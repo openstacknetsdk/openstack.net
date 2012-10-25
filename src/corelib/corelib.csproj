@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,8 +43,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CloudIdentity.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="IComputeProvider.cs" />
+    <Compile Include="IdentityToken.cs" />
+    <Compile Include="IdentityTokenCache.cs" />
+    <Compile Include="IIdentityProvider.cs" />
+    <Compile Include="IRetryLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Rackspace\GeographicalIdentityProvider.cs" />
+    <Compile Include="Providers\Rackspace\IdentityProviderBase.cs" />
+    <Compile Include="Providers\Rackspace\IdentityProviderFactory.cs" />
+    <Compile Include="Providers\Rackspace\Objects\TokenResponse.cs" />
+    <Compile Include="Providers\Rackspace\IdentityProvider.cs" />
+    <Compile Include="Providers\Rackspace\Settings.cs" />
+    <Compile Include="Web\HttpMethod.cs" />
+    <Compile Include="Web\IRestService.cs" />
+    <Compile Include="Web\Json\JsonRestService.cs" />
+    <Compile Include="Web\WebResponse.cs" />
+    <Compile Include="Web\WebResponseRetryLogic.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
