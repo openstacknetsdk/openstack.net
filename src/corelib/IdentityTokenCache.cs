@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
+using net.openstack.Core.Domain;
 
-namespace net.openstack.corelib
+namespace net.openstack
 {
     public class IdentityTokenCache : ICache<IdentityToken>
     {

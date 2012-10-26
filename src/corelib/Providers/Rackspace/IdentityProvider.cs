@@ -1,27 +1,27 @@
-﻿using System;
-using net.openstack.corelib.Providers.Rackspace.Objects;
-using net.openstack.corelib.Web;
+﻿using SimpleRestServices.Client;
+using SimpleRestServices.Client.Json;
+using net.openstack.Core;
+using net.openstack.Core.Domain;
 
-namespace net.openstack.corelib.Providers.Rackspace
+namespace net.openstack.Providers.Rackspace
 {
     public class IdentityProvider : IIdentityProvider
     {
         private readonly IdentityProviderFactory _factory;
 
-        public IdentityProvider()
+        public IdentityProvider() : this(new JsonRestServices(), new IdentityTokenCache())
         {
-            _factory = new IdentityProviderFactory();
         }
         public IdentityProvider(IRestService restService, ICache<IdentityToken> tokenCache)
         {
             _factory = new IdentityProviderFactory();
         }
 
-        public Role[] GetAllRoles(CloudIdentity identity)
+        public Role[] ListRoles(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
 
-            return provider.GetAllRoles(identity);
+            return provider.ListRoles(identity);
         }
 
         public Role[] GetRolesByUser(string userId, CloudIdentity identity)
@@ -45,7 +45,7 @@ namespace net.openstack.corelib.Providers.Rackspace
             return provider.AddRoleToUser(userId, roleId, identity);
         }
 
-        public string GetUserImpersonationToken(string userName, CloudIdentity identity)
+        public IdentityToken GetUserImpersonationToken(string userName, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
 

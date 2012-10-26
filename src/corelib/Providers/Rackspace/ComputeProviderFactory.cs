@@ -4,18 +4,18 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class IdentityProviderFactory : IProviderFactory<IIdentityProvider>
+    internal class ComputeProviderFactory : IProviderFactory<IComputeProvider>
     {
-        public IIdentityProvider Get(string geo)
+        public IComputeProvider Get(string geo)
         {
             switch (geo.ToLower())
             {
                 case "dfw":
+                    return new RegionalComputeProvider(new Uri(Settings.DFWComputeUrlBase));
                 case "ord":
-                case "us":
-                    return new GeographicalIdentityProvider(new Uri(Settings.USIdentityUrlBase));
+                    return new RegionalComputeProvider(new Uri(Settings.ORDComputeUrlBase));
                 case "lon":
-                    return new GeographicalIdentityProvider(new Uri(Settings.LONIdentityUrlBase));
+                    return new RegionalComputeProvider(new Uri(Settings.LONComputeUrlBase));
                 default:
                     throw new UnknownGeographyException(geo);
             }

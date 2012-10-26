@@ -1,31 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using net.openstack.corelib.Providers.Rackspace.Objects;
-using net.openstack.corelib.Web;
-using net.openstack.corelib.Web.Json;
+using SimpleRestServices.Client;
+using SimpleRestServices.Client.Json;
+using net.openstack.Core;
+using net.openstack.Core.Domain;
+using net.openstack.Providers.Rackspace.Objects;
 
-namespace net.openstack.corelib.Providers.Rackspace
+namespace net.openstack.Providers.Rackspace
 {
-    public class GeographicalIdentityProvider : IdentityProviderBase, IIdentityProvider
+    internal class GeographicalIdentityProvider : IIdentityProvider
     {
         public GeographicalIdentityProvider(Uri urlBase)
             : this(urlBase, new JsonRestServices(), new IdentityTokenCache())
         {
         }
-        public GeographicalIdentityProvider(Uri urlBase, IRestService restService, ICache<IdentityToken> tokenCache) 
-            : base(urlBase, restService, tokenCache)
+        public GeographicalIdentityProvider(Uri urlBase, IRestService restService, ICache<IdentityToken> tokenCache)
         {
+            URLBase = urlBase;
+            _tokenCache = tokenCache;
+            RestService = restService;
         }
 
-        public Role[] GetAllRoles(CloudIdentity identity)
+        #region Roles
+        
+        public Role[] ListRoles(CloudIdentity identity)
         {
             const string urlPath = Settings.GetAllRolesUrlFormat;
             var response = ExecuteRESTRequest<RolesResponse>(urlPath, HttpMethod.GET, null, identity);
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.roles;
+            return response.Data.Roles;
         }
 
         public Role[] GetRolesByUser(string userId, CloudIdentity identity)
@@ -37,19 +44,7 @@ namespace net.openstack.corelib.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.roles;
-        }
-
-        public User GetUserByName(string name, CloudIdentity identity)
-        {
-            const string urlFormat = Settings.GetUserByNameUrlFormat;
-            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "name", name } });
-            var response = ExecuteRESTRequest<UserResponse>(urlPath, HttpMethod.GET, null, identity);
-
-            if (response == null || response.Data == null)
-                return null;
-
-            return response.Data.user;
+            return response.Data.Roles;
         }
 
         public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
@@ -65,18 +60,6 @@ namespace net.openstack.corelib.Providers.Rackspace
             return true;
         }
 
-        public string GetUserImpersonationToken(string userName, CloudIdentity identity)
-        {
-            const string urlPath = Settings.GetUserImpersonationTokenUrlFormat;
-            var request = BuildImpersonationRequestJson(urlPath, userName, 600);
-            var response = ExecuteRESTRequest<UserImpersonationResponse>(urlPath, HttpMethod.POST, request, identity);
-
-            if (response == null || response.Data == null || response.Data.access == null || response.Data.access.token == null)
-                return null;
-
-            return response.Data.access.token.id;
-        }
-
         public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
             const string urlFormat = Settings.DeleteRoleFromUserUrlFormat;
@@ -85,11 +68,81 @@ namespace net.openstack.corelib.Providers.Rackspace
 
             if (response != null && response.StatusCode == 204)
                 return true;
-            
+
             return false;
         }
 
-        #region
+        #endregion
+
+        #region Users
+        
+        public User GetUserByName(string name, CloudIdentity identity)
+        {
+            const string urlFormat = Settings.GetUserByNameUrlFormat;
+            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "name", name } });
+            var response = ExecuteRESTRequest<UserResponse>(urlPath, HttpMethod.GET, null, identity);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.User;
+        }
+        #endregion
+        
+        protected readonly IRestService RestService;
+        private readonly ICache<IdentityToken> _tokenCache;
+        protected readonly Uri URLBase;
+
+        public string GetToken(CloudIdentity idenity)
+        {
+            var token = _tokenCache.Get(string.Format("{0}/{1}", idenity.Region, idenity.Username), () => GetTokenInfo(idenity));
+            
+            if (token == null)
+                return null;
+
+            return token.Id;
+        }
+
+        public string GetToken(ImpersonationIdentity idenity)
+        {
+            var token = _tokenCache.Get(string.Format("{0}/{1}", idenity.Region, idenity.Username), () => GetTokenInfo(idenity));
+
+            if (token == null)
+                return null;
+
+            var impToken = _tokenCache.Get(string.Format("imp/{0}/{1}", idenity.UserToImpersonate.Region, idenity.UserToImpersonate.Username),
+                    () => GetUserImpersonationToken(idenity.UserToImpersonate.Username, idenity) );
+
+            if (impToken == null)
+                return null;
+
+            return impToken.Id;
+        }
+
+        public IdentityToken GetTokenInfo(CloudIdentity identity)
+        {
+
+            var auth = AuthRequest.FromCloudIdentity(identity);
+            var response = ExecuteRESTRequest<TokenResponse>(Settings.GetTokenInfoUrlFormat, HttpMethod.POST, auth, identity, isTokenRequest: true);
+
+
+            if (response == null || response.Data == null || response.Data.Access == null || response.Data.Access.Token == null)
+                return null;
+
+            return response.Data.Access.Token;
+        }
+
+        public IdentityToken GetUserImpersonationToken(string userName, CloudIdentity identity)
+        {
+            const string urlPath = Settings.GetUserImpersonationTokenUrlFormat;
+            var request = BuildImpersonationRequestJson(urlPath, userName, 600);
+            var response = ExecuteRESTRequest<UserImpersonationResponse>(urlPath, HttpMethod.POST, request, identity);
+
+            if (response == null || response.Data == null || response.Data.Access == null || response.Data.Access.Token == null)
+                return null;
+
+            return response.Data.Access.Token;
+        }
 
         private JObject BuildImpersonationRequestJson(string path, string userName, int expirationInSeconds)
         {
@@ -103,22 +156,53 @@ namespace net.openstack.corelib.Providers.Rackspace
             return request;
         }
 
-        #endregion
-    }
+        protected virtual bool ExecuteRESTRequest(string urlPath, HttpMethod method, object body, CloudIdentity identity, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200)
+        {
+            var response = ExecuteRESTRequest<object>(urlPath, method, body, identity, false, isTokenRequest, token, retryCount, retryDelay);
 
-    public class UserResponse
-    {
-        public User user { get; set; }
-    }
+            if (response == null)
+                return false;
 
-    public class RolesResponse
-    {
-        public Role[] roles { get; set; }
-        public string[] roles_links { get; set; }
-    }
+            if (response.StatusCode >= 400)
+                return false;
 
-    public class UserImpersonationResponse
-    {
-        public Access access { get; set; }
+            return true;
+        }
+
+        protected Response<T> ExecuteRESTRequest<T>(string urlPath, HttpMethod method, object body, CloudIdentity identity, bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200) where T : new()
+        {
+            var url = new Uri(URLBase, urlPath);
+
+            var headers = new Dictionary<string, string>();
+
+            if (!isTokenRequest)
+                headers.Add("X-Auth-Token", string.IsNullOrWhiteSpace(token) ? GetToken(identity) : token);
+
+            string bodyStr = null;
+            if (body != null)
+            {
+                if (body is JObject)
+                    bodyStr = body.ToString();
+                else
+                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+            }
+
+            var response = RestService.Execute<T>(url, method, bodyStr, headers, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 } });
+
+            // on errors try again 1 time.
+            if (response.StatusCode == 401)
+            {
+                if (!isRetry)
+                {
+                    // if authentication failed, assume the token ran out and refresh.
+                    //if (response.StatusCode == 401 && !isTokenRequest)
+                    //    GetRackConnectToken(region, modifiedBy, true);
+
+                    return ExecuteRESTRequest<T>(urlPath, method, body, identity, true, isTokenRequest, GetToken(identity));
+                }
+            }
+
+            return response;
+        }
     }
 }

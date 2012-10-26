@@ -8,8 +8,8 @@
     <ProjectGuid>{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>net.openstack.corelib</RootNamespace>
-    <AssemblyName>net.openstack.corelib</AssemblyName>
+    <RootNamespace>net.openstack</RootNamespace>
+    <AssemblyName>openstacknet</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,8 +34,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleRestServices">
+      <HintPath>..\..\res\SimpleRestServices.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,25 +47,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudIdentity.cs" />
+    <Compile Include="Core\Domain\Address.cs" />
+    <Compile Include="Core\Domain\CloudIdentity.cs" />
+    <Compile Include="Core\Domain\Flavor.cs" />
+    <Compile Include="Core\Domain\Link.cs" />
+    <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
+    <Compile Include="Core\Domain\Mapping\MetaDataJsonMapper.cs" />
+    <Compile Include="Core\Domain\ServerAddresses.cs" />
+    <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
+    <Compile Include="Providers\Rackspace\ComputeProviderFactory.cs" />
+    <Compile Include="Providers\Rackspace\IProviderFactory.cs" />
+    <Compile Include="Core\Domain\NewServer.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\CreateServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\CreateServerResponse.cs" />
+    <Compile Include="Core\Domain\ImpersonationIdentity.cs" />
+    <Compile Include="Core\Domain\MetaData.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\CreateServerRequestJsonMapper.cs" />
+    <Compile Include="Providers\Rackspace\Objects\MetaDataResponse.cs" />
+    <Compile Include="Core\Domain\ServerDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\ServerDetailsResponse.cs" />
+    <Compile Include="Core\Domain\ServerImage.cs" />
+    <Compile Include="Core\Domain\ServerIps.cs" />
+    <Compile Include="Providers\Rackspace\Objects\UpdateIPv4Request.cs" />
+    <Compile Include="Core\Domain\User.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="IComputeProvider.cs" />
-    <Compile Include="IdentityToken.cs" />
+    <Compile Include="Core\IComputeProvider.cs" />
+    <Compile Include="Core\Domain\IdentityToken.cs" />
     <Compile Include="IdentityTokenCache.cs" />
-    <Compile Include="IIdentityProvider.cs" />
-    <Compile Include="IRetryLogic.cs" />
+    <Compile Include="Core\IIdentityProvider.cs" />
+    <Compile Include="Core\IRetryLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\GeographicalIdentityProvider.cs" />
-    <Compile Include="Providers\Rackspace\IdentityProviderBase.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderFactory.cs" />
+    <Compile Include="Core\Domain\AccessDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AuthRequest.cs" />
+    <Compile Include="Core\Domain\Role.cs" />
+    <Compile Include="Core\Domain\Endpoint.cs" />
+    <Compile Include="Core\Domain\ServiceCatalog.cs" />
     <Compile Include="Providers\Rackspace\Objects\TokenResponse.cs" />
     <Compile Include="Providers\Rackspace\IdentityProvider.cs" />
+    <Compile Include="Core\Domain\TokenUser.cs" />
+    <Compile Include="Providers\Rackspace\Objects\RolesResponse.cs" />
+    <Compile Include="Providers\Rackspace\ProviderBase.cs" />
+    <Compile Include="Providers\Rackspace\RegionalComputeProvider.cs" />
     <Compile Include="Providers\Rackspace\Settings.cs" />
-    <Compile Include="Web\HttpMethod.cs" />
-    <Compile Include="Web\IRestService.cs" />
-    <Compile Include="Web\Json\JsonRestService.cs" />
-    <Compile Include="Web\WebResponse.cs" />
-    <Compile Include="Web\WebResponseRetryLogic.cs" />
+    <Compile Include="Providers\Rackspace\Objects\UserResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\UserImpersonationResponse.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
