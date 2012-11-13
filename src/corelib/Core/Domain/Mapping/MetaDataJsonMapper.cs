@@ -4,9 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Core.Domain.Mapping
 {
-    public class MetaDataJsonMapper : IJsonObjectMapper<MetaData>
+    public class MetaDataJsonMapper : IJsonObjectMapper<Metadata>
     {
-        public MetaData FromJson(string rawJson)
+        public Metadata FromJson(string rawJson)
         {
             if (string.IsNullOrWhiteSpace(rawJson))
                 return null;
@@ -20,7 +20,7 @@ namespace net.openstack.Core.Domain.Mapping
                 if (metaDataItem == null)
                     return null;
 
-                var metadata = new MetaData();
+                var metadata = new Metadata();
                 foreach (var prop in metaDataItem.Children().OfType<JProperty>())
                 {
                     metadata.Add(prop.Name, prop.Value.Value<string>());
@@ -34,7 +34,7 @@ namespace net.openstack.Core.Domain.Mapping
             }
         }
 
-        public JObject ToJson(MetaData mapObj)
+        public JObject ToJson(Metadata mapObj)
         {
             throw new System.NotImplementedException();
         }

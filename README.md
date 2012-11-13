@@ -29,11 +29,11 @@ Below is a list of required Openstack features and our current progress.  We hav
         &nbsp;</td><td>List Servers</td><td>
         &nbsp;</td><td>
             &nbsp;</td></tr><tr><td> </td><td>Create Server</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Support scheduler hints</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Delete Server</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Update Server</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Support AccessIP</td><td>
@@ -69,7 +69,7 @@ Below is a list of required Openstack features and our current progress.  We hav
                 &nbsp;</td></tr><tr><td> </td><td>Attach Volume</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Get Details</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>List Images</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Get Image Details</td><td>
@@ -79,7 +79,7 @@ Below is a list of required Openstack features and our current progress.  We hav
                 &nbsp;</td></tr><tr><td> </td><td>Get Flavor Details</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Server Bandwidth (RAX)</td><td> </td><td> &nbsp;</td></tr><tr><td> </td><td>List Metadata</td><td>
-        &nbsp;</td><td>
+        Done</td><td>
             &nbsp;</td></tr><tr><td> </td><td>Set Metadata</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>Update Metadata</td><td>

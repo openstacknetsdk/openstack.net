@@ -14,7 +14,7 @@ namespace net.openstack.Providers.Rackspace
     {
         #region Private/Protected instance members
 
-        private readonly IJsonObjectMapper<MetaData> _metadataMapper;
+        private readonly IJsonObjectMapper<Metadata> _metadataMapper;
         private readonly IJsonObjectMapper<CreateServerRequest> _createServerRequestMapper;
 
         #endregion
@@ -25,14 +25,14 @@ namespace net.openstack.Providers.Rackspace
         public RegionalComputeProvider(Uri urlBase, IIdentityProvider identityProvider, IRestService restService) 
             : this(urlBase, identityProvider, restService, new MetaDataJsonMapper(), new CreateServerRequestJsonMapper()) {}
 
-        public RegionalComputeProvider(Uri urlBase, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<MetaData> metadataMapper, IJsonObjectMapper<CreateServerRequest> createServerRequestMapper)
+        public RegionalComputeProvider(Uri urlBase, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Metadata> metadataMapper, IJsonObjectMapper<CreateServerRequest> createServerRequestMapper)
             : base(urlBase, identityProvider, restService)
         {
             _metadataMapper = metadataMapper;
             _createServerRequestMapper = createServerRequestMapper;
         }
 
-        public MetaData GetMetaData(string apiServerId, CloudIdentity identity)
+        public Metadata ListMetadata(string apiServerId, CloudIdentity identity)
         {
             var urlFormat = Settings.GetMetadataUrlFormat;
             var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "cloudDDIAccout", identity.AccountId }, { "apiServerID", apiServerId } });
@@ -53,7 +53,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            response.Data.Server.MetaData = _metadataMapper.FromJson(response.RawBody);
+            response.Data.Server.Metadata = _metadataMapper.FromJson(response.RawBody);
             return response.Data.Server;
         }
 

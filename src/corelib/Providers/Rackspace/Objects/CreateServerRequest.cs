@@ -13,13 +13,13 @@ namespace net.openstack.Providers.Rackspace.Objects
 
         public string DiskConfig { get; set; }
 
-        public List<MetaData> Metadata { get; set; }
+        public List<Metadata> Metadata { get; set; }
 
         public string FriendlyName { get; set; }
 
         public CreateServerRequest()
         {
-            Metadata = new List<MetaData>();
+            Metadata = new List<Metadata>();
         }
     }
 }

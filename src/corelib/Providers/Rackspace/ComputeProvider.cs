@@ -18,11 +18,11 @@ namespace net.openstack.Providers.Rackspace
             _factory = new ComputeProviderFactory();
         }
 
-        public MetaData GetMetaData(string apiServerId, CloudIdentity identity)
+        public Metadata ListMetadata(string apiServerId, CloudIdentity identity)
         {
             var provider = _factory.Get(identity.Region);
 
-            return provider.GetMetaData(apiServerId, identity);
+            return provider.ListMetadata(apiServerId, identity);
         }
 
         public ServerDetails GetDetails(string apiServerId, CloudIdentity identity)

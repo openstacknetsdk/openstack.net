@@ -6,6 +6,6 @@ namespace net.openstack.Providers.Rackspace.Objects
     [Serializable]
     public class MetaDataResponse
     {
-        public MetaData Metadata { get; set; }
+        public Metadata Metadata { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace net.openstack.Core.Domain
         public string AccessIPv6 { get; set; }
 
         [DataMember]
-        public MetaData MetaData { get; set; }
+        public Metadata Metadata { get; set; }
 
         [DataMember]
         public string Name { get; set; }
