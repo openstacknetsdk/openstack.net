@@ -4,7 +4,7 @@ openstack.net
 .Net SDK and client side utilities for common openstack providers
 
 Below is a list of required Openstack features and our current progress.  We have split off the progress for the Rackspace OpenStack provider and a generic Openstack provider.
-    <div class="table_wrapper"><table class="progress_tbl"><colgroup><col /> <col /> <col /> <col /> <col /> <col /> <col /> <col /> </colgroup><tbody><tr><td>Product</td><td>Feature</td><td>
+        <div class="table_wrapper"><table class="progress_tbl"><colgroup><col /> <col /> <col /> <col /> <col /> <col /> <col /> <col /> </colgroup><tbody><tr><td>Product</td><td>Feature</td><td>
         Rackspace </td><td>
             Openstack</td></tr><tr><td>General</td><td> </td><td> </td><td> &nbsp;</td></tr><tr><td> </td><td>Handle ratelimit failures</td><td>
         &nbsp;</td><td>
@@ -280,7 +280,7 @@ Below is a list of required Openstack features and our current progress.  We hav
                 &nbsp;</td></tr><tr><td>Identity</td><td> </td><td> </td><td> &nbsp;</td></tr><tr><td> </td><td>List Users</td><td>
         &nbsp;</td><td>
             &nbsp;</td></tr><tr><td> </td><td>Get user by name</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>get user by id</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>add user</td><td>
@@ -294,9 +294,9 @@ Below is a list of required Openstack features and our current progress.  We hav
                 &nbsp;</td></tr><tr><td> </td><td>get user credentials</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>list user global roles</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>authenticate token</td><td>
-            &nbsp;</td><td>
+            Done</td><td>
                 &nbsp;</td></tr><tr><td> </td><td>get tenants</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr><tr><td>Monitoring</td><td> </td><td> </td><td> &nbsp;</td></tr><tr><td> </td><td>Limits</td><td>
@@ -434,4 +434,5 @@ Below is a list of required Openstack features and our current progress.  We hav
                 &nbsp;</td></tr><tr><td> </td><td>Delete Agent Token</td><td>
             &nbsp;</td><td>
                 &nbsp;</td></tr></tbody></table></div>
+
     
