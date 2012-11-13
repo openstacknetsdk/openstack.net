@@ -8,8 +8,6 @@
 
         public string APIKey { get; set; }
 
-        public string AccountId { get; set; }
-
         public string Region { get; set; }
 
     }

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace net.openstack.Core.Domain
 {
     [DataContract]
-    public class ServerDetails
+    public class ServerDetails : Server
     {
         [DataMember(Name = "OS-DCF:diskConfig" )]
         public string DiskConfig { get; set; }
@@ -19,9 +19,6 @@ namespace net.openstack.Core.Domain
         public string VMState { get; set; }
 
         [DataMember]
-        public string Id { get; set; }
-
-        [DataMember]
         public string AccessIPv4 { get; set; }
 
         [DataMember]
@@ -29,9 +26,6 @@ namespace net.openstack.Core.Domain
 
         [DataMember]
         public Metadata Metadata { get; set; }
-
-        [DataMember]
-        public string Name { get; set; }
 
         [DataMember(Name = "user_id")]
         public string UserId { get; set; }
@@ -55,9 +49,6 @@ namespace net.openstack.Core.Domain
         public string HostId { get; set; }
 
         [DataMember]
-        public Link[] Links { get; set; }
-
-        [DataMember]
         public int Progress { get; set; }
 
         [DataMember(Name = "rax-bandwidth:bandwidth")]
@@ -68,5 +59,18 @@ namespace net.openstack.Core.Domain
 
         [DataMember]
         public DateTime Updated { get; set; }
+    }
+
+    [DataContract]
+    public class Server
+    {
+        [DataMember]
+        public string Id { get; set; }
+
+        [DataMember]
+        public Link[] Links { get; set; }
+
+        [DataMember]
+        public string Name { get; set; }
     }
 }

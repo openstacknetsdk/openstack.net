@@ -34,8 +34,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRestServices">
-      <HintPath>..\..\res\SimpleRestServices.dll</HintPath>
+    <Reference Include="SimpleRestServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\SimpleRestServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,24 +75,24 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Core\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
-    <Compile Include="IdentityTokenCache.cs" />
+    <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\IIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\GeographicalIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderFactory.cs" />
-    <Compile Include="Core\Domain\AccessDetails.cs" />
+    <Compile Include="Core\Domain\UserAccess.cs" />
     <Compile Include="Providers\Rackspace\Objects\AuthRequest.cs" />
     <Compile Include="Core\Domain\Role.cs" />
     <Compile Include="Core\Domain\Endpoint.cs" />
     <Compile Include="Core\Domain\ServiceCatalog.cs" />
-    <Compile Include="Providers\Rackspace\Objects\TokenResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AuthenticationResponse.cs" />
     <Compile Include="Providers\Rackspace\IdentityProvider.cs" />
     <Compile Include="Core\Domain\TokenUser.cs" />
     <Compile Include="Providers\Rackspace\Objects\RolesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\UpdateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\ProviderBase.cs" />
     <Compile Include="Providers\Rackspace\RegionalComputeProvider.cs" />
-    <Compile Include="Providers\Rackspace\Settings.cs" />
     <Compile Include="Providers\Rackspace\Objects\UserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />

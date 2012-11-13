@@ -12,23 +12,22 @@ namespace net.openstack.Providers.Rackspace
 {
     internal class GeographicalIdentityProvider : IIdentityProvider
     {
-        public GeographicalIdentityProvider(Uri urlBase)
-            : this(urlBase, new JsonRestServices(), new IdentityTokenCache())
+        private readonly IRestService _restService;
+        private readonly ICache<UserAccess> _userAccessCache;
+        private readonly Uri _urlBase;
+
+        public GeographicalIdentityProvider(Uri urlBase, IRestService restService, ICache<UserAccess> userAccessCache)
         {
-        }
-        public GeographicalIdentityProvider(Uri urlBase, IRestService restService, ICache<IdentityToken> tokenCache)
-        {
-            URLBase = urlBase;
-            _tokenCache = tokenCache;
-            RestService = restService;
+            _urlBase = urlBase;
+            _userAccessCache = userAccessCache;
+            _restService = restService;
         }
 
         #region Roles
         
         public Role[] ListRoles(CloudIdentity identity)
         {
-            const string urlPath = Settings.GetAllRolesUrlFormat;
-            var response = ExecuteRESTRequest<RolesResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<RolesResponse>("/v2.0/OS-KSADM/roles", HttpMethod.GET, null, identity);
             if (response == null || response.Data == null)
                 return null;
 
@@ -37,8 +36,7 @@ namespace net.openstack.Providers.Rackspace
 
         public Role[] GetRolesByUser(string userId, CloudIdentity identity)
         {
-            const string urlFormat = Settings.GetRolesByUserUrlFormat;
-            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "userID", userId } });
+            var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
             var response = ExecuteRESTRequest<RolesResponse>(urlPath, HttpMethod.GET, null, identity);
 
             if (response == null || response.Data == null)
@@ -49,8 +47,7 @@ namespace net.openstack.Providers.Rackspace
 
         public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
         {
-            const string urlFormat = Settings.AddRoleToUserUrlFormat;
-            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "userID", userId }, { "roleID", roleId } });
+            var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.PUT, null, identity);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
@@ -62,8 +59,7 @@ namespace net.openstack.Providers.Rackspace
 
         public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
-            const string urlFormat = Settings.DeleteRoleFromUserUrlFormat;
-            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "userID", userId }, { "roleID", roleId } });
+            var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.DELETE, null, identity);
 
             if (response != null && response.StatusCode == 204)
@@ -78,8 +74,7 @@ namespace net.openstack.Providers.Rackspace
         
         public User GetUserByName(string name, CloudIdentity identity)
         {
-            const string urlFormat = Settings.GetUserByNameUrlFormat;
-            var urlPath = urlFormat.Format(new Dictionary<string, string>() { { "name", name } });
+            var urlPath = string.Format("/v2.0/users/?name={0}", name);
             var response = ExecuteRESTRequest<UserResponse>(urlPath, HttpMethod.GET, null, identity);
 
             if (response == null || response.Data == null)
@@ -88,60 +83,67 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
         #endregion
-        
-        protected readonly IRestService RestService;
-        private readonly ICache<IdentityToken> _tokenCache;
-        protected readonly Uri URLBase;
 
         public string GetToken(CloudIdentity idenity)
         {
-            var token = _tokenCache.Get(string.Format("{0}/{1}", idenity.Region, idenity.Username), () => GetTokenInfo(idenity));
-            
-            if (token == null)
+            var auth = Authenticate(idenity);
+
+            if (auth == null || auth.Token == null)
                 return null;
 
-            return token.Id;
+            return auth.Token.Id;
         }
 
-        public string GetToken(ImpersonationIdentity idenity)
+        public string GetToken(ImpersonationIdentity identity)
         {
-            var token = _tokenCache.Get(string.Format("{0}/{1}", idenity.Region, idenity.Username), () => GetTokenInfo(idenity));
+            var auth = Authenticate(identity);
 
-            if (token == null)
+            if (auth == null || auth.Token == null)
                 return null;
 
-            var impToken = _tokenCache.Get(string.Format("imp/{0}/{1}", idenity.UserToImpersonate.Region, idenity.UserToImpersonate.Username),
-                    () => GetUserImpersonationToken(idenity.UserToImpersonate.Username, idenity) );
-
-            if (impToken == null)
-                return null;
-
-            return impToken.Id;
+            return auth.Token.Id;
         }
 
         public IdentityToken GetTokenInfo(CloudIdentity identity)
         {
+            var auth = Authenticate(identity);
 
-            var auth = AuthRequest.FromCloudIdentity(identity);
-            var response = ExecuteRESTRequest<TokenResponse>(Settings.GetTokenInfoUrlFormat, HttpMethod.POST, auth, identity, isTokenRequest: true);
-
-
-            if (response == null || response.Data == null || response.Data.Access == null || response.Data.Access.Token == null)
+            if (auth == null)
                 return null;
 
-            return response.Data.Access.Token;
+            return auth.Token;
         }
 
-        public IdentityToken GetUserImpersonationToken(string userName, CloudIdentity identity)
+        public UserAccess Authenticate(CloudIdentity identity)
         {
-            const string urlPath = Settings.GetUserImpersonationTokenUrlFormat;
-            var request = BuildImpersonationRequestJson(urlPath, userName, 600);
-            var response = ExecuteRESTRequest<UserImpersonationResponse>(urlPath, HttpMethod.POST, request, identity);
+            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", identity.Region, identity.Username), () => {
+                var auth = AuthRequest.FromCloudIdentity(identity);
+                var response = ExecuteRESTRequest<AuthenticationResponse>("/v2.0/tokens", HttpMethod.POST, auth, identity, isTokenRequest: true);
 
-            if (response == null || response.Data == null || response.Data.Access == null || response.Data.Access.Token == null)
-                return null;
 
-            return response.Data.Access.Token;
+                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                    return null;
+
+                return response.Data.UserAccess;
+            });
+
+            return userAccess;
+        }
+
+        public UserAccess Authenticate(ImpersonationIdentity identity)
+        {
+            var impToken = _userAccessCache.Get(string.Format("imp/{0}/{1}", identity.UserToImpersonate.Region, identity.UserToImpersonate.Username), () => {
+                const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
+                var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
+                var response = ExecuteRESTRequest<UserImpersonationResponse>(urlPath, HttpMethod.POST, request, identity);
+
+                if (response == null || response.Data == null || response.Data.UserAccess == null)
+                    return null;
+
+                return response.Data.UserAccess;
+            });
+
+            return impToken;
         }
 
         private JObject BuildImpersonationRequestJson(string path, string userName, int expirationInSeconds)
@@ -171,7 +173,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected Response<T> ExecuteRESTRequest<T>(string urlPath, HttpMethod method, object body, CloudIdentity identity, bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200) where T : new()
         {
-            var url = new Uri(URLBase, urlPath);
+            var url = new Uri(_urlBase, urlPath);
 
             var headers = new Dictionary<string, string>();
 
@@ -187,7 +189,7 @@ namespace net.openstack.Providers.Rackspace
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
             }
 
-            var response = RestService.Execute<T>(url, method, bodyStr, headers, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 } });
+            var response = _restService.Execute<T>(url, method, bodyStr, headers, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 } });
 
             // on errors try again 1 time.
             if (response.StatusCode == 401)

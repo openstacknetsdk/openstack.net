@@ -10,7 +10,6 @@ namespace net.openstack.console
         {
             var identity = new CloudIdentity()
                                {
-                                   AccountId = "",
                                    APIKey = "",
                                    Password = "",
                                    Region = "",
@@ -54,7 +53,6 @@ namespace net.openstack.console
                     Thread.Sleep(1000);
                     details = provider.GetDetails(server.Id, identity);
                 }
-                provider.DeleteServer(server.Id, identity);
                 Console.WriteLine("Server deleted.");
             }
             Console.ReadLine();

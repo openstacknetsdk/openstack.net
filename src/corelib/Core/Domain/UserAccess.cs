@@ -1,6 +1,6 @@
 namespace net.openstack.Core.Domain
 {
-    public class AccessDetails
+    public class UserAccess
     {
         public IdentityToken Token { get; set; }
 
