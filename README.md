@@ -3,7 +3,7 @@ openstack.net
 
 .Net SDK and client side utilities for common openstack providers
 
-Below is a list of required Openstack
+Below is a list of required Openstack features and our current progress.  We have split off the progress for the Rackspace OpenStack provider and a generic Openstack provider.
     <div class="table_wrapper"><table class="progress_tbl"><colgroup><col /> <col /> <col /> <col /> <col /> <col /> <col /> <col /> </colgroup><tbody><tr><td>Product</td><td>Feature</td><td>
         Rackspace </td><td>
             Openstack</td></tr><tr><td>General</td><td> </td><td> </td><td> &nbsp;</td></tr><tr><td> </td><td>Handle ratelimit failures</td><td>
