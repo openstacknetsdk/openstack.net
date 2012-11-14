@@ -12,22 +12,13 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ProviderBase
     {
-        private readonly Uri _urlBase;
         private readonly IIdentityProvider _identityProvider;
         private readonly IRestService _restService;
 
-        protected ProviderBase(Uri urlBase, IIdentityProvider identityProvider, IRestService restService)
+        protected ProviderBase(IIdentityProvider identityProvider, IRestService restService)
         {
-            _urlBase = urlBase;
             _identityProvider = identityProvider;
             _restService = restService;
-        }
-
-        protected Response<T> ExecuteRESTRequest<T>(string urlPath, HttpMethod method, object body, CloudIdentity identity, bool isRetry = false, string token = null, JsonRequestSettings requestSettings = null) where T : new()
-        {
-            var url = new Uri(_urlBase, urlPath);
-
-            return ExecuteRESTRequest<T>(url, method, body, identity, isRetry, token, requestSettings);
         }
 
         protected Response<T> ExecuteRESTRequest<T>(Uri absoluteUri, HttpMethod method, object body, CloudIdentity identity, bool isRetry = false, string token = null, JsonRequestSettings requestSettings = null) where T : new()
@@ -72,7 +63,7 @@ namespace net.openstack.Providers.Rackspace
             return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate};
         }
 
-        protected virtual string GetServiceEndpoint(string serviceName, CloudIdentity identity)
+        protected virtual string GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
             var userAccess = _identityProvider.Authenticate(identity);
 
@@ -84,7 +75,10 @@ namespace net.openstack.Providers.Rackspace
             if (serviceDetails == null || serviceDetails.Endpoints == null || serviceDetails.Endpoints.Length == 0)
                 throw new UserAuthorizationException("The user does not have access to the requested service.");
 
-            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(identity.Region, StringComparison.OrdinalIgnoreCase));
+            if (string.IsNullOrWhiteSpace(region))
+                region = userAccess.User.DefaultRegion;
+
+            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
 
             if(endpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");

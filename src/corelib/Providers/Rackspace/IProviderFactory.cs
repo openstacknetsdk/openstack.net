@@ -1,7 +1,7 @@
 namespace net.openstack.Providers.Rackspace
 {
-    internal interface IProviderFactory<T>
+    internal interface IProviderFactory<T, T2>
     {
-        T Get(string geo);
+        T Get(T2 key);
     }
 }

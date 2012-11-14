@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
+using net.openstack.Providers.Rackspace;
 
 namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 {
@@ -17,11 +18,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     {
         public ComputeTests()
         {
-            _testIdentity = new CloudIdentity()
+            CloudInstance cloudInstance;
+            CloudInstance.TryParse(ConfigurationManager.AppSettings["TestIdentityRegion"], true, out cloudInstance);
+
+            _testIdentity = new RackspaceCloudIdentity
             {
                 APIKey = ConfigurationManager.AppSettings["TestIdentityAPIKey"],
                 Password = ConfigurationManager.AppSettings["TestIdentityPassword"],
-                Region = ConfigurationManager.AppSettings["TestIdentityRegion"],
+                CloudInstance = cloudInstance,
                 Username = ConfigurationManager.AppSettings["TestIdentityUserName"],
             };
         }
@@ -46,33 +50,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
         }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
         [TestMethod]
         public void Test1_Should_Create_A_New_Server_In_DFW()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            _testServer = provider.CreateServer("test-server", "My Test Server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2", _testIdentity);
+            _testServer = provider.CreateServer(_testIdentity, "test-server", "My Test Server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2");
 
             Assert.IsNotNull(_testServer);
             Assert.IsNotNull(_testServer.Id);
@@ -82,7 +64,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test2_Should_Get_Details_For_Newly_Created_Server_In_DFW()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var serverDetails = provider.GetDetails(_testServer.Id, _testIdentity);
+            var serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
 
             Assert.IsNotNull(serverDetails);
             Assert.AreEqual("test-server", serverDetails.Name);
@@ -94,14 +76,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test3_Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var serverDetails = provider.GetDetails(_testServer.Id, _testIdentity);
+            var serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
             Assert.IsNotNull(serverDetails);
             
             int count = 0;
             while (!serverDetails.Status.Equals("ACTIVE") && !serverDetails.Status.Equals("ERROR") && !serverDetails.Status.Equals("UNKNOWN") && !serverDetails.Status.Equals("SUSPENDED") && count < 600)
             {
                 Thread.Sleep(1000);
-                serverDetails = provider.GetDetails(_testServer.Id, _testIdentity);
+                serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
                 count++;
             }
 
@@ -124,7 +106,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test5_Should_Mark_The_Server_For_Deletion()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var result = provider.DeleteServer(_testServer.Id, _testIdentity);
+            var result = provider.DeleteServer(_testIdentity, _testServer.Id);
 
             Assert.IsTrue(result);
         }
@@ -133,13 +115,13 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test6_Should_Wait_A_Max_Of_10_Minutes_For_The_Server_Is_Deleted_Indicated_By_A_Null_Return_Value_For_Details()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var details = provider.GetDetails(_testServer.Id, _testIdentity);
+            var details = provider.GetDetails(_testIdentity, _testServer.Id);
             Assert.IsNotNull(details);
             
             while (details != null && (!details.Status.Equals("DELETED") && !details.Status.Equals("ERROR") && !details.Status.Equals("UNKNOWN") && !details.Status.Equals("SUSPENDED")))
             {
                 Thread.Sleep(1000);
-                details = provider.GetDetails(_testServer.Id, _testIdentity);
+                details = provider.GetDetails(_testIdentity, _testServer.Id);
             }
 
             if(details != null)

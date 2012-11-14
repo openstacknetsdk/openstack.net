@@ -55,13 +55,12 @@
     <Compile Include="Core\Domain\Mapping\MetaDataJsonMapper.cs" />
     <Compile Include="Core\Domain\ServerAddresses.cs" />
     <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
-    <Compile Include="Providers\Rackspace\ComputeProviderFactory.cs" />
     <Compile Include="Providers\Rackspace\IProviderFactory.cs" />
     <Compile Include="Core\Domain\NewServer.cs" />
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\CreateServerResponse.cs" />
-    <Compile Include="Core\Domain\ImpersonationIdentity.cs" />
+    <Compile Include="Providers\Rackspace\RackspaceImpersonationIdentity.cs" />
     <Compile Include="Core\Domain\MetaData.cs" />
     <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\CreateServerRequestJsonMapper.cs" />
@@ -75,6 +74,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Core\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
+    <Compile Include="Providers\Rackspace\RackspaceCloudIdentity.cs" />
     <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\IIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
@@ -88,11 +88,10 @@
     <Compile Include="Core\Domain\ServiceCatalog.cs" />
     <Compile Include="Providers\Rackspace\Objects\AuthenticationResponse.cs" />
     <Compile Include="Providers\Rackspace\IdentityProvider.cs" />
-    <Compile Include="Core\Domain\TokenUser.cs" />
+    <Compile Include="Core\Domain\UserDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\RolesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\UpdateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\ProviderBase.cs" />
-    <Compile Include="Providers\Rackspace\RegionalComputeProvider.cs" />
     <Compile Include="Providers\Rackspace\Objects\UserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />

@@ -20,18 +20,18 @@ namespace net.openstack.Providers.Rackspace
             return provider.ListRoles(identity);
         }
 
-        public Role[] GetRolesByUser(string userId, CloudIdentity identity)
+        public Role[] GetRolesByUser(CloudIdentity identity, string userId)
         {
             var provider = GetProvider(identity);
 
-            return provider.GetRolesByUser(userId, identity);
+            return provider.GetRolesByUser(identity, userId);
         }
 
-        public User GetUserByName(string name, CloudIdentity identity)
+        public User GetUserByName(CloudIdentity identity, string name)
         {
             var provider = GetProvider(identity);
 
-            return provider.GetUserByName(name, identity);
+            return provider.GetUserByName(identity, name);
         }
 
         public UserAccess Authenticate(CloudIdentity identity)
@@ -41,11 +41,11 @@ namespace net.openstack.Providers.Rackspace
             return provider.Authenticate(identity);
         }
 
-        public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
+        public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
         {
             var provider = GetProvider(identity);
 
-            return provider.AddRoleToUser(userId, roleId, identity);
+            return provider.AddRoleToUser(identity, userId, roleId);
         }
 
         public string GetToken(CloudIdentity identity)
@@ -55,11 +55,11 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetToken(identity);
         }
 
-        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
+        public bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId)
         {
             var provider = GetProvider(identity);
 
-            return provider.DeleteRoleFromUser(userId, roleId, identity);
+            return provider.DeleteRoleFromUser(identity, userId, roleId);
         }
 
         public IdentityToken GetTokenInfo(CloudIdentity identity)
@@ -71,7 +71,12 @@ namespace net.openstack.Providers.Rackspace
 
         private IIdentityProvider GetProvider(CloudIdentity identity)
         {
-            return _factory.Get(identity.Region);
+            var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
+
+            if (rackspaceCloudIdentity == null)
+                throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identoty service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
+
+            return _factory.Get(rackspaceCloudIdentity.CloudInstance);
         }
     }
 }

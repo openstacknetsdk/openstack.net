@@ -34,7 +34,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Roles;
         }
 
-        public Role[] GetRolesByUser(string userId, CloudIdentity identity)
+        public Role[] GetRolesByUser(CloudIdentity identity, string userId)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
             var response = ExecuteRESTRequest<RolesResponse>(urlPath, HttpMethod.GET, null, identity);
@@ -45,7 +45,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Roles;
         }
 
-        public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
+        public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.PUT, null, identity);
@@ -57,7 +57,7 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
+        public bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.DELETE, null, identity);
@@ -72,7 +72,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Users
         
-        public User GetUserByName(string name, CloudIdentity identity)
+        public User GetUserByName(CloudIdentity identity, string name)
         {
             var urlPath = string.Format("/v2.0/users/?name={0}", name);
             var response = ExecuteRESTRequest<UserResponse>(urlPath, HttpMethod.GET, null, identity);
@@ -94,7 +94,7 @@ namespace net.openstack.Providers.Rackspace
             return auth.Token.Id;
         }
 
-        public string GetToken(ImpersonationIdentity identity)
+        public string GetToken(RackspaceImpersonationIdentity identity)
         {
             var auth = Authenticate(identity);
 
@@ -116,9 +116,14 @@ namespace net.openstack.Providers.Rackspace
 
         public UserAccess Authenticate(CloudIdentity identity)
         {
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", identity.Region, identity.Username), () => {
-                var auth = AuthRequest.FromCloudIdentity(identity);
-                var response = ExecuteRESTRequest<AuthenticationResponse>("/v2.0/tokens", HttpMethod.POST, auth, identity, isTokenRequest: true);
+            var usIdentity = identity as RackspaceCloudIdentity;
+
+            if(usIdentity == null)
+                throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identoty service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
+
+            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", usIdentity.CloudInstance, usIdentity.Username), () => {
+                var auth = AuthRequest.FromCloudIdentity(usIdentity);
+                var response = ExecuteRESTRequest<AuthenticationResponse>("/v2.0/tokens", HttpMethod.POST, auth, usIdentity, isTokenRequest: true);
 
 
                 if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
@@ -130,9 +135,9 @@ namespace net.openstack.Providers.Rackspace
             return userAccess;
         }
 
-        public UserAccess Authenticate(ImpersonationIdentity identity)
+        public UserAccess Authenticate(RackspaceImpersonationIdentity identity)
         {
-            var impToken = _userAccessCache.Get(string.Format("imp/{0}/{1}", identity.UserToImpersonate.Region, identity.UserToImpersonate.Username), () => {
+            var impToken = _userAccessCache.Get(string.Format("imp/{0}/{1}", identity.UserToImpersonate.CloudInstance, identity.UserToImpersonate.Username), () => {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
                 var response = ExecuteRESTRequest<UserImpersonationResponse>(urlPath, HttpMethod.POST, request, identity);
@@ -192,19 +197,17 @@ namespace net.openstack.Providers.Rackspace
             var response = _restService.Execute<T>(url, method, bodyStr, headers, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 } });
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401)
+            if (response.StatusCode == 401 && !isRetry && !isTokenRequest)
             {
-                if (!isRetry)
-                {
-                    // if authentication failed, assume the token ran out and refresh.
-                    //if (response.StatusCode == 401 && !isTokenRequest)
-                    //    GetRackConnectToken(region, modifiedBy, true);
-
-                    return ExecuteRESTRequest<T>(urlPath, method, body, identity, true, isTokenRequest, GetToken(identity));
-                }
+                return ExecuteRESTRequest<T>(urlPath, method, body, identity, true, isTokenRequest, GetToken(identity));
             }
 
             return response;
         }
+    }
+
+    internal class InvalidCloudIdentityException : Exception
+    {
+        public InvalidCloudIdentityException(string message) : base(message) {}
     }
 }

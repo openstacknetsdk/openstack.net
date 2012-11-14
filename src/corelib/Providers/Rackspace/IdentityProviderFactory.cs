@@ -7,7 +7,7 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class IdentityProviderFactory : IProviderFactory<IIdentityProvider>
+    internal class IdentityProviderFactory : IProviderFactory<IIdentityProvider, CloudInstance>
     {
         private const string USIdentityUrlBase = "https://identity.api.rackspacecloud.com";
         private const string LONIdentityUrlBase = "https://lon.identity.api.rackspacecloud.com";
@@ -27,18 +27,16 @@ namespace net.openstack.Providers.Rackspace
             _tokenCache = tokenCache;
         }
 
-        public IIdentityProvider Get(string geo)
+        public IIdentityProvider Get(CloudInstance cloudInstance)
         {
-            switch (geo.ToLower())
+            switch (cloudInstance)
             {
-                case "dfw":
-                case "ord":
-                case "us":
+                case CloudInstance.US:
                     return new GeographicalIdentityProvider(new Uri(USIdentityUrlBase), _restService, _tokenCache);
-                case "lon":
+                case CloudInstance.Lon:
                     return new GeographicalIdentityProvider(new Uri(LONIdentityUrlBase), _restService, _tokenCache);
                 default:
-                    throw new UnknownGeographyException(geo);
+                    throw new UnknownGeographyException(cloudInstance.ToString());
             }
         }
     }
