@@ -28,8 +28,8 @@ namespace net.openstack.Core
         FlavorDetails GetFlavor(CloudIdentity identity, string id, string region = null);
             
         // Images
-        IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.NONE, string region = null);
-        IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.NONE, string region = null);
+        IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null);
+        IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null);
         ServerImageDetails GetImage(CloudIdentity identity, string imageId, string region = null);
         bool DeleteImage(CloudIdentity identity, string imageId, string region = null);
 

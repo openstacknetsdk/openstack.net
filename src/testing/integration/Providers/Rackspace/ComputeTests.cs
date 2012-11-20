@@ -1,7 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Configuration;
 using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,7 +16,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public ComputeTests()
         {
             CloudInstance cloudInstance;
-            CloudInstance.TryParse(ConfigurationManager.AppSettings["TestIdentityRegion"], true, out cloudInstance);
+            CloudInstance.TryParse(ConfigurationManager.AppSettings["TestIdentityGeo"], true, out cloudInstance);
 
             _testIdentity = new RackspaceCloudIdentity
             {

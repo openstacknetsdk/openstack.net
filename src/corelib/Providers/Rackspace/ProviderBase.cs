@@ -21,14 +21,14 @@ namespace net.openstack.Providers.Rackspace
             _restService = restService;
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(Uri absoluteUri, HttpMethod method, object body, CloudIdentity identity, bool isRetry = false, string token = null, JsonRequestSettings requestSettings = null) where T : new()
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isRetry = false, JsonRequestSettings requestSettings = null) where T : new()
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
             
             var headers = new Dictionary<string, string>
                               {
-                                  { "X-Auth-Token", string.IsNullOrWhiteSpace(token) ? _identityProvider.GetToken(identity) : token }
+                                  { "X-Auth-Token", _identityProvider.GetToken(identity, isRetry)}
                               };
 
             string bodyStr = null;
@@ -40,14 +40,14 @@ namespace net.openstack.Providers.Rackspace
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
-            var response = _restService.Execute<T>(absoluteUri, method, bodyStr, headers, requestSettings);
+            var response = _restService.Execute<T>(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
             // on errors try again 1 time.
             if (response.StatusCode == 401)
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest<T>(absoluteUri, method, body, identity, true, _identityProvider.GetToken(identity));
+                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, true);
                 }
             }
 

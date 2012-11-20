@@ -9,7 +9,7 @@ namespace net.openstack
         private readonly Hashtable _tokenCache = new Hashtable();
         private readonly object _tokenLock = new object();
 
-        public UserAccess Get(string key, Func<UserAccess> refreshCallback)
+        public UserAccess Get(string key, Func<UserAccess> refreshCallback, bool forceCacheRefresh = false)
         {
             UserAccess userAccess = null;
 
@@ -17,7 +17,7 @@ namespace net.openstack
             {
                 //var hashKey = BuildTokenCacheKey(username, region);
                 var refreshToken = true;
-                if (_tokenCache.ContainsKey(key))
+                if (!forceCacheRefresh && _tokenCache.ContainsKey(key))
                 {
                     userAccess = (UserAccess)_tokenCache[key];
 
@@ -27,7 +27,7 @@ namespace net.openstack
                         refreshToken = false;
                 }
 
-                if (refreshToken && refreshCallback != null)
+                if (forceCacheRefresh || (refreshToken && refreshCallback != null))
                 {
                     userAccess = refreshCallback();
                     if (userAccess != null)
@@ -66,6 +66,6 @@ namespace net.openstack
 
     public interface ICache<T>
     {
-        T Get(string key, Func<T> refreshCallback);
+        T Get(string key, Func<T> refreshCallback, bool forceCacheRefresh = false);
     }
 }

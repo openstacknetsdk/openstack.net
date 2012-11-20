@@ -2,6 +2,6 @@
 {
     public enum ImageType
     {
-        NONE, BASE, SERVER
+        Default, Base, Server
     }
 }

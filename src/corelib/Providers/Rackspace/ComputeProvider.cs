@@ -38,7 +38,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListServersResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -50,7 +50,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
             
-            var response = ExecuteRESTRequest<ListServersResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -63,7 +63,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
             var requestJson = _createServerRequestMapper.ToJson(new CreateServerRequest(){DiskConfig = "AUTO", Flavor = flavor, ImageName = imageName, Name = cloudServerName, FriendlyName = friendlyName});
-            var response = ExecuteRESTRequest<CreateServerResponse>(urlPath, HttpMethod.POST, requestJson, identity);
+            var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, requestJson);
 
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
@@ -78,7 +78,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<ServerDetailsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ServerDetailsResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
@@ -92,7 +92,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
             var requestJson = new UpdateServerRequest(name, ipV4Address, ipV6Address);
-            var response = ExecuteRESTRequest<ServerDetailsResponse>(urlPath, HttpMethod.PUT, requestJson, identity);
+            var response = ExecuteRESTRequest<ServerDetailsResponse>(identity, urlPath, HttpMethod.PUT, requestJson);
 
             if (response == null || response.Data == null || response.Data.Server == null)
                 return false;
@@ -108,7 +108,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
             var defaultSettings = BuildDefaultRequestSettings(new [] {404});
-            var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.DELETE, null, identity, requestSettings: defaultSettings);
+            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, requestSettings: defaultSettings);
 
             if (response.StatusCode != 200 && response.StatusCode != 204)
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
@@ -124,7 +124,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips", GetServiceEndpoint(identity, region), serverId));
 
-            var response = ExecuteRESTRequest<ListAddressesResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListAddressesResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -136,7 +136,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
-            var response = ExecuteRESTRequest<ListAddressesByNetworkResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListAddressesByNetworkResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -160,7 +160,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/flavors", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListFlavorsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListFlavorsResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -172,7 +172,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/flavors/detail", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListFlavorDetailsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<ListFlavorDetailsResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -184,7 +184,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/flavors/{1}", GetServiceEndpoint(identity, region), id));
 
-            var response = ExecuteRESTRequest<FlavorDetailsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<FlavorDetailsResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -196,11 +196,13 @@ namespace net.openstack.Providers.Rackspace
 
         #region Images
 
-        public IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = ImageType.NONE, string region = null)
+        public IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListImagesResponse>(urlPath, HttpMethod.GET, null, identity);
+            var queryStringParameters = BuildListImagesQueryStringParameters(serverId, imageName, imageStatus, changesSince, markerId, limit, imageType);
+
+            var response = ExecuteRESTRequest<ListImagesResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -208,23 +210,53 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Images;
         }
 
-        public IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = ImageType.NONE, string region = null)
+        public IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListImagesDetailsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var queryStringParameters = BuildListImagesQueryStringParameters(serverId, imageName, imageStatus, changesSince, markerId, limit, imageType);
+
+            var response = ExecuteRESTRequest<ListImagesDetailsResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
             if (response == null || response.Data == null)
                 return null;
 
             return response.Data.Images;
         }
+
+        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default)
+        {
+            var queryParameters = new Dictionary<string, string>();
+
+            if(!string.IsNullOrWhiteSpace(serverId))
+                queryParameters.Add("server", serverId);
+
+            if (!string.IsNullOrWhiteSpace(imageName))
+                queryParameters.Add("name", serverId);
+
+            if (!string.IsNullOrWhiteSpace(imageStatus))
+                queryParameters.Add("status", serverId);
+
+            if (changesSince != default(DateTime))
+                queryParameters.Add("changes-since", changesSince.ToUniversalTime().ToString("yyyy-MM-ddTHH::mm:ssZ"));
+
+            if (!string.IsNullOrWhiteSpace(markerId))
+                queryParameters.Add("marker", markerId);
+
+            if (limit > 0)
+                queryParameters.Add("limit", limit.ToString());
+
+            if(imageType != ImageType.Default)
+                queryParameters.Add("type", imageType.ToString().ToUpper());
+
+            return queryParameters;
+        } 
 
         public ServerImageDetails GetImage(CloudIdentity identity, string imageId, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
-            var response = ExecuteRESTRequest<GetImageDetailsResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<GetImageDetailsResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -237,7 +269,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
             var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
-            var response = ExecuteRESTRequest<object>(urlPath, HttpMethod.DELETE, null, identity, requestSettings: defaultSettings);
+            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, requestSettings: defaultSettings);
 
             if (response.StatusCode != 200 && response.StatusCode != 203)
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
@@ -253,7 +285,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<MetaDataResponse>(urlPath, HttpMethod.GET, null, identity);
+            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null)
                 return null;

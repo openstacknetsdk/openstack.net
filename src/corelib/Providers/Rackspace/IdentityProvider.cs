@@ -34,11 +34,11 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUserByName(identity, name);
         }
 
-        public UserAccess Authenticate(CloudIdentity identity)
+        public UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
 
-            return provider.Authenticate(identity);
+            return provider.Authenticate(identity, forceCacheRefresh);
         }
 
         public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
@@ -48,11 +48,11 @@ namespace net.openstack.Providers.Rackspace
             return provider.AddRoleToUser(identity, userId, roleId);
         }
 
-        public string GetToken(CloudIdentity identity)
+        public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
 
-            return provider.GetToken(identity);
+            return provider.GetToken(identity, forceCacheRefresh);
         }
 
         public bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId)
@@ -62,7 +62,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.DeleteRoleFromUser(identity, userId, roleId);
         }
 
-        public IdentityToken GetTokenInfo(CloudIdentity identity)
+        public IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
 

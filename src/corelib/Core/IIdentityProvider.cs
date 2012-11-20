@@ -10,8 +10,8 @@ namespace net.openstack.Core
         Role[] GetRolesByUser(CloudIdentity identity, string userId);
         bool AddRoleToUser(CloudIdentity identity, string userId, string roleId);
         bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId);
-        string GetToken(CloudIdentity identity);
-        IdentityToken GetTokenInfo(CloudIdentity identity);
+        string GetToken(CloudIdentity identity, bool forceCacheRefresh = false);
+        IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false);
         
         //User[] ListUsers(CloudIdentity identity);
         User GetUserByName(CloudIdentity identity, string name);
@@ -19,6 +19,6 @@ namespace net.openstack.Core
         //void AddUser(User user, CloudIdentity identity);
         //void UpdateUser(User user, CloudIdentity identity);
         //void DeleteUser(string userId, CloudIdentity identity);
-        UserAccess Authenticate(CloudIdentity identity);
+        UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false);
     }
 }
