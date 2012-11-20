@@ -6,4 +6,6 @@ namespace net.openstack.Core.Domain
 
         public Link[] Links { get; set; }
     }
+
+    public class ServerImageDetails : ServerImage{}
 }
