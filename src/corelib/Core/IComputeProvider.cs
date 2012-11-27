@@ -44,6 +44,11 @@ namespace net.openstack.Core
 
         // Metadata
         Metadata ListMetadata(CloudIdentity identity, string cloudServerId, string region = null);
+        //Metadata SetMetadata(CloudIdentity identity, string cloudServerId, string region = null);
+        //Metadata UpdateMetadata(CloudIdentity identity, string cloudServerId, string region = null);
+        //Metadata GetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null);
+        //Metadata SetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null);
+        //Metadata DeleteMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null);
     }
 }
     

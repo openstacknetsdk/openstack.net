@@ -403,6 +403,31 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
+        //public Metadata SetMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Metadata UpdateMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Metadata GetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Metadata SetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Metadata DeleteMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         #endregion
 
         #region Private methods
