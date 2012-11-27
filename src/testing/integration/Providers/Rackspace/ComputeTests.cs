@@ -51,7 +51,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test1_Should_Create_A_New_Server_In_DFW()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            _testServer = provider.CreateServer(_testIdentity, "test-server", "My Test Server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2");
+            _testServer = provider.CreateServer(_testIdentity, "test-server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2");
 
             Assert.IsNotNull(_testServer);
             Assert.IsNotNull(_testServer.Id);

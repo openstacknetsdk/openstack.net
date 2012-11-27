@@ -1,8 +1,8 @@
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Providers.Rackspace.Objects
+namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    public class ListImagesDetailsResponse
+    internal class ListImagesDetailsResponse
     {
         public ServerImageDetails[] Images { get; set; }
     }

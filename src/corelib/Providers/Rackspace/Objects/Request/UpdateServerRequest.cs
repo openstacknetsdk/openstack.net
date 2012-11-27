@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace net.openstack.Providers.Rackspace.Objects
+namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     [DataContract]
-    public class UpdateServerRequest
+    internal class UpdateServerRequest
     {
         [DataMember(Name="server")]
         public ServerUpdateDetails Server { get; set; }
@@ -20,7 +20,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     }
 
     [DataContract]
-    public class ServerUpdateDetails
+    internal class ServerUpdateDetails
     {
         [DataMember(Name="name")]
         public string Name { get; set; }

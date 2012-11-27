@@ -1,10 +1,10 @@
 using System.Runtime.Serialization;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Providers.Rackspace.Objects
+namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     [DataContract]
-    public class RolesResponse
+    internal class RolesResponse
     {
         [DataMember]
         public Role[] Roles { get; set; }

@@ -1,8 +1,8 @@
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Providers.Rackspace.Objects
+namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    public class ListAddressesResponse
+    internal class ListAddressesResponse
     {
         public ServerAddresses Addresses { get; set; }
     }

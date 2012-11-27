@@ -5,8 +5,8 @@ using SimpleRestServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
-using net.openstack.Providers.Rackspace.Objects;
-using net.openstack.Providers.Rackspace.Objects.Mapping;
+using net.openstack.Providers.Rackspace.Objects.Request;
+using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -19,18 +19,15 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
+        #region Constructors
+       
         public ComputeProvider()
             : this(new IdentityProvider(), new JsonRestServices()) { }
 
         public ComputeProvider(IIdentityProvider identityProvider, IRestService restService) 
-            : this(identityProvider, restService, new MetaDataJsonMapper(), new CreateServerRequestJsonMapper()) {}
+            : base(identityProvider, restService){}
 
-        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Metadata> metadataMapper, IJsonObjectMapper<CreateServerRequest> createServerRequestMapper)
-            : base(identityProvider, restService)
-        {
-            _metadataMapper = metadataMapper;
-            _createServerRequestMapper = createServerRequestMapper;
-        }
+        #endregion
 
         #region Servers
 
@@ -58,12 +55,22 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Servers;
         }
 
-        public NewServer CreateServer(CloudIdentity identity, string cloudServerName, string friendlyName, string imageName, string flavor, string region = null)
+        public NewServer CreateServer(CloudIdentity identity, string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            var requestJson = _createServerRequestMapper.ToJson(new CreateServerRequest(){DiskConfig = "AUTO", Flavor = flavor, ImageName = imageName, Name = cloudServerName, FriendlyName = friendlyName});
-            var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, requestJson);
+            var request = new CreateServerRequest
+                              {
+                                  Details = new CreateServerDetails
+                                                {
+                                                    Name = cloudServerName,
+                                                    DiskConfig = diskConfig,
+                                                    Flavor = flavor,
+                                                    ImageName = imageName,
+                                                    Metadata = metadata
+                                                }
+                              };
+            var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
@@ -83,7 +90,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            response.Data.Server.Metadata = _metadataMapper.FromJson(response.RawBody);
+            //response.Data.Server.Metadata = _metadataMapper.From(response.RawBody);
             return response.Data.Server;
         }
 
@@ -147,6 +154,109 @@ namespace net.openstack.Providers.Rackspace
         #endregion
 
         #region Server Actions
+        
+        public bool ChangeAdministratorPassword(CloudIdentity identity, string serverId, string password, string region = null)
+        {
+            var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        public bool RebootServer(CloudIdentity identity, string serverId, RebootType rebootType, string region = null)
+        {
+            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        public ServerDetails RebuildServer(CloudIdentity identity, string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null)
+        {
+            var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
+                                                                   {
+                                                                       Name = serverName,
+                                                                       ImageName = imageName,
+                                                                       Flavor = flavor,
+                                                                       DiskConfig = diskConfig,
+                                                                       AdminPassword = adminPassword,
+                                                                       Metadata = metadata,
+                                                                       Personality = personality,
+                                                                       AccessIPv4 = ipV4Address,
+                                                                       AccessIPv6 = ipV6Address,
+                                                                   } };
+            var resp = ExecuteServerAction<ServerDetailsResponse>(identity, serverId, request, region);
+
+            return resp.Server;
+        }
+
+        public bool ResizeServer(CloudIdentity identity, string serverId, string serverName, string flavor, string diskConfig = null, string region = null)
+        {
+            var request = new ServerResizeRequest
+                {
+                    Details = new ServerResizeDetails
+                    {
+                        Name = serverName,
+                        Flavor = flavor,
+                        DiskConfig = diskConfig,
+                    }
+                };
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        public bool ConfirmServerResize(CloudIdentity identity, string serverId, string region = null)
+        {
+            var request = new ConfirmServerResizeRequest();
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        public bool RevertServerResize(CloudIdentity identity, string serverId, string region = null)
+        {
+            var request = new RevertServerResizeRequest();
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        public string RescueServer(CloudIdentity identity, string serverId, string region = null)
+        {
+            var request = new RescueServerRequest{Details = "none"};
+            var resp = ExecuteServerAction<RescueServerResponse>(identity, serverId, request, region);
+
+            return resp.AdminPassword;
+        }
+
+        public ServerDetails UnRescueServer(CloudIdentity identity, string serverId, string region = null)
+        {
+            var request = new UnrescueServerRequest { Details = "none" };
+            var resp = ExecuteServerAction<ServerDetailsResponse>(identity, serverId, request, region);
+
+            return resp.Server;
+        }
+
+        public bool CreateImage(CloudIdentity identity, string serverId, string imageName, Metadata metadata = null, string region = null)
+        {
+            var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
+            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+
+            return resp;
+        }
+
+        private T ExecuteServerAction<T>(CloudIdentity identity, string serverId, object body, string region = null) where T : new()
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
+
+            var response = ExecuteRESTRequest<T>(identity, urlPath, HttpMethod.GET, body);
+
+            if (response == null || response.Data == null)
+                return default(T);
+
+            return response.Data;
+        }
 
         #endregion
 
@@ -290,7 +400,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null)
                 return null;
 
-            return _metadataMapper.FromJson(response.RawBody);
+            return response.Data.Metadata;
         }
 
         #endregion

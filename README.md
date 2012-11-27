@@ -98,7 +98,7 @@ Below is a list of required Openstack features and our current progress.  We hav
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Support AccessIP</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
@@ -113,62 +113,62 @@ Below is a list of required Openstack features and our current progress.  We hav
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Support IPv6</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Support DiskConfig on server create</td>				
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Support DiskConfig on image create</td>				
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Change Admin Password</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Reboot</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Rebuild</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Resize</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Confirm Resized</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Revert Resized</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Create Image</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Rescue</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>
 				<td>Unrescue</td>
-				<td>&nbsp;</td>
+				<td><img src="http://c87551950a9ea8b9ff4a-3de1324fa419f1d38a3b4315c44fd19c.r96.cf1.rackcdn.com/status_2_sm.png" /></td>
 				<td>&nbsp;</td></tr>
 			<tr>				
 				<td>&nbsp;</td>

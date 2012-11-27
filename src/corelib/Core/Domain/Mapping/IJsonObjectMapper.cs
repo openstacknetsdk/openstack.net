@@ -2,10 +2,8 @@
 
 namespace net.openstack.Core.Domain.Mapping
 {
-    public interface IJsonObjectMapper<T>
+    public interface IJsonObjectMapper<T> : IObjectMapper<JObject, T>
     {
-        T FromJson(string rawJson);
-
-        JObject ToJson(T mapObj);
+        T Map(string rawJson);
     }
 }

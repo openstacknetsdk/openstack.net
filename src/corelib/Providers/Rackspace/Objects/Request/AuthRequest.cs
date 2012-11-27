@@ -1,10 +1,10 @@
 ﻿using System.Runtime.Serialization;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Providers.Rackspace.Objects
+namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     [DataContract]
-    public class AuthRequest
+    internal class AuthRequest
     {
         [DataMember(Name = "auth")]
         public AuthDetails Credencials { get; set; }

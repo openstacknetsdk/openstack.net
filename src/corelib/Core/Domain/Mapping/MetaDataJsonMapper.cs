@@ -6,7 +6,7 @@ namespace net.openstack.Core.Domain.Mapping
 {
     public class MetaDataJsonMapper : IJsonObjectMapper<Metadata>
     {
-        public Metadata FromJson(string rawJson)
+        public Metadata Map(string rawJson)
         {
             if (string.IsNullOrWhiteSpace(rawJson))
                 return null;
@@ -15,18 +15,7 @@ namespace net.openstack.Core.Domain.Mapping
             {
                 var json = JObject.Parse(rawJson);
 
-                var metaDataItem = GetMetaDataItem(json);
-
-                if (metaDataItem == null)
-                    return null;
-
-                var metadata = new Metadata();
-                foreach (var prop in metaDataItem.Children().OfType<JProperty>())
-                {
-                    metadata.Add(prop.Name, prop.Value.Value<string>());
-                }
-
-                return metadata;
+                return Map(json);
             }
             catch (JsonReaderException)
             {
@@ -34,7 +23,23 @@ namespace net.openstack.Core.Domain.Mapping
             }
         }
 
-        public JObject ToJson(Metadata mapObj)
+        public Metadata Map(JObject json)
+        {
+            var metaDataItem = GetMetaDataItem(json);
+
+            if (metaDataItem == null)
+                return null;
+
+            var metadata = new Metadata();
+            foreach (var prop in metaDataItem.Children().OfType<JProperty>())
+            {
+                metadata.Add(prop.Name, prop.Value.Value<string>());
+            }
+
+            return metadata;
+        }
+
+        public JObject Map(Metadata mapObj)
         {
             throw new System.NotImplementedException();
         }
