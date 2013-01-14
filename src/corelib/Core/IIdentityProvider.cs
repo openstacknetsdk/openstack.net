@@ -17,7 +17,7 @@ namespace net.openstack.Core
         User GetUserByName(CloudIdentity identity, string name);
         User GetUser(CloudIdentity identity, string id);
         //void AddUser(User user, CloudIdentity identity);
-        bool UpdateUser(CloudIdentity identity, UpdateUserRequest user);
+        bool UpdateUser(CloudIdentity identity, User user);
         //void DeleteUser(string userId, CloudIdentity identity);
         UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false);
     }

@@ -78,11 +78,12 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        public bool UpdateUser(CloudIdentity identity, UpdateUserRequest userRequest)
+        public bool UpdateUser(CloudIdentity identity, User user)
         {
-            var urlPath = string.Format("v2.0/users/{0}", userRequest.user.id);
+            var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
-            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.POST, userRequest);
+            var updateUserRequest = new UpdateUserRequest {User = user};
+            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.POST, updateUserRequest);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
             if (response == null || (response.StatusCode >= 400 && response.StatusCode != 409))

@@ -57,11 +57,11 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUser(identity, userId);
         }
 
-        public bool UpdateUser(CloudIdentity identity, UpdateUserRequest userRequest)
+        public bool UpdateUser(CloudIdentity identity, User user)
         {
             var provider = GetProvider(identity);
 
-            return provider.UpdateUser(identity, userRequest);
+            return provider.UpdateUser(identity, user);
         }
 
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
