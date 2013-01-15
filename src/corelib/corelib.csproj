@@ -65,6 +65,9 @@
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataItemRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\IProviderFactory.cs" />

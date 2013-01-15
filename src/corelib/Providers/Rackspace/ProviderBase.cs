@@ -25,7 +25,7 @@ namespace net.openstack.Providers.Rackspace
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
-            
+
             var headers = new Dictionary<string, string>
                               {
                                   { "X-Auth-Token", _identityProvider.GetToken(identity, isRetry)}
@@ -51,7 +51,42 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
+            return response; 
+            
+        }
+
+        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isRetry = false, JsonRequestSettings requestSettings = null)
+        {
+            if (requestSettings == null)
+                requestSettings = BuildDefaultRequestSettings();
+
+            var headers = new Dictionary<string, string>
+                              {
+                                  { "X-Auth-Token", _identityProvider.GetToken(identity, isRetry)}
+                              };
+
+            string bodyStr = null;
+            if (body != null)
+            {
+                if (body is JObject)
+                    bodyStr = body.ToString();
+                else
+                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+
+            var response = _restService.Execute(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
+
+            // on errors try again 1 time.
+            if (response.StatusCode == 401)
+            {
+                if (!isRetry)
+                {
+                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, true);
+                }
+            }
+
             return response;
+
         }
 
         internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)

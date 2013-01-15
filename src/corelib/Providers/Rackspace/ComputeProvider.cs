@@ -5,7 +5,6 @@ using SimpleRestServices.Client;
 using SimpleRestServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Domain.Mapping;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
@@ -13,13 +12,6 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ComputeProvider : ProviderBase, IComputeProvider
     {
-        #region Private/Protected instance members
-
-        private readonly IJsonObjectMapper<Metadata> _metadataMapper;
-        private readonly IJsonObjectMapper<CreateServerRequest> _createServerRequestMapper;
-
-        #endregion
-
         #region Constructors
        
         public ComputeProvider()
@@ -267,7 +259,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Flavors
 
-        public IEnumerable<Flavor> ListFlavors(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerID = null, int limit = 0, string region = null)
+        public IEnumerable<Flavor> ListFlavors(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors", GetServiceEndpoint(identity, region)));
 
@@ -279,7 +271,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Flavors;
         }
 
-        public IEnumerable<FlavorDetails> ListFlavorsWithDetails(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerID = null, int limit = 0, string region = null)
+        public IEnumerable<FlavorDetails> ListFlavorsWithDetails(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors/detail", GetServiceEndpoint(identity, region)));
 
@@ -408,7 +400,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
             if (response.StatusCode == 200)
                 return true;
@@ -420,7 +412,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
             if (response.StatusCode == 200)
                 return true;
@@ -444,7 +436,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = new Metadata {{key, value}} });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
 
             if (response.StatusCode == 200)
                 return true;
@@ -456,7 +448,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.DELETE);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
             if (response.StatusCode == 204)
                 return true;
@@ -484,7 +476,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
             if (response.StatusCode == 200)
                 return true;
@@ -496,7 +488,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
             if (response.StatusCode == 200)
                 return true;
@@ -520,7 +512,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = new Metadata { { key, value } } });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
 
             if (response.StatusCode == 200)
                 return true;
@@ -532,7 +524,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.DELETE);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
             if (response.StatusCode == 204)
                 return true;

@@ -11,6 +11,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public CreateServerDetails Details { get; set; }
     }
 
+    [DataContract]
     internal class CreateServerDetails
     {
         [DataMember(Name = "name")]

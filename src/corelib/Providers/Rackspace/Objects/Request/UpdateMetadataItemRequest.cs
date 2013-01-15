@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     [DataContract]
-    public class UpdateMetadataRequest
+    public class UpdateMetadataItemRequest
     {
-        [DataMember(Name = "metadata")]
+        [DataMember(Name = "meta")]
         public Metadata Metadata { get; set; }
     }
 }
