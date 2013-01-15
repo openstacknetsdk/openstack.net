@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SimpleRestServices.Client;
 using SimpleRestServices.Client.Json;
 using net.openstack.Core;
@@ -389,9 +390,9 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-        #region Metadata
+        #region Server Metadata
 
-        public Metadata ListMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        public Metadata ListServerMetadata(CloudIdentity identity, string cloudServerId, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -403,30 +404,141 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        //public Metadata SetMetadata(CloudIdentity identity, string cloudServerId, string region = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public bool SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-        //public Metadata UpdateMetadata(CloudIdentity identity, string cloudServerId, string region = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
-        //public Metadata GetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
+            if (response.StatusCode == 200)
+                return true;
 
-        //public Metadata SetMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
+            return false;
+        }
 
-        //public Metadata DeleteMetadataItem(CloudIdentity identity, string cloudServerId, string metadataItemId, string region = null)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public bool UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+
+            if (response.StatusCode == 200)
+                return true;
+
+            return false;
+        }
+
+        public string GetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || (response.StatusCode != 200 && response.StatusCode != 203) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
+                return null;
+
+            return response.Data.Metadata.First().Value;
+        }
+
+        public bool SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = new Metadata {{key, value}} });
+
+            if (response.StatusCode == 200)
+                return true;
+
+            return false;
+        }
+
+        public bool DeleteServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.DELETE);
+
+            if (response.StatusCode == 204)
+                return true;
+
+            return false;
+        }
+
+        #endregion
+
+        #region Image Metadata
+
+        public Metadata ListImageMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+
+            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null)
+                return null;
+
+            return response.Data.Metadata;
+        }
+
+        public bool SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+
+            if (response.StatusCode == 200)
+                return true;
+
+            return false;
+        }
+
+        public bool UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+
+            if (response.StatusCode == 200)
+                return true;
+
+            return false;
+        }
+
+        public string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
+                return null;
+
+            return response.Data.Metadata.First().Value;
+        }
+
+        public bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = new Metadata { { key, value } } });
+
+            if (response.StatusCode == 200)
+                return true;
+
+            return false;
+        }
+        
+        public bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+
+            var response = ExecuteRESTRequest<bool>(identity, urlPath, HttpMethod.DELETE);
+
+            if (response.StatusCode == 204)
+                return true;
+
+            return false;
+        }
 
         #endregion
 

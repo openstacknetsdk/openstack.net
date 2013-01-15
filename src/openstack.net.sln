@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{62B45D81-B643-4E2B-B612-F479B9570F3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "unit\unit.csproj", "{FDFD92C2-75CF-4437-87B8-841EC3624CE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "testing\unit\unit.csproj", "{FDFD92C2-75CF-4437-87B8-841EC3624CE4}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
