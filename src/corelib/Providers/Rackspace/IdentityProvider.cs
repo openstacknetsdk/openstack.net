@@ -1,6 +1,8 @@
-﻿using SimpleRestServices.Client;
+﻿using System.Collections.Generic;
+using SimpleRestServices.Client;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -46,6 +48,20 @@ namespace net.openstack.Providers.Rackspace
             var provider = GetProvider(identity);
 
             return provider.AddRoleToUser(identity, userId, roleId);
+        }
+
+        public User GetUser(CloudIdentity identity, string userId)
+        {
+            var provider = GetProvider(identity);
+
+            return provider.GetUser(identity, userId);
+        }
+
+        public bool UpdateUser(CloudIdentity identity, User user)
+        {
+            var provider = GetProvider(identity);
+
+            return provider.UpdateUser(identity, user);
         }
 
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
