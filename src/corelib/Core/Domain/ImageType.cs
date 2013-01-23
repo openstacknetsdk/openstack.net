@@ -1,7 +1,8 @@
 ﻿namespace net.openstack.Core.Domain
 {
-    public enum ImageType
+    public class ImageType
     {
-        Default, Base, Server
+        public static string Base {get { return "BASE"; } }
+        public static string Snapshot {get { return "SNAPSHOT"; } }
     }
 }

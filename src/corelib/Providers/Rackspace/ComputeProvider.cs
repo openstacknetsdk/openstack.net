@@ -151,7 +151,7 @@ namespace net.openstack.Providers.Rackspace
         public bool ChangeAdministratorPassword(CloudIdentity identity, string serverId, string password, string region = null)
         {
             var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
@@ -159,7 +159,7 @@ namespace net.openstack.Providers.Rackspace
         public bool RebootServer(CloudIdentity identity, string serverId, RebootType rebootType, string region = null)
         {
             var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
@@ -194,7 +194,7 @@ namespace net.openstack.Providers.Rackspace
                         DiskConfig = diskConfig,
                     }
                 };
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
@@ -202,7 +202,7 @@ namespace net.openstack.Providers.Rackspace
         public bool ConfirmServerResize(CloudIdentity identity, string serverId, string region = null)
         {
             var request = new ConfirmServerResizeRequest();
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
@@ -210,7 +210,7 @@ namespace net.openstack.Providers.Rackspace
         public bool RevertServerResize(CloudIdentity identity, string serverId, string region = null)
         {
             var request = new RevertServerResizeRequest();
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
@@ -234,21 +234,35 @@ namespace net.openstack.Providers.Rackspace
         public bool CreateImage(CloudIdentity identity, string serverId, string imageName, Metadata metadata = null, string region = null)
         {
             var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
-            var resp = ExecuteServerAction<bool>(identity, serverId, request, region);
+            var resp = ExecuteServerAction(identity, serverId, request, region);
 
             return resp;
         }
+
+        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
 
         private T ExecuteServerAction<T>(CloudIdentity identity, string serverId, object body, string region = null) where T : new()
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
 
-            var response = ExecuteRESTRequest<T>(identity, urlPath, HttpMethod.GET, body);
+            var response = ExecuteRESTRequest<T>(identity, urlPath, HttpMethod.POST, body);
 
-            if (response == null || response.Data == null)
+            if (response == null || response.Data == null || !_validServerActionResponseCode.Contains(response.StatusCode))
                 return default(T);
 
             return response.Data;
+        }
+
+        private bool ExecuteServerAction(CloudIdentity identity, string serverId, object body, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, body);
+
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
+                return false;
+
+            return true;
         }
 
         #endregion
@@ -299,7 +313,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Images
 
-        public IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null)
+        public IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
@@ -313,7 +327,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Images;
         }
 
-        public IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default, string region = null)
+        public IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
@@ -327,7 +341,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Images;
         }
 
-        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = ImageType.Default)
+        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null)
         {
             var queryParameters = new Dictionary<string, string>();
 
@@ -335,13 +349,13 @@ namespace net.openstack.Providers.Rackspace
                 queryParameters.Add("server", serverId);
 
             if (!string.IsNullOrWhiteSpace(imageName))
-                queryParameters.Add("name", serverId);
+                queryParameters.Add("name", imageName);
 
             if (!string.IsNullOrWhiteSpace(imageStatus))
-                queryParameters.Add("status", serverId);
+                queryParameters.Add("status", imageStatus);
 
             if (changesSince != default(DateTime))
-                queryParameters.Add("changes-since", changesSince.ToUniversalTime().ToString("yyyy-MM-ddTHH::mm:ssZ"));
+                queryParameters.Add("changes-since", changesSince.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
 
             if (!string.IsNullOrWhiteSpace(markerId))
                 queryParameters.Add("marker", markerId);
@@ -349,8 +363,8 @@ namespace net.openstack.Providers.Rackspace
             if (limit > 0)
                 queryParameters.Add("limit", limit.ToString());
 
-            if(imageType != ImageType.Default)
-                queryParameters.Add("type", imageType.ToString().ToUpper());
+            if(!string.IsNullOrWhiteSpace(imageType))
+                queryParameters.Add("type", imageType);
 
             return queryParameters;
         } 
