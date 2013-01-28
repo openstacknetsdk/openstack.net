@@ -21,15 +21,15 @@ namespace net.openstack.Providers.Rackspace
             _restService = restService;
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isRetry = false, JsonRequestSettings requestSettings = null) where T : new()
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null) where T : new()
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
 
-            var headers = new Dictionary<string, string>
-                              {
-                                  { "X-Auth-Token", _identityProvider.GetToken(identity, isRetry)}
-                              };
+            if(headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
 
             string bodyStr = null;
             if (body != null)
@@ -47,7 +47,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, true);
+                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, null, true);
                 }
             }
 
@@ -55,15 +55,15 @@ namespace net.openstack.Providers.Rackspace
             
         }
 
-        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isRetry = false, JsonRequestSettings requestSettings = null)
+        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings requestSettings = null)
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
 
-            var headers = new Dictionary<string, string>
-                              {
-                                  { "X-Auth-Token", _identityProvider.GetToken(identity, isRetry)}
-                              };
+            if (headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
 
             string bodyStr = null;
             if (body != null)
@@ -81,7 +81,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, true);
+                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, null, true);
                 }
             }
 
