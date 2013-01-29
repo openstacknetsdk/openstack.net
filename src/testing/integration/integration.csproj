@@ -55,6 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\ComputeTests.cs" />
     <Compile Include="Providers\Rackspace\IdentityTests.cs" />
+     <Compile Include="Providers\Rackspace\ObjectStoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.csproj">
