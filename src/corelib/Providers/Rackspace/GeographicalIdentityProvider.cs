@@ -204,6 +204,20 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
+        #region Tenants
+
+        public Tenant[] ListTenants(CloudIdentity identity)
+        {
+            var response = ExecuteRESTRequest<TenantsResponse>(identity, "v2.0/tenants", HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Tenants;
+        }
+
+        #endregion
+
         #region Token and Authentication
 
         public string GetToken(CloudIdentity idenity, bool forceCacheRefresh = false)

@@ -17,7 +17,6 @@ namespace net.openstack.Providers.Rackspace
         public Role[] ListRoles(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
-
             return provider.ListRoles(identity);
         }
 
@@ -36,7 +35,6 @@ namespace net.openstack.Providers.Rackspace
         public Role[] GetRolesByUser(CloudIdentity identity, string userId)
         {
             var provider = GetProvider(identity);
-
             return provider.GetRolesByUser(identity, userId);
         }
 
@@ -49,28 +47,24 @@ namespace net.openstack.Providers.Rackspace
         public User GetUserByName(CloudIdentity identity, string name)
         {
             var provider = GetProvider(identity);
-
             return provider.GetUserByName(identity, name);
         }
 
         public UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
-
             return provider.Authenticate(identity, forceCacheRefresh);
         }
 
         public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
         {
             var provider = GetProvider(identity);
-
             return provider.AddRoleToUser(identity, userId, roleId);
         }
 
         public User GetUser(CloudIdentity identity, string userId)
         {
             var provider = GetProvider(identity);
-
             return provider.GetUser(identity, userId);
         }
 
@@ -83,7 +77,6 @@ namespace net.openstack.Providers.Rackspace
         public User UpdateUser(CloudIdentity identity, User user)
         {
             var provider = GetProvider(identity);
-
             return provider.UpdateUser(identity, user);
         }
 
@@ -117,24 +110,27 @@ namespace net.openstack.Providers.Rackspace
             return provider.DeleteUserCredentials(identity, userId);
         }
 
+        public Tenant[] ListTenants(CloudIdentity identity)
+        {
+            var provider = GetProvider(identity);
+            return provider.ListTenants(identity);
+        }
+
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
-
             return provider.GetToken(identity, forceCacheRefresh);
         }
 
         public bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId)
         {
             var provider = GetProvider(identity);
-
             return provider.DeleteRoleFromUser(identity, userId, roleId);
         }
 
         public IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
-
             return provider.GetTokenInfo(identity);
         }
 

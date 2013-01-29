@@ -27,5 +27,7 @@ namespace net.openstack.Core
         UserCredential[] ListUserCredentials(CloudIdentity identity, string userId);
         UserCredential UpdateUserCredentials(CloudIdentity identity, string userId);
         bool DeleteUserCredentials(CloudIdentity identity, string userId);
+
+        Tenant[] ListTenants(CloudIdentity identity);
     }
 }

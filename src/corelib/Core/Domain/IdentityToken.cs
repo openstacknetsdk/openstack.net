@@ -8,6 +8,8 @@ namespace net.openstack.Core.Domain
 
         public string Id { get; set; }
 
+        public Tenant Tenant { get; set; }
+
         public bool IsExpired()
         {
             if (string.IsNullOrWhiteSpace(Expires))
