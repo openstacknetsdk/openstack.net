@@ -60,7 +60,17 @@
     <Compile Include="Core\Domain\Personality.cs" />
     <Compile Include="Core\Domain\RebootType.cs" />
     <Compile Include="Core\Domain\ServerAddresses.cs" />
+    <Compile Include="Core\Domain\UserCredential.cs" />
+    <Compile Include="Core\Exceptions\Response\BadServiceRequestException.cs" />
+    <Compile Include="Core\Exceptions\Response\ItemNotFoundException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceFaultException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
+    <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
     <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
+    <Compile Include="Core\Exceptions\InvalidCloudIdentityException.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
@@ -82,6 +92,8 @@
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
     <Compile Include="Providers\Rackspace\RackspaceImpersonationIdentity.cs" />
     <Compile Include="Core\Domain\MetaData.cs" />
     <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
@@ -106,6 +118,9 @@
     <Compile Include="Providers\Rackspace\Objects\Request\ServerRebuildRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeRequest.cs" />
+    <Compile Include="Core\Exceptions\Response\ResponseException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
     <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\IIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />

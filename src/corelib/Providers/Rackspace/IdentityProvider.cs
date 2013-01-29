@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using SimpleRestServices.Client;
+﻿using SimpleRestServices.Client;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
-using net.openstack.Providers.Rackspace.Objects.Response;
+using net.openstack.Core.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -22,11 +21,29 @@ namespace net.openstack.Providers.Rackspace
             return provider.ListRoles(identity);
         }
 
+        public Role AddRole(CloudIdentity identity, Role role)
+        {
+            var provider = GetProvider(identity);
+            return provider.AddRole(identity, role);
+        }
+
+        public Role GetRole(CloudIdentity identity, string roleId)
+        {
+            var provider = GetProvider(identity);
+            return provider.GetRole(identity, roleId);
+        }
+
         public Role[] GetRolesByUser(CloudIdentity identity, string userId)
         {
             var provider = GetProvider(identity);
 
             return provider.GetRolesByUser(identity, userId);
+        }
+
+        public User[] ListUsers(CloudIdentity identity)
+        {
+            var provider = GetProvider(identity);
+            return provider.ListUsers(identity);
         }
 
         public User GetUserByName(CloudIdentity identity, string name)
@@ -57,11 +74,47 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUser(identity, userId);
         }
 
-        public bool UpdateUser(CloudIdentity identity, User user)
+        public User AddUser(CloudIdentity identity, User user)
+        {
+            var provider = GetProvider(identity);
+            return provider.AddUser(identity, user);
+        }
+
+        public User UpdateUser(CloudIdentity identity, User user)
         {
             var provider = GetProvider(identity);
 
             return provider.UpdateUser(identity, user);
+        }
+
+        public bool DeleteUser(CloudIdentity identity, string userId)
+        {
+            var provider = GetProvider(identity);
+            return provider.DeleteUser(identity, userId);
+        }
+
+        public bool SetUserPassword(CloudIdentity identity, string userId, string password)
+        {
+            var provider = GetProvider(identity);
+            return provider.SetUserPassword(identity, userId, password);
+        }
+
+        public UserCredential[] ListUserCredentials(CloudIdentity identity, string userId)
+        {
+            var provider = GetProvider(identity);
+            return provider.ListUserCredentials(identity, userId);
+        }
+
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId)
+        {
+            var provider = GetProvider(identity);
+            return provider.UpdateUserCredentials(identity, userId);
+        }
+
+        public bool DeleteUserCredentials(CloudIdentity identity, string userId)
+        {
+            var provider = GetProvider(identity);
+            return provider.DeleteUserCredentials(identity, userId);
         }
 
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)

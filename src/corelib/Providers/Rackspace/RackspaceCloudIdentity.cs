@@ -9,6 +9,6 @@ namespace net.openstack.Providers.Rackspace
 
     public enum CloudInstance
     {
-        US, Lon
+        Default, UK
     }
 }

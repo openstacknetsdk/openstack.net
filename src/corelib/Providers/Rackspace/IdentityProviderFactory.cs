@@ -31,9 +31,9 @@ namespace net.openstack.Providers.Rackspace
         {
             switch (cloudInstance)
             {
-                case CloudInstance.US:
+                case CloudInstance.Default:
                     return new GeographicalIdentityProvider(new Uri(USIdentityUrlBase), _restService, _tokenCache);
-                case CloudInstance.Lon:
+                case CloudInstance.UK:
                     return new GeographicalIdentityProvider(new Uri(LONIdentityUrlBase), _restService, _tokenCache);
                 default:
                     throw new UnknownGeographyException(cloudInstance.ToString());

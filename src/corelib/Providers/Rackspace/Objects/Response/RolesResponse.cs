@@ -12,4 +12,11 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
         [DataMember(Name="roles_links")]
         public string[] RoleLinks { get; set; }
     }
+
+    [DataContract]
+    internal class RoleResponse
+    {
+        [DataMember]
+        public Role Role { get; set; }
+    }
 }

@@ -7,6 +7,8 @@ using SimpleRestServices.Client;
 using SimpleRestServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions;
+using net.openstack.Core.Exceptions.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -21,7 +23,7 @@ namespace net.openstack.Providers.Rackspace
             _restService = restService;
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null) where T : new()
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null)
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
@@ -47,12 +49,11 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, null, true);
+                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, true);
                 }
             }
 
-            return response; 
-            
+            return response;
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings requestSettings = null)
@@ -81,7 +82,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, null, true);
+                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, headers, true);
                 }
             }
 
@@ -120,15 +121,29 @@ namespace net.openstack.Providers.Rackspace
 
             return endpoint.PublicURL;
         }
-    }
 
-    public class UserAuthorizationException : Exception
-    {
-        public UserAuthorizationException(string message) : base(message){}
-    }
+        protected void CheckResponse(Response response)
+        {
+            if(response.StatusCode <= 299)
+                return;
 
-    public class UserAuthenticationException : Exception
-    {
-        public UserAuthenticationException(string message) : base(message){}
+            switch (response.StatusCode)
+            {
+                case 400:
+                    throw new BadServiceRequestException(response);
+                case 401:
+                case 403:
+                case 405:
+                    throw new UserNotAuthorizedException(response);
+                case 404:
+                    throw new ItemNotFoundException(response);
+                case 413:
+                    throw new ServiceLimitReachedException(response);
+                case 500:
+                    throw new ServiceFaultException(response);
+                case 503:
+                    throw new ServiceUnavailableException(response);
+            }
+        }
     }
 }
