@@ -23,7 +23,7 @@ namespace net.openstack.Providers.Rackspace
             _restService = restService;
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null)
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null) 
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
