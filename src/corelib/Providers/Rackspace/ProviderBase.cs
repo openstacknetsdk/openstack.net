@@ -53,6 +53,8 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
+            CheckResponse(response);
+
             return response;
         }
 
@@ -86,8 +88,9 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
-            return response;
+            CheckResponse(response);
 
+            return response;
         }
 
         internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)
@@ -122,7 +125,7 @@ namespace net.openstack.Providers.Rackspace
             return endpoint.PublicURL;
         }
 
-        protected void CheckResponse(Response response)
+        internal static void CheckResponse(Response response)
         {
             if(response.StatusCode <= 299)
                 return;

@@ -8,9 +8,9 @@ using net.openstack.Core.Domain;
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     [DataContract]
-    internal class UpdateMetadataRequest
+    internal class UpdateUserCredencialRequest
     {
-        [DataMember(Name = "metadata")]
-        public Metadata Metadata { get; set; }
+        [DataMember(Name = "RAX-KSKEY:apiKeyCredentials")]
+        public UserCredential UserCredential { get; set; }
     }
 }

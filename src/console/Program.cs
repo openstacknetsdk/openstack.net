@@ -1,7 +1,6 @@
 ﻿using System;
-using net.openstack.Core;
-using net.openstack.Core.Domain;
-using net.openstack.Core.Exceptions.Response;
+using System.Collections.Generic;
+using System.IO;
 using net.openstack.Providers.Rackspace;
 
 namespace net.openstack.console

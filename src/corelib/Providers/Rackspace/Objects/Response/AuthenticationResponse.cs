@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace.Objects.Response

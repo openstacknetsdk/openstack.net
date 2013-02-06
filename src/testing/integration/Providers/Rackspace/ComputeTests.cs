@@ -17,16 +17,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     {
         public ComputeTests()
         {
-            CloudInstance cloudInstance;
-            CloudInstance.TryParse(ConfigurationManager.AppSettings["TestIdentityGeo"], true, out cloudInstance);
-
-            _testIdentity = new RackspaceCloudIdentity
-            {
-                APIKey = ConfigurationManager.AppSettings["TestIdentityAPIKey"],
-                Password = ConfigurationManager.AppSettings["TestIdentityPassword"],
-                CloudInstance = cloudInstance,
-                Username = ConfigurationManager.AppSettings["TestIdentityUserName"],
-            };
+            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.TestIdentity);
         }
 
         private TestContext testContextInstance;
