@@ -15,11 +15,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     [TestClass]
     public class ComputeTests
     {
-        public ComputeTests()
-        {
-            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.TestIdentity);
-        }
-
         private TestContext testContextInstance;
         private static CloudIdentity _testIdentity;
         private static NewServer _testServer;
@@ -42,6 +37,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
         }
 
+        [ClassInitialize]
+        public static void Init(TestContext context)
+        {
+            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
+        }
+
         [TestMethod]
         public void Test001_Should_Create_A_New_Server_In_DFW()
         {
@@ -61,23 +62,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(serverDetails);
             Assert.AreEqual("net-sdk-test-server", serverDetails.Name);
             Assert.AreEqual("d531a2dd-7ae9-4407-bb5a-e5ea03303d98", serverDetails.Image.Id);
-            Assert.AreEqual("2", serverDetails.Flavor.Id);
+            Assert.AreEqual("2", serverDetails.Flavor.Id);  
         }
 
         [TestMethod]
         public void Test003_Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
-            Assert.IsNotNull(serverDetails);
             
-            int count = 0;
-            while (!serverDetails.Status.Equals("ACTIVE") && !serverDetails.Status.Equals("ERROR") && !serverDetails.Status.Equals("UNKNOWN") && !serverDetails.Status.Equals("SUSPENDED") && count < 600)
-            {
-                Thread.Sleep(2400);
-                serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
-                count++;
-            }
+            var serverDetails = provider.WaitForServerActive(_testIdentity, _testServer.Id);
 
             Assert.IsNotNull(serverDetails);
             Assert.AreEqual("ACTIVE", serverDetails.Status);
@@ -134,9 +127,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_1"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_1").Value == "My_Value_1");
+            Assert.AreEqual("My_Value_1", metadata.First(md => md.Key == "Metadata_Key_1").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_2"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_2").Value == "My_Value_2");
+            Assert.AreEqual("My_Value_2", metadata.First(md => md.Key == "Metadata_Key_2").Value);
         }
 
         [TestMethod]
@@ -158,9 +151,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3");
+            Assert.AreEqual("My_Value_3", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4");
+            Assert.AreEqual("My_Value_4", metadata.First(md => md.Key == "Metadata_Key_4").Value);
         }
 
         [TestMethod]
@@ -170,6 +163,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3_Updated" }, { "Metadata_Key_4", "My_Value_4_Updated" } };
             var response = provider.UpdateServerMetadata(_testIdentity, _testServer.Id, metadata);
 
+            Thread.Sleep(10000);   // Sleep a few seconds because there is an edge case that the system does not reflect the new metadata changes quick enough
             Assert.IsTrue(response);
         }
 
@@ -182,9 +176,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated");
+            Assert.AreEqual("My_Value_3_Updated", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4_Updated");
+            Assert.AreEqual("My_Value_4_Updated", metadata.First(md => md.Key == "Metadata_Key_4").Value);
         }
 
         [TestMethod]
@@ -205,11 +199,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated");
+            Assert.AreEqual("My_Value_3_Updated", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4_Updated");
+            Assert.AreEqual("My_Value_4_Updated", metadata.First(md => md.Key == "Metadata_Key_4").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_5"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_5").Value == "My_Value_5");
+            Assert.AreEqual("My_Value_5", metadata.First(md => md.Key == "Metadata_Key_5").Value);
         }
 
         [TestMethod]
@@ -231,11 +225,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated_Again");
+            Assert.AreEqual("My_Value_3_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4_Updated");
+            Assert.AreEqual("My_Value_4_Updated", metadata.First(md => md.Key == "Metadata_Key_4").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_5"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_5").Value == "My_Value_5_Updated");
+            Assert.AreEqual("My_Value_5_Updated", metadata.First(md => md.Key == "Metadata_Key_5").Value);
         }
 
         [TestMethod]
@@ -256,11 +250,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated_Again");
+            Assert.AreEqual("My_Value_3_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4_Updated_Again");
+            Assert.AreEqual("My_Value_4_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_4").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_5"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_5").Value == "My_Value_5_Updated");
+            Assert.AreEqual("My_Value_5_Updated", metadata.First(md => md.Key == "Metadata_Key_5").Value);
         }
 
         [TestMethod]
@@ -281,9 +275,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated_Again");
+            Assert.AreEqual("My_Value_3_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_5"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_5").Value == "My_Value_5_Updated");
+            Assert.AreEqual("My_Value_5_Updated", metadata.First(md => md.Key == "Metadata_Key_5").Value);
         }
 
         [TestMethod]
@@ -305,11 +299,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_3"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_3").Value == "My_Value_3_Updated_Again");
+            Assert.AreEqual("My_Value_3_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_3").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_4"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_4").Value == "My_Value_4");
+            Assert.AreEqual("My_Value_4", metadata.First(md => md.Key == "Metadata_Key_4").Value);
             Assert.IsTrue(metadata.Any(md => md.Key == "Metadata_Key_5"));
-            Assert.IsTrue(metadata.First(md => md.Key == "Metadata_Key_5").Value == "My_Value_5_Updated_Again");
+            Assert.AreEqual("My_Value_5_Updated_Again", metadata.First(md => md.Key == "Metadata_Key_5").Value);
         }
 
         [TestMethod]
@@ -393,7 +387,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Test030_Should_Return_One_Image_When_Searching_By_Valid_Id()
         {
-            var validImage = _allImages.First();
+            var validImage = _allImages.First(i => i.Server != null);
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
             var images = provider.ListImages(_testIdentity, serverId: validImage.Server.Id);
 
@@ -433,7 +427,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Test034_Should_Return_One_Image_With_Details_When_Searching_By_Valid_Id()
         {
-            var validImage = _allImages.First();
+            var validImage = _allImages.First(i => i.Server != null);
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
             var images = provider.ListImagesWithDetails(_testIdentity, serverId: validImage.Server.Id);
 
@@ -510,7 +504,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(images.Count() == _allImages.Count());
         }
 
-
+        [TestMethod]
+        public void Test042_Should_Wait_For_Image_To_Be_ACTIVE()
+        {
+            
+        }
 
 
 
@@ -542,14 +540,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Test101_Should_Wait_A_Max_Of_10_Minutes_For_The_Server_Is_Deleted_Indicated_By_A_Null_Return_Value_For_Details()
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
-            var details = provider.GetDetails(_testIdentity, _testServer.Id);
-            Assert.IsNotNull(details);
-            
-            while (details != null && (!details.Status.Equals("DELETED") && !details.Status.Equals("ERROR") && !details.Status.Equals("UNKNOWN") && !details.Status.Equals("SUSPENDED")))
-            {
-                Thread.Sleep(1000);
-                details = provider.GetDetails(_testIdentity, _testServer.Id);
-            }
+
+            var details = provider.WaitForServerDeleted(_testIdentity, _testServer.Id);
 
             if(details != null)
                 Assert.AreEqual("DELETED", details.Status);

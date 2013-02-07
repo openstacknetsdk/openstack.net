@@ -20,5 +20,6 @@ namespace net.openstack.Core
         UserCredential[] ListUserCredentials(CloudIdentity identity, string userId);
 
         Tenant[] ListTenants(CloudIdentity identity);
+        UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false);
     }
 }
