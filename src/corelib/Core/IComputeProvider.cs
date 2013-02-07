@@ -57,6 +57,13 @@ namespace net.openstack.Core
         string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
         bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
         bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
+        
+        ServerDetails WaitForServerState(CloudIdentity identity, string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerDetails WaitForServerActive(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerDetails WaitForServerDeleted(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerImageDetails WaitForImageState(CloudIdentity identity, string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerImageDetails WaitForImageActive(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerImageDetails WaitForImageDeleted(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
     }
 }
     

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using net.openstack.Core.Domain;
 
@@ -9,25 +7,15 @@ namespace Net.OpenStack.Testing.Integration
 {
     public class Bootstrapper
     {
-        private static CloudIdentity _testIdentity;
-        public static CloudIdentity TestIdentity
+        private static OpenstackNetSetings _settings;
+        public static OpenstackNetSetings Settings
         {
             get
             {
-                if(_testIdentity == null)
+                if(_settings == null)
                     Initialize();
-                return _testIdentity;
-            }
-        }
 
-        private static CloudIdentity _testAdminIdentity;
-        public static CloudIdentity TestAdminIdentity
-        {
-            get
-            {
-                if (_testAdminIdentity == null)
-                    Initialize();
-                return _testAdminIdentity;
+                return _settings;
             }
         }
 
@@ -37,27 +25,34 @@ namespace Net.OpenStack.Testing.Integration
 
             var path = Path.Combine(homeDir, ".openstack_net");
 
-            string contents;
+            var contents = new StringBuilder();
 
             using(var stream = File.Open(path, FileMode.Open, FileAccess.Read))
             {
                 using(var reader = new StreamReader(stream))
                 {
-                    contents = reader.ReadToEnd();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if(!line.Trim().StartsWith("//"))
+                            contents.Append(line);
+                    }
                 }
             }
 
-            var appCredentials = Newtonsoft.Json.JsonConvert.DeserializeObject<OpenstackNetCredencials>(contents);
+            var appCredentials = Newtonsoft.Json.JsonConvert.DeserializeObject<OpenstackNetSetings>(contents.ToString());
 
-            _testIdentity = appCredentials.TestIdentity;
-            _testAdminIdentity = appCredentials.TestAdminIdentity;
+            _settings = appCredentials;
         }
     }
 
-    public class OpenstackNetCredencials
+    public class OpenstackNetSetings
     {
         public CloudIdentity TestIdentity { get; set; }
 
         public CloudIdentity TestAdminIdentity { get; set; }
+
+        public string RackspaceExtendedIdentityUSUrl { get; set; }
+        public string RackspaceExtendedIdentityUKUrl { get; set; }
     }
 }
