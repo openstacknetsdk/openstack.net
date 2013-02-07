@@ -1,17 +1,16 @@
 ﻿using SimpleRestServices.Client;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class IdentityProvider : IIdentityProvider
+    public class IdentityProvider : IExtendedIdentityProvider
     {
         private readonly IdentityProviderFactory _factory;
 
-        public IdentityProvider(IRestService restService = null, ICache<UserAccess> tokenCache = null)
+        public IdentityProvider(IRestService restService = null, ICache<UserAccess> tokenCache = null, string usInstanceUrlBase = null, string ukInstanceUrlBase = null)
         {
-            _factory = new IdentityProviderFactory(restService, tokenCache);
+            _factory = new IdentityProviderFactory(restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
         }
 
         public Role[] ListRoles(CloudIdentity identity)
@@ -50,10 +49,10 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUserByName(identity, name);
         }
 
-        public UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false)
+        public UserAccess Authenticate(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
-            return provider.Authenticate(identity, forceCacheRefresh);
+            return provider.Authenticate(identity);
         }
 
         public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
@@ -98,10 +97,10 @@ namespace net.openstack.Providers.Rackspace
             return provider.ListUserCredentials(identity, userId);
         }
 
-        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId)
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string apiKey)
         {
             var provider = GetProvider(identity);
-            return provider.UpdateUserCredentials(identity, userId);
+            return provider.UpdateUserCredentials(identity, userId, apiKey);
         }
 
         public bool DeleteUserCredentials(CloudIdentity identity, string userId)
@@ -134,7 +133,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetTokenInfo(identity);
         }
 
-        private IIdentityProvider GetProvider(CloudIdentity identity)
+        private IExtendedIdentityProvider GetProvider(CloudIdentity identity)
         {
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 

@@ -13,4 +13,18 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
         [DataMember(Name = "RAX-KSKEY:apiKeyCredentials")]
         public UserCredential UserCredential { get; set; }
     }
+    
+    [DataContract]
+    internal class UserCredentialsResponse
+    {
+        [DataMember(Name = "credentials")]
+        public Credencials[] Credentials { get; set; }
+    }
+
+    [DataContract]
+    internal class Credencials
+    {
+        [DataMember(Name = "RAX-KSKEY:apiKeyCredentials")]
+        public UserCredential UserCredential { get; set; }
+    }
 }

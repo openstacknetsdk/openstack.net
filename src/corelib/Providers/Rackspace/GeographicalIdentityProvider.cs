@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SimpleRestServices.Client;
 using SimpleRestServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace.Objects.Request;
@@ -12,7 +12,7 @@ using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class GeographicalIdentityProvider : IIdentityProvider
+    internal class GeographicalIdentityProvider : IExtendedIdentityProvider
     {
         private readonly IRestService _restService;
         private readonly ICache<UserAccess> _userAccessCache;
@@ -97,24 +97,40 @@ namespace net.openstack.Providers.Rackspace
 
         public bool SetUserPassword(CloudIdentity identity, string userId, string password)
         {
-            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
-            var response = ExecuteRESTRequest<RoleResponse>(identity, urlPath, HttpMethod.GET);
+            var user = GetUser(identity, userId);
 
-            if (response == null || response.StatusCode != 201)
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
+            var request = new SetPasswordRequest
+                              {
+                                  PasswordCredencial =
+                                      new PasswordCredencial {Username = user.Username, Password = password}
+                              };
+            var response = ExecuteRESTRequest<PasswordCredencialResponse>(identity, urlPath, HttpMethod.POST, request);
+
+            if (response == null || response.StatusCode != 201 || response.Data == null)
                 return false;
 
-            return true;
+            return response.Data.PasswordCredencial.Password.Equals(password);
         }
 
         public UserCredential[] ListUserCredentials(CloudIdentity identity, string userId)
         {
-            throw new NotImplementedException();
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
+            var response = ExecuteRESTRequest<UserCredentialsResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Credentials.Select(c => c.UserCredential).ToArray();
         }
 
-        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId)
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string apiKey)
         {
+            var user = GetUser(identity, userId);
+
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST);
+            var request = new UpdateUserCredencialRequest { UserCredential = new UserCredential { Username = user.Username, APIKey = apiKey } };
+            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
                 return null;
@@ -143,6 +159,18 @@ namespace net.openstack.Providers.Rackspace
 
             if (response == null || response.Data == null)
                 return null;
+
+            // Due to the fact the sometimes the API returns a JSON array of users and sometimes it returns a single JSON user object.  
+            // Therefore if we get a null data object (which indicates that the deserializer could not parse to an array) we need to try and parse as a single User object.
+            if(response.Data.Users == null)
+            {
+                var userResponse = JsonConvert.DeserializeObject<UserResponse>(response.RawBody);
+
+                if (response == null || response.Data == null)
+                    return null;
+
+                return new[] {userResponse.User};
+            }
 
             return response.Data.Users;
         }
@@ -222,7 +250,7 @@ namespace net.openstack.Providers.Rackspace
 
         public string GetToken(CloudIdentity idenity, bool forceCacheRefresh = false)
         {
-            var auth = Authenticate(idenity, forceCacheRefresh);
+            var auth = GetUserAccess(idenity, forceCacheRefresh);
 
             if (auth == null || auth.Token == null)
                 return null;
@@ -232,7 +260,7 @@ namespace net.openstack.Providers.Rackspace
 
         public string GetToken(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
         {
-            var auth = Authenticate(identity, forceCacheRefresh);
+            var auth = GetUserAccess(identity, forceCacheRefresh);
 
             if (auth == null || auth.Token == null)
                 return null;
@@ -242,7 +270,7 @@ namespace net.openstack.Providers.Rackspace
 
         public IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false)
         {
-            var auth = Authenticate(identity, forceCacheRefresh);
+            var auth = GetUserAccess(identity, forceCacheRefresh);
 
             if (auth == null)
                 return null;
@@ -250,23 +278,26 @@ namespace net.openstack.Providers.Rackspace
             return auth.Token;
         }
 
-        public UserAccess Authenticate(CloudIdentity identity, bool forceCacheRefresh = false)
+        public UserAccess Authenticate(CloudIdentity identity)
         {
-            var usIdentity = identity as RackspaceCloudIdentity;
+            var auth = AuthRequest.FromCloudIdentity(identity);
+            var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
-            if(usIdentity == null)
+
+            if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                return null;
+
+            return response.Data.UserAccess;
+        }
+
+        private UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
+        {
+            var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
+
+            if (rackspaceCloudIdentity == null)
                 throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identity service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
 
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", usIdentity.CloudInstance, usIdentity.Username), () => {
-                var auth = AuthRequest.FromCloudIdentity(usIdentity);
-                var response = ExecuteRESTRequest<AuthenticationResponse>(usIdentity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
-
-
-                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
-                    return null;
-
-                return response.Data.UserAccess;
-            }, forceCacheRefresh);
+            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () => Authenticate(rackspaceCloudIdentity), forceCacheRefresh);
 
             return userAccess;
         }
@@ -331,6 +362,8 @@ namespace net.openstack.Providers.Rackspace
             {
                 return ExecuteRESTRequest<T>(identity,urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity));
             }
+
+            ProviderBase.CheckResponse(response);
 
             return response;
         }
