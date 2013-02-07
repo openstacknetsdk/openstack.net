@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace net.openstack.Providers.Rackspace.Objects
 {
     [DataContract]
-    public class Credentials
+    internal class Credentials
     {
         [DataMember(Name="username", EmitDefaultValue = true)]
         public string Username { get; set; }

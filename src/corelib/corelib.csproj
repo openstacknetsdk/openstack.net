@@ -70,8 +70,8 @@
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
     <Compile Include="Core\IObjectStoreProvider.cs" />
+    <Compile Include="Providers\Rackspace\IExtendedIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\ObjectStoreProvider.cs" />
-
     <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
     <Compile Include="Core\Exceptions\InvalidCloudIdentityException.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
@@ -80,8 +80,10 @@
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\SetPasswordRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataItemRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredencialRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredencialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />

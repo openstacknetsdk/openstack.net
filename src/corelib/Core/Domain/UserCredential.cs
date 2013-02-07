@@ -8,7 +8,7 @@ namespace net.openstack.Core.Domain
         [DataMember(Name = "username")]
         public string Username { get; set; }
 
-        [DataMember(Name = "apikey")]
+        [DataMember(Name = "apiKey")]
         public string APIKey { get; set; }
     }
 }

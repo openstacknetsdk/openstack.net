@@ -7,15 +7,15 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class IdentityProviderFactory : IProviderFactory<IIdentityProvider, CloudInstance>
+    internal class IdentityProviderFactory : IProviderFactory<IExtendedIdentityProvider, CloudInstance>
     {
-        private const string USIdentityUrlBase = "https://identity.api.rackspacecloud.com";
-        private const string LONIdentityUrlBase = "https://lon.identity.api.rackspacecloud.com";
+        private readonly string USIdentityUrlBase;
+        private readonly string LONIdentityUrlBase;
 
         private readonly ICache<UserAccess> _tokenCache;
         private readonly IRestService _restService;
 
-        public IdentityProviderFactory(IRestService restService = null, ICache<UserAccess> tokenCache = null)
+        public IdentityProviderFactory(IRestService restService = null, ICache<UserAccess> tokenCache = null, string usInstanceUrlBase = null, string ukInstanceUrlBase = null)
         {
             if (restService == null)
                 restService = new JsonRestServices();
@@ -23,11 +23,14 @@ namespace net.openstack.Providers.Rackspace
             if (tokenCache == null)
                 tokenCache = UserAccessCache.Instance;
 
+            USIdentityUrlBase = string.IsNullOrWhiteSpace(usInstanceUrlBase) ? "https://identity.api.rackspacecloud.com" : usInstanceUrlBase;
+            LONIdentityUrlBase = string.IsNullOrWhiteSpace(ukInstanceUrlBase) ? "https://lon.identity.api.rackspacecloud.com" : ukInstanceUrlBase;
+
             _restService = restService;
             _tokenCache = tokenCache;
         }
 
-        public IIdentityProvider Get(CloudInstance cloudInstance)
+        public IExtendedIdentityProvider Get(CloudInstance cloudInstance)
         {
             switch (cloudInstance)
             {

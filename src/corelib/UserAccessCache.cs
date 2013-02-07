@@ -17,17 +17,24 @@ namespace net.openstack
             {
                 //var hashKey = BuildTokenCacheKey(username, region);
                 var refreshToken = true;
-                if (!forceCacheRefresh && _tokenCache.ContainsKey(key))
+                if (_tokenCache.ContainsKey(key))
                 {
-                    userAccess = (UserAccess)_tokenCache[key];
-
-                    if (userAccess == null || userAccess.Token == null || userAccess.Token.IsExpired())
+                    if (forceCacheRefresh)
+                    {
                         _tokenCache.Remove(key);
+                    }
                     else
-                        refreshToken = false;
+                    {
+                        userAccess = (UserAccess) _tokenCache[key];
+
+                        if (userAccess == null || userAccess.Token == null || userAccess.Token.IsExpired())
+                            _tokenCache.Remove(key);
+                        else
+                            refreshToken = false;
+                    }
                 }
 
-                if (forceCacheRefresh || (refreshToken && refreshCallback != null))
+                if ((refreshToken && refreshCallback != null))
                 {
                     userAccess = refreshCallback();
                     if (userAccess != null)
@@ -36,9 +43,6 @@ namespace net.openstack
                     }
                 }
             }
-
-            if (userAccess == null)
-                return null;
 
             return userAccess;
         }

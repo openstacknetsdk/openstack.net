@@ -6,7 +6,7 @@ using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    public class UpdateUserRequest
+    internal class UpdateUserRequest
     {
         public User User { get; set; }
     }
