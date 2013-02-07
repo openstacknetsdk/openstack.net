@@ -99,12 +99,22 @@ namespace net.openstack.Providers.Rackspace
         {
             var user = GetUser(identity, userId);
 
+            return SetUserPassword(identity, user, password);
+        }
+
+        public bool SetUserPassword(CloudIdentity identity, User user, string password)
+        {
+            return SetUserPassword(identity, user.Id, user.Username, password);
+        }
+
+        public bool SetUserPassword(CloudIdentity identity, string userId, string username, string password)
+        {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var request = new SetPasswordRequest
-                              {
-                                  PasswordCredencial =
-                                      new PasswordCredencial {Username = user.Username, Password = password}
-                              };
+            {
+                PasswordCredencial =
+                    new PasswordCredencial { Username = username, Password = password }
+            };
             var response = ExecuteRESTRequest<PasswordCredencialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.StatusCode != 201 || response.Data == null)
@@ -128,8 +138,18 @@ namespace net.openstack.Providers.Rackspace
         {
             var user = GetUser(identity, userId);
 
+            return UpdateUserCredentials(identity, user, apiKey);
+        }
+
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, User user, string apiKey)
+        {
+            return UpdateUserCredentials(identity, user.Id, user.Username, apiKey);
+        }
+
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string username, string apiKey)
+        {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var request = new UpdateUserCredencialRequest { UserCredential = new UserCredential { Username = user.Username, APIKey = apiKey } };
+            var request = new UpdateUserCredencialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
@@ -280,24 +300,27 @@ namespace net.openstack.Providers.Rackspace
 
         public UserAccess Authenticate(CloudIdentity identity)
         {
-            var auth = AuthRequest.FromCloudIdentity(identity);
-            var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
-
-
-            if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
-                return null;
-
-            return response.Data.UserAccess;
+            return GetUserAccess(identity, true);
         }
 
-        private UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
+        public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
             if (rackspaceCloudIdentity == null)
                 throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identity service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
 
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () => Authenticate(rackspaceCloudIdentity), forceCacheRefresh);
+            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
+                                                                                                                                                       {
+                                                                                                                                                           var auth = AuthRequest.FromCloudIdentity(identity);
+                                                                                                                                                           var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
+
+
+                                                                                                                                                           if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                                                                                                                                                               return null;
+
+                                                                                                                                                           return response.Data.UserAccess;
+                                                                                                                                                       }, forceCacheRefresh);
 
             return userAccess;
         }

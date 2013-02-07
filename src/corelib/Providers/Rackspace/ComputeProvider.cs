@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using SimpleRestServices.Client;
 using SimpleRestServices.Client.Json;
 using net.openstack.Core;
@@ -114,6 +115,34 @@ namespace net.openstack.Providers.Rackspace
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
 
             return true;
+        }
+
+        public ServerDetails WaitForServerState(CloudIdentity identity, string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            var serverDetails = GetDetails(identity, cloudServerId, region);
+
+            int count = 0;
+            while (!serverDetails.Status.Equals(expectedState) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
+            {
+                Thread.Sleep(refreshDelayInMS);
+                serverDetails = GetDetails(identity, cloudServerId, region);
+                count++;
+            }
+
+            if (errorStates.Contains(serverDetails.Status))
+                throw new ServerEnteredErrorStateException(serverDetails.Status);
+
+            return serverDetails;
+        }
+
+        public ServerDetails WaitForServerActive(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            return WaitForServerState(identity, cloudServerId, ServerState.ACTIVE, new [] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED}, region, refreshCount, refreshDelayInMS);
+        }
+
+        public ServerDetails WaitForServerDeleted(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            return WaitForServerState(identity, cloudServerId, ServerState.DELETED, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
         }
 
         #endregion
@@ -394,6 +423,34 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
+        public ServerImageDetails WaitForImageState(CloudIdentity identity, string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            var details = GetImage(identity, imageId, region);
+
+            int count = 0;
+            while (!details.Status.Equals(expectedState) && !errorStates.Contains(details.Status) && count < refreshCount)
+            {
+                Thread.Sleep(refreshDelayInMS);
+                details = GetImage(identity, imageId, region);
+                count++;
+            }
+
+            if (errorStates.Contains(details.Status))
+                throw new ServerEnteredErrorStateException(details.Status);
+
+            return details;
+        }
+
+        public ServerImageDetails WaitForImageActive(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            return WaitForImageState(identity, imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
+        }
+
+        public ServerImageDetails WaitForImageDeleted(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        {
+            return WaitForImageState(identity, imageId, ImageState.DELETED, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
+        }
+
         #endregion
 
         #region Server Metadata
@@ -556,5 +613,15 @@ namespace net.openstack.Providers.Rackspace
         }
 
         #endregion
+    }
+
+    public class ServerEnteredErrorStateException : Exception
+    {
+        public string Status { get; private set; }
+
+        public ServerEnteredErrorStateException(string status) : base(string.Format("The server entered an error state: '{0}'", status))
+        {
+            Status = status;
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core;
@@ -12,12 +10,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     [TestClass]
     public class IdentityTests
     {
-        public IdentityTests()
-        {
-            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.TestIdentity);
-            _testAdminIdentity = new RackspaceCloudIdentity(Bootstrapper.TestAdminIdentity);
-        }
-
         private TestContext testContextInstance;
         private static RackspaceCloudIdentity _testIdentity;
         private static RackspaceCloudIdentity _testAdminIdentity;
@@ -39,6 +31,13 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             {
                 testContextInstance = value;
             }
+        }
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
+        {
+            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
+            _testAdminIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestAdminIdentity);
         }
 
         [TestMethod]

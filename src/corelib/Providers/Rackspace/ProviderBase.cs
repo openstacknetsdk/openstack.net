@@ -104,7 +104,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected virtual string GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
-            var userAccess = _identityProvider.Authenticate(identity);
+            var userAccess = _identityProvider.GetUserAccess(identity);
 
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints");
@@ -144,6 +144,8 @@ namespace net.openstack.Providers.Rackspace
                     throw new ServiceLimitReachedException(response);
                 case 500:
                     throw new ServiceFaultException(response);
+                case 501:
+                    throw new MethodNotImplementedException(response);
                 case 503:
                     throw new ServiceUnavailableException(response);
             }

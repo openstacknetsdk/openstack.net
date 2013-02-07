@@ -91,6 +91,30 @@ namespace net.openstack.Providers.Rackspace
             return provider.SetUserPassword(identity, userId, password);
         }
 
+        public bool SetUserPassword(CloudIdentity identity, User user, string password)
+        {
+            var provider = GetProvider(identity);
+            return provider.SetUserPassword(identity, user, password);
+        }
+
+        public bool SetUserPassword(CloudIdentity identity, string userId, string username, string password)
+        {
+            var provider = GetProvider(identity);
+            return provider.SetUserPassword(identity, userId, username, password);
+        }
+
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, User user, string apiKey)
+        {
+            var provider = GetProvider(identity);
+            return provider.UpdateUserCredentials(identity, user, apiKey);
+        }
+
+        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string username, string apiKey)
+        {
+            var provider = GetProvider(identity);
+            return provider.UpdateUserCredentials(identity, userId, username, apiKey);
+        }
+
         public UserCredential[] ListUserCredentials(CloudIdentity identity, string userId)
         {
             var provider = GetProvider(identity);
@@ -113,6 +137,12 @@ namespace net.openstack.Providers.Rackspace
         {
             var provider = GetProvider(identity);
             return provider.ListTenants(identity);
+        }
+
+        public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
+        {
+            var provider = GetProvider(identity);
+            return provider.GetUserAccess(identity, forceCacheRefresh);
         }
 
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
