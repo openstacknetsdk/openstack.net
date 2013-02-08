@@ -58,6 +58,7 @@
     <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
     <Compile Include="Core\Domain\Mapping\MetaDataJsonMapper.cs" />
     <Compile Include="Core\Domain\Network.cs" />
+    <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\Personality.cs" />
     <Compile Include="Core\Domain\RebootType.cs" />
     <Compile Include="Core\Domain\ServerAddresses.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredencialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />

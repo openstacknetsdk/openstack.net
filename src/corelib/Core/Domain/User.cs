@@ -6,21 +6,19 @@ namespace net.openstack.Core.Domain
     [DataContract]
     public class User
     {
-
         [DataMember(Name = "RAX-AUTH:defaultRegion")]
         public string DefaultRegion { get; set; }
 
-        [DataMember]
+        [DataMember(Name="id", EmitDefaultValue = true)]
         public string Id { get; set; }
 
-        [DataMember]
+        [DataMember(Name="username")]
         public string Username { get; set; }
 
-        [DataMember]
+        [DataMember(Name="email")]
         public string Email { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "enabled")]
         public bool Enabled { get; set; }
-
     }
 }
