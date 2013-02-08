@@ -13,7 +13,7 @@ namespace net.openstack.Core
         User[] ListUsers(CloudIdentity identity);
         User GetUserByName(CloudIdentity identity, string name);
         User GetUser(CloudIdentity identity, string id);
-        User AddUser(CloudIdentity identity, User user);
+        NewUser AddUser(CloudIdentity identity, NewUser user);
         User UpdateUser(CloudIdentity identity, User user);
         bool DeleteUser(CloudIdentity identity, string userId);
 

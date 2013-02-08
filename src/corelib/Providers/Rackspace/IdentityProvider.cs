@@ -67,10 +67,10 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUser(identity, userId);
         }
 
-        public User AddUser(CloudIdentity identity, User user)
+        public NewUser AddUser(CloudIdentity identity, NewUser newUser)
         {
             var provider = GetProvider(identity);
-            return provider.AddUser(identity, user);
+            return provider.AddUser(identity, newUser);
         }
 
         public User UpdateUser(CloudIdentity identity, User user)
@@ -168,7 +168,7 @@ namespace net.openstack.Providers.Rackspace
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
             if (rackspaceCloudIdentity == null)
-                throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identoty service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
+                _factory.Get(CloudInstance.Default);
 
             return _factory.Get(rackspaceCloudIdentity.CloudInstance);
         }

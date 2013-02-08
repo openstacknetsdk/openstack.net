@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SimpleRestServices.Client;
@@ -215,18 +216,27 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        public User AddUser(CloudIdentity identity, User user)
+        public NewUser AddUser(CloudIdentity identity, NewUser newUser)
         {
-            var response = ExecuteRESTRequest<UserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = user });
+            newUser.Id = null;
+
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = newUser });
 
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.User;
+            // If the user specifies a password, then the password will not be in the response, so we need to fill it in on the return object.
+            if (string.IsNullOrWhiteSpace(response.Data.NewUser.Password))
+                response.Data.NewUser.Password = newUser.Password;
+
+            return response.Data.NewUser;
         }
 
         public User UpdateUser(CloudIdentity identity, User user)
         {
+            if(user == null || string.IsNullOrWhiteSpace(user.Id))
+                throw new ArgumentException("The User or User.Id values cannot be null.");
+
             var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
             var updateUserRequest = new UpdateUserRequest { User = user };
@@ -378,7 +388,7 @@ namespace net.openstack.Providers.Rackspace
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
             }
 
-            var response = _restService.Execute<T>(url, method, bodyStr, headers, queryStringParameter, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 } });
+            var response = _restService.Execute<T>(url, method, bodyStr, headers, queryStringParameter, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 }, UserAgent = ProviderBase.GetUserAgentHeaderValue()});
 
             // on errors try again 1 time.
             if (response.StatusCode == 401 && !isRetry && !isTokenRequest)
