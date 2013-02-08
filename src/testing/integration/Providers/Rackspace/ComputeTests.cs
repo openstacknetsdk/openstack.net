@@ -333,12 +333,22 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
             var serverDetails = provider.GetDetails(_testIdentity, _testServer.Id);
-            using(var client = new Renci.SshNet.SshClient(serverDetails.AccessIPv4, "root", NewPassword))
+            bool sucess = false;
+            for (int i = 0; i < 10; i++ )
             {
-                client.Connect();
+                using (var client = new Renci.SshNet.SshClient(serverDetails.AccessIPv4, "root", NewPassword))
+                {
+                    client.Connect();
 
-                Assert.IsTrue(client.IsConnected);
+                    sucess = client.IsConnected;
+
+                    if (sucess)
+                        break;
+                }
+                Thread.Sleep(1000);
             }
+            
+            Assert.IsTrue(sucess);
         }
 
         [TestMethod]

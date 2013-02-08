@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SimpleRestServices.Client;
@@ -16,6 +17,7 @@ namespace net.openstack.Providers.Rackspace
     {
         private readonly IIdentityProvider _identityProvider;
         private readonly IRestService _restService;
+        private static Version _currentVersion;
 
         protected ProviderBase(IIdentityProvider identityProvider, IRestService restService)
         {
@@ -41,6 +43,9 @@ namespace net.openstack.Providers.Rackspace
                 else
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
+
+            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+                requestSettings.UserAgent = GetUserAgentHeaderValue();
 
             var response = _restService.Execute<T>(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
@@ -77,6 +82,9 @@ namespace net.openstack.Providers.Rackspace
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
+            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+                requestSettings.UserAgent = GetUserAgentHeaderValue();
+
             var response = _restService.Execute(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
             // on errors try again 1 time.
@@ -99,7 +107,7 @@ namespace net.openstack.Providers.Rackspace
             if(non200SuccessCodes != null)
                 non200SuccessCodesAggregate.AddRange(non200SuccessCodes);
 
-            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate};
+            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
         protected virtual string GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
@@ -149,6 +157,14 @@ namespace net.openstack.Providers.Rackspace
                 case 503:
                     throw new ServiceUnavailableException(response);
             }
+        }
+
+        internal static string GetUserAgentHeaderValue()
+        {
+            if (_currentVersion == null)
+                _currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+            return string.Format("openstack.net/{0}", _currentVersion.ToString());
         }
     }
 }

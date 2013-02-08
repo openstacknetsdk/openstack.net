@@ -7,6 +7,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     internal class AddUserRequest
     {
         [DataMember(Name = "user")]
-        public User User { get; set; }
+        public NewUser User { get; set; }
     }
 }
