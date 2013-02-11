@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using net.openstack.Core.Domain;
+using net.openstack.Providers.Rackspace;
 
 namespace Net.OpenStack.Testing.Integration
 {
@@ -48,11 +49,29 @@ namespace Net.OpenStack.Testing.Integration
 
     public class OpenstackNetSetings
     {
-        public CloudIdentity TestIdentity { get; set; }
+        public ExtendedCloudIdentity TestIdentity { get; set; }
 
-        public CloudIdentity TestAdminIdentity { get; set; }
+        public ExtendedCloudIdentity TestAdminIdentity { get; set; }
 
         public string RackspaceExtendedIdentityUSUrl { get; set; }
         public string RackspaceExtendedIdentityUKUrl { get; set; }
+    }
+
+    public class ExtendedCloudIdentity : CloudIdentity
+    {
+        public string TenantId { get; set; }
+    }
+
+    public class ExtendedRackspaceCloudIdentity : RackspaceCloudIdentity
+    {
+        public string TenantId { get; set; }
+
+        public ExtendedRackspaceCloudIdentity(ExtendedCloudIdentity cloudIdentity)
+        {
+            this.APIKey = cloudIdentity.APIKey;
+            this.Password = cloudIdentity.Password;
+            this.Username = cloudIdentity.Username;
+            this.TenantId = cloudIdentity.TenantId;
+        }
     }
 }
