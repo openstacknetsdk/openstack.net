@@ -1,6 +1,6 @@
 ﻿using System;
+using JSIStudios.SimpleRESTServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SimpleRestServices.Client;
 using net.openstack;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
