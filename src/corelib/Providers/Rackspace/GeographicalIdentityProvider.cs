@@ -127,12 +127,40 @@ namespace net.openstack.Providers.Rackspace
         public UserCredential[] ListUserCredentials(CloudIdentity identity, string userId)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
-            var response = ExecuteRESTRequest<UserCredentialsResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
 
-            if (response == null || response.Data == null)
+            if (response == null || string.IsNullOrWhiteSpace(response.RawBody))
                 return null;
 
-            return response.Data.Credentials.Select(c => c.UserCredential).ToArray();
+            var jObject = JObject.Parse(response.RawBody);
+            var credsArray = (JArray)jObject["credentials"];
+            var creds = new List<UserCredential>();
+
+            foreach (JObject jToken in credsArray)
+            {
+                foreach (JProperty property in jToken.Properties())
+                {
+                    var cred = (JObject)property.Value;
+                    creds.Add(new UserCredential
+                            {
+                                Name = property.Name,
+                                APIKey = cred["apiKey"].ToString(),
+                                Username = cred["username"].ToString()
+                            }); 
+                }
+                   
+            }
+            
+            return creds.ToArray();
+        }
+
+        public UserCredential GetUserCredential(CloudIdentity identity, string userId, string credentialKey)
+        {
+            var creds = ListUserCredentials(identity, userId);
+
+            var cred = creds.FirstOrDefault(c => c.Name.Equals(credentialKey, StringComparison.OrdinalIgnoreCase));
+
+            return cred;
         }
 
         public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string apiKey)
