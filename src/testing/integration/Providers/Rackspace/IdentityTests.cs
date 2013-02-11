@@ -11,13 +11,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     public class IdentityTests
     {
         private TestContext testContextInstance;
-        private static RackspaceCloudIdentity _testIdentity;
-        private static RackspaceCloudIdentity _testAdminIdentity;
+        private static ExtendedRackspaceCloudIdentity _testIdentity;
+        private static ExtendedRackspaceCloudIdentity _testAdminIdentity;
         private static User _userDetails;
         private static User _adminUserDetails;
         private static NewUser _newTestUser1;
         private const string NewUserPassword = "My_n3wuser2_p@$$ssw0rd";
-        private const string NewPassword = "My_n3w_p@$$ssw0rd";
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -38,8 +37,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
-            _testAdminIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestAdminIdentity);
+            _testIdentity = new ExtendedRackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
+            _testAdminIdentity = new ExtendedRackspaceCloudIdentity(Bootstrapper.Settings.TestAdminIdentity);
         }
 
         [TestMethod]
@@ -399,6 +398,52 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             Assert.IsTrue(users.Count() == 1);
             Assert.AreEqual(_newTestUser1.Username, users[0].Username);
+        }
+
+        [TestMethod]
+        public void Should_Return_The_Users_Tenant_When_Requesting_As_Non_Admin()
+        {
+            IIdentityProvider provider = new IdentityProvider();
+
+            var tenants = provider.ListTenants(_testIdentity);
+
+            Assert.IsTrue(tenants.Any());
+
+            if(!string.IsNullOrWhiteSpace(_testIdentity.TenantId))
+            {
+                Assert.IsTrue(tenants.Any(t => t.Id == _testIdentity.TenantId));
+            }
+        }
+
+        [TestMethod]
+        public void Should_Return_List_Of_Users_Credentials_When_Requesting_As_Non_Admin()
+        {
+            IIdentityProvider provider = new IdentityProvider();
+
+            var creds = provider.ListUserCredentials(_testIdentity, _userDetails.Id);
+
+            Assert.IsNotNull(creds);
+            Assert.IsTrue(creds.Any());
+
+            foreach (var cred in creds)
+            {
+                Assert.IsFalse(string.IsNullOrWhiteSpace(cred.Name));
+                Assert.IsFalse(string.IsNullOrWhiteSpace(cred.APIKey));
+                Assert.IsFalse(string.IsNullOrWhiteSpace(cred.Username));
+            }
+        }
+
+        [TestMethod]
+        public void Should_Return_User_API_Credential_When_Requesting_As_Non_Admin()
+        {
+            IIdentityProvider provider = new IdentityProvider();
+
+            var cred = provider.GetUserCredential(_testIdentity, _userDetails.Id, "RAX-KSKEY:apiKeyCredentials");
+
+            Assert.IsNotNull(cred);
+            Assert.AreEqual("RAX-KSKEY:apiKeyCredentials", cred.Name);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(cred.APIKey));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(cred.Username));
         }
     }
 }

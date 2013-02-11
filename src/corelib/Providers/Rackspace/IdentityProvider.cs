@@ -145,6 +145,12 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetUserAccess(identity, forceCacheRefresh);
         }
 
+        public UserCredential GetUserCredential(CloudIdentity identity, string userId, string credentialKey)
+        {
+            var provider = GetProvider(identity);
+            return provider.GetUserCredential(identity, userId, credentialKey);
+        }
+
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
