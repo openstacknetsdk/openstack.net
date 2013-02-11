@@ -1,4 +1,4 @@
-﻿using SimpleRestServices.Client;
+﻿using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 

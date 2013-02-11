@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JSIStudios.SimpleRESTServices.Client;
+using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SimpleRestServices.Client;
-using SimpleRestServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;

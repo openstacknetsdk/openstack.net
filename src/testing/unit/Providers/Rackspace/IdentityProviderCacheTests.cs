@@ -2,9 +2,9 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using JSIStudios.SimpleRESTServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SimpleRestServices.Client;
 using net.openstack;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace;

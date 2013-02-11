@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using SimpleRestServices.Client;
-using SimpleRestServices.Client.Json;
+using JSIStudios.SimpleRESTServices.Client;
+using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace.Objects.Request;
