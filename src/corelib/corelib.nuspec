@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>openstack.net</id>
+    <version>$version$</version>
+    <title>openstack.net</title>
+    <authors>alanquillin, kravi</authors>
+    <owners>alanquillin</owners>
+    <licenseUrl>https://github.com/rackspace/openstack.net/wiki/Copyright</licenseUrl>
+    <projectUrl>https://github.com/rackspace/openstack.net</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>openstack.net - An openstack SDK</description>
+    <releaseNotes>https://github.com/rackspace/openstack.net/wiki/v$version$</releaseNotes>
+    <copyright>Copyright (C) 2013 Rackspace US, Inc.</copyright>
+    <tags>openstack</tags>
+  </metadata>
+</package>

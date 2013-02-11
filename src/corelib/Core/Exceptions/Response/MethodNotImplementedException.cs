@@ -7,8 +7,8 @@ namespace net.openstack.Core.Exceptions.Response
 {
     class MethodNotImplementedException : ResponseException
     {
-        public MethodNotImplementedException(SimpleRestServices.Client.Response response) : base("The requested method is not implemented at the service.", response) { }
+        public MethodNotImplementedException(JSIStudios.SimpleRESTServices.Client.Response response) : base("The requested method is not implemented at the service.", response) { }
 
-        public MethodNotImplementedException(string message, SimpleRestServices.Client.Response response) : base(message, response) {}
+        public MethodNotImplementedException(string message, JSIStudios.SimpleRESTServices.Client.Response response) : base(message, response) { }
     }
 }
