@@ -9,13 +9,18 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ObjectStoreProvider : ProviderBase, IObjectStoreProvider
     {
+        private readonly IObjectStoreValidator _objectStoreValidator;
         #region Constructors
 
         public ObjectStoreProvider()
-            : this(new IdentityProvider(), new JsonRestServices()) { }
+            : this(new IdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
 
-        public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService)
-            : base(identityProvider, restService) { }
+        public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
+            : base(identityProvider, restService)
+        {
+            _objectStoreValidator = objectStoreValidator;
+        }
+
 
         #endregion
 
@@ -44,6 +49,21 @@ namespace net.openstack.Providers.Rackspace
 
             return response.Data;
 
+        }
+
+        public ObjectStore CreateContainer(CloudIdentity identity, string container, string region = null)
+        {
+            _objectStoreValidator.ValidateContainerName(container);
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
+
+            if (response.StatusCode == 201)
+                return ObjectStore.ContainerCreated;
+            if (response.StatusCode == 202)
+                return ObjectStore.ContainerExists;
+
+            return ObjectStore.Unknown;
         }
 
         #endregion
