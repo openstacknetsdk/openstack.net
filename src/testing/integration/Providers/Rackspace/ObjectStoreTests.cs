@@ -13,22 +13,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     public class ObjectStoreTests
     {
 
+        private static RackspaceCloudIdentity _testIdentity;
+        private static RackspaceCloudIdentity _testAdminIdentity;
+
         public ObjectStoreTests()
         {
             CloudInstance cloudInstance;
-            CloudInstance.TryParse(ConfigurationManager.AppSettings["TestIdentityGeo"], true, out cloudInstance);
-
-            _testIdentity = new RackspaceCloudIdentity
-            {
-                APIKey = ConfigurationManager.AppSettings["TestIdentityAPIKey"],
-                Password = ConfigurationManager.AppSettings["TestIdentityPassword"],
-                CloudInstance = cloudInstance,
-                Username = ConfigurationManager.AppSettings["TestIdentityUserName"],
-            };
         }
 
         private TestContext testContextInstance;
-        private static CloudIdentity _testIdentity;
+        
         
         /// <summary>
         ///Gets or sets the test context which provides
@@ -44,6 +38,13 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             {
                 testContextInstance = value;
             }
+        }
+
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
+        {
+            _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
         }
 
 
@@ -106,6 +107,26 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             Assert.IsNotNull(containerList);
             Assert.IsTrue(containerList.Any());
+        }
+
+        [TestMethod]
+        public void Should_Create_Container()
+        {
+            const string containerName = "TestContainer";
+            var provider = new ObjectStoreProvider();
+            var containerCreatedResponse = provider.CreateContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(ObjectStore.ContainerCreated, containerCreatedResponse);
+        }
+
+        [TestMethod]
+        public void Should_Not_Create_Container_Already_Exists()
+        {
+            const string containerName = "TestContainer";
+            var provider = new ObjectStoreProvider();
+            var containerCreatedResponse = provider.CreateContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(ObjectStore.ContainerExists, containerCreatedResponse);
         }
 
 

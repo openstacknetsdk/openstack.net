@@ -11,6 +11,7 @@ namespace net.openstack.Core
         #region Container
 
         IEnumerable<Container> ListContainers(CloudIdentity identity, int? limit = null, string markerId = null, string markerEnd = null, string format = "json", string region = null);
+        ObjectStore CreateContainer(CloudIdentity identity, string container, string region = null);
 
         #endregion
     }
