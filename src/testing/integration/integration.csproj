@@ -40,12 +40,13 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Renci.SshNet">
-      <HintPath>..\..\packages\SSH.NET.2013.1.8\lib\net40\Renci.SshNet.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Renci.SshNet, Version=2013.1.27.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SimpleRESTServices.1.0.1.0\lib\net40\SimpleRESTServices.dll</HintPath>
+      <HintPath>..\..\packages\SSH.NET.2013.1.27\lib\net40\Renci.SshNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleRESTServices, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SimpleRESTServices.1.0.2.0\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

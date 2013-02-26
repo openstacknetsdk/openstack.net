@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>SSH.NET</id>
-    <version>2013.1.8</version>
+    <version>2013.1.27</version>
     <title>SSH.NET</title>
     <authors>Renci</authors>
     <owners>Renci</owners>
