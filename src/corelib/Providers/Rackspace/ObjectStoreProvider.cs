@@ -66,6 +66,22 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        public ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null)
+        {
+            _objectStoreValidator.ValidateContainerName(container);
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response.StatusCode == 204)
+                return ObjectStore.ContainerDeleted;
+            if (response.StatusCode == 404)
+                return ObjectStore.ContainerNotFound;
+            if (response.StatusCode == 409)
+                return ObjectStore.ContainerNotEmpty;
+
+            return ObjectStore.Unknown;
+        }
         #endregion
 
         #region Private methods
