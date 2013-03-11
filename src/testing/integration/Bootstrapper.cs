@@ -22,7 +22,7 @@ namespace Net.OpenStack.Testing.Integration
 
         public static void Initialize()
         {
-            var homeDir = Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            var homeDir = Environment.ExpandEnvironmentVariables("C:\\");
 
             var path = Path.Combine(homeDir, ".openstack_net");
 
