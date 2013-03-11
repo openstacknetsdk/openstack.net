@@ -129,6 +129,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.AreEqual(ObjectStore.ContainerExists, containerCreatedResponse);
         }
 
+        [TestMethod]
+        public void Should_Delete_Container()
+        {
+            const string containerName = "TestContainer";
+            var provider = new ObjectStoreProvider();
+            var containerCreatedResponse = provider.DeleteContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+        }
 
     }
 }
