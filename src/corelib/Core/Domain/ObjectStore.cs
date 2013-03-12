@@ -9,6 +9,9 @@ namespace net.openstack.Core.Domain
     {
         Unknown,
         ContainerCreated,
-        ContainerExists
+        ContainerExists,
+        ContainerDeleted,
+        ContainerNotEmpty,
+        ContainerNotFound
     }
 }
