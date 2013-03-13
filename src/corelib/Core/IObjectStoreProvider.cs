@@ -15,5 +15,11 @@ namespace net.openstack.Core
         ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null);
 
         #endregion
+
+        #region Container Objects
+
+        IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string containerName, int? limit = null, string markerId = null, string markerEnd = null, string format = "json", string region = null);
+
+        #endregion
     }
 }
