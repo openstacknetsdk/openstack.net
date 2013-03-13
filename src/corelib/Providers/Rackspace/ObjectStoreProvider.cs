@@ -84,6 +84,38 @@ namespace net.openstack.Providers.Rackspace
         }
         #endregion
 
+        #region Container Objects
+
+        public IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
+        {
+            _objectStoreValidator.ValidateContainerName(container);
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var queryStringParameter = new Dictionary<string, string>();
+            queryStringParameter.Add("format", format);
+
+            if (limit != null)
+                queryStringParameter.Add("limit", limit.ToString());
+
+            if (!string.IsNullOrWhiteSpace(marker))
+                queryStringParameter.Add("marker", marker);
+
+            if (!string.IsNullOrWhiteSpace(markerEnd))
+                queryStringParameter.Add("end_marker", markerEnd);
+
+            var response = ExecuteRESTRequest<ContainerObject[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
+
+            //if (response.StatusCode == 204)
+
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data;
+        }
+
+        #endregion
+
         #region Private methods
 
         protected string GetServiceEndpoint(CloudIdentity identity, string region = null)

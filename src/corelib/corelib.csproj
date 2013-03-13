@@ -47,6 +47,7 @@
     <Compile Include="Core\Domain\Address.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
+    <Compile Include="Core\Domain\ContainerObject.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
     <Compile Include="Core\Domain\ImageType.cs" />
