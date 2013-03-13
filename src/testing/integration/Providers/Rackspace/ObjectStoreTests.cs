@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
 
 namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
@@ -137,6 +138,36 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var containerCreatedResponse = provider.DeleteContainer(_testIdentity, containerName);
 
             Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+        }
+
+        [TestMethod]
+        public void Should_Get_Objects_From_Container()
+        {
+            const string containerName = "lb_19087_ADMLab_-_LB80_Apr_2012";
+            var provider = new ObjectStoreProvider();
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+
+            Assert.IsNotNull(containerGetObjectsResponse);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ItemNotFoundException))]
+        public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Container_Does_Not_Exist()
+        {
+            const string containerName = "No_Container_Present";
+            var provider = new ObjectStoreProvider();       
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.Fail("Expected exception was not thrown.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ItemNotFoundException))]
+        public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Objects_Does_Not_Exist()
+        {
+            const string containerName = "RK_Teat";
+            var provider = new ObjectStoreProvider();
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.Fail("Expected exception was not thrown.");
         }
 
     }
