@@ -15,17 +15,17 @@ using net.openstack.Providers.Rackspace.Objects.Response;
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {
     [TestClass]
-    public class ObjectProviderValidatorTests
+    public class ObjectProviderHelperTests
     {
         [TestMethod]
         public void Should_Pass_Validation_For_Container_Name()
         {
             const string containerName = "DarkKnight";
-            var validatorMock = new Mock<IObjectStoreValidator>();
+            var validatorMock = new Mock<IObjectStoreHelper>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
-            var objectStoreValidator = new ObjectStoreValidator();
+            var objectStoreValidator = new ObjectStoreHelper();
             objectStoreValidator.ValidateContainerName(containerName);
 
         }
@@ -35,13 +35,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Empty_Container_Name()
         {
             const string containerName = "";
-            var validatorMock = new Mock<IObjectStoreValidator>();
+            var validatorMock = new Mock<IObjectStoreHelper>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new ObjectStoreValidator();
+                var objectStoreValidator = new ObjectStoreHelper();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -56,13 +56,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Null_Container_Name()
         {
             const string containerName = null;
-            var validatorMock = new Mock<IObjectStoreValidator>();
+            var validatorMock = new Mock<IObjectStoreHelper>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new ObjectStoreValidator();
+                var objectStoreValidator = new ObjectStoreHelper();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -82,13 +82,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
                 containerName += containerName;
             }
-            var validatorMock = new Mock<IObjectStoreValidator>();
+            var validatorMock = new Mock<IObjectStoreHelper>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new ObjectStoreValidator();
+                var objectStoreValidator = new ObjectStoreHelper();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -104,13 +104,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         {
             string containerName = "/";
             
-            var validatorMock = new Mock<IObjectStoreValidator>();
+            var validatorMock = new Mock<IObjectStoreHelper>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new ObjectStoreValidator();
+                var objectStoreValidator = new ObjectStoreHelper();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }

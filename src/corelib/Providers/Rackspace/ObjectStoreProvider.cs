@@ -9,7 +9,7 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ObjectStoreProvider : ProviderBase, IObjectStoreProvider
     {
-        private readonly IObjectStoreValidator _objectStoreValidator;
+        private readonly IObjectStoreHelper _objectStoreHelper;
         #region Constructors
 
         public ObjectStoreProvider()
@@ -24,7 +24,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStoreProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
             : base(defaultIdentity, identityProvider, restService)
         {
-            _objectStoreValidator = objectStoreValidator;
+            _objectStoreHelper = objectStoreValidator;
         }
 
 
@@ -47,8 +47,8 @@ namespace net.openstack.Providers.Rackspace
 
             if (!string.IsNullOrWhiteSpace(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
-            
-            var response = ExecuteRESTRequest<Container []>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
+
+            var response = ExecuteRESTRequest<Container[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
 
             if (response == null || response.Data == null)
                 return null;
@@ -59,7 +59,7 @@ namespace net.openstack.Providers.Rackspace
 
         public ObjectStore CreateContainer(CloudIdentity identity, string container, string region = null)
         {
-            _objectStoreValidator.ValidateContainerName(container);
+            _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
@@ -74,7 +74,7 @@ namespace net.openstack.Providers.Rackspace
 
         public ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null)
         {
-            _objectStoreValidator.ValidateContainerName(container);
+            _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
@@ -88,13 +88,78 @@ namespace net.openstack.Providers.Rackspace
 
             return ObjectStore.Unknown;
         }
+
+
+        public Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
+
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
+        }
+
+        public Dictionary<string, string> GetMetaDataForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
+
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
+        }
+
+        public void AddContainerMetadata(CloudIdentity identity, string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            if (metadata.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> m in metadata)
+            {
+                if (m.Key.Contains(ObjectStoreConstants.ContainerMetaDataPrefix))
+                {
+                    headers.Add(m.Key, m.Value);
+                }
+                else
+                {
+                    headers.Add(ObjectStoreConstants.ContainerMetaDataPrefix + m.Key, m.Value);
+                }
+            }
+
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST,null,null,headers);
+        }
+
+        public void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            if (headers == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+        }
+
         #endregion
 
         #region Container Objects
 
         public IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
         {
-            _objectStoreValidator.ValidateContainerName(container);
+            _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
 
             var queryStringParameter = new Dictionary<string, string>();
@@ -118,6 +183,19 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return response.Data;
+        }
+
+        public IEnumerable<HttpHeader> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpoint(identity, region), container, objectName));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
+            if (response == null)
+                return null;
+
+            return response.Headers;
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
 
@@ -48,7 +49,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
         }
 
-
+        #region Container Tests
+        
         [TestMethod]
         public void Should_Return_Container_List()
         {
@@ -169,6 +171,91 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
             Assert.Fail("Expected exception was not thrown.");
         }
+
+        [TestMethod]
+        public void Should_Get_Headers_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetHeaderForContainer(_testIdentity, containerName);
+
+            Assert.IsNotNull(objectHeadersResponse);
+            //Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetMetaDataForContainer(_testIdentity, containerName);
+
+            Assert.IsNotNull(objectHeadersResponse);
+            Assert.IsFalse(bool.Parse(objectHeadersResponse.Where(x => x.Key.Equals("Access-Log-Delivery", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+        }
+
+        [TestMethod]
+        public void Should_Add_MetaData_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var metaData = new Dictionary<string, string>();
+            metaData.Add("X-Container-Meta-XXXX","Test");
+            var provider = new ObjectStoreProvider();
+            provider.AddContainerMetadata(_testIdentity, containerName, metaData);
+        }
+
+        [TestMethod]
+        public void Should_Add_Headers_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var metaData = new Dictionary<string, string>();
+            metaData.Add("X-Container-Meta-Movie", "Batman");
+            metaData.Add("X-Container-Meta-Genre", "Action");
+            var provider = new ObjectStoreProvider();
+            provider.AddContainerHeaders(_testIdentity, containerName, metaData);
+        }
+
+
+
+        #endregion Container Tests
+
+
+        [TestMethod]
+        public void Should_Get_Headers_For_Object()
+        {
+            const string containerName = "DarkKnight";
+            const string objectName = "BatmanBegins.jpg";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName,objectName);
+            
+            Assert.IsNotNull(objectHeadersResponse);
+            Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Should_Throw_Exception_When_Calling_Get_Headers_For_Object_And_Container_Name_Is_Empty()
+        {
+            string containerName = string.Empty;
+            const string objectName = "BatmanBegins.jpg";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName, objectName);
+
+            Assert.Fail("Expected exception was not thrown.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Should_Throw_Exception_When_Calling_Get_Headers_For_Object_And_Object_Name_Is_Empty()
+        {
+            const string containerName = "DarkKnight";
+            string objectName = string.Empty;
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName, objectName);
+
+            Assert.Fail("Expected exception was not thrown.");
+        }
+
 
     }
 }
