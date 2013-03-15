@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderCacheTests.cs" />
-    <Compile Include="Providers\Rackspace\ObjectProviderValidatorTests.cs" />
+    <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
