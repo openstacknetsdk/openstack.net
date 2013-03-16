@@ -64,6 +64,7 @@
     <Compile Include="Core\Domain\ServerState.cs" />
     <Compile Include="Core\Domain\Tenant.cs" />
     <Compile Include="Core\Domain\UserCredential.cs" />
+    <Compile Include="Core\Exceptions\CDNNotEnabledException.cs" />
     <Compile Include="Core\Exceptions\ContainerNameException.cs" />
     <Compile Include="Core\Exceptions\ObjectNameException.cs" />
     <Compile Include="Core\Exceptions\Response\BadServiceRequestException.cs" />
