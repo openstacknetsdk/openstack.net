@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -28,7 +30,7 @@ namespace net.openstack.Providers.Rackspace
 
         public IEnumerable<Container> ListContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
         {
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpoint(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
 
             var queryStringParameter = new Dictionary<string, string>();
             queryStringParameter.Add("format", format);
@@ -54,7 +56,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStore CreateContainer(CloudIdentity identity, string container, string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
@@ -69,7 +71,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -87,7 +89,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
 
@@ -99,13 +101,24 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetMetaDataForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
 
             var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
 
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
+        }
+
+        public Dictionary<string, string> GetCDNHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
+
+            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
         public void AddContainerMetadata(CloudIdentity identity, string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false)
@@ -129,9 +142,9 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST,null,null,headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
         }
 
         public void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
@@ -142,9 +155,36 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+        }
+
+        public void AddContainerCdnHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            if (headers == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            bool cdnEnabled = false;
+
+            var cdnHeaders = GetCDNHeaderForContainer(identity, container);
+            if (cdnHeaders.ContainsKey(ObjectStoreConstants.CdnEnabled))
+            {
+                cdnEnabled = bool.Parse(cdnHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.CdnEnabled, StringComparison.InvariantCultureIgnoreCase)).Value);
+            }
+
+            if (!cdnEnabled)
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+                ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+            }
         }
 
         #endregion
@@ -154,7 +194,7 @@ namespace net.openstack.Providers.Rackspace
         public IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpoint(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
             var queryStringParameter = new Dictionary<string, string>();
             queryStringParameter.Add("format", format);
@@ -183,7 +223,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpoint(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
             if (response == null)
@@ -196,9 +236,14 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        protected string GetServiceEndpoint(CloudIdentity identity, string region = null)
+        protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null)
         {
             return base.GetServiceEndpoint(identity, "cloudFiles", region);
+        }
+
+        protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
+        {
+            return base.GetServiceEndpoint(identity, "cloudFilesCDN", region);
         }
 
         #endregion
