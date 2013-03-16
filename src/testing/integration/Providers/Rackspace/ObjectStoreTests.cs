@@ -24,8 +24,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         private TestContext testContextInstance;
-        
-        
+
+
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
@@ -50,7 +50,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         #region Container Tests
-        
+
         [TestMethod]
         public void Should_Return_Container_List()
         {
@@ -65,7 +65,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Return_Container_List_With_Limit()
         {
             var provider = new ObjectStoreProvider();
-            var containerList = provider.ListContainers(_testIdentity,1);
+            var containerList = provider.ListContainers(_testIdentity, 1);
 
             Assert.IsNotNull(containerList);
             Assert.AreEqual(1, containerList.Count());
@@ -75,7 +75,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Return_Container_List_With_Start_Marker_Lower_Case()
         {
             var provider = new ObjectStoreProvider();
-            var containerList = provider.ListContainers(_testIdentity, null,"a");
+            var containerList = provider.ListContainers(_testIdentity, null, "a");
 
             Assert.IsNotNull(containerList);
             Assert.IsTrue(containerList.Any());
@@ -91,12 +91,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(containerList.Any());
         }
 
-        
+
         [TestMethod]
         public void Should_Return_Container_List_With_End_Marker_Upper_Case()
         {
             var provider = new ObjectStoreProvider();
-            var containerList = provider.ListContainers(_testIdentity, null, null,"L");
+            var containerList = provider.ListContainers(_testIdentity, null, null, "L");
 
             Assert.IsNotNull(containerList);
             Assert.IsTrue(containerList.Any());
@@ -157,7 +157,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Container_Does_Not_Exist()
         {
             const string containerName = "No_Container_Present";
-            var provider = new ObjectStoreProvider();       
+            var provider = new ObjectStoreProvider();
             var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
             Assert.Fail("Expected exception was not thrown.");
         }
@@ -199,7 +199,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             const string containerName = "DarkKnight";
             var metaData = new Dictionary<string, string>();
-            metaData.Add("X-Container-Meta-XXXX","Test");
+            metaData.Add("X-Container-Meta-XXXX", "Test");
             var provider = new ObjectStoreProvider();
             provider.AddContainerMetadata(_testIdentity, containerName, metaData);
         }
@@ -215,7 +215,49 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.AddContainerHeaders(_testIdentity, containerName, metaData);
         }
 
+        [TestMethod]
+        public void Should_Get_CDN_Headers_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
 
+            Assert.IsNotNull(objectHeadersResponse);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ItemNotFoundException))]
+        public void Should_Not_Get_CDN_Headers_For_Container()
+        {
+            const string containerName = "cloudservers";
+            var provider = new ObjectStoreProvider();
+            var objectHeadersResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.Fail("Expected exception was not thrown.");
+        }
+
+        //X-Log-Retention, X-CDN-enabled, and X-TTL.
+        [TestMethod]
+        public void Should_Add_CDN_Headers_For_Container()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("X-Log-Retention", "false");
+            provider.AddContainerCdnHeaders(_testIdentity, containerName, headers);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ItemNotFoundException))]
+        public void Should_Not_Add_CDN_Headers_For_Container()
+        {
+            const string containerName = "cloudservers";
+            var provider = new ObjectStoreProvider();
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("X-Log-Retention", "false");
+            provider.AddContainerCdnHeaders(_testIdentity, containerName, headers);
+            Assert.Fail("Expected exception was not thrown.");
+        }
 
         #endregion Container Tests
 
@@ -226,8 +268,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string containerName = "DarkKnight";
             const string objectName = "BatmanBegins.jpg";
             var provider = new ObjectStoreProvider();
-            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName,objectName);
-            
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName, objectName);
+
             Assert.IsNotNull(objectHeadersResponse);
             Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }

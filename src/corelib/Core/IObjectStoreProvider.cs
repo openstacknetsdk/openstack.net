@@ -16,9 +16,12 @@ namespace net.openstack.Core
         ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null);
         Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
         Dictionary<string, string> GetMetaDataForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
+        Dictionary<string, string> GetCDNHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
+        
         void AddContainerMetadata(CloudIdentity identity, string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false);
         void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false);
-
+        void AddContainerCdnHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false);
+         
         #endregion
 
         #region Container Objects
@@ -61,7 +64,7 @@ namespace net.openstack.Core
         //void DeleteObject(string object_name);
         //void AddMetadata(Dictionary<string, string> metadata); -- DONE
         //void AddHeaders(Dictionary<string, string> headers); -- DONE
-        //void AddCdnHeaders(Dictionary<string, string> headers);
+        //void AddCdnHeaders(Dictionary<string, string> headers); -- DONE
         //void EnableStaticWeb(string index, string error, string css, bool listing);
         //void EnableStaticWeb(string index, string error, bool listing);
         //void EnableStaticWeb(string css, bool listing);
