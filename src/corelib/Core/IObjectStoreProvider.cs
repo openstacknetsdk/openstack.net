@@ -17,11 +17,20 @@ namespace net.openstack.Core
         Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
         Dictionary<string, string> GetMetaDataForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
         Dictionary<string, string> GetCDNHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false);
-        
+
+        IEnumerable<ContainerCDN> ListCDNContainers(CloudIdentity identity, int? limit = null, string markerId = null, string markerEnd = null, bool cdnEnabled = false, string region = null);
+
+        Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, string region = null);
+        Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, bool logRetention, string region = null);
+        Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, bool logRetention, string region = null);
+
+        Dictionary<string, string> DisableCDNOnContainer(CloudIdentity identity, string container, string region = null);
+
+
         void AddContainerMetadata(CloudIdentity identity, string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false);
         void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false);
         void AddContainerCdnHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false);
-         
+
         #endregion
 
         #region Container Objects
