@@ -47,6 +47,7 @@
     <Compile Include="Core\Domain\Address.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
+    <Compile Include="Core\Domain\ContainerCDN.cs" />
     <Compile Include="Core\Domain\ContainerObject.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\IObjectStoreProvider.cs" />
     <Compile Include="Core\IObjectStoreHelper.cs" />
     <Compile Include="Providers\Rackspace\IExtendedIdentityProvider.cs" />

@@ -259,6 +259,68 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.Fail("Expected exception was not thrown.");
         }
 
+        [TestMethod]
+        public void Should_Get_CDN_Enabled_Containers()
+        {
+            var provider = new ObjectStoreProvider();
+            var cdnContainerList = provider.ListCDNContainers(_testIdentity, null, null, null, true);
+
+            Assert.IsNotNull(cdnContainerList);
+            Assert.IsTrue(cdnContainerList.All(x => x.CDNEnabled == true));
+        }
+
+        [TestMethod]
+        public void Should_Get_CDN_All_Containers()
+        {
+            var provider = new ObjectStoreProvider();
+            var cdnContainerList = provider.ListCDNContainers(_testIdentity);
+
+            Assert.IsNotNull(cdnContainerList);
+            Assert.IsTrue(cdnContainerList.Any(x => x.CDNEnabled == true));
+            Assert.IsTrue(cdnContainerList.Any(x => x.CDNEnabled == false));
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Enabled_With_TTL()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, 1000);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(1000,int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Enabled_With_Log_Retention()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(259200, int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Log-Retention", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Disabled()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.DisableCDNOnContainer(_testIdentity, containerName);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.IsFalse(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+        }
+
         #endregion Container Tests
 
 
@@ -297,7 +359,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             Assert.Fail("Expected exception was not thrown.");
         }
-
 
     }
 }
