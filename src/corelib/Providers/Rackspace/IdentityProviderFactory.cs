@@ -7,15 +7,15 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class IdentityProviderFactory : IProviderFactory<IExtendedIdentityProvider, CloudInstance>
+    internal class IdentityProviderFactory : IProviderFactory<IExtendedIdentityProvider, CloudIdentity>
     {
         private readonly string USIdentityUrlBase;
         private readonly string LONIdentityUrlBase;
-
+        private readonly CloudIdentity _defaultIdentity;
         private readonly ICache<UserAccess> _tokenCache;
         private readonly IRestService _restService;
 
-        public IdentityProviderFactory(IRestService restService = null, ICache<UserAccess> tokenCache = null, string usInstanceUrlBase = null, string ukInstanceUrlBase = null)
+        public IdentityProviderFactory(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
             if (restService == null)
                 restService = new JsonRestServices();
@@ -28,16 +28,26 @@ namespace net.openstack.Providers.Rackspace
 
             _restService = restService;
             _tokenCache = tokenCache;
+            _defaultIdentity = defaultIdentity;
         }
 
-        public IExtendedIdentityProvider Get(CloudInstance cloudInstance)
+        public IExtendedIdentityProvider Get(CloudIdentity identity)
         {
+            if (identity == null)
+                identity = _defaultIdentity;
+
+            var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
+
+            var cloudInstance = CloudInstance.Default;
+            if (rackspaceCloudIdentity != null)
+                cloudInstance = rackspaceCloudIdentity.CloudInstance;
+
             switch (cloudInstance)
             {
                 case CloudInstance.Default:
-                    return new GeographicalIdentityProvider(new Uri(USIdentityUrlBase), _restService, _tokenCache);
+                    return new GeographicalIdentityProvider(new Uri(USIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
                 case CloudInstance.UK:
-                    return new GeographicalIdentityProvider(new Uri(LONIdentityUrlBase), _restService, _tokenCache);
+                    return new GeographicalIdentityProvider(new Uri(LONIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
                 default:
                     throw new UnknownGeographyException(cloudInstance.ToString());
             }

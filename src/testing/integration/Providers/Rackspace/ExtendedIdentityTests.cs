@@ -48,8 +48,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             var provider = BuildProvider();
 
-            _userDetails = provider.GetUserByName(_testIdentity, _testIdentity.Username);
-            _adminUserDetails = provider.GetUserByName(_testAdminIdentity, _testAdminIdentity.Username);
+            _userDetails = provider.GetUserByName(_testIdentity.Username, _testIdentity);
+            _adminUserDetails = provider.GetUserByName(_testAdminIdentity.Username, _testAdminIdentity);
         }
 
         private static IExtendedIdentityProvider BuildProvider(IRestService restService = null, ICache<UserAccess> cache = null)
@@ -64,7 +64,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             try
             {
-                var result = provider.SetUserPassword(_testIdentity, _userDetails, NewPassword);
+                var result = provider.SetUserPassword(_userDetails, NewPassword, _testIdentity);
 
                 throw new Exception("This code path is invalid, exception was expected.");
             }
@@ -81,7 +81,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             try
             {
-                var result = provider.SetUserPassword(_testIdentity, _adminUserDetails, AdminNewPassword);
+                var result = provider.SetUserPassword(_adminUserDetails, AdminNewPassword, _testIdentity);
 
                 throw new Exception("This code path is invalid, exception was expected.");
             }
@@ -96,7 +96,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = BuildProvider();
 
-            var result = provider.SetUserPassword(_testAdminIdentity, _adminUserDetails, AdminNewPassword);
+            var result = provider.SetUserPassword(_adminUserDetails, AdminNewPassword, _testAdminIdentity);
 
             Assert.IsTrue(result);
         }
@@ -122,7 +122,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = BuildProvider();
 
-            var result = provider.SetUserPassword(_testAdminIdentity, _adminUserDetails, _testAdminIdentity.Password);
+            var result = provider.SetUserPassword(_adminUserDetails, _testAdminIdentity.Password, _testAdminIdentity);
 
             Assert.IsTrue(result);
         }
@@ -143,7 +143,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = BuildProvider();
 
-            var result = provider.SetUserPassword(_testAdminIdentity, _adminUserDetails, AdminNewPassword);
+            var result = provider.SetUserPassword(_adminUserDetails, AdminNewPassword, _testAdminIdentity);
 
             Assert.IsTrue(result);
         }
@@ -169,7 +169,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = BuildProvider();
 
-            var result = provider.SetUserPassword(_testAdminIdentity, _adminUserDetails, _testAdminIdentity.Password);
+            var result = provider.SetUserPassword(_adminUserDetails, _testAdminIdentity.Password, _testAdminIdentity);
 
             Assert.IsTrue(result);
         }

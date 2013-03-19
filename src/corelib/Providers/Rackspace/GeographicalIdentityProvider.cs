@@ -17,9 +17,11 @@ namespace net.openstack.Providers.Rackspace
         private readonly IRestService _restService;
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
+        private readonly CloudIdentity _defaultIdentity;
 
-        public GeographicalIdentityProvider(Uri urlBase, IRestService restService, ICache<UserAccess> userAccessCache)
+        public GeographicalIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
         {
+            _defaultIdentity = identity;
             _urlBase = urlBase;
             _userAccessCache = userAccessCache;
             _restService = restService;
@@ -29,14 +31,15 @@ namespace net.openstack.Providers.Rackspace
         
         public Role[] ListRoles(CloudIdentity identity)
         {
-            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET);
+            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles",
+                                                                             HttpMethod.GET);
             if (response == null || response.Data == null)
                 return null;
 
             return response.Data.Roles;
         }
 
-        public Role AddRole(CloudIdentity identity, Role role)
+        public Role AddRole(Role role, CloudIdentity identity)
         {
             var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = role});
 
@@ -46,7 +49,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Role;
         }
 
-        public Role GetRole(CloudIdentity identity, string roleId)
+        public Role GetRole(string roleId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}", roleId);
             var response = ExecuteRESTRequest<RoleResponse>(identity, urlPath, HttpMethod.GET);
@@ -57,7 +60,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Role;
         }
 
-        public Role[] GetRolesByUser(CloudIdentity identity, string userId)
+        public Role[] GetRolesByUser(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
             var response = ExecuteRESTRequest<RolesResponse>(identity, urlPath, HttpMethod.GET);
@@ -68,7 +71,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Roles;
         }
 
-        public bool AddRoleToUser(CloudIdentity identity, string userId, string roleId)
+        public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
@@ -80,7 +83,7 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId)
+        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
@@ -95,19 +98,19 @@ namespace net.openstack.Providers.Rackspace
 
         #region Credentials
 
-        public bool SetUserPassword(CloudIdentity identity, string userId, string password)
+        public bool SetUserPassword(string userId, string password, CloudIdentity identity)
         {
-            var user = GetUser(identity, userId);
+            var user = GetUser(userId, identity);
 
-            return SetUserPassword(identity, user, password);
+            return SetUserPassword(user, password, identity);
         }
 
-        public bool SetUserPassword(CloudIdentity identity, User user, string password)
+        public bool SetUserPassword(User user, string password, CloudIdentity identity)
         {
-            return SetUserPassword(identity, user.Id, user.Username, password);
+            return SetUserPassword(user.Id, user.Username, password, identity);
         }
 
-        public bool SetUserPassword(CloudIdentity identity, string userId, string username, string password)
+        public bool SetUserPassword(string userId, string username, string password, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var request = new SetPasswordRequest
@@ -123,7 +126,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.PasswordCredencial.Password.Equals(password);
         }
 
-        public UserCredential[] ListUserCredentials(CloudIdentity identity, string userId)
+        public UserCredential[] ListUserCredentials(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
@@ -153,28 +156,28 @@ namespace net.openstack.Providers.Rackspace
             return creds.ToArray();
         }
 
-        public UserCredential GetUserCredential(CloudIdentity identity, string userId, string credentialKey)
+        public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
         {
-            var creds = ListUserCredentials(identity, userId);
+            var creds = ListUserCredentials(userId, identity);
 
             var cred = creds.FirstOrDefault(c => c.Name.Equals(credentialKey, StringComparison.OrdinalIgnoreCase));
 
             return cred;
         }
 
-        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string apiKey)
+        public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
         {
-            var user = GetUser(identity, userId);
+            var user = GetUser(userId, identity);
 
-            return UpdateUserCredentials(identity, user, apiKey);
+            return UpdateUserCredentials(user, apiKey, identity);
         }
 
-        public UserCredential UpdateUserCredentials(CloudIdentity identity, User user, string apiKey)
+        public UserCredential UpdateUserCredentials(User user, string apiKey, CloudIdentity identity)
         {
-            return UpdateUserCredentials(identity, user.Id, user.Username, apiKey);
+            return UpdateUserCredentials(user.Id, user.Username, apiKey, identity);
         }
 
-        public UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string username, string apiKey)
+        public UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var request = new UpdateUserCredencialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
@@ -186,7 +189,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.UserCredential;
         }
 
-        public bool DeleteUserCredentials(CloudIdentity identity, string userId)
+        public bool DeleteUserCredentials(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
@@ -203,6 +206,7 @@ namespace net.openstack.Providers.Rackspace
 
         public User[] ListUsers(CloudIdentity identity)
         {
+
             var response = ExecuteRESTRequest<UsersResponse>(identity, "/v2.0/users", HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -223,7 +227,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Users;
         }
 
-        public User GetUserByName(CloudIdentity identity, string name)
+        public User GetUserByName(string name, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/?name={0}", name);
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
@@ -234,7 +238,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        public User GetUser(CloudIdentity identity, string userId)
+        public User GetUser(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}", userId);
 
@@ -243,7 +247,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        public NewUser AddUser(CloudIdentity identity, NewUser newUser)
+        public NewUser AddUser(NewUser newUser, CloudIdentity identity)
         {
             newUser.Id = null;
 
@@ -259,7 +263,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.NewUser;
         }
 
-        public User UpdateUser(CloudIdentity identity, User user)
+        public User UpdateUser(User user, CloudIdentity identity)
         {
             if(user == null || string.IsNullOrWhiteSpace(user.Id))
                 throw new ArgumentException("The User or User.Id values cannot be null.");
@@ -276,7 +280,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        public bool DeleteUser(CloudIdentity identity, string userId)
+        public bool DeleteUser(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/{0}", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
@@ -305,9 +309,9 @@ namespace net.openstack.Providers.Rackspace
 
         #region Token and Authentication
 
-        public string GetToken(CloudIdentity idenity, bool forceCacheRefresh = false)
+        public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
-            var auth = GetUserAccess(idenity, forceCacheRefresh);
+            var auth = GetUserAccess(identity, forceCacheRefresh);
 
             if (auth == null || auth.Token == null)
                 return null;
@@ -342,10 +346,13 @@ namespace net.openstack.Providers.Rackspace
 
         public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
+            if (identity == null)
+                identity = _defaultIdentity;
+
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
             if (rackspaceCloudIdentity == null)
-                throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identity service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
+                rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
             var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
                                                                                                                                                        {
@@ -394,11 +401,23 @@ namespace net.openstack.Providers.Rackspace
 
         protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200)
         {
-            return ExecuteRESTRequest<object>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay);
+            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay,
+                (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
         }
 
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null,  bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200) where T : new()
         {
+            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay,
+                (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+
+        }
+
+        protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, int retryDelay, 
+            Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
+        {
+            if (identity == null)
+                identity = _defaultIdentity;
+
             var url = new Uri(_urlBase, urlPath);
 
             var headers = new Dictionary<string, string>();
@@ -412,15 +431,23 @@ namespace net.openstack.Providers.Rackspace
                 if (body is JObject)
                     bodyStr = body.ToString();
                 else
-                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
-            var response = _restService.Execute<T>(url, method, bodyStr, headers, queryStringParameter, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 }, UserAgent = ProviderBase.GetUserAgentHeaderValue()});
+            var settings = new JsonRequestSettings()
+                               {
+                                   RetryCount = retryCount,
+                                   RetryDelayInMS = retryDelay,
+                                   Non200SuccessCodes = new[] {401, 409},
+                                   UserAgent = ProviderBase.GetUserAgentHeaderValue()
+                               };
+
+            var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
 
             // on errors try again 1 time.
             if (response.StatusCode == 401 && !isRetry && !isTokenRequest)
             {
-                return ExecuteRESTRequest<T>(identity,urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity));
+                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity), retryCount, retryCount, callback);
             }
 
             ProviderBase.CheckResponse(response);

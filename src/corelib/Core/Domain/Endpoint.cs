@@ -13,5 +13,7 @@ namespace net.openstack.Core.Domain
         public string VersionInfo { get; set; }
 
         public string VersionList { get; set; }
+
+        public string InternalURL { get; set; }
     }
 }
