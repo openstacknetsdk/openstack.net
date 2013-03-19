@@ -13,19 +13,27 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ComputeProvider : ProviderBase, IComputeProvider
     {
+        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
+
         #region Constructors
        
         public ComputeProvider()
             : this(new IdentityProvider(), new JsonRestServices()) { }
 
+        public ComputeProvider(CloudIdentity identity)
+            : this(identity, new IdentityProvider(), new JsonRestServices()) { }
+
         public ComputeProvider(IIdentityProvider identityProvider, IRestService restService) 
-            : base(identityProvider, restService){}
+            : this(null, identityProvider, restService){}
+
+        public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
+            : base(identity, identityProvider, restService) {}
 
         #endregion
 
         #region Servers
 
-        public IEnumerable<Server> ListServers(CloudIdentity identity, string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null)
+        public IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
@@ -37,7 +45,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Servers;
         }
 
-        public IEnumerable<ServerDetails> ListServersWithDetails(CloudIdentity identity, string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null)
+        public IEnumerable<ServerDetails> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
             
@@ -49,7 +57,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Servers;
         }
 
-        public NewServer CreateServer(CloudIdentity identity, string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
@@ -75,7 +83,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Server;
         }
 
-        public ServerDetails GetDetails(CloudIdentity identity, string cloudServerId, string region = null)
+        public ServerDetails GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -84,11 +92,10 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            //response.Data.Server.Metadata = _metadataMapper.From(response.RawBody);
             return response.Data.Server;
         }
 
-        public bool UpdateServer(CloudIdentity identity, string cloudServerId, string name, string ipV4Address, string ipV6Address, string region = null)
+        public bool UpdateServer(string cloudServerId, string name, string ipV4Address, string ipV6Address, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -99,17 +106,17 @@ namespace net.openstack.Providers.Rackspace
                 return false;
 
             if (response.StatusCode != 200 && response.StatusCode != 202)
-                return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
+                return false; 
 
             return true;
         }
 
-        public bool DeleteServer(CloudIdentity identity, string cloudServerId, string region = null)
+        public bool DeleteServer(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
             var defaultSettings = BuildDefaultRequestSettings(new [] {404});
-            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, requestSettings: defaultSettings);
+            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response.StatusCode != 200 && response.StatusCode != 204)
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
@@ -117,15 +124,15 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerDetails WaitForServerState(CloudIdentity identity, string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public ServerDetails WaitForServerState(string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            var serverDetails = GetDetails(identity, cloudServerId, region);
+            var serverDetails = GetDetails(cloudServerId, region, identity);
 
             int count = 0;
             while (!serverDetails.Status.Equals(expectedState) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
-                serverDetails = GetDetails(identity, cloudServerId, region);
+                serverDetails = GetDetails(cloudServerId, region, identity);
                 count++;
             }
 
@@ -135,21 +142,29 @@ namespace net.openstack.Providers.Rackspace
             return serverDetails;
         }
 
-        public ServerDetails WaitForServerActive(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public ServerDetails WaitForServerActive(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            return WaitForServerState(identity, cloudServerId, ServerState.ACTIVE, new [] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED}, region, refreshCount, refreshDelayInMS);
+            return WaitForServerState(cloudServerId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, region, refreshCount, refreshDelayInMS, identity);
         }
 
-        public ServerDetails WaitForServerDeleted(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public void WaitForServerDeleted(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            return WaitForServerState(identity, cloudServerId, ServerState.DELETED, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
+            try
+            {
+                WaitForServerState(cloudServerId, ServerState.DELETED,
+                                   new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED}, region,
+                                   refreshCount, refreshDelayInMS, identity);
+            }
+            catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
+                                                                                   // by the next pass a 404 is returned.  This is due to the VERY limited window in which
+                                                                                   // the server goes into the DELETED state before it is removed from the system.
         }
 
         #endregion
 
         #region Server Addresses
 
-        public ServerAddresses ListAddresses(CloudIdentity identity, string serverId, string region = null)
+        public ServerAddresses ListAddresses(string serverId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips", GetServiceEndpoint(identity, region), serverId));
 
@@ -161,7 +176,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Addresses;
         }
 
-        public Network ListAddressesByNetwork(CloudIdentity identity, string serverId, string network, string region = null)
+        public Network ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
@@ -176,24 +191,24 @@ namespace net.openstack.Providers.Rackspace
         #endregion
 
         #region Server Actions
-        
-        public bool ChangeAdministratorPassword(CloudIdentity identity, string serverId, string password, string region = null)
+
+        public bool ChangeAdministratorPassword(string serverId, string password, string region = null, CloudIdentity identity = null)
         {
             var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        public bool RebootServer(CloudIdentity identity, string serverId, RebootType rebootType, string region = null)
+        public bool RebootServer(string serverId, RebootType rebootType, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        public ServerDetails RebuildServer(CloudIdentity identity, string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null)
+        public ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
                                                                    {
@@ -207,12 +222,12 @@ namespace net.openstack.Providers.Rackspace
                                                                        AccessIPv4 = ipV4Address,
                                                                        AccessIPv6 = ipV6Address,
                                                                    } };
-            var resp = ExecuteServerAction<ServerDetailsResponse>(identity, serverId, request, region);
+            var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
             return resp.Server;
         }
 
-        public bool ResizeServer(CloudIdentity identity, string serverId, string serverName, string flavor, string diskConfig = null, string region = null)
+        public bool ResizeServer(string serverId, string serverName, string flavor, string diskConfig = null, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerResizeRequest
                 {
@@ -223,54 +238,54 @@ namespace net.openstack.Providers.Rackspace
                         DiskConfig = diskConfig,
                     }
                 };
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        public bool ConfirmServerResize(CloudIdentity identity, string serverId, string region = null)
+        public bool ConfirmServerResize(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new ConfirmServerResizeRequest();
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        public bool RevertServerResize(CloudIdentity identity, string serverId, string region = null)
+        public bool RevertServerResize(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new RevertServerResizeRequest();
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        public string RescueServer(CloudIdentity identity, string serverId, string region = null)
+        public string RescueServer(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new RescueServerRequest{Details = "none"};
-            var resp = ExecuteServerAction<RescueServerResponse>(identity, serverId, request, region);
+            var resp = ExecuteServerAction<RescueServerResponse>(serverId, request, region, identity);
 
             return resp.AdminPassword;
         }
 
-        public ServerDetails UnRescueServer(CloudIdentity identity, string serverId, string region = null)
+        public ServerDetails UnRescueServer(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new UnrescueServerRequest { Details = "none" };
-            var resp = ExecuteServerAction<ServerDetailsResponse>(identity, serverId, request, region);
+            var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
             return resp.Server;
         }
 
-        public bool CreateImage(CloudIdentity identity, string serverId, string imageName, Metadata metadata = null, string region = null)
+        public bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null)
         {
             var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
-            var resp = ExecuteServerAction(identity, serverId, request, region);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
         }
 
-        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
 
-        private T ExecuteServerAction<T>(CloudIdentity identity, string serverId, object body, string region = null) where T : new()
+
+        private T ExecuteServerAction<T>(string serverId, object body, string region = null, CloudIdentity identity = null) where T : new()
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
 
@@ -282,7 +297,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        private bool ExecuteServerAction(CloudIdentity identity, string serverId, object body, string region = null)
+        private bool ExecuteServerAction(string serverId, object body, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
 
@@ -302,7 +317,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Flavors
 
-        public IEnumerable<Flavor> ListFlavors(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null)
+        public IEnumerable<Flavor> ListFlavors(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors", GetServiceEndpoint(identity, region)));
 
@@ -314,7 +329,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Flavors;
         }
 
-        public IEnumerable<FlavorDetails> ListFlavorsWithDetails(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null)
+        public IEnumerable<FlavorDetails> ListFlavorsWithDetails(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors/detail", GetServiceEndpoint(identity, region)));
 
@@ -326,7 +341,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Flavors;
         }
 
-        public FlavorDetails GetFlavor(CloudIdentity identity, string id, string region = null)
+        public FlavorDetails GetFlavor(string id, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors/{1}", GetServiceEndpoint(identity, region), id));
 
@@ -342,7 +357,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Images
 
-        public IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null)
+        public IEnumerable<ServerImage> ListImages(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
@@ -356,7 +371,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Images;
         }
 
-        public IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null)
+        public IEnumerable<ServerImageDetails> ListImagesWithDetails(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
@@ -396,9 +411,9 @@ namespace net.openstack.Providers.Rackspace
                 queryParameters.Add("type", imageType);
 
             return queryParameters;
-        } 
+        }
 
-        public ServerImageDetails GetImage(CloudIdentity identity, string imageId, string region = null)
+        public ServerImageDetails GetImage(string imageId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
@@ -410,12 +425,12 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Image;
         }
 
-        public bool DeleteImage(CloudIdentity identity, string imageId, string region = null)
+        public bool DeleteImage(string imageId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
             var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
-            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, requestSettings: defaultSettings);
+            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response.StatusCode != 200 && response.StatusCode != 203)
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
@@ -423,15 +438,15 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerImageDetails WaitForImageState(CloudIdentity identity, string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            var details = GetImage(identity, imageId, region);
+            var details = GetImage(imageId, region, identity);
 
             int count = 0;
             while (!details.Status.Equals(expectedState) && !errorStates.Contains(details.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
-                details = GetImage(identity, imageId, region);
+                details = GetImage(imageId, region, identity);
                 count++;
             }
 
@@ -441,21 +456,29 @@ namespace net.openstack.Providers.Rackspace
             return details;
         }
 
-        public ServerImageDetails WaitForImageActive(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public ServerImageDetails WaitForImageActive(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            return WaitForImageState(identity, imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
+            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS, identity);
         }
 
-        public ServerImageDetails WaitForImageDeleted(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400)
+        public void WaitForImageDeleted(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
-            return WaitForImageState(identity, imageId, ImageState.DELETED, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS);
+            try
+            {
+                WaitForImageState(imageId, ImageState.DELETED,
+                                  new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED}, region,
+                                  refreshCount, refreshDelayInMS, identity);
+            }
+            catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 
+                                                                                   // by the next pass a 404 is returned.  This is due to the VERY limited window in which
+                                                                                   // the image goes into the DELETED state before it is removed from the system.
         }
 
         #endregion
 
         #region Server Metadata
 
-        public Metadata ListServerMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        public Metadata ListServerMetadata(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -467,7 +490,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public bool SetServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -479,7 +502,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public bool UpdateServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -491,7 +514,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public string GetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        public string GetServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -503,7 +526,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        public bool SetServerMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -515,7 +538,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool DeleteServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        public bool DeleteServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -531,7 +554,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Image Metadata
 
-        public Metadata ListImageMetadata(CloudIdentity identity, string cloudServerId, string region = null)
+        public Metadata ListImageMetadata(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -543,7 +566,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public bool SetImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -555,7 +578,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public bool UpdateImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -567,7 +590,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+        public string GetImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -579,7 +602,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        public bool SetImageMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -590,8 +613,8 @@ namespace net.openstack.Providers.Rackspace
 
             return false;
         }
-        
-        public bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
+
+        public bool DeleteImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
@@ -607,9 +630,17 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
         
-        protected string GetServiceEndpoint(CloudIdentity identity, string region = null)
+        protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
         {
-            return base.GetServiceEndpoint(identity, "cloudServersOpenStack", region);
+            return base.GetPublicServiceEndpoint(identity, "cloudServersOpenStack", region);
+        }
+
+        private IComputeProvider BuildProvider(CloudIdentity identity)
+        {
+            if (identity == null)
+                identity = _defaultIdentity;
+
+            return new ComputeProvider(identity, _identityProvider, _restService);
         }
 
         #endregion

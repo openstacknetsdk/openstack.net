@@ -13,10 +13,16 @@ namespace net.openstack.Providers.Rackspace
         #region Constructors
 
         public ObjectStoreProvider()
-            : this(new IdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
+            : this(null) { }
+
+        public ObjectStoreProvider(CloudIdentity defaultIdentity)
+            : this(defaultIdentity, new IdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
 
         public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
-            : base(identityProvider, restService)
+            : this(null, identityProvider, restService, objectStoreValidator) { }
+
+        public ObjectStoreProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
+            : base(defaultIdentity, identityProvider, restService)
         {
             _objectStoreValidator = objectStoreValidator;
         }
@@ -72,7 +78,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpoint(CloudIdentity identity, string region = null)
         {
-            return base.GetServiceEndpoint(identity, "cloudFiles", region);
+            return base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
         }
 
         #endregion

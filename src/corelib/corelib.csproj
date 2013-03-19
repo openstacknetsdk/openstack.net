@@ -34,9 +34,9 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SimpleRESTServices, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SimpleRESTServices.1.0.2.0\lib\net40\SimpleRESTServices.dll</HintPath>
+      <HintPath>..\packages\SimpleRESTServices.1.0.5.0\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,6 +67,7 @@
     <Compile Include="Core\Exceptions\Response\BadServiceRequestException.cs" />
     <Compile Include="Core\Exceptions\Response\ItemNotFoundException.cs" />
     <Compile Include="Core\Exceptions\Response\MethodNotImplementedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceConflictException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceFaultException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

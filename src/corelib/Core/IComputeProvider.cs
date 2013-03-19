@@ -7,63 +7,63 @@ namespace net.openstack.Core
     public interface IComputeProvider
     {
         // Servers
-        IEnumerable<Server> ListServers(CloudIdentity identity, string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null);
-        IEnumerable<ServerDetails> ListServersWithDetails(CloudIdentity identity, string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null);
-        NewServer CreateServer(CloudIdentity identity, string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null);
-        ServerDetails GetDetails(CloudIdentity identity, string cloudServerId, string region = null);
-        bool UpdateServer(CloudIdentity identity, string cloudServerId, string name = null, string ipV4Address = null, string ipV6Address = null, string region = null);
-        bool DeleteServer(CloudIdentity identity, string cloudServerId, string region = null);
-        
+        IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<ServerDetails> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null, CloudIdentity identity = null);
+        ServerDetails GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null);
+        bool UpdateServer(string cloudServerId, string name = null, string ipV4Address = null, string ipV6Address = null, string region = null, CloudIdentity identity = null);
+        bool DeleteServer(string cloudServerId, string region = null, CloudIdentity identity = null);
+
         // Server Addresses
-        ServerAddresses ListAddresses(CloudIdentity identity, string serverId, string region = null);
-        Network ListAddressesByNetwork(CloudIdentity identity, string serverId, string network, string region = null);
+        ServerAddresses ListAddresses(string serverId, string region = null, CloudIdentity identity = null);
+        Network ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null);
         
         // Server Actions
-        bool ChangeAdministratorPassword(CloudIdentity identity, string serverId, string password, string region = null);
-        bool RebootServer(CloudIdentity identity, string serverId, RebootType rebootType, string region = null);
-        ServerDetails RebuildServer(CloudIdentity identity, string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null,  string region = null);
-        bool ResizeServer(CloudIdentity identity, string serverId, string serverName, string flavor, string diskConfig = null, string region = null);
-        bool ConfirmServerResize(CloudIdentity identity, string serverId, string region = null);
-        bool RevertServerResize(CloudIdentity identity, string serverId, string region = null);
-        string RescueServer(CloudIdentity identity, string serverId, string region = null);
-        ServerDetails UnRescueServer(CloudIdentity identity, string serverId, string region = null);
-        bool CreateImage(CloudIdentity identity, string serverId, string imageName, Metadata metadata = null, string region = null);
+        bool ChangeAdministratorPassword(string serverId, string password, string region = null, CloudIdentity identity = null);
+        bool RebootServer(string serverId, RebootType rebootType, string region = null, CloudIdentity identity = null);
+        ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null,  string region = null, CloudIdentity identity = null);
+        bool ResizeServer(string serverId, string serverName, string flavor, string diskConfig = null, string region = null, CloudIdentity identity = null);
+        bool ConfirmServerResize(string serverId, string region = null, CloudIdentity identity = null);
+        bool RevertServerResize(string serverId, string region = null, CloudIdentity identity = null);
+        string RescueServer(string serverId, string region = null, CloudIdentity identity = null);
+        ServerDetails UnRescueServer(string serverId, string region = null, CloudIdentity identity = null);
+        bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null);
 
         // Volume Attachment Actions
 
         // Flavors
-        IEnumerable<Flavor> ListFlavors(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null);
-        IEnumerable<FlavorDetails> ListFlavorsWithDetails(CloudIdentity identity, int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null);
-        FlavorDetails GetFlavor(CloudIdentity identity, string id, string region = null);
+        IEnumerable<Flavor> ListFlavors(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null);
+        IEnumerable<FlavorDetails> ListFlavorsWithDetails(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null);
+        FlavorDetails GetFlavor(string id, string region = null, CloudIdentity identity = null);
             
         // Images
-        IEnumerable<ServerImage> ListImages(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null);
-        IEnumerable<ServerImageDetails> ListImagesWithDetails(CloudIdentity identity, string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null);
-        ServerImageDetails GetImage(CloudIdentity identity, string imageId, string region = null);
-        bool DeleteImage(CloudIdentity identity, string imageId, string region = null);
+        IEnumerable<ServerImage> ListImages(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<ServerImageDetails> ListImagesWithDetails(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
+        ServerImageDetails GetImage(string imageId, string region = null, CloudIdentity identity = null);
+        bool DeleteImage(string imageId, string region = null, CloudIdentity identity = null);
 
         // Server metadata
-        Metadata ListServerMetadata(CloudIdentity identity, string cloudServerId, string region = null);
-        bool SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        bool UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        string GetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
-        bool SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
-        bool DeleteServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
+        Metadata ListServerMetadata(string cloudServerId, string region = null, CloudIdentity identity = null);
+        bool SetServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null);
+        bool UpdateServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null);
+        string GetServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null);
+        bool SetServerMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null);
+        bool DeleteServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null);
     
         // Image metadata
-        Metadata ListImageMetadata(CloudIdentity identity, string cloudServerId, string region = null);
-        bool SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        bool UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
-        bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
-        bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
+        Metadata ListImageMetadata(string cloudServerId, string region = null, CloudIdentity identity = null);
+        bool SetImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null);
+        bool UpdateImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null);
+        string GetImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null);
+        bool SetImageMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null);
+        bool DeleteImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null);
         
-        ServerDetails WaitForServerState(CloudIdentity identity, string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
-        ServerDetails WaitForServerActive(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
-        ServerDetails WaitForServerDeleted(CloudIdentity identity, string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
-        ServerImageDetails WaitForImageState(CloudIdentity identity, string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
-        ServerImageDetails WaitForImageActive(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
-        ServerImageDetails WaitForImageDeleted(CloudIdentity identity, string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);
+        ServerDetails WaitForServerState(string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
+        ServerDetails WaitForServerActive(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
+        void WaitForServerDeleted(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageActive(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
+        void WaitForImageDeleted(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null);
     }
 }
     
