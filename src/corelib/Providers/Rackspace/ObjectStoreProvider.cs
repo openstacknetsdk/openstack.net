@@ -19,15 +19,15 @@ namespace net.openstack.Providers.Rackspace
             : this(null) { }
 
         public ObjectStoreProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, new IdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
+            : this(defaultIdentity, new IdentityProvider(), new JsonRestServices(), new ObjectStoreHelper()) { }
 
-        public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
-            : this(null, identityProvider, restService, objectStoreValidator) { }
+        public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStoreHelper objectStoreHelper)
+            : this(null, identityProvider, restService, objectStoreHelper) { }
 
-        public ObjectStoreProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
+        public ObjectStoreProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStoreHelper objectStoreHelper)
             : base(defaultIdentity, identityProvider, restService)
         {
-            _objectStoreHelper = objectStoreValidator;
+            _objectStoreHelper = objectStoreHelper;
         }
 
 
@@ -334,7 +334,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
-            return base.GetServiceEndpoint(identity, "cloudFilesCDN", region);
+            return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
         }
 
         #endregion
