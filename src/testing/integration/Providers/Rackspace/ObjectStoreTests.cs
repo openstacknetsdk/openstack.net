@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,7 +147,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_Objects_From_Container()
         {
-            const string containerName = "lb_19087_ADMLab_-_LB80_Apr_2012";
+            const string containerName = "DarkKnight";
             var provider = new ObjectStoreProvider();
             var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
 
@@ -259,7 +261,71 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.Fail("Expected exception was not thrown.");
         }
 
+        [TestMethod]
+        public void Should_Get_CDN_Enabled_Containers()
+        {
+            var provider = new ObjectStoreProvider();
+            var cdnContainerList = provider.ListCDNContainers(_testIdentity, null, null, null, true);
+
+            Assert.IsNotNull(cdnContainerList);
+            Assert.IsTrue(cdnContainerList.All(x => x.CDNEnabled == true));
+        }
+
+        [TestMethod]
+        public void Should_Get_CDN_All_Containers()
+        {
+            var provider = new ObjectStoreProvider();
+            var cdnContainerList = provider.ListCDNContainers(_testIdentity);
+
+            Assert.IsNotNull(cdnContainerList);
+            Assert.IsTrue(cdnContainerList.Any(x => x.CDNEnabled == true));
+            Assert.IsTrue(cdnContainerList.Any(x => x.CDNEnabled == false));
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Enabled_With_TTL()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, 1000);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(1000, int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Enabled_With_Log_Retention()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.AreEqual(259200, int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Log-Retention", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Make_Container_CDN_Disabled()
+        {
+            const string containerName = "DarkKnight";
+            var provider = new ObjectStoreProvider();
+            var cdnEnabledResponse = provider.DisableCDNOnContainer(_testIdentity, containerName);
+
+            var cdnContainerHeaderResponse = provider.GetCDNHeaderForContainer(_testIdentity, containerName);
+
+            Assert.IsFalse(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+        }
+
         #endregion Container Tests
+
+        #region Object Tests
 
 
         [TestMethod]
@@ -298,6 +364,139 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.Fail("Expected exception was not thrown.");
         }
 
+        [TestMethod]
+        public void Should_Create_Object_From_Stream_With_Headers()
+        {
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Koala.jpg";
+            string fileName = Path.GetFileName(filePath);
+            Stream stream = System.IO.File.OpenRead(filePath);
+            var etag = GetMD5Hash(filePath);
+            stream.Position = 0;
+            var headers = new Dictionary<string, string>();
+            headers.Add("ETag",etag);
+            int cnt = 0;
+            var info = new FileInfo(filePath);
+            var totalBytest = info.Length;
+            var provider = new ObjectStoreProvider();
+            provider.CreateObjectFromStream(_testIdentity, containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
+                                       {
+                                           cnt = cnt + 1;
+                                           if (cnt % 10 != 0)
+                                               return;
 
+                                           var x = (float)bytesWritten / (float)totalBytest;
+                                           var percentCompleted = (float)x * 100.00;
+                                           
+                                           Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
+                                       });
+
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName, fileName);
+
+            Assert.IsNotNull(objectHeadersResponse);
+            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+
+        }
+
+        private static string GetMD5Hash(string filePath)
+        {
+            byte[] computedHash = new MD5CryptoServiceProvider().ComputeHash(File.ReadAllBytes(filePath));
+            var sBuilder = new StringBuilder();
+            foreach (byte b in computedHash)
+            {
+                sBuilder.Append(b.ToString("x2").ToLower());
+            }
+            return sBuilder.ToString();
+        }
+
+        [TestMethod]
+        public void Should_Create_Object_From_Stream_Without_Headers()
+        {
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Tulips.jpg";
+            string fileName = Path.GetFileName(filePath);
+            Stream stream = System.IO.File.OpenRead(filePath);
+            var etag = GetMD5Hash(filePath);
+            stream.Position = 0;
+            var headers = new Dictionary<string, string>();
+            var provider = new ObjectStoreProvider();
+            provider.CreateObjectFromStream(_testIdentity, containerName, stream, fileName, 65536, headers);
+
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+        }
+
+        [TestMethod]
+        public void Should_Create_Object_From_File_With_Headers()
+        {
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Hydrangeas.jpg";
+            string fileName = Path.GetFileName(filePath);
+            Stream stream = System.IO.File.OpenRead(filePath);
+            var etag = GetMD5Hash(filePath);
+            stream.Position = 0;
+            var headers = new Dictionary<string, string>();
+            headers.Add("ETag", etag);
+            int cnt = 0;
+            var info = new FileInfo(filePath);
+            var totalBytest = info.Length;
+            var provider = new ObjectStoreProvider();
+            provider.CreateObjectFromFile(_testIdentity, containerName, filePath, fileName, 65536, headers, null, (bytesWritten) =>
+            {
+                cnt = cnt + 1;
+                if (cnt % 10 != 0)
+                    return;
+
+                var x = (float)bytesWritten / (float)totalBytest;
+                var percentCompleted = (float)x * 100.00;
+
+                Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
+            });
+
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+            var objectHeadersResponse = provider.GetObjectHeaders(_testIdentity, containerName, fileName);
+
+            Assert.IsNotNull(objectHeadersResponse);
+            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Create_Object_From_File_Without_Headers()
+        {
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
+            string fileName = Path.GetFileName(filePath);
+            var headers = new Dictionary<string, string>();
+            var provider = new ObjectStoreProvider();
+            provider.CreateObjectFromFile(_testIdentity, containerName, filePath, fileName, 65536, headers);
+
+            var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+        }
+
+        
+        [TestMethod]
+        public void Should_Get_Object_And_Save_To_File_Without_Headers()
+        {
+            //const string containerName = "DarkKnight";
+            //const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
+            //string fileName = Path.GetFileName(filePath);
+            //var headers = new Dictionary<string, string>();
+            //var provider = new ObjectStoreProvider();
+            //provider.GetObjectSaveToFile(_testIdentity, containerName, filePath, fileName, 65536, headers);
+
+            //var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
+            //Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+        }
+
+        #endregion Object Tests
     }
 }

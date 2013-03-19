@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
@@ -187,6 +191,90 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        public IEnumerable<ContainerCDN> ListCDNContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
+
+            var queryStringParameter = new Dictionary<string, string>();
+            queryStringParameter.Add("format", "json");
+            queryStringParameter.Add("enabled_only", cdnEnabled.ToString().ToLower());
+
+            if (limit != null)
+                queryStringParameter.Add("limit", limit.ToString());
+
+            if (!string.IsNullOrWhiteSpace(marker))
+                queryStringParameter.Add("marker", marker);
+
+            if (!string.IsNullOrWhiteSpace(markerEnd))
+                queryStringParameter.Add("end_marker", markerEnd);
+
+            var response = ExecuteRESTRequest<ContainerCDN[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data;
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, string region = null)
+        {
+            return EnableCDNOnContainer(identity, container, ttl, false);
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, bool logRetention, string region = null)
+        {
+            return EnableCDNOnContainer(identity, container, 259200, logRetention, region);
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, bool logRetention, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            if (ttl.Equals(null) || logRetention.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (ttl > 1577836800 || ttl < 900)
+            {
+                throw new TTLLengthException("TTL range must be 900 to 1577836800 seconds TTL: " + ttl.ToString(CultureInfo.InvariantCulture));
+            }
+
+            var headers = new Dictionary<string, string>
+                {
+                 {ObjectStoreConstants.CdnTTL, ttl.ToString(CultureInfo.InvariantCulture)},
+                 {ObjectStoreConstants.CdnLogRetention, logRetention.ToString(CultureInfo.InvariantCulture)},
+                 {ObjectStoreConstants.CdnEnabled, "true"}
+                };
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+
+            if (response == null)
+                return null;
+
+            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
+        }
+
+        public Dictionary<string, string> DisableCDNOnContainer(CloudIdentity identity, string container, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+
+            var headers = new Dictionary<string, string>
+                {
+                {ObjectStoreConstants.CdnEnabled, "false"}
+                };
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+
+            if (response == null)
+                return null;
+
+            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
+        }
+
+
         #endregion
 
         #region Container Objects
@@ -231,6 +319,85 @@ namespace net.openstack.Providers.Rackspace
 
             return response.Headers;
         }
+
+        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
+        {
+            Stream stream = System.IO.File.OpenRead(filePath);
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
+        }
+
+        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
+        {
+            Stream stream = System.IO.File.OpenRead(filePath);
+
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, headers, region, progressUpdated);
+        }
+
+        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
+        {
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
+        }
+
+        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
+        {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+            var response = StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, null, headers, true, null, progressUpdated);
+
+        }
+
+        //public void GetObjectSaveToFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verify_etag = false)
+        //{
+        //    if (String.IsNullOrEmpty(filePath))
+        //        throw new ArgumentNullException();
+
+        //    _objectStoreHelper.ValidateContainerName(container);
+        //    _objectStoreHelper.ValidateObjectName(objectName);
+        //    Stream saveTo = File.OpenWrite(filePath);
+        //    var buffer = new byte[chunkSize];
+
+        //    var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+        //    var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, null, null, headers);
+
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(response.RawBody);
+        //    MemoryStream stream = new MemoryStream(byteArray);
+            
+        //    int read;
+
+
+        //    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        //    {
+        //        saveTo.Write(buffer, 0, read);
+        //    }
+        //    saveTo.Close();
+        //    stream.Close();
+        //    //if (verify_etag)
+        //    //{
+        //    //    save_to = File.OpenRead(path);
+        //    //    var md5 = MD5.Create();
+        //    //    md5.ComputeHash(save_to);
+        //    //    var sbuilder = new StringBuilder();
+        //    //    var hash = md5.Hash;
+        //    //    foreach (var b in hash)
+        //    //    {
+        //    //        sbuilder.Append(b.ToString("x2").ToLower());
+        //    //    }
+        //    //    var converted_md5 = sbuilder.ToString();
+        //    //    if (converted_md5 != res.Headers[Constants.Headers.Etag].ToLower())
+        //    //    {
+        //    //        File.Delete(path);
+        //    //        throw new InvalidETagException();
+        //    //    }
+        //    //}
+
+        //}
 
         #endregion
 

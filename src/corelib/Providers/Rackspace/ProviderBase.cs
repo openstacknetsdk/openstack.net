@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using JSIStudios.SimpleRESTServices.Client;
@@ -25,12 +26,12 @@ namespace net.openstack.Providers.Rackspace
             _restService = restService;
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings requestSettings = null) 
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings requestSettings = null)
         {
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
 
-            if(headers == null)
+            if (headers == null)
                 headers = new Dictionary<string, string>();
 
             headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
@@ -54,7 +55,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, true);
+                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, requestSettings);
                 }
             }
 
@@ -92,7 +93,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, headers, true);
+                    return ExecuteRESTRequest(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, requestSettings);
                 }
             }
 
@@ -101,13 +102,45 @@ namespace net.openstack.Providers.Rackspace
             return response;
         }
 
+
+        protected Response StreamRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Stream stream, int chunkSize, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings requestSettings = null, Action<long> progressUpdated = null)
+        {
+            if (requestSettings == null)
+                requestSettings = BuildDefaultRequestSettings();
+            requestSettings.Timeout = 14400000; // Need to pass this in.
+
+            if (headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
+
+            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+                requestSettings.UserAgent = GetUserAgentHeaderValue();
+
+            var response = _restService.Stream(absoluteUri, method, stream, chunkSize, headers, queryStringParameter, requestSettings, progressUpdated);
+
+            // on errors try again 1 time.
+            if (response.StatusCode == 401)
+            {
+                if (!isRetry)
+                {
+                    return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, queryStringParameter,headers, isRetry, requestSettings, progressUpdated);
+                }
+            }
+
+            CheckResponse(response);
+
+            return response;
+        }
+
+
         internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)
         {
-            var non200SuccessCodesAggregate = new List<int>{ 401, 409 };
-            if(non200SuccessCodes != null)
+            var non200SuccessCodesAggregate = new List<int> { 401, 409 };
+            if (non200SuccessCodes != null)
                 non200SuccessCodesAggregate.AddRange(non200SuccessCodes);
 
-            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
+            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue() };
         }
 
         protected virtual string GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
@@ -127,7 +160,7 @@ namespace net.openstack.Providers.Rackspace
 
             var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
 
-            if(endpoint == null)
+            if (endpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");
 
             return endpoint.PublicURL;
@@ -135,7 +168,7 @@ namespace net.openstack.Providers.Rackspace
 
         internal static void CheckResponse(Response response)
         {
-            if(response.StatusCode <= 299)
+            if (response.StatusCode <= 299)
                 return;
 
             switch (response.StatusCode)
