@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
@@ -186,6 +187,90 @@ namespace net.openstack.Providers.Rackspace
                 ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
             }
         }
+
+        public IEnumerable<ContainerCDN> ListCDNContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null)
+        {
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
+
+            var queryStringParameter = new Dictionary<string, string>();
+            queryStringParameter.Add("format", "json");
+            queryStringParameter.Add("enabled_only", cdnEnabled.ToString().ToLower());
+
+            if (limit != null)
+                queryStringParameter.Add("limit", limit.ToString());
+
+            if (!string.IsNullOrWhiteSpace(marker))
+                queryStringParameter.Add("marker", marker);
+
+            if (!string.IsNullOrWhiteSpace(markerEnd))
+                queryStringParameter.Add("end_marker", markerEnd);
+
+            var response = ExecuteRESTRequest<ContainerCDN[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data;
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, string region = null)
+        {
+            return EnableCDNOnContainer(identity, container, ttl, false);
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, bool logRetention, string region = null)
+        {
+            return EnableCDNOnContainer(identity, container, 259200, logRetention, region);
+        }
+
+        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, bool logRetention, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            if (ttl.Equals(null) || logRetention.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (ttl > 1577836800 || ttl < 900)
+            {
+                throw new TTLLengthException("TTL range must be 900 to 1577836800 seconds TTL: " + ttl.ToString(CultureInfo.InvariantCulture));
+            }
+
+            var headers = new Dictionary<string, string>
+                {
+                 {ObjectStoreConstants.CdnTTL, ttl.ToString(CultureInfo.InvariantCulture)},
+                 {ObjectStoreConstants.CdnLogRetention, logRetention.ToString(CultureInfo.InvariantCulture)},
+                 {ObjectStoreConstants.CdnEnabled, "true"}
+                };
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+
+            if (response == null)
+                return null;
+
+            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
+        }
+
+        public Dictionary<string, string> DisableCDNOnContainer(CloudIdentity identity, string container, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+           
+
+            var headers = new Dictionary<string, string>
+                {
+                {ObjectStoreConstants.CdnEnabled, "false"}
+                };
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+
+            if (response == null)
+                return null;
+
+            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
+        }
+
 
         #endregion
 
