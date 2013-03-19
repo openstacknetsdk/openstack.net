@@ -5,18 +5,18 @@ namespace net.openstack.Providers.Rackspace
 {
     public interface IExtendedIdentityProvider : IIdentityProvider
     {
-        Role[] ListRoles(CloudIdentity identity);
-        Role AddRole(CloudIdentity identity, Role role);
-        Role GetRole(CloudIdentity identity, string roleId);
-        bool AddRoleToUser(CloudIdentity identity, string userId, string roleId);
-        bool DeleteRoleFromUser(CloudIdentity identity, string userId, string roleId);
+        Role[] ListRoles(CloudIdentity identity = null);
+        Role AddRole(Role role, CloudIdentity identity = null);
+        Role GetRole(string roleId, CloudIdentity identity = null);
+        bool AddRoleToUser(string userId, string roleId, CloudIdentity identity = null);
+        bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity = null);
 
-        UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string apiKey);
-        bool DeleteUserCredentials(CloudIdentity identity, string userId);
-        bool SetUserPassword(CloudIdentity identity, string userId, string password);
-        bool SetUserPassword(CloudIdentity identity, User user, string password);
-        bool SetUserPassword(CloudIdentity identity, string userId, string username, string password);
-        UserCredential UpdateUserCredentials(CloudIdentity identity, User user, string apiKey);
-        UserCredential UpdateUserCredentials(CloudIdentity identity, string userId, string username, string apiKey);
+        UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity = null);
+        bool DeleteUserCredentials(string userId, CloudIdentity identity = null);
+        bool SetUserPassword(string userId, string password, CloudIdentity identity = null);
+        bool SetUserPassword(User user, string password, CloudIdentity identity = null);
+        bool SetUserPassword(string userId, string username, string password, CloudIdentity identity = null);
+        UserCredential UpdateUserCredentials(User user, string apiKey, CloudIdentity identity = null);
+        UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity = null);
     }
 }

@@ -4,23 +4,23 @@ namespace net.openstack.Core
 {
     public interface IIdentityProvider
     {
-        UserAccess Authenticate(CloudIdentity identity);
-        string GetToken(CloudIdentity identity, bool forceCacheRefresh = false);
-        IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false);
+        UserAccess Authenticate(CloudIdentity identity = null);
+        string GetToken(CloudIdentity identity = null, bool forceCacheRefresh = false);
+        IdentityToken GetTokenInfo(CloudIdentity identity = null, bool forceCacheRefresh = false);
 
-        Role[] GetRolesByUser(CloudIdentity identity, string userId);
+        Role[] GetRolesByUser(string userId, CloudIdentity identity = null);
 
-        User[] ListUsers(CloudIdentity identity);
-        User GetUserByName(CloudIdentity identity, string name);
-        User GetUser(CloudIdentity identity, string id);
-        NewUser AddUser(CloudIdentity identity, NewUser user);
-        User UpdateUser(CloudIdentity identity, User user);
-        bool DeleteUser(CloudIdentity identity, string userId);
+        User[] ListUsers(CloudIdentity identity = null);
+        User GetUserByName(string name, CloudIdentity identity = null);
+        User GetUser(string id, CloudIdentity identity = null);
+        NewUser AddUser(NewUser user, CloudIdentity identity = null);
+        User UpdateUser(User user, CloudIdentity identity = null);
+        bool DeleteUser(string userId, CloudIdentity identity = null);
 
-        UserCredential[] ListUserCredentials(CloudIdentity identity, string userId);
+        UserCredential[] ListUserCredentials(string userId, CloudIdentity identity = null);
 
-        Tenant[] ListTenants(CloudIdentity identity);
-        UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false);
-        UserCredential GetUserCredential(CloudIdentity identity, string userId, string credentialKey);
+        Tenant[] ListTenants(CloudIdentity identity = null);
+        UserAccess GetUserAccess(CloudIdentity identity = null, bool forceCacheRefresh = false);
+        UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity = null);
     }
 }

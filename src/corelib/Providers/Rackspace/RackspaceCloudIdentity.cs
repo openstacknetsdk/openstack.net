@@ -4,9 +4,12 @@ namespace net.openstack.Providers.Rackspace
 {
     public class RackspaceCloudIdentity : CloudIdentity
     {
-        public RackspaceCloudIdentity(){}
+        public RackspaceCloudIdentity()
+        {
+            CloudInstance = CloudInstance.Default;
+        }
 
-        public RackspaceCloudIdentity(CloudIdentity cloudIdentity)
+        public RackspaceCloudIdentity(CloudIdentity cloudIdentity) : this()
         {
             this.Username = cloudIdentity.Username;
             this.Password = cloudIdentity.Password;
