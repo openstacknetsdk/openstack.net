@@ -27,7 +27,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStoreProvider(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
             : base(defaultIdentity, identityProvider, restService)
         {
-            _objectStoreHelper = objectStoreValidator;
+            _objectStoreHelper = objectStoreHelper;
         }
 
 
@@ -334,7 +334,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
-            return base.GetServiceEndpoint(identity, "cloudFilesCDN", region);
+            return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
         }
 
         #endregion
