@@ -28,11 +28,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             identityProvider.Authenticate(new RackspaceCloudIdentity());
 
-            cacheMock.Verify(m => m.Get(It.IsAny<string>(), It.IsAny<Func<UserAccess>>(), It.IsAny<bool>()), Times.Never());
+            cacheMock.Verify(m => m.Get(It.IsAny<string>(), It.IsAny<Func<UserAccess>>(), true), Times.Once());
         }
 
         [TestMethod]
-        public void Should_Never_Hit_Cache_When_Authenticating()
+        public void Should_Always_Request_Fresh_Data_From_Cache_When_Authenticating()
         {
             var cacheMock = new Mock<ICache<UserAccess>>();
             var restServiceMock = new Mock<IRestService>();
@@ -47,7 +47,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 identityProvider.Authenticate(new RackspaceCloudIdentity());
             }
 
-            cacheMock.Verify(m => m.Get(It.IsAny<string>(), It.IsAny<Func<UserAccess>>(), It.IsAny<bool>()), Times.Never());
+            cacheMock.Verify(m => m.Get(It.IsAny<string>(), It.IsAny<Func<UserAccess>>(), true), Times.Exactly(100));
         }
     }
 }
