@@ -47,8 +47,7 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-
-
+        
         public const string ProcessedHeadersMetadataKey = "metadata";
         public const string ProcessedHeadersHeaderKey = "headers";
     }

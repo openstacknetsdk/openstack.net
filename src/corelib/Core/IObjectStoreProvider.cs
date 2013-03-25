@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
@@ -37,6 +38,10 @@ namespace net.openstack.Core
 
         IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string container, int? limit = null, string markerId = null, string markerEnd = null, string format = "json", string region = null);
         IEnumerable<HttpHeader> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null);
+        void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null);
+        void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null);
+        void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null);
+        void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null);
 
         #endregion
 

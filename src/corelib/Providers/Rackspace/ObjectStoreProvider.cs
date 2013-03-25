@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
@@ -91,8 +92,7 @@ namespace net.openstack.Providers.Rackspace
 
             return ObjectStore.Unknown;
         }
-
-
+        
         public Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
@@ -322,6 +322,85 @@ namespace net.openstack.Providers.Rackspace
 
             return response.Headers;
         }
+
+        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
+        {
+            Stream stream = System.IO.File.OpenRead(filePath);
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
+        }
+
+        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
+        {
+            Stream stream = System.IO.File.OpenRead(filePath);
+
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, headers, region, progressUpdated);
+        }
+
+        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
+        {
+            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
+        }
+
+        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
+        {
+            if (stream == null)
+                throw new ArgumentNullException();
+
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+            var response = StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, null, headers, true, null, progressUpdated);
+
+        }
+
+        //public void GetObjectSaveToFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verify_etag = false)
+        //{
+        //    if (String.IsNullOrEmpty(filePath))
+        //        throw new ArgumentNullException();
+
+        //    _objectStoreHelper.ValidateContainerName(container);
+        //    _objectStoreHelper.ValidateObjectName(objectName);
+        //    Stream saveTo = File.OpenWrite(filePath);
+        //    var buffer = new byte[chunkSize];
+
+        //    var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+        //    var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, null, null, headers);
+
+        //    byte[] byteArray = Encoding.UTF8.GetBytes(response.RawBody);
+        //    MemoryStream stream = new MemoryStream(byteArray);
+
+        //    int read;
+
+
+        //    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        //    {
+        //        saveTo.Write(buffer, 0, read);
+        //    }
+        //    saveTo.Close();
+        //    stream.Close();
+        //    //if (verify_etag)
+        //    //{
+        //    //    save_to = File.OpenRead(path);
+        //    //    var md5 = MD5.Create();
+        //    //    md5.ComputeHash(save_to);
+        //    //    var sbuilder = new StringBuilder();
+        //    //    var hash = md5.Hash;
+        //    //    foreach (var b in hash)
+        //    //    {
+        //    //        sbuilder.Append(b.ToString("x2").ToLower());
+        //    //    }
+        //    //    var converted_md5 = sbuilder.ToString();
+        //    //    if (converted_md5 != res.Headers[Constants.Headers.Etag].ToLower())
+        //    //    {
+        //    //        File.Delete(path);
+        //    //        throw new InvalidETagException();
+        //    //    }
+        //    //}
+
+        //}
 
         #endregion
 
