@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using JSIStudios.SimpleRESTServices.Client;
@@ -73,6 +74,36 @@ namespace net.openstack.Providers.Rackspace
                 if (!isRetry)
                 {
                     return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, true, requestSettings, callback);
+                }
+            }
+
+            CheckResponse(response);
+
+            return response;
+        }
+
+        protected Response StreamRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Stream stream, int chunkSize, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings requestSettings = null, Action<long> progressUpdated = null)
+        {
+            if (requestSettings == null)
+                requestSettings = BuildDefaultRequestSettings();
+            requestSettings.Timeout = 14400000; // Need to pass this in.
+
+            if (headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
+
+            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+                requestSettings.UserAgent = GetUserAgentHeaderValue();
+
+            var response = _restService.Stream(absoluteUri, method, stream, chunkSize, headers, queryStringParameter, requestSettings, progressUpdated);
+
+            // on errors try again 1 time.
+            if (response.StatusCode == 401)
+            {
+                if (!isRetry)
+                {
+                    return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, queryStringParameter, headers, isRetry, requestSettings, progressUpdated);
                 }
             }
 
