@@ -43,6 +43,8 @@ namespace net.openstack.Core
         void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null);
         void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null);
 
+        ObjectStore DeleteObject(CloudIdentity identity, string container, string objectNmae, Dictionary<string, string> headers = null, string region = null);
+
         #endregion
 
         //string Name { get; }
