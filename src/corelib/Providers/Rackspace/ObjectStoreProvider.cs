@@ -431,6 +431,23 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        public ObjectStore DeleteObject(CloudIdentity identity, string container, string objectName, Dictionary<string, string> headers = null, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers);
+
+            if (response.StatusCode == 204)
+                return ObjectStore.ObjectDeleted;
+            if (response.StatusCode == 404)
+                return ObjectStore.ContainerNotFound;
+
+            return ObjectStore.Unknown;
+
+        }
         #endregion
 
         #region Private methods
