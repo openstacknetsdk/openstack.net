@@ -358,51 +358,42 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
-        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
+        public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
         {
-            if (String.IsNullOrEmpty(saveDirectory))
-                throw new ArgumentNullException();
-
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-            var filePath = Path.Combine(saveDirectory, string.IsNullOrWhiteSpace(fileName) ? objectName : fileName);
-
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
-                {
-                    if (resp == null)
-                        return new Response(0, null, null);
-
-                    try
-                    {
-                        using (var respStream = resp.GetResponseStream())
-                        {
-                            using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write))
-                            {
-                                CopyStream(respStream, fileStream, chunkSize);
-                            }
-                        }
-
-                        var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader() { Key = key, Value = resp.GetResponseHeader(key) }).ToList();
-
-                        return new Response(resp.StatusCode, respHeaders, "[Binary]");
-                    }
-                    catch (Exception)
-                    {
-                        return new Response(0, null, null);
-                    }
-                }, headers: headers);
-
-            if (verifyEtag && response.Headers.Any(h => h.Key == ObjectStoreConstants.Etag))
             {
-                var md5 = MD5.Create();
-                using (var fileStream = File.OpenRead(filePath))
-                {
-                    md5.ComputeHash(fileStream);
-                }
+                if (resp == null)
+                    return new Response(0, null, null);
 
+                try
+                {
+                    using (var respStream = resp.GetResponseStream())
+                    {
+                        CopyStream(respStream, outputStream, chunkSize);
+                    }
+
+                    var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader() { Key = key, Value = resp.GetResponseHeader(key) }).ToList();
+
+                    return new Response(resp.StatusCode, respHeaders, "[Binary]");
+                }
+                catch (Exception)
+                {
+                    return new Response(0, null, null);
+                }
+            }, headers: headers);
+
+            if (verifyEtag && response.Headers.Any(h => h.Key.Equals(ObjectStoreConstants.Etag, StringComparison.OrdinalIgnoreCase)))
+            {
+                outputStream.Flush(); // flush the contents of the stream to the output device
+                outputStream.Position = 0;  // reset the head of the stream to the beginning
+
+                var md5 = MD5.Create();
+                md5.ComputeHash(outputStream);
 
                 var sbuilder = new StringBuilder();
                 var hash = md5.Hash;
@@ -411,11 +402,32 @@ namespace net.openstack.Providers.Rackspace
                     sbuilder.Append(b.ToString("x2").ToLower());
                 }
                 var convertedMd5 = sbuilder.ToString();
-                if (convertedMd5 != response.Headers.First(h => h.Key == ObjectStoreConstants.Etag).Value.ToLower())
+                if (convertedMd5 != response.Headers.First(h => h.Key.Equals(ObjectStoreConstants.Etag, StringComparison.OrdinalIgnoreCase)).Value.ToLower())
                 {
-                    File.Delete(filePath);
+                    
                     throw new InvalidETagException();
                 }
+            }
+        }
+
+        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
+        {
+            if (String.IsNullOrEmpty(saveDirectory))
+                throw new ArgumentNullException();
+
+            var filePath = Path.Combine(saveDirectory, string.IsNullOrWhiteSpace(fileName) ? objectName : fileName);
+
+            try
+            {
+                using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    GetObject(container, objectName, fileStream, chunkSize, headers, region, verifyEtag, identity);
+                }
+            }
+            catch (InvalidETagException)
+            {
+                File.Delete(filePath);
+                throw;
             }
         }
 
