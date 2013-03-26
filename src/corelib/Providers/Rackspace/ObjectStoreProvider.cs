@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
+using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -151,7 +154,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
         public void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
@@ -164,7 +167,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
         public void AddContainerCdnHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
@@ -190,7 +193,7 @@ namespace net.openstack.Providers.Rackspace
             else
             {
                 var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
-                ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, null, null, headers);
+                ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
             }
         }
 
@@ -250,7 +253,7 @@ namespace net.openstack.Providers.Rackspace
                 };
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
 
             if (response == null)
                 return null;
@@ -269,7 +272,7 @@ namespace net.openstack.Providers.Rackspace
                 };
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, null, null, headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
 
             if (response == null)
                 return null;
@@ -355,52 +358,66 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
-        //public void GetObjectSaveToFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verify_etag = false)
-        //{
-        //    if (String.IsNullOrEmpty(filePath))
-        //        throw new ArgumentNullException();
+        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
+        {
+            if (String.IsNullOrEmpty(saveDirectory))
+                throw new ArgumentNullException();
 
-        //    _objectStoreHelper.ValidateContainerName(container);
-        //    _objectStoreHelper.ValidateObjectName(objectName);
-        //    Stream saveTo = File.OpenWrite(filePath);
-        //    var buffer = new byte[chunkSize];
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
 
-        //    var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-        //    var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, null, null, headers);
+            var filePath = Path.Combine(saveDirectory, string.IsNullOrWhiteSpace(fileName) ? objectName : fileName);
 
-        //    byte[] byteArray = Encoding.UTF8.GetBytes(response.RawBody);
-        //    MemoryStream stream = new MemoryStream(byteArray);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
+                {
+                    if (resp == null)
+                        return new Response(0, null, null);
 
-        //    int read;
+                    try
+                    {
+                        using (var respStream = resp.GetResponseStream())
+                        {
+                            using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write))
+                            {
+                                CopyStream(respStream, fileStream, chunkSize);
+                            }
+                        }
+
+                        var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader() { Key = key, Value = resp.GetResponseHeader(key) }).ToList();
+
+                        return new Response(resp.StatusCode, respHeaders, "[Binary]");
+                    }
+                    catch (Exception)
+                    {
+                        return new Response(0, null, null);
+                    }
+                }, headers: headers);
+
+            if (verifyEtag && response.Headers.Any(h => h.Key == ObjectStoreConstants.Etag))
+            {
+                var md5 = MD5.Create();
+                using (var fileStream = File.OpenRead(filePath))
+                {
+                    md5.ComputeHash(fileStream);
+                }
 
 
-        //    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-        //    {
-        //        saveTo.Write(buffer, 0, read);
-        //    }
-        //    saveTo.Close();
-        //    stream.Close();
-        //    //if (verify_etag)
-        //    //{
-        //    //    save_to = File.OpenRead(path);
-        //    //    var md5 = MD5.Create();
-        //    //    md5.ComputeHash(save_to);
-        //    //    var sbuilder = new StringBuilder();
-        //    //    var hash = md5.Hash;
-        //    //    foreach (var b in hash)
-        //    //    {
-        //    //        sbuilder.Append(b.ToString("x2").ToLower());
-        //    //    }
-        //    //    var converted_md5 = sbuilder.ToString();
-        //    //    if (converted_md5 != res.Headers[Constants.Headers.Etag].ToLower())
-        //    //    {
-        //    //        File.Delete(path);
-        //    //        throw new InvalidETagException();
-        //    //    }
-        //    //}
-
-        //}
+                var sbuilder = new StringBuilder();
+                var hash = md5.Hash;
+                foreach (var b in hash)
+                {
+                    sbuilder.Append(b.ToString("x2").ToLower());
+                }
+                var convertedMd5 = sbuilder.ToString();
+                if (convertedMd5 != response.Headers.First(h => h.Key == ObjectStoreConstants.Etag).Value.ToLower())
+                {
+                    File.Delete(filePath);
+                    throw new InvalidETagException();
+                }
+            }
+        }
 
         #endregion
 
@@ -414,6 +431,16 @@ namespace net.openstack.Providers.Rackspace
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
             return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
+        }
+
+        public static void CopyStream(Stream input, Stream output, int bufferSize)
+        {
+            var buffer = new byte[bufferSize];
+            int len;
+            while ((len = input.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                output.Write(buffer, 0, len);
+            }
         }
 
         #endregion
