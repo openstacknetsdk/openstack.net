@@ -34,9 +34,9 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SimpleRESTServices, Version=1.0.5.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SimpleRESTServices.1.0.5.0\lib\net40\SimpleRESTServices.dll</HintPath>
+      <HintPath>..\packages\SimpleRESTServices.1.0.5.2\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,6 +85,7 @@
 =======
     <Compile Include="Core\IObjectStoreHelper.cs" />
     <Compile Include="Providers\Rackspace\IExtendedIdentityProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidETagException.cs" />
     <Compile Include="Providers\Rackspace\ObjectStoreConstants.cs" />
 >>>>>>> Object Headers functionality
     <Compile Include="Providers\Rackspace\ObjectStoreProvider.cs" />
