@@ -12,6 +12,7 @@ namespace net.openstack.Core.Domain
         ContainerExists,
         ContainerDeleted,
         ContainerNotEmpty,
-        ContainerNotFound
+        ContainerNotFound,
+        ObjectDeleted
     }
 }

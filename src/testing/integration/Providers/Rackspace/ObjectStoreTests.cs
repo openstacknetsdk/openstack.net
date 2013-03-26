@@ -497,6 +497,34 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         }
 
+        [TestMethod]
+        public void Should_Delete_Object()
+        {
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
+            string fileName = Path.GetFileName(filePath);
+            var headers = new Dictionary<string, string>();
+            var provider = new ObjectStoreProvider();
+            var deleteResponse = provider.DeleteObject(_testIdentity, containerName, fileName, headers);
+
+            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ItemNotFoundException))]
+        public void Should_Throw_An_Exception_When_Deleting_Object()
+        {
+            // TODO: Also need to make 404 as an acceptable status.
+            const string containerName = "DarkKnight";
+            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
+            string fileName = Path.GetFileName(filePath);
+            var headers = new Dictionary<string, string>();
+            var provider = new ObjectStoreProvider();
+            var deleteResponse = provider.DeleteObject(_testIdentity, containerName, fileName, headers);
+
+            Assert.Fail("Expected exception was not thrown.");
+        }
         #endregion Object Tests
 
     }
