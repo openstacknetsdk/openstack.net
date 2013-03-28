@@ -45,10 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\Address.cs" />
+    <Compile Include="Core\Domain\CloudBlockStorage.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\ICloudBlockStorageProvider.cs" />
+    <Compile Include="Core\ICloudBlockStorageValidator.cs" />
     <Compile Include="Core\Domain\ImageType.cs" />
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
@@ -74,6 +77,7 @@
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
     <Compile Include="Core\IObjectStoreProvider.cs" />
     <Compile Include="Core\IObjectStoreValidator.cs" />
+    <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
     <Compile Include="Providers\Rackspace\IExtendedIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\ObjectStoreProvider.cs" />
     <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
@@ -136,6 +140,7 @@
     <Compile Include="Core\Exceptions\Response\ResponseException.cs" />
     <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
     <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
     <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\IIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
