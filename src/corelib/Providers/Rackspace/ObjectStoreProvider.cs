@@ -448,6 +448,52 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
 
         }
+
+        public ObjectStore CopyObject(CloudIdentity identity, string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null)
+        {
+            _objectStoreHelper.ValidateContainerName(sourceContainer);
+            _objectStoreHelper.ValidateObjectName(sourceObjectName);
+
+            _objectStoreHelper.ValidateContainerName(destinationContainer);
+            _objectStoreHelper.ValidateObjectName(destinationObjectName);
+
+            if (headers != null)
+            {
+                if (string.IsNullOrWhiteSpace(headers.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.ContentLength, StringComparison.OrdinalIgnoreCase)).Value))
+                {
+                    var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region);
+                    headers.Add(ObjectStoreConstants.ContentLength, contentLength);
+                }
+            }
+            else
+            {
+                headers = new Dictionary<string, string>();
+                var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region);
+                headers.Add(ObjectStoreConstants.ContentLength, contentLength);
+
+            }
+            
+            headers.Add(ObjectStoreConstants.CopyFrom,string.Format("{0}/{1}",sourceContainer,sourceObjectName));
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), destinationContainer, destinationObjectName));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers);
+
+            if (response.StatusCode == 201)
+                return ObjectStore.ObjectCreated;
+            if (response.StatusCode == 404)
+                return ObjectStore.ContainerNotFound;
+
+            return ObjectStore.Unknown;
+        }
+
+        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
+        {
+            var sourceHeaders = GetObjectHeaders(identity, sourceContainer, sourceObjectName, null, region);
+            var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
+            return contentLength;
+        }
+
         #endregion
 
         #region Private methods
