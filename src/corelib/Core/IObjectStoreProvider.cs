@@ -45,6 +45,7 @@ namespace net.openstack.Core
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null);
         void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null);
         ObjectStore DeleteObject(CloudIdentity identity, string container, string objectNmae, Dictionary<string, string> headers = null, string region = null);
+        ObjectStore CopyObject(CloudIdentity identity, string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null);
 
         #endregion
 
