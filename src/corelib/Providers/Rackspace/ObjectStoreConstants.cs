@@ -40,6 +40,7 @@ namespace net.openstack.Providers.Rackspace
         public const string Etag = "etag";
         public const string ContentType = "content-type";
         public const string ContentLength = "content-length";
+        public const string CopyFrom = "x-copy-from";
         //Cdn Object Constants
         public const string CdnPurgeEmail = "x-purge-email";
         //Misc Headers
