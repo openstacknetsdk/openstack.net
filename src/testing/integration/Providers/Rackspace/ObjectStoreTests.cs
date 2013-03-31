@@ -554,6 +554,61 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             Assert.Fail("Expected exception was not thrown.");
         }
+
+        [TestMethod]
+        public void Should_Copy_Object_When_Not_Passing_Content_Length()
+        {
+            const string sourceContainerName = "DarkKnight";
+            const string sourceObjectName = "BatmanBegins.jpg";
+
+            const string destinationContainerName = "rk_test";
+            const string destinationObjectName = "BatmanBegins.jpg";
+            
+            var provider = new ObjectStoreProvider();
+            var copyResponse = provider.CopyObject(_testIdentity, sourceContainerName, sourceObjectName, destinationContainerName,destinationObjectName);
+
+            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+        }
+        
+        [TestMethod]
+        public void Should_Copy_Object_When_Passing_Content_Length()
+        {
+            const string sourceContainerName = "DarkKnight";
+            const string sourceObjectName = "BatmanBegins.jpg";
+
+            const string destinationContainerName = "rk_test";
+            const string destinationObjectName = "BatmanBegins.jpg";
+
+            Dictionary<string,string> header = new Dictionary<string, string>();
+            header.Add(ObjectStoreConstants.ContentLength, "62504");
+            
+            var provider = new ObjectStoreProvider();
+            var copyResponse = provider.CopyObject(_testIdentity, sourceContainerName, sourceObjectName, destinationContainerName,destinationObjectName,header);
+
+            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+        }
+
+        [TestMethod]
+        public void Should_Copy_Object_When_Not_Passing_Content_Length_And_Passing_Expiring_Header()
+        {
+            // Object will expire 2 days from now.
+            int epoch = (int)(DateTime.UtcNow.AddDays(2) - new DateTime(1970, 1, 1)).TotalSeconds;
+            const string sourceContainerName = "DarkKnight";
+            const string sourceObjectName = "BatmanBegins.jpg";
+
+            const string destinationContainerName = "rk_test";
+            const string destinationObjectName = "BatmanBegins.jpg";
+
+            Dictionary<string, string> header = new Dictionary<string, string>();
+            header.Add(ObjectStoreConstants.ObjectDeleteAt, epoch.ToString());
+
+            var provider = new ObjectStoreProvider();
+            var copyResponse = provider.CopyObject(_testIdentity, sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header);
+
+            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+
+        }
+
         #endregion Object Tests
 
     }
