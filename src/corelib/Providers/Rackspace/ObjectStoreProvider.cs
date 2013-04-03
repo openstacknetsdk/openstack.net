@@ -96,19 +96,19 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
         
-        public Dictionary<string, string> GetHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerHeader(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD); 
 
             var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
 
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
         }
 
-        public Dictionary<string, string> GetMetaDataForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerMetaData(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -120,7 +120,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
         }
 
-        public Dictionary<string, string> GetCDNHeaderForContainer(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerCDNHeader(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
 
@@ -180,7 +180,7 @@ namespace net.openstack.Providers.Rackspace
 
             bool cdnEnabled = false;
 
-            var cdnHeaders = GetCDNHeaderForContainer(identity, container);
+            var cdnHeaders = GetContainerCDNHeader(identity, container);
             if (cdnHeaders.ContainsKey(ObjectStoreConstants.CdnEnabled))
             {
                 cdnEnabled = bool.Parse(cdnHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.CdnEnabled, StringComparison.InvariantCultureIgnoreCase)).Value);
@@ -313,17 +313,17 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public IEnumerable<HttpHeader> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
+        public Dictionary<string,string> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
-            if (response == null)
-                return null;
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
-            return response.Headers;
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
         }
 
         public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
@@ -487,16 +487,30 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD); 
+
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
+        }
+
+
+        #endregion
+
+        #region Private methods
+
         private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
         {
             var sourceHeaders = GetObjectHeaders(identity, sourceContainer, sourceObjectName, null, region);
             var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
             return contentLength;
         }
-
-        #endregion
-
-        #region Private methods
 
         protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null)
         {
