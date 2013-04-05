@@ -323,6 +323,104 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsFalse(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
         }
 
+        [TestMethod]
+        public void Should_Enable_Static_Web_On_Container_With_Index_Error_CSS_And_Listing_As_True()
+        {
+            const string containerName = "DarkKnight";
+            const string webIndex = "index.html";
+            const string webError = "error.html";
+            const string webListingsCSS = "index.css";
+            const bool webListing = true;
+
+            var provider = new ObjectStoreProvider();
+            //var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListingsCSS, webListing, null, false, _testIdentity);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(_testIdentity, containerName);
+
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Enable_Static_Web_On_Container_With_CSS_And_Listing_As_True()
+        {
+            const string containerName = "DarkKnight";
+            const string webListingsCSS = "index.css";
+            const bool webListing = true;
+
+            var provider = new ObjectStoreProvider();
+            //var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            provider.EnableStaticWebOnContainer(containerName, webListingsCSS, webListing, null, false, _testIdentity);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(_testIdentity, containerName);
+
+            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Enable_Static_Web_On_Container_With_Index_Error_And_Listing_As_True()
+        {
+            const string containerName = "DarkKnight";
+            const string webIndex = "index.html";
+            const string webError = "error.html";
+            const bool webListing = true;
+
+            var provider = new ObjectStoreProvider();
+            //var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListing, null, false, _testIdentity);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(_testIdentity, containerName);
+
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+
+        }
+
+        [TestMethod]
+        public void Should_Enable_Static_Web_On_Container_With_Index_And_Error()
+        {
+            const string containerName = "DarkKnight";
+            const string webIndex = "index.html";
+            const string webError = "error.html";
+        
+            var provider = new ObjectStoreProvider();
+            //var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            provider.EnableStaticWebOnContainer(containerName, webIndex, webError, null, false, _testIdentity);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(_testIdentity, containerName);
+
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Disable_Static_Web_On_Container()
+        {
+            const string containerName = "DarkKnight";
+           
+            var provider = new ObjectStoreProvider();
+            //var cdnEnabledResponse = provider.EnableCDNOnContainer(_testIdentity, containerName, true);
+
+            provider.DisableStaticWebOnContainer(containerName, null, false, _testIdentity);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(_testIdentity, containerName);
+
+            
+            Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Index"));
+            Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Error"));
+            Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Listings-Css"));
+            Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Listings"));
+            
+        }
+
+
+
         #endregion Container Tests
 
         #region Object Tests
