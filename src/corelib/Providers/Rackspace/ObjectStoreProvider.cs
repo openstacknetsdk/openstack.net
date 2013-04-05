@@ -95,13 +95,13 @@ namespace net.openstack.Providers.Rackspace
 
             return ObjectStore.Unknown;
         }
-        
+
         public Dictionary<string, string> GetContainerHeader(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD); 
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
             var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
 
@@ -178,15 +178,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            bool cdnEnabled = false;
-
-            var cdnHeaders = GetContainerCDNHeader(identity, container);
-            if (cdnHeaders.ContainsKey(ObjectStoreConstants.CdnEnabled))
-            {
-                cdnEnabled = bool.Parse(cdnHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.CdnEnabled, StringComparison.InvariantCultureIgnoreCase)).Value);
-            }
-
-            if (!cdnEnabled)
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
             {
                 throw new CDNNotEnabledException();
             }
@@ -195,6 +187,22 @@ namespace net.openstack.Providers.Rackspace
                 var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
                 ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
             }
+        }
+
+        private bool IsContainerCdnEnabled(CloudIdentity identity, string container, string region, bool useInternalUrl)
+        {
+            bool cdnEnabled = false;
+
+            var cdnHeaders = GetContainerCDNHeader(identity, container, region, useInternalUrl);
+            if (cdnHeaders.ContainsKey(ObjectStoreConstants.CdnEnabled))
+            {
+                cdnEnabled =
+                    bool.Parse(
+                        cdnHeaders.FirstOrDefault(
+                            x => x.Key.Equals(ObjectStoreConstants.CdnEnabled, StringComparison.InvariantCultureIgnoreCase)).
+                            Value);
+            }
+            return cdnEnabled;
         }
 
         public IEnumerable<ContainerCDN> ListCDNContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null)
@@ -264,7 +272,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> DisableCDNOnContainer(CloudIdentity identity, string container, string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
-           
+
 
             var headers = new Dictionary<string, string>
                 {
@@ -280,6 +288,105 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
+        public void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>
+                                  {
+                                      {ObjectStoreConstants.WebIndex, index},
+                                      {ObjectStoreConstants.WebError, error},
+                                      {ObjectStoreConstants.WebListingsCSS, css},
+                                      {ObjectStoreConstants.WebListings, listing.ToString()}
+                                  };
+                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+            }
+        }
+
+        public void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>
+                                  {
+                                      {ObjectStoreConstants.WebIndex, index},
+                                      {ObjectStoreConstants.WebError, error},
+                                      {ObjectStoreConstants.WebListings, listing.ToString()}
+                                  };
+                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+            }
+        }
+
+        public void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>
+                                  {
+                                      {ObjectStoreConstants.WebListingsCSS, css},
+                                      {ObjectStoreConstants.WebListings, listing.ToString()}
+                                  };
+                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+            }
+        }
+
+        public void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>
+                                  {
+                                      {ObjectStoreConstants.WebIndex, index},
+                                      {ObjectStoreConstants.WebError, error}
+                                  };
+                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+            }
+        }
+
+        public void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+
+            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>
+                                  {
+                                      {ObjectStoreConstants.WebIndex, string.Empty},
+                                      {ObjectStoreConstants.WebError, string.Empty},
+                                      {ObjectStoreConstants.WebListingsCSS, string.Empty},
+                                      {ObjectStoreConstants.WebListings, string.Empty}
+                                  };
+                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+            }
+        }
 
         #endregion
 
@@ -313,7 +420,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public Dictionary<string,string> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
+        public Dictionary<string, string> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
@@ -404,7 +511,7 @@ namespace net.openstack.Providers.Rackspace
                 var convertedMd5 = sbuilder.ToString();
                 if (convertedMd5 != response.Headers.First(h => h.Key.Equals(ObjectStoreConstants.Etag, StringComparison.OrdinalIgnoreCase)).Value.ToLower())
                 {
-                    
+
                     throw new InvalidETagException();
                 }
             }
@@ -472,8 +579,8 @@ namespace net.openstack.Providers.Rackspace
                 headers.Add(ObjectStoreConstants.ContentLength, contentLength);
 
             }
-            
-            headers.Add(ObjectStoreConstants.CopyFrom,string.Format("{0}/{1}",sourceContainer,sourceObjectName));
+
+            headers.Add(ObjectStoreConstants.CopyFrom, string.Format("{0}/{1}", sourceContainer, sourceObjectName));
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), destinationContainer, destinationObjectName));
 
@@ -493,7 +600,7 @@ namespace net.openstack.Providers.Rackspace
             _objectStoreHelper.ValidateObjectName(objectName);
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD); 
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
             var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
 
