@@ -55,5 +55,34 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(volumeCreatedResponse);
         } 
         #endregion
+
+        
+        [TestMethod]
+        public void Should_Return_Volume_List()
+        {
+            var provider = new CloudBlockStorageProvider();
+            var volumeListResponse = provider.ListVolumes(identity: _testIdentity);
+            Assert.IsNotNull(volumeListResponse);
+            Assert.IsTrue(volumeListResponse.Any());
+        }
+
+        [TestMethod]
+        public void Should_Return_Single_Volume()
+        {   
+            var provider = new CloudBlockStorageProvider();
+
+            var volumeListResponse = provider.ListVolumes(identity: _testIdentity);
+            if (volumeListResponse != null && volumeListResponse.Any())
+            {
+                var firstVolumeInList = volumeListResponse.First();
+                var singleVolumeResponse = provider.ShowVolume(firstVolumeInList.Id, identity: _testIdentity);
+                Assert.IsNotNull(singleVolumeResponse);
+                Assert.IsTrue(singleVolumeResponse.Id == firstVolumeInList.Id);
+            }
+            else
+            {
+               Assert.Fail("No volumes present."); 
+            }                                  
+        }                      
     }
 }
