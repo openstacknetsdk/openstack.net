@@ -2,6 +2,6 @@
 {
     public interface ICloudBlockStorageValidator
     {
-        
+        void ValidateVolumeSize(int size);
     }
 }

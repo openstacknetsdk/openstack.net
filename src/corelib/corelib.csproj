@@ -45,7 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\Address.cs" />
-    <Compile Include="Core\Domain\CloudBlockStorage.cs" />
+    <Compile Include="Core\Domain\CloudBlockStorageVolume.cs" />
+    <Compile Include="Core\Domain\CloudBlockStorageVolumeType.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
