@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace net.openstack.Core.Domain
+namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     [DataContract]
     public class CreateCloudBlockStorageVolumeDetails
