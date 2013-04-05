@@ -476,8 +476,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             int cnt = 0;
             var info = new FileInfo(filePath);
             var totalBytest = info.Length;
-            var provider = new ObjectStoreProvider();
-            provider.CreateObjectFromStream(_testIdentity, containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
+            var provider = new ObjectStoreProvider(_testIdentity);
+            provider.CreateObjectFromStream(containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
             {
                 cnt = cnt + 1;
                 if (cnt % 10 != 0)
@@ -520,8 +520,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var etag = GetMD5Hash(filePath);
             stream.Position = 0;
             var headers = new Dictionary<string, string>();
-            var provider = new ObjectStoreProvider();
-            provider.CreateObjectFromStream(_testIdentity, containerName, stream, fileName, 65536, headers);
+            var provider = new ObjectStoreProvider(_testIdentity);
+            provider.CreateObjectFromStream(containerName, stream, fileName, 65536, headers);
 
             var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
@@ -542,8 +542,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             int cnt = 0;
             var info = new FileInfo(filePath);
             var totalBytest = info.Length;
-            var provider = new ObjectStoreProvider();
-            provider.CreateObjectFromFile(_testIdentity, containerName, filePath, fileName, 65536, headers, null, (bytesWritten) =>
+            var provider = new ObjectStoreProvider(_testIdentity);
+            provider.CreateObjectFromFile(containerName, filePath, fileName, 65536, headers, null, (bytesWritten) =>
             {
                 cnt = cnt + 1;
                 if (cnt % 10 != 0)
@@ -571,8 +571,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
-            var provider = new ObjectStoreProvider();
-            provider.CreateObjectFromFile(_testIdentity, containerName, filePath, fileName, 65536, headers);
+            var provider = new ObjectStoreProvider(_testIdentity);
+            provider.CreateObjectFromFile(containerName, filePath, fileName, 65536, headers);
 
             var containerGetObjectsResponse = provider.GetObjects(_testIdentity, containerName);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);

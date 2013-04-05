@@ -23,28 +23,28 @@ namespace net.openstack.Providers.Rackspace
 
         protected ProviderBase(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService)
         {
-            _defaultIdentity = defaultIdentity;
-            _identityProvider = identityProvider;
-            _restService = restService;
+            DefaultIdentity = defaultIdentity;
+            IdentityProvider = identityProvider;
+            RestService = restService;
         }
         
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                                   (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+                                                   (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
 
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, buildResponseCallback, requestBody, requestHeaders, requestQueryParams, requestSettings));
+                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, buildResponseCallback, requestBody, requestHeaders, requestQueryParams, requestSettings));
 
         }
 
@@ -52,7 +52,7 @@ namespace net.openstack.Providers.Rackspace
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
@@ -60,7 +60,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
+            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
 
             string bodyStr = null;
             if (body != null)
@@ -99,12 +99,12 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
+            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();
 
-            var response = _restService.Stream(absoluteUri, method, stream, chunkSize, headers, queryStringParameter, requestSettings, progressUpdated);
+            var response = RestService.Stream(absoluteUri, method, stream, chunkSize, headers, queryStringParameter, requestSettings, progressUpdated);
 
             // on errors try again 1 time.
             if (response.StatusCode == 401)
@@ -132,9 +132,9 @@ namespace net.openstack.Providers.Rackspace
         private Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
-            var userAccess = _identityProvider.GetUserAccess(identity);
+            var userAccess = IdentityProvider.GetUserAccess(identity);
 
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints");
