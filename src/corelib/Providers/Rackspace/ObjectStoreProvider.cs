@@ -433,25 +433,15 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
         }
 
-        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
+        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
-            Stream stream = System.IO.File.OpenRead(filePath);
-            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
+            using (var stream = System.IO.File.OpenRead(filePath))
+            {
+                CreateObjectFromStream(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
+            }
         }
 
-        public void CreateObjectFromFile(CloudIdentity identity, string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
-        {
-            Stream stream = System.IO.File.OpenRead(filePath);
-
-            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, headers, region, progressUpdated);
-        }
-
-        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, string region = null, Action<long> progressUpdated = null)
-        {
-            CreateObjectFromStream(identity, container, stream, objectName, chunkSize, null, region, progressUpdated);
-        }
-
-        public void CreateObjectFromStream(CloudIdentity identity, string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null)
+        public void CreateObjectFromStream(string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             if (stream == null)
                 throw new ArgumentNullException();

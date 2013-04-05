@@ -638,9 +638,9 @@ namespace net.openstack.Providers.Rackspace
         private IComputeProvider BuildProvider(CloudIdentity identity)
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
-            return new ComputeProvider(identity, _identityProvider, _restService);
+            return new ComputeProvider(identity, IdentityProvider, RestService);
         }
 
         #endregion
