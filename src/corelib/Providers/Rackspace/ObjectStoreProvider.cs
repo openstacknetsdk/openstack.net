@@ -39,7 +39,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Containers
 
-        public IEnumerable<Container> ListContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
+        public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
 
@@ -64,7 +64,7 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
-        public ObjectStore CreateContainer(CloudIdentity identity, string container, string region = null)
+        public ObjectStore CreateContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -79,7 +79,7 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
-        public ObjectStore DeleteContainer(CloudIdentity identity, string container, string region = null)
+        public ObjectStore DeleteContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -96,7 +96,7 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
-        public Dictionary<string, string> GetContainerHeader(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -108,7 +108,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
         }
 
-        public Dictionary<string, string> GetContainerMetaData(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -120,7 +120,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
         }
 
-        public Dictionary<string, string> GetContainerCDNHeader(CloudIdentity identity, string container, string region = null, bool useInternalUrl = false)
+        public Dictionary<string, string> GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
 
@@ -131,7 +131,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
-        public void AddContainerMetadata(CloudIdentity identity, string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false)
+        public void AddContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             if (metadata.Equals(null))
@@ -157,7 +157,7 @@ namespace net.openstack.Providers.Rackspace
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
-        public void AddContainerHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
+        public void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             if (headers == null)
@@ -170,7 +170,7 @@ namespace net.openstack.Providers.Rackspace
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
-        public void AddContainerCdnHeaders(CloudIdentity identity, string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false)
+        public void AddContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             if (headers == null)
@@ -178,7 +178,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -189,11 +189,11 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
-        private bool IsContainerCdnEnabled(CloudIdentity identity, string container, string region, bool useInternalUrl)
+        private bool IsContainerCdnEnabled(string container, string region, bool useInternalUrl, CloudIdentity identity = null)
         {
             bool cdnEnabled = false;
 
-            var cdnHeaders = GetContainerCDNHeader(identity, container, region, useInternalUrl);
+            var cdnHeaders = GetContainerCDNHeader(container, region, useInternalUrl, identity: identity);
             if (cdnHeaders.ContainsKey(ObjectStoreConstants.CdnEnabled))
             {
                 cdnEnabled =
@@ -205,7 +205,7 @@ namespace net.openstack.Providers.Rackspace
             return cdnEnabled;
         }
 
-        public IEnumerable<ContainerCDN> ListCDNContainers(CloudIdentity identity, int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null)
+        public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
 
@@ -230,17 +230,17 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, string region = null)
+        public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, string region = null, CloudIdentity identity = null)
         {
-            return EnableCDNOnContainer(identity, container, ttl, false);
+            return EnableCDNOnContainer(container, ttl, false, identity: identity);
         }
 
-        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, bool logRetention, string region = null)
+        public Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null)
         {
-            return EnableCDNOnContainer(identity, container, 259200, logRetention, region);
+            return EnableCDNOnContainer(container, 259200, logRetention, region,identity);
         }
 
-        public Dictionary<string, string> EnableCDNOnContainer(CloudIdentity identity, string container, long ttl, bool logRetention, string region = null)
+        public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             if (ttl.Equals(null) || logRetention.Equals(null))
@@ -269,7 +269,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
-        public Dictionary<string, string> DisableCDNOnContainer(CloudIdentity identity, string container, string region = null)
+        public Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
 
@@ -292,7 +292,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -305,7 +305,7 @@ namespace net.openstack.Providers.Rackspace
                                       {ObjectStoreConstants.WebListingsCSS, css},
                                       {ObjectStoreConstants.WebListings, listing.ToString()}
                                   };
-                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+                AddContainerHeaders(container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -313,7 +313,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -325,7 +325,7 @@ namespace net.openstack.Providers.Rackspace
                                       {ObjectStoreConstants.WebError, error},
                                       {ObjectStoreConstants.WebListings, listing.ToString()}
                                   };
-                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+                AddContainerHeaders(container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -333,7 +333,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -344,7 +344,7 @@ namespace net.openstack.Providers.Rackspace
                                       {ObjectStoreConstants.WebListingsCSS, css},
                                       {ObjectStoreConstants.WebListings, listing.ToString()}
                                   };
-                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+                AddContainerHeaders(container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -352,7 +352,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -363,7 +363,7 @@ namespace net.openstack.Providers.Rackspace
                                       {ObjectStoreConstants.WebIndex, index},
                                       {ObjectStoreConstants.WebError, error}
                                   };
-                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+                AddContainerHeaders(container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -371,7 +371,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _objectStoreHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(identity, container, region, useInternalUrl))
+            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
             {
                 throw new CDNNotEnabledException();
             }
@@ -384,7 +384,7 @@ namespace net.openstack.Providers.Rackspace
                                       {ObjectStoreConstants.WebListingsCSS, string.Empty},
                                       {ObjectStoreConstants.WebListings, string.Empty}
                                   };
-                AddContainerHeaders(identity, container, headers, region, useInternalUrl);
+                AddContainerHeaders( container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -392,7 +392,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Container Objects
 
-        public IEnumerable<ContainerObject> GetObjects(CloudIdentity identity, string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null)
+        public IEnumerable<ContainerObject> GetObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -420,7 +420,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public Dictionary<string, string> GetObjectHeaders(CloudIdentity identity, string container, string objectName, string format = "json", string region = null)
+        public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string format = "json", string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
@@ -528,7 +528,7 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
-        public ObjectStore DeleteObject(CloudIdentity identity, string container, string objectName, Dictionary<string, string> headers = null, string region = null)
+        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
@@ -546,7 +546,7 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
-        public ObjectStore CopyObject(CloudIdentity identity, string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null)
+        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(sourceContainer);
             _objectStoreHelper.ValidateObjectName(sourceObjectName);
@@ -597,24 +597,69 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
         }
 
+        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null)
+        {
+            return PurgeObjectFromCDN(container, objectName, " ", region, identity);
+        }
+
+        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string[] emails, string region = null, CloudIdentity identity = null)
+        {
+            if (emails.Length < 0)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return PurgeObjectFromCDN(container, objectName, string.Join(",", emails), region, identity);
+        }
+
+        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null)
+        {
+            _objectStoreHelper.ValidateContainerName(container);
+            _objectStoreHelper.ValidateObjectName(objectName);
+
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (!IsContainerCdnEnabled(container, region, true, identity))
+            {
+                throw new CDNNotEnabledException();
+            }
+            else
+            {
+                var headers = new Dictionary<string, string>();
+                if (email.Trim().Length > 0)
+                {
+                    headers[ObjectStoreConstants.CdnPurgeEmail] = email;
+                }
+                var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFilesCDN(identity, region), container, objectName));
+                var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
+                if (response.StatusCode == 204)
+                    return ObjectStore.ObjectPurged;
+
+                return ObjectStore.Unknown;
+            }
+
+        }
 
         #endregion
 
         #region Private methods
 
-        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
+        private string GetObjectContentLength(CloudIdentity identity,string sourceContainer, string sourceObjectName, string region)
         {
-            var sourceHeaders = GetObjectHeaders(identity, sourceContainer, sourceObjectName, null, region);
+            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, null, region, identity);
             var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ObjectStoreConstants.ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
             return contentLength;
         }
 
-        protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null)
+        protected string GetServiceEndpointCloudFiles(CloudIdentity identity,string region = null)
         {
             return base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
         }
 
-        protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
+        protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity,string region = null)
         {
             return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
         }

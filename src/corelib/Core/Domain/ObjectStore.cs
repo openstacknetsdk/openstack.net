@@ -14,6 +14,7 @@ namespace net.openstack.Core.Domain
         ContainerNotEmpty,
         ContainerNotFound,
         ObjectDeleted,
-        ObjectCreated
+        ObjectCreated,
+        ObjectPurged
     }
 }
