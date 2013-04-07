@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace;
@@ -37,8 +39,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         }
 
-
-        #region Create Volume Tests
         [TestMethod]
         public void Should_Create_Volume_Only_Required_Parameters()
         {
@@ -54,9 +54,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var volumeCreatedResponse = provider.CreateVolume(100, volumeDisplayDescription, volumeDisplayName, null, CloudBlockStorageVolumeType.SATA, null, _testIdentity);
             Assert.IsTrue(volumeCreatedResponse);
         } 
-        #endregion
-
-        
+             
         [TestMethod]
         public void Should_Return_Volume_List()
         {
@@ -81,8 +79,40 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
             else
             {
-               Assert.Fail("No volumes present."); 
+               Assert.Fail("No volumes present to query."); 
             }                                  
+        }
+
+        [TestMethod]
+        public void Should_Delete_Volume()
+        {
+            var provider = new CloudBlockStorageProvider();
+            var volumeListResponse = provider.ListVolumes(identity: _testIdentity);
+            if (volumeListResponse != null && volumeListResponse.Any())
+            {
+                var testVolume = volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName);
+                if (testVolume == null)
+                {
+                    Assert.Fail("Could not find test volume to delete.");
+                }
+                var deleteVolumeResult = provider.DeleteVolume(testVolume.Id, identity: _testIdentity);
+                if (deleteVolumeResult)
+                {
+                    volumeListResponse = provider.ListVolumes(identity: _testIdentity);
+                    if (volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName) != null)                  
+                    {
+                        Assert.Fail("Volume still exists after delete method returned true");
+                    }
+                }
+                else
+                {
+                    Assert.Fail("Test volume was not deleted.");
+                }
+            }
+            else
+            {
+                Assert.Fail("No volumes present to test delete.");
+            }
         }                      
     }
 }

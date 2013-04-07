@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OrderedTest name="CloudBlockStorage" storage="c:\code\main\openstack.net\src\testing\integration\providers\rackspace\cloudblockstorage.orderedtest" id="14787c20-44cd-4a7b-a1b4-1d3da4e31a92" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestLinks>
+    <TestLink id="dbffd956-67a3-3705-b569-d62d911d5e3c" name="Should_Create_Volume_Full_Parameters" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="df11950c-b9c2-e477-a250-679cce36cc8c" name="Should_Return_Volume_List" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="a26785d3-fcfd-705c-d405-39a552d12805" name="Should_Return_Single_Volume" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="b9b5f4fb-b232-6e59-d214-5284466a8289" name="Should_Delete_Volume" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestLinks>
+</OrderedTest>
