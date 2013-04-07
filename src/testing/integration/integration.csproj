@@ -91,6 +91,9 @@
     <None Include="Providers\Rackspace\CloudServersFull.orderedtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Providers\Rackspace\CloudBlockStorageFull.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Providers\Rackspace\CloudFiles\DarkKnightRises.jpg">

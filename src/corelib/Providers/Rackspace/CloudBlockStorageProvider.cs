@@ -15,7 +15,7 @@ namespace net.openstack.Providers.Rackspace
     public class CloudBlockStorageProvider : ProviderBase, ICloudBlockStorageProvider
     {
 
-        private readonly int[] _validResponseCode = new[] { 200 };
+        private readonly int[] _validResponseCode = new[] { 200, 202 };
         private readonly ICloudBlockStorageValidator _cloudBlockStorageValidator;
 
         public CloudBlockStorageProvider()
@@ -67,6 +67,14 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return response.Data.Volume;
+        }
+
+        public bool DeleteVolume(string volume_id, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volume_id));
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
         #endregion
