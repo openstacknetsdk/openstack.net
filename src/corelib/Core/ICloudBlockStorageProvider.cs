@@ -8,5 +8,6 @@ namespace net.openstack.Core
         bool CreateVolume(int size, string display_description = null, string display_name = null, string snapshot_id = null, string volume_type = null, string region = null, CloudIdentity identity = null);
         IEnumerable<Volume> ListVolumes(string region = null, CloudIdentity identity = null);
         Volume ShowVolume(string volume_id, string region = null, CloudIdentity identity = null);
+        bool DeleteVolume(string volume_id, string region = null, CloudIdentity identity = null);
     }
 }
