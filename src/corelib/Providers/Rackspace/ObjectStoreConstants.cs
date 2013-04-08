@@ -41,10 +41,10 @@ namespace net.openstack.Providers.Rackspace
         public const string ContentType = "content-type";
         public const string ContentLength = "content-length";
         public const string CopyFrom = "x-copy-from";
+        public const long LargeFileBatchThreshold = 5368709120; // 5GB
+        public const string ObjectManifestMetadataKey = "X-Object-Manifest";
         //Cdn Object Constants
         public const string CdnPurgeEmail = "x-purge-email";
-        //Misc Headers
-        public const string UserAgent = "user-agent";
 
         #endregion
 
