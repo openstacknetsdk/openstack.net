@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
 
@@ -18,11 +17,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     {
 
         private static RackspaceCloudIdentity _testIdentity;
-        private static RackspaceCloudIdentity _testAdminIdentity;
 
         public ObjectStoreTests()
         {
-            CloudInstance cloudInstance;
         }
 
         private TestContext testContextInstance;
@@ -477,7 +474,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var info = new FileInfo(filePath);
             var totalBytest = info.Length;
             var provider = new ObjectStoreProvider(_testIdentity);
-            provider.CreateObjectFromStream(containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
+            provider.CreateObject(containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
             {
                 cnt = cnt + 1;
                 if (cnt % 10 != 0)
@@ -521,7 +518,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             stream.Position = 0;
             var headers = new Dictionary<string, string>();
             var provider = new ObjectStoreProvider(_testIdentity);
-            provider.CreateObjectFromStream(containerName, stream, fileName, 65536, headers);
+            provider.CreateObject(containerName, stream, fileName, 65536, headers);
 
             var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
@@ -590,7 +587,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new ObjectStoreProvider();
-            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, false, _testIdentity);
+            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, false, identity: _testIdentity);
 
             //var containerGetObjectsResponse = provider.GetObjects( containerName);
             //Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
@@ -607,7 +604,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new ObjectStoreProvider();
-            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, true, _testIdentity);
+            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, true, identity: _testIdentity);
         }
 
         //[TestMethod]
