@@ -433,15 +433,15 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
         }
 
-        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             using (var stream = System.IO.File.OpenRead(filePath))
             {
-                CreateObjectFromStream(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
+                CreateObject(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
             }
         }
 
-        public void CreateObjectFromStream(string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             if (stream == null)
                 throw new ArgumentNullException();
@@ -449,13 +449,60 @@ namespace net.openstack.Providers.Rackspace
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
 
+            if (stream.Length > ObjectStoreConstants.LargeFileBatchThreshold)
+            {
+                CreateObjectInSegments(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
+                return;
+            }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-            var response = StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, null, headers, true, null, progressUpdated);
-
+            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings());
         }
 
-        public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
+        private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        {
+            var totalLength = stream.Length;
+            var segmentCount = Math.Ceiling((double)totalLength/(double)ObjectStoreConstants.LargeFileBatchThreshold);
+
+            long totalBytesWritten = 0;
+            for (int i = 0; i < segmentCount; i++)
+            {
+                var remaining = (totalLength - ObjectStoreConstants.LargeFileBatchThreshold*i);
+                var length = (remaining < ObjectStoreConstants.LargeFileBatchThreshold) ? remaining : ObjectStoreConstants.LargeFileBatchThreshold;
+
+                var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region), container, objectName, i));
+                long segmentBytesWritten = 0;
+                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated: (
+                    bytesWritten) =>
+                    {
+                        if (progressUpdated != null)
+                        {
+                            segmentBytesWritten = bytesWritten;
+                            progressUpdated(totalBytesWritten + segmentBytesWritten);
+                        }
+                    });
+
+                totalBytesWritten += segmentBytesWritten;
+            }
+
+            // upload the manifest file
+            var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+
+            if(headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add(ObjectStoreConstants.ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
+            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated: 
+                (bytesWritten) =>
+                    {
+                        if (progressUpdated != null)
+                        {
+                            progressUpdated(totalBytesWritten);
+                        }
+                    });
+        }
+
+        public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             _objectStoreHelper.ValidateContainerName(container);
             _objectStoreHelper.ValidateObjectName(objectName);
@@ -471,7 +518,7 @@ namespace net.openstack.Providers.Rackspace
                 {
                     using (var respStream = resp.GetResponseStream())
                     {
-                        CopyStream(respStream, outputStream, chunkSize);
+                        CopyStream(respStream, outputStream, chunkSize, progressUpdated);
                     }
 
                     var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader() { Key = key, Value = resp.GetResponseHeader(key) }).ToList();
@@ -507,7 +554,7 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
-        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, CloudIdentity identity = null)
+        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             if (String.IsNullOrEmpty(saveDirectory))
                 throw new ArgumentNullException();
@@ -518,7 +565,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    GetObject(container, objectName, fileStream, chunkSize, headers, region, verifyEtag, identity);
+                    GetObject(container, objectName, fileStream, chunkSize, headers, region, verifyEtag, progressUpdated, identity);
                 }
             }
             catch (InvalidETagException)
@@ -730,13 +777,19 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
         }
 
-        public static void CopyStream(Stream input, Stream output, int bufferSize)
+        public static void CopyStream(Stream input, Stream output, int bufferSize, Action<long> progressUpdated)
         {
             var buffer = new byte[bufferSize];
             int len;
+            long bytesWritten = 0;
+
             while ((len = input.Read(buffer, 0, buffer.Length)) > 0)
             {
                 output.Write(buffer, 0, len);
+                bytesWritten += len;
+
+                if (progressUpdated != null)
+                    progressUpdated(bytesWritten);
             }
         }
 
