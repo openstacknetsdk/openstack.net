@@ -51,10 +51,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Create_Volume_Full_Parameters()
         {
             var provider = new CloudBlockStorageProvider();
-            var volumeCreatedResponse = provider.CreateVolume(100, volumeDisplayDescription, volumeDisplayName, null, CloudBlockStorageVolumeType.SATA, null, _testIdentity);
+            var volumeCreatedResponse = provider.CreateVolume(100, volumeDisplayDescription, volumeDisplayName, null, "SATA", null, _testIdentity);
             Assert.IsTrue(volumeCreatedResponse);
-        } 
-             
+        }
+
         [TestMethod]
         public void Should_Return_Volume_List()
         {
@@ -66,7 +66,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         [TestMethod]
         public void Should_Return_Single_Volume()
-        {   
+        {
             var provider = new CloudBlockStorageProvider();
 
             var volumeListResponse = provider.ListVolumes(identity: _testIdentity);
@@ -79,8 +79,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
             else
             {
-               Assert.Fail("No volumes present to query."); 
-            }                                  
+                Assert.Fail("No volumes present to query.");
+            }
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 if (deleteVolumeResult)
                 {
                     volumeListResponse = provider.ListVolumes(identity: _testIdentity);
-                    if (volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName) != null)                  
+                    if (volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName) != null)
                     {
                         Assert.Fail("Volume still exists after delete method returned true");
                     }
@@ -113,6 +113,35 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             {
                 Assert.Fail("No volumes present to test delete.");
             }
-        }                      
+        }
+
+
+        [TestMethod]
+        public void Should_Return_Volume_Type_List()
+        {
+            var provider = new CloudBlockStorageProvider();
+            var volumeTypeListResponse = provider.ListVolumeTypes(identity: _testIdentity);
+            Assert.IsNotNull(volumeTypeListResponse);
+            Assert.IsTrue(volumeTypeListResponse.Any());
+        }
+
+        [TestMethod]
+        public void Should_Return_Single_Volume_Type()
+        {
+            var provider = new CloudBlockStorageProvider();
+
+            var volumeTypeListResponse = provider.ListVolumeTypes(identity: _testIdentity);
+            if (volumeTypeListResponse != null && volumeTypeListResponse.Any())
+            {
+                var firstVolumeTypeInList = volumeTypeListResponse.First();
+                var singleVolumeTypeResponse = provider.DescribeVolumeType(firstVolumeTypeInList.Id, identity: _testIdentity);
+                Assert.IsNotNull(singleVolumeTypeResponse);
+                Assert.IsTrue(singleVolumeTypeResponse.Id == firstVolumeTypeInList.Id);
+            }
+            else
+            {
+                Assert.Fail("No volumes types present to query.");
+            }
+        }
     }
 }
