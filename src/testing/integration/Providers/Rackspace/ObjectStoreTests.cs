@@ -57,7 +57,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Return_Container_List()
         {
             var provider = new ObjectStoreProvider();
-            var containerList = provider.ListContainers(identity:_testIdentity);
+            var containerList = provider.ListContainers(identity: _testIdentity);
 
             Assert.IsNotNull(containerList);
             Assert.IsTrue(containerList.Any());
@@ -67,7 +67,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Return_Container_List_With_Limit()
         {
             var provider = new ObjectStoreProvider();
-            var containerList = provider.ListContainers( 1,identity:_testIdentity);
+            var containerList = provider.ListContainers(1, identity: _testIdentity);
 
             Assert.IsNotNull(containerList);
             Assert.AreEqual(1, containerList.Count());
@@ -375,7 +375,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
             provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListing, null, false, _testIdentity);
-            var cdnContainerMetaDataResponse = provider.GetContainerMetaData( containerName);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName);
 
             Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
             Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
@@ -389,7 +389,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string containerName = "DarkKnight";
             const string webIndex = "index.html";
             const string webError = "error.html";
-        
+
             var provider = new ObjectStoreProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
@@ -404,19 +404,19 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Disable_Static_Web_On_Container()
         {
             const string containerName = "DarkKnight";
-           
+
             var provider = new ObjectStoreProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
             provider.DisableStaticWebOnContainer(containerName, null, false, _testIdentity);
             var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
-            
+
             Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Index"));
             Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Error"));
             Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Listings-Css"));
             Assert.IsFalse(cdnContainerMetaDataResponse.ContainsKey("Web-Listings"));
-            
+
         }
 
 
@@ -728,7 +728,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
-            
+
         }
 
         [TestMethod]
@@ -739,7 +739,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string emailTo = "123@abc.com";
 
             var provider = new ObjectStoreProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, email:emailTo, identity: _testIdentity);
+            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
 
@@ -750,7 +750,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             const string containerName = "DarkKnight";
             const string objectName = "TheDarkKnight.jpg";
-             var emailTo = new[]{"abc@123.com,123@abc.com"};
+            var emailTo = new[] { "abc@123.com,123@abc.com" };
 
             var provider = new ObjectStoreProvider();
             var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailTo, identity: _testIdentity);
@@ -761,5 +761,60 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         #endregion Object Tests
 
+        #region Account Tests
+        [TestMethod]
+        public void Should_Get_Headers_For_Account()
+        {
+            var provider = new ObjectStoreProvider();
+            var accountHeadersResponse = provider.GetAccountHeaders(identity: _testIdentity);
+
+            Assert.IsNotNull(accountHeadersResponse);
+            Assert.IsTrue(accountHeadersResponse.ContainsKey("x-account-object-count"));
+
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Account()
+        {
+
+            var provider = new ObjectStoreProvider();
+            var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
+
+            Assert.IsNotNull(accountHeadersResponse);
+            Assert.IsTrue(accountHeadersResponse.ContainsKey("Temp-Url-Key"));
+        }
+        
+        [TestMethod]
+        public void Should_Add_MetaData_For_Account()
+        {
+            var metaData = new Dictionary<string, string>();
+            metaData.Add("Test-Accountmetadata", "Test");
+            var provider = new ObjectStoreProvider();
+            provider.UpdateAccountMetadata(metaData, identity: _testIdentity);
+            var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
+
+            Assert.IsNotNull(accountHeadersResponse);
+            Assert.IsTrue(accountHeadersResponse.ContainsKey("Test-Accountmetadata"));
+            Assert.AreEqual("Test", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+
+        }
+
+        [TestMethod]
+        public void Should_Update_Headers_For_Account()
+        {
+            var headers = new Dictionary<string, string>();
+            headers.Add("X-Account-Meta-Test-Accountmetadata", "Test1"); 
+            
+            var provider = new ObjectStoreProvider();
+            provider.UpdateAccountHeaders(headers, identity: _testIdentity);
+            var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
+
+            Assert.IsNotNull(accountHeadersResponse);
+            Assert.IsTrue(accountHeadersResponse.ContainsKey("Test-Accountmetadata"));
+            Assert.AreEqual("Test1", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+
+        }
+
+        #endregion
     }
 }
