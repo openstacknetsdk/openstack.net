@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Renci.SshNet.WindowsPhone</name>
+        <name>Renci.SshNet</name>
     </assembly>
     <members>
         <member name="T:Renci.SshNet.AuthenticationMethod">
@@ -341,7 +341,7 @@
             Sends channel data message to the servers.
             </summary>
             <remarks>This method takes care of managing the window size.</remarks>
-            <param name="message">Channel data message.</param>
+            <param name="message">Channel data message.</param>        
         </member>
         <member name="M:Renci.SshNet.Channels.Channel.SendMessage(Renci.SshNet.Messages.Connection.ChannelExtendedDataMessage)">
             <summary>
@@ -487,6 +487,9 @@
             <summary>
             Implements "direct-tcpip" SSH channel.
             </summary>
+            <summary>
+            Implements "direct-tcpip" SSH channel.
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Channels.ChannelDirectTcpip.#ctor">
             <summary>
@@ -529,13 +532,16 @@
             <summary>
             Implements "forwarded-tcpip" SSH channel.
             </summary>
+            <summary>
+            Implements "forwarded-tcpip" SSH channel.
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Channels.ChannelForwardedTcpip.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.Channels.ChannelForwardedTcpip"/> class.
             </summary>
         </member>
-        <member name="M:Renci.SshNet.Channels.ChannelForwardedTcpip.Bind(System.String,System.UInt32)">
+        <member name="M:Renci.SshNet.Channels.ChannelForwardedTcpip.Bind(System.Net.IPAddress,System.UInt32)">
             <summary>
             Binds channel to specified connected host.
             </summary>
@@ -2450,6 +2456,12 @@
             <summary>
             Collection of different extension method
             </summary>
+            <summary>
+            Collection of different extension method specific for .NET 4.0
+            </summary>
+            <summary>
+            Collection of different extension method specific for .NET 3.5
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Extensions.IsEqualTo``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
@@ -2467,6 +2479,12 @@
             <param name="value">The current instance object</param>
             <param name="compareList">The collection to compare with</param>
             <returns>True if the two collections contain all the same items in the same order</returns>
+        </member>
+        <member name="M:Renci.SshNet.Extensions.DebugPrint(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            Prints out 
+            </summary>
+            <param name="bytes">The bytes.</param>
         </member>
         <member name="M:Renci.SshNet.Extensions.TrimLeadingZero(System.Collections.Generic.IEnumerable{System.Byte})">
             <summary>
@@ -2511,15 +2529,7 @@
             <param name="value">The number to convert.</param>
             <returns>An array of bytes with length 8.</returns>
         </member>
-        <member name="T:Renci.SshNet.Common.Extensions">
-            <summary>
-            Collection of different extension method specific for Silverlight
-            </summary>
-            <summary>
-            Collection of different extension method specific for Windows Phone
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Common.Extensions.IsNullOrWhiteSpace(System.String)">
+        <member name="M:Renci.SshNet.Extensions.IsNullOrWhiteSpace(System.String)">
             <summary>
             Determines whether [is null or white space] [the specified value].
             </summary>
@@ -2528,23 +2538,31 @@
               <c>true</c> if [is null or white space] [the specified value]; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:Renci.SshNet.Common.Extensions.Dispose(System.Net.Sockets.Socket)">
+        <member name="M:Renci.SshNet.Extensions.Dispose(System.Net.Sockets.Socket)">
             <summary>
             Disposes the specified socket.
             </summary>
             <param name="socket">The socket.</param>
         </member>
-        <member name="M:Renci.SshNet.Common.Extensions.Dispose(System.Threading.WaitHandle)">
+        <member name="M:Renci.SshNet.Extensions.Dispose(System.Threading.WaitHandle)">
             <summary>
             Disposes the specified handle.
             </summary>
             <param name="handle">The handle.</param>
         </member>
-        <member name="M:Renci.SshNet.Common.Extensions.Dispose(System.Security.Cryptography.HashAlgorithm)">
+        <member name="M:Renci.SshNet.Extensions.Dispose(System.Security.Cryptography.HashAlgorithm)">
             <summary>
             Disposes the specified algorithm.
             </summary>
             <param name="algorithm">The algorithm.</param>
+        </member>
+        <member name="M:Renci.SshNet.Extensions.Clear(System.Text.StringBuilder)">
+            <summary>
+                Clears the contents of the string builder.
+            </summary>
+            <param name="value">
+                The <see cref="T:System.Text.StringBuilder"/> to clear.
+            </param>
         </member>
         <member name="T:Renci.SshNet.Common.HostKeyEventArgs">
             <summary>
@@ -2587,6 +2605,91 @@
             <value>
             The length of the key in bits.
             </value>
+        </member>
+        <member name="T:Renci.SshNet.Common.NetConfServerException">
+            <summary>
+            The exception that is thrown when there is something wrong with the server capabilities.
+            </summary>
+            <summary>
+            The exception that is thrown when there is something wrong with the server capabilities.
+            </summary>
+        </member>
+        <member name="T:Renci.SshNet.Common.SshException">
+            <summary>
+            The exception that is thrown when SSH exception occurs.
+            </summary>
+            <summary>
+            The exception that is thrown when SSH exception occurs.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is a null reference (Nothing in Visual Basic). </exception>
+              
+            <PermissionSet>
+              <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
+              <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+              </PermissionSet>
+        </member>
+        <member name="M:Renci.SshNet.Common.NetConfServerException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.NetConfServerException"/> class.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Common.NetConfServerException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.NetConfServerException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.NetConfServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.NetConfServerException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.NetConfServerException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshAuthenticationException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
         </member>
         <member name="T:Renci.SshNet.Common.ObjectIdentifier">
             <summary>
@@ -2817,29 +2920,6 @@
             The exception that is thrown when SCP error occurred.
             </summary>
         </member>
-        <member name="T:Renci.SshNet.Common.SshException">
-            <summary>
-            The exception that is thrown when SSH exception occurs.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Common.SshException.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Common.SshException.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
-            </summary>
-            <param name="message">The message.</param>
-        </member>
-        <member name="M:Renci.SshNet.Common.SshException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshException"/> class.
-            </summary>
-            <param name="message">The message.</param>
-            <param name="inner">The inner.</param>
-        </member>
         <member name="M:Renci.SshNet.Common.ProxyException.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.Common.ScpException"/> class.
@@ -2909,6 +2989,16 @@
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="M:Renci.SshNet.Common.ScpException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.ScpException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
         <member name="T:Renci.SshNet.Common.ScpUploadEventArgs">
             <summary>
             Provides data for the Uploading event.
@@ -2977,6 +3067,9 @@
             <summary>
             The exception that is thrown when file or directory is not found.
             </summary>
+            <summary>
+            The exception that is thrown when file or directory is not found.
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Common.SftpPathNotFoundException.#ctor">
             <summary>
@@ -2996,7 +3089,20 @@
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="M:Renci.SshNet.Common.SftpPathNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SftpPathNotFoundException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
         <member name="T:Renci.SshNet.Common.SftpPermissionDeniedException">
+            <summary>
+            The exception that is thrown when operation permission is denied.
+            </summary>
             <summary>
             The exception that is thrown when operation permission is denied.
             </summary>
@@ -3018,6 +3124,16 @@
             </summary>
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.SftpPermissionDeniedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SftpPermissionDeniedException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
         </member>
         <member name="T:Renci.SshNet.Common.ShellDataEventArgs">
             <summary>
@@ -3050,6 +3166,9 @@
             <summary>
             The exception that is thrown when authentication failed.
             </summary>
+            <summary>
+            The exception that is thrown when authentication failed.
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Common.SshAuthenticationException.#ctor">
             <summary>
@@ -3069,7 +3188,20 @@
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="M:Renci.SshNet.Common.SshAuthenticationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshAuthenticationException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
         <member name="T:Renci.SshNet.Common.SshConnectionException">
+            <summary>
+            The exception that is thrown when connection was terminated.
+            </summary>
             <summary>
             The exception that is thrown when connection was terminated.
             </summary>
@@ -3106,6 +3238,23 @@
             </summary>
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshConnectionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshConnectionException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshConnectionException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Gets the object data.
+            </summary>
+            <param name="info">The info.</param>
+            <param name="context">The context.</param>
         </member>
         <member name="P:Renci.SshNet.Common.SshConnectionException.DisconnectReason">
             <summary>
@@ -3369,7 +3518,20 @@
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="M:Renci.SshNet.Common.SshOperationTimeoutException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshOperationTimeoutException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
         <member name="T:Renci.SshNet.Common.SshPassPhraseNullOrEmptyException">
+            <summary>
+            The exception that is thrown when pass phrase for key file is empty or null
+            </summary>
             <summary>
             The exception that is thrown when pass phrase for key file is empty or null
             </summary>
@@ -3391,6 +3553,16 @@
             </summary>
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Renci.SshNet.Common.SshPassPhraseNullOrEmptyException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Common.SshPassPhraseNullOrEmptyException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+              
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
         </member>
         <member name="T:Renci.SshNet.Common.TerminalModes">
             <summary>
@@ -4207,6 +4379,12 @@
             <summary>
             Provides functionality for local port forwarding
             </summary>
+            <summary>
+            Provides functionality for local port forwarding
+            </summary>
+            <summary>
+            Provides functionality for local port forwarding
+            </summary>
         </member>
         <member name="M:Renci.SshNet.ForwardedPortLocal.#ctor(System.UInt32,System.String,System.UInt32)">
             <summary>
@@ -4279,26 +4457,23 @@
             <summary>
             Provides functionality for remote port forwarding
             </summary>
+            <summary>
+            Provides functionality for remote port forwarding
+            </summary>
+            <summary>
+            Provides functionality for remote port forwarding
+            </summary>
         </member>
-        <member name="M:Renci.SshNet.ForwardedPortRemote.#ctor(System.UInt32,System.String,System.UInt32)">
+        <member name="M:Renci.SshNet.ForwardedPortRemote.#ctor(System.Net.IPAddress,System.UInt32,System.Net.IPAddress,System.UInt32)">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.ForwardedPortRemote"/> class.
             </summary>
+            <param name="boundHostAddress">The bound host address.</param>
             <param name="boundPort">The bound port.</param>
-            <param name="host">The host.</param>
+            <param name="hostAddress">The host address.</param>
             <param name="port">The port.</param>
-            <example>
-                <code source="..\..\Renci.SshNet.Tests\Classes\ForwardedPortRemoteTest.cs" region="Example SshClient AddForwardedPort Start Stop ForwardedPortRemote" language="C#" title="Remote port forwarding"/>
-            </example>
-        </member>
-        <member name="M:Renci.SshNet.ForwardedPortRemote.#ctor(System.String,System.UInt32,System.String,System.UInt32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Renci.SshNet.ForwardedPortRemote"/> class.
-            </summary>
-            <param name="boundHost">The bound host.</param>
-            <param name="boundPort">The bound port.</param>
-            <param name="host">The host.</param>
-            <param name="port">The port.</param>
+            <exception cref="T:System.ArgumentNullException">boundHost</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">boundPort</exception>
         </member>
         <member name="M:Renci.SshNet.ForwardedPortRemote.Start">
             <summary>
@@ -4327,6 +4502,31 @@
             <see cref="T:Renci.SshNet.ForwardedPortRemote"/> is reclaimed by garbage collection.
             </summary>
         </member>
+        <member name="M:Renci.SshNet.ForwardedPortRemote.#ctor(System.UInt32,System.String,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.ForwardedPortRemote"/> class.
+            </summary>
+            <param name="boundPort">The bound port.</param>
+            <param name="host">The host.</param>
+            <param name="port">The port.</param>
+            <example>
+                <code source="..\..\Renci.SshNet.Tests\Classes\ForwardedPortRemoteTest.cs" region="Example SshClient AddForwardedPort Start Stop ForwardedPortRemote" language="C#" title="Remote port forwarding"/>
+            </example>
+        </member>
+        <member name="M:Renci.SshNet.ForwardedPortRemote.#ctor(System.String,System.UInt32,System.String,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.ForwardedPortRemote"/> class.
+            </summary>
+            <param name="boundHost">The bound host.</param>
+            <param name="boundPort">The bound port.</param>
+            <param name="host">The host.</param>
+            <param name="port">The port.</param>
+        </member>
+        <member name="P:Renci.SshNet.ForwardedPortRemote.BoundHostAddress">
+            <summary>
+            Gets the bound host.
+            </summary>
+        </member>
         <member name="P:Renci.SshNet.ForwardedPortRemote.BoundHost">
             <summary>
             Gets the bound host.
@@ -4335,6 +4535,11 @@
         <member name="P:Renci.SshNet.ForwardedPortRemote.BoundPort">
             <summary>
             Gets the bound port.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.ForwardedPortRemote.HostAddress">
+            <summary>
+            Gets the forwarded host.
             </summary>
         </member>
         <member name="P:Renci.SshNet.ForwardedPortRemote.Host">
@@ -5149,7 +5354,7 @@
             Initializes a new instance of the <see cref="T:Renci.SshNet.Messages.Connection.ChannelExtendedDataMessage"/> class.
             </summary>
         </member>
-        <member name="M:Renci.SshNet.Messages.Connection.ChannelExtendedDataMessage.#ctor(System.UInt32)">
+        <member name="M:Renci.SshNet.Messages.Connection.ChannelExtendedDataMessage.#ctor(System.UInt32,System.UInt32,System.Byte[])">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.Messages.Connection.ChannelExtendedDataMessage"/> class.
             </summary>
@@ -6932,6 +7137,64 @@
             </summary>
             <value>The signature.</value>
         </member>
+        <member name="T:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage">
+            <summary>
+            Represents SSH_MSG_KEXECDH_INIT message.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage.#ctor(Renci.SshNet.Common.BigInteger,Renci.SshNet.Common.BigInteger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage"/> class.
+            </summary>
+            <param name="clientExchangeValue">The client exchange value.</param>
+        </member>
+        <member name="M:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage.LoadData">
+            <summary>
+            Called when type specific data need to be loaded.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage.SaveData">
+            <summary>
+            Called when type specific data need to be saved.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.Messages.Transport.KeyExchangeEcdhInitMessage.QC">
+            <summary>
+            Gets the client's ephemeral contribution to the ECDH exchange, encoded as an octet string
+            </summary>
+        </member>
+        <member name="T:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage">
+            <summary>
+            Represents SSH_MSG_KEXECDH_REPLY message.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage.LoadData">
+            <summary>
+            Called when type specific data need to be loaded.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage.SaveData">
+            <summary>
+            Called when type specific data need to be saved.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage.KS">
+            <summary>
+            Gets a string encoding an X.509v3 certificate containing the server's ECDSA public host key
+            </summary>
+            <value>The host key.</value>
+        </member>
+        <member name="P:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage.QS">
+            <summary>
+            Gets the the server's ephemeral contribution to the ECDH exchange, encoded as an octet string.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.Messages.Transport.KeyExchangeEcdhReplyMessage.Signature">
+            <summary>
+            Gets the an octet string containing the server's signature of the newly established exchange hash value.
+            </summary>
+            <value>The signature.</value>
+        </member>
         <member name="T:Renci.SshNet.Messages.Transport.KeyExchangeInitMessage">
             <summary>
             Represents SSH_MSG_KEXINIT message.
@@ -7133,6 +7396,233 @@
         <member name="M:Renci.SshNet.Messages.Transport.UnimplementedMessage.SaveData">
             <summary>
             Called when type specific data need to be saved.
+            </summary>
+        </member>
+        <member name="T:Renci.SshNet.NetConfClient">
+            <summary>
+            Contains operation for working with NetConf server.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.NetConfClient._netConfSession">
+            <summary>
+            Holds SftpSession instance that used to communicate to the SFTP server
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.#ctor(Renci.SshNet.ConnectionInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.SftpClient"/> class.
+            </summary>
+            <param name="connectionInfo">The connection info.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="connectionInfo"/> is null.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.SftpClient"/> class.
+            </summary>
+            <param name="host">Connection host.</param>
+            <param name="port">Connection port.</param>
+            <param name="username">Authentication username.</param>
+            <param name="password">Authentication password.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="password"/> is null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="host"/> is invalid, or <paramref name="username"/> is null or contains whitespace characters.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="port"/> is not within <see cref="F:System.Net.IPEndPoint.MinPort"/> and <see cref="F:System.Net.IPEndPoint.MaxPort"/>.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.SftpClient"/> class.
+            </summary>
+            <param name="host">Connection host.</param>
+            <param name="username">Authentication username.</param>
+            <param name="password">Authentication password.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="password"/> is null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="host"/> is invalid, or <paramref name="username"/> is null or contains whitespace characters.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.#ctor(System.String,System.Int32,System.String,Renci.SshNet.PrivateKeyFile[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.SftpClient"/> class.
+            </summary>
+            <param name="host">Connection host.</param>
+            <param name="port">Connection port.</param>
+            <param name="username">Authentication username.</param>
+            <param name="keyFiles">Authentication private key file(s) .</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="keyFiles"/> is null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="host"/> is invalid, -or- <paramref name="username"/> is null or contains whitespace characters.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="port"/> is not within <see cref="F:System.Net.IPEndPoint.MinPort"/> and <see cref="F:System.Net.IPEndPoint.MaxPort"/>.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.#ctor(System.String,System.String,Renci.SshNet.PrivateKeyFile[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.SftpClient"/> class.
+            </summary>
+            <param name="host">Connection host.</param>
+            <param name="username">Authentication username.</param>
+            <param name="keyFiles">Authentication private key file(s) .</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="keyFiles"/> is null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="host"/> is invalid, -or- <paramref name="username"/> is null or contains whitespace characters.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.SendReceiveRpc(System.Xml.XmlDocument)">
+            <summary>
+            Sends the receive RPC.
+            </summary>
+            <param name="rpc">The RPC.</param>
+            <returns>Reply message to RPC request</returns>
+            <exception cref="T:Renci.SshNet.Common.SshConnectionException">Client is not connected.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.SendReceiveRpc(System.String)">
+            <summary>
+            Sends the receive RPC.
+            </summary>
+            <param name="xml">The XML.</param>
+            <returns>Reply message to RPC request</returns>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.SendCloseRpc">
+            <summary>
+            Sends the close RPC.
+            </summary>
+            <returns>Reply message to closing RPC request</returns>
+            <exception cref="T:Renci.SshNet.Common.SshConnectionException">Client is not connected.</exception>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.OnConnected">
+            <summary>
+            Called when client is connected to the server.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.OnDisconnecting">
+            <summary>
+            Called when client is disconnecting from the server.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.NetConfClient.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged ResourceMessages.</param>
+        </member>
+        <member name="P:Renci.SshNet.NetConfClient.OperationTimeout">
+            <summary>
+            Gets or sets the operation timeout.
+            </summary>
+            <value>The operation timeout.</value>
+        </member>
+        <member name="P:Renci.SshNet.NetConfClient.ServerCapabilities">
+            <summary>
+            Gets NetConf server capabilities.
+            </summary>
+            <exception cref="T:Renci.SshNet.Common.SshConnectionException">Client is not connected.</exception>
+        </member>
+        <member name="P:Renci.SshNet.NetConfClient.ClientCapabilities">
+            <summary>
+            Gets NetConf client capabilities.
+            </summary>
+            <exception cref="T:Renci.SshNet.Common.SshConnectionException">Client is not connected.</exception>
+        </member>
+        <member name="P:Renci.SshNet.NetConfClient.AutomaticMessageIdHandling">
+            <summary>
+            Gets or sets a value indicating whether [automatic message id handling].
+            </summary>
+            <value>
+            <c>true</c> if [automatic message id handling]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Renci.SshNet.Sftp.SubsystemSession">
+            <summary>
+            Base class for SSH subsystem implementations
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Sftp.SubsystemSession._operationTimeout">
+            <summary>
+            Specifies a timeout to wait for operation to complete
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.#ctor(Renci.SshNet.Session,System.String,System.TimeSpan,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the SubsystemSession class.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="subsystemName">Name of the subsystem.</param>
+            <param name="operationTimeout">The operation timeout.</param>
+            <exception cref="T:System.ArgumentNullException">session</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="session"/> or <paramref name="subsystemName"/> is null.</exception>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Connect">
+            <summary>
+            Connects subsystem on SSH channel.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Disconnect">
+            <summary>
+            Disconnects subsystem channel.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.SendData(System.Byte[])">
+            <summary>
+            Sends data to the subsystem.
+            </summary>
+            <param name="data">The data to be sent.</param>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.OnChannelOpen">
+            <summary>
+            Called when channel is open.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.OnDataReceived(System.UInt32,System.Byte[])">
+            <summary>
+            Called when data is received.
+            </summary>
+            <param name="dataTypeCode">The data type code.</param>
+            <param name="data">The data.</param>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.RaiseError(System.Exception)">
+            <summary>
+            Raises the error.
+            </summary>
+            <param name="error">The error.</param>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:Renci.SshNet.Sftp.SubsystemSession"/> class.
+            </summary>
+        </member>
+        <member name="E:Renci.SshNet.Sftp.SubsystemSession.ErrorOccurred">
+            <summary>
+            Occurs when an error occurred.
+            </summary>
+        </member>
+        <member name="E:Renci.SshNet.Sftp.SubsystemSession.Disconnected">
+            <summary>
+            Occurs when session has been disconnected form the server.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.Sftp.SubsystemSession.ChannelNumber">
+            <summary>
+            Gets the channel number.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.NetConf.NetConfSession.#ctor(Renci.SshNet.Session,System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.NetConf.NetConfSession"/> class.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="operationTimeout">The operation timeout.</param>
+        </member>
+        <member name="P:Renci.SshNet.NetConf.NetConfSession.ServerCapabilities">
+            <summary>
+            Gets NetConf server capabilities.
+            </summary>
+        </member>
+        <member name="P:Renci.SshNet.NetConf.NetConfSession.ClientCapabilities">
+            <summary>
+            Gets NetConf client capabilities.
             </summary>
         </member>
         <member name="T:Renci.SshNet.NoneAuthenticationMethod">
@@ -7822,6 +8312,42 @@
             </summary>
             <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged ResourceMessages.</param>
         </member>
+        <member name="M:Renci.SshNet.ScpClient.Upload(System.IO.FileInfo,System.String)">
+            <summary>
+            Uploads the specified file to the remote host.
+            </summary>
+            <param name="fileInfo">The file system info.</param>
+            <param name="path">The path.</param>
+            <exception cref="T:System.ArgumentNullException">fileSystemInfo</exception>
+            <exception cref="T:System.ArgumentException">path</exception>
+            <exception cref="T:System.NotSupportedException"></exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileInfo"/> or <paramref name="filename"/> is null.</exception>
+        </member>
+        <member name="M:Renci.SshNet.ScpClient.Upload(System.IO.DirectoryInfo,System.String)">
+            <summary>
+            Uploads the specified directory to the remote host.
+            </summary>
+            <param name="directoryInfo">The directory info.</param>
+            <param name="path">The path.</param>
+            <exception cref="T:System.ArgumentNullException">fileSystemInfo</exception>
+            <exception cref="T:System.ArgumentException">path</exception>
+        </member>
+        <member name="M:Renci.SshNet.ScpClient.Download(System.String,System.IO.FileInfo)">
+            <summary>
+            Downloads the specified file from the remote host to local file.
+            </summary>
+            <param name="filename">Remote host file name.</param>
+            <param name="fileInfo">Local file information.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileInfo"/> or <paramref name="filename"/> is null.</exception>
+        </member>
+        <member name="M:Renci.SshNet.ScpClient.Download(System.String,System.IO.DirectoryInfo)">
+            <summary>
+            Downloads the specified directory from the remote host to local directory.
+            </summary>
+            <param name="directoryName">Remote host directory name.</param>
+            <param name="directoryInfo">Local directory information.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="directoryInfo"/> or <paramref name="directoryName"/> is null.</exception>
+        </member>
         <member name="P:Renci.SshNet.ScpClient.OperationTimeout">
             <summary>
             Gets or sets the operation timeout.
@@ -8271,16 +8797,6 @@
             <exception cref="T:System.ArgumentNullException"><paramref name="inputBuffer"/> or <paramref name="outputBuffer"/> is null.</exception>
             <exception cref="T:System.IndexOutOfRangeException"><paramref name="inputBuffer"/> or <paramref name="outputBuffer"/> is too short.</exception>
         </member>
-        <member name="P:Renci.SshNet.Security.Cryptography.Ciphers.AesCipher.EncryptionKey">
-            <summary>
-            Gets the encryption key.
-            </summary>
-        </member>
-        <member name="P:Renci.SshNet.Security.Cryptography.Ciphers.AesCipher.DecryptionKey">
-            <summary>
-            Gets the encryption key.
-            </summary>
-        </member>
         <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher">
             <summary>
             Implements ARCH4 cipher algorithm
@@ -8298,11 +8814,17 @@
             <param name="key">The key.</param>
             <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher._engineState">
+            <summary>
+             Holds the state of the RC4 engine
+            </summary>
+        </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher.#ctor(System.Byte[],System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher"/> class.
             </summary>
             <param name="key">The key.</param>
+            <param name="dischargeFirstBytes">if set to <c>true</c> will disharged first 1536 bytes.</param>
             <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher.EncryptBlock(System.Byte[],System.Int32,System.Int32,System.Byte[],System.Int32)">
@@ -8351,9 +8873,42 @@
             </returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
+        <member name="P:Renci.SshNet.Security.Cryptography.Ciphers.Arc4Cipher.MinimumSize">
+            <summary>
+            Gets the minimum data size.
+            </summary>
+            <value>
+            The minimum data size.
+            </value>
+        </member>
         <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher">
             <summary>
             Blowfish cipher implementation.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher._s0">
+            <summary>
+            The s-boxes
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher._s1">
+            <summary>
+            The s-boxes
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher._s2">
+            <summary>
+            The s-boxes
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher._s3">
+            <summary>
+            The s-boxes
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher._p">
+            <summary>
+            The p-array
             </summary>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.BlowfishCipher.#ctor(System.Byte[],Renci.SshNet.Security.Cryptography.Ciphers.CipherMode,Renci.SshNet.Security.Cryptography.Ciphers.CipherPadding)">
@@ -8405,6 +8960,16 @@
             Implements CAST cipher algorithm
             </summary>
         </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher._kr">
+            <summary>
+            The rotating round key
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher._km">
+            <summary>
+            The masking round key
+            </summary>
+        </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.#ctor(System.Byte[],Renci.SshNet.Security.Cryptography.Ciphers.CipherMode,Renci.SshNet.Security.Cryptography.Ciphers.CipherPadding)">
             <summary>
             Initializes a new instance of the <see cref="T:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher"/> class.
@@ -8441,38 +9006,46 @@
             The number of bytes decrypted.
             </returns>
         </member>
+        <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.SetKey(System.Byte[])">
+            <summary>
+            Sets the subkeys using the same nomenclatureas described in RFC2144.
+            </summary>
+            <param name="key">The key.</param>
+        </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.F1(System.UInt32,System.UInt32,System.Int32)">
-             The first of the three processing functions for the
-             encryption and decryption.
-            
-             @param D            the input to be processed
-             @param Kmi        the mask to be used from Km[n]
-             @param Kri        the rotation value to be used
-            
+            <summary>
+            The first of the three processing functions for the encryption and decryption.
+            </summary>
+            <param name="D">The input to be processed.</param>
+            <param name="Kmi">The mask to be used from Km[n].</param>
+            <param name="Kri">The rotation value to be used.</param>
+            <returns></returns>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.F2(System.UInt32,System.UInt32,System.Int32)">
-             The second of the three processing functions for the
-             encryption and decryption.
-            
-             @param D            the input to be processed
-             @param Kmi        the mask to be used from Km[n]
-             @param Kri        the rotation value to be used
-            
+            <summary>
+            The second of the three processing functions for the encryption and decryption.
+            </summary>
+            <param name="D">The input to be processed.</param>
+            <param name="Kmi">The mask to be used from Km[n].</param>
+            <param name="Kri">The rotation value to be used.</param>
+            <returns></returns>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.F3(System.UInt32,System.UInt32,System.Int32)">
-             The third of the three processing functions for the
-             encryption and decryption.
-            
-             @param D            the input to be processed
-             @param Kmi        the mask to be used from Km[n]
-             @param Kri        the rotation value to be used
-            
+            <summary>
+            The third of the three processing functions for the encryption and decryption.
+            </summary>
+            <param name="D">The input to be processed.</param>
+            <param name="Kmi">The mask to be used from Km[n].</param>
+            <param name="Kri">The rotation value to be used.</param>
+            <returns></returns>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.CastCipher.CastEncipher(System.UInt32,System.UInt32,System.UInt32[])">
-             Does the 16 rounds to encrypt the block.
-            
-             @param L0    the LH-32bits of the plaintext block
-             @param R0    the RH-32bits of the plaintext block
+            <summary>
+            Does the 16 rounds to encrypt the block.
+            </summary>
+            <param name="L0">The LH-32bits of the plaintext block.</param>
+            <param name="R0">The RH-32bits of the plaintext block.</param>
+            <param name="result">The result.</param>
         </member>
         <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.CipherMode">
             <summary>
@@ -8756,6 +9329,21 @@
             The number of bytes decrypted.
             </returns>
         </member>
+        <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.Paddings.PKCS5Padding">
+            <summary>
+            Implements PKCS5 cipher padding
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.Paddings.PKCS5Padding.Pad(System.Int32,System.Byte[])">
+            <summary>
+            Transforms the specified input.
+            </summary>
+            <param name="blockSize">Size of the block.</param>
+            <param name="input">The input.</param>
+            <returns>
+            Padded data array.
+            </returns>
+        </member>
         <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.Paddings.PKCS7Padding">
             <summary>
             Implements PKCS7 cipher padding
@@ -8848,58 +9436,158 @@
              @exception ArgumentException
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb0(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S0 - { 3, 8,15, 1,10, 6, 5,11,14,13, 4, 2, 7, 0, 9,12 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib0(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvSO - {13, 3,11, 0,10, 6, 5,12, 1,14, 4, 7,15, 9, 8, 2 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb1(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S1 - {15,12, 2, 7, 9, 0, 5,10, 1,11,14, 8, 6,13, 3, 4 } - 14 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib1(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS1 - { 5, 8, 2,14,15, 6,12, 3,11, 4, 7, 9, 1,13,10, 0 } - 14 steps.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb2(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S2 - { 8, 6, 7, 9, 3,12,10,15,13, 1,14, 4, 0,11, 5, 2 } - 16 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib2(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS2 - {12, 9,15, 4,11,14, 1, 2, 0, 3, 6,13, 5, 8,10, 7 } - 16 steps.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb3(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S3 - { 0,15,11, 8,12, 9, 6, 3,13, 1, 2, 4,10, 7, 5,14 } - 16 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib3(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS3 - { 0, 9,10, 7,11,14, 6,13, 3, 5,12, 2, 4, 8,15, 1 } - 15 terms
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb4(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S4 - { 1,15, 8, 3,12, 0,11, 6, 2, 5, 4,10, 9,14, 7,13 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib4(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS4 - { 5, 0, 8, 3,10, 9, 7,14, 2,12,11, 6, 4,15,13, 1 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb5(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S5 - {15, 5, 2,11, 4,10, 9,12, 0, 3,14, 8,13, 6, 7, 1 } - 16 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib5(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS5 - { 8,15, 2, 9, 4, 1,13,14,11, 6, 5, 3, 7,12,10, 0 } - 16 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb6(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S6 - { 7, 2,12, 5, 8, 4, 6,11,14, 9, 1,15,13, 3,10, 0 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib6(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS6 - {15,10, 1,13, 5, 3, 6, 0, 4, 9,14, 7, 2,12, 8,11 } - 15 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Sb7(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             S7 - { 1,13,15, 0,14, 8, 2,11, 7, 4,12,10, 9, 3, 5, 6 } - 16 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.Ib7(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
             InvS7 - { 3, 0, 6,13, 9,14,15, 8, 5,12,11, 7,10, 1, 4, 2 } - 17 terms.
+            </summary>
+            <param name="a">A.</param>
+            <param name="b">The b.</param>
+            <param name="c">The c.</param>
+            <param name="d">The d.</param>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.LT">
+            <summary>
             Apply the linear transformation to the register set.
+            </summary>
         </member>
         <member name="M:Renci.SshNet.Security.Cryptography.Ciphers.SerpentCipher.InverseLT">
+            <summary>
             Apply the inverse of the linear transformation to the register set.
+            </summary>
         </member>
         <member name="T:Renci.SshNet.Security.Cryptography.Ciphers.TripleDesCipher">
             <summary>
@@ -9278,6 +9966,16 @@
             
             </summary>
         </member>
+        <member name="M:Renci.SshNet.Security.Cryptography.RIPEMD160Hash.Initialize">
+            <summary>
+            Initializes an implementation of the <see cref="T:System.Security.Cryptography.HashAlgorithm" /> class.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Security.Cryptography.RIPEMD160Hash.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Security.Cryptography.RIPEMD160Hash"/> class.
+            </summary>
+        </member>
         <member name="M:Renci.SshNet.Security.Cryptography.RIPEMD160Hash.InternalInitialize">
             <summary>
             Reset the chaining variables to the IV values.
@@ -9448,6 +10146,11 @@
         <member name="M:Renci.SshNet.Security.Cryptography.SHA256Hash.Initialize">
             <summary>
             Initializes an implementation of the <see cref="T:System.Security.Cryptography.HashAlgorithm"/> class.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.Cryptography.SHA256Hash.K">
+            <summary>
+            The SHA-256 Constants (represent the first 32 bits of the fractional parts of the cube roots of the first sixty-four prime numbers)
             </summary>
         </member>
         <member name="P:Renci.SshNet.Security.Cryptography.SHA256Hash.HashSize">
@@ -10107,6 +10810,66 @@
             Gets algorithm name.
             </summary>
         </member>
+        <member name="T:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman">
+            <summary>
+            Represents base class for Diffie Hellman key exchange algorithm
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._clientPayload">
+            <summary>
+            Specifies client payload
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._serverPayload">
+            <summary>
+            Specifies server payload
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._clientExchangeValue">
+            <summary>
+            Specifies client exchange number.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._serverExchangeValue">
+            <summary>
+            Specifies server exchange number.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._randomValue">
+            <summary>
+            Specifies random generated number.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._hostKey">
+            <summary>
+            Specifies host key data.
+            </summary>
+        </member>
+        <member name="F:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman._signature">
+            <summary>
+            Specifies signature data.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman.Start(Renci.SshNet.Session,Renci.SshNet.Messages.Transport.KeyExchangeInitMessage)">
+            <summary>
+            Starts key exchange algorithm
+            </summary>
+            <param name="session">The session.</param>
+            <param name="message">Key exchange init message.</param>
+        </member>
+        <member name="M:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman.ValidateExchangeHash">
+            <summary>
+            Validates the exchange hash.
+            </summary>
+            <returns>
+            true if exchange hash is valid; otherwise false.
+            </returns>
+        </member>
+        <member name="M:Renci.SshNet.Security.KeyExchangeEllipticCurveDiffieHellman.HandleServerEcdhReply">
+            <summary>
+            Populates the client exchange value.
+            </summary>
+        </member>
         <member name="T:Renci.SshNet.Security.KeyHostAlgorithm">
             <summary>
             Implements key support for host algorithm.
@@ -10183,6 +10946,9 @@
             </value>
         </member>
         <member name="T:Renci.SshNet.Session">
+            <summary>
+            Provides functionality to connect and interact with SSH server.
+            </summary>
             <summary>
             Provides functionality to connect and interact with SSH server.
             </summary>
@@ -10533,6 +11299,21 @@
             <see cref="T:Renci.SshNet.Session"/> is reclaimed by garbage collection.
             </summary>
         </member>
+        <member name="M:Renci.SshNet.Session.SocketRead(System.Int32,System.Byte[]@)">
+            <summary>
+            Function to read <paramref name="length"/> amount of data before returning, or throwing an exception.
+            </summary>
+            <param name="length">The amount wanted.</param>
+            <param name="buffer">The buffer to read to.</param>
+            <exception cref="T:Renci.SshNet.Common.SshConnectionException">Happens when the socket is closed.</exception>
+            <exception cref="T:System.Exception">Unhandled exception.</exception>
+        </member>
+        <member name="M:Renci.SshNet.Session.HandleMessageCore(Renci.SshNet.Messages.Message)">
+            <summary>
+            Handles SSH messages.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
         <member name="P:Renci.SshNet.Session.SessionSemaphore">
             <summary>
             Gets the session semaphore that controls session channels.
@@ -10734,6 +11515,9 @@
             </summary>
         </member>
         <member name="T:Renci.SshNet.SftpClient">
+            <summary>
+            Implementation of the SSH File Transfer Protocol (SFTP) over SSH.
+            </summary>
             <summary>
             Implementation of the SSH File Transfer Protocol (SFTP) over SSH.
             </summary>
@@ -11553,6 +12337,38 @@
             Releases unmanaged and - optionally - managed resources
             </summary>
             <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged ResourceMessages.</param>
+        </member>
+        <member name="M:Renci.SshNet.SftpClient.SynchronizeDirectories(System.String,System.String,System.String)">
+            <summary>
+            Synchronizes the directories.
+            </summary>
+            <param name="sourcePath">The source path.</param>
+            <param name="destinationPath">The destination path.</param>
+            <param name="searchPattern">The search pattern.</param>
+            <returns>List of uploaded files.</returns>
+        </member>
+        <member name="M:Renci.SshNet.SftpClient.BeginSynchronizeDirectories(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins the synchronize directories.
+            </summary>
+            <param name="sourcePath">The source path.</param>
+            <param name="destinationPath">The destination path.</param>
+            <param name="searchPattern">The search pattern.</param>
+            <param name="asyncCallback">The async callback.</param>
+            <param name="state">The state.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that represents the asynchronous directory synchronization.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">sourceDir</exception>
+            <exception cref="T:System.ArgumentException">destDir</exception>
+        </member>
+        <member name="M:Renci.SshNet.SftpClient.EndSynchronizeDirectories(System.IAsyncResult)">
+            <summary>
+            Ends the synchronize directories.
+            </summary>
+            <param name="asyncResult">The async result.</param>
+            <returns>List of uploaded files.</returns>
+            <exception cref="T:System.ArgumentException">Either the IAsyncResult object did not come from the corresponding async method on this type, or EndExecute was called multiple times with the same IAsyncResult.</exception>
         </member>
         <member name="P:Renci.SshNet.SftpClient.OperationTimeout">
             <summary>
@@ -12651,91 +13467,6 @@
             SSH_FXP_EXTENDED_REPLY
             </summary>
         </member>
-        <member name="T:Renci.SshNet.Sftp.SubsystemSession">
-            <summary>
-            Base class for SSH subsystem implementations
-            </summary>
-        </member>
-        <member name="F:Renci.SshNet.Sftp.SubsystemSession._operationTimeout">
-            <summary>
-            Specifies a timeout to wait for operation to complete
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.#ctor(Renci.SshNet.Session,System.String,System.TimeSpan,System.Text.Encoding)">
-            <summary>
-            Initializes a new instance of the SubsystemSession class.
-            </summary>
-            <param name="session">The session.</param>
-            <param name="subsystemName">Name of the subsystem.</param>
-            <param name="operationTimeout">The operation timeout.</param>
-            <exception cref="T:System.ArgumentNullException">session</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="session"/> or <paramref name="subsystemName"/> is null.</exception>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Connect">
-            <summary>
-            Connects subsystem on SSH channel.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Disconnect">
-            <summary>
-            Disconnects subsystem channel.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.SendData(System.Byte[])">
-            <summary>
-            Sends data to the subsystem.
-            </summary>
-            <param name="data">The data to be sent.</param>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.OnChannelOpen">
-            <summary>
-            Called when channel is open.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.OnDataReceived(System.UInt32,System.Byte[])">
-            <summary>
-            Called when data is received.
-            </summary>
-            <param name="dataTypeCode">The data type code.</param>
-            <param name="data">The data.</param>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.RaiseError(System.Exception)">
-            <summary>
-            Raises the error.
-            </summary>
-            <param name="error">The error.</param>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Dispose(System.Boolean)">
-            <summary>
-            Releases unmanaged and - optionally - managed resources
-            </summary>
-            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        </member>
-        <member name="M:Renci.SshNet.Sftp.SubsystemSession.Finalize">
-            <summary>
-            Finalizes an instance of the <see cref="T:Renci.SshNet.Sftp.SubsystemSession"/> class.
-            </summary>
-        </member>
-        <member name="E:Renci.SshNet.Sftp.SubsystemSession.ErrorOccurred">
-            <summary>
-            Occurs when an error occurred.
-            </summary>
-        </member>
-        <member name="E:Renci.SshNet.Sftp.SubsystemSession.Disconnected">
-            <summary>
-            Occurs when session has been disconnected form the server.
-            </summary>
-        </member>
-        <member name="P:Renci.SshNet.Sftp.SubsystemSession.ChannelNumber">
-            <summary>
-            Gets the channel number.
-            </summary>
-        </member>
         <member name="M:Renci.SshNet.Sftp.SftpSession.GetCanonicalPath(System.String)">
             <summary>
             Resolves path into absolute path on the server.
@@ -12927,6 +13658,29 @@
         <member name="P:Renci.SshNet.Sftp.SftpSession.NextRequestId">
             <summary>
             Gets the next request id for sftp session.
+            </summary>
+        </member>
+        <member name="T:Renci.SshNet.Sftp.SftpSynchronizeDirectoriesAsyncResult">
+            <summary>
+            Encapsulates the results of an asynchronous directory synchronization operation.
+            </summary>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SftpSynchronizeDirectoriesAsyncResult.#ctor(System.AsyncCallback,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Renci.SshNet.Sftp.SftpListDirectoryAsyncResult"/> class.
+            </summary>
+            <param name="asyncCallback">The async callback.</param>
+            <param name="state">The state.</param>
+        </member>
+        <member name="M:Renci.SshNet.Sftp.SftpSynchronizeDirectoriesAsyncResult.Update(System.Int32)">
+            <summary>
+            Updates asynchronous operation status information.
+            </summary>
+            <param name="filesRead">The files read.</param>
+        </member>
+        <member name="P:Renci.SshNet.Sftp.SftpSynchronizeDirectoriesAsyncResult.FilesRead">
+            <summary>
+            Gets the number of files read so far.
             </summary>
         </member>
         <member name="T:Renci.SshNet.Sftp.SftpUploadAsyncResult">
@@ -13128,7 +13882,7 @@
             Represents instance of the SSH shell object
             </summary>
             <summary>
-            
+            Represents instance of the SSH shell object
             </summary>
         </member>
         <member name="M:Renci.SshNet.Shell.#ctor(Renci.SshNet.Session,System.IO.Stream,System.IO.Stream,System.IO.Stream,System.String,System.UInt32,System.UInt32,System.UInt32,System.UInt32,System.Collections.Generic.IDictionary{Renci.SshNet.Common.TerminalModes,System.UInt32},System.Int32)">
@@ -13214,7 +13968,7 @@
             Contains operation for working with SSH Shell.
             </summary>
             <summary>
-            
+            Represents instance of the SSH shell object
             </summary>
         </member>
         <member name="M:Renci.SshNet.ShellStream.Flush">
