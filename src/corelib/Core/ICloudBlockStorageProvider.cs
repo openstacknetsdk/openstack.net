@@ -9,5 +9,8 @@ namespace net.openstack.Core
         IEnumerable<Volume> ListVolumes(string region = null, CloudIdentity identity = null);
         Volume ShowVolume(string volume_id, string region = null, CloudIdentity identity = null);
         bool DeleteVolume(string volume_id, string region = null, CloudIdentity identity = null);
+
+        IEnumerable<VolumeType> ListVolumeTypes(string region = null, CloudIdentity identity = null);
+        VolumeType DescribeVolumeType(int volume_type_id, string region = null, CloudIdentity identity = null);
     }
 }

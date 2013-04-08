@@ -77,6 +77,28 @@ namespace net.openstack.Providers.Rackspace
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
+        public IEnumerable<VolumeType> ListVolumeTypes(string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/types", GetServiceEndpoint(identity, region)));
+            var response = ExecuteRESTRequest<ListVolumeTypeResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.VolumeTypes;
+        }
+
+        public VolumeType DescribeVolumeType(int volume_type_id, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/types/{1}", GetServiceEndpoint(identity, region), volume_type_id));
+            var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeTypeResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.VolumeType;
+        }
+
         #endregion
 
         #region Private methods
