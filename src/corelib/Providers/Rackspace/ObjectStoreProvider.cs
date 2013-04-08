@@ -645,6 +645,72 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
+        #region Accounts
+
+        public Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
+
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersHeaderKey];
+
+        }
+
+        public Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
+
+            var processedHeaders = _objectStoreHelper.ProcessMetadata(response.Headers);
+
+            return processedHeaders[ObjectStoreConstants.ProcessedHeadersMetadataKey];
+        }
+
+        public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (metadata.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> m in metadata)
+            {
+                if (m.Key.Contains(ObjectStoreConstants.AccountMetaDataPrefix))
+                {
+                    headers.Add(m.Key, m.Value);
+                }
+                else
+                {
+                    headers.Add(ObjectStoreConstants.AccountMetaDataPrefix + m.Key, m.Value);
+                }
+            }
+
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+        
+        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (headers == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+
+
+        #endregion
+
+
         #region Private methods
 
         private string GetObjectContentLength(CloudIdentity identity,string sourceContainer, string sourceObjectName, string region)
