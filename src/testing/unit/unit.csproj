@@ -57,12 +57,7 @@
     <Compile Include="Domain\Mapping\NetworkResponseJObjectMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderCacheTests.cs" />
-<<<<<<< HEAD
-    <Compile Include="Providers\Rackspace\ObjectProviderValidatorTests.cs" />
-=======
     <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
-    <Compile Include="UnitTest1.cs" />
->>>>>>> Object Headers functionality
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
