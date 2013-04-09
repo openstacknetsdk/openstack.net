@@ -29,5 +29,9 @@ namespace net.openstack.Core.Domain
 
         [DataMember(Name = "cdn_uri")]
         public string CDNUri { get; set; }
+
+        [DataMember(Name = "cdn_ios_uri")]
+        public string CDNIosUri { get; set; }
+
     }
 }
