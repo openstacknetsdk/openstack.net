@@ -6,20 +6,19 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class GeographicalIdentityProvider : IExtendedIdentityProvider
+    internal class GeographicalCloudIdentityProvider : IExtendedCloudIdentityProvider
     {
         private readonly IRestService _restService;
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
         private readonly CloudIdentity _defaultIdentity;
 
-        public GeographicalIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
+        public GeographicalCloudIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
         {
             _defaultIdentity = identity;
             _urlBase = urlBase;

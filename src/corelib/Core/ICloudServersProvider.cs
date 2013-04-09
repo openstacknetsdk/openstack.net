@@ -4,7 +4,7 @@ using net.openstack.Core.Domain;
 
 namespace net.openstack.Core
 {
-    public interface IComputeProvider
+    public interface ICloudServersProvider
     {
         // Servers
         IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core;
@@ -9,7 +7,7 @@ using net.openstack.Core.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class ObjectStoreHelper : IObjectStoreHelper
+    public class CloudFilesHelper : ICloudFilesHelper
     {
         public void ValidateContainerName(string containerName)
         {
@@ -36,15 +34,15 @@ namespace net.openstack.Providers.Rackspace
         //    var metadata = new Dictionary<string, string>();
         //    foreach (var header in headers)
         //    {
-        //        if (header.Key.ToLower().Contains(ObjectStoreConstants.AccountMetaDataPrefix))
+        //        if (header.Key.ToLower().Contains(CloudFilesConstants.AccountMetaDataPrefix))
         //        {
         //            metadata.Add(header.Key.Remove(0, 15), header.Value);
         //        }
-        //        else if (header.Key.ToLower().Contains(ObjectStoreConstants.ContainerMetaDataPrefix))
+        //        else if (header.Key.ToLower().Contains(CloudFilesConstants.ContainerMetaDataPrefix))
         //        {
         //            metadata.Add(header.Key.Remove(0, 17), header.Value);
         //        }
-        //        else if (header.Key.ToLower().Contains(ObjectStoreConstants.ObjectMetaDataPrefix))
+        //        else if (header.Key.ToLower().Contains(CloudFilesConstants.ObjectMetaDataPrefix))
         //        {
         //            metadata.Add(header.Key.Remove(0, 14), header.Value);
         //        }
@@ -54,8 +52,8 @@ namespace net.openstack.Providers.Rackspace
         //        }
         //    }
         //    var processed_headers = new Dictionary<string, Dictionary<string, string>>();
-        //    processed_headers[ObjectStoreConstants.ProcessedHeadersHeaderKey] = pheaders;
-        //    processed_headers[ObjectStoreConstants.ProcessedHeadersMetadataKey] = metadata;
+        //    processed_headers[CloudFilesConstants.ProcessedHeadersHeaderKey] = pheaders;
+        //    processed_headers[CloudFilesConstants.ProcessedHeadersMetadataKey] = metadata;
         //    return processed_headers;
         //}
 
@@ -65,15 +63,15 @@ namespace net.openstack.Providers.Rackspace
             var metadata = new Dictionary<string, string>();
             foreach (var header in httpHeaders)
             {
-                if (header.Key.ToLower().Contains(ObjectStoreConstants.AccountMetaDataPrefix))
+                if (header.Key.ToLower().Contains(CloudFilesConstants.AccountMetaDataPrefix))
                 {
                     metadata.Add(header.Key.Remove(0, 15), header.Value);
                 }
-                else if (header.Key.ToLower().Contains(ObjectStoreConstants.ContainerMetaDataPrefix))
+                else if (header.Key.ToLower().Contains(CloudFilesConstants.ContainerMetaDataPrefix))
                 {
                     metadata.Add(header.Key.Remove(0, 17), header.Value);
                 }
-                else if (header.Key.ToLower().Contains(ObjectStoreConstants.ObjectMetaDataPrefix))
+                else if (header.Key.ToLower().Contains(CloudFilesConstants.ObjectMetaDataPrefix))
                 {
                     metadata.Add(header.Key.Remove(0, 14), header.Value);
                 }
@@ -82,10 +80,13 @@ namespace net.openstack.Providers.Rackspace
                     pheaders.Add(header.Key.ToLower(), header.Value);
                 }
             }
-            var processed_headers = new Dictionary<string, Dictionary<string, string>>();
-            processed_headers[ObjectStoreConstants.ProcessedHeadersHeaderKey] = pheaders;
-            processed_headers[ObjectStoreConstants.ProcessedHeadersMetadataKey] = metadata;
-            return processed_headers;
+            var processedHeaders = new Dictionary<string, Dictionary<string, string>>()
+                {
+                    {CloudFilesConstants.ProcessedHeadersHeaderKey, pheaders},
+                    {CloudFilesConstants.ProcessedHeadersMetadataKey, metadata}
+                };
+
+            return processedHeaders;
         }
     }
 }

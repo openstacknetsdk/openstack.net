@@ -17,14 +17,14 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ProviderBase
     {
-        protected readonly IIdentityProvider IdentityProvider;
+        protected readonly ICloudIdentityProvider CloudIdentityProvider;
         protected readonly IRestService RestService;
         protected readonly CloudIdentity DefaultIdentity;
 
-        protected ProviderBase(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
+        protected ProviderBase(CloudIdentity defaultIdentity, ICloudIdentityProvider cloudIdentityProvider, IRestService restService)
         {
             DefaultIdentity = defaultIdentity;
-            IdentityProvider = identityProvider;
+            CloudIdentityProvider = cloudIdentityProvider;
             RestService = restService;
         }
         
@@ -60,7 +60,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers.Add("X-Auth-Token", CloudIdentityProvider.GetToken(identity, isRetry));
 
             string bodyStr = null;
             if (body != null)
@@ -103,7 +103,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers.Add("X-Auth-Token", CloudIdentityProvider.GetToken(identity, isRetry));
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();
@@ -138,7 +138,7 @@ namespace net.openstack.Providers.Rackspace
             if (identity == null)
                 identity = DefaultIdentity;
 
-            var userAccess = IdentityProvider.GetUserAccess(identity);
+            var userAccess = CloudIdentityProvider.GetUserAccess(identity);
 
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints");
