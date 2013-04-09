@@ -8,7 +8,7 @@ using net.openstack.Core.Domain;
 
 namespace net.openstack.Core
 {
-    public interface IObjectStoreProvider
+    public interface ICloudFilesProvider
     {
         #region Container
 

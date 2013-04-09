@@ -64,7 +64,7 @@
     <Compile Include="Providers\Rackspace\CloudServersTests.cs" />
     <Compile Include="Providers\Rackspace\IdentityTests.cs" />
     <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
-    <Compile Include="Providers\Rackspace\ObjectStoreTests.cs" />
+    <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.csproj">
