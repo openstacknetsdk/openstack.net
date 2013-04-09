@@ -23,10 +23,10 @@ namespace net.openstack.Providers.Rackspace
         public CloudServersProvider(CloudIdentity identity)
             : this(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
 
-        internal CloudServersProvider(ICloudIdentityProvider cloudIdentityProvider, IRestService restService) 
+        public CloudServersProvider(ICloudIdentityProvider cloudIdentityProvider, IRestService restService) 
             : this(null, cloudIdentityProvider, restService){}
 
-        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider cloudIdentityProvider, IRestService restService)
+        public CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider cloudIdentityProvider, IRestService restService)
             : base(identity, cloudIdentityProvider, restService) {}
 
         #endregion

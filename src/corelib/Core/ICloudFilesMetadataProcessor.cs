@@ -6,10 +6,8 @@ using JSIStudios.SimpleRESTServices.Client;
 
 namespace net.openstack.Core
 {
-    public interface ICloudFilesHelper
+    public interface ICloudFilesMetadataProcessor
     {
-        void ValidateContainerName(string containerName);
-        void ValidateObjectName(string objectName);
         Dictionary<string, Dictionary<string, string>> ProcessMetadata(IList<HttpHeader> httpHeaders);
     }
 }

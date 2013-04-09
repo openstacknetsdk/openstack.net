@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using JSIStudios.SimpleRESTServices.Client;
-using net.openstack;
 using net.openstack.Core;
-using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace;
-using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {
@@ -21,11 +14,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Pass_Validation_For_Container_Name()
         {
             const string containerName = "DarkKnight";
-            var validatorMock = new Mock<ICloudFilesHelper>();
+            var validatorMock = new Mock<ICloudFilesValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
-            var objectStoreValidator = new CloudFilesHelper();
+            var objectStoreValidator = new CloudFilesValidator();
             objectStoreValidator.ValidateContainerName(containerName);
 
         }
@@ -35,13 +28,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Empty_Container_Name()
         {
             const string containerName = "";
-            var validatorMock = new Mock<ICloudFilesHelper>();
+            var validatorMock = new Mock<ICloudFilesValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new CloudFilesHelper();
+                var objectStoreValidator = new CloudFilesValidator();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -56,13 +49,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Null_Container_Name()
         {
             const string containerName = null;
-            var validatorMock = new Mock<ICloudFilesHelper>();
+            var validatorMock = new Mock<ICloudFilesValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new CloudFilesHelper();
+                var objectStoreValidator = new CloudFilesValidator();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -82,13 +75,13 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
                 containerName += containerName;
             }
-            var validatorMock = new Mock<ICloudFilesHelper>();
+            var validatorMock = new Mock<ICloudFilesValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new CloudFilesHelper();
+                var objectStoreValidator = new CloudFilesValidator();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -102,15 +95,15 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Throw_Exception_When_Passing_Forwar_Slash_In_Container_Name()
         {
-            string containerName = "/";
-            
-            var validatorMock = new Mock<ICloudFilesHelper>();
+            const string containerName = "/";
+
+            var validatorMock = new Mock<ICloudFilesValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
             try
             {
-                var objectStoreValidator = new CloudFilesHelper();
+                var objectStoreValidator = new CloudFilesValidator();
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
