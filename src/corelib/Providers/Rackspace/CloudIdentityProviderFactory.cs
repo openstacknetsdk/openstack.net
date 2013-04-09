@@ -1,21 +1,20 @@
 ﻿using System;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class IdentityProviderFactory : IProviderFactory<IExtendedIdentityProvider, CloudIdentity>
+    internal class CloudIdentityProviderFactory : IProviderFactory<IExtendedCloudIdentityProvider, CloudIdentity>
     {
-        private readonly string USIdentityUrlBase;
-        private readonly string LONIdentityUrlBase;
+        private readonly string _usIdentityUrlBase;
+        private readonly string _lonIdentityUrlBase;
         private readonly CloudIdentity _defaultIdentity;
         private readonly ICache<UserAccess> _tokenCache;
         private readonly IRestService _restService;
 
-        public IdentityProviderFactory(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProviderFactory(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
             if (restService == null)
                 restService = new JsonRestServices();
@@ -23,15 +22,15 @@ namespace net.openstack.Providers.Rackspace
             if (tokenCache == null)
                 tokenCache = UserAccessCache.Instance;
 
-            USIdentityUrlBase = string.IsNullOrWhiteSpace(usInstanceUrlBase) ? "https://identity.api.rackspacecloud.com" : usInstanceUrlBase;
-            LONIdentityUrlBase = string.IsNullOrWhiteSpace(ukInstanceUrlBase) ? "https://lon.identity.api.rackspacecloud.com" : ukInstanceUrlBase;
+            _usIdentityUrlBase = string.IsNullOrWhiteSpace(usInstanceUrlBase) ? "https://identity.api.rackspacecloud.com" : usInstanceUrlBase;
+            _lonIdentityUrlBase = string.IsNullOrWhiteSpace(ukInstanceUrlBase) ? "https://lon.identity.api.rackspacecloud.com" : ukInstanceUrlBase;
 
             _restService = restService;
             _tokenCache = tokenCache;
             _defaultIdentity = defaultIdentity;
         }
 
-        public IExtendedIdentityProvider Get(CloudIdentity identity)
+        public IExtendedCloudIdentityProvider Get(CloudIdentity identity)
         {
             if (identity == null)
                 identity = _defaultIdentity;
@@ -45,9 +44,9 @@ namespace net.openstack.Providers.Rackspace
             switch (cloudInstance)
             {
                 case CloudInstance.Default:
-                    return new GeographicalIdentityProvider(new Uri(USIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
+                    return new GeographicalCloudIdentityProvider(new Uri(_usIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
                 case CloudInstance.UK:
-                    return new GeographicalIdentityProvider(new Uri(LONIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
+                    return new GeographicalCloudIdentityProvider(new Uri(_lonIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
                 default:
                     throw new UnknownGeographyException(cloudInstance.ToString());
             }

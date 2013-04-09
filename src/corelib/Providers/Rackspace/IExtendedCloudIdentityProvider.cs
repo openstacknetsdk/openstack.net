@@ -3,7 +3,7 @@ using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public interface IExtendedIdentityProvider : IIdentityProvider
+    public interface IExtendedCloudIdentityProvider : ICloudIdentityProvider
     {
         Role[] ListRoles(CloudIdentity identity = null);
         Role AddRole(Role role, CloudIdentity identity = null);

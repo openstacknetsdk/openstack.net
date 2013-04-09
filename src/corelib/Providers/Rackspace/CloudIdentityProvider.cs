@@ -3,36 +3,36 @@ using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class IdentityProvider : IExtendedIdentityProvider
+    public class CloudIdentityProvider : IExtendedCloudIdentityProvider
     {
-        private readonly IdentityProviderFactory _factory;
+        private readonly CloudIdentityProviderFactory _factory;
 
-        public IdentityProvider() : this(null, null, null, null, null)
+        public CloudIdentityProvider() : this(null, null, null, null, null)
         {}
 
-        public IdentityProvider(CloudIdentity defaultIdentity)
+        public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null, null)
         { }
 
-        public IdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
-        public IdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(defaultIdentity, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
-        public IdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase)
         {}
 
-        public IdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
+        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null, null)
         { }
 
-        public IdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
-            _factory = new IdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
+            _factory = new CloudIdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
         }
 
         public Role[] ListRoles(CloudIdentity identity)
@@ -191,7 +191,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetTokenInfo(identity);
         }
 
-        private IExtendedIdentityProvider GetProvider(CloudIdentity identity)
+        private IExtendedCloudIdentityProvider GetProvider(CloudIdentity identity)
         {
             return _factory.Get(identity);
         }

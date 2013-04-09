@@ -6,7 +6,7 @@ using JSIStudios.SimpleRESTServices.Client;
 
 namespace net.openstack.Core
 {
-    public interface IObjectStoreHelper
+    public interface ICloudFilesHelper
     {
         void ValidateContainerName(string containerName);
         void ValidateObjectName(string objectName);
