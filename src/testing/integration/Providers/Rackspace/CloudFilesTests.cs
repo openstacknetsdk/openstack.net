@@ -676,7 +676,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string destinationObjectName = "BatmanBegins.jpg";
 
             Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add(CloudFilesConstants.ContentLength, "62504");
+            header.Add(CloudFilesProvider.ContentLength, "62504");
 
             var provider = new CloudFilesProvider();
             var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header, identity: _testIdentity);
@@ -696,7 +696,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             const string destinationObjectName = "BatmanBegins.jpg";
 
             Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add(CloudFilesConstants.ObjectDeleteAt, epoch.ToString());
+            header.Add(CloudFilesProvider.ObjectDeleteAt, epoch.ToString());
 
             var provider = new CloudFilesProvider();
             var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header, identity: _testIdentity);
