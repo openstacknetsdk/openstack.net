@@ -2,7 +2,7 @@
 
 namespace net.openstack.Core
 {
-    public interface IIdentityProvider
+    public interface ICloudIdentityProvider
     {
         UserAccess Authenticate(CloudIdentity identity = null);
         string GetToken(CloudIdentity identity = null, bool forceCacheRefresh = false);

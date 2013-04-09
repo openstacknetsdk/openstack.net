@@ -24,7 +24,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
             restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
 
-            var identityProvider = new IdentityProvider(restServiceMock.Object, cacheMock.Object);
+            var identityProvider = new CloudIdentityProvider(restServiceMock.Object, cacheMock.Object);
 
             identityProvider.Authenticate(new RackspaceCloudIdentity());
 
@@ -40,7 +40,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
             restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
             
-            var identityProvider = new IdentityProvider(restServiceMock.Object, cacheMock.Object);
+            var identityProvider = new CloudIdentityProvider(restServiceMock.Object, cacheMock.Object);
 
             for (int i = 0; i < 100; i++)
             {

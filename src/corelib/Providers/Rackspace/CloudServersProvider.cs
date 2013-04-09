@@ -11,23 +11,23 @@ using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class ComputeProvider : ProviderBase, IComputeProvider
+    public class CloudServersProvider : ProviderBase, ICloudServersProvider
     {
         private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
 
         #region Constructors
        
-        public ComputeProvider()
-            : this(new IdentityProvider(), new JsonRestServices()) { }
+        public CloudServersProvider()
+            : this(new CloudIdentityProvider(), new JsonRestServices()) { }
 
-        public ComputeProvider(CloudIdentity identity)
-            : this(identity, new IdentityProvider(), new JsonRestServices()) { }
+        public CloudServersProvider(CloudIdentity identity)
+            : this(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
 
-        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService) 
-            : this(null, identityProvider, restService){}
+        internal CloudServersProvider(ICloudIdentityProvider cloudIdentityProvider, IRestService restService) 
+            : this(null, cloudIdentityProvider, restService){}
 
-        public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : base(identity, identityProvider, restService) {}
+        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider cloudIdentityProvider, IRestService restService)
+            : base(identity, cloudIdentityProvider, restService) {}
 
         #endregion
 
@@ -635,12 +635,12 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "cloudServersOpenStack", region);
         }
 
-        private IComputeProvider BuildProvider(CloudIdentity identity)
+        private ICloudServersProvider BuildProvider(CloudIdentity identity)
         {
             if (identity == null)
                 identity = DefaultIdentity;
 
-            return new ComputeProvider(identity, IdentityProvider, RestService);
+            return new CloudServersProvider(identity, CloudIdentityProvider, RestService);
         }
 
         #endregion

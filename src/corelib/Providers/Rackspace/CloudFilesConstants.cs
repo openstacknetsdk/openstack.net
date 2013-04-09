@@ -5,7 +5,7 @@ using System.Text;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public static class ObjectStoreConstants
+    public static class CloudFilesConstants
     {
         #region Headers
         //Auth Constants

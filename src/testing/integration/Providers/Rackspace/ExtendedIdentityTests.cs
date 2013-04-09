@@ -52,9 +52,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             _adminUserDetails = provider.GetUserByName(_testAdminIdentity.Username, _testAdminIdentity);
         }
 
-        private static IExtendedIdentityProvider BuildProvider(IRestService restService = null, ICache<UserAccess> cache = null)
+        private static IExtendedCloudIdentityProvider BuildProvider(IRestService restService = null, ICache<UserAccess> cache = null)
         {
-            return new IdentityProvider(restService, cache, Bootstrapper.Settings.RackspaceExtendedIdentityUSUrl, Bootstrapper.Settings.RackspaceExtendedIdentityUKUrl);
+            return new CloudIdentityProvider(restService, cache, Bootstrapper.Settings.RackspaceExtendedIdentityUSUrl, Bootstrapper.Settings.RackspaceExtendedIdentityUKUrl);
         }
 
         [TestMethod]
