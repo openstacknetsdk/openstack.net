@@ -32,7 +32,8 @@ namespace net.openstack.Providers.Rackspace
         public const string CdnStreamingUri = "x-cdn-streaming-uri";
         public const string CdnTTL = "x-ttl";
         public const string CdnLogRetention = "x-log-retention";
-        public const string CdnEnabled = "X-Cdn-Enabled";
+        public const string CdnEnabled = "x-cdn-enabled";
+        public const string CdnIosUri = "x-cdn-ios-uri";
         //Object Constants
         public const string ObjectMetaDataPrefix = "x-object-meta-";
         public const string ObjectDeleteAfter = "x-delete-after";
