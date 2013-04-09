@@ -1,8 +1,15 @@
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
 namespace net.openstack.Core.Domain
 {
-    public class ServerAddresses
+    [DataContract]
+    public class ServerAddresses : Dictionary<string, AddressDetails[]>
     {
-        public Address[] Private { get; set; }
-        public Address[] Public { get; set; }
+        [IgnoreDataMember]
+        public AddressDetails[] Private { get { return this["private"]; } }
+
+        [IgnoreDataMember]
+        public AddressDetails[] Public { get { return this["public"]; } }
     }
 }

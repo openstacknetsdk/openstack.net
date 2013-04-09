@@ -9,14 +9,14 @@ namespace net.openstack.Core
         // Servers
         IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
         IEnumerable<ServerDetails> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
-        NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, string region = null, CloudIdentity identity = null);
         ServerDetails GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null);
         bool UpdateServer(string cloudServerId, string name = null, string ipV4Address = null, string ipV6Address = null, string region = null, CloudIdentity identity = null);
         bool DeleteServer(string cloudServerId, string region = null, CloudIdentity identity = null);
 
         // Server Addresses
         ServerAddresses ListAddresses(string serverId, string region = null, CloudIdentity identity = null);
-        Network ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null);
+        IEnumerable<AddressDetails> ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null);
         
         // Server Actions
         bool ChangeAdministratorPassword(string serverId, string password, string region = null, CloudIdentity identity = null);

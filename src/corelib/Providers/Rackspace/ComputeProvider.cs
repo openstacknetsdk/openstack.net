@@ -6,6 +6,7 @@ using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Domain.Mapping;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
@@ -14,20 +15,30 @@ namespace net.openstack.Providers.Rackspace
     public class ComputeProvider : ProviderBase, IComputeProvider
     {
         private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
+        private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
        
         public ComputeProvider()
-            : this(new IdentityProvider(), new JsonRestServices()) { }
+            : this(null) { }
 
         public ComputeProvider(CloudIdentity identity)
             : this(identity, new IdentityProvider(), new JsonRestServices()) { }
 
-        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService) 
-            : this(null, identityProvider, restService){}
+        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService)
+            : this(null, identityProvider, restService) { }
+
+        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper) 
+            : this(null, identityProvider, restService, networkResponseMapper){}
 
         public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : base(identity, identityProvider, restService) {}
+            : this(identity, identityProvider, restService, new NetworkResponseJsonMapper()) { }
+
+        public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
+            : base(identity, identityProvider, restService)
+        {
+            _networkResponseMapper = networkResponseMapper;
+        }
 
         #endregion
 
@@ -57,9 +68,24 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Servers;
         }
 
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
+
+            NewServertNetwork[] networks = null;
+
+            if (attachToServiceNetwork || attachToPublicNetwork)
+            {
+                var networkList = new List<NewServertNetwork>();
+
+                if(attachToPublicNetwork)
+                    networkList.Add(new NewServertNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
+
+                if(attachToServiceNetwork)
+                    networkList.Add(new NewServertNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
+
+                networks = networkList.ToArray();
+            }
 
             var request = new CreateServerRequest
                               {
@@ -69,7 +95,8 @@ namespace net.openstack.Providers.Rackspace
                                                     DiskConfig = diskConfig,
                                                     Flavor = flavor,
                                                     ImageName = imageName,
-                                                    Metadata = metadata
+                                                    Metadata = metadata,
+                                                    Networks = networks,
                                                 }
                               };
             var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, request);
@@ -176,16 +203,18 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Addresses;
         }
 
-        public Network ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null)
+        public IEnumerable<AddressDetails> ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
-            var response = ExecuteRESTRequest<ListAddressesByNetworkResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
 
-            if (response == null || response.Data == null)
+            if (response == null)
                 return null;
 
-            return response.Data.Network;
+            var data = _networkResponseMapper.Map(response.RawBody);
+
+            return data.Addresses;
         }
 
         #endregion
