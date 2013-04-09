@@ -17,7 +17,7 @@ namespace net.openstack.Core
         ObjectStore DeleteContainer(string container, string region = null, CloudIdentity identity = null);
         Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
         Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-        Dictionary<string, string> GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ContainerCDN GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string markerId = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null);
 
