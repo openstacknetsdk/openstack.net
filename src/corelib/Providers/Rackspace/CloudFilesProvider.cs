@@ -120,15 +120,48 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[CloudFilesConstants.ProcessedHeadersMetadataKey];
         }
 
-        public Dictionary<string, string> GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ContainerCDN GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesHelper.ValidateContainerName(container);
-
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
-            return response.Headers.ToDictionary(header => header.Key, header => header.Value);
+            var result = new ContainerCDN() { Name = container };
+
+            foreach (var header in response.Headers)
+            {
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnUri))
+                {
+                    result.CDNUri = header.Value;
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnSslUri))
+                {
+                    result.CDNSslUri = header.Value;
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnStreamingUri))
+                {
+                    result.CDNStreamingUri = header.Value;
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnTTL))
+                {
+                    result.Ttl = long.Parse(header.Value);
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnEnabled))
+                {
+                    result.CDNEnabled = bool.Parse(header.Value);
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnLogRetention))
+                {
+                    result.LogRetention = bool.Parse(header.Value);
+                }
+                if (header.Key.ToLower().Equals(CloudFilesConstants.CdnIosUri))
+                {
+                    result.CDNIosUri = header.Value;
+                }
+            }
+
+            return result;
         }
 
         public void AddContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
@@ -178,7 +211,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -187,22 +220,6 @@ namespace net.openstack.Providers.Rackspace
                 var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
                 ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
             }
-        }
-
-        private bool IsContainerCdnEnabled(string container, string region, bool useInternalUrl, CloudIdentity identity = null)
-        {
-            bool cdnEnabled = false;
-
-            var cdnHeaders = GetContainerCDNHeader(container, region, useInternalUrl, identity: identity);
-            if (cdnHeaders.ContainsKey(CloudFilesConstants.CdnEnabled))
-            {
-                cdnEnabled =
-                    bool.Parse(
-                        cdnHeaders.FirstOrDefault(
-                            x => x.Key.Equals(CloudFilesConstants.CdnEnabled, StringComparison.InvariantCultureIgnoreCase)).
-                            Value);
-            }
-            return cdnEnabled;
         }
 
         public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
@@ -237,7 +254,7 @@ namespace net.openstack.Providers.Rackspace
 
         public Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null)
         {
-            return EnableCDNOnContainer(container, 259200, logRetention, region,identity);
+            return EnableCDNOnContainer(container, 259200, logRetention, region, identity);
         }
 
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
@@ -292,7 +309,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -313,7 +330,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -333,7 +350,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -352,7 +369,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -371,7 +388,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesHelper.ValidateContainerName(container);
 
-            if (!IsContainerCdnEnabled(container, region, useInternalUrl, identity))
+            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -384,7 +401,7 @@ namespace net.openstack.Providers.Rackspace
                                       {CloudFilesConstants.WebListingsCSS, string.Empty},
                                       {CloudFilesConstants.WebListings, string.Empty}
                                   };
-                AddContainerHeaders( container, headers, region, useInternalUrl, identity);
+                AddContainerHeaders(container, headers, region, useInternalUrl, identity);
             }
         }
 
@@ -462,12 +479,12 @@ namespace net.openstack.Providers.Rackspace
         private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             var totalLength = stream.Length;
-            var segmentCount = Math.Ceiling((double)totalLength/(double)CloudFilesConstants.LargeFileBatchThreshold);
+            var segmentCount = Math.Ceiling((double)totalLength / (double)CloudFilesConstants.LargeFileBatchThreshold);
 
             long totalBytesWritten = 0;
             for (int i = 0; i < segmentCount; i++)
             {
-                var remaining = (totalLength - CloudFilesConstants.LargeFileBatchThreshold*i);
+                var remaining = (totalLength - CloudFilesConstants.LargeFileBatchThreshold * i);
                 var length = (remaining < CloudFilesConstants.LargeFileBatchThreshold) ? remaining : CloudFilesConstants.LargeFileBatchThreshold;
 
                 var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region), container, objectName, i));
@@ -488,18 +505,18 @@ namespace net.openstack.Providers.Rackspace
             // upload the manifest file
             var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
 
-            if(headers == null)
+            if (headers == null)
                 headers = new Dictionary<string, string>();
 
             headers.Add(CloudFilesConstants.ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
-            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated: 
+            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated:
                 (bytesWritten) =>
+                {
+                    if (progressUpdated != null)
                     {
-                        if (progressUpdated != null)
-                        {
-                            progressUpdated(totalBytesWritten);
-                        }
-                    });
+                        progressUpdated(totalBytesWritten);
+                    }
+                });
         }
 
         public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
@@ -669,7 +686,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            if (!IsContainerCdnEnabled(container, region, true, identity))
+            if (!GetContainerCDNHeader(container, region, identity: identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -741,7 +758,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
-        
+
         public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (headers == null)
@@ -760,19 +777,19 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        private string GetObjectContentLength(CloudIdentity identity,string sourceContainer, string sourceObjectName, string region)
+        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
         {
             var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, null, region, identity);
             var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(CloudFilesConstants.ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
             return contentLength;
         }
 
-        protected string GetServiceEndpointCloudFiles(CloudIdentity identity,string region = null)
+        protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null)
         {
             return base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
         }
 
-        protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity,string region = null)
+        protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
             return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
         }

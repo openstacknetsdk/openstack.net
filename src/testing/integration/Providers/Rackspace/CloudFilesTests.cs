@@ -287,8 +287,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             var cdnContainerHeaderResponse = provider.GetContainerCDNHeader(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(1000, int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
-            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual(1000, cdnContainerHeaderResponse.Ttl);
+            Assert.IsTrue(cdnContainerHeaderResponse.CDNEnabled);
 
         }
 
@@ -301,9 +301,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             var cdnContainerHeaderResponse = provider.GetContainerCDNHeader(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(259200, int.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Ttl", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
-            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Log-Retention", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
-            Assert.IsTrue(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual(259200, cdnContainerHeaderResponse.Ttl);
+            Assert.IsTrue(cdnContainerHeaderResponse.LogRetention);
+            Assert.IsTrue(cdnContainerHeaderResponse.CDNEnabled);
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(cdnContainerHeaderResponse.CDNIosUri));
+            Assert.IsTrue(containerName.Equals(cdnContainerHeaderResponse.Name,StringComparison.InvariantCultureIgnoreCase));
 
         }
 
@@ -316,7 +318,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             var cdnContainerHeaderResponse = provider.GetContainerCDNHeader(containerName, identity: _testIdentity);
 
-            Assert.IsFalse(bool.Parse(cdnContainerHeaderResponse.Where(x => x.Key.Equals("X-Cdn-Enabled", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.IsFalse(cdnContainerHeaderResponse.CDNEnabled);
         }
 
         [TestMethod]
