@@ -9,6 +9,6 @@ namespace net.openstack.Core.Domain
         public string Id { get; set; }
 
         [DataMember(Name = "ip")]
-        public Address[] Addresses { get; set; }
+        public AddressDetails[] Addresses { get; set; }
     }
 }
