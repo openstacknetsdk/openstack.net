@@ -44,7 +44,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Domain\Address.cs" />
+    <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
@@ -53,7 +53,7 @@
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
     <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
-    <Compile Include="Core\Domain\Mapping\MetaDataJsonMapper.cs" />
+    <Compile Include="Core\Domain\Mapping\NetworkResponseJsonMapper.cs" />
     <Compile Include="Core\Domain\Network.cs" />
     <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\ObjectStore.cs" />
@@ -159,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Providers\Rackspace\Objects\Mapping\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
