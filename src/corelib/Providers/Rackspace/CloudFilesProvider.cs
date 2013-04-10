@@ -14,6 +14,10 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace
 {
+    /// <summary>
+    /// The Cloud Files Provider contains methods required to interact with Cloud Files.
+    /// For generic information: http://docs.rackspace.com/ check Cloud Files section.
+    /// </summary>
     public class CloudFilesProvider : ProviderBase, ICloudFilesProvider
     {
         private readonly ICloudFilesValidator _cloudFilesValidator;
@@ -42,11 +46,20 @@ namespace net.openstack.Providers.Rackspace
 
         #region Containers
 
-        public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
+        /// <summary>
+        /// Lists the containers.
+        /// </summary>
+        /// <param name="limit">The limit.<remarks>[Optional]</remarks></param>
+        /// <param name="marker">The marker.<remarks>[Optional]</remarks></param>
+        /// <param name="markerEnd">The marker end.<remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.Container"/></returns>
+        public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
 
-            var queryStringParameter = new Dictionary<string, string> {{"format", format}};
+            var queryStringParameter = new Dictionary<string, string>();
 
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
@@ -66,6 +79,13 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
         public ObjectStore CreateContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -81,6 +101,13 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        /// <summary>
+        /// Deletes the container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
         public ObjectStore DeleteContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -98,6 +125,14 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        /// <summary>
+        /// Gets the container header.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt;</returns>
         public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -110,6 +145,14 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersHeaderKey];
         }
 
+        /// <summary>
+        /// Gets the container meta data.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt;</returns>
         public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -122,6 +165,14 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
+        /// <summary>
+        /// Gets the container CDN header.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ContainerCDN"/></returns>
         public ContainerCDN GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -166,6 +217,15 @@ namespace net.openstack.Providers.Rackspace
             return result;
         }
 
+        /// <summary>
+        /// Updates the container metadata.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="metadata">The metadata. <remarks>Dictionary&lt;string,string&gt;</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -192,6 +252,15 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <summary>
+        /// Adds the container headers.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="headers">The headers.<remarks>Dictionary&lt;string,string&gt;</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -205,6 +274,16 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <summary>
+        /// Updates the container CDN headers.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="headers">The headers.<remarks>Dictionary&lt;string,string&gt;</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -220,8 +299,18 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), container));
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
-    }
+        }
 
+        /// <summary>
+        /// Lists the CDN containers.
+        /// </summary>
+        /// <param name="limit">The limit.<remarks>[Optional]</remarks></param>
+        /// <param name="marker">The marker.<remarks>[Optional]</remarks></param>
+        /// <param name="markerEnd">The marker end.<remarks>[Optional]</remarks></param>
+        /// <param name="cdnEnabled">if set to <c>true</c> lists CDN enabled containers.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerCDN"/></returns>
         public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
@@ -249,16 +338,46 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
+        /// <summary>
+        /// Enables the CDN on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="ttl">The TTL in seconds.<c>[Range 900 to 1577836800]</c></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="TTLLengthException">TTL range must be 900 to 1577836800 seconds TTL:  + ttl.ToString(CultureInfo.InvariantCulture)</exception>
+        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, string region = null, CloudIdentity identity = null)
         {
             return EnableCDNOnContainer(container, ttl, false, identity: identity);
         }
 
+        /// <summary>
+        /// Enables the CDN on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="logRetention">if set to <c>true</c> enables log retention on container.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
         public Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null)
         {
             return EnableCDNOnContainer(container, 259200, logRetention, region, identity);
         }
 
+        /// <summary>
+        /// Enables the CDN on container.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="ttl">The TTL in seconds.<c>[Range 900 to 1577836800]</c></param>
+        /// <param name="logRetention">if set to <c>true</c> enables log retention on container.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="Dictionary&lt;string,string&gt;"/>of CDN Headers</returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="TTLLengthException">TTL range must be 900 to 1577836800 seconds TTL:  + ttl.ToString(CultureInfo.InvariantCulture)</exception>
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -288,10 +407,16 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
+        /// <summary>
+        /// Disables the CDN on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region. <remarks>[Nullable]</remarks></param>
+        /// <param name="identity">The identity <remarks>[Nullable]</remarks></param>
+        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
         public Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-
 
             var headers = new Dictionary<string, string>
                 {
@@ -307,6 +432,18 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
+        /// <summary>
+        /// Enables the static web on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
+        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
+        /// <param name="css">Value for <c>x-container-meta-web-listings-css</c>.</param>
+        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -324,9 +461,20 @@ namespace net.openstack.Providers.Rackspace
                                     {WebListings, listing.ToString()}
                                 };
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
-    
+
         }
 
+        /// <summary>
+        /// Enables the static web on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
+        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
+        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -345,6 +493,16 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <summary>
+        /// Enables the static web on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="css">Value for <c>x-container-meta-web-listings-css</c>.</param>
+        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -362,6 +520,16 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <summary>
+        /// Enables the static web on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
+        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -379,6 +547,14 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <summary>
+        /// Disables the static web on container.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -396,19 +572,28 @@ namespace net.openstack.Providers.Rackspace
                                     {WebListings, string.Empty}
                                 };
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
-            
         }
 
         #endregion
 
         #region Container Objects
 
-        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
+        /// <summary>
+        /// Lists the objects.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="limit">The limit.<remarks>[Optional]</remarks></param>
+        /// <param name="marker">The marker.<remarks>[Optional]</remarks></param>
+        /// <param name="markerEnd">The marker end.<remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerObject"/></returns>
+        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
 
-            var queryStringParameter = new Dictionary<string, string> {{"format", format}};
+            var queryStringParameter = new Dictionary<string, string>();
 
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
@@ -427,7 +612,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string format = "json", string region = null, CloudIdentity identity = null)
+        /// <summary>
+        /// Gets the object headers.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
+        public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
@@ -440,6 +633,17 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersHeaderKey];
         }
 
+        /// <summary>
+        /// Creates the object from file.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="filePath">The file path.<remarks>Example c:\folder1\folder2\image_name.jpeg</remarks></param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             using (var stream = File.OpenRead(filePath))
@@ -448,6 +652,17 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <summary>
+        /// Creates the object.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="stream">The stream. <see cref="Stream"/></param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             if (stream == null)
@@ -466,6 +681,17 @@ namespace net.openstack.Providers.Rackspace
             StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings());
         }
 
+        /// <summary>
+        /// Creates the object in segments.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="stream">The stream. <see cref="Stream"/></param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             var totalLength = stream.Length;
@@ -479,7 +705,7 @@ namespace net.openstack.Providers.Rackspace
 
                 var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region), container, objectName, i));
                 long segmentBytesWritten = 0;
-                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated: 
+                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated:
                     bytesWritten =>
                     {
                         if (progressUpdated != null)
@@ -509,6 +735,19 @@ namespace net.openstack.Providers.Rackspace
                 });
         }
 
+        /// <summary>
+        /// Gets the object.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="outputStream">The output stream.<see cref="Stream"/></param>
+        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="verifyEtag">if set to <c>true</c> will verify etag.</param>
+        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="InvalidETagException"></exception>
         public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -561,6 +800,19 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <summary>
+        /// Gets the object save to file.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="saveDirectory">The save directory path. <remarks>Example c:\user\</remarks></param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="fileName">Name of the file.<remarks>Example image_name1.jpeg</remarks></param>
+        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="verifyEtag">if set to <c>true</c> will verify etag.</param>
+        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
         {
             if (String.IsNullOrEmpty(saveDirectory))
@@ -582,6 +834,15 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <summary>
+        /// Deletes the object.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
         public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -600,6 +861,17 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <summary>
+        /// Copies the object.
+        /// </summary>
+        /// <param name="sourceContainer">The source container name.</param>
+        /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="destinationContainer">The destination container name.</param>
+        /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
         public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(sourceContainer);
@@ -638,7 +910,15 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
-        public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <summary>
+        /// Gets the object meta data.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt; of Meta data</returns>
+        public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
@@ -651,11 +931,32 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
+        /// <summary>
+        /// Purges the object from CDN.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
+        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null)
         {
             return PurgeObjectFromCDN(container, objectName, " ", region, identity);
         }
 
+        /// <summary>
+        /// Purges the object from CDN.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="emails">string[] of email address.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
+        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string[] emails, string region = null, CloudIdentity identity = null)
         {
             if (emails.Length < 0)
@@ -666,6 +967,17 @@ namespace net.openstack.Providers.Rackspace
             return PurgeObjectFromCDN(container, objectName, string.Join(",", emails), region, identity);
         }
 
+        /// <summary>
+        /// Purges the object from CDN.
+        /// </summary>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="email">Email Address.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="CDNNotEnabledException"></exception>
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -699,7 +1011,13 @@ namespace net.openstack.Providers.Rackspace
 
         #region Accounts
 
-        public Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <summary>
+        /// Gets the account headers.
+        /// </summary>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt; of headers</returns>
+        public Dictionary<string, string> GetAccountHeaders(string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
 
@@ -711,7 +1029,13 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
-        public Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <summary>
+        /// Gets the account meta data.
+        /// </summary>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <returns>Dictionary&lt;string,string&gt; of meta data</returns>
+        public Dictionary<string, string> GetAccountMetaData(string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
 
@@ -722,7 +1046,14 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
-        public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <summary>
+        /// Updates the account metadata.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, CloudIdentity identity = null)
         {
             if (metadata.Equals(null))
             {
@@ -747,7 +1078,14 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
-        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <summary>
+        /// Updates the account headers.
+        /// </summary>
+        /// <param name="headers">The headers.</param>
+        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
         {
             if (headers == null)
             {
@@ -767,7 +1105,7 @@ namespace net.openstack.Providers.Rackspace
 
         private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
         {
-            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, null, region, identity);
+            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region, identity);
             var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
             return contentLength;
         }

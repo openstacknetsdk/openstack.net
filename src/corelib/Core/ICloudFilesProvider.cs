@@ -12,7 +12,7 @@ namespace net.openstack.Core
     {
         #region Container
 
-        IEnumerable<Container> ListContainers(int? limit = null, string markerId = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null);
+        IEnumerable<Container> ListContainers(int? limit = null, string markerId = null, string markerEnd = null, string region = null, CloudIdentity identity = null);
         ObjectStore CreateContainer(string container, string region = null, CloudIdentity identity = null);
         ObjectStore DeleteContainer(string container, string region = null, CloudIdentity identity = null);
         Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
@@ -41,7 +41,7 @@ namespace net.openstack.Core
 
         #region Container Objects
 
-        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string markerId = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null);
+        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string markerId = null, string markerEnd = null, string region = null, CloudIdentity identity = null);
         void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null);
         void CreateObject(string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null);
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null);
@@ -49,8 +49,8 @@ namespace net.openstack.Core
         ObjectStore DeleteObject(string container, string objectNmae, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null);
         ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null);
 
-        Dictionary<string, string> GetObjectHeaders(string container, string objectName, string format = "json", string region = null, CloudIdentity identity = null);
-        Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, CloudIdentity identity = null);
+        Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, CloudIdentity identity = null);
 
         ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null);
         ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null);
@@ -59,10 +59,10 @@ namespace net.openstack.Core
 
         #region Accounts
 
-        Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-        Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-        void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-        void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        Dictionary<string, string> GetAccountHeaders(string region = null, CloudIdentity identity = null);
+        Dictionary<string, string> GetAccountMetaData(string region = null, CloudIdentity identity = null);
+        void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, CloudIdentity identity = null);
+        void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, CloudIdentity identity = null);
 
         #endregion
     }
