@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\Address.cs" />
+    <Compile Include="Core\Domain\Snapshot.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
+    <Compile Include="Core\Domain\VolumeState.cs" />
     <Compile Include="Core\Domain\VolumeType.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
@@ -87,6 +89,8 @@
     <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
@@ -98,6 +102,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredencialRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageSnapshotResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
@@ -113,6 +118,7 @@
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListSnapshotResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
