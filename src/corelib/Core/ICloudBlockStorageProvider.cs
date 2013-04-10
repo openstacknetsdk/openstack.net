@@ -12,5 +12,12 @@ namespace net.openstack.Core
 
         IEnumerable<VolumeType> ListVolumeTypes(string region = null, CloudIdentity identity = null);
         VolumeType DescribeVolumeType(int volume_type_id, string region = null, CloudIdentity identity = null);
+
+        bool CreateSnapshot(string volume_id, bool force = false, string display_name = "None", string display_description = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<Snapshot> ListSnapshots(string region = null, CloudIdentity identity = null);
+        Snapshot ShowSnapshot(string snapshot_id, string region = null, CloudIdentity identity = null);
+        bool DeleteSnapshot(string snapshot_id, string region = null, CloudIdentity identity = null);
+
+
     }
 }
