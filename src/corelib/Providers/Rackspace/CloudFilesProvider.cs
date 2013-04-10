@@ -166,7 +166,7 @@ namespace net.openstack.Providers.Rackspace
             return result;
         }
 
-        public void AddContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             if (metadata.Equals(null))
@@ -205,7 +205,7 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
-        public void AddContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             if (headers == null)
@@ -403,7 +403,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Container Objects
 
-        public IEnumerable<ContainerObject> GetObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
+        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string format = "json", string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
@@ -420,9 +420,6 @@ namespace net.openstack.Providers.Rackspace
                 queryStringParameter.Add("end_marker", markerEnd);
 
             var response = ExecuteRESTRequest<ContainerObject[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
-
-            //if (response.StatusCode == 204)
-
 
             if (response == null || response.Data == null)
                 return null;

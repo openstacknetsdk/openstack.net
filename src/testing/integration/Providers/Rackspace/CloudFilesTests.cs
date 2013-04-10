@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
@@ -16,6 +17,24 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     {
 
         private static RackspaceCloudIdentity _testIdentity;
+
+        private static readonly string containerName = string.Format("CloudFilesIntegrationTests_{0}",Guid.NewGuid().ToString());
+        const string webIndex = "index.html";
+        const string webError = "error.html";
+        const string webListingsCSS = "index.css";
+        const bool webListing = true;
+        const string objectName = "DarkKnightRises.jpg";
+        const string saveDirectory = @"C:\";
+
+        private static readonly string sourceContainerName = containerName;
+        private const string sourceObjectName = objectName;
+
+        private static readonly string destinationContainerName = string.Format("{0}_DarkKnightRises", containerName);
+        private const string destinationObjectName = objectName;
+
+        const string emailTo = "123@abc.com";
+        string[] emailToList = new[] { "abc@123.com,123@abc.com" };
+
 
         public CloudFilesTests()
         {
@@ -113,7 +132,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Create_Container()
         {
-            const string containerName = "TestContainer";
+
             var provider = new CloudFilesProvider();
             var containerCreatedResponse = provider.CreateContainer(containerName, identity: _testIdentity);
 
@@ -121,9 +140,18 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
+        public void Should_Create_Destination_Container()
+        {
+            var provider = new CloudFilesProvider();
+            var containerCreatedResponse = provider.CreateContainer(destinationContainerName, identity: _testIdentity);
+
+            Assert.AreEqual(ObjectStore.ContainerCreated, containerCreatedResponse);
+        }
+
+
+        [TestMethod]
         public void Should_Not_Create_Container_Already_Exists()
         {
-            const string containerName = "TestContainer";
             var provider = new CloudFilesProvider();
             var containerCreatedResponse = provider.CreateContainer(containerName, identity: _testIdentity);
 
@@ -133,7 +161,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Delete_Container()
         {
-            const string containerName = "TestContainer";
             var provider = new CloudFilesProvider();
             var containerCreatedResponse = provider.DeleteContainer(containerName, identity: _testIdentity);
 
@@ -141,11 +168,20 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
+        public void Should_Delete_Destination_Container()
+        {
+            var provider = new CloudFilesProvider();
+            var containerCreatedResponse = provider.DeleteContainer(destinationContainerName, identity: _testIdentity);
+
+            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+        }
+
+
+        [TestMethod]
         public void Should_Get_Objects_From_Container()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
 
             Assert.IsNotNull(containerGetObjectsResponse);
         }
@@ -154,9 +190,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ExpectedException(typeof(ItemNotFoundException))]
         public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Container_Does_Not_Exist()
         {
-            const string containerName = "No_Container_Present";
             var provider = new CloudFilesProvider();
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.Fail("Expected exception was not thrown.");
         }
 
@@ -164,16 +199,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ExpectedException(typeof(ItemNotFoundException))]
         public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Objects_Does_Not_Exist()
         {
-            const string containerName = "RK_Teat";
             var provider = new CloudFilesProvider();
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.Fail("Expected exception was not thrown.");
         }
 
         [TestMethod]
         public void Should_Get_Headers_For_Container()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetContainerHeader(containerName, identity: _testIdentity);
 
@@ -184,28 +217,24 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_MetaData_For_Container()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
-
             Assert.IsNotNull(objectHeadersResponse);
-            Assert.IsFalse(bool.Parse(objectHeadersResponse.Where(x => x.Key.Equals("Access-Log-Delivery", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual("Action", objectHeadersResponse.Where(x => x.Key.Equals("Genre", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
         public void Should_Add_MetaData_For_Container()
         {
-            const string containerName = "DarkKnight";
             var metaData = new Dictionary<string, string>();
             metaData.Add("X-Container-Meta-XXXX", "Test");
             var provider = new CloudFilesProvider();
-            provider.AddContainerMetadata(containerName, metaData, identity: _testIdentity);
+            provider.UpdateContainerMetadata(containerName, metaData, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Add_Headers_For_Container()
         {
-            const string containerName = "DarkKnight";
             var metaData = new Dictionary<string, string>();
             metaData.Add("X-Container-Meta-Movie", "Batman");
             metaData.Add("X-Container-Meta-Genre", "Action");
@@ -216,7 +245,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_CDN_Headers_For_Container()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetContainerCDNHeader(containerName, identity: _testIdentity);
 
@@ -227,7 +255,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ExpectedException(typeof(ItemNotFoundException))]
         public void Should_Not_Get_CDN_Headers_For_Container()
         {
-            const string containerName = "cloudservers";
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetContainerCDNHeader(containerName, identity: _testIdentity);
 
@@ -238,22 +265,20 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Add_CDN_Headers_For_Container()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("X-Log-Retention", "false");
-            provider.AddContainerCdnHeaders(containerName, headers, identity: _testIdentity);
+            provider.UpdateContainerCdnHeaders(containerName, headers, identity: _testIdentity);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ItemNotFoundException))]
         public void Should_Not_Add_CDN_Headers_For_Container()
         {
-            const string containerName = "cloudservers";
             var provider = new CloudFilesProvider();
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("X-Log-Retention", "false");
-            provider.AddContainerCdnHeaders(containerName, headers, identity: _testIdentity);
+            provider.UpdateContainerCdnHeaders(containerName, headers, identity: _testIdentity);
             Assert.Fail("Expected exception was not thrown.");
         }
 
@@ -281,7 +306,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Make_Container_CDN_Enabled_With_TTL()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var cdnEnabledResponse = provider.EnableCDNOnContainer(containerName, 1000, identity: _testIdentity);
 
@@ -295,7 +319,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Make_Container_CDN_Enabled_With_Log_Retention()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var cdnEnabledResponse = provider.EnableCDNOnContainer(containerName, true, identity: _testIdentity);
 
@@ -305,14 +328,13 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(cdnContainerHeaderResponse.LogRetention);
             Assert.IsTrue(cdnContainerHeaderResponse.CDNEnabled);
             Assert.IsTrue(!string.IsNullOrWhiteSpace(cdnContainerHeaderResponse.CDNIosUri));
-            Assert.IsTrue(containerName.Equals(cdnContainerHeaderResponse.Name,StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(containerName.Equals(cdnContainerHeaderResponse.Name, StringComparison.InvariantCultureIgnoreCase));
 
         }
 
         [TestMethod]
         public void Should_Make_Container_CDN_Disabled()
         {
-            const string containerName = "DarkKnight";
             var provider = new CloudFilesProvider();
             var cdnEnabledResponse = provider.DisableCDNOnContainer(containerName, identity: _testIdentity);
 
@@ -324,12 +346,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Enable_Static_Web_On_Container_With_Index_Error_CSS_And_Listing_As_True()
         {
-            const string containerName = "DarkKnight";
-            const string webIndex = "index.html";
-            const string webError = "error.html";
-            const string webListingsCSS = "index.css";
-            const bool webListing = true;
-
             var provider = new CloudFilesProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true);
 
@@ -346,10 +362,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Enable_Static_Web_On_Container_With_CSS_And_Listing_As_True()
         {
-            const string containerName = "DarkKnight";
-            const string webListingsCSS = "index.css";
-            const bool webListing = true;
-
             var provider = new CloudFilesProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
@@ -364,16 +376,11 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Enable_Static_Web_On_Container_With_Index_Error_And_Listing_As_True()
         {
-            const string containerName = "DarkKnight";
-            const string webIndex = "index.html";
-            const string webError = "error.html";
-            const bool webListing = true;
-
             var provider = new CloudFilesProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
             provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListing, null, false, _testIdentity);
-            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName);
+            var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
             Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
             Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
@@ -384,10 +391,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Enable_Static_Web_On_Container_With_Index_And_Error()
         {
-            const string containerName = "DarkKnight";
-            const string webIndex = "index.html";
-            const string webError = "error.html";
-
             var provider = new CloudFilesProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
 
@@ -401,7 +404,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Disable_Static_Web_On_Container()
         {
-            const string containerName = "DarkKnight";
 
             var provider = new CloudFilesProvider();
             //var cdnEnabledResponse = provider.EnableCDNOnContainer( containerName, true, identity: _testIdentity);
@@ -417,8 +419,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         }
 
-
-
         #endregion Container Tests
 
         #region Object Tests
@@ -427,8 +427,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_Headers_For_Object()
         {
-            const string containerName = "DarkKnight";
-            const string objectName = "BatmanBegins.jpg";
+
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
@@ -440,10 +439,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_Throw_Exception_When_Calling_Get_Headers_For_Object_And_Container_Name_Is_Empty()
         {
-            string containerName = string.Empty;
-            const string objectName = "BatmanBegins.jpg";
+            string containerNameLocal = string.Empty;
             var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
+            var objectHeadersResponse = provider.GetObjectHeaders(containerNameLocal, objectName, identity: _testIdentity);
 
             Assert.Fail("Expected exception was not thrown.");
         }
@@ -452,27 +450,25 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_Throw_Exception_When_Calling_Get_Headers_For_Object_And_Object_Name_Is_Empty()
         {
-            const string containerName = "DarkKnight";
-            string objectName = string.Empty;
+            string objectNameLocal = string.Empty;
             var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
+            var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectNameLocal, identity: _testIdentity);
 
             Assert.Fail("Expected exception was not thrown.");
         }
 
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Create_Object_From_Stream_With_Headers()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Koala.jpg";
-            string fileName = Path.GetFileName(filePath);
-            Stream stream = System.IO.File.OpenRead(filePath);
-            var etag = GetMD5Hash(filePath);
+            string fileName = objectName;
+            Stream stream = System.IO.File.OpenRead(objectName);
+            var etag = GetMD5Hash(objectName);
             stream.Position = 0;
             var headers = new Dictionary<string, string>();
             headers.Add("ETag", etag);
             int cnt = 0;
-            var info = new FileInfo(filePath);
+            var info = new FileInfo(objectName);
             var totalBytest = info.Length;
             var provider = new CloudFilesProvider(_testIdentity);
             provider.CreateObject(containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
@@ -487,15 +483,50 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
             });
 
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
 
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, fileName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
             Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-
         }
+
+        //[TestMethod]
+        //public void Should_Create_Object_From_Stream_With_Headers_For_Destination_Container()
+        //{
+        //    string fileName = Path.GetFileName(filePath);
+        //    Stream stream = System.IO.File.OpenRead(filePath);
+        //    var etag = GetMD5Hash(filePath);
+        //    stream.Position = 0;
+        //    var headers = new Dictionary<string, string>();
+        //    headers.Add("ETag", etag);
+        //    int cnt = 0;
+        //    var info = new FileInfo(filePath);
+        //    var totalBytest = info.Length;
+        //    var provider = new CloudFilesProvider(_testIdentity);
+        //    provider.CreateObject(destinationContainerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
+        //    {
+        //        cnt = cnt + 1;
+        //        if (cnt % 10 != 0)
+        //            return;
+
+        //        var x = (float)bytesWritten / (float)totalBytest;
+        //        var percentCompleted = (float)x * 100.00;
+
+        //        Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
+        //    });
+
+        //    var containerGetObjectsResponse = provider.ListObjects(destinationContainerName, identity: _testIdentity);
+        //    Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+
+        //    var objectHeadersResponse = provider.GetObjectHeaders(destinationContainerName, fileName, identity: _testIdentity);
+
+        //    Assert.IsNotNull(objectHeadersResponse);
+        //    Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+
+        //}
+
 
         private static string GetMD5Hash(string filePath)
         {
@@ -509,28 +540,27 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Create_Object_From_Stream_Without_Headers()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Tulips.jpg";
-            string fileName = Path.GetFileName(filePath);
-            Stream stream = System.IO.File.OpenRead(filePath);
-            var etag = GetMD5Hash(filePath);
+            string fileName = objectName;
+            Stream stream = System.IO.File.OpenRead(objectName);
             stream.Position = 0;
+
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider(_testIdentity);
             provider.CreateObject(containerName, stream, fileName, 65536, headers);
 
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
 
         }
 
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Create_Object_From_File_With_Headers()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Hydrangeas.jpg";
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
             string fileName = Path.GetFileName(filePath);
             Stream stream = System.IO.File.OpenRead(filePath);
             var etag = GetMD5Hash(filePath);
@@ -553,7 +583,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
             });
 
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
 
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, fileName, identity: _testIdentity);
@@ -563,71 +593,45 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Create_Object_From_File_Without_Headers()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider(_testIdentity);
             provider.CreateObjectFromFile(containerName, filePath, fileName, 65536, headers, identity: _testIdentity);
 
-            var containerGetObjectsResponse = provider.GetObjects(containerName, identity: _testIdentity);
+            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
-
         }
 
-
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Get_Object_And_Save_To_File_Without_Headers()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Koala.jpg";
-            const string saveDirectory = @"C:\Users\Public\Pictures\Sample Pictures\";
-
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
             provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, false, identity: _testIdentity);
-
-            //var containerGetObjectsResponse = provider.GetObjects( containerName);
-            //Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
-
         }
 
         [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Get_Object_And_Save_To_File_Without_Headers_And_Verify_Etag()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Koala.jpg";
-            const string saveDirectory = @"C:\Users\Public\Pictures\Sample Pictures\";
-
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
             provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, true, identity: _testIdentity);
         }
 
-        //[TestMethod]
-        //public void Should_Get_Object_And_Save_To_File_Without_Headers_And_Verify_Etag_Fails()
-        //{
-        //    const string containerName = "DarkKnight";
-        //    const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Koala.jpg";
-        //    const string saveDirectory = @"C:\Users\Public\Pictures\";
-
-        //    string fileName = Path.GetFileName(filePath);
-        //    var headers = new Dictionary<string, string>();
-        //    var provider = new CloudFilesProvider();
-        //    provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, "test", 65536, null, null, true, _testIdentity);
-        //}
-
-
         [TestMethod]
         public void Should_Delete_Object()
         {
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
-            string fileName = Path.GetFileName(filePath);
+            string fileName = objectName;
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
             var deleteResponse = provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
@@ -635,18 +639,25 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
         }
 
+        [TestMethod]
+        public void Should_Delete_Object_On_Destination_Container()
+        {
+            string fileName = objectName;
+            var headers = new Dictionary<string, string>();
+            var provider = new CloudFilesProvider();
+            var deleteResponse = provider.DeleteObject(destinationContainerName, fileName, headers, identity: _testIdentity);
+
+            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+        }
 
         [TestMethod]
         [ExpectedException(typeof(ItemNotFoundException))]
         public void Should_Throw_An_Exception_When_Deleting_Object()
         {
             // TODO: Also need to make 404 as an acceptable status.
-            const string containerName = "DarkKnight";
-            const string filePath = @"C:\Users\Public\Pictures\Sample Pictures\Desert.jpg";
-            string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
+            var deleteResponse = provider.DeleteObject(containerName, objectName, headers, identity: _testIdentity);
 
             Assert.Fail("Expected exception was not thrown.");
         }
@@ -654,12 +665,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Copy_Object_When_Not_Passing_Content_Length()
         {
-            const string sourceContainerName = "DarkKnight";
-            const string sourceObjectName = "BatmanBegins.jpg";
-
-            const string destinationContainerName = "rk_test";
-            const string destinationObjectName = "BatmanBegins.jpg";
-
             var provider = new CloudFilesProvider();
             var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, identity: _testIdentity);
 
@@ -669,12 +674,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Copy_Object_When_Passing_Content_Length()
         {
-            const string sourceContainerName = "DarkKnight";
-            const string sourceObjectName = "BatmanBegins.jpg";
-
-            const string destinationContainerName = "rk_test";
-            const string destinationObjectName = "BatmanBegins.jpg";
-
             Dictionary<string, string> header = new Dictionary<string, string>();
             header.Add(CloudFilesProvider.ContentLength, "62504");
 
@@ -689,11 +688,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             // Object will expire 2 days from now.
             int epoch = (int)(DateTime.UtcNow.AddDays(2) - new DateTime(1970, 1, 1)).TotalSeconds;
-            const string sourceContainerName = "DarkKnight";
-            const string sourceObjectName = "BatmanBegins.jpg";
-
-            const string destinationContainerName = "rk_test";
-            const string destinationObjectName = "BatmanBegins.jpg";
 
             Dictionary<string, string> header = new Dictionary<string, string>();
             header.Add(CloudFilesProvider.ObjectDeleteAt, epoch.ToString());
@@ -707,9 +701,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_MetaData_For_Object1()
         {
-            const string containerName = "DarkKnight";
-            const string objectName = "BatmanBegins.jpg";
-
             var provider = new CloudFilesProvider();
             var objectHeadersResponse = provider.GetObjectMetaData(containerName, objectName, null, false, _testIdentity);
 
@@ -720,22 +711,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Purge_CDN_Enabled_Object_No_Email_Notification()
         {
-            const string containerName = "DarkKnight";
-            const string objectName = "BatmanBegins.jpg";
             var provider = new CloudFilesProvider();
             var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
-
         }
 
         [TestMethod]
         public void Should_Purge_CDN_Enabled_Object_Single_Email_Notification()
         {
-            const string containerName = "DarkKnight";
-            const string objectName = "TheDarkKnight.jpg";
-            const string emailTo = "123@abc.com";
-
             var provider = new CloudFilesProvider();
             var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
 
@@ -746,15 +730,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Purge_CDN_Enabled_Object_Multiple_Email_Notification()
         {
-            const string containerName = "DarkKnight";
-            const string objectName = "TheDarkKnight.jpg";
-            var emailTo = new[] { "abc@123.com,123@abc.com" };
-
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailTo, identity: _testIdentity);
+            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
-
         }
 
         #endregion Object Tests
@@ -781,7 +760,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsNotNull(accountHeadersResponse);
             Assert.IsTrue(accountHeadersResponse.ContainsKey("Temp-Url-Key"));
         }
-        
+
         [TestMethod]
         public void Should_Add_MetaData_For_Account()
         {
@@ -801,8 +780,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Update_Headers_For_Account()
         {
             var headers = new Dictionary<string, string>();
-            headers.Add("X-Account-Meta-Test-Accountmetadata", "Test1"); 
-            
+            headers.Add("X-Account-Meta-Test-Accountmetadata", "Test1");
+
             var provider = new CloudFilesProvider();
             provider.UpdateAccountHeaders(headers, identity: _testIdentity);
             var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
