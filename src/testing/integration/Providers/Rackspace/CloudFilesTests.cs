@@ -702,7 +702,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Get_MetaData_For_Object1()
         {
             var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetObjectMetaData(containerName, objectName, null, false, _testIdentity);
+            var objectHeadersResponse = provider.GetObjectMetaData(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
             //Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
