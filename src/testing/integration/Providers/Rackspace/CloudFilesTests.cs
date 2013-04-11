@@ -79,6 +79,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
+        public void Should_Return_Container_List_With_Internal_Url()
+        {
+            var provider = new CloudFilesProvider();
+            var containerList = provider.ListContainers(useInternalUrl:true, identity: _testIdentity);
+
+            Assert.IsNotNull(containerList);
+            Assert.IsTrue(containerList.Any());
+        }
+
+        [TestMethod]
         public void Should_Return_Container_List_With_Limit()
         {
             var provider = new CloudFilesProvider();
