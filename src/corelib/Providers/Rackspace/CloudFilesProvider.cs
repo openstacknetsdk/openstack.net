@@ -53,11 +53,12 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="marker">The marker.<remarks>[Optional]</remarks></param>
         /// <param name="markerEnd">The marker end.<remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.Container"/></returns>
-        public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var queryStringParameter = new Dictionary<string, string>();
 
@@ -84,12 +85,13 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore CreateContainer(string container, string region = null, CloudIdentity identity = null)
+        public ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
@@ -106,12 +108,13 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore DeleteContainer(string container, string region = null, CloudIdentity identity = null)
+        public ObjectStore DeleteContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -136,7 +139,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -156,7 +159,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
 
@@ -170,10 +173,9 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
-        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns><see cref="ContainerCDN"/></returns>
-        public ContainerCDN GetContainerCDNHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ContainerCDN GetContainerCDNHeader(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
@@ -247,7 +249,7 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -269,7 +271,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -280,11 +282,10 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="headers">The headers.<remarks>Dictionary&lt;string,string&gt;</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
-        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="CDNNotEnabledException"></exception>
-        public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             if (headers == null)
@@ -292,7 +293,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -375,7 +376,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="logRetention">if set to <c>true</c> enables log retention on container.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
-        /// <returns><see cref="Dictionary&lt;string,string&gt;"/>of CDN Headers</returns>
+        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="TTLLengthException">TTL range must be 900 to 1577836800 seconds TTL:  + ttl.ToString(CultureInfo.InvariantCulture)</exception>
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
@@ -448,7 +449,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -479,7 +480,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -507,7 +508,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -534,7 +535,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -559,7 +560,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            if (!GetContainerCDNHeader(container, region, useInternalUrl, identity).CDNEnabled)
+            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
             {
                 throw new CDNNotEnabledException();
             }
@@ -586,12 +587,13 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="marker">The marker.<remarks>[Optional]</remarks></param>
         /// <param name="markerEnd">The marker end.<remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerObject"/></returns>
-        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region), container));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container));
 
             var queryStringParameter = new Dictionary<string, string>();
 
@@ -618,13 +620,14 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
-        public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -643,12 +646,13 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
-        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null,bool useInternalUrl = false, CloudIdentity identity = null)
         {
             using (var stream = File.OpenRead(filePath))
             {
-                CreateObject(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
+                CreateObject(container, stream, objectName, chunkSize, headers, region, progressUpdated,useInternalUrl, identity);
             }
         }
 
@@ -662,8 +666,9 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
-        public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (stream == null)
                 throw new ArgumentNullException();
@@ -673,10 +678,10 @@ namespace net.openstack.Providers.Rackspace
 
             if (stream.Length > LargeFileBatchThreshold)
             {
-                CreateObjectInSegments(container, stream, objectName, chunkSize, headers, region, progressUpdated, identity);
+                CreateObjectInSegments(container, stream, objectName, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
                 return;
             }
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings());
         }
@@ -691,8 +696,9 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
-        private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var totalLength = stream.Length;
             var segmentCount = Math.Ceiling((double)totalLength / (double)LargeFileBatchThreshold);
@@ -703,7 +709,7 @@ namespace net.openstack.Providers.Rackspace
                 var remaining = (totalLength - LargeFileBatchThreshold * i);
                 var length = (remaining < LargeFileBatchThreshold) ? remaining : LargeFileBatchThreshold;
 
-                var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region), container, objectName, i));
+                var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i));
                 long segmentBytesWritten = 0;
                 StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated:
                     bytesWritten =>
@@ -719,7 +725,7 @@ namespace net.openstack.Providers.Rackspace
             }
 
             // upload the manifest file
-            var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
@@ -746,14 +752,15 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="verifyEtag">if set to <c>true</c> will verify etag.</param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <exception cref="InvalidETagException"></exception>
-        public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
             {
@@ -812,8 +819,9 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
         /// <param name="verifyEtag">if set to <c>true</c> will verify etag.</param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
-        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, CloudIdentity identity = null)
+        public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null,bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (String.IsNullOrEmpty(saveDirectory))
                 throw new ArgumentNullException();
@@ -824,7 +832,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    GetObject(container, objectName, fileStream, chunkSize, headers, region, verifyEtag, progressUpdated, identity);
+                    GetObject(container, objectName, fileStream, chunkSize, headers, region, verifyEtag, progressUpdated, useInternalUrl, identity);
                 }
             }
             catch (InvalidETagException)
@@ -841,14 +849,15 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
+        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers);
 
@@ -870,9 +879,10 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, CloudIdentity identity = null)
+        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(sourceContainer);
             _cloudFilesValidator.ValidateObjectName(sourceObjectName);
@@ -884,21 +894,21 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (string.IsNullOrWhiteSpace(headers.FirstOrDefault(x => x.Key.Equals(ContentLength, StringComparison.OrdinalIgnoreCase)).Value))
                 {
-                    var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region);
+                    var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region, useInternalUrl);
                     headers.Add(ContentLength, contentLength);
                 }
             }
             else
             {
                 headers = new Dictionary<string, string>();
-                var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region);
+                var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region, useInternalUrl);
                 headers.Add(ContentLength, contentLength);
 
             }
 
             headers.Add(CopyFrom, string.Format("{0}/{1}", sourceContainer, sourceObjectName));
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), destinationContainer, destinationObjectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), destinationContainer, destinationObjectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers);
 
@@ -916,13 +926,14 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        ///<param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>Dictionary&lt;string,string&gt; of Meta data</returns>
-        public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region), container, objectName));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -1015,11 +1026,12 @@ namespace net.openstack.Providers.Rackspace
         /// Gets the account headers.
         /// </summary>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>Dictionary&lt;string,string&gt; of headers</returns>
-        public Dictionary<string, string> GetAccountHeaders(string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -1033,11 +1045,12 @@ namespace net.openstack.Providers.Rackspace
         /// Gets the account meta data.
         /// </summary>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <returns>Dictionary&lt;string,string&gt; of meta data</returns>
-        public Dictionary<string, string> GetAccountMetaData(string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -1051,9 +1064,10 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="metadata">The metadata.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, CloudIdentity identity = null)
+        public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (metadata.Equals(null))
             {
@@ -1073,7 +1087,7 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -1083,16 +1097,17 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="headers">The headers.</param>
         /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
+        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (headers == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region)));
+            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -1103,16 +1118,16 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region)
+        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region, bool useInternalUrl)
         {
-            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region, identity);
+            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region,useInternalUrl, identity);
             var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
             return contentLength;
         }
 
-        protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null)
+        protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null, bool useInternalUrl = false)
         {
-            return base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
+            return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "cloudFiles", region) : base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
         }
 
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
