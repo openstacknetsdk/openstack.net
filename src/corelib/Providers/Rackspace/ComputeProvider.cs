@@ -14,7 +14,7 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ComputeProvider : ProviderBase, IComputeProvider
     {
-        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203 };
+        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203, 204 };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
@@ -145,7 +145,7 @@ namespace net.openstack.Providers.Rackspace
             var defaultSettings = BuildDefaultRequestSettings(new [] {404});
             var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
-            if (response.StatusCode != 200 && response.StatusCode != 204)
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
 
             return true;
@@ -231,7 +231,7 @@ namespace net.openstack.Providers.Rackspace
 
         public bool RebootServer(string serverId, RebootType rebootType, string region = null, CloudIdentity identity = null)
         {
-            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
+            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType.ToString()}};
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -311,8 +311,6 @@ namespace net.openstack.Providers.Rackspace
 
             return resp;
         }
-
-
 
         private T ExecuteServerAction<T>(string serverId, object body, string region = null, CloudIdentity identity = null) where T : new()
         {
@@ -461,7 +459,7 @@ namespace net.openstack.Providers.Rackspace
             var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
             var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
-            if (response.StatusCode != 200 && response.StatusCode != 203)
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
 
             return true;

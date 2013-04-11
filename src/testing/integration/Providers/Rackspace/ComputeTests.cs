@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace;
 
-namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
+    namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 {
     /// <summary>
     /// Summary description for ComputeTests
@@ -19,6 +19,13 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private static NewServer _testServer;
         private static IEnumerable<ServerImageDetails> _allImages;
         private static NewServer _testServer2;
+        private static bool _rebootSuccess;
+        private static bool _resizeSuccess;
+        private static bool _confirmResizeSuccess;
+        private static ServerDetails _rebuildServer;
+        private static ServerImage _testImage;
+        private static string _testImageName;
+        private static bool _revertResizeSuccess;
         private const string NewPassword = "my_new_password";
 
         /// <summary>
@@ -43,7 +50,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Test001_Should_Create_A_New_Server_In_DFW()
         {
             var provider = new ComputeProvider(_testIdentity);
@@ -98,7 +105,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.AreEqual("ACTIVE", serverDetails.Status);
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes_For_Server2()
         {
             var provider = new ComputeProvider(_testIdentity);
@@ -482,7 +489,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var validImage = _allImages.First();
             var provider = new ComputeProvider(_testIdentity);
-            var images = provider.ListImagesWithDetails(imageName: validImage.Name);
+            var images = provider.ListImagesWithDetails(imageName: _testImageName);
 
             Assert.IsTrue(images.Any());
         }
@@ -545,12 +552,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var images = provider.ListImagesWithDetails(limit: _allImages.Count() * 2);
 
             Assert.IsTrue(images.Count() == _allImages.Count());
-        }
-
-        [TestMethod]
-        public void Test042_Should_Wait_For_Image_To_Be_ACTIVE()
-        {
-            
         }
 
         [TestMethod]
@@ -661,12 +662,248 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Wait_A_Max_Of_10_Minutes_For_The_Server_Is_Deleted_Indicated_By_A_Null_Return_Value_For_Details_For_Server2()
         {
             var provider = new ComputeProvider(_testIdentity);
 
             provider.WaitForServerDeleted(_testServer2.Id);
+        }
+
+        [TestMethod]
+        public void Should_Soft_Reboot_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            _rebootSuccess = provider.RebootServer(_testServer.Id, RebootType.SOFT);
+
+            Assert.IsTrue(_rebootSuccess);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Server_Goes_Into_Reboot_State()
+        {
+            Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
+
+            var provider = new ComputeProvider(_testIdentity);
+
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Hard_Reboot_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            _rebootSuccess = provider.RebootServer(_testServer.Id, RebootType.HARD);
+
+            Assert.IsTrue(_rebootSuccess);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Server_Goes_Into_Hard_Reboot_State()
+        {
+            Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
+
+            var provider = new ComputeProvider(_testIdentity);
+
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.HARD_REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Rebuild_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.GetDetails(_testServer.Id);
+            var image = provider.ListImages().First(i => i.Name.Contains("CentOS") && i.Id != details.Image.Id);
+            var flavor = int.Parse(details.Flavor.Id) + 1;
+
+            _rebuildServer = provider.RebuildServer(_testServer.Id, string.Format("{0}_REBUILD", details.Name), image.Id, flavor.ToString(), _testServer.AdminPassword);
+
+            Assert.IsNotNull(_rebuildServer);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Rebuild_Status()
+        {
+            Assert.IsNotNull(_rebuildServer);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.REBUILD, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+            Assert.AreEqual(_testServer.Id, _rebuildServer.Id);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Active_Status_After_Rebuild()
+        {
+            Assert.IsNotNull(_rebuildServer);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerActive(_testServer.Id);
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Resize_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.GetDetails(_testServer.Id);
+            var flavor = int.Parse(details.Flavor.Id) + 1;
+
+            _resizeSuccess = provider.ResizeServer(_testServer.Id, string.Format("{0}_RESIZE", details.Name), flavor.ToString());
+
+            Assert.IsTrue(_resizeSuccess);
+        }
+
+        [TestMethod]
+        public void Should_Resize_Server_Back()
+        {
+            Assert.IsTrue(_resizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.GetDetails(_testServer.Id);
+            var flavor = int.Parse(details.Flavor.Id) - 1;
+
+            _resizeSuccess = provider.ResizeServer(_testServer.Id, string.Format("{0}_RESIZED_BACK", details.Name), flavor.ToString());
+
+            Assert.IsTrue(_resizeSuccess);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Resize_Status()
+        {
+            Assert.IsTrue(_resizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Verify_Resize_Status()
+        {
+            Assert.IsTrue(_resizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Confirm_Resize_Server()
+        {
+            Assert.IsTrue(_resizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+
+            _confirmResizeSuccess = provider.ConfirmServerResize(_testServer.Id);
+
+            Assert.IsTrue(_confirmResizeSuccess);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Active_Status_After_Confirm_Resize()
+        {
+            Assert.IsTrue(_confirmResizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+
+            var details = provider.WaitForServerActive(_testServer.Id);
+
+            Assert.IsNotNull(details);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Server_To_Go_Into_Confirm_Resize_Status()
+        {
+            Assert.IsTrue(_confirmResizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Revert_Resize_Server()
+        {
+            Assert.IsTrue(_resizeSuccess);
+            var provider = new ComputeProvider(_testIdentity);
+
+            _revertResizeSuccess = provider.RevertServerResize(_testServer.Id);
+
+            Assert.IsTrue(_revertResizeSuccess);
+        }
+
+        [TestMethod]
+        public void Should_Wait_For_Server_To_Be_In_Active_State_After_Reverting_Resize()
+        {
+            Assert.IsTrue(_revertResizeSuccess);
+
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerActive(_testServer.Id);
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Create_Image_From_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var detail = provider.GetDetails(_testServer.Id);
+
+            _testImageName = "Image_of_" + detail.Id;
+            var sucess = provider.CreateImage(detail.Id, _testImageName);
+
+            Assert.IsTrue(sucess);
+        }
+
+        [TestMethod]
+        public void Should_Retrieve_Image_By_Name()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var images = provider.ListImagesWithDetails();
+
+            _testImage = images.First(i => i.Name == _testImageName);
+
+            Assert.IsNotNull(_testImage);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Image_To_Be_In_Active_State()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var details = provider.WaitForImageActive(_testImage.Id);
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Mark_Image_For_Deletetion()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var success = provider.DeleteImage(_testImage.Id);
+
+            Assert.IsTrue(success);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Image_To_Be_In_Deleted_State()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            provider.WaitForImageDeleted(_testImage.Id);
         }
     }
 }
