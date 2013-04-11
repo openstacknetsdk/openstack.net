@@ -26,6 +26,9 @@ using net.openstack.Providers.Rackspace;
         private static ServerImage _testImage;
         private static string _testImageName;
         private static bool _revertResizeSuccess;
+        private static ServerDetails _preBuildDetails;
+        private static string _rescueAdminPass;
+        private static ServerDetails _unRescueDetails;
         private const string NewPassword = "my_new_password";
 
         /// <summary>
@@ -392,6 +395,57 @@ using net.openstack.Providers.Rackspace;
         }
 
         [TestMethod]
+        public void Should_Create_Image_From_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var detail = provider.GetDetails(_testServer.Id);
+
+            _testImageName = "Image_of_" + detail.Id;
+            var sucess = provider.CreateImage(detail.Id, _testImageName);
+
+            Assert.IsTrue(sucess);
+        }
+
+        [TestMethod]
+        public void Should_Retrieve_Image_By_Name()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+            var images = provider.ListImagesWithDetails();
+
+            _testImage = images.First(i => i.Name == _testImageName);
+
+            Assert.IsNotNull(_testImage);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Image_To_Be_In_Active_State()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var details = provider.WaitForImageActive(_testImage.Id);
+
+            Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Mark_Image_For_Deletetion()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var success = provider.DeleteImage(_testImage.Id);
+
+            Assert.IsTrue(success);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_For_Image_To_Be_In_Deleted_State()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            provider.WaitForImageDeleted(_testImage.Id);
+        }
+
+        [TestMethod]
         public void Test026_Should_Get_List_Of_Base_Images()
         {
             var provider = new ComputeProvider(_testIdentity);
@@ -718,11 +772,11 @@ using net.openstack.Providers.Rackspace;
         public void Should_Rebuild_Server()
         {
             var provider = new ComputeProvider(_testIdentity);
-            var details = provider.GetDetails(_testServer.Id);
-            var image = provider.ListImages().First(i => i.Name.Contains("CentOS") && i.Id != details.Image.Id);
-            var flavor = int.Parse(details.Flavor.Id) + 1;
+            _preBuildDetails = provider.GetDetails(_testServer.Id);
+            var image = provider.ListImages().First(i => i.Name.Contains("CentOS") && i.Id != _preBuildDetails.Image.Id);
+            var flavor = int.Parse(_preBuildDetails.Flavor.Id) + 1;
 
-            _rebuildServer = provider.RebuildServer(_testServer.Id, string.Format("{0}_REBUILD", details.Name), image.Id, flavor.ToString(), _testServer.AdminPassword);
+            _rebuildServer = provider.RebuildServer(_testServer.Id, string.Format("{0}_REBUILD", _preBuildDetails.Name), image.Id, flavor.ToString(), _testServer.AdminPassword);
 
             Assert.IsNotNull(_rebuildServer);
         }
@@ -748,6 +802,16 @@ using net.openstack.Providers.Rackspace;
             var details = provider.WaitForServerActive(_testServer.Id);
 
             Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Verify_That_The_Name_Image_And_Flavor_Changed_As_expected_After_Rebuild()
+        {
+            Assert.IsNotNull(_rebuildServer);
+            
+            Assert.AreNotEqual(_preBuildDetails.Name, _rebuildServer.Name);
+            Assert.AreNotEqual(_preBuildDetails.Flavor.Id, _rebuildServer.Flavor.Id);
+            Assert.AreNotEqual(_preBuildDetails.Image.Id, _rebuildServer.Image.Id);
         }
 
         [TestMethod]
@@ -777,25 +841,15 @@ using net.openstack.Providers.Rackspace;
         }
 
         [Timeout(1800000), TestMethod]
-        public void Should_Wait_For_Server_To_Go_Into_Resize_Status()
-        {
-            Assert.IsTrue(_resizeSuccess);
-
-            var provider = new ComputeProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
-
-            Assert.IsNotNull(details);
-        }
-
-        [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Server_To_Go_Into_Verify_Resize_Status()
         {
             Assert.IsTrue(_resizeSuccess);
 
             var provider = new ComputeProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            var details = provider.WaitForServerState(_testServer.Id, new [] {ServerState.VERIFY_RESIZE, ServerState.ACTIVE}, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
             Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.VERIFY_RESIZE, details.Status);
         }
 
         [TestMethod]
@@ -856,54 +910,45 @@ using net.openstack.Providers.Rackspace;
         }
 
         [TestMethod]
-        public void Should_Create_Image_From_Server()
+        public void Should_Mark_Server_To_Enter_Rescue_Mode()
         {
             var provider = new ComputeProvider(_testIdentity);
-            var detail = provider.GetDetails(_testServer.Id);
 
-            _testImageName = "Image_of_" + detail.Id;
-            var sucess = provider.CreateImage(detail.Id, _testImageName);
+            _rescueAdminPass = provider.RescueServer(_testServer.Id);
 
-            Assert.IsTrue(sucess);
-        }
-
-        [TestMethod]
-        public void Should_Retrieve_Image_By_Name()
-        {
-            var provider = new ComputeProvider(_testIdentity);
-            var images = provider.ListImagesWithDetails();
-
-            _testImage = images.First(i => i.Name == _testImageName);
-
-            Assert.IsNotNull(_testImage);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_rescueAdminPass));
         }
 
         [Timeout(1800000), TestMethod]
-        public void Should_Wait_For_Image_To_Be_In_Active_State()
+        public void Should_Wait_For_Server_To_Go_Into_Rescue_Status()
         {
-            var provider = new ComputeProvider(_testIdentity);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_rescueAdminPass));
 
-            var details = provider.WaitForImageActive(_testImage.Id);
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.RESCUE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
             Assert.IsNotNull(details);
         }
 
         [TestMethod]
-        public void Should_Mark_Image_For_Deletetion()
+        public void Should_Mark_Server_To_Be_UnRescued()
         {
             var provider = new ComputeProvider(_testIdentity);
 
-            var success = provider.DeleteImage(_testImage.Id);
+            _unRescueDetails = provider.UnRescueServer(_testServer.Id);
 
-            Assert.IsTrue(success);
+            Assert.IsNotNull(_unRescueDetails);
         }
 
         [Timeout(1800000), TestMethod]
-        public void Should_Wait_For_Image_To_Be_In_Deleted_State()
+        public void Should_Wait_For_Server_To_Go_Into_Active_Status_After_UnRescue()
         {
-            var provider = new ComputeProvider(_testIdentity);
+            Assert.IsNotNull(_unRescueDetails);
 
-            provider.WaitForImageDeleted(_testImage.Id);
+            var provider = new ComputeProvider(_testIdentity);
+            var details = provider.WaitForServerActive(_testServer.Id);
+
+            Assert.IsNotNull(details);
         }
     }
 }

@@ -153,10 +153,15 @@ namespace net.openstack.Providers.Rackspace
 
         public ServerDetails WaitForServerState(string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
         {
+            return WaitForServerState(cloudServerId, new[] { expectedState }, errorStates, region, refreshCount, refreshDelayInMS, identity);
+        }
+
+        public ServerDetails WaitForServerState(string cloudServerId, string[] expectedStates, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        {
             var serverDetails = GetDetails(cloudServerId, region, identity);
 
             int count = 0;
-            while (!serverDetails.Status.Equals(expectedState) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
+            while (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
                 serverDetails = GetDetails(cloudServerId, region, identity);
@@ -182,7 +187,7 @@ namespace net.openstack.Providers.Rackspace
                                    new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED}, region,
                                    refreshCount, refreshDelayInMS, identity);
             }
-            catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
+            catch (Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
                                                                                    // the server goes into the DELETED state before it is removed from the system.
         }
@@ -301,7 +306,7 @@ namespace net.openstack.Providers.Rackspace
             var request = new UnrescueServerRequest { Details = "none" };
             var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
-            return resp.Server;
+            return resp == null ? null : resp.Server;
         }
 
         public bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null)
