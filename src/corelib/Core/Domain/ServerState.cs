@@ -36,7 +36,11 @@ namespace net.openstack.Core.Domain
         public static string UNKNOWN { get { return "UNKNOWN"; } }
 
         public static string VERIFY_RESIZE { get { return "VERIFY_RESIZE"; } }
-    }
 
+        public static string PREP_RESCUE { get { return "PREP_RESCUE"; } }
+
+        public static string PREP_UNRESCUE { get { return "PREP_UNRESCUE"; } }
+    }
+    
     public class ImageState : ServerState{}
 }
