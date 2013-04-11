@@ -6,6 +6,11 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     internal class ConfirmServerResizeRequest
     {
         [DataMember(Name = "confirmResize")]
-        public object Details { get; set; }
+        public string Details { get; set; }
+
+        public ConfirmServerResizeRequest()
+        {
+            Details = string.Empty;
+        }
     }
 }

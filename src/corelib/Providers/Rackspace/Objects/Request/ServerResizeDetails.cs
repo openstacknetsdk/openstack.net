@@ -2,6 +2,7 @@ using System.Runtime.Serialization;
 
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
+    [DataContract]
     internal class ServerResizeDetails
     {
         [DataMember(Name = "name")]

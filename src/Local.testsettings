@@ -3,6 +3,7 @@
   <Description>These are default test settings for a local test run.</Description>
   <Deployment enabled="false" />
   <Execution>
+	<Timeouts runTimeout="1800000" testTimeout="3600000" />
     <TestTypeSpecific />
     <AgentRule name="Execution Agents">
     </AgentRule>

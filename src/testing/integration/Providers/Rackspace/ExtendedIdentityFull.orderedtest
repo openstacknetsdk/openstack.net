@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="ExtendedIdentityFull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\extendedidentityfull.orderedtest" id="a40eaa8e-bb0f-45f5-a54a-0184d196c438" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Execution id="52683fa1-85ab-40d1-ac85-2d978fff60be" />
+<OrderedTest name="extendedidentityfull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\extendedidentityfull.orderedtest" id="a40eaa8e-bb0f-45f5-a54a-0184d196c438" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Execution timeOut="3600000" id="52683fa1-85ab-40d1-ac85-2d978fff60be" />
   <TestLinks>
     <TestLink id="a8531247-d960-2652-b54e-b9fd77cc67c5" name="Test001_Should_Throw_Exception_When_Trying_To_Change_Password_For_Self_When_Changeing_Password_As_Non_Admin_Identity" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="24aeb503-6621-586f-c87c-22f1e7f364c7" name="Test002_Should_Throw_Exception_When_Trying_To_Change_Password_For_Other_User_When_Changeing_Password_As_Non_Admin_Identity" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
