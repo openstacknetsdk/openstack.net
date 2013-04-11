@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <OrderedTest name="identityfull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\identityfull.orderedtest" id="a5917904-bc4e-4a43-8f0b-0936087905c6" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Execution id="d59ce81b-03e2-4a48-b84f-4cffec9a43be" />
+  <Execution timeOut="3600000" id="d59ce81b-03e2-4a48-b84f-4cffec9a43be" />
   <TestLinks>
     <TestLink id="e36560a2-71a9-2e97-f0e7-3128ecc781d3" name="Should_Authenticate_Test_Identity" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="57443066-dd7a-6ca1-1d6a-c72b84384cc7" name="Should_Authenticate_Test_Admin_Identity" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

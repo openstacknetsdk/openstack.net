@@ -6,6 +6,11 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     internal class RevertServerResizeRequest
     {
         [DataMember(Name = "revertResize")]
-        public object Details { get; set; }
+        public string Details { get; set; }
+
+        public RevertServerResizeRequest()
+        {
+            Details = string.Empty;
+        }
     }
 }
