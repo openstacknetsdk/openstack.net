@@ -15,11 +15,11 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ProviderBase
     {
-        protected readonly IIdentityProvider _identityProvider;
+        protected readonly ICloudIdentityProvider _identityProvider;
         protected readonly IRestService _restService;
         protected readonly CloudIdentity _defaultIdentity;
 
-        protected ProviderBase(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
+        protected ProviderBase(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService)
         {
             _defaultIdentity = defaultIdentity;
             _identityProvider = identityProvider;

@@ -1,41 +1,49 @@
-﻿using JSIStudios.SimpleRESTServices.Client;
+﻿using System.Collections.Generic;
+using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class IdentityProvider : IExtendedIdentityProvider
+    public class CloudIdentityProvider : IExtendedCloudIdentityProvider
     {
-        private readonly IdentityProviderFactory _factory;
+        private readonly CloudIdentityProviderFactory _factory;
 
-        public IdentityProvider() : this(null, null, null, null, null)
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudIdentityProvider"/> class.
+        /// </summary>
+        public CloudIdentityProvider() : this(null, null, null, null, null)
         {}
 
-        public IdentityProvider(CloudIdentity defaultIdentity)
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudIdentityProvider"/> class.
+        /// </summary>
+        /// <param name="defaultIdentity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>[Optional]: If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null, null)
         { }
 
-        public IdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
-        public IdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(defaultIdentity, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
-        public IdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase)
         {}
 
-        public IdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
+        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null, null)
         { }
 
-        public IdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
-            _factory = new IdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
+            _factory = new CloudIdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
         }
 
-        public Role[] ListRoles(CloudIdentity identity)
+        public IEnumerable<Role> ListRoles(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListRoles(identity);
@@ -53,13 +61,13 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetRole(roleId, identity: identity);
         }
 
-        public Role[] GetRolesByUser(string userId, CloudIdentity identity)
+        public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.GetRolesByUser(userId, identity: identity);
         }
 
-        public User[] ListUsers(CloudIdentity identity)
+        public IEnumerable<User> ListUsers(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListUsers(identity);
@@ -137,7 +145,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.UpdateUserCredentials(userId, username, apiKey, identity: identity);
         }
 
-        public UserCredential[] ListUserCredentials(string userId, CloudIdentity identity)
+        public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListUserCredentials(userId, identity: identity);
@@ -155,7 +163,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.DeleteUserCredentials(userId, identity: identity);
         }
 
-        public Tenant[] ListTenants(CloudIdentity identity)
+        public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListTenants(identity);
@@ -191,7 +199,7 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetTokenInfo(identity);
         }
 
-        private IExtendedIdentityProvider GetProvider(CloudIdentity identity)
+        private IExtendedCloudIdentityProvider GetProvider(CloudIdentity identity)
         {
             return _factory.Get(identity);
         }
