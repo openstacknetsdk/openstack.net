@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using net.openstack.Providers.Rackspace.Exceptions;
 using net.openstack.Providers.Rackspace.Validators;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
@@ -17,7 +18,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 var cloudBlockStorageValidator = new CloudBlockStorageValidator();
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 Assert.Fail("Exception should not be thrown.");
@@ -33,12 +34,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
                 var cloudBlockStorageValidator = new CloudBlockStorageValidator();
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
-                Assert.Fail("Expected was not thrown.");
+                Assert.Fail("Expected exception was not thrown.");
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-
-                Assert.AreEqual("ERROR: The volume size value must be between 100 and 1000", ex.Message);
+                Assert.IsTrue(exc is InvalidVolumeSizeException);
             }
         }
 
@@ -53,10 +53,9 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
                 Assert.Fail("Expected  was not thrown.");
             }
-            catch (Exception ex)
-            {
-
-                Assert.AreEqual("ERROR: The volume size value must be between 100 and 1000", ex.Message);
+            catch (Exception exc)
+            {  
+                Assert.IsTrue(exc is InvalidVolumeSizeException);
             }
         }    
     }
