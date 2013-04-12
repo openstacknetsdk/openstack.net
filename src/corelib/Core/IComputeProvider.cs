@@ -30,6 +30,10 @@ namespace net.openstack.Core
         bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null);
 
         // Volume Attachment Actions
+        ServerVolume AttachServerVolume(string serverId, string volumeId, string storageDevice = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<ServerVolume> ListServerVolumes(string serverId, string region = null, CloudIdentity identity = null);
+        ServerVolume GetServerVolumeDetails(string serverId, string volumeId, string region = null, CloudIdentity identity = null);
+        bool DetachServerVolume(string serverId, string volumeId, string region = null, CloudIdentity identity = null);
 
         // Flavors
         IEnumerable<Flavor> ListFlavors(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null);
