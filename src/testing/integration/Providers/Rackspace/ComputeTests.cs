@@ -29,6 +29,7 @@ using net.openstack.Providers.Rackspace;
         private static ServerDetails _preBuildDetails;
         private static string _rescueAdminPass;
         private static ServerDetails _unRescueDetails;
+        private static ServerVolume _testVolume;
         private const string NewPassword = "my_new_password";
 
         /// <summary>
@@ -949,6 +950,98 @@ using net.openstack.Providers.Rackspace;
             var details = provider.WaitForServerActive(_testServer.Id);
 
             Assert.IsNotNull(details);
+        }
+
+        [TestMethod]
+        public void Should_Attach_Server_Volume()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            _testVolume = provider.AttachServerVolume(_testServer.Id, "2da9ce90-076e-450a-be3e-c822c9aa73f5");
+
+            Assert.IsNotNull(_testVolume);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Volume_Is_Attached_To_The_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+           var volumeIsInList = false;
+            var count = 0;
+            do
+            {
+                var volumes = provider.ListServerVolumes(_testServer.Id);
+
+                if (volumes != null)
+                    volumeIsInList = volumes.Any(v => v.Id == _testVolume.Id);
+
+                count += 1;
+
+                Thread.Sleep(2400);
+            } while (!volumeIsInList && count < 600);
+
+            Assert.IsTrue(volumeIsInList);
+        }
+
+        [TestMethod]
+        public void Should_List_All_Volumes()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var volumes = provider.ListServerVolumes(_testServer.Id);
+
+            Assert.IsTrue(volumes.Any());
+        }
+
+        [TestMethod]
+        public void Should_Contain_Attached_Volumne_In_Server_Volume_List()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var volumes = provider.ListServerVolumes(_testServer.Id);
+
+            Assert.IsTrue(volumes.Any(v => v.Id == _testVolume.Id));
+        }
+
+        [TestMethod]
+        public void Should_Detach_Volume_From_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var success = provider.DetachServerVolume(_testServer.Id, _testVolume.Id);
+
+            Assert.IsTrue(success);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Volume_Is_Detached_From_The_Server()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var volumeIsInList = false;
+            var count = 0;
+            do
+            {
+                var volumes = provider.ListServerVolumes(_testServer.Id);
+
+                if (volumes != null)
+                    volumeIsInList = volumes.Any(v => v.Id == _testVolume.Id);
+
+                count += 1;
+            } while (volumeIsInList && count < 600);
+
+            Assert.IsFalse(volumeIsInList);
+        }
+
+        [TestMethod]
+        public void Should_NOT_Contain_Attached_Volumne_In__Server_Volume_List()
+        {
+            var provider = new ComputeProvider(_testIdentity);
+
+            var volumes = provider.ListServerVolumes(_testServer.Id);
+
+            Assert.IsFalse(volumes.Any(v => v.Id == _testVolume.Id));
         }
     }
 }

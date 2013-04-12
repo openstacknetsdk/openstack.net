@@ -7,6 +7,7 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
+using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
@@ -345,6 +346,57 @@ namespace net.openstack.Providers.Rackspace
 
         #region Volume Attachment Actions
 
+        public ServerVolume AttachServerVolume(string serverId, string volumeId, string storageDevice = null, string region = null,
+                                               CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments", GetServiceEndpoint(identity, region), serverId));
+
+            var request = new AttachServerVolumeRequest { ServerVolumeData = new AttachServerVolumeData { Device = storageDevice, VolumeId = volumeId } };
+            var response = ExecuteRESTRequest<ServerVolumeResponse>(identity, urlPath, HttpMethod.POST, request);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.ServerVolume;
+        }
+
+        public IEnumerable<ServerVolume> ListServerVolumes(string serverId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments", GetServiceEndpoint(identity, region), serverId));
+
+            var response = ExecuteRESTRequest<ServerVolumeListResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.ServerVolumes;
+        }
+
+        public ServerVolume GetServerVolumeDetails(string serverId, string volumeId, string region = null,
+                                                   CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments/{2}", GetServiceEndpoint(identity, region), serverId, volumeId));
+
+            var response = ExecuteRESTRequest<ServerVolumeResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.ServerVolume;
+        }
+
+        public bool DetachServerVolume(string serverId, string volumeId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments/{2}", GetServiceEndpoint(identity, region), serverId, volumeId));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
+                return false;
+
+            return true;
+        }
+
         #endregion
 
         #region Flavors
@@ -462,7 +514,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
             var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
-            var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
                 return false; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
