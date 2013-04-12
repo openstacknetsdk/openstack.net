@@ -18,10 +18,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private const string snapshotDisplayName = "Integration Test Snapshot";
         private const string snapshotDisplayDescription = "Integration Test Snapshot Description";
 
-        // <summary>
-        //Gets or sets the test context which provides
-        //information about and functionality for the current test run.
-        //</summary>
         public TestContext TestContext
         {
             get
@@ -84,6 +80,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudBlockStorageProvider();
             var volumeCreatedResponse = provider.CreateVolume(100, volumeDisplayDescription, volumeDisplayName, null, "SATA", null, _testIdentity);
             Assert.IsTrue(volumeCreatedResponse);
+
+
         }
 
         [TestMethod]
@@ -157,11 +155,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 var deleteVolumeResult = provider.DeleteVolume(testVolume.Id, identity: _testIdentity);
                 if (deleteVolumeResult)
                 {
-                    volumeListResponse = provider.ListVolumes(identity: _testIdentity);
-                    if (volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName) != null)
-                    {
-                        Assert.Fail("Volume still exists after delete method returned true");
-                    }
+                    var volumeWaitForDeletedResult = provider.WaitForVolumeDeleted(testVolume.Id, identity: _testIdentity);
+                    Assert.IsTrue(volumeWaitForDeletedResult);
                 }
                 else
                 {
@@ -318,40 +313,49 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = new CloudBlockStorageProvider();
             var volumeListResponse = provider.ListVolumes(identity: _testIdentity);
-            
+
             if (volumeListResponse == null || !volumeListResponse.Any()) return;
-            
-            var testVolume = volumeListResponse.FirstOrDefault(x => x.DisplayName == volumeDisplayName);
-            if (testVolume == null) return;
+
+            var testVolumeList = volumeListResponse.Where(x => x.DisplayName == volumeDisplayName);
+            if (!testVolumeList.Any()) return;
 
             var snapshotList = provider.ListSnapshots(identity: _testIdentity);
             if (snapshotList != null && snapshotList.Any())
             {
-
-                var testVolumeSnapshots = snapshotList.Where(x => x.VolumeId == testVolume.Id);
-
-                if (testVolumeSnapshots.Any())
+                foreach (var testVolume in testVolumeList)
                 {
-                    foreach (var volumeSnapshot in testVolumeSnapshots)
+                    var testVolumeSnapshots = snapshotList.Where(x => x.VolumeId == testVolume.Id);
+
+                    if (testVolumeSnapshots.Any())
                     {
-                        var deleteSnapshotResult = provider.DeleteSnapshot(volumeSnapshot.Id, identity: _testIdentity);
-
-                        if (deleteSnapshotResult)
+                        foreach (var testSnapshot in testVolumeSnapshots)
                         {
-                            var snapshotDeleteDetails = provider.WaitForSnapshotDeleted(volumeSnapshot.Id,
-                                                                                        identity: _testIdentity);
-                            Assert.IsTrue(snapshotDeleteDetails);
-                        }
-                        else
-                        {
-                            Assert.Fail(string.Format("Snapshot (ID:{0}) could not be deleted.", volumeSnapshot.Id));
-                        }
+                            var deleteSnapshotResult = provider.DeleteSnapshot(testSnapshot.Id,
+                                                                               identity: _testIdentity);
 
+                            if (deleteSnapshotResult)
+                            {
+                                var snapshotDeleteDetails = provider.WaitForSnapshotDeleted(testSnapshot.Id,
+                                                                                            identity: _testIdentity);
+                                Assert.IsTrue(snapshotDeleteDetails);
+                            }
+                            else
+                            {
+                                Assert.Fail(string.Format("Snapshot (Volume ID: {0} -- Snapshot ID:{1}) could not be deleted.", testVolume.Id, testSnapshot.Id));
+                            }
+
+                        }
                     }
                 }
             }
 
-            Assert.IsTrue(provider.DeleteVolume(testVolume.Id, identity: _testIdentity));
+            foreach (var testVolume in testVolumeList)
+            {
+                var deleteVolumeResults = provider.DeleteVolume(testVolume.Id, identity: _testIdentity);
+                Assert.IsTrue(deleteVolumeResults);
+                var volumeWaitForDeletedResult = provider.WaitForVolumeDeleted(testVolume.Id, identity: _testIdentity);
+                Assert.IsTrue(volumeWaitForDeletedResult);
+            }
         }
         #endregion
     }
