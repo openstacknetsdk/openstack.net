@@ -37,7 +37,10 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public string AccessIPv6 { get; set; }
 
         [DataMember(Name = "networks", EmitDefaultValue = true)]
-        public NewServertNetwork[] Networks { get; set; } 
+        public NewServerNetwork[] Networks { get; set; }
+
+        [DataMember(Name = "personality", EmitDefaultValue = true)]
+        public string Personality { get; set; }
 
         public CreateServerDetails()
         {
@@ -46,7 +49,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     }
 
     [DataContract]
-    internal class NewServertNetwork
+    internal class NewServerNetwork
     {
         [DataMember(Name = "uuid")]
         public Guid Id { get; set; }

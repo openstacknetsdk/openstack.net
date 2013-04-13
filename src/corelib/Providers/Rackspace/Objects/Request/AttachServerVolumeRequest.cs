@@ -12,4 +12,14 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         [DataMember(Name = "volumeAttachment")]
         public AttachServerVolumeData ServerVolumeData { get; set; }
     }
+
+    [DataContract]
+    internal class AttachServerVolumeData
+    {
+        [DataMember(Name = "device")]
+        public string Device { get; set; }
+
+        [DataMember(Name = "volumeId")]
+        public string VolumeId { get; set; }
+    }
 }
