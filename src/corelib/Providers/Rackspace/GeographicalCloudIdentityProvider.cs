@@ -6,20 +6,19 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class GeographicalIdentityProvider : IExtendedIdentityProvider
+    internal class GeographicalCloudIdentityProvider : IExtendedCloudIdentityProvider
     {
         private readonly IRestService _restService;
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
         private readonly CloudIdentity _defaultIdentity;
 
-        public GeographicalIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
+        public GeographicalCloudIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
         {
             _defaultIdentity = identity;
             _urlBase = urlBase;
@@ -28,8 +27,8 @@ namespace net.openstack.Providers.Rackspace
         }
 
         #region Roles
-        
-        public Role[] ListRoles(CloudIdentity identity)
+
+        public IEnumerable<Role> ListRoles(CloudIdentity identity)
         {
             var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles",
                                                                              HttpMethod.GET);
@@ -60,7 +59,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Role;
         }
 
-        public Role[] GetRolesByUser(string userId, CloudIdentity identity)
+        public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
             var response = ExecuteRESTRequest<RolesResponse>(identity, urlPath, HttpMethod.GET);
@@ -126,7 +125,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.PasswordCredencial.Password.Equals(password);
         }
 
-        public UserCredential[] ListUserCredentials(string userId, CloudIdentity identity)
+        public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
@@ -204,7 +203,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Users
 
-        public User[] ListUsers(CloudIdentity identity)
+        public IEnumerable<User> ListUsers(CloudIdentity identity)
         {
 
             var response = ExecuteRESTRequest<UsersResponse>(identity, "/v2.0/users", HttpMethod.GET);
@@ -295,7 +294,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Tenants
 
-        public Tenant[] ListTenants(CloudIdentity identity)
+        public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
             var response = ExecuteRESTRequest<TenantsResponse>(identity, "v2.0/tenants", HttpMethod.GET);
 
@@ -355,16 +354,16 @@ namespace net.openstack.Providers.Rackspace
                 rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
             var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
-                                                                                                                                                       {
-                                                                                                                                                           var auth = AuthRequest.FromCloudIdentity(identity);
-                                                                                                                                                           var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
+                            {
+                                var auth = AuthRequest.FromCloudIdentity(identity);
+                                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
 
-                                                                                                                                                           if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
-                                                                                                                                                               return null;
+                                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                                    return null;
 
-                                                                                                                                                           return response.Data.UserAccess;
-                                                                                                                                                       }, forceCacheRefresh);
+                                return response.Data.UserAccess;
+                            }, forceCacheRefresh);
 
             return userAccess;
         }

@@ -7,35 +7,41 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
-using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class ComputeProvider : ProviderBase, IComputeProvider
+    public class CloudServersProvider : ProviderBase, ICloudServersProvider
     {
         private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203, 204 };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
-       
-        public ComputeProvider()
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        public CloudServersProvider()
             : this(null) { }
 
-        public ComputeProvider(CloudIdentity identity)
-            : this(identity, new IdentityProvider(), new JsonRestServices()) { }
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>[Optional]: If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        public CloudServersProvider(CloudIdentity identity)
+            : this(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
 
-        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService)
+        internal CloudServersProvider(ICloudIdentityProvider identityProvider, IRestService restService)
             : this(null, identityProvider, restService) { }
 
-        public ComputeProvider(IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper) 
+        internal CloudServersProvider(ICloudIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper) 
             : this(null, identityProvider, restService, networkResponseMapper){}
 
-        public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
+        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider identityProvider, IRestService restService)
             : this(identity, identityProvider, restService, new NetworkResponseJsonMapper()) { }
 
-        public ComputeProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
+        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
             : base(identity, identityProvider, restService)
         {
             _networkResponseMapper = networkResponseMapper;
@@ -69,23 +75,26 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Servers;
         }
 
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            NewServertNetwork[] networks = null;
+            NewServerNetwork[] networksToAttach = null;
 
             if (attachToServiceNetwork || attachToPublicNetwork)
             {
-                var networkList = new List<NewServertNetwork>();
+                var networkList = new List<NewServerNetwork>();
 
                 if(attachToPublicNetwork)
-                    networkList.Add(new NewServertNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
+                    networkList.Add(new NewServerNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
 
                 if(attachToServiceNetwork)
-                    networkList.Add(new NewServertNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
+                    networkList.Add(new NewServerNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
 
-                networks = networkList.ToArray();
+                if(networks != null && networks.Any())
+                    networkList.AddRange(networks.Select(id => new NewServerNetwork(){Id = id}));
+
+                networksToAttach = networkList.ToArray();
             }
 
             var request = new CreateServerRequest
@@ -97,7 +106,8 @@ namespace net.openstack.Providers.Rackspace
                                                     Flavor = flavor,
                                                     ImageName = imageName,
                                                     Metadata = metadata,
-                                                    Networks = networks,
+                                                    Networks = networksToAttach,
+                                                    Personality = personality,
                                                 }
                               };
             var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, request);
@@ -123,11 +133,11 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Server;
         }
 
-        public bool UpdateServer(string cloudServerId, string name, string ipV4Address, string ipV6Address, string region = null, CloudIdentity identity = null)
+        public bool UpdateServer(string cloudServerId, string name= null, string accessIPv4 = null, string accessIPv6 = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var requestJson = new UpdateServerRequest(name, ipV4Address, ipV6Address);
+            var requestJson = new UpdateServerRequest(name, accessIPv4, accessIPv6);
             var response = ExecuteRESTRequest<ServerDetailsResponse>(identity, urlPath, HttpMethod.PUT, requestJson);
 
             if (response == null || response.Data == null || response.Data.Server == null)
@@ -152,20 +162,20 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerDetails WaitForServerState(string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(cloudServerId, new[] { expectedState }, errorStates, region, refreshCount, refreshDelayInMS, identity);
+            return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public ServerDetails WaitForServerState(string cloudServerId, string[] expectedStates, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            var serverDetails = GetDetails(cloudServerId, region, identity);
+            var serverDetails = GetDetails(serverId, region, identity);
 
             int count = 0;
             while (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
-                serverDetails = GetDetails(cloudServerId, region, identity);
+                serverDetails = GetDetails(serverId, region, identity);
                 count++;
             }
 
@@ -175,18 +185,18 @@ namespace net.openstack.Providers.Rackspace
             return serverDetails;
         }
 
-        public ServerDetails WaitForServerActive(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(cloudServerId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, region, refreshCount, refreshDelayInMS, identity);
+            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public void WaitForServerDeleted(string cloudServerId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
             try
             {
-                WaitForServerState(cloudServerId, ServerState.DELETED,
-                                   new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED}, region,
-                                   refreshCount, refreshDelayInMS, identity);
+                WaitForServerState(serverId, ServerState.DELETED,
+                                   new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED},
+                                   refreshCount, refreshDelayInMS, region, identity);
             }
             catch (Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
@@ -243,7 +253,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
-        public ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string ipV4Address = null, string ipV6Address = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
+        public ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
                                                                    {
@@ -254,8 +264,8 @@ namespace net.openstack.Providers.Rackspace
                                                                        AdminPassword = adminPassword,
                                                                        Metadata = metadata,
                                                                        Personality = personality,
-                                                                       AccessIPv4 = ipV4Address,
-                                                                       AccessIPv6 = ipV6Address,
+                                                                       AccessIPv4 = accessIPv4,
+                                                                       AccessIPv6 = accessIPv6,
                                                                    } };
             var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
@@ -441,11 +451,11 @@ namespace net.openstack.Providers.Rackspace
 
         #region Images
 
-        public IEnumerable<ServerImage> ListImages(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
-            var queryStringParameters = BuildListImagesQueryStringParameters(serverId, imageName, imageStatus, changesSince, markerId, limit, imageType);
+            var queryStringParameters = BuildListImagesQueryStringParameters(server, imageName, imageStatus, changesSince, markerId, limit, imageType);
 
             var response = ExecuteRESTRequest<ListImagesResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
@@ -455,11 +465,11 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Images;
         }
 
-        public IEnumerable<ServerImageDetails> ListImagesWithDetails(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ServerImageDetails> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
-            var queryStringParameters = BuildListImagesQueryStringParameters(serverId, imageName, imageStatus, changesSince, markerId, limit, imageType);
+            var queryStringParameters = BuildListImagesQueryStringParameters(server, imageName, imageStatus, changesSince, markerId, limit, imageType);
 
             var response = ExecuteRESTRequest<ListImagesDetailsResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
@@ -522,12 +532,12 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
             var details = GetImage(imageId, region, identity);
 
             int count = 0;
-            while (!details.Status.Equals(expectedState) && !errorStates.Contains(details.Status) && count < refreshCount)
+            while (!expectedStates.Contains(details.Status) && !errorStates.Contains(details.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
                 details = GetImage(imageId, region, identity);
@@ -540,18 +550,23 @@ namespace net.openstack.Providers.Rackspace
             return details;
         }
 
-        public ServerImageDetails WaitForImageActive(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, region, refreshCount, refreshDelayInMS, identity);
+            return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public void WaitForImageDeleted(string imageId, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        {
+            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelayInMS, region, identity);
+        }
+
+        public void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
             try
             {
                 WaitForImageState(imageId, ImageState.DELETED,
-                                  new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED}, region,
-                                  refreshCount, refreshDelayInMS, identity);
+                                  new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED},
+                                  refreshCount, refreshDelayInMS, region, identity);
             }
             catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
@@ -562,9 +577,9 @@ namespace net.openstack.Providers.Rackspace
 
         #region Server Metadata
 
-        public Metadata ListServerMetadata(string cloudServerId, string region = null, CloudIdentity identity = null)
+        public Metadata ListServerMetadata(string serverId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -574,9 +589,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
+        public bool SetServerMetadata(string serverId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
@@ -586,9 +601,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool UpdateServerMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
+        public bool UpdateServerMetadata(string serverId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
@@ -598,9 +613,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public string GetServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
+        public string GetServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -610,9 +625,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetServerMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null)
+        public bool SetServerMetadataItem(string serverId, string key, string value, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
 
@@ -622,9 +637,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool DeleteServerMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
+        public bool DeleteServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -638,9 +653,9 @@ namespace net.openstack.Providers.Rackspace
 
         #region Image Metadata
 
-        public Metadata ListImageMetadata(string cloudServerId, string region = null, CloudIdentity identity = null)
+        public Metadata ListImageMetadata(string imageId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -650,9 +665,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
+        public bool SetImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
@@ -662,9 +677,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool UpdateImageMetadata(string cloudServerId, Metadata metadata, string region = null, CloudIdentity identity = null)
+        public bool UpdateImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
@@ -674,9 +689,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public string GetImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
+        public string GetImageMetadataItem(string imageId, string key, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -686,9 +701,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetImageMetadataItem(string cloudServerId, string key, string value, string region = null, CloudIdentity identity = null)
+        public bool SetImageMetadataItem(string imageId, string key, string value, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
 
@@ -698,9 +713,9 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        public bool DeleteImageMetadataItem(string cloudServerId, string key, string region = null, CloudIdentity identity = null)
+        public bool DeleteImageMetadataItem(string imageId, string key, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
+            var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -719,12 +734,12 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "cloudServersOpenStack", region);
         }
 
-        private IComputeProvider BuildProvider(CloudIdentity identity)
+        private ICloudServersProvider BuildProvider(CloudIdentity identity)
         {
             if (identity == null)
                 identity = _defaultIdentity;
 
-            return new ComputeProvider(identity, _identityProvider, _restService);
+            return new CloudServersProvider(identity, _identityProvider, _restService);
         }
 
         #endregion

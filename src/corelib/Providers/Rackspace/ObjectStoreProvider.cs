@@ -16,12 +16,12 @@ namespace net.openstack.Providers.Rackspace
             : this(null) { }
 
         public ObjectStoreProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, new IdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
+            : this(defaultIdentity, new CloudIdentityProvider(), new JsonRestServices(), new ObjectStoreValidator()) { }
 
-        public ObjectStoreProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
+        public ObjectStoreProvider(ICloudIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
             : this(null, identityProvider, restService, objectStoreValidator) { }
 
-        public ObjectStoreProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
+        public ObjectStoreProvider(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService, IObjectStoreValidator objectStoreValidator)
             : base(defaultIdentity, identityProvider, restService)
         {
             _objectStoreValidator = objectStoreValidator;

@@ -13,22 +13,22 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
             Server = new ServerUpdateDetails();
         }
 
-        public UpdateServerRequest(string name, string ipV4Address, string ipV6Address)
+        public UpdateServerRequest(string name, string accessIPv4, string accessIPv6)
         {
-            Server = new ServerUpdateDetails{Name = name, IPv4Address = ipV4Address, IPv6Address = ipV6Address};
+            Server = new ServerUpdateDetails{Name = name, AccessIpV4 = accessIPv4, AccessIPv6 = accessIPv6};
         }
     }
 
     [DataContract]
     internal class ServerUpdateDetails
     {
-        [DataMember(Name="name")]
+        [DataMember(Name="name", EmitDefaultValue = true)]
         public string Name { get; set; }
 
-        [DataMember(Name = "accessIPv4")]
-        public string IPv4Address { get; set; }
+        [DataMember(Name = "accessIPv4", EmitDefaultValue = true)]
+        public string AccessIpV4 { get; set; }
 
-        [DataMember(Name = "accessIPv6")]
-        public string IPv6Address { get; set; }
+        [DataMember(Name = "accessIPv6", EmitDefaultValue = true)]
+        public string AccessIPv6 { get; set; }
     }
 }
