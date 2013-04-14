@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="full" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\full.orderedtest" id="ad9ad82e-bcc7-4089-874e-4589965732d8" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<OrderedTest name="full" storage="c:\workspace\openstack.net_upstream\src\testing\integration\providers\rackspace\full.orderedtest" id="ad9ad82e-bcc7-4089-874e-4589965732d8" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Execution timeOut="36000000" />
   <TestLinks>
     <TestLink id="a5917904-bc4e-4a43-8f0b-0936087905c6" name="IdentityFull" storage="identityfull.orderedtest" type="Microsoft.VisualStudio.TestTools.TestTypes.Ordered.AutoSuite, Microsoft.VisualStudio.QualityTools.Tips.OrderedTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="a40eaa8e-bb0f-45f5-a54a-0184d196c438" name="ExtendedIdentityFull" storage="extendedidentityfull.orderedtest" type="Microsoft.VisualStudio.TestTools.TestTypes.Ordered.AutoSuite, Microsoft.VisualStudio.QualityTools.Tips.OrderedTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="eae53aec-fdb5-4c0d-a8ea-07c2749c7630" name="CloudServersFull" storage="cloudserversfull.orderedtest" type="Microsoft.VisualStudio.TestTools.TestTypes.Ordered.AutoSuite, Microsoft.VisualStudio.QualityTools.Tips.OrderedTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="3c3ce776-b081-4cb1-8782-5747e245a387" name="cloudfilesfull" storage="cloudfilesfull.orderedtest" type="Microsoft.VisualStudio.TestTools.TestTypes.Ordered.AutoSuite, Microsoft.VisualStudio.QualityTools.Tips.OrderedTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
   </TestLinks>
 </OrderedTest>

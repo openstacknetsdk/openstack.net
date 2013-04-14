@@ -37,12 +37,11 @@
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SimpleRESTServices.1.0.5.0\lib\net40\SimpleRESTServices.dll</HintPath>
+    <Reference Include="SimpleRESTServices">
+      <HintPath>..\..\packages\SimpleRESTServices.1.0.6.1\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -58,7 +57,7 @@
     <Compile Include="Domain\Mapping\NetworkResponseJObjectMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderCacheTests.cs" />
-    <Compile Include="Providers\Rackspace\ObjectProviderValidatorTests.cs" />
+    <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

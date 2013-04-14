@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
@@ -15,27 +17,34 @@ namespace net.openstack.Providers.Rackspace
 {
     public class ProviderBase
     {
-        protected readonly ICloudIdentityProvider _identityProvider;
-        protected readonly IRestService _restService;
-        protected readonly CloudIdentity _defaultIdentity;
+        protected readonly ICloudIdentityProvider IdentityProvider;
+        protected readonly IRestService RestService;
+        protected readonly CloudIdentity DefaultIdentity;
 
         protected ProviderBase(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService)
         {
-            _defaultIdentity = defaultIdentity;
-            _identityProvider = identityProvider;
-            _restService = restService;
+            DefaultIdentity = defaultIdentity;
+            IdentityProvider = identityProvider;
+            RestService = restService;
         }
         
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                                   (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+                                                   (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+
+        }
+
+        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
+        {
+            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
+                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, buildResponseCallback, requestBody, requestHeaders, requestQueryParams, requestSettings));
 
         }
 
@@ -43,7 +52,7 @@ namespace net.openstack.Providers.Rackspace
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
@@ -51,7 +60,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", _identityProvider.GetToken(identity, isRetry));
+            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
 
             string bodyStr = null;
             if (body != null)
@@ -81,6 +90,40 @@ namespace net.openstack.Providers.Rackspace
             return response;
         }
 
+        protected Response StreamRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Stream stream, int chunkSize, long maxReadLength = 0, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings requestSettings = null, Action<long> progressUpdated = null)
+        {
+            if (identity == null)
+                identity = DefaultIdentity;
+
+            if (requestSettings == null)
+                requestSettings = BuildDefaultRequestSettings();
+
+            requestSettings.Timeout = 14400000; // Need to pass this in.
+
+            if (headers == null)
+                headers = new Dictionary<string, string>();
+
+            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+
+            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+                requestSettings.UserAgent = GetUserAgentHeaderValue();
+
+            var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
+
+            // on errors try again 1 time.
+            if (response.StatusCode == 401)
+            {
+                if (!isRetry)
+                {
+                    return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, maxReadLength, queryStringParameter, headers, isRetry, requestSettings, progressUpdated);
+                }
+            }
+
+            CheckResponse(response);
+
+            return response;
+        }
+
         internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)
         {
             var non200SuccessCodesAggregate = new List<int>{ 401, 409 };
@@ -93,9 +136,9 @@ namespace net.openstack.Providers.Rackspace
         private Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
-            var userAccess = _identityProvider.GetUserAccess(identity);
+            var userAccess = IdentityProvider.GetUserAccess(identity);
 
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints");

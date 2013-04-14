@@ -737,9 +737,9 @@ namespace net.openstack.Providers.Rackspace
         private ICloudServersProvider BuildProvider(CloudIdentity identity)
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
-            return new CloudServersProvider(identity, _identityProvider, _restService);
+            return new CloudServersProvider(identity, IdentityProvider, RestService);
         }
 
         #endregion

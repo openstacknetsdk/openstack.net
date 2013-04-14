@@ -331,7 +331,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
                 throw new Exception("This code path is invalid, exception was expected.");
             }
-            catch(Exception ex)
+            catch(Exception )
             {
                 Assert.IsTrue(true);
             }
