@@ -3,7 +3,7 @@ using System.Web;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
 
-namespace net.openstack.Providers.Rackspace
+namespace net.openstack.Providers.Rackspace.Validators
 {
     public class CloudFilesValidator : ICloudFilesValidator
     {
