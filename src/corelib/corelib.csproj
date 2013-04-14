@@ -45,12 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\Snapshot.cs" />
+    <Compile Include="Core\Domain\Volume.cs" />
+    <Compile Include="Core\Domain\VolumeState.cs" />
+    <Compile Include="Core\Domain\VolumeType.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\ContainerCDN.cs" />
     <Compile Include="Core\Domain\ContainerObject.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\ICloudBlockStorageProvider.cs" />
+    <Compile Include="Core\ICloudBlockStorageValidator.cs" />
     <Compile Include="Core\Domain\ImageType.cs" />
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
@@ -77,6 +83,7 @@
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
     <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\ICloudFilesProvider.cs" />
     <Compile Include="Core\ICloudFilesMetadataProcessor.cs" />
@@ -94,6 +101,10 @@
     <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
@@ -103,6 +114,9 @@
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredencialRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\IProviderFactory.cs" />
     <Compile Include="Core\Domain\NewServer.cs" />
@@ -116,6 +130,9 @@
     <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredencialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeListResponse.cs" />
@@ -150,6 +167,7 @@
     <Compile Include="Core\Exceptions\Response\ResponseException.cs" />
     <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
     <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
     <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\ICloudIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
