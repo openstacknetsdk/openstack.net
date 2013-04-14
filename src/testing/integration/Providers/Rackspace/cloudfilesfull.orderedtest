@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="cloudfilesfull" storage="c:\workspace\openstack.net_upstream\src\testing\integration\providers\rackspace\cloudfilesfull.orderedtest" id="3c3ce776-b081-4cb1-8782-5747e245a387" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<OrderedTest name="cloudfilesfull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\cloudfilesfull.orderedtest" id="3c3ce776-b081-4cb1-8782-5747e245a387" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Execution timeOut="3600000" />
   <TestLinks>
     <TestLink id="d67b2c7a-a446-7518-2eb3-1579df0b6db1" name="Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Container_Does_Not_Exist" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="e36520a9-35b4-27aa-dc08-62823a2c4cc6" name="Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Objects_Does_Not_Exist" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

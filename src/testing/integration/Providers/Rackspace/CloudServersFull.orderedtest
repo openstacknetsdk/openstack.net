@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="CloudServersFull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\cloudserversfull.orderedtest" id="eae53aec-fdb5-4c0d-a8ea-07c2749c7630" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Execution id="b36f7a95-4c23-4694-afae-b821da1029b9" />
+<OrderedTest name="cloudserversfull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\cloudserversfull.orderedtest" id="eae53aec-fdb5-4c0d-a8ea-07c2749c7630" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Execution timeOut="10800000" id="b36f7a95-4c23-4694-afae-b821da1029b9" />
   <TestLinks>
     <TestLink id="caaf7e8d-77de-05a3-2590-497dc2dafe63" name="Should_Create_A_New_Server_In_DFW" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="cbdd021a-2047-4cf1-3974-ca583ceef8ae" name="Should_Create_A_New_Complex_Server_In_DFW" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
