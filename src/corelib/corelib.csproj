@@ -83,12 +83,7 @@
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
-    <Compile Include="Core\IObjectStoreProvider.cs" />
-    <Compile Include="Core\IObjectStoreValidator.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
-    <Compile Include="Providers\Rackspace\IExtendedIdentityProvider.cs" />
-    <Compile Include="Providers\Rackspace\ObjectStoreProvider.cs" />
-    <Compile Include="Providers\Rackspace\ComputeProvider.cs" />
     <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\ICloudFilesProvider.cs" />
     <Compile Include="Core\ICloudFilesMetadataProcessor.cs" />

@@ -24,12 +24,12 @@ namespace net.openstack.Providers.Rackspace
             : this(null) { }
 
         public CloudBlockStorageProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, new IdentityProvider(), new JsonRestServices(), new CloudBlockStorageValidator()) { }
+            : this(defaultIdentity, new CloudIdentityProvider(), new JsonRestServices(), new CloudBlockStorageValidator()) { }
 
-        internal CloudBlockStorageProvider(IIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
+        internal CloudBlockStorageProvider(ICloudIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
             : this(null, identityProvider, restService, cloudBlockStorageValidator) { }
 
-        internal CloudBlockStorageProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
+        internal CloudBlockStorageProvider(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
             : base(defaultIdentity, identityProvider, restService)
         {
             _cloudBlockStorageValidator = cloudBlockStorageValidator;
