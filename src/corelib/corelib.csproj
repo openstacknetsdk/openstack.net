@@ -50,6 +50,7 @@
     <Compile Include="Core\Domain\VolumeState.cs" />
     <Compile Include="Core\Domain\VolumeType.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
+    <Compile Include="Core\Domain\CloudNetwork.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\ContainerCDN.cs" />
     <Compile Include="Core\Domain\ContainerObject.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Core\Domain\ServerVolume.cs" />
     <Compile Include="Core\Domain\Tenant.cs" />
     <Compile Include="Core\Domain\UserCredential.cs" />
+    <Compile Include="Core\Exceptions\CidrFormatException.cs" />
     <Compile Include="Core\Exceptions\CDNNotEnabledException.cs" />
     <Compile Include="Core\Exceptions\ContainerNameException.cs" />
     <Compile Include="Core\Exceptions\ObjectNameException.cs" />
@@ -83,6 +85,10 @@
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Core\ICloudNetworksProvider.cs" />
+    <Compile Include="Core\ICloudNetworksValidator.cs" />
+    <Compile Include="Core\IObjectStoreProvider.cs" />
+    <Compile Include="Core\IObjectStoreValidator.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
     <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\ICloudFilesProvider.cs" />
@@ -92,12 +98,21 @@
     <Compile Include="Core\ICloudFilesValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\InvalidVolumeSizeException.cs" />
+    <Compile Include="Providers\Rackspace\CloudNetworksProvider.cs" />
     <Compile Include="Providers\Rackspace\IExtendedCloudIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\InvalidETagException.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudServersProvider.cs" />
     <Compile Include="Core\Exceptions\InvalidCloudIdentityException.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesMetadataProcessor.cs" />
+    <Compile Include="Providers\Rackspace\ObjectStoreValidator.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworkRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworksDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\CloudNetworkResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListCloudNetworksResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeListResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
@@ -169,6 +184,7 @@
     <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
     <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudNetworksValidator.cs" />
     <Compile Include="UserAccessCache.cs" />
     <Compile Include="Core\ICloudIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
