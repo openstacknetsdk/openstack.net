@@ -81,7 +81,7 @@ namespace net.openstack.Providers.Rackspace
 
             NewServerNetwork[] networksToAttach = null;
 
-            if (attachToServiceNetwork || attachToPublicNetwork)
+            if (attachToServiceNetwork || attachToPublicNetwork || networks.Any())
             {
                 var networkList = new List<NewServerNetwork>();
 
