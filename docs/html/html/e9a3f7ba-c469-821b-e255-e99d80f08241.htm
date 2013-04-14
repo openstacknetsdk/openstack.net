@@ -1,0 +1,114 @@
+﻿<html xmlns:MSHelp="http://msdn.microsoft.com/mshelp" xmlns:mshelp="http://msdn.microsoft.com/mshelp"><head><link rel="SHORTCUT ICON" href="./../icons/favicon.ico" /><style type="text/css">.OH_CodeSnippetContainerTabLeftActive, .OH_CodeSnippetContainerTabLeft,.OH_CodeSnippetContainerTabLeftDisabled { backgroundImageName: tabLeftBG.gif; }.OH_CodeSnippetContainerTabRightActive, .OH_CodeSnippetContainerTabRight,.OH_CodeSnippetContainerTabRightDisabled { backgroundImageName: tabRightBG.gif; }.OH_footer { backgroundImageName: footer_slice.gif; background-position: top; background-repeat: repeat-x; }</style><link rel="stylesheet" type="text/css" href="./../styles/branding.css" /><link rel="stylesheet" type="text/css" href="./../styles/branding-en-US.css" /><style type="text/css">
+			body
+			{
+			border-left:5px solid #e6e6e6;
+			overflow-x:scroll;
+			overflow-y:scroll;
+			}
+		</style><script src="./../scripts/branding.js" type="text/javascript"><!----></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>ICloudServersProvider.RebuildServer Method </title><meta name="Language" content="en-us" /><meta name="System.Keywords" content="RebuildServer method" /><meta name="System.Keywords" content="ICloudServersProvider.RebuildServer method" /><meta name="Microsoft.Help.F1" content="net.openstack.Core.ICloudServersProvider.RebuildServer" /><meta name="Microsoft.Help.Id" content="M:net.openstack.Core.ICloudServersProvider.RebuildServer(System.String,System.String,System.String,System.String,System.String,System.String,System.String,net.openstack.Core.Domain.Metadata,System.String,net.openstack.Core.Domain.Personality,System.String,net.openstack.Core.Domain.CloudIdentity)" /><meta name="Description" content="Rebuilds the specified server." /><meta name="Microsoft.Help.ContentType" content="Reference" /><meta name="BrandingAware" content="'true'" /><meta name="container" content="net.openstack.Core" /><meta name="file" content="e9a3f7ba-c469-821b-e255-e99d80f08241" /><meta name="guid" content="e9a3f7ba-c469-821b-e255-e99d80f08241" /><link type="text/css" rel="stylesheet" href="ms-help://Hx/HxRuntime/HxLink.css" /><meta name="SelfBranded" content="true" /></head><body onload="onLoad()" class="primary-mtps-offline-document"><div class="OH_outerDiv"><div class="OH_outerContent"><table class="TitleTable"><tr><td class="OH_tdTitleColumn">ICloudServersProvider<span id="ID0EBBABAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBBABAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>RebuildServer Method </td><td class="OH_tdRunningTitleColumn">A Sandcastle Documented Class Library</td></tr></table><div id="mainSection"><div id="mainBody"><span class="introStyle"></span><div class="summary">
+            Rebuilds the specified server.
+            </div><p></p><b>Namespace:</b> <a href="6f750d61-9d3f-a33a-5e5f-e0b4634663bc.htm" target="">net.openstack.Core</a><br /><b>Assembly:</b> <span sdata="assembly">openstacknet</span> (in openstacknet.dll) Version: 1.0.3.0 (1.0.3.0)<div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Syntax</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div><div id="snippetGroup_Syntax" class="code"><div id="ID0ECHCAAAAA" class="OH_CodeSnippetContainer"><div class="OH_CodeSnippetContainerTabs" id="ID0ECHCAAAAA_tabs"><div class="OH_CodeSnippetContainerTabLeftActive" id="ID0ECHCAAAAA_tabimgleft"></div><div id="ID0ECHCAAAAA_tab1" class="OH_CodeSnippetContainerTabActive" EnableCopyCode="true"><a href="#" onclick="javascript:ChangeTab('ID0ECHCAAAAA','C#','1','4');return false;">C#</a></div><div id="ID0ECHCAAAAA_tab2" class="OH_CodeSnippetContainerTab" EnableCopyCode="true"><a href="#" onclick="javascript:ChangeTab('ID0ECHCAAAAA','Visual Basic','2','4');return false;">VB</a></div><div id="ID0ECHCAAAAA_tab3" class="OH_CodeSnippetContainerTab" EnableCopyCode="true"><a href="#" onclick="javascript:ChangeTab('ID0ECHCAAAAA','Visual C++','3','4');return false;">C++</a></div><div id="ID0ECHCAAAAA_tab4" class="OH_CodeSnippetContainerTabDisabledNotFirst" EnableCopyCode="true" disabled="true"><a>F#</a></div><div class="OH_CodeSnippetContainerTabRight" id="ID0ECHCAAAAA_tabimgright"></div></div><div id="ID0ECHCAAAAA_codecollection" class="OH_CodeSnippetContainerCodeCollection"><div class="OH_CodeSnippetToolBar"><div class="OH_CodeSnippetToolBarText"><a id="ID0ECHCAAAAA_ViewColorized" href="#" onclick="javascript:ExchangeTitleContent('ID0ECHCAAAAA','4')" title="View Colorized" style="display: none">View Colorized</a><a id="ID0ECHCAAAAA_copycode" href="#" onclick="javascript:CopyToClipboard('ID0ECHCAAAAA','4')" title="Copy to Clipboard">Copy to Clipboard</a><a id="ID0ECHCAAAAA_PrintText" class="OH_PrintText" href="#" onclick="javascript:Print('ID0ECHCAAAAA','4')" title="Print">Print</a></div></div><div id="ID0ECHCAAAAA_code_Div1" class="OH_CodeSnippetContainerCode" style="display: block"><pre><span class="identifier">ServerDetails</span> <span class="identifier">RebuildServer</span>(
+	<span class="identifier">string</span> <span class="parameter">serverId</span>,
+	<span class="identifier">string</span> <span class="parameter">serverName</span>,
+	<span class="identifier">string</span> <span class="parameter">imageName</span>,
+	<span class="identifier">string</span> <span class="parameter">flavor</span>,
+	<span class="identifier">string</span> <span class="parameter">adminPassword</span>,
+	<span class="identifier">string</span> <span class="parameter">accessIPv4</span> = <span class="keyword">null</span>,
+	<span class="identifier">string</span> <span class="parameter">accessIPv6</span> = <span class="keyword">null</span>,
+	<span class="identifier">Metadata</span> <span class="parameter">metadata</span> = <span class="keyword">null</span>,
+	<span class="identifier">string</span> <span class="parameter">diskConfig</span> = <span class="keyword">null</span>,
+	<span class="identifier">Personality</span> <span class="parameter">personality</span> = <span class="keyword">null</span>,
+	<span class="identifier">string</span> <span class="parameter">region</span> = <span class="keyword">null</span>,
+	<span class="identifier">CloudIdentity</span> <span class="parameter">identity</span> = <span class="keyword">null</span>
+)</pre></div><div id="ID0ECHCAAAAA_code_Plain_Div1" class="OH_CodeSnippetContainerCode" style="display: none"><pre>ServerDetails RebuildServer(
+	string serverId,
+	string serverName,
+	string imageName,
+	string flavor,
+	string adminPassword,
+	string accessIPv4 = null,
+	string accessIPv6 = null,
+	Metadata metadata = null,
+	string diskConfig = null,
+	Personality personality = null,
+	string region = null,
+	CloudIdentity identity = null
+)</pre></div><div id="ID0ECHCAAAAA_code_Div2" class="OH_CodeSnippetContainerCode" style="display: none"><pre><span class="keyword">Function</span> <span class="identifier">RebuildServer</span> ( 
+	<span class="parameter">serverId</span> <span class="keyword">As</span> <span class="identifier">String</span>,
+	<span class="parameter">serverName</span> <span class="keyword">As</span> <span class="identifier">String</span>,
+	<span class="parameter">imageName</span> <span class="keyword">As</span> <span class="identifier">String</span>,
+	<span class="parameter">flavor</span> <span class="keyword">As</span> <span class="identifier">String</span>,
+	<span class="parameter">adminPassword</span> <span class="keyword">As</span> <span class="identifier">String</span>,
+	Optional <span class="parameter">accessIPv4</span> <span class="keyword">As</span> <span class="identifier">String</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">accessIPv6</span> <span class="keyword">As</span> <span class="identifier">String</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">metadata</span> <span class="keyword">As</span> <span class="identifier">Metadata</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">diskConfig</span> <span class="keyword">As</span> <span class="identifier">String</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">personality</span> <span class="keyword">As</span> <span class="identifier">Personality</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">region</span> <span class="keyword">As</span> <span class="identifier">String</span> = <span class="keyword">Nothing</span>,
+	Optional <span class="parameter">identity</span> <span class="keyword">As</span> <span class="identifier">CloudIdentity</span> = <span class="keyword">Nothing</span>
+) <span class="keyword">As</span> <span class="identifier">ServerDetails</span></pre></div><div id="ID0ECHCAAAAA_code_Plain_Div2" class="OH_CodeSnippetContainerCode" style="display: none"><pre>Function RebuildServer ( 
+	serverId As String,
+	serverName As String,
+	imageName As String,
+	flavor As String,
+	adminPassword As String,
+	Optional accessIPv4 As String = Nothing,
+	Optional accessIPv6 As String = Nothing,
+	Optional metadata As Metadata = Nothing,
+	Optional diskConfig As String = Nothing,
+	Optional personality As Personality = Nothing,
+	Optional region As String = Nothing,
+	Optional identity As CloudIdentity = Nothing
+) As ServerDetails</pre></div><div id="ID0ECHCAAAAA_code_Div3" class="OH_CodeSnippetContainerCode" style="display: none"><pre><span class="identifier">ServerDetails</span>^ <span class="identifier">RebuildServer</span>(
+	<span class="identifier">String</span>^ <span class="parameter">serverId</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">serverName</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">imageName</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">flavor</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">adminPassword</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">accessIPv4</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">accessIPv6</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">Metadata</span>^ <span class="parameter">metadata</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">diskConfig</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">Personality</span>^ <span class="parameter">personality</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">String</span>^ <span class="parameter">region</span> = <span class="keyword">nullptr</span>, 
+	<span class="identifier">CloudIdentity</span>^ <span class="parameter">identity</span> = <span class="keyword">nullptr</span>
+)</pre></div><div id="ID0ECHCAAAAA_code_Plain_Div3" class="OH_CodeSnippetContainerCode" style="display: none"><pre>ServerDetails^ RebuildServer(
+	String^ serverId, 
+	String^ serverName, 
+	String^ imageName, 
+	String^ flavor, 
+	String^ adminPassword, 
+	String^ accessIPv4 = nullptr, 
+	String^ accessIPv6 = nullptr, 
+	Metadata^ metadata = nullptr, 
+	String^ diskConfig = nullptr, 
+	Personality^ personality = nullptr, 
+	String^ region = nullptr, 
+	CloudIdentity^ identity = nullptr
+)</pre></div><div id="ID0ECHCAAAAA_code_Div4" class="OH_CodeSnippetContainerCode" style="display: none"><pre /></div><div id="ID0ECHCAAAAA_code_Plain_Div4" class="OH_CodeSnippetContainerCode" style="display: none"><pre /></div></div></div><script>addSpecificTextLanguageTagSet('ID0ECHCAAAAA');</script></div><div id="parameters"><h4 class="subHeading">Parameters</h4><dl paramName="serverId"><dt><span class="parameter">serverId</span></dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCALGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCALGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The server id.</span></dd></dl><dl paramName="serverName"><dt><span class="parameter">serverName</span></dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAKGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAKGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The new name for the server.</span></dd></dl><dl paramName="imageName"><dt><span class="parameter">imageName</span></dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAJGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAJGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The Id of the new image for the server.</span></dd></dl><dl paramName="flavor"><dt><span class="parameter">flavor</span></dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAIGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAIGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The new flavor for server.</span></dd></dl><dl paramName="adminPassword"><dt><span class="parameter">adminPassword</span></dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAHGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAHGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The new admin password for the server.</span></dd></dl><dl paramName="accessIPv4"><dt><span class="parameter">accessIPv4</span> (Optional)</dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAGGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAGGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The new access IP v4 address for the server. <div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]</span></dd></dl><dl paramName="accessIPv6"><dt><span class="parameter">accessIPv6</span> (Optional)</dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCAFGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAFGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The new access IP v6 address for the server. <div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]</span></dd></dl><dl paramName="metadata"><dt><span class="parameter">metadata</span> (Optional)</dt><dd>Type: <a href="2b64eb80-e52a-38c7-a4d4-31315acb8ead.htm" target="">net.openstack.Core.Domain<span id="ID0EBCAEGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAEGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>Metadata</a><br /><span>The list of any metadata to associate with the server. <div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]</span></dd></dl><dl paramName="diskConfig"><dt><span class="parameter">diskConfig</span> (Optional)</dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCADGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCADGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The disk configuration value. <div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]: Available values are [AUTO, MANUAL]</span></dd></dl><dl paramName="personality"><dt><span class="parameter">personality</span> (Optional)</dt><dd>Type: <a href="9851da39-e2a9-b31d-37ae-bdd69d8e1e12.htm" target="">net.openstack.Core.Domain<span id="ID0EBCACGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCACGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>Personality</a><br /><span>The file path and file contents. <div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]</span></dd></dl><dl paramName="region"><dt><span class="parameter">region</span> (Optional)</dt><dd>Type: <img src="./../icons/online_icon.gif" class="OH_offlineIcon" alt="Online" title="Online" /><a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">System<span id="ID0EBCABGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCABGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>String</a><br /><span>The region in which to build the server.<div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]: If not specified, the users default region will be used.</span></dd></dl><dl paramName="identity"><dt><span class="parameter">identity</span> (Optional)</dt><dd>Type: <a href="11ac4d8d-188f-528e-822c-80a66554e422.htm" target="">net.openstack.Core.Domain<span id="ID0EBCAAGCAAAAA"> </span><script type="text/javascript">
+					addToLanSpecTextIdSet("ID0EBCAAGCAAAAA?vb=.|cpp=::|cs=.|fs=.|nu=.");
+				</script>CloudIdentity</a><br /><span>The users Cloud Identity <a href="11ac4d8d-188f-528e-822c-80a66554e422.htm" target="">CloudIdentity</a><div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Remarks</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div>[Optional]: If not specified, the default identity given in the constructor will be used.</span></dd></dl></div><h4 class="subHeading">Return Value</h4>Type: <a href="af81d2cd-0c35-21d7-bf6a-81da5f89db39.htm" target="">ServerDetails</a><br />The <a href="af81d2cd-0c35-21d7-bf6a-81da5f89db39.htm" target="">ServerDetails</a><a name="seeAlsoSection"><!----></a><div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">See Also</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div><div class="seeAlsoStyle"><a href="8e30e084-64bf-9faf-1264-d784c5e00629.htm" target="">ICloudServersProvider Interface</a></div><div class="seeAlsoStyle"><a href="b2ea9d47-3590-87c7-0f37-a63dd604df5f.htm" target="">ICloudServersProvider Members</a></div><div class="seeAlsoStyle"><a href="6f750d61-9d3f-a33a-5e5f-e0b4634663bc.htm" target="">net.openstack.Core Namespace</a></div></div></div></div></div><div id="OH_footer" class="OH_footer"><p /><div class="OH_feedbacklink"><a href="mailto:?subject=A+Sandcastle+Documented+Class+Library+ICloudServersProvider.RebuildServer+Method++100+EN-US&amp;body=Your%20feedback%20is%20used%20to%20improve%20the%20documentation%20and%20the%20product.%20Your%20e-mail%20address%20will%20not%20be%20used%20for%20any%20other%20purpose%20and%20is%20disposed%20of%20after%20the%20issue%20you%20report%20is%20resolved.%20While%20working%20to%20resolve%20the%20issue%20that%20you%20report%2c%20you%20may%20be%20contacted%20via%20e-mail%20to%20get%20further%20details%20or%20clarification%20on%20the%20feedback%20you%20sent.%20After%20the%20issue%20you%20report%20has%20been%20addressed%2c%20you%20may%20receive%20an%20e-mail%20to%20let%20you%20know%20that%20your%20feedback%20has%20been%20addressed.">Send Feedback</a> on this topic.</div></div></body></html>

@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{62B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "testing\unit\unit.csproj", "{FDFD92C2-75CF-4437-87B8-841EC3624CE4}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentation\Documentation.shfbproj", "{EA57BD15-3742-45B8-BDE2-263F7236BAFD}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
@@ -70,6 +72,16 @@ Global
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
