@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using net.openstack.Core;
-using net.openstack.Providers.Rackspace;
 
 namespace net.openstack.console
 {

@@ -141,7 +141,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>The <see cref="ServerDetails"/></returns>
-        ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null,  string region = null, CloudIdentity identity = null);
+        ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Resizes the specified server.
@@ -276,7 +276,7 @@ namespace net.openstack.Core
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>The <see cref="Flavor"/> details</returns>
         FlavorDetails GetFlavor(string id, string region = null, CloudIdentity identity = null);
-            
+
         // Images
         /// <summary>
         /// Lists all available images.
@@ -529,7 +529,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageActive(string imageId,  int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -541,7 +541,6 @@ namespace net.openstack.Core
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns></returns>
         void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
-       
+
     }
 }
-    
