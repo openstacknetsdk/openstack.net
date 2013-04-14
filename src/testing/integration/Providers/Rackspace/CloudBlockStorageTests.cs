@@ -84,7 +84,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Wait_Until_Test_Volume_Becomes_Available_Or_Exceeds_Timeout_For_Becoming_Available()
         {
             var provider = new CloudBlockStorageProvider();
@@ -140,7 +140,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Delete_Test_Volume()
         {
             var provider = new CloudBlockStorageProvider();
@@ -218,7 +218,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Wait_Until_Test_Snapshot_Becomes_Available_Or_Exceeds_Timeout_For_Becoming_Available()
         {
             var provider = new CloudBlockStorageProvider();
@@ -275,7 +275,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
         }
 
-        [TestMethod]
+        [Timeout(1800000), TestMethod]
         public void Should_Delete_Test_Snapshot()
         {
             var provider = new CloudBlockStorageProvider();

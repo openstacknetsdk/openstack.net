@@ -189,8 +189,8 @@ namespace net.openstack.Core
         /// <param name="serverId">The server id.</param>
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>The <see cref="ServerDetails"/></returns>
-        ServerDetails UnRescueServer(string serverId, string region = null, CloudIdentity identity = null);
+        /// <returns><c>bool</c> indicating if the action was successful</returns>
+        bool UnRescueServer(string serverId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates a new snapshot image for a specified server at its current state.

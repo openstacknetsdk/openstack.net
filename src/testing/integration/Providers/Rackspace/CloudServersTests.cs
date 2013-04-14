@@ -28,7 +28,7 @@ using net.openstack.Providers.Rackspace;
         private static bool _revertResizeSuccess;
         private static ServerDetails _preBuildDetails;
         private static string _rescueAdminPass;
-        private static ServerDetails _unRescueDetails;
+        private static bool _unRescueSuccess;
         private static ServerVolume _testVolume;
         private const string NewPassword = "my_new_password";
 
@@ -896,15 +896,15 @@ using net.openstack.Providers.Rackspace;
         {
             var provider = new CloudServersProvider(_testIdentity);
 
-            _unRescueDetails = provider.UnRescueServer(_testServer.Id);
+            _unRescueSuccess = provider.UnRescueServer(_testServer.Id);
 
-            Assert.IsNotNull(_unRescueDetails);
+            Assert.IsTrue(_unRescueSuccess);
         }
 
         [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Server_To_Go_Into_Active_Status_After_UnRescue()
         {
-            Assert.IsNotNull(_unRescueDetails);
+            Assert.IsTrue(_unRescueSuccess);
 
             var provider = new CloudServersProvider(_testIdentity);
             var details = provider.WaitForServerActive(_testServer.Id);
