@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="cloudblockstoragefull" storage="c:\workspace\openstack.net_upstream\src\testing\integration\providers\rackspace\cloudblockstoragefull.orderedtest" id="14787c20-44cd-4a7b-a1b4-1d3da4e31a92" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Execution id="e96230d3-51b8-4a69-ad7a-94b06e9ac981" />
+<OrderedTest name="cloudblockstoragefull" storage="c:\workspace\openstack.net\src\testing\integration\providers\rackspace\cloudblockstoragefull.orderedtest" id="14787c20-44cd-4a7b-a1b4-1d3da4e31a92" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Execution timeOut="10800000" id="e96230d3-51b8-4a69-ad7a-94b06e9ac981" />
   <TestLinks>
     <TestLink id="b94d0f36-04b7-f09a-a5dd-af7ec6d87d40" name="Should_Cleanup_CloudBlockStorage_Environment" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="2488fab3-ab93-a81c-f983-ccb2baedfd0d" name="Should_Return_Volume_Type_List" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

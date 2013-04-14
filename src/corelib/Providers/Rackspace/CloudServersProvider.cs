@@ -312,12 +312,12 @@ namespace net.openstack.Providers.Rackspace
             return resp.AdminPassword;
         }
 
-        public ServerDetails UnRescueServer(string serverId, string region = null, CloudIdentity identity = null)
+        public bool UnRescueServer(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new UnrescueServerRequest { Details = "none" };
-            var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
+            var resp = ExecuteServerAction(serverId, request, region, identity);
 
-            return resp == null ? null : resp.Server;
+            return resp;
         }
 
         public bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null)
