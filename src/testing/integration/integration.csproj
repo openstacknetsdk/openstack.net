@@ -80,9 +80,6 @@
     <None Include="Providers\Rackspace\CloudFilesFull.orderedtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Providers\Rackspace\ComputeFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Providers\Rackspace\IdentityFull.orderedtest" />
     <None Include="Providers\Rackspace\Full.orderedtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

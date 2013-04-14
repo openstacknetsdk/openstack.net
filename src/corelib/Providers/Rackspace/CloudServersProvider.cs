@@ -739,7 +739,7 @@ namespace net.openstack.Providers.Rackspace
             if (identity == null)
                 identity = DefaultIdentity;
 
-            return new CloudServersProvider(identity, _identityProvider, _restService);
+            return new CloudServersProvider(identity, IdentityProvider, RestService);
         }
 
         #endregion

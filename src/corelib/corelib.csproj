@@ -44,7 +44,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Domain\Address.cs" />
+    <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\CloudIdentity.cs" />
     <Compile Include="Core\Domain\Container.cs" />
     <Compile Include="Core\Domain\ContainerCDN.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
     <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
-    <Compile Include="Core\Domain\Mapping\MetaDataJsonMapper.cs" />
+    <Compile Include="Core\Domain\Mapping\NetworkResponseJsonMapper.cs" />
     <Compile Include="Core\Domain\Network.cs" />
     <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\ObjectStore.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="Core\Domain\RebootType.cs" />
     <Compile Include="Core\Domain\ServerAddresses.cs" />
     <Compile Include="Core\Domain\ServerState.cs" />
+    <Compile Include="Core\Domain\ServerVolume.cs" />
     <Compile Include="Core\Domain\Tenant.cs" />
     <Compile Include="Core\Domain\UserCredential.cs" />
     <Compile Include="Core\Exceptions\CDNNotEnabledException.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Providers\Rackspace\CloudFilesMetadataProcessor.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
@@ -116,6 +118,8 @@
     <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredencialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeListResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
