@@ -302,15 +302,15 @@ Full-Width Styles
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+  padding: 20px 10px 30px 10px;
 }
 
 #project_title {
-  margin: 0;
-  color: #fff;
-  font-size: 42px;
-  font-weight: 700;
-  text-shadow: #111 0px 0px 10px;
+  display: block;
+  width: 200px;
+  height:150px;
+  overflow: hidden;
+  background: url(../images/logo_white.png) no-repeat bottom left;
 }
 
 #project_tagline {
@@ -331,8 +331,15 @@ Full-Width Styles
   background: url('../images/icon_download.png') no-repeat 0% 90%;
 }
 
+.rs_logo {
+  display: inline-block;
+  width: 151px;
+  height:45px;
+  background: url(../images/rs_logo_while_sm.png) no-repeat;
+}
+
 .zip_download_link {
-  display: block;
+  
   float: right;
   width: 90px;
   height:70px;
@@ -395,7 +402,7 @@ Small Device Styles
   }
 
   #project_title {
-  font-size: 32px;
+	background: url(../images/logo_red.png) no-repeat bottom left;
   }
 
   h1 {
