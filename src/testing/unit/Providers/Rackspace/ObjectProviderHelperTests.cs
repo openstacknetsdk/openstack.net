@@ -4,6 +4,7 @@ using Moq;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Validators;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {

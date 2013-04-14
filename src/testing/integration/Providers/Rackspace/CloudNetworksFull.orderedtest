@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="cloudnetworksfull" storage="c:\code\local\openstack.net\src\testing\integration\providers\rackspace\cloudnetworksfull.orderedtest" id="9068bfff-4daa-4338-9439-11118086dad1" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Execution id="fc9a3bdc-5816-424c-a9b5-48076f0ced6d" />
+<OrderedTest name="cloudnetworksfull" storage="c:\workspace\openstack.net_upstream\src\testing\integration\providers\rackspace\cloudnetworksfull.orderedtest" id="9068bfff-4daa-4338-9439-11118086dad1" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Execution timeOut="3600000" id="fc9a3bdc-5816-424c-a9b5-48076f0ced6d" />
   <TestLinks>
     <TestLink id="c25e3e4f-347c-c8b1-18ab-8c1fc1d5d33d" name="Should_Have_Networks" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <TestLink id="91139e34-ce9f-bc88-61a7-b57deb31e224" name="Should_Have_Private_Network" storage="..\..\bin\debug\openstacknet.testing.integration.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
