@@ -91,6 +91,7 @@
     <Compile Include="Providers\Rackspace\CloudFilesValidator.cs" />
     <Compile Include="Core\ICloudFilesValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidVolumeSizeException.cs" />
     <Compile Include="Providers\Rackspace\IExtendedCloudIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\InvalidETagException.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesProvider.cs" />
