@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>SimpleRESTServices</id>
+    <version>1.0.6.2</version>
+    <title>SimpleRESTServices</title>
+    <authors>alanquillin</authors>
+    <owners>alanquillin</owners>
+    <licenseUrl>https://github.com/JSIStudios/SimpleRestServices/wiki/License</licenseUrl>
+    <projectUrl>https://github.com/JSIStudios/SimpleRestServices</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A simple set of client side and server side REST helpers</description>
+    <releaseNotes>https://github.com/JSIStudios/SimpleRestServices/wiki/v1.0.6.2</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>REST REST_client</tags>
+    <references>
+      <reference file="SimpleRESTServices.dll" />
+    </references>
+  </metadata>
+</package>

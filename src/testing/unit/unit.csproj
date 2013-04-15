@@ -40,8 +40,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices">
-      <HintPath>..\..\packages\SimpleRESTServices.1.0.6.1\lib\net40\SimpleRESTServices.dll</HintPath>
+    <Reference Include="SimpleRESTServices, Version=1.0.6.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SimpleRESTServices.1.0.6.2\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
