@@ -81,21 +81,22 @@ namespace net.openstack.Providers.Rackspace
 
             NewServerNetwork[] networksToAttach = null;
 
-            if (attachToServiceNetwork || attachToPublicNetwork || networks.Any())
-            {
-                var networkList = new List<NewServerNetwork>();
+            var networkList = new List<NewServerNetwork>();
 
+            if (attachToServiceNetwork || attachToPublicNetwork)
+            {
                 if(attachToPublicNetwork)
                     networkList.Add(new NewServerNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
 
                 if(attachToServiceNetwork)
                     networkList.Add(new NewServerNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
-
-                if(networks != null && networks.Any())
-                    networkList.AddRange(networks.Select(id => new NewServerNetwork(){Id = id}));
-
-                networksToAttach = networkList.ToArray();
             }
+
+            if (networks != null && networks.Any())
+                networkList.AddRange(networks.Select(id => new NewServerNetwork() { Id = id }));
+
+            if(networkList.Any())
+                networksToAttach = networkList.ToArray();
 
             var request = new CreateServerRequest
                               {
