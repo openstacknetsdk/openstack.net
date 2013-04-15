@@ -44,8 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\SSH.NET.2013.4.7\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices">
-      <HintPath>..\..\packages\SimpleRESTServices.1.0.6.1\lib\net40\SimpleRESTServices.dll</HintPath>
+    <Reference Include="SimpleRESTServices, Version=1.0.6.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SimpleRESTServices.1.0.6.2\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
