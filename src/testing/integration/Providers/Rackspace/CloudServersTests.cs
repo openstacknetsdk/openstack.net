@@ -807,7 +807,7 @@ using net.openstack.Providers.Rackspace;
             Assert.IsTrue(_resizeSuccess);
 
             var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, new [] {ServerState.VERIFY_RESIZE, ServerState.ACTIVE}, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
             Assert.IsNotNull(details);
             Assert.AreEqual(ServerState.VERIFY_RESIZE, details.Status);
