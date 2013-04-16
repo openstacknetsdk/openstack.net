@@ -32,7 +32,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>[Optional]: If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         public CloudNetworksProvider(CloudIdentity identity)
             : base(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
 
@@ -66,9 +66,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Network;
         }
 
-        public CloudNetwork ShowNetwork(string network_id, string region = null, CloudIdentity identity = null)
+        public CloudNetwork ShowNetwork(string networkId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), network_id));
+            var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), networkId));
             var response = ExecuteRESTRequest<CloudNetworkResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -77,9 +77,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Network;
         }
 
-        public bool DeleteNetwork(string network_id, string region = null, CloudIdentity identity = null)
+        public bool DeleteNetwork(string networkId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), network_id));
+            var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), networkId));
 
             Response response = null;
             try
