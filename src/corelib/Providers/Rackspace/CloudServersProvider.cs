@@ -51,6 +51,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Servers
 
+        /// <inheritdoc />
         public IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
@@ -163,21 +164,31 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var serverDetails = GetDetails(serverId, region, identity);
 
             int count = 0;
+            int currentProgress = 0;
             while (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
                 serverDetails = GetDetails(serverId, region, identity);
                 count++;
+
+                if (progressUpdatedCallback != null)
+                {
+                    if (serverDetails.Progress > currentProgress)
+                    {
+                        currentProgress = serverDetails.Progress;
+                        progressUpdatedCallback(currentProgress);
+                    }
+                }
             }
 
             if (errorStates.Contains(serverDetails.Status))
@@ -186,18 +197,18 @@ namespace net.openstack.Providers.Rackspace
             return serverDetails;
         }
 
-        public ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null,  string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
             {
                 WaitForServerState(serverId, ServerState.DELETED,
                                    new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED},
-                                   refreshCount, refreshDelayInMS, region, identity);
+                                   refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
             }
             catch (Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
@@ -533,16 +544,26 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var details = GetImage(imageId, region, identity);
 
             int count = 0;
+            int currentProgress = 0;
             while (!expectedStates.Contains(details.Status) && !errorStates.Contains(details.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
                 details = GetImage(imageId, region, identity);
                 count++;
+
+                if (progressUpdatedCallback != null)
+                {
+                    if (details.Progress > currentProgress)
+                    {
+                        currentProgress = details.Progress;
+                        progressUpdatedCallback(currentProgress);
+                    }
+                }
             }
 
             if (errorStates.Contains(details.Status))
@@ -551,23 +572,23 @@ namespace net.openstack.Providers.Rackspace
             return details;
         }
 
-        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
             {
                 WaitForImageState(imageId, ImageState.DELETED,
                                   new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED},
-                                  refreshCount, refreshDelayInMS, region, identity);
+                                  refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
             }
             catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which

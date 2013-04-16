@@ -5,6 +5,7 @@ using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;

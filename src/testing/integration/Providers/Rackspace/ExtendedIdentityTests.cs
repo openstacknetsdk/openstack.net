@@ -2,6 +2,7 @@
 using JSIStudios.SimpleRESTServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack;
+using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
