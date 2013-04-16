@@ -15,7 +15,7 @@ using CreateCloudBlockStorageVolumeDetails = net.openstack.Providers.Rackspace.O
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
-    /// The Cloud Block Storage Provider contains the methods required to interact with Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshots
+    /// The Cloud Block Storage Provider contains the methods required to interact with Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshots.
     /// Rackspace Cloud Block Storage is a block level storage solution that allows customers to mount drives or volumes to their Rackspace Next Generation Cloud Servers.
     /// The two primary use cases are (1) to allow customers to scale their storage independently from their compute resources,
     /// and (2) to allow customers to utilize high performance storage to serve database or I/O-intensive applications.
@@ -48,7 +48,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>[Optional]: If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         public CloudBlockStorageProvider(CloudIdentity identity)
             : this(identity, new CloudIdentityProvider(), new JsonRestServices(), new CloudBlockStorageValidator()) { }
 
@@ -64,12 +64,12 @@ namespace net.openstack.Providers.Rackspace
         #region Volumes
 
 
-        public bool CreateVolume(int size, string display_description = null, string display_name = null, string snapshot_id = null, string volume_type = null, string region = null, CloudIdentity identity = null)
+        public bool CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null)
         {
             _cloudBlockStorageValidator.ValidateVolumeSize(size);
 
             var urlPath = new Uri(string.Format("{0}/volumes", GetServiceEndpoint(identity, region)));
-            var requestBody = new CreateCloudBlockStorageVolumeRequest { CreateCloudBlockStorageVolumeDetails = new CreateCloudBlockStorageVolumeDetails { Size = size, DisplayDescription = display_description, DisplayName = display_name, SnapshotId = snapshot_id, VolumeType = volume_type } };
+            var requestBody = new CreateCloudBlockStorageVolumeRequest { CreateCloudBlockStorageVolumeDetails = new CreateCloudBlockStorageVolumeDetails { Size = size, DisplayDescription = displayDescription, DisplayName = displayName, SnapshotId = snapshotId, VolumeType = volumeType } };
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, requestBody);
 
             return response != null && _validResponseCode.Contains(response.StatusCode);
@@ -86,9 +86,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Volumes;
         }
 
-        public Volume ShowVolume(string volume_id, string region = null, CloudIdentity identity = null)
+        public Volume ShowVolume(string volumeId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volume_id));
+            var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volumeId));
             var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -97,9 +97,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Volume;
         }
 
-        public bool DeleteVolume(string volume_id, string region = null, CloudIdentity identity = null)
+        public bool DeleteVolume(string volumeId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volume_id));
+            var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volumeId));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
             return response != null && _validResponseCode.Contains(response.StatusCode);
@@ -116,9 +116,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.VolumeTypes;
         }
 
-        public VolumeType DescribeVolumeType(int volume_type_id, string region = null, CloudIdentity identity = null)
+        public VolumeType DescribeVolumeType(int volumeTypeId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/types/{1}", GetServiceEndpoint(identity, region), volume_type_id));
+            var urlPath = new Uri(string.Format("{0}/types/{1}", GetServiceEndpoint(identity, region), volumeTypeId));
             var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeTypeResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -127,25 +127,25 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.VolumeType;
         }
 
-        public Volume WaitForVolumeAvailable(string volume_id, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            return WaitForVolumeState(volume_id, VolumeState.AVAILABLE, new[] { VolumeState.ERROR, VolumeState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForVolumeState(volumeId, VolumeState.AVAILABLE, new[] { VolumeState.ERROR, VolumeState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public bool WaitForVolumeDeleted(string volume_id, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
-            return WaitForItemToBeDeleted(ShowVolume, volume_id, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForItemToBeDeleted(ShowVolume, volumeId, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public Volume WaitForVolumeState(string volume_id, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
-            var volumeInfo = ShowVolume(volume_id, region, identity);
+            var volumeInfo = ShowVolume(volumeId, region, identity);
 
             var count = 0;
             while (!volumeInfo.Status.Equals(expectedState, StringComparison.OrdinalIgnoreCase) && !errorStates.Contains(volumeInfo.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
-                volumeInfo = ShowVolume(volume_id, region, identity);
+                volumeInfo = ShowVolume(volumeId, region, identity);
                 count++;
             }
 
@@ -170,10 +170,10 @@ namespace net.openstack.Providers.Rackspace
 
         #region Snapshots
 
-        public bool CreateSnapshot(string volume_id, bool force = false, string display_name = "None", string display_description = "None", string region = null, CloudIdentity identity = null)
+        public bool CreateSnapshot(string volumeId, bool force = false, string displayName = "None", string displayDescription = "None", string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/snapshots", GetServiceEndpoint(identity, region)));
-            var requestBody = new CreateCloudBlockStorageSnapshotRequest { CreateCloudBlockStorageSnapshotDetails = new CreateCloudBlockStorageSnapshotDetails { VolumeId = volume_id, Force = force, DisplayName = display_name, DisplayDescription = display_description } };
+            var requestBody = new CreateCloudBlockStorageSnapshotRequest { CreateCloudBlockStorageSnapshotDetails = new CreateCloudBlockStorageSnapshotDetails { VolumeId = volumeId, Force = force, DisplayName = displayName, DisplayDescription = displayDescription } };
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, requestBody);
 
             return response != null && _validResponseCode.Contains(response.StatusCode);
@@ -190,9 +190,9 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Snapshots;
         }
 
-        public Snapshot ShowSnapshot(string snapshot_id, string region = null, CloudIdentity identity = null)
+        public Snapshot ShowSnapshot(string snapshotId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshot_id));
+            var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshotId));
             var response = ExecuteRESTRequest<GetCloudBlockStorageSnapshotResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -201,34 +201,33 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Snapshot;
         }
 
-
-        public bool DeleteSnapshot(string snapshot_id, string region = null, CloudIdentity identity = null)
+        public bool DeleteSnapshot(string snapshotId, string region = null, CloudIdentity identity = null)
         {
-            var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshot_id));
+            var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshotId));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
-        public Snapshot WaitForSnapshotAvailable(string snapshot_id, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
-            return WaitForSnapshotState(snapshot_id, SnapshotState.AVAILABLE, new[] { SnapshotState.ERROR, SnapshotState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForSnapshotState(snapshotId, SnapshotState.AVAILABLE, new[] { SnapshotState.ERROR, SnapshotState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public bool WaitForSnapshotDeleted(string snapshot_id, int refreshCount = 180, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
-            return WaitForItemToBeDeleted(ShowSnapshot, snapshot_id, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForItemToBeDeleted(ShowSnapshot, snapshotId, refreshCount, refreshDelayInMS, region, identity);
         }
 
-        public Snapshot WaitForSnapshotState(string snapshot_id, string expectedState, string[] errorStates, int refreshCount = 60, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
-            var snapshotInfo = ShowSnapshot(snapshot_id, region, identity);
+            var snapshotInfo = ShowSnapshot(snapshotId, region, identity);
 
             var count = 0;
             while (!snapshotInfo.Status.Equals(expectedState, StringComparison.OrdinalIgnoreCase) && !errorStates.Contains(snapshotInfo.Status) && count < refreshCount)
             {
                 Thread.Sleep(refreshDelayInMS);
-                snapshotInfo = ShowSnapshot(snapshot_id, region, identity);
+                snapshotInfo = ShowSnapshot(snapshotId, region, identity);
                 count++;
             }
 
