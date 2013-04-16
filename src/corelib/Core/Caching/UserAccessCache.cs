@@ -2,7 +2,7 @@
 using System.Collections;
 using net.openstack.Core.Domain;
 
-namespace net.openstack
+namespace net.openstack.Core.Caching
 {
     public class UserAccessCache : ICache<UserAccess>
     {
