@@ -28,7 +28,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>[Optional]: If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         public CloudServersProvider(CloudIdentity identity)
             : this(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
 

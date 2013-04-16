@@ -17,7 +17,7 @@ namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
     /// The Cloud Files Provider contains methods required to interact with Cloud Files.
-    /// For generic information: http://docs.rackspace.com/ check Cloud Files section.
+    /// For information please go to http://docs.rackspace.com/ and check the Cloud Files section.
     /// </summary>
     public class CloudFilesProvider : ProviderBase, ICloudFilesProvider
     {
@@ -774,11 +774,11 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="stream">The stream. <see cref="Stream"/></param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. <remarks>[Optional]</remarks></param>
-        /// <param name="region">The region.<remarks>[Optional]</remarks></param>
+        /// <param name="headers">The headers. </param>
+        /// <param name="region">The region.</param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
         /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The identity. <see cref="CloudIdentity"/> <remarks>[Optional]</remarks> </param>
+        /// <param name="identity">The identity. <see cref="CloudIdentity"/>  </param>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var totalLength = stream.Length;

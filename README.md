@@ -2,7 +2,7 @@ openstack.net
 =============
 ### Rackspace Cloud SDK for Microsoft .NET
 
-<p>The Rackspace Cloud SDK for Microsoft .NET is an SDK written for the Microsoft .NET platform, designed to enable developers to seemlessly work with the many services provided by the openstack cloud operating system.</p>  
+<p>The Rackspace Cloud SDK for Microsoft .NET is an SDK written for the Microsoft .NET platform, designed to enable developers to seamlessly work with the many services provided by the openstack cloud operating system.</p>  
 <p>The openstack.net SDK contains:
 	<ul>
 		<li>A language API</li>
