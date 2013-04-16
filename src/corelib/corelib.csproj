@@ -180,7 +180,7 @@
     <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudNetworksValidator.cs" />
-    <Compile Include="UserAccessCache.cs" />
+    <Compile Include="Core\Caching\UserAccessCache.cs" />
     <Compile Include="Core\ICloudIdentityProvider.cs" />
     <Compile Include="Core\IRetryLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

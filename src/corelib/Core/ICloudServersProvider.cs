@@ -457,7 +457,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -470,7 +470,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -481,7 +481,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -492,7 +492,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns></returns>
-        void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter a specified state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -505,7 +505,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -518,7 +518,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -529,7 +529,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -540,7 +540,7 @@ namespace net.openstack.Core
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns></returns>
-        void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
     }
 }

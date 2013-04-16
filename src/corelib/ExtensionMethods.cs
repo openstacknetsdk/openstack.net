@@ -2,9 +2,9 @@
 
 namespace net.openstack
 {
-    public static class ExtensionMethods
+    internal static class ExtensionMethods
     {
-        public static string Format(this string input, Dictionary<string, string> replaceValues)
+        internal static string Format(this string input, Dictionary<string, string> replaceValues)
         {
             var output = input;
             foreach (var replaceValue in replaceValues)

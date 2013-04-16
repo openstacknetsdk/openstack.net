@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JSIStudios.SimpleRESTServices.Client;
+using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Providers.Rackspace
