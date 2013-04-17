@@ -18,7 +18,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         private static RackspaceCloudIdentity _testIdentity;
 
-        private static readonly string containerName = string.Format("CloudFilesIntegrationTests_{0}",Guid.NewGuid().ToString());
+        private static readonly string containerName = string.Format("Cloud Files Integration Tests_{0}",Guid.NewGuid().ToString());
         const string webIndex = "index.html";
         const string webError = "error.html";
         const string webListingsCSS = "index.css";
@@ -30,7 +30,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private const string sourceObjectName = objectName;
 
         private static readonly string destinationContainerName = string.Format("{0}_DarkKnightRises", containerName);
-        private const string destinationObjectName = objectName;
+        private const string destinationObjectName = "Test " + objectName;
+
 
         const string emailTo = "123@abc.com";
         string[] emailToList = new[] { "abc@123.com,123@abc.com" };
@@ -652,10 +653,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Delete_Object_On_Destination_Container()
         {
-            string fileName = objectName;
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(destinationContainerName, fileName, headers, identity: _testIdentity);
+            var deleteResponse = provider.DeleteObject(destinationContainerName, destinationObjectName, headers, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
         }
