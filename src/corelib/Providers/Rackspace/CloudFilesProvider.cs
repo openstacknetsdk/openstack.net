@@ -83,7 +83,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
@@ -98,7 +98,7 @@ namespace net.openstack.Providers.Rackspace
         public ObjectStore DeleteContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -115,7 +115,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -127,7 +127,7 @@ namespace net.openstack.Providers.Rackspace
         public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET); // Should be HEAD
 
@@ -140,7 +140,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
             var result = new ContainerCDN { Name = container };
@@ -236,7 +236,7 @@ namespace net.openstack.Providers.Rackspace
                  {CdnLogRetention, logRetention.ToString(CultureInfo.InvariantCulture)},
                  {CdnEnabled, "true"}
                 };
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
 
@@ -254,7 +254,7 @@ namespace net.openstack.Providers.Rackspace
                 {
                 {CdnEnabled, "false"}
                 };
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
 
@@ -285,7 +285,7 @@ namespace net.openstack.Providers.Rackspace
                 }
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -298,7 +298,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
@@ -316,7 +316,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new CDNNotEnabledException();
             }
 
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
@@ -419,7 +419,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -432,7 +432,7 @@ namespace net.openstack.Providers.Rackspace
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
@@ -444,7 +444,7 @@ namespace net.openstack.Providers.Rackspace
         public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container)));
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             var queryStringParameter = new Dictionary<string, string>();
 
@@ -483,10 +483,10 @@ namespace net.openstack.Providers.Rackspace
 
             if (stream.Length > LargeFileBatchThreshold)
             {
-                CreateObjectInSegments(_encodeDecodeProvider.HtmlEncode(container), stream, _encodeDecodeProvider.HtmlEncode(objectName), chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
+                CreateObjectInSegments(_encodeDecodeProvider.UrlEncode(container), stream, _encodeDecodeProvider.UrlEncode(objectName), chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
                 return;
             }
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
             StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings());
         }
@@ -496,7 +496,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
             {
@@ -590,7 +590,7 @@ namespace net.openstack.Providers.Rackspace
 
             headers.Add(CopyFrom, string.Format("{0}/{1}", sourceContainer, sourceObjectName));
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(destinationContainer), _encodeDecodeProvider.HtmlEncode(destinationObjectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(destinationContainer), _encodeDecodeProvider.UrlEncode(destinationObjectName)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers);
 
@@ -607,7 +607,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers);
 
@@ -655,7 +655,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 headers[CdnPurgeEmail] = email;
             }
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.HtmlEncode(container), _encodeDecodeProvider.HtmlEncode(objectName)));
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
             if (response.StatusCode == 204)
                 return ObjectStore.ObjectPurged;
