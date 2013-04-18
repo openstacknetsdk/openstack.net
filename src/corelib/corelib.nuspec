@@ -4,8 +4,8 @@
     <id>openstack.net</id>
     <version>$version$</version>
     <title>openstack.net</title>
-    <authors>alanquillin, kravi</authors>
-    <owners>alanquillin</owners>
+    <authors>Rackspace</authors>
+    <owners>Rackspace</owners>
     <licenseUrl>https://github.com/rackspace/openstack.net/wiki/Copyright</licenseUrl>
     <projectUrl>https://github.com/rackspace/openstack.net</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
