@@ -9,14 +9,14 @@ namespace net.openstack.Providers.Rackspace
 {
     public class EncodeDecodeProvider : IEncodeDecodeProvider
     {
-        public string HtmlEncode(string stringToEncode)
+        public string UrlEncode(string stringToEncode)
         {
-            return HttpUtility.UrlEncode(stringToEncode);
+            return HttpUtility.UrlEncode(stringToEncode).Replace("+","%20");
         }
 
-        public string HtmlDecode(string stringToDecode)
+        public string UrlDecode(string stringToDecode)
         {
-            return HttpUtility.HtmlDecode(stringToDecode);
+            return HttpUtility.UrlDecode(stringToDecode);
         }
     }
 }

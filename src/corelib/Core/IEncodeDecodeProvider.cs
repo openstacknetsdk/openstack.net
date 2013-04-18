@@ -7,7 +7,7 @@ namespace net.openstack.Core
 {
     public interface IEncodeDecodeProvider
     {
-        string HtmlEncode(string stringToEncode);
-        string HtmlDecode(string stringToDecode);
+        string UrlEncode(string stringToEncode);
+        string UrlDecode(string stringToDecode);
     }
 }
