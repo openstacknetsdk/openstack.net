@@ -465,8 +465,14 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        public void CreateObjectFromFile(string container, string filePath, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void CreateObjectFromFile(string container, string filePath, string objectName = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (string.IsNullOrWhiteSpace(objectName))
+            {
+                var info = new FileInfo(filePath);
+                objectName = info.Name;
+            }
+
             using (var stream = File.OpenRead(filePath))
             {
                 CreateObject(container, stream, objectName, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
@@ -488,7 +494,7 @@ namespace net.openstack.Providers.Rackspace
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings());
+            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings {ChunkRequest = true});
         }
 
         public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
@@ -792,7 +798,7 @@ namespace net.openstack.Providers.Rackspace
 
                 var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i));
                 long segmentBytesWritten = 0;
-                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated:
+                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
                     bytesWritten =>
                     {
                         if (progressUpdated != null)
@@ -812,7 +818,7 @@ namespace net.openstack.Providers.Rackspace
                 headers = new Dictionary<string, string>();
 
             headers.Add(ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
-            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings(), progressUpdated:
+            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
                 (bytesWritten) =>
                 {
                     if (progressUpdated != null)
