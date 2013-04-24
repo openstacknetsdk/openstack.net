@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class GetImageDetailsResponse
     {
-        public ServerImageDetails Image { get; set; }
+        public ServerImage Image { get; set; }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Core
+namespace net.openstack.Core.Providers
 {
-    public interface ICloudNetworksProvider
+    /// <summary>
+    /// Provides simple access to the Rackspace Cloud Network Services.
+    /// </summary>
+    public interface INetworksProvider
     {
         /// <summary>
         /// List the networks configured for the account.

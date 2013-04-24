@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
 
 namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
@@ -45,7 +46,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Authenticate_Test_Identity()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
             var userAccess = serviceProvider.Authenticate();
 
             Assert.IsNotNull(userAccess);
@@ -54,7 +55,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Authenticate_Test_Admin_Identity()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
             var userAccess = serviceProvider.Authenticate();
 
             Assert.IsNotNull(userAccess);
@@ -68,7 +69,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                                    Username = _testIdentity.Username,
                                    Password = "bad password"
                                };
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
 
             try
             {
@@ -90,7 +91,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                                    Username = _testIdentity.Username,
                                    APIKey = "bad api key"
                                };
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
 
             try
             {
@@ -112,7 +113,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 Username = "I'm a bad bad user",
                 APIKey = "bad api key"
             };
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
 
             try
             {
@@ -129,7 +130,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Only_User_In_Account_When_Retrieving_List_Of_Users_With_User_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
 
             var users = serviceProvider.ListUsers();
 
@@ -140,7 +141,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Multiple_Users_When_Retrieving_List_Of_Users_With_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
 
             var users = serviceProvider.ListUsers();
 
@@ -150,7 +151,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Self_When_Retrieving_User_By_Name_With_Non_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
 
             _userDetails = serviceProvider.GetUserByName(_testIdentity.Username);
 
@@ -161,7 +162,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Self_When_Retrieving_User_By_Name_With_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
 
             _adminUserDetails = serviceProvider.GetUserByName(_testAdminIdentity.Username);
 
@@ -172,7 +173,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Other_User_When_Retrieving_User_By_Name_With_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
 
             var details = serviceProvider.GetUserByName(_testIdentity.Username);
 
@@ -183,7 +184,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Throw_Exception_When_Trying_To_Get_Details_Of_A_Different_User_When_Retrieving_User_By_Name_With_Non_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
 
             try
             {
@@ -200,7 +201,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Self_When_Retrieving_User_By_Id_With_Non_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
 
             _userDetails = serviceProvider.GetUser(_userDetails.Id);
 
@@ -211,7 +212,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Self_When_Retrieving_User_By_Id_With_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
 
             _adminUserDetails = serviceProvider.GetUser(_adminUserDetails.Id);
 
@@ -222,7 +223,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Details_Of_Other_User_When_Retrieving_User_By_Id_With_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testAdminIdentity);
 
             var details = serviceProvider.GetUser(_userDetails.Id);
 
@@ -233,7 +234,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Throw_Exception_When_Trying_To_Get_Details_Of_A_Different_User_When_Retrieving_User_By_Id_With_Non_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(_testIdentity);
 
             try
             {
@@ -250,7 +251,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Add_New_User_1_Without_Specifying_A_Password_Or_Default_Region_To_Account_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var newTestUser = provider.AddUser(new NewUser { Username = "openstacknettestuser1", Email = "newuser@me.com", Enabled = true });
 
@@ -265,7 +266,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Retrieve_New_User_1_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testAdminIdentity);
 
             _testUser = provider.GetUserByName("openstacknettestuser1");
 
@@ -280,7 +281,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsNotNull(_testUser);
 
-            ICloudIdentityProvider provider = new CloudIdentityProvider();
+            IIdentityProvider provider = new CloudIdentityProvider();
 
             var userAccess =
                 provider.Authenticate(new RackspaceCloudIdentity
@@ -292,7 +293,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Update_NewUser_Username_And_Email_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var user = new User
                            {
@@ -313,7 +314,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Delete_NewUser_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var response = provider.DeleteUser(_testUser.Id);
 
@@ -323,7 +324,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Throw_Exception_When_Requesting_The_NewUser_After_It_Has_Been_Deleted_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             try
             {
@@ -340,7 +341,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Add_New_User_2_With_Specifying_A_Password_But_Not_Default_Region_To_Account_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var newUser = provider.AddUser(new NewUser { Username = "openstacknettestuser2", Email = "newuser2@me.com", Enabled = true, Password = NewUserPassword });
             _newTestUserPassword = newUser.Password;
@@ -356,7 +357,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Retrieve_New_User_2_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testAdminIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testAdminIdentity);
 
             _testUser = provider.GetUserByName("openstacknettestuser2");
 
@@ -369,7 +370,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Update_NewUser_Username_And_Email_And_Default_Region_When_Requesting_As_User_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var user = new User
             {
@@ -391,7 +392,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Get_NewUser_When_Requesting_As_Self()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
+            IIdentityProvider provider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
 
             var user = provider.GetUser(_testUser.Id);
 
@@ -401,7 +402,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Update_NewUser_Username_And_Email_When_Requesting_As_Self()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
+            IIdentityProvider provider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
 
             var user = new User
             {
@@ -421,7 +422,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_List_Only_Self_When_Retrieving_List_Of_Users_With_Non_Admin_Account()
         {
-            ICloudIdentityProvider serviceProvider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
+            IIdentityProvider serviceProvider = new CloudIdentityProvider(new RackspaceCloudIdentity { Username = _testUser.Username, Password = _newTestUserPassword });
 
             var users = serviceProvider.ListUsers();
 
@@ -432,7 +433,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Return_The_Users_Tenant_When_Requesting_As_Non_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var tenants = provider.ListTenants();
 
@@ -447,7 +448,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Return_List_Of_Users_Credentials_When_Requesting_As_Non_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var creds = provider.ListUserCredentials(_userDetails.Id);
 
@@ -465,7 +466,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Return_User_API_Credential_When_Requesting_As_Non_Admin()
         {
-            ICloudIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
             var cred = provider.GetUserCredential(_userDetails.Id, "RAX-KSKEY:apiKeyCredentials");
 

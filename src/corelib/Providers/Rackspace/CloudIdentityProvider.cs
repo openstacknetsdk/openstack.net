@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace
     public class CloudIdentityProvider : IExtendedCloudIdentityProvider
     {
         private readonly CloudIdentityProviderFactory _factory;
+        private readonly CloudIdentity _defaultIdentity;
 
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudIdentityProvider"/> class.
@@ -35,6 +36,14 @@ namespace net.openstack.Providers.Rackspace
             : this(null, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase)
         {}
 
+        public CloudIdentityProvider(ICache<UserAccess> tokenCache)
+            : this( null, tokenCache)
+        { }
+
+        public CloudIdentityProvider(IRestService restService)
+            : this(restService, null)
+        { }
+
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null, null)
         { }
@@ -42,6 +51,7 @@ namespace net.openstack.Providers.Rackspace
         public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
             _factory = new CloudIdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
+            _defaultIdentity = defaultIdentity;
         }
 
         public IEnumerable<Role> ListRoles(CloudIdentity identity)
@@ -181,6 +191,8 @@ namespace net.openstack.Providers.Rackspace
             var provider = GetProvider(identity);
             return provider.GetUserCredential(userId, credentialKey, identity: identity);
         }
+
+        public CloudIdentity DefaultIdentity { get { return _defaultIdentity; } }
 
         public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 using net.openstack.Providers.Rackspace.Exceptions;
 
-namespace net.openstack.Core
+namespace net.openstack.Core.Providers
 {
-    public interface ICloudFilesProvider
+    /// <summary>
+    /// Provides simple access to the Rackspace Cloud Files Services.
+    /// </summary>
+    public interface IObjectStorageProvider
     {
         #region Container
         /// <summary>

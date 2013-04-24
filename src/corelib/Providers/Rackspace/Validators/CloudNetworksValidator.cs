@@ -2,10 +2,11 @@
 using System.Net;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
-    public class CloudNetworksValidator : ICloudNetworksValidator
+    public class CloudNetworksValidator : INetworksValidator
     {
         public void ValidateCidr(string cidr)
         {

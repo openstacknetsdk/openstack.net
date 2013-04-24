@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Core
+namespace net.openstack.Core.Providers
 {
-    public interface ICloudBlockStorageProvider
+    /// <summary>
+    /// Provides simple access to the Rackspace Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshot services.
+    /// </summary>
+    public interface IBlockStorageProvider
     {
         #region Volume
         /// <summary>
         /// Creates a new volume.
-        /// 
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/POST_createVolume__v1__tenant_id__volumes.html
         /// </summary>
         /// <param name="size">The size (in GB) of the volume.  The size parameter should always be supplied and should be between 100 and 1000.</param>
@@ -23,7 +26,7 @@ namespace net.openstack.Core
         bool CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View a list of volumes.
-        /// 
+        /// <para/>
         /// Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumesSimple__v1__tenant_id__volumes.html
         /// </summary>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
@@ -32,7 +35,7 @@ namespace net.openstack.Core
         IEnumerable<Volume> ListVolumes(string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View information about a single volume.
-        /// 
+        /// <para/>
         /// Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolume__v1__tenant_id__volumes.html
         /// </summary>
         /// <param name="volumeId">The ID of the volume</param>
@@ -42,9 +45,9 @@ namespace net.openstack.Core
         Volume ShowVolume(string volumeId, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Deletes a volume.
-        /// 
+        /// <para/>
         /// NOTE:  It is not currently possible to delete a volume once you have created a snapshot from it.  Any snapshots will need to be deleted prior to deleting the Volume.
-        /// 
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/DELETE_deleteVolume__v1__tenant_id__volumes.html
         /// </summary>
         /// <param name="volumeId">The ID of the volume.</param>
@@ -54,7 +57,7 @@ namespace net.openstack.Core
         bool DeleteVolume(string volumeId, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Request a list of volume types.
-        /// 
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumeTypes__v1__tenant_id__types.html
         /// </summary>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
@@ -63,7 +66,7 @@ namespace net.openstack.Core
         IEnumerable<VolumeType> ListVolumeTypes(string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View information about a single volume type.
-        /// 
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumeType__v1__tenant_id__types.html
         /// </summary>
         /// <param name="volumeTypeId">The ID of the volume type.</param>
@@ -96,7 +99,7 @@ namespace net.openstack.Core
         /// <summary>
         /// Waits for a volume to be set to be set to a particular status.  
         /// This method will be helpful to ensure that a volume is in an intended state prior to executing additional requests against it.
-        /// 
+        /// <para/>
         /// Volume State reference URL:  http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/volume_status.html
         /// <see cref="net.openstack.Core.Domain.VolumeState"></see>
         /// </summary>
@@ -115,12 +118,12 @@ namespace net.openstack.Core
         #region Snapshot
         /// <summary>
         /// Creates a new snapshot.
-        /// 
+        /// <para/>
         /// Creating a snapshot makes a point-in-time copy of the volume. 
         /// All writes to the volume should be flushed before creating the snapshot, either by un-mounting any file systems on the volume, or by detaching the volume before creating the snapshot. 
         /// Snapshots are incremental, so each time you create a new snapshot, you are appending the incremental changes for the new snapshot to the previous one. 
         /// The previous snapshot is still available. Note that you can create a new volume from the snapshot if desired.
-
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/POST_createSnapshot__v1__tenant_id__snapshots.html
         /// </summary>
         /// <param name="volumeId">The ID of the volume to snapshot.</param>
@@ -133,7 +136,7 @@ namespace net.openstack.Core
         bool CreateSnapshot(string volumeId, bool force = false, string displayName = "None", string displayDescription = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View a list of snapshots.
-        /// 
+        /// <para/>
         /// Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getSnapshotsSimple__v1__tenant_id__snapshots.html
         /// </summary>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
@@ -142,7 +145,7 @@ namespace net.openstack.Core
         IEnumerable<Snapshot> ListSnapshots(string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View all information about a single snapshot.
-        /// 
+        /// <para/>
         /// Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getSnapshot__v1__tenant_id__snapshots.html
         /// </summary>
         /// <param name="snapshotId">The ID of the snapshot</param>
@@ -152,7 +155,7 @@ namespace net.openstack.Core
         Snapshot ShowSnapshot(string snapshotId, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Deletes a single snapshot.
-        /// 
+        /// <para/>
         /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/DELETE_deleteSnapshot__v1__tenant_id__snapshots.html
         /// </summary>
         /// <param name="snapshotId">The ID of the snapshot.</param>
