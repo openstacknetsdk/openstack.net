@@ -45,6 +45,15 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Domain\Limit.cs" />
+    <Compile Include="Core\Domain\GlobalField.cs" />
+    <Compile Include="Core\Domain\RateField.cs" />
+    <Compile Include="Core\Domain\ResourceField.cs" />
+    <Compile Include="Core\Domain\TestAlarmField.cs" />
+    <Compile Include="Core\Domain\TestCheckField.cs" />
+    <Compile Include="Core\Domain\TestNotificationField.cs" />
+    <Compile Include="Core\Domain\TracerouteField.cs" />
+    <Compile Include="Core\ICloudMonitoringProvider.cs" />
     <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\Snapshot.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
@@ -93,6 +102,7 @@
     <Compile Include="Core\ICloudFilesProvider.cs" />
     <Compile Include="Core\ICloudFilesMetadataProcessor.cs" />
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudMonitoringProvider.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\ICloudFilesValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
