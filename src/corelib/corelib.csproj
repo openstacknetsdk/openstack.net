@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\Audits.cs" />
+    <Compile Include="Core\Domain\AuditsMetadata.cs" />
+    <Compile Include="Core\Domain\AuditsValue.cs" />
+    <Compile Include="Core\Domain\Headers.cs" />
     <Compile Include="Core\Domain\Snapshot.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
     <Compile Include="Core\Domain\VolumeState.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
     <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Core\ICloudMonitoringProvider.cs" />
     <Compile Include="Core\ICloudNetworksProvider.cs" />
     <Compile Include="Core\ICloudNetworksValidator.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="Core\ICloudFilesProvider.cs" />
     <Compile Include="Core\ICloudFilesMetadataProcessor.cs" />
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudMonitoringProvider.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\ICloudFilesValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
