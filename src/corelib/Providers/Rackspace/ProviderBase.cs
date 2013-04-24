@@ -151,7 +151,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrWhiteSpace(region))
                 region = userAccess.User.DefaultRegion;
 
-            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
+            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region == null || e.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
 
             if (endpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");
