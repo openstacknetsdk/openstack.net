@@ -62,6 +62,7 @@
     <Compile Include="Providers\Rackspace\EncodeDecodeProviderTests.cs" />
     <Compile Include="Providers\Rackspace\IdentityProviderCacheTests.cs" />
     <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
+    <Compile Include="Providers\Rackspace\ProviderBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
