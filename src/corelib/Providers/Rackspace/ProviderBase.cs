@@ -133,7 +133,7 @@ namespace net.openstack.Providers.Rackspace
             return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
-        private Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
+        protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
             if (identity == null)
                 identity = DefaultIdentity;
@@ -149,9 +149,12 @@ namespace net.openstack.Providers.Rackspace
                 throw new UserAuthorizationException("The user does not have access to the requested service.");
 
             if (string.IsNullOrWhiteSpace(region))
-                region = userAccess.User.DefaultRegion;
+                region = string.IsNullOrWhiteSpace(userAccess.User.DefaultRegion) ?
+                    IsLondonIdentity(identity) ? "LON" : null
+                    : userAccess.User.DefaultRegion;
 
-            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
+            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase)) ??
+                           serviceDetails.Endpoints.FirstOrDefault(e => string.IsNullOrWhiteSpace(e.Region));
 
             if (endpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");
@@ -208,6 +211,16 @@ namespace net.openstack.Providers.Rackspace
                 _currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             return string.Format("openstack.net/{0}", _currentVersion.ToString());
+        }
+
+        private static bool IsLondonIdentity(CloudIdentity identity)
+        {
+            var rsCloudIdentity = identity as RackspaceCloudIdentity;
+
+            if (rsCloudIdentity == null)
+                return false;
+
+            return rsCloudIdentity.CloudInstance == CloudInstance.UK;
         }
     }
 }
