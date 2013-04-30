@@ -44,15 +44,17 @@
     <BinaryTOC>True</BinaryTOC>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, SealedProtected, InheritedFrameworkPrivateMembers, InheritedFrameworkInternalMembers</VisibleItems>
     <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
-    <CopyrightText>Copyright %28C%29 2013 Rackspace US, Inc.</CopyrightText>
-    <CopyrightHref>https://github.com/rackspace/openstack.net/wiki/Copyright</CopyrightHref>
+    <CopyrightText>
+    </CopyrightText>
+    <CopyrightHref>
+    </CopyrightHref>
     <TransformComponentArguments>
-      <Argument Key="logoFile" Value="openstack_net_logo.png" xmlns="" />
-      <Argument Key="logoHeight" Value="" xmlns="" />
-      <Argument Key="logoWidth" Value="" xmlns="" />
-      <Argument Key="logoAltText" Value="" xmlns="" />
-      <Argument Key="logoPlacement" Value="left" xmlns="" />
-      <Argument Key="logoAlignment" Value="left" xmlns="" />
+      <Argument Key="logoFile" Value="" />
+      <Argument Key="logoHeight" Value="" />
+      <Argument Key="logoWidth" Value="" />
+      <Argument Key="logoAltText" Value="" />
+      <Argument Key="logoPlacement" Value="left" />
+      <Argument Key="logoAlignment" Value="left" />
     </TransformComponentArguments>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
