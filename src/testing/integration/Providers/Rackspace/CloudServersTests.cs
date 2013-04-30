@@ -16,20 +16,24 @@ using net.openstack.Providers.Rackspace;
     {
         private TestContext testContextInstance;
         private static CloudIdentity _testIdentity;
-        private static NewServer _testServer;
-        private static IEnumerable<ServerImageDetails> _allImages;
-        private static NewServer _testServer2;
+        private static NewServer _newTestServer;
+        private static Server _testServer;
+        private static IEnumerable<ServerImage> _allImages;
+        private static NewServer _newTestServer2;
+        private static Server _testServer2;
         private static bool _rebootSuccess;
         private static bool _resizeSuccess;
         private static bool _confirmResizeSuccess;
-        private static ServerDetails _rebuildServer;
+        private static bool _rebuildServerSuccess;
         private static ServerImage _testImage;
         private static string _testImageName;
         private static bool _revertResizeSuccess;
-        private static ServerDetails _preBuildDetails;
+        private static Server _preBuildDetails;
         private static string _rescueAdminPass;
         private static bool _unRescueSuccess;
         private static ServerVolume _testVolume;
+        private static SimpleServerImage _initImage;
+        private static Flavor _initFlavor;
         private const string NewPassword = "my_new_password";
 
         /// <summary>
@@ -48,56 +52,37 @@ using net.openstack.Providers.Rackspace;
             }
         }
 
-        
-
         #region Initialize and Build Test Servers
 
         [ClassInitialize]
         public static void Init(TestContext context)
         {
             _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
+            
+            var provider = new CloudServersProvider(_testIdentity);
+
+            _initImage = provider.ListImages(imageName: "CentOS 6.3").First();
+            _initFlavor = provider.ListFlavors().OrderBy(f => f.Id).First();
         }
 
         [Timeout(1800000), TestMethod]
         public void Should_Create_A_New_Server_In_DFW()
         {
             var provider = new CloudServersProvider(_testIdentity);
-            _testServer = provider.CreateServer("net-sdk-test-server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2");
+            _newTestServer = provider.CreateServer("net-sdk-test-server", _initImage.Id, _initFlavor.Id);
 
-            Assert.IsNotNull(_testServer);
-            Assert.IsNotNull(_testServer.Id);
+            Assert.IsNotNull(_newTestServer);
+            Assert.IsNotNull(_newTestServer.Id);
         }
 
         [TestMethod]
         public void Should_Create_A_New_Complex_Server_In_DFW()
         {
             var provider = new CloudServersProvider(_testIdentity);
-            _testServer2 = provider.CreateServer("net-sdk-test-server2", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2", metadata: new Metadata{{"Key1", "Value1"}, {"Key2", "Value2"}}, attachToPublicNetwork: true, attachToServiceNetwork: true);
+            _newTestServer2 = provider.CreateServer("net-sdk-test-server2", _initImage.Id, _initFlavor.Id, metadata: new Metadata { { "Key1", "Value1" }, { "Key2", "Value2" } }, attachToPublicNetwork: true, attachToServiceNetwork: true);
 
-            Assert.IsNotNull(_testServer2);
-            Assert.IsNotNull(_testServer2.Id);
-        }
-
-        [TestMethod]
-        public void Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes()
-        {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var serverDetails = provider.WaitForServerActive(_testServer.Id);
-
-            Assert.IsNotNull(serverDetails);
-            Assert.AreEqual("ACTIVE", serverDetails.Status);
-        }
-
-        [Timeout(1800000), TestMethod]
-        public void Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes_For_Server2()
-        {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var serverDetails = provider.WaitForServerActive(_testServer2.Id);
-
-            Assert.IsNotNull(serverDetails);
-            Assert.AreEqual("ACTIVE", serverDetails.Status);
+            Assert.IsNotNull(_newTestServer2);
+            Assert.IsNotNull(_newTestServer2.Id);
         }
 
         #endregion
@@ -107,32 +92,48 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_Details_For_Newly_Created_Server_In_DFW()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var serverDetails = provider.GetDetails(_testServer.Id);
+            _testServer = _newTestServer.GetDetails();
 
-            Assert.IsNotNull(serverDetails);
-            Assert.AreEqual("net-sdk-test-server", serverDetails.Name);
-            Assert.AreEqual("d531a2dd-7ae9-4407-bb5a-e5ea03303d98", serverDetails.Image.Id);
-            Assert.AreEqual("2", serverDetails.Flavor.Id);  
+            Assert.IsNotNull(_testServer);
+            Assert.AreEqual("net-sdk-test-server", _testServer.Name);
+            Assert.AreEqual(_initImage.Id, _testServer.Image.Id);
+            Assert.AreEqual(_initFlavor.Id, _testServer.Flavor.Id);  
         }
 
         [TestMethod]
         public void Should_Get_Details_For_Newly_Created_Complex_Server_In_DFW()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var serverDetails = provider.GetDetails(_testServer2.Id);
+            _testServer2 = _newTestServer2.GetDetails();
 
-            Assert.IsNotNull(serverDetails);
-            Assert.AreEqual("net-sdk-test-server2", serverDetails.Name);
-            Assert.AreEqual("d531a2dd-7ae9-4407-bb5a-e5ea03303d98", serverDetails.Image.Id);
-            Assert.AreEqual("2", serverDetails.Flavor.Id);
+            Assert.IsNotNull(_testServer2);
+            Assert.AreEqual("net-sdk-test-server2", _testServer2.Name);
+            Assert.AreEqual(_initImage.Id, _testServer2.Image.Id);
+            Assert.AreEqual(_initFlavor.Id, _testServer2.Flavor.Id);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes()
+        {
+            _testServer.WaitForActive();
+
+            Assert.IsNotNull(_newTestServer);
+            Assert.AreEqual("ACTIVE", _testServer.Status);
+        }
+
+        [Timeout(1800000), TestMethod]
+        public void Should_Wait_Until_Server_Becomes_Active_Or_A_Maximum_Of_10_Minutes_For_Server2()
+        {
+            _testServer2.WaitForActive();
+
+            Assert.IsNotNull(_testServer2);
+            Assert.AreEqual("ACTIVE", _testServer2.Status);
         }
 
         [TestMethod]
         public void Should_Get_A_List_Of_Servers_Which_Should_Include_The_Newly_Created_Server()
         {
             var provider = new CloudServersProvider(_testIdentity);
-            var servers = provider.ListServers(identity: _testIdentity);
+            var servers = provider.ListServers();
 
             Assert.IsNotNull(servers);
             Assert.IsTrue(servers.Any());
@@ -143,7 +144,7 @@ using net.openstack.Providers.Rackspace;
         public void Should_Get_A_List_Of_Servers_With_Details_Which_Should_Include_The_Newly_Created_Server()
         {
             var provider = new CloudServersProvider(_testIdentity);
-            var servers = provider.ListServersWithDetails(identity: _testIdentity);
+            var servers = provider.ListServersWithDetails();
 
             Assert.IsNotNull(servers);
             Assert.IsTrue(servers.Any());
@@ -153,8 +154,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_AccessIP_v4_Address()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer.Id);
+            var server = _testServer.GetDetails();
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(server.AccessIPv4));
         }
@@ -162,8 +162,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_AccessIP_v6_Address()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer.Id);
+            var server = _testServer.GetDetails();
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(server.AccessIPv6));
         }
@@ -171,8 +170,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_AccessIP_v4_Address_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer2.Id);
+            var server = _testServer2.GetDetails();
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(server.AccessIPv4));
         }
@@ -180,8 +178,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_AccessIP_v6_Address_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer2.Id);
+            var server = _testServer2.GetDetails();
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(server.AccessIPv6));
         }
@@ -189,8 +186,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_Network_Addresses_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer2.Id);
+            var server = _testServer2.GetDetails();
 
             Assert.IsTrue(server.Addresses.Public.Any());
             Assert.IsTrue(server.Addresses.Private.Any());
@@ -199,8 +195,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Match_AccessIPv4_and_Public_Network_IP()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer2.Id);
+            var server = _testServer2.GetDetails();
 
             Assert.AreEqual(server.AccessIPv4, server.Addresses.Public.First(a => a.Version.Equals("4")).Address);
         }
@@ -208,8 +203,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Match_AccessIPv6_and_Public_Network_IP()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var server = provider.GetDetails(_testServer2.Id);
+            var server = _testServer2.GetDetails();
 
             Assert.AreEqual(server.AccessIPv6, server.Addresses.Public.First(a => a.Version.Equals("6")).Address);
         }
@@ -217,8 +211,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_Addresses_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var addresses = provider.ListAddresses(_testServer2.Id);
+            var addresses = _testServer2.ListAddresses();
 
             Assert.IsTrue(addresses.Public.Any());
         }
@@ -226,8 +219,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_Addresses_By_Network_Name_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var addresses = provider.ListAddressesByNetwork(_testServer2.Id, "public");
+            var addresses = _testServer2.ListAddressesByNetwork("public");
 
             Assert.IsTrue(addresses.Any());
         }
@@ -239,8 +231,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_Empty_Server_Metadata_List()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 0);
@@ -249,9 +240,8 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Set_Initial_Server_Metadata_With_Keys_1_and_2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
             var metadata = new Metadata() {{"Metadata_Key_1", "My_Value_1"}, {"Metadata_Key_2", "My_Value_2"}};
-            var response = provider.SetServerMetadata(_testServer.Id, metadata);
+            var response = _testServer.SetMetadata(metadata);
 
             Assert.IsTrue(response);
         }
@@ -259,8 +249,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Initial_Test_Server_Metadata_With_Keys_1_and_2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
@@ -273,9 +262,8 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Reset_Server_Metadata_With_Keys_3_and_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3" }, { "Metadata_Key_4", "My_Value_4" } };
-            var response = provider.SetServerMetadata(_testServer.Id, metadata);
+            var response = _testServer.SetMetadata(metadata);
 
             Assert.IsTrue(response);
         }
@@ -283,8 +271,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Reset_Test_Server_Metadata_With_Keys_3_and_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
@@ -297,9 +284,8 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Update_Server_Metadata_Items_With_Keys_3_and_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3_Updated" }, { "Metadata_Key_4", "My_Value_4_Updated" } };
-            var response = provider.UpdateServerMetadata(_testServer.Id, metadata);
+            var response = _testServer.UpdateMetadata(metadata);
 
             Thread.Sleep(10000);   // Sleep a few seconds because there is an edge case that the system does not reflect the new metadata changes quick enough
             Assert.IsTrue(response);
@@ -308,8 +294,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Updated_Server_Metadata_With_Keys_3_and_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
@@ -322,8 +307,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Add_A_New_Metadata_Item_With_Key_5()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var response = provider.SetServerMetadataItem(_testServer.Id, "Metadata_Key_5", "My_Value_5");
+            var response = _testServer.AddMetadata("Metadata_Key_5", "My_Value_5");
 
             Assert.IsTrue(response);
         }
@@ -331,8 +315,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Server_Metadata_Including_The_New_Item_With_Key_5()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
@@ -347,9 +330,8 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Update_Metadata_Items_With_Key_3_And_5_But_NOT_Key_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3_Updated_Again" }, { "Metadata_Key_5", "My_Value_5_Updated" } };
-            var response = provider.UpdateServerMetadata(_testServer.Id, metadata);
+            var response = _testServer.UpdateMetadata(metadata);
 
             Assert.IsTrue(response);
         }
@@ -357,8 +339,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Updates_To_Metadata_Items_With_Key_3_And_5_And_Validate_That_Metadata_Item_With_Key_4_Did_Not_Change()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
@@ -373,8 +354,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Update_A_Single_Server_Metadata_Item_With_Key_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var response = provider.SetServerMetadataItem(_testServer.Id, "Metadata_Key_4", "My_Value_4_Updated_Again");
+            var response = _testServer.UpdateMetadataItem("Metadata_Key_4", "My_Value_4_Updated_Again");
 
             Assert.IsTrue(response);
         }
@@ -382,8 +362,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_Updates_To_Metadata_Item_With_Key_4_And_Validate_That_Metadata_Items_ith_Keys_3_And_5_Have_Not_Changed()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 3);
@@ -398,8 +377,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Delete_A_Single_Server_Metadata_Item_With_Key_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var response = provider.DeleteServerMetadataItem(_testServer.Id, "Metadata_Key_4");
+            var response = _testServer.DeleteMetadataItem("Metadata_Key_4");
 
             Assert.IsTrue(response);
         }
@@ -407,8 +385,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Get_The_List_Of_Metadata_Items_Including_Keys_3_And_5_But_Excluding_The_Deleted_Item_With_Key_4()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var metadata = provider.ListServerMetadata(_testServer.Id);
+            var metadata = _testServer.GetMetadata();
 
             Assert.IsNotNull(metadata);
             Assert.IsTrue(metadata.Count == 2);
@@ -425,13 +402,10 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Create_Image_From_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var detail = provider.GetDetails(_testServer.Id);
+            _testImageName = "Image_of_" + _testServer.Id;
+            var imageDetails = _testServer.Snapshot(_testImageName);
 
-            _testImageName = "Image_of_" + detail.Id;
-            var sucess = provider.CreateImage(detail.Id, _testImageName);
-
-            Assert.IsTrue(sucess);
+            Assert.IsNotNull(imageDetails);
         }
 
         [TestMethod]
@@ -448,19 +422,15 @@ using net.openstack.Providers.Rackspace;
         [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Image_To_Be_In_Active_State()
         {
-            var provider = new CloudServersProvider(_testIdentity);
+            _testImage.WaitForActive();
 
-            var details = provider.WaitForImageActive(_testImage.Id);
-
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ImageState.ACTIVE, _testImage.Status);
         }
 
         [TestMethod]
         public void Should_Mark_Image_For_Deletetion()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var success = provider.DeleteImage(_testImage.Id);
+            var success = _testImage.Delete();
 
             Assert.IsTrue(success);
         }
@@ -468,9 +438,7 @@ using net.openstack.Providers.Rackspace;
         [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Image_To_Be_In_Deleted_State()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            provider.WaitForImageDeleted(_testImage.Id);
+            _testImage.WaitForDelete();
         }
 
         [TestMethod]
@@ -599,7 +567,6 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_Exactly_Two_Images()
         {
-            var validImage = _allImages.First();
             var provider = new CloudServersProvider(_testIdentity);
             var images = provider.ListImages(limit: 2);
 
@@ -609,7 +576,6 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_Exactly_Two_Images_With_Details()
         {
-            var validImage = _allImages.First();
             var provider = new CloudServersProvider(_testIdentity);
             var images = provider.ListImagesWithDetails(limit: 2);
 
@@ -619,7 +585,6 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_All_Images_When_Using_A_Limit_Greater_Than_What_Actually_Exists()
         {
-            var validImage = _allImages.First();
             var provider = new CloudServersProvider(_testIdentity);
             var images = provider.ListImages(limit: _allImages.Count() * 2);
 
@@ -629,7 +594,6 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Return_All_Images_With_Details_When_Using_A_Limit_Greater_Than_What_Actually_Exists()
         {
-            var validImage = _allImages.First();
             var provider = new CloudServersProvider(_testIdentity);
             var images = provider.ListImagesWithDetails(limit: _allImages.Count() * 2);
 
@@ -643,9 +607,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Successfully_To_And_Login_With_Old_Password()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var serverDetails = provider.GetDetails(_testServer.Id);
-            using (var client = new Renci.SshNet.SshClient(serverDetails.AccessIPv4, "root", _testServer.AdminPassword))
+            using (var client = new Renci.SshNet.SshClient(_testServer.AccessIPv4, "root", _newTestServer.AdminPassword))
             {
                 client.Connect();
 
@@ -665,12 +627,10 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Successfully_To_And_Login_With_New_Password()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var serverDetails = provider.GetDetails(_testServer.Id);
             bool sucess = false;
             for (int i = 0; i < 10; i++)
             {
-                using (var client = new Renci.SshNet.SshClient(serverDetails.AccessIPv4, "root", NewPassword))
+                using (var client = new Renci.SshNet.SshClient(_testServer.AccessIPv4, "root", NewPassword))
                 {
                     client.Connect();
 
@@ -688,9 +648,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Soft_Reboot_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _rebootSuccess = provider.RebootServer(_testServer.Id, RebootType.SOFT);
+            _rebootSuccess = _testServer.SoftReboot();
 
             Assert.IsTrue(_rebootSuccess);
         }
@@ -700,19 +658,15 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
 
-            var provider = new CloudServersProvider(_testIdentity);
+            _testServer.WaitForState(ServerState.REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
-
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.REBOOT, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Hard_Reboot_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _rebootSuccess = provider.RebootServer(_testServer.Id, RebootType.HARD);
+            _rebootSuccess = _testServer.HardReboot();
 
             Assert.IsTrue(_rebootSuccess);
         }
@@ -722,81 +676,60 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
 
-            var provider = new CloudServersProvider(_testIdentity);
+            _testServer.WaitForState(ServerState.HARD_REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.HARD_REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
-
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.HARD_REBOOT, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Rebuild_Server()
         {
+            _preBuildDetails = _testServer.GetDetails();
             var provider = new CloudServersProvider(_testIdentity);
-            _preBuildDetails = provider.GetDetails(_testServer.Id);
             var image = provider.ListImages().First(i => i.Name.Contains("CentOS") && i.Id != _preBuildDetails.Image.Id);
             var flavor = int.Parse(_preBuildDetails.Flavor.Id) + 1;
 
-            _rebuildServer = provider.RebuildServer(_testServer.Id, string.Format("{0}_REBUILD", _preBuildDetails.Name), image.Id, flavor.ToString(), _testServer.AdminPassword);
+            _rebuildServerSuccess = _testServer.Rebuild(string.Format("{0}_REBUILD", _preBuildDetails.Name), image.Id, flavor.ToString(), _newTestServer.AdminPassword);
 
-            Assert.IsNotNull(_rebuildServer);
+            Assert.IsTrue(_rebuildServerSuccess);
         }
 
         [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Server_To_Go_Into_Rebuild_Status()
         {
-            Assert.IsNotNull(_rebuildServer);
+            Assert.IsTrue(_rebuildServerSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.REBUILD, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.REBUILD, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            Assert.IsNotNull(details);
-            Assert.AreEqual(_testServer.Id, _rebuildServer.Id);
+            Assert.AreEqual(_preBuildDetails.Id, _testServer.Id);
         }
 
         [Timeout(1800000), TestMethod]
         public void Should_Wait_For_Server_To_Go_Into_Active_Status_After_Rebuild()
         {
-            Assert.IsNotNull(_rebuildServer);
+            Assert.IsTrue(_rebuildServerSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerActive(_testServer.Id);
+            _testServer.WaitForActive();
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Verify_That_The_Name_Image_And_Flavor_Changed_As_expected_After_Rebuild()
         {
-            Assert.IsNotNull(_rebuildServer);
+            Assert.IsTrue(_rebuildServerSuccess);
             
-            Assert.AreNotEqual(_preBuildDetails.Name, _rebuildServer.Name);
-            Assert.AreNotEqual(_preBuildDetails.Flavor.Id, _rebuildServer.Flavor.Id);
-            Assert.AreNotEqual(_preBuildDetails.Image.Id, _rebuildServer.Image.Id);
+            Assert.AreNotEqual(_preBuildDetails.Name, _testServer.Name);
+            Assert.AreNotEqual(_preBuildDetails.Flavor.Id, _testServer.Flavor.Id);
+            Assert.AreNotEqual(_preBuildDetails.Image.Id, _testServer.Image.Id);
         }
 
         [TestMethod]
         public void Should_Resize_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.GetDetails(_testServer.Id);
-            var flavor = int.Parse(details.Flavor.Id) + 1;
+            var flavor = int.Parse(_testServer.Flavor.Id) + 1;
 
-            _resizeSuccess = provider.ResizeServer(_testServer.Id, string.Format("{0}_RESIZE", details.Name), flavor.ToString());
-
-            Assert.IsTrue(_resizeSuccess);
-        }
-
-        [TestMethod]
-        public void Should_Resize_Server_Back()
-        {
-            Assert.IsTrue(_resizeSuccess);
-
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.GetDetails(_testServer.Id);
-            var flavor = int.Parse(details.Flavor.Id) - 1;
-
-            _resizeSuccess = provider.ResizeServer(_testServer.Id, string.Format("{0}_RESIZED_BACK", details.Name), flavor.ToString());
+            _resizeSuccess = _testServer.Resize(string.Format("{0}_RESIZE", _testServer.Name), flavor.ToString());
 
             Assert.IsTrue(_resizeSuccess);
         }
@@ -806,11 +739,9 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_resizeSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            Assert.IsNotNull(details);
-            Assert.AreEqual(ServerState.VERIFY_RESIZE, details.Status);
+            Assert.AreEqual(ServerState.VERIFY_RESIZE, _testServer.Status);
         }
 
         [TestMethod]
@@ -818,11 +749,21 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_resizeSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _confirmResizeSuccess = provider.ConfirmServerResize(_testServer.Id);
+            _confirmResizeSuccess = _testServer.ConfirmResize();
 
             Assert.IsTrue(_confirmResizeSuccess);
+        }
+
+        [TestMethod]
+        public void Should_Resize_Server_Back()
+        {
+            Assert.IsTrue(_resizeSuccess);
+
+            var flavor = int.Parse(_testServer.Flavor.Id) - 1;
+
+            _resizeSuccess = _testServer.Resize(string.Format("{0}_RESIZED_BACK", _testServer.Name), flavor.ToString());
+
+            Assert.IsTrue(_resizeSuccess);
         }
 
         [Timeout(1800000), TestMethod]
@@ -830,11 +771,10 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_confirmResizeSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
 
-            var details = provider.WaitForServerActive(_testServer.Id);
+            _testServer.WaitForActive();
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
         }
 
         [Timeout(1800000), TestMethod]
@@ -842,19 +782,17 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_confirmResizeSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.VERIFY_RESIZE, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Revert_Resize_Server()
         {
             Assert.IsTrue(_resizeSuccess);
-            var provider = new CloudServersProvider(_testIdentity);
 
-            _revertResizeSuccess = provider.RevertServerResize(_testServer.Id);
+            _revertResizeSuccess = _testServer.RevertResize();
 
             Assert.IsTrue(_revertResizeSuccess);
         }
@@ -864,18 +802,15 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_revertResizeSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerActive(_testServer.Id);
+            _testServer.WaitForActive();
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Mark_Server_To_Enter_Rescue_Mode()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _rescueAdminPass = provider.RescueServer(_testServer.Id);
+            _rescueAdminPass = _testServer.Rescue();
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(_rescueAdminPass));
         }
@@ -885,18 +820,15 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(_rescueAdminPass));
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerState(_testServer.Id, ServerState.RESCUE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.RESCUE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.RESCUE, _testServer.Status);
         }
 
         [TestMethod]
         public void Should_Mark_Server_To_Be_UnRescued()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _unRescueSuccess = provider.UnRescueServer(_testServer.Id);
+            _unRescueSuccess = _testServer.UnRescue();
 
             Assert.IsTrue(_unRescueSuccess);
         }
@@ -906,10 +838,9 @@ using net.openstack.Providers.Rackspace;
         {
             Assert.IsTrue(_unRescueSuccess);
 
-            var provider = new CloudServersProvider(_testIdentity);
-            var details = provider.WaitForServerActive(_testServer.Id);
+            _testServer.WaitForActive();
 
-            Assert.IsNotNull(details);
+            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
         }
 
         #endregion
@@ -919,9 +850,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Attach_Server_Volume()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            _testVolume = provider.AttachServerVolume(_testServer.Id, "2da9ce90-076e-450a-be3e-c822c9aa73f5");
+            _testVolume = _testServer.AttachVolume("2da9ce90-076e-450a-be3e-c822c9aa73f5");
 
             Assert.IsNotNull(_testVolume);
         }
@@ -929,13 +858,11 @@ using net.openstack.Providers.Rackspace;
         [Timeout(1800000), TestMethod]
         public void Should_Wait_Until_Volume_Is_Attached_To_The_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
            var volumeIsInList = false;
             var count = 0;
             do
             {
-                var volumes = provider.ListServerVolumes(_testServer.Id);
+                var volumes = _testServer.GetVolumes();
 
                 if (volumes != null)
                     volumeIsInList = volumes.Any(v => v.Id == _testVolume.Id);
@@ -951,9 +878,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_List_All_Volumes()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var volumes = provider.ListServerVolumes(_testServer.Id);
+            var volumes = _testServer.GetVolumes();
 
             Assert.IsTrue(volumes.Any());
         }
@@ -961,9 +886,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Contain_Attached_Volumne_In_Server_Volume_List()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var volumes = provider.ListServerVolumes(_testServer.Id);
+            var volumes = _testServer.GetVolumes();
 
             Assert.IsTrue(volumes.Any(v => v.Id == _testVolume.Id));
         }
@@ -971,9 +894,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Detach_Volume_From_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var success = provider.DetachServerVolume(_testServer.Id, _testVolume.Id);
+            var success = _testServer.DetachVolume(_testVolume.Id);
 
             Assert.IsTrue(success);
         }
@@ -981,13 +902,11 @@ using net.openstack.Providers.Rackspace;
         [Timeout(1800000), TestMethod]
         public void Should_Wait_Until_Volume_Is_Detached_From_The_Server()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
             var volumeIsInList = false;
             var count = 0;
             do
             {
-                var volumes = provider.ListServerVolumes(_testServer.Id);
+                var volumes = _testServer.GetVolumes();
 
                 if (volumes != null)
                     volumeIsInList = volumes.Any(v => v.Id == _testVolume.Id);
@@ -1001,9 +920,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_NOT_Contain_Attached_Volume_In_Server_Volume_List()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            var volumes = provider.ListServerVolumes(_testServer.Id);
+            var volumes = _testServer.GetVolumes();
 
             Assert.IsFalse(volumes.Any(v => v.Id == _testVolume.Id));
         }
@@ -1015,8 +932,7 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Mark_The_Server_For_Deletion()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var result = provider.DeleteServer(_testServer.Id);
+            var result = _testServer.Delete();
 
             Assert.IsTrue(result);
         }
@@ -1024,16 +940,13 @@ using net.openstack.Providers.Rackspace;
         [TestMethod]
         public void Should_Wait_A_Max_Of_10_Minutes_For_The_Server_Is_Deleted_Indicated_By_A_Null_Return_Value_For_Details()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            provider.WaitForServerDeleted(_testServer.Id);
+            _testServer.WaitForDeleted();
         }
 
         [TestMethod]
         public void Should_Mark_The_Server_For_Deletion_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-            var result = provider.DeleteServer(_testServer2.Id);
+            var result = _testServer2.Delete();
 
             Assert.IsTrue(result);
         }
@@ -1041,9 +954,7 @@ using net.openstack.Providers.Rackspace;
         [Timeout(1800000), TestMethod]
         public void Should_Wait_A_Max_Of_10_Minutes_For_The_Server_Is_Deleted_Indicated_By_A_Null_Return_Value_For_Details_For_Server2()
         {
-            var provider = new CloudServersProvider(_testIdentity);
-
-            provider.WaitForServerDeleted(_testServer2.Id);
+            _testServer2.WaitForDeleted();
         }
 
         #endregion

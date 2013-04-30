@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class ListServersResponse
     {
-        public ServerDetails[] Servers { get; set; }
+        public Server[] Servers { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace.Exceptions;
+using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -46,9 +46,9 @@ namespace net.openstack.Providers.Rackspace
             switch (cloudInstance)
             {
                 case CloudInstance.Default:
-                    return new GeographicalCloudIdentityProvider(new Uri(USIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
+                    return new GeographicalCloudIdentityProvider(new Uri(USIdentityUrlBase), _defaultIdentity, _restService, _tokenCache, new HttpResponseCodeValidator());
                 case CloudInstance.UK:
-                    return new GeographicalCloudIdentityProvider(new Uri(LONIdentityUrlBase), _defaultIdentity, _restService, _tokenCache);
+                    return new GeographicalCloudIdentityProvider(new Uri(LONIdentityUrlBase), _defaultIdentity, _restService, _tokenCache, new HttpResponseCodeValidator());
                 default:
                     throw new UnknownGeographyException(cloudInstance.ToString());
             }

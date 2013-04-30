@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using JSIStudios.SimpleRESTServices.Client;
 
 namespace net.openstack.Core
 {
-    public interface ICloudFilesMetadataProcessor
+    public interface IObjectStorageMetadataProcessor
     {
         Dictionary<string, Dictionary<string, string>> ProcessMetadata(IList<HttpHeader> httpHeaders);
     }

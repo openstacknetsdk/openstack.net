@@ -5,8 +5,10 @@ using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
@@ -18,13 +20,15 @@ namespace net.openstack.Providers.Rackspace
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
         private readonly CloudIdentity _defaultIdentity;
+        private readonly IHttpResponseCodeValidator _responseCodeValidator;
 
-        public GeographicalCloudIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache)
+        public GeographicalCloudIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache, IHttpResponseCodeValidator responseCodeValidator)
         {
             _defaultIdentity = identity;
             _urlBase = urlBase;
             _userAccessCache = userAccessCache;
             _restService = restService;
+            _responseCodeValidator = responseCodeValidator;
         }
 
         #region Roles
@@ -164,6 +168,8 @@ namespace net.openstack.Providers.Rackspace
 
             return cred;
         }
+
+        public CloudIdentity DefaultIdentity { get { return _defaultIdentity;  } }
 
         public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
         {
@@ -439,7 +445,7 @@ namespace net.openstack.Providers.Rackspace
                                    RetryCount = retryCount,
                                    RetryDelayInMS = retryDelay,
                                    Non200SuccessCodes = new[] {401, 409},
-                                   UserAgent = ProviderBase.GetUserAgentHeaderValue()
+                                   UserAgent = UserAgentGenerator.Generate()
                                };
 
             var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
@@ -450,7 +456,7 @@ namespace net.openstack.Providers.Rackspace
                 return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity), retryCount, retryCount, callback);
             }
 
-            ProviderBase.CheckResponse(response);
+            _responseCodeValidator.Validate(response);
 
             return response;
         }

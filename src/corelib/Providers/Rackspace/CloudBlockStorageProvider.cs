@@ -7,6 +7,8 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
+using net.openstack.Core.Providers;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using net.openstack.Providers.Rackspace.Validators;
@@ -15,47 +17,86 @@ using CreateCloudBlockStorageVolumeDetails = net.openstack.Providers.Rackspace.O
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
-    /// The Cloud Block Storage Provider contains the methods required to interact with Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshots.
+    /// <para>The Cloud Block Storage Provider enables simple access to the Rackspace Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshot services.
     /// Rackspace Cloud Block Storage is a block level storage solution that allows customers to mount drives or volumes to their Rackspace Next Generation Cloud Servers.
     /// The two primary use cases are (1) to allow customers to scale their storage independently from their compute resources,
-    /// and (2) to allow customers to utilize high performance storage to serve database or I/O-intensive applications.
-    /// 
-    /// Highlights of Rackspace Cloud Block Storage include:
-    /// - Mount a drive to a Cloud Server to scale storage without paying for more compute capability.
-    /// - A high performance option for databases and high performance applications, leveraging solid state drives for speed.
-    /// - A standard speed option for customers who just need additional storage on their Cloud Server.
-    /// 
-    /// Notes:
-    /// - Cloud Block Storage is an add-on feature to Next Generation Cloud Servers.  Customers may not attach Cloud Block Storage volumes to other instances, like first generation Cloud Servers.
-    /// - Cloud Block Storage is multi-tenant rather than dedicated.
-    /// - When volumes are destroyed, Rackspace keeps that disk space unavailable until zeros have been written to the space to ensure that data is not accessible by any other customers.
-    /// - Cloud Block Storage allows you to create snapshots that you can save, list, and restore.
-    /// 
-    /// Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/overview.html
+    /// and (2) to allow customers to utilize high performance storage to serve database or I/O-intensive applications.</para>
+    /// <para />
+    /// <para>Highlights of Rackspace Cloud Block Storage include:</para>
+    /// <para>- Mount a drive to a Cloud Server to scale storage without paying for more compute capability.</para>
+    /// <para>- A high performance option for databases and high performance applications, leveraging solid state drives for speed.</para>
+    /// <para>- A standard speed option for customers who just need additional storage on their Cloud Server.</para>
+    /// <para />
+    /// <para>Notes:</para>
+    /// <para>- Cloud Block Storage is an add-on feature to Next Generation Cloud Servers.  Customers may not attach Cloud Block Storage volumes to other instances, like first generation Cloud Servers.</para>
+    /// <para>- Cloud Block Storage is multi-tenant rather than dedicated.</para>
+    /// <para>- When volumes are destroyed, Rackspace keeps that disk space unavailable until zeros have been written to the space to ensure that data is not accessible by any other customers.</para>
+    /// <para>- Cloud Block Storage allows you to create snapshots that you can save, list, and restore.</para>
+    /// <para />
+    /// <para>Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/overview.html</para>
     /// </summary>
-    public class CloudBlockStorageProvider : ProviderBase, ICloudBlockStorageProvider
+    /// <see cref="IBlockStorageProvider"/>
+    /// <inheritdoc />
+    public class CloudBlockStorageProvider : ProviderBase<IBlockStorageProvider>, IBlockStorageProvider
     {
 
         private readonly int[] _validResponseCode = new[] { 200, 201, 202 };
-        private readonly ICloudBlockStorageValidator _cloudBlockStorageValidator;
+        private readonly IBlockStorageValidator _cloudBlockStorageValidator;
 
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
         /// </summary>
         public CloudBlockStorageProvider()
-            : this(null) { }
+            : this(null, null, null) { }
 
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
         /// </summary>
         /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         public CloudBlockStorageProvider(CloudIdentity identity)
-            : this(identity, new CloudIdentityProvider(), new JsonRestServices(), new CloudBlockStorageValidator()) { }
+            : this(identity, null, null) { }
 
-        internal CloudBlockStorageProvider(ICloudIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
-            : this(null, identityProvider, restService, cloudBlockStorageValidator) { }
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// </summary>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudBlockStorageProvider(IRestService restService)
+            : this(null, restService) { }
+    
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// </summary>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudBlockStorageProvider(IIdentityProvider identityProvider)
+            : this(null, identityProvider, null) { }
 
-        internal CloudBlockStorageProvider(CloudIdentity identity, ICloudIdentityProvider identityProvider, IRestService restService, ICloudBlockStorageValidator cloudBlockStorageValidator)
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// </summary>
+        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider)
+            : this(identity, identityProvider, null) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudBlockStorageProvider(CloudIdentity identity, IRestService restService)
+            : this(identity, null, restService) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
+            : this(identity, identityProvider, restService, new CloudBlockStorageValidator()) { }
+
+
+        internal CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IBlockStorageValidator cloudBlockStorageValidator)
             : base(identity, identityProvider, restService)
         {
             _cloudBlockStorageValidator = cloudBlockStorageValidator;
@@ -63,7 +104,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Volumes
 
-
+        /// <inheritdoc />
         public bool CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null)
         {
             _cloudBlockStorageValidator.ValidateVolumeSize(size);
@@ -75,6 +116,7 @@ namespace net.openstack.Providers.Rackspace
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
+        /// <inheritdoc />
         public IEnumerable<Volume> ListVolumes(string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/volumes", GetServiceEndpoint(identity, region)));
@@ -86,6 +128,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Volumes;
         }
 
+        /// <inheritdoc />
         public Volume ShowVolume(string volumeId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volumeId));
@@ -97,6 +140,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Volume;
         }
 
+        /// <inheritdoc />
         public bool DeleteVolume(string volumeId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/volumes/{1}", GetServiceEndpoint(identity, region), volumeId));
@@ -105,6 +149,7 @@ namespace net.openstack.Providers.Rackspace
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
+        /// <inheritdoc />
         public IEnumerable<VolumeType> ListVolumeTypes(string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/types", GetServiceEndpoint(identity, region)));
@@ -116,6 +161,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.VolumeTypes;
         }
 
+        /// <inheritdoc />
         public VolumeType DescribeVolumeType(int volumeTypeId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/types/{1}", GetServiceEndpoint(identity, region), volumeTypeId));
@@ -127,16 +173,19 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.VolumeType;
         }
 
+        /// <inheritdoc />
         public Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
             return WaitForVolumeState(volumeId, VolumeState.AVAILABLE, new[] { VolumeState.ERROR, VolumeState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
         }
 
+        /// <inheritdoc />
         public bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
             return WaitForItemToBeDeleted(ShowVolume, volumeId, refreshCount, refreshDelayInMS, region, identity);
         }
 
+        /// <inheritdoc />
         public Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
         {
             var volumeInfo = ShowVolume(volumeId, region, identity);
@@ -155,6 +204,7 @@ namespace net.openstack.Providers.Rackspace
             return volumeInfo;
         }
 
+        /// <inheritdoc />
         public class VolumeEnteredErrorStateException : Exception
         {
             public string Status { get; private set; }
@@ -170,6 +220,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Snapshots
 
+        /// <inheritdoc />
         public bool CreateSnapshot(string volumeId, bool force = false, string displayName = "None", string displayDescription = "None", string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/snapshots", GetServiceEndpoint(identity, region)));
@@ -179,6 +230,7 @@ namespace net.openstack.Providers.Rackspace
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
+        /// <inheritdoc />
         public IEnumerable<Snapshot> ListSnapshots(string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/snapshots", GetServiceEndpoint(identity, region)));
@@ -190,6 +242,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Snapshots;
         }
 
+        /// <inheritdoc />
         public Snapshot ShowSnapshot(string snapshotId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshotId));
@@ -201,6 +254,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Snapshot;
         }
 
+        /// <inheritdoc />
         public bool DeleteSnapshot(string snapshotId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/snapshots/{1}", GetServiceEndpoint(identity, region), snapshotId));
@@ -209,16 +263,19 @@ namespace net.openstack.Providers.Rackspace
             return response != null && _validResponseCode.Contains(response.StatusCode);
         }
 
+        /// <inheritdoc />
         public Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
             return WaitForSnapshotState(snapshotId, SnapshotState.AVAILABLE, new[] { SnapshotState.ERROR, SnapshotState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
         }
 
+        /// <inheritdoc />
         public bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
             return WaitForItemToBeDeleted(ShowSnapshot, snapshotId, refreshCount, refreshDelayInMS, region, identity);
         }
 
+        /// <inheritdoc />
         public Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
         {
             var snapshotInfo = ShowSnapshot(snapshotId, region, identity);
@@ -237,6 +294,7 @@ namespace net.openstack.Providers.Rackspace
             return snapshotInfo;
         }
 
+        /// <inheritdoc />
         public class SnapshotEnteredErrorStateException : Exception
         {
             public string Status { get; private set; }
@@ -279,6 +337,12 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        protected override IBlockStorageProvider BuildProvider(CloudIdentity identity)
+        {
+            return new CloudBlockStorageProvider(identity, IdentityProvider, RestService, _cloudBlockStorageValidator);
+        }
         #endregion
+
+        
     }
 }

@@ -2,10 +2,11 @@
 using System.Web;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
-    public class CloudFilesValidator : ICloudFilesValidator
+    public class CloudFilesValidator : IObjectStorageValidator
     {
         public void ValidateContainerName(string containerName)
         {
