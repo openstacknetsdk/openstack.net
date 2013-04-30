@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Validators;
 
@@ -15,7 +16,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Pass_Validation_For_Container_Name()
         {
             const string containerName = "DarkKnight";
-            var validatorMock = new Mock<ICloudFilesValidator>();
+            var validatorMock = new Mock<IObjectStorageValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
@@ -29,7 +30,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Empty_Container_Name()
         {
             const string containerName = "";
-            var validatorMock = new Mock<ICloudFilesValidator>();
+            var validatorMock = new Mock<IObjectStorageValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
@@ -50,7 +51,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         public void Should_Throw_Exception_When_Passing_Null_Container_Name()
         {
             const string containerName = null;
-            var validatorMock = new Mock<ICloudFilesValidator>();
+            var validatorMock = new Mock<IObjectStorageValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
@@ -76,7 +77,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
                 containerName += containerName;
             }
-            var validatorMock = new Mock<ICloudFilesValidator>();
+            var validatorMock = new Mock<IObjectStorageValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
@@ -98,7 +99,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         {
             const string containerName = "/";
 
-            var validatorMock = new Mock<ICloudFilesValidator>();
+            var validatorMock = new Mock<IObjectStorageValidator>();
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 

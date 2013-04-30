@@ -10,40 +10,94 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Providers;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Exceptions;
 using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
-    /// The Cloud Files Provider contains methods required to interact with Cloud Files.
-    /// For information please go to http://docs.rackspace.com/ and check the Cloud Files section.
+    /// <para>The Cloud Files Provider enable simple access to the Rackspace Cloud Files Services.
+    /// Rackspace Cloud Files™ is an affordable, redundant, scalable, and dynamic storage service offering. 
+    /// The core storage system is designed to provide a safe, secure, automatically re-sizing and network-accessible way to store data. 
+    /// You can store an unlimited quantity of files and each one can be as large as 5 gigabytes. 
+    /// Users can store as much as they want and pay only for storage space they actually use.</para>
+    /// <para />
+    /// <para>Additionally, Cloud Files provides a simple yet powerful way to publish and distribute content behind the industry-leading Akamai Content Distribution Network (CDN). 
+    /// Cloud Files users get access to this network automatically without having to worry about contracts, additional costs, or technical hurdles.</para>
+    /// <para />
+    /// <para>Cloud Files allows users to store/retrieve files and CDN-enable content via a simple ReST (Representational State Transfer) web service interface. 
+    /// There are also language-specific APIs that utilize the ReST API to make it much easier for developers to integrate into their applications.</para>
+    /// <para />
+    /// <para>Documentation URL: http://docs.rackspace.com/files/api/v1/cf-intro/content/Introduction-d1e82.html</para>
     /// </summary>
-    public class CloudFilesProvider : ProviderBase, ICloudFilesProvider
+    /// <see cref="IObjectStorageProvider"/>
+    /// <inheritdoc />
+    public class CloudFilesProvider : ProviderBase<IObjectStorageProvider>, IObjectStorageProvider
     {
-        private readonly ICloudFilesValidator _cloudFilesValidator;
-        private readonly ICloudFilesMetadataProcessor _cloudFilesMetadataProcessor;
+        private readonly IObjectStorageValidator _cloudFilesValidator;
+        private readonly IObjectStorageMetadataProcessor _cloudFilesMetadataProcessor;
         private readonly IEncodeDecodeProvider _encodeDecodeProvider;
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
         /// </summary>
         public CloudFilesProvider()
-            : this(null) { }
+            : this(null, null, null) { }
 
         /// <summary>
-        /// Initializes a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
         /// </summary>
         /// <param name="defaultIdentity">The default identity. An instance of <see cref="net.openstack.Core.Domain.CloudIdentity"/></param>
         public CloudFilesProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, new CloudIdentityProvider(), new JsonRestServices(), new CloudFilesValidator(), new CloudFilesMetadataProcessor(), new EncodeDecodeProvider()) { }
+            : this(defaultIdentity, null, null) { }
 
-        internal CloudFilesProvider(ICloudIdentityProvider cloudIdentityProvider, IRestService restService, ICloudFilesValidator cloudFilesValidator, ICloudFilesMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider)
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// </summary>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudFilesProvider(IRestService restService)
+            : this(null, null, restService) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// </summary>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudFilesProvider(IIdentityProvider identityProvider)
+            : this(null, identityProvider, null) { }
+
+                /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// </summary>
+        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudFilesProvider(CloudIdentity identity, IIdentityProvider identityProvider)
+            : this(identity, identityProvider, null) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudFilesProvider(CloudIdentity identity, IRestService restService)
+            : this(identity, null, restService) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudFilesProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
+            : this(identity, identityProvider, restService, new CloudFilesValidator(), new CloudFilesMetadataProcessor(), new EncodeDecodeProvider()) { }
+
+        internal CloudFilesProvider(IIdentityProvider cloudIdentityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider)
             : this(null, cloudIdentityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider) { }
 
-        internal CloudFilesProvider(CloudIdentity defaultIdentity, ICloudIdentityProvider cloudIdentityProvider, IRestService restService, ICloudFilesValidator cloudFilesValidator, ICloudFilesMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider)
+        internal CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider cloudIdentityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider)
             : base(defaultIdentity, cloudIdentityProvider, restService)
         {
             _cloudFilesValidator = cloudFilesValidator;
@@ -56,6 +110,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Containers
 
+        /// <inheritdoc />
         public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
@@ -80,6 +135,7 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <inheritdoc />
         public ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -95,6 +151,7 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        /// <inheritdoc />
         public ObjectStore DeleteContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -112,6 +169,7 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -124,6 +182,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersHeaderKey];
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -136,6 +195,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
+        /// <inheritdoc />
         public ContainerCDN GetContainerCDNHeader(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -180,6 +240,7 @@ namespace net.openstack.Providers.Rackspace
             return result;
         }
 
+        /// <inheritdoc />
         public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
@@ -207,16 +268,19 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, string region = null, CloudIdentity identity = null)
         {
             return EnableCDNOnContainer(container, ttl, false, identity: identity);
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null)
         {
             return EnableCDNOnContainer(container, 259200, logRetention, region, identity);
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -246,6 +310,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -264,6 +329,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Headers.ToDictionary(header => header.Key, header => header.Value);
         }
 
+        /// <inheritdoc />
         public void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -290,6 +356,7 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <inheritdoc />
         public void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -303,6 +370,7 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <inheritdoc />
         public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -320,6 +388,7 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -340,6 +409,7 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -358,6 +428,7 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -375,6 +446,7 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -392,6 +464,7 @@ namespace net.openstack.Providers.Rackspace
             AddContainerHeaders(container, headers, region, useInternalUrl, identity);
         }
 
+        /// <inheritdoc />
         public void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -415,6 +488,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Container Objects
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -428,6 +502,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersHeaderKey];
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -441,6 +516,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
+        /// <inheritdoc />
         public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -465,6 +541,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
+        /// <inheritdoc />
         public void CreateObjectFromFile(string container, string filePath, string objectName = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (string.IsNullOrWhiteSpace(objectName))
@@ -479,6 +556,7 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <inheritdoc />
         public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (stream == null)
@@ -497,6 +575,7 @@ namespace net.openstack.Providers.Rackspace
             StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings {ChunkRequest = true});
         }
 
+        /// <inheritdoc />
         public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -549,6 +628,7 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <inheritdoc />
         public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (String.IsNullOrEmpty(saveDirectory))
@@ -570,6 +650,7 @@ namespace net.openstack.Providers.Rackspace
             }
         }
 
+        /// <inheritdoc />
         public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(sourceContainer);
@@ -608,6 +689,7 @@ namespace net.openstack.Providers.Rackspace
             return ObjectStore.Unknown;
         }
 
+        /// <inheritdoc />
         public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -626,11 +708,13 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <inheritdoc />
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null)
         {
             return PurgeObjectFromCDN(container, objectName, " ", region, identity);
         }
 
+        /// <inheritdoc />
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string[] emails, string region = null, CloudIdentity identity = null)
         {
             if (emails.Length < 0)
@@ -641,6 +725,7 @@ namespace net.openstack.Providers.Rackspace
             return PurgeObjectFromCDN(container, objectName, string.Join(",", emails), region, identity);
         }
 
+        /// <inheritdoc />
         public ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
@@ -674,6 +759,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Accounts
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
@@ -686,6 +772,7 @@ namespace net.openstack.Providers.Rackspace
 
         }
 
+        /// <inheritdoc />
         public Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
@@ -697,6 +784,7 @@ namespace net.openstack.Providers.Rackspace
             return processedHeaders[ProcessedHeadersMetadataKey];
         }
 
+        /// <inheritdoc />
         public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (metadata.Equals(null))
@@ -722,6 +810,7 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <inheritdoc />
         public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (headers == null)
@@ -736,7 +825,6 @@ namespace net.openstack.Providers.Rackspace
 
 
         #endregion
-
 
         #region Private methods
 
@@ -828,6 +916,11 @@ namespace net.openstack.Providers.Rackspace
                 });
         }
 
+        protected override IObjectStorageProvider BuildProvider(CloudIdentity identity)
+        {
+            return new CloudFilesProvider(identity, IdentityProvider, RestService, _cloudFilesValidator, _cloudFilesMetadataProcessor, _encodeDecodeProvider);
+        }
+
         #endregion
 
         #region constants
@@ -878,5 +971,6 @@ namespace net.openstack.Providers.Rackspace
         public const string ProcessedHeadersHeaderKey = "headers";
 
         #endregion
+ 
     }
 }

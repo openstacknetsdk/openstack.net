@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Core
+namespace net.openstack.Core.Providers
 {
-    public interface ICloudIdentityProvider
+    public interface IIdentityProvider
     {
         /// <summary>
         /// Authenticates the user for the specified identity. <remarks>NOTE: This method always authenticates to the server and never from cache.</remarks>
@@ -114,5 +114,10 @@ namespace net.openstack.Core
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>The <see cref="UserCredential"/> details</returns>
         UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity = null);
+
+        /// <summary>
+        /// Returns the default <see cref="CloudIdentity"/> if on was provided in the constructor 
+        /// </summary>
+        CloudIdentity DefaultIdentity { get; }
     }
 }

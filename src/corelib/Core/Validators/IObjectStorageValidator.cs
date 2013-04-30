@@ -1,6 +1,6 @@
-﻿namespace net.openstack.Core
+﻿namespace net.openstack.Core.Validators
 {
-    public interface ICloudFilesValidator
+    public interface IObjectStorageValidator
     {
         void ValidateContainerName(string containerName);
         void ValidateObjectName(string objectName);

@@ -7,12 +7,26 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
+using net.openstack.Core.Exceptions;
+using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class CloudServersProvider : ProviderBase, ICloudServersProvider
+    /// <summary>
+    /// <para>The Cloud Servers Provider enables simple access go the Rackspace next generation Cloud Servers powered by OpenStack.
+    /// The next generation service is a fast, reliable, and scalable cloud compute solution without the risk of proprietary lock-in. 
+    /// It provides the core features of the OpenStack Compute API v2 and also deploys certain extensions as permitted by the OpenStack Compute API contract. 
+    /// Some of these extensions are generally available through OpenStack while others implement Rackspace-specific features 
+    /// to meet customers’ expectations and for operational compatibility. The OpenStack Compute API and the Rackspace extensions are 
+    /// known collectively as API v2.</para>
+    /// <para />
+    /// <para>Documentation URL: http://docs.rackspace.com/servers/api/v2/cs-gettingstarted/content/overview.html</para>
+    /// </summary>
+    /// <see cref="IComputeProvider"/>
+    /// <inheritdoc />
+    public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
         private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203, 204 };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
@@ -23,25 +37,55 @@ namespace net.openstack.Providers.Rackspace
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
         /// </summary>
         public CloudServersProvider()
-            : this(null) { }
+            : this(null, null, null) { }
 
         /// <summary>
         /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         public CloudServersProvider(CloudIdentity identity)
-            : this(identity, new CloudIdentityProvider(), new JsonRestServices()) { }
+            : this(identity, null, null) { }
 
-        internal CloudServersProvider(ICloudIdentityProvider identityProvider, IRestService restService)
-            : this(null, identityProvider, restService) { }
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudServersProvider(IRestService restService)
+            : this(null, null, restService) { }
 
-        internal CloudServersProvider(ICloudIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper) 
-            : this(null, identityProvider, restService, networkResponseMapper){}
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudServersProvider(IIdentityProvider identityProvider)
+            : this(null, identityProvider, null) { }
 
-        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider identityProvider, IRestService restService)
+                        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        public CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider)
+            : this(identity, identityProvider, null) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudServersProvider(CloudIdentity identity, IRestService restService)
+            : this(identity, null, restService) { }
+
+        /// <summary>
+        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudServersProvider"/> class.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public  CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
             : this(identity, identityProvider, restService, new NetworkResponseJsonMapper()) { }
 
-        internal CloudServersProvider(CloudIdentity identity, ICloudIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
+        internal CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
             : base(identity, identityProvider, restService)
         {
             _networkResponseMapper = networkResponseMapper;
@@ -50,9 +94,9 @@ namespace net.openstack.Providers.Rackspace
         #endregion
 
         #region Servers
-
+        
         /// <inheritdoc />
-        public IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
@@ -61,10 +105,11 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.Servers;
+            return BuildCloudServersProviderAwareObject<SimpleServer>(response.Data.Servers, region, identity);
         }
 
-        public IEnumerable<ServerDetails> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
             
@@ -73,9 +118,10 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.Servers;
+            return BuildCloudServersProviderAwareObject<Server>(response.Data.Servers, region, identity);
         }
 
+        /// <inheritdoc />
         public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
@@ -119,11 +165,12 @@ namespace net.openstack.Providers.Rackspace
 
             if (response.StatusCode != 200 && response.StatusCode != 202)
                 return null; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
-            
-            return response.Data.Server;
+
+            return BuildCloudServersProviderAwareObject<NewServer>(response.Data.Server, region, identity);
         }
 
-        public ServerDetails GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public Server GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
@@ -132,9 +179,10 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            return response.Data.Server;
+            return BuildCloudServersProviderAwareObject<Server>(response.Data.Server, region, identity);
         }
 
+        /// <inheritdoc />
         public bool UpdateServer(string cloudServerId, string name= null, string accessIPv4 = null, string accessIPv6 = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
@@ -151,6 +199,7 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
+        /// <inheritdoc />
         public bool DeleteServer(string cloudServerId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
@@ -164,23 +213,21 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var serverDetails = GetDetails(serverId, region, identity);
 
             int count = 0;
-            int currentProgress = 0;
+            int currentProgress = -1;
             while (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
             {
-                Thread.Sleep(refreshDelayInMS);
-                serverDetails = GetDetails(serverId, region, identity);
-                count++;
-
                 if (progressUpdatedCallback != null)
                 {
                     if (serverDetails.Progress > currentProgress)
@@ -189,19 +236,25 @@ namespace net.openstack.Providers.Rackspace
                         progressUpdatedCallback(currentProgress);
                     }
                 }
+
+                Thread.Sleep(refreshDelayInMS);
+                serverDetails = GetDetails(serverId, region, identity);
+                count++;
             }
 
             if (errorStates.Contains(serverDetails.Status))
                 throw new ServerEnteredErrorStateException(serverDetails.Status);
 
-            return serverDetails;
+            return BuildCloudServersProviderAwareObject<Server>(serverDetails, region, identity);
         }
 
-        public ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null,  string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public Server WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null,  string region = null, CloudIdentity identity = null)
         {
             return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
+        /// <inheritdoc />
         public void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
@@ -219,6 +272,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Server Addresses
 
+        /// <inheritdoc />
         public ServerAddresses ListAddresses(string serverId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips", GetServiceEndpoint(identity, region), serverId));
@@ -231,6 +285,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Addresses;
         }
 
+        /// <inheritdoc />
         public IEnumerable<AddressDetails> ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
@@ -249,6 +304,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Server Actions
 
+        /// <inheritdoc />
         public bool ChangeAdministratorPassword(string serverId, string password, string region = null, CloudIdentity identity = null)
         {
             var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
@@ -257,6 +313,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
+        /// <inheritdoc />
         public bool RebootServer(string serverId, RebootType rebootType, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType.ToString()}};
@@ -265,7 +322,8 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
-        public ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
                                                                    {
@@ -281,9 +339,10 @@ namespace net.openstack.Providers.Rackspace
                                                                    } };
             var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
-            return resp.Server;
+            return BuildCloudServersProviderAwareObject<Server>(resp.Server, region, identity);
         }
 
+        /// <inheritdoc />
         public bool ResizeServer(string serverId, string serverName, string flavor, string diskConfig = null, string region = null, CloudIdentity identity = null)
         {
             var request = new ServerResizeRequest
@@ -300,6 +359,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
+        /// <inheritdoc />
         public bool ConfirmServerResize(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new ConfirmServerResizeRequest();
@@ -308,6 +368,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
+        /// <inheritdoc />
         public bool RevertServerResize(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new RevertServerResizeRequest();
@@ -316,6 +377,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
+        /// <inheritdoc />
         public string RescueServer(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new RescueServerRequest{Details = "none"};
@@ -324,6 +386,7 @@ namespace net.openstack.Providers.Rackspace
             return resp.AdminPassword;
         }
 
+        /// <inheritdoc />
         public bool UnRescueServer(string serverId, string region = null, CloudIdentity identity = null)
         {
             var request = new UnrescueServerRequest { Details = "none" };
@@ -332,6 +395,7 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
+        /// <inheritdoc />
         public bool CreateImage(string serverId, string imageName, Metadata metadata = null, string region = null, CloudIdentity identity = null)
         {
             var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
@@ -368,6 +432,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Volume Attachment Actions
 
+        /// <inheritdoc />
         public ServerVolume AttachServerVolume(string serverId, string volumeId, string storageDevice = null, string region = null,
                                                CloudIdentity identity = null)
         {
@@ -382,6 +447,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.ServerVolume;
         }
 
+        /// <inheritdoc />
         public IEnumerable<ServerVolume> ListServerVolumes(string serverId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments", GetServiceEndpoint(identity, region), serverId));
@@ -394,6 +460,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.ServerVolumes;
         }
 
+        /// <inheritdoc />
         public ServerVolume GetServerVolumeDetails(string serverId, string volumeId, string region = null,
                                                    CloudIdentity identity = null)
         {
@@ -407,6 +474,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.ServerVolume;
         }
 
+        /// <inheritdoc />
         public bool DetachServerVolume(string serverId, string volumeId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments/{2}", GetServiceEndpoint(identity, region), serverId, volumeId));
@@ -423,6 +491,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Flavors
 
+        /// <inheritdoc />
         public IEnumerable<Flavor> ListFlavors(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors", GetServiceEndpoint(identity, region)));
@@ -435,6 +504,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Flavors;
         }
 
+        /// <inheritdoc />
         public IEnumerable<FlavorDetails> ListFlavorsWithDetails(int minDiskInGB = 0, int minRamInMB = 0, string markerId = null, int limit = 0, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors/detail", GetServiceEndpoint(identity, region)));
@@ -447,6 +517,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Flavors;
         }
 
+        /// <inheritdoc />
         public FlavorDetails GetFlavor(string id, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/flavors/{1}", GetServiceEndpoint(identity, region), id));
@@ -463,7 +534,8 @@ namespace net.openstack.Providers.Rackspace
 
         #region Images
 
-        public IEnumerable<ServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
@@ -474,10 +546,11 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.Images;
+            return BuildCloudServersProviderAwareObject<SimpleServerImage>(response.Data.Images, region, identity);
         }
 
-        public IEnumerable<ServerImageDetails> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
@@ -488,9 +561,10 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.Images;
+            return BuildCloudServersProviderAwareObject<ServerImage>(response.Data.Images, region, identity);
         }
 
+        /// <inheritdoc />
         private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null)
         {
             var queryParameters = new Dictionary<string, string>();
@@ -519,7 +593,8 @@ namespace net.openstack.Providers.Rackspace
             return queryParameters;
         }
 
-        public ServerImageDetails GetImage(string imageId, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public ServerImage GetImage(string imageId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
@@ -528,9 +603,10 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null)
                 return null;
 
-            return response.Data.Image;
+            return BuildCloudServersProviderAwareObject<ServerImage>(response.Data.Image, region, identity);
         }
 
+        /// <inheritdoc />
         public bool DeleteImage(string imageId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
@@ -544,18 +620,15 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
-        public ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var details = GetImage(imageId, region, identity);
 
             int count = 0;
-            int currentProgress = 0;
+            int currentProgress = -1;
             while (!expectedStates.Contains(details.Status) && !errorStates.Contains(details.Status) && count < refreshCount)
             {
-                Thread.Sleep(refreshDelayInMS);
-                details = GetImage(imageId, region, identity);
-                count++;
-
                 if (progressUpdatedCallback != null)
                 {
                     if (details.Progress > currentProgress)
@@ -564,24 +637,31 @@ namespace net.openstack.Providers.Rackspace
                         progressUpdatedCallback(currentProgress);
                     }
                 }
+
+                Thread.Sleep(refreshDelayInMS);
+                details = GetImage(imageId, region, identity);
+                count++;
             }
 
             if (errorStates.Contains(details.Status))
                 throw new ServerEnteredErrorStateException(details.Status);
 
-            return details;
+            return BuildCloudServersProviderAwareObject<ServerImage>(details, region, identity);
         }
 
-        public ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
-        public ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        /// <inheritdoc />
+        public ServerImage WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
         }
 
+        /// <inheritdoc />
         public void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
@@ -599,6 +679,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Server Metadata
 
+        /// <inheritdoc />
         public Metadata ListServerMetadata(string serverId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
@@ -611,6 +692,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
+        /// <inheritdoc />
         public bool SetServerMetadata(string serverId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
@@ -623,6 +705,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public bool UpdateServerMetadata(string serverId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
@@ -635,6 +718,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public string GetServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
@@ -647,6 +731,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
+        /// <inheritdoc />
         public bool SetServerMetadataItem(string serverId, string key, string value, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
@@ -659,6 +744,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public bool DeleteServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
@@ -675,6 +761,7 @@ namespace net.openstack.Providers.Rackspace
 
         #region Image Metadata
 
+        /// <inheritdoc />
         public Metadata ListImageMetadata(string imageId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
@@ -687,6 +774,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
+        /// <inheritdoc />
         public bool SetImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
@@ -699,6 +787,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public bool UpdateImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
@@ -711,6 +800,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public string GetImageMetadataItem(string imageId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
@@ -723,6 +813,7 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
+        /// <inheritdoc />
         public bool SetImageMetadataItem(string imageId, string key, string value, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
@@ -735,6 +826,7 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
+        /// <inheritdoc />
         public bool DeleteImageMetadataItem(string imageId, string key, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
@@ -756,24 +848,11 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "cloudServersOpenStack", region);
         }
 
-        private ICloudServersProvider BuildProvider(CloudIdentity identity)
+        protected override IComputeProvider BuildProvider(CloudIdentity identity)
         {
-            if (identity == null)
-                identity = DefaultIdentity;
-
-            return new CloudServersProvider(identity, IdentityProvider, RestService);
+            return new CloudServersProvider(identity, IdentityProvider, RestService, _networkResponseMapper);
         }
 
         #endregion
-    }
-
-    public class ServerEnteredErrorStateException : Exception
-    {
-        public string Status { get; private set; }
-
-        public ServerEnteredErrorStateException(string status) : base(string.Format("The server entered an error state: '{0}'", status))
-        {
-            Status = status;
-        }
     }
 }

@@ -18,7 +18,7 @@ namespace net.openstack.Core.Domain
         [DataMember]
         public long Bytes { get; set; }
 
-        //internal ICloudFilesProvider CloudFilesProvider { get; set; }
+        //internal IObjectStorageProvider CloudFilesProvider { get; set; }
 
         //public void AddHeader(string name)
         //{

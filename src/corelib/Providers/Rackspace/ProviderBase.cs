@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using Newtonsoft.Json;
@@ -11,23 +10,42 @@ using Newtonsoft.Json.Linq;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
-using net.openstack.Core.Exceptions.Response;
+using net.openstack.Core.Providers;
+using net.openstack.Core.Validators;
+using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class ProviderBase
+    /// <summary>
+    /// Adds common functionality for all Rackspace Providers.
+    /// </summary>
+    public abstract class ProviderBase<TProvider>
     {
-        protected readonly ICloudIdentityProvider IdentityProvider;
+        protected readonly IIdentityProvider IdentityProvider;
         protected readonly IRestService RestService;
         protected readonly CloudIdentity DefaultIdentity;
+        protected readonly IHttpResponseCodeValidator ResponseCodeValidator;
 
-        protected ProviderBase(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService)
+        protected ProviderBase(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
+            : this(defaultIdentity, identityProvider, restService, null) { }
+
+        protected ProviderBase(CloudIdentity defaultIdentity,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
+            if(identityProvider == null)
+                identityProvider = new CloudIdentityProvider(defaultIdentity);
+
+            if (restService == null)
+                restService = new JsonRestServices();
+
+            if (httpStatusCodeValidator == null)
+                httpStatusCodeValidator = new HttpResponseCodeValidator();
+
             DefaultIdentity = defaultIdentity;
             IdentityProvider = identityProvider;
             RestService = restService;
-        }
-        
+            ResponseCodeValidator = httpStatusCodeValidator;
+        }        
+
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings settings = null)
         {
             return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
@@ -51,8 +69,7 @@ namespace net.openstack.Providers.Rackspace
         private T ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, Dictionary<string, string> headers, bool isRetry, JsonRequestSettings requestSettings,
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
         {
-            if (identity == null)
-                identity = DefaultIdentity;
+            identity = GetDefaultIdentity(identity);
 
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
@@ -92,8 +109,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected Response StreamRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Stream stream, int chunkSize, long maxReadLength = 0, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings requestSettings = null, Action<long> progressUpdated = null)
         {
-            if (identity == null)
-                identity = DefaultIdentity;
+            identity = GetDefaultIdentity(identity);
 
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
@@ -135,13 +151,12 @@ namespace net.openstack.Providers.Rackspace
 
         protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
         {
-            if (identity == null)
-                identity = DefaultIdentity;
+            identity = GetDefaultIdentity(identity);
 
             var userAccess = IdentityProvider.GetUserAccess(identity);
 
             if (userAccess == null || userAccess.ServiceCatalog == null)
-                throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints");
+                throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints.");
 
             var serviceDetails = userAccess.ServiceCatalog.FirstOrDefault(sc => sc.Name == serviceName);
 
@@ -149,9 +164,14 @@ namespace net.openstack.Providers.Rackspace
                 throw new UserAuthorizationException("The user does not have access to the requested service.");
 
             if (string.IsNullOrWhiteSpace(region))
+            {
+                var isLondon = IsLondonIdentity(identity);
                 region = string.IsNullOrWhiteSpace(userAccess.User.DefaultRegion) ?
-                    IsLondonIdentity(identity) ? "LON" : null
-                    : userAccess.User.DefaultRegion;
+                    isLondon ? "LON" : null : userAccess.User.DefaultRegion;
+
+                if (string.IsNullOrWhiteSpace(region))
+                    throw new NoDefaultRegionSetException("No region was provided and there is no default region set for the user's account.");
+            }
 
             var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase)) ??
                            serviceDetails.Endpoints.FirstOrDefault(e => string.IsNullOrWhiteSpace(e.Region));
@@ -162,55 +182,68 @@ namespace net.openstack.Providers.Rackspace
             return endpoint;
         }
 
-        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
+        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceName, string region)
         {
             var endpoint = GetServiceEndpoint(identity, serviceName, region);
 
             return endpoint.PublicURL;
         }
 
-        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
+        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceName, string region)
         {
             var endpoint = GetServiceEndpoint(identity, serviceName, region);
 
             return endpoint.InternalURL;
         }
 
-        internal static void CheckResponse(Response response)
+        internal void CheckResponse(Response response)
         {
-            if(response.StatusCode <= 299)
-                return;
-
-            switch (response.StatusCode)
-            {
-                case 400:
-                    throw new BadServiceRequestException(response);
-                case 401:
-                case 403:
-                case 405:
-                    throw new UserNotAuthorizedException(response);
-                case 404:
-                    throw new ItemNotFoundException(response);
-                case 409:
-                    throw new ServiceConflictException(response);
-                case 413:
-                    throw new ServiceLimitReachedException(response);
-                case 500:
-                    throw new ServiceFaultException(response);
-                case 501:
-                    throw new MethodNotImplementedException(response);
-                case 503:
-                    throw new ServiceUnavailableException(response);
-            }
+            ResponseCodeValidator.Validate(response);
         }
 
-        private static Version _currentVersion; 
+        
         internal static string GetUserAgentHeaderValue()
         {
-            if (_currentVersion == null)
-                _currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            return UserAgentGenerator.Generate();
+        }
 
-            return string.Format("openstack.net/{0}", _currentVersion.ToString());
+        protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>
+        {
+            return BuildCloudServersProviderAwareObject(input, region, identity, CheckIdentityAndBuildProvider(identity));
+        }
+
+        protected IEnumerable<T> BuildCloudServersProviderAwareObject<T>(IEnumerable<T> input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>
+        {
+            var provider = CheckIdentityAndBuildProvider(identity);
+
+            return input.Select(obj => BuildCloudServersProviderAwareObject(obj, region, identity, provider)).ToList();
+        }
+
+        protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity, TProvider provider) where T : ProviderStateBase<TProvider>
+        {
+            input.Provider = provider;
+            input.Region = region;
+            return input;
+        }
+
+        private TProvider CheckIdentityAndBuildProvider(CloudIdentity identity)
+        {
+            identity = GetDefaultIdentity(identity);
+
+            return BuildProvider(identity);
+        }
+
+        protected abstract TProvider BuildProvider(CloudIdentity identity);
+
+        protected CloudIdentity GetDefaultIdentity(CloudIdentity identity)
+        {
+            if (identity != null)
+                return identity;
+
+            if (DefaultIdentity != null)
+                return DefaultIdentity;
+
+            return IdentityProvider.DefaultIdentity;
         }
 
         private static bool IsLondonIdentity(CloudIdentity identity)

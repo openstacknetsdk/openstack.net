@@ -8,6 +8,7 @@ using Moq;
 using Moq.Protected;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
@@ -20,7 +21,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -38,7 +39,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Different_Than_Default_Region()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -56,7 +57,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Set_On_Provider_And_Region_Is_Different_Than_Default_Region()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -74,7 +75,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -92,7 +93,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -110,7 +111,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -128,7 +129,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -146,7 +147,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -164,7 +165,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -182,7 +183,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -200,7 +201,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_And_Region_Is_Always_Empty()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -218,7 +219,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Always_Empty()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -236,7 +237,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_And_Region_Is_Always_Null()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -254,7 +255,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Always_Null()
         {
-            var identityProviderMock = new Mock<ICloudIdentityProvider>();
+            var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
@@ -269,15 +270,20 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             Assert.AreEqual("LON", endpoint.Region);
         }
 
-        public class MockProvider : ProviderBase
+        public class MockProvider : ProviderBase<IIdentityProvider>
         {
-            internal MockProvider(CloudIdentity defaultIdentity, ICloudIdentityProvider identityProvider, IRestService restService) : base(defaultIdentity, identityProvider, restService)
+            internal MockProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService) : base(defaultIdentity, identityProvider, restService)
             {
             }
 
             public Endpoint GetEndpoint(string serviceName, string region, CloudIdentity identity)
             {
                 return base.GetServiceEndpoint(identity, serviceName, region);
+            }
+
+            protected override IIdentityProvider BuildProvider(CloudIdentity identity)
+            {
+                throw new NotImplementedException();
             }
         }
     }

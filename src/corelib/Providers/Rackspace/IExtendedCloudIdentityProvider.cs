@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public interface IExtendedCloudIdentityProvider : ICloudIdentityProvider
+    public interface IExtendedCloudIdentityProvider : IIdentityProvider
     {
         /// <summary>
         /// Lists all roles.

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
-namespace net.openstack.Core
+namespace net.openstack.Core.Providers
 {
-    public interface ICloudServersProvider
+    /// <summary>
+    /// Provides simple access to the Rackspace Cloud Servers Services.
+    /// </summary>
+    public interface IComputeProvider
     {
         /// <summary>
         /// Returns a list of all servers for the account.
@@ -18,8 +21,8 @@ namespace net.openstack.Core
         /// <param name="changesSince">Filters the list to those that have changed since the given date.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>An enumerable list of Servers <see cref="net.openstack.Core.Domain.Server"/></returns>
-        IEnumerable<Server> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        /// <returns>An enumerable list of Servers <see cref="SimpleServer"/></returns>
+        IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Returns a list of all servers and their full details for the account.
@@ -33,8 +36,8 @@ namespace net.openstack.Core
         /// <param name="changesSince">Filters the list to those that have changed since the given date.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>An enumerable list of Servers' Details <see cref="net.openstack.Core.Domain.ServerDetails"/></returns>
-        IEnumerable<ServerDetails> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        /// <returns>An enumerable list of Servers' Details <see cref="Server"/></returns>
+        IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates a new Cloud Server
@@ -61,8 +64,8 @@ namespace net.openstack.Core
         /// <param name="cloudServerId">The cloud server ID.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Details for the given server <see cref="net.openstack.Core.Domain.ServerDetails"/></returns>
-        ServerDetails GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null);
+        /// <returns>Details for the given server <see cref="Server"/></returns>
+        Server GetDetails(string cloudServerId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Updates the editable attributes for the specified server.
@@ -140,8 +143,8 @@ namespace net.openstack.Core
         /// <param name="personality">The file path and file contents. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>The <see cref="ServerDetails"/></returns>
-        ServerDetails RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
+        /// <returns>The <see cref="Server"/></returns>
+        Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Resizes the specified server.
@@ -290,8 +293,8 @@ namespace net.openstack.Core
         /// <param name="imageType">Filters base Rackspace images or any custom server images that you have created. <remarks>Available values are {BASE|SNAPSHOT}</remarks></param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>List of <see cref="ServerImage"/></returns>
-        IEnumerable<ServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
+        /// <returns>List of <see cref="SimpleServerImage"/></returns>
+        IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Lists full details for all available images.
@@ -305,8 +308,8 @@ namespace net.openstack.Core
         /// <param name="imageType">Filters base Rackspace images or any custom server images that you have created. <remarks>Available values are {BASE|SNAPSHOT}</remarks></param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>List of <see cref="ServerImage"/></returns>
-        IEnumerable<ServerImageDetails> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
+        /// <returns>List of <see cref="SimpleServerImage"/></returns>
+        IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Retrieves the details for the specified image
@@ -314,8 +317,8 @@ namespace net.openstack.Core
         /// <param name="imageId">The image ID.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>The <see cref="ServerImage"/> details</returns>
-        ServerImageDetails GetImage(string imageId, string region = null, CloudIdentity identity = null);
+        /// <returns>The <see cref="SimpleServerImage"/> details</returns>
+        ServerImage GetImage(string imageId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Deletes the specified image.
@@ -453,11 +456,16 @@ namespace net.openstack.Core
         /// <param name="expectedState">The expected state.</param>
         /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
+        /// <param name="refreshDelayInMS">The number of milisecods to wait each time before requesting the status for the server.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
+        /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
+        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
+        /// <returns>Returns the deatils of the <see cref="Server"/> after the process completes</returns>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -467,10 +475,11 @@ namespace net.openstack.Core
         /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -478,10 +487,11 @@ namespace net.openstack.Core
         /// <param name="serverId">The cloud server ID.</param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerDetails WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        Server WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -489,6 +499,7 @@ namespace net.openstack.Core
         /// <param name="serverId">The cloud server ID.</param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns></returns>
@@ -498,27 +509,29 @@ namespace net.openstack.Core
         /// Waits for the image to enter a specified state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="imageId">The image ID.</param>
-        /// <param name="expectedState">The expected state.</param>
-        /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
+        /// <param name="expectedState">The expected <see cref="ServerState"/></param>
+        /// <param name="errorStates">A list of <see cref="ServerState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="imageId">The image ID.</param>
-        /// <param name="expectedStates">The set expected state.</param>
-        /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
+        /// <param name="expectedStates">The set expected <see cref="ServerState"/>s</param>
+        /// <param name="errorStates">A list of <see cref="ServerState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -526,10 +539,11 @@ namespace net.openstack.Core
         /// <param name="imageId">The image ID.</param>
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>Returns the details of the <see cref="ServerDetails"/> after the process completes</returns>
-        ServerImageDetails WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
+        ServerImage WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -537,9 +551,9 @@ namespace net.openstack.Core
         /// <param name="imageId">The image ID.</param>
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns></returns>
         void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
     }

@@ -4,7 +4,7 @@ using net.openstack.Core;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class CloudFilesMetadataProcessor : ICloudFilesMetadataProcessor
+    internal class CloudFilesMetadataProcessor : IObjectStorageMetadataProcessor
     {
         public Dictionary<string, Dictionary<string, string>> ProcessMetadata(IList<HttpHeader> httpHeaders)
         {

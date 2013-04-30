@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Web;
 using net.openstack.Core;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class EncodeDecodeProvider : IEncodeDecodeProvider
+    internal class EncodeDecodeProvider : IEncodeDecodeProvider
     {
         public string UrlEncode(string stringToEncode)
         {
