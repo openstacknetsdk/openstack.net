@@ -4,14 +4,14 @@
     <id>openstack.net</id>
     <version>$version$</version>
     <title>openstack.net</title>
-    <authors>alanquillin, kravi</authors>
+    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc</authors>
     <owners>alanquillin</owners>
-    <licenseUrl>https://github.com/rackspace/openstack.net/wiki/Copyright</licenseUrl>
-    <projectUrl>https://github.com/rackspace/openstack.net</projectUrl>
+    <licenseUrl>https://github.com/openstacknetsdk/openstack.net/wiki/Copyright</licenseUrl>
+    <projectUrl>https://github.com/openstacknetsdk/openstack.net</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>openstack.net - An openstack SDK</description>
-    <releaseNotes>https://github.com/rackspace/openstack.net/wiki/v$version$</releaseNotes>
-    <copyright>Copyright (C) 2013 Rackspace US, Inc.</copyright>
+    <description>openstack.net - An OpenStack SDK for Microsoft >NET</description>
+    <releaseNotes>https://github.com/openstacknetsdk/openstack.net/wiki/v$version$</releaseNotes>
+    <copyright></copyright>
     <tags>openstack</tags>
   </metadata>
 </package>
