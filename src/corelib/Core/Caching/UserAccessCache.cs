@@ -1,70 +1,86 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Core.Caching
 {
     public class UserAccessCache : ICache<UserAccess>
     {
-        private readonly Hashtable _tokenCache = new Hashtable();
-        private readonly object _tokenLock = new object();
+        private static readonly Lazy<UserAccessCache> _instance = new Lazy<UserAccessCache>(CreateInstance, true);
+
+        private readonly ConcurrentDictionary<string, UserAccess> _tokenCache = new ConcurrentDictionary<string, UserAccess>();
 
         public UserAccess Get(string key, Func<UserAccess> refreshCallback, bool forceCacheRefresh = false)
         {
-            UserAccess userAccess = null;
+            UserAccess userAccess;
 
-            lock (_tokenLock)
+            if (forceCacheRefresh)
             {
-                //var hashKey = BuildTokenCacheKey(username, region);
-                var refreshToken = true;
-                if (_tokenCache.ContainsKey(key))
+                if (refreshCallback != null)
                 {
-                    if (forceCacheRefresh)
+                    userAccess = _tokenCache.AddOrUpdate(key, k => refreshCallback(), (k, existing) => refreshCallback());
+                }
+                else
+                {
+                    UserAccess ignored;
+                    _tokenCache.TryRemove(key, out ignored);
+                    userAccess = null;
+                }
+            }
+            else
+            {
+                if (_tokenCache.TryGetValue(key, out userAccess))
+                {
+                    if (!IsValid(userAccess))
                     {
-                        _tokenCache.Remove(key);
-                    }
-                    else
-                    {
-                        userAccess = (UserAccess) _tokenCache[key];
+                        bool remove = true;
+                        if (refreshCallback != null)
+                        {
+                            /* Attempt to update the key. Call IsValid on existing in case another thread
+                             * performed a concurrent update and the result is now valid.
+                             */
+                            userAccess = _tokenCache.AddOrUpdate(key, k => refreshCallback(), (k, existing) => IsValid(existing) ? existing : refreshCallback());
+                            remove = userAccess == null;
+                        }
 
-                        if (userAccess == null || userAccess.Token == null || userAccess.Token.IsExpired())
-                            _tokenCache.Remove(key);
-                        else
-                            refreshToken = false;
+                        if (remove)
+                        {
+                            /* only remove the key if it was updated to null or no refresh callback was given,
+                             * and make sure to check the value before actually removing the entry.
+                             * see: http://blogs.msdn.com/b/pfxteam/archive/2011/04/02/10149222.aspx
+                             */
+                            var pair = new KeyValuePair<string, UserAccess>(key, userAccess);
+                            ((ICollection<KeyValuePair<string, UserAccess>>)_tokenCache).Remove(pair);
+                        }
                     }
                 }
-
-                if ((refreshToken && refreshCallback != null))
+                else
                 {
-                    userAccess = refreshCallback();
-                    if (userAccess != null)
-                    {
-                        _tokenCache.Add(key, userAccess);
-                    }
+                    userAccess = null;
                 }
             }
 
             return userAccess;
         }
 
-        private static volatile UserAccessCache _instance;
-        private static object _contextLock = new object();
-
         public static UserAccessCache Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    lock (_contextLock)
-                    {
-                        if(_instance == null)
-                            _instance = new UserAccessCache();
-                    }
-                }
-
-                return _instance;
+                return _instance.Value;
             }
+        }
+
+        private static UserAccessCache CreateInstance()
+        {
+            return new UserAccessCache();
+        }
+
+        private static bool IsValid(UserAccess userAccess)
+        {
+            IdentityToken token = userAccess != null ? userAccess.Token : null;
+            return token != null && !token.IsExpired();
         }
     }
 
