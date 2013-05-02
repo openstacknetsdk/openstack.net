@@ -7,6 +7,8 @@ namespace net.openstack.Core.Caching
 {
     public class UserAccessCache : ICache<UserAccess>
     {
+        private static readonly Lazy<UserAccessCache> _instance = new Lazy<UserAccessCache>(CreateInstance, true);
+
         private readonly ConcurrentDictionary<string, UserAccess> _tokenCache = new ConcurrentDictionary<string, UserAccess>();
 
         public UserAccess Get(string key, Func<UserAccess> refreshCallback, bool forceCacheRefresh = false)
@@ -62,24 +64,17 @@ namespace net.openstack.Core.Caching
             return userAccess;
         }
 
-        private static volatile UserAccessCache _instance;
-        private static object _contextLock = new object();
-
         public static UserAccessCache Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    lock (_contextLock)
-                    {
-                        if(_instance == null)
-                            _instance = new UserAccessCache();
-                    }
-                }
-
-                return _instance;
+                return _instance.Value;
             }
+        }
+
+        private static UserAccessCache CreateInstance()
+        {
+            return new UserAccessCache();
         }
 
         private static bool IsValid(UserAccess userAccess)
