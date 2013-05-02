@@ -1,46 +1,61 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Core.Caching
 {
     public class UserAccessCache : ICache<UserAccess>
     {
-        private readonly Hashtable _tokenCache = new Hashtable();
-        private readonly object _tokenLock = new object();
+        private readonly ConcurrentDictionary<string, UserAccess> _tokenCache = new ConcurrentDictionary<string, UserAccess>();
 
         public UserAccess Get(string key, Func<UserAccess> refreshCallback, bool forceCacheRefresh = false)
         {
-            UserAccess userAccess = null;
+            UserAccess userAccess;
 
-            lock (_tokenLock)
+            if (forceCacheRefresh)
             {
-                //var hashKey = BuildTokenCacheKey(username, region);
-                var refreshToken = true;
-                if (_tokenCache.ContainsKey(key))
+                if (refreshCallback != null)
                 {
-                    if (forceCacheRefresh)
+                    userAccess = _tokenCache.AddOrUpdate(key, k => refreshCallback(), (k, existing) => refreshCallback());
+                }
+                else
+                {
+                    UserAccess ignored;
+                    _tokenCache.TryRemove(key, out ignored);
+                    userAccess = null;
+                }
+            }
+            else
+            {
+                if (_tokenCache.TryGetValue(key, out userAccess))
+                {
+                    if (!IsValid(userAccess))
                     {
-                        _tokenCache.Remove(key);
-                    }
-                    else
-                    {
-                        userAccess = (UserAccess) _tokenCache[key];
+                        bool remove = true;
+                        if (refreshCallback != null)
+                        {
+                            /* Attempt to update the key. Call IsValid on existing in case another thread
+                             * performed a concurrent update and the result is now valid.
+                             */
+                            userAccess = _tokenCache.AddOrUpdate(key, k => refreshCallback(), (k, existing) => IsValid(existing) ? existing : refreshCallback());
+                            remove = userAccess == null;
+                        }
 
-                        if (userAccess == null || userAccess.Token == null || userAccess.Token.IsExpired())
-                            _tokenCache.Remove(key);
-                        else
-                            refreshToken = false;
+                        if (remove)
+                        {
+                            /* only remove the key if it was updated to null or no refresh callback was given,
+                             * and make sure to check the value before actually removing the entry.
+                             * see: http://blogs.msdn.com/b/pfxteam/archive/2011/04/02/10149222.aspx
+                             */
+                            var pair = new KeyValuePair<string, UserAccess>(key, userAccess);
+                            ((ICollection<KeyValuePair<string, UserAccess>>)_tokenCache).Remove(pair);
+                        }
                     }
                 }
-
-                if ((refreshToken && refreshCallback != null))
+                else
                 {
-                    userAccess = refreshCallback();
-                    if (userAccess != null)
-                    {
-                        _tokenCache.Add(key, userAccess);
-                    }
+                    userAccess = null;
                 }
             }
 
@@ -65,6 +80,12 @@ namespace net.openstack.Core.Caching
 
                 return _instance;
             }
+        }
+
+        private static bool IsValid(UserAccess userAccess)
+        {
+            IdentityToken token = userAccess != null ? userAccess.Token : null;
+            return token != null && !token.IsExpired();
         }
     }
 
