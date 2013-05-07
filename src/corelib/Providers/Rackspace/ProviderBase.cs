@@ -41,7 +41,7 @@ namespace net.openstack.Providers.Rackspace
                 if (body is JObject)
                     bodyStr = body.ToString();
                 else
-                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    bodyStr = JsonConvert.SerializeObject(body, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
@@ -79,7 +79,7 @@ namespace net.openstack.Providers.Rackspace
                 if (body is JObject)
                     bodyStr = body.ToString();
                 else
-                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    bodyStr = JsonConvert.SerializeObject(body, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))

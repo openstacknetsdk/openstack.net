@@ -412,7 +412,7 @@ namespace net.openstack.Providers.Rackspace
                 if (body is JObject)
                     bodyStr = body.ToString();
                 else
-                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+                    bodyStr = JsonConvert.SerializeObject(body, Formatting.None, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
             }
 
             var response = _restService.Execute<T>(url, method, bodyStr, headers, queryStringParameter, new JsonRequestSettings() { RetryCount = retryCount, RetryDelayInMS = retryDelay, Non200SuccessCodes = new[] { 401, 409 }, UserAgent = ProviderBase.GetUserAgentHeaderValue()});

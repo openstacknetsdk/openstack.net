@@ -471,7 +471,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
             if (response.StatusCode == 200)
                 return true;
@@ -483,7 +483,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings{Non200SuccessCodes = new []{403, 404, 405, 409, 413, 415}});
 
             if (response.StatusCode == 200)
                 return true;
@@ -507,7 +507,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
             if (response.StatusCode == 200)
                 return true;
@@ -547,7 +547,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
             if (response.StatusCode == 200)
                 return true;
@@ -559,7 +559,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
             if (response.StatusCode == 200)
                 return true;
@@ -583,7 +583,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
             if (response.StatusCode == 200)
                 return true;
