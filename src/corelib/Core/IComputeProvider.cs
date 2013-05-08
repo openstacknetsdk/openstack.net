@@ -44,18 +44,18 @@ namespace net.openstack.Core
 
         // Server metadata
         Metadata ListServerMetadata(CloudIdentity identity, string cloudServerId, string region = null);
-        bool SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        bool UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
+        int SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
+        int UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
         string GetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
-        bool SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
+        int SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
         bool DeleteServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
     
         // Image metadata
         Metadata ListImageMetadata(CloudIdentity identity, string cloudServerId, string region = null);
-        bool SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
-        bool UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
+        int SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
+        int UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null);
         string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
-        bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
+        int SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null);
         bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null);
         
         ServerDetails WaitForServerState(CloudIdentity identity, string cloudServerId, string expectedState, string[] errorStates, string region = null, int refreshCount = 600, int refreshDelayInMS = 2400);

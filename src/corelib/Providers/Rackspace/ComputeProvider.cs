@@ -467,30 +467,23 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public int SetServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
 
-        public bool UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public int UpdateServerMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings{Non200SuccessCodes = new []{403, 404, 405, 409, 413, 415}});
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
-
         public string GetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
@@ -503,16 +496,13 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        public int SetServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
 
         public bool DeleteServerMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
@@ -543,28 +533,22 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata;
         }
 
-        public bool SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public int SetImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
 
-        public bool UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
+        public int UpdateImageMetadata(CloudIdentity identity, string cloudServerId, Metadata metadata, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), cloudServerId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
 
         public string GetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)
@@ -579,16 +563,13 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Metadata.First().Value;
         }
 
-        public bool SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
+        public int SetImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string value, string region = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), cloudServerId, key));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } }, requestSettings: new JsonRequestSettings { Non200SuccessCodes = new[] { 403, 404, 405, 409, 413, 415 } });
 
-            if (response.StatusCode == 200)
-                return true;
-
-            return false;
+            return response.StatusCode;
         }
         
         public bool DeleteImageMetadataItem(CloudIdentity identity, string cloudServerId, string key, string region = null)

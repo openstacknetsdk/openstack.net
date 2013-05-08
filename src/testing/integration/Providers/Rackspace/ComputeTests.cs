@@ -115,7 +115,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metadata = new Metadata() {{"Metadata_Key_1", "My_Value_1"}, {"Metadata_Key_2", "My_Value_2"}};
             var response = provider.SetServerMetadata(_testIdentity, _testServer.Id, metadata);
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -139,7 +139,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3" }, { "Metadata_Key_4", "My_Value_4" } };
             var response = provider.SetServerMetadata(_testIdentity, _testServer.Id, metadata);
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -164,7 +164,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var response = provider.UpdateServerMetadata(_testIdentity, _testServer.Id, metadata);
 
             Thread.Sleep(10000);   // Sleep a few seconds because there is an edge case that the system does not reflect the new metadata changes quick enough
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -187,7 +187,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
             var response = provider.SetServerMetadataItem(_testIdentity, _testServer.Id, "Metadata_Key_5", "My_Value_5");
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -213,7 +213,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metadata = new Metadata() { { "Metadata_Key_3", "My_Value_3_Updated_Again" }, { "Metadata_Key_5", "My_Value_5_Updated" } };
             var response = provider.UpdateServerMetadata(_testIdentity, _testServer.Id, metadata);
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -238,7 +238,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new net.openstack.Providers.Rackspace.ComputeProvider();
             var response = provider.SetServerMetadataItem(_testIdentity, _testServer.Id, "Metadata_Key_4", "My_Value_4_Updated_Again");
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
@@ -287,7 +287,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metadata = new Metadata() { { "Metadata_Key_4", "My_Value_4" }, { "Metadata_Key_5", "My_Value_5_Updated_Again" } };
             var response = provider.UpdateServerMetadata(_testIdentity, _testServer.Id, metadata);
 
-            Assert.IsTrue(response);
+            Assert.AreEqual(200, response);
         }
 
         [TestMethod]
