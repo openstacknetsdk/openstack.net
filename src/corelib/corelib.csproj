@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\LoadBalancer.cs" />
     <Compile Include="Core\Domain\ProviderStateBase.cs" />
     <Compile Include="Core\Domain\ServerBase.cs" />
     <Compile Include="Core\Domain\ServerImage.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Core\Domain\Snapshot.cs" />
     <Compile Include="Core\Domain\VirtualInterface.cs" />
     <Compile Include="Core\Domain\VirtualInterfaceAddress.cs" />
+    <Compile Include="Core\Domain\VirtualIP.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
     <Compile Include="Core\Domain\VolumeState.cs" />
     <Compile Include="Core\Domain\VolumeType.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Core\HttpStatusCodeParser.cs" />
     <Compile Include="Core\IStatusParser.cs" />
     <Compile Include="Core\Providers\IBlockStorageProvider.cs" />
+    <Compile Include="Core\Providers\Rackspace\ICloudLoadBalancerProvider.cs" />
     <Compile Include="Core\Domain\Status.cs" />
     <Compile Include="Core\Validators\IBlockStorageValidator.cs" />
     <Compile Include="Core\Domain\ImageType.cs" />
@@ -113,6 +116,10 @@
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
     <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\CloudLoadBalancerProvider.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateLoadBalancerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\LoadBalancerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListLoadBalancersResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
     <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
