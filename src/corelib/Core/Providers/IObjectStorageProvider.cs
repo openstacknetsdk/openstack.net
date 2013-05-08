@@ -331,7 +331,7 @@ namespace net.openstack.Core.Providers
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="headers">The headers. </param>
+        /// <param name="headers">A list of HTTP headers to send to the service. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
@@ -339,11 +339,25 @@ namespace net.openstack.Core.Providers
         ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
+        /// Moves an object.  <remarks>The original source object will be deleted only if the move is successful.</remarks>
+        /// </summary>
+        /// <param name="sourceContainer">The source container name.</param>
+        /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="destinationContainer">The destination container name.</param>
+        /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="headers">A list of HTTP headers to send to the service. </param>
+        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
+        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
+        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <returns><see cref="ObjectStore"/></returns>
+        ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+
+        /// <summary>
         /// Deletes the object.
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="headers">The headers. </param>
+        /// <param name="headers">A list of HTTP headers to send to the service. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
