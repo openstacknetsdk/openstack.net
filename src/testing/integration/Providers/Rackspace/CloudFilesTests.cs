@@ -719,6 +719,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.AreEqual(sourceheader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value, destinationHeader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value);
 
         }
+
         [TestMethod]
         public void Should_Get_MetaData_For_Object1()
         {

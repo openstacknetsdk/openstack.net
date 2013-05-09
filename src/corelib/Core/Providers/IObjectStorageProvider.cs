@@ -358,11 +358,12 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="headers">A list of HTTP headers to send to the service. </param>
+        /// <param name="deleteSegments">Indicates whether the file's segments should be deleted if any exist.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Purges the object from CDN.
