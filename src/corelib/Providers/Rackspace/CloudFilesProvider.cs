@@ -956,13 +956,9 @@ namespace net.openstack.Providers.Rackspace
         public const string Etag = "etag";
         public const string ContentType = "content-type";
         public const string ContentLength = "content-length";
-<<<<<<< HEAD
-        public const string CopyFrom = "x-copy-from";
-        public const string ObjectManifestMetadataKey = "x-object-manifest";
-=======
         public const string Destination = "Destination";
-        public const string ObjectManifestMetadataKey = "X-Object-Manifest";
->>>>>>> Fixed an issue with the Cloud Files Provider's Copy object
+        public const string ObjectManifestMetadataKey = "x-object-manifest";
+
         //Cdn Object Constants
         public const string CdnPurgeEmail = "x-purge-email";
 
