@@ -24,7 +24,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         const string webListingsCSS = "index.css";
         const bool webListing = true;
         const string objectName = "DarkKnightRises.jpg";
-        const string saveDirectory = @"C:\";
+        const string saveFileNane1 = "DarkKnightRises_SAVE1.jpg";
+        const string saveFileNane2 = "DarkKnightRises_SAVE2.jpg";
 
         private static readonly string sourceContainerName = containerName;
         private const string sourceObjectName = objectName;
@@ -65,6 +66,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public static void Init(TestContext context)
         {
             _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
+
+            var file = Path.Combine(Directory.GetCurrentDirectory(), saveFileNane1);
+            if(File.Exists(file))
+                File.Delete(file);
+
+            file = Path.Combine(Directory.GetCurrentDirectory(), saveFileNane2);
+            if (File.Exists(file))
+                File.Delete(file);
         }
 
         #region Container Tests
@@ -621,22 +630,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Get_Object_And_Save_To_File_Without_Headers()
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
-            string fileName = Path.GetFileName(filePath);
-            var headers = new Dictionary<string, string>();
-            var provider = new CloudFilesProvider();
-            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, false, identity: _testIdentity);
+            var provider = new CloudFilesProvider(_testIdentity);
+            provider.GetObjectSaveToFile(containerName, Directory.GetCurrentDirectory(), objectName, saveFileNane1);
         }
 
         [TestMethod]
         [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Get_Object_And_Save_To_File_Without_Headers_And_Verify_Etag()
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
-            string fileName = Path.GetFileName(filePath);
-            var headers = new Dictionary<string, string>();
-            var provider = new CloudFilesProvider();
-            provider.GetObjectSaveToFile(containerName, saveDirectory, fileName, null, 65536, null, null, true, identity: _testIdentity);
+            var provider = new CloudFilesProvider(_testIdentity);
+            provider.GetObjectSaveToFile(containerName, Directory.GetCurrentDirectory(), objectName, saveFileNane2, verifyEtag: true);
         }
 
         [TestMethod]
@@ -684,28 +687,36 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Copy_Object_When_Passing_Content_Length()
         {
-            Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add(CloudFilesProvider.ContentLength, "62504");
-
-            var provider = new CloudFilesProvider();
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header, identity: _testIdentity);
+            var provider = new CloudFilesProvider(_testIdentity);
+            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName);
 
             Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+
+            var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
+            var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
+
+            Assert.AreEqual(sourceheader.First(h => h.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).Value, destinationHeader.First(h => h.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).Value);
+            Assert.AreEqual(sourceheader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value, destinationHeader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value);
         }
 
         [TestMethod]
         public void Should_Copy_Object_When_Not_Passing_Content_Length_And_Passing_Expiring_Header()
         {
             // Object will expire 2 days from now.
-            int epoch = (int)(DateTime.UtcNow.AddDays(2) - new DateTime(1970, 1, 1)).TotalSeconds;
+            var epoch = (int)(DateTime.UtcNow.AddDays(2) - new DateTime(1970, 1, 1)).TotalSeconds;
 
-            Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add(CloudFilesProvider.ObjectDeleteAt, epoch.ToString());
+            var header = new Dictionary<string, string> { { CloudFilesProvider.ObjectDeleteAt, epoch.ToString() } };
 
-            var provider = new CloudFilesProvider();
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header, identity: _testIdentity);
+            var provider = new CloudFilesProvider(_testIdentity);
+            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header);
 
             Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+
+            var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
+            var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
+
+            Assert.AreEqual(sourceheader.First(h => h.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).Value, destinationHeader.First(h => h.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).Value);
+            Assert.AreEqual(sourceheader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value, destinationHeader.First(h => h.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase)).Value);
 
         }
         [TestMethod]

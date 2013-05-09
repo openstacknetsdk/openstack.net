@@ -659,27 +659,13 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(destinationContainer);
             _cloudFilesValidator.ValidateObjectName(destinationObjectName);
 
-            if (headers != null)
-            {
-                if (string.IsNullOrWhiteSpace(headers.FirstOrDefault(x => x.Key.Equals(ContentLength, StringComparison.OrdinalIgnoreCase)).Value))
-                {
-                    var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region, useInternalUrl);
-                    headers.Add(ContentLength, contentLength);
-                }
-            }
-            else
-            {
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(sourceContainer), _encodeDecodeProvider.UrlEncode(sourceObjectName)));
+
+            if(headers == null)
                 headers = new Dictionary<string, string>();
-                var contentLength = GetObjectContentLength(identity, sourceContainer, sourceObjectName, region, useInternalUrl);
-                headers.Add(ContentLength, contentLength);
 
-            }
-
-            headers.Add(CopyFrom, string.Format("{0}/{1}", sourceContainer, sourceObjectName));
-
-            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(destinationContainer), _encodeDecodeProvider.UrlEncode(destinationObjectName)));
-
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers);
+            headers.Add(Destination, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers);
 
             if (response.StatusCode == 201)
                 return ObjectStore.ObjectCreated;
@@ -697,7 +683,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
 
             if (response.StatusCode == 204)
                 return ObjectStore.ObjectDeleted;
@@ -706,6 +692,17 @@ namespace net.openstack.Providers.Rackspace
 
             return ObjectStore.Unknown;
 
+        }
+
+        /// <inheritdoc />
+        public ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            var result = CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, headers, region, useInternalUrl, identity);
+
+            if (result != ObjectStore.ObjectCreated)
+                return result;
+
+            return DeleteObject(sourceContainer, sourceObjectName, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -959,8 +956,9 @@ namespace net.openstack.Providers.Rackspace
         public const string Etag = "etag";
         public const string ContentType = "content-type";
         public const string ContentLength = "content-length";
-        public const string CopyFrom = "x-copy-from";
+        public const string Destination = "Destination";
         public const string ObjectManifestMetadataKey = "x-object-manifest";
+
         //Cdn Object Constants
         public const string CdnPurgeEmail = "x-purge-email";
 
