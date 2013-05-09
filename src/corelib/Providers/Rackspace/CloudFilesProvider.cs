@@ -960,7 +960,7 @@ namespace net.openstack.Providers.Rackspace
         public const string ContentType = "content-type";
         public const string ContentLength = "content-length";
         public const string CopyFrom = "x-copy-from";
-        public const string ObjectManifestMetadataKey = "X-Object-Manifest";
+        public const string ObjectManifestMetadataKey = "x-object-manifest";
         //Cdn Object Constants
         public const string CdnPurgeEmail = "x-purge-email";
 
