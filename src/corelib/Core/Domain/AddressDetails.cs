@@ -6,7 +6,7 @@ namespace net.openstack.Core.Domain
     public class AddressDetails
     {
         [DataMember(Name = "addr")]
-        internal string Address { get; set; }
+        public string Address { get; set; }
 
         [DataMember]
         public string Version { get; set; }

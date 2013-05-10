@@ -40,7 +40,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public NewServerNetwork[] Networks { get; set; }
 
         [DataMember(Name = "personality", EmitDefaultValue = true)]
-        public string Personality { get; set; }
+        public Personality[] Personality { get; set; }
 
         public CreateServerDetails()
         {

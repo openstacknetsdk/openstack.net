@@ -122,7 +122,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
