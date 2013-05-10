@@ -56,7 +56,7 @@ namespace net.openstack.Core.Providers
         /// <returns>
         /// Details for the new server <see cref="net.openstack.Core.Domain.NewServer" /> <remarks>NOTE: This is the only time the servers admin password is retruned.</remarks>
         /// </returns>
-        NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, string personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, string diskConfig = null, Metadata metadata = null, Personality personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Retrieves the details for a given server.
