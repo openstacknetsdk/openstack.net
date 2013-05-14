@@ -1,6 +1,6 @@
 ﻿using net.openstack.Core.Domain;
 
-namespace net.openstack.Providers.Rackspace
+namespace net.openstack.Providers.Rackspace.Objects
 {
     public class RackspaceCloudIdentity : CloudIdentity
     {
@@ -17,6 +17,8 @@ namespace net.openstack.Providers.Rackspace
         }
 
         public CloudInstance CloudInstance { get; set; }
+
+        public Domain Domain { get; set; }
     }
 
     public enum CloudInstance

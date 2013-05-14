@@ -10,5 +10,8 @@ namespace net.openstack.Providers.Rackspace.Objects
 
         [DataMember(Name = "RAX-KSKEY:apiKeyCredentials", EmitDefaultValue = true)]
         public Credentials APIKeyCredentials { get; set; }
+
+        [DataMember(Name = "RAX-AUTH:domain", EmitDefaultValue = true)]
+        public Domain Domain { get; set; }
     }
 }

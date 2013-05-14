@@ -9,6 +9,7 @@ using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Validators;
+using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
