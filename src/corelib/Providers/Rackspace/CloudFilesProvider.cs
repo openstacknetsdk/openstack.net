@@ -572,7 +572,7 @@ namespace net.openstack.Providers.Rackspace
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, isRetry: true, progressUpdated: progressUpdated, requestSettings: new RequestSettings {ChunkRequest = true});
+            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, progressUpdated: progressUpdated, requestSettings: new RequestSettings {ChunkRequest = true});
         }
 
         /// <inheritdoc />
@@ -660,38 +660,45 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateObjectName(destinationObjectName);
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(sourceContainer), _encodeDecodeProvider.UrlEncode(sourceObjectName)));
-
+            
             if(headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add(Destination, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers);
+            headers.Add(DestinationMetadataKey, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers);
 
-            if (response.StatusCode == 201)
-                return ObjectStore.ObjectCreated;
-            if (response.StatusCode == 404)
-                return ObjectStore.ContainerNotFound;
-
-            return ObjectStore.Unknown;
+            return ObjectStore.ObjectCreated;
         }
 
         /// <inheritdoc />
-        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
+            Dictionary<string, string> objectHeader = null;
+            if(deleteSegments)
+                objectHeader = GetObjectHeaders(container, objectName, region, useInternalUrl, identity);
+
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
 
-            if (response.StatusCode == 204)
-                return ObjectStore.ObjectDeleted;
-            if (response.StatusCode == 404)
-                return ObjectStore.ContainerNotFound;
+            if (deleteSegments && objectHeader != null && objectHeader.Any(h => h.Key.Equals(ObjectManifestMetadataKey, StringComparison.OrdinalIgnoreCase)))
+            {
+                var objects = this.ListObjects(container, region: region, useInternalUrl: useInternalUrl, identity: identity);
 
-            return ObjectStore.Unknown;
-
+                if (objects != null && objects.Any())
+                {
+                    var segments = objects.Where(f => f.Name.StartsWith(string.Format("{0}.seg", objectName)));
+                    foreach (var segment in segments)
+                    {
+                        DeleteObject(container, segment.Name, headers, false, region, useInternalUrl, identity);
+                    }
+                }
+            }
+            
+            return ObjectStore.ObjectDeleted;
         }
 
         /// <inheritdoc />
@@ -702,7 +709,7 @@ namespace net.openstack.Providers.Rackspace
             if (result != ObjectStore.ObjectCreated)
                 return result;
 
-            return DeleteObject(sourceContainer, sourceObjectName, headers, region, useInternalUrl, identity);
+            return DeleteObject(sourceContainer, sourceObjectName, headers, true, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -825,13 +832,6 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        private string GetObjectContentLength(CloudIdentity identity, string sourceContainer, string sourceObjectName, string region, bool useInternalUrl)
-        {
-            var sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region,useInternalUrl, identity);
-            var contentLength = sourceHeaders.FirstOrDefault(x => x.Key.Equals(ContentLength, StringComparison.OrdinalIgnoreCase)).Value;
-            return contentLength;
-        }
-
         protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null, bool useInternalUrl = false)
         {
             return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "cloudFiles", region) : base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
@@ -883,7 +883,7 @@ namespace net.openstack.Providers.Rackspace
 
                 var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i));
                 long segmentBytesWritten = 0;
-                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, isRetry: true, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
+                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
                     bytesWritten =>
                     {
                         if (progressUpdated != null)
@@ -903,7 +903,7 @@ namespace net.openstack.Providers.Rackspace
                 headers = new Dictionary<string, string>();
 
             headers.Add(ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
-            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, isRetry: true, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
+            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
                 (bytesWritten) =>
                 {
                     if (progressUpdated != null)
@@ -954,9 +954,7 @@ namespace net.openstack.Providers.Rackspace
         public const string ObjectDeleteAfter = "x-delete-after";
         public const string ObjectDeleteAt = "x-delete-at";
         public const string Etag = "etag";
-        public const string ContentType = "content-type";
-        public const string ContentLength = "content-length";
-        public const string Destination = "Destination";
+        public const string DestinationMetadataKey = "destination";
         public const string ObjectManifestMetadataKey = "x-object-manifest";
 
         //Cdn Object Constants
