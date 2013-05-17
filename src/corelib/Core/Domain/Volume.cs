@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace net.openstack.Core.Domain
@@ -25,7 +26,7 @@ namespace net.openstack.Core.Domain
         public string SnapshotId { get; set; }
 
         [DataMember]
-        public string[] Attachments { get; set; }
+        public Dictionary<string, string>[] Attachments { get; set; }
 
         [DataMember]
         public string Status { get; set; }

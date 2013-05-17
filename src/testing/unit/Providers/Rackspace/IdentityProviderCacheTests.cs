@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using JSIStudios.SimpleRESTServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using net.openstack;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace

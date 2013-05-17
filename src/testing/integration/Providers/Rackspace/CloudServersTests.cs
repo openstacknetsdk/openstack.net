@@ -5,8 +5,9 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Objects;
 
-    namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
+namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 {
     /// <summary>
     /// Summary description for CloudServersTests

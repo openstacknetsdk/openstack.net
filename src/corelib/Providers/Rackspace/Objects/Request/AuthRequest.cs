@@ -16,6 +16,13 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
                 creds.APIKeyCredentials = new Credentials() { Username = identity.Username, APIKey = identity.APIKey};
             else
                 creds.PasswordCredentials = new Credentials(){Username = identity.Username, Password = identity.Password};
+
+            var raxIdentity = identity as RackspaceCloudIdentity;
+            if (raxIdentity != null)
+            {
+                creds.Domain = raxIdentity.Domain;
+            }
+
             return new AuthRequest { Credencials = creds };
         }
     }

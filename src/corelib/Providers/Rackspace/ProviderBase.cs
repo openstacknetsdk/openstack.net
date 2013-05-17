@@ -12,6 +12,7 @@ using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
+using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
