@@ -4,6 +4,7 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Providers.Rackspace.Exceptions;
+using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace

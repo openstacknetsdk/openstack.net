@@ -35,11 +35,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.0.6.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SimpleRESTServices, Version=1.0.6.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SimpleRESTServices.1.0.6.3\lib\net40\SimpleRESTServices.dll</HintPath>
+      <HintPath>..\packages\SimpleRESTServices.1.0.6.6\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -104,6 +105,7 @@
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
     <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
@@ -174,7 +176,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Core\Providers\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
-    <Compile Include="Providers\Rackspace\RackspaceCloudIdentity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\RackspaceCloudIdentity.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\RescueServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\RescueServerResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\RevertServerResizeRequest.cs" />
@@ -215,7 +217,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Icons\openstack_net_logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
