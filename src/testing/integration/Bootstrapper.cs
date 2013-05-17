@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using net.openstack.Core.Domain;
-using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Objects;
 
 namespace Net.OpenStack.Testing.Integration
 {
@@ -53,6 +53,8 @@ namespace Net.OpenStack.Testing.Integration
 
         public ExtendedCloudIdentity TestAdminIdentity { get; set; }
 
+        public ExtendedCloudIdentity TestDomainIdentity { get; set; }
+
         public string RackspaceExtendedIdentityUSUrl { get; set; }
         public string RackspaceExtendedIdentityUKUrl { get; set; }
     }
@@ -60,6 +62,8 @@ namespace Net.OpenStack.Testing.Integration
     public class ExtendedCloudIdentity : CloudIdentity
     {
         public string TenantId { get; set; }
+
+        public string Domain { get; set; }
     }
 
     public class ExtendedRackspaceCloudIdentity : RackspaceCloudIdentity
@@ -72,6 +76,7 @@ namespace Net.OpenStack.Testing.Integration
             this.Password = cloudIdentity.Password;
             this.Username = cloudIdentity.Username;
             this.TenantId = cloudIdentity.TenantId;
+            this.Domain = string.IsNullOrWhiteSpace(cloudIdentity.Domain) ? null : new Domain {Name = cloudIdentity.Domain};
         }
     }
 }

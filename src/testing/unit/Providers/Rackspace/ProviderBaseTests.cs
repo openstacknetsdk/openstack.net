@@ -10,6 +10,7 @@ using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Objects;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {

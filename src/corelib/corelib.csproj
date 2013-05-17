@@ -105,6 +105,7 @@
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
     <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
@@ -175,7 +176,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Core\Providers\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
-    <Compile Include="Providers\Rackspace\RackspaceCloudIdentity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\RackspaceCloudIdentity.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\RescueServerRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\RescueServerResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\RevertServerResizeRequest.cs" />

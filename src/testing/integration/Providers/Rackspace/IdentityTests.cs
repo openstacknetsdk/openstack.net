@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Objects;
 
 namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 {
@@ -41,6 +41,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             _testIdentity = new ExtendedRackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
             _testAdminIdentity = new ExtendedRackspaceCloudIdentity(Bootstrapper.Settings.TestAdminIdentity);
+           
         }
 
         [TestMethod]
