@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpKI>
-  <HelpKINode Title="AccessIpV4 property" Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_ServerUpdateDetails_AccessIpV4.htm" />
   <HelpKINode Title="AccessIPv4 property">
     <HelpKINode Title="CreateServerDetails.AccessIPv4 Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_CreateServerDetails_AccessIPv4.htm" />
     <HelpKINode Title="Server.AccessIPv4 Property " Url="html/P_net_openstack_Core_Domain_Server_AccessIPv4.htm" />
     <HelpKINode Title="ServerIps.AccessIPv4 Property " Url="html/P_net_openstack_Core_Domain_ServerIps_AccessIPv4.htm" />
     <HelpKINode Title="ServerRebuildDetails.AccessIPv4 Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_ServerRebuildDetails_AccessIPv4.htm" />
   </HelpKINode>
+  <HelpKINode Title="AccessIpV4 property" Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_ServerUpdateDetails_AccessIpV4.htm" />
   <HelpKINode Title="AccessIPv6 property">
     <HelpKINode Title="CreateServerDetails.AccessIPv6 Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_CreateServerDetails_AccessIPv6.htm" />
     <HelpKINode Title="Server.AccessIPv6 Property " Url="html/P_net_openstack_Core_Domain_Server_AccessIPv6.htm" />
@@ -138,6 +138,7 @@
   </HelpKINode>
   <HelpKINode Title="AuthDetails.APIKeyCredentials property" Url="html/P_net_openstack_Providers_Rackspace_Objects_AuthDetails_APIKeyCredentials.htm" />
   <HelpKINode Title="AuthDetails.AuthDetails constructor" Url="html/M_net_openstack_Providers_Rackspace_Objects_AuthDetails__ctor.htm" />
+  <HelpKINode Title="AuthDetails.Domain property" Url="html/P_net_openstack_Providers_Rackspace_Objects_AuthDetails_Domain.htm" />
   <HelpKINode Title="AuthDetails.PasswordCredentials property" Url="html/P_net_openstack_Providers_Rackspace_Objects_AuthDetails_PasswordCredentials.htm" />
   <HelpKINode Title="Authenticate method">
     <HelpKINode Title="CloudIdentityProvider.Authenticate Method " Url="html/M_net_openstack_Providers_Rackspace_CloudIdentityProvider_Authenticate.htm" />
@@ -370,9 +371,6 @@
   <HelpKINode Title="CloudFilesProvider.ContainerBytesUsed field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContainerBytesUsed.htm" />
   <HelpKINode Title="CloudFilesProvider.ContainerMetaDataPrefix field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContainerMetaDataPrefix.htm" />
   <HelpKINode Title="CloudFilesProvider.ContainerObjectCount field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContainerObjectCount.htm" />
-  <HelpKINode Title="CloudFilesProvider.ContentLength field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContentLength.htm" />
-  <HelpKINode Title="CloudFilesProvider.ContentType field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContentType.htm" />
-  <HelpKINode Title="CloudFilesProvider.CopyFrom field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_CopyFrom.htm" />
   <HelpKINode Title="CloudFilesProvider.CopyObject method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_CopyObject.htm" />
   <HelpKINode Title="CloudFilesProvider.CopyStream method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_CopyStream.htm" />
   <HelpKINode Title="CloudFilesProvider.CreateContainer method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_CreateContainer.htm" />
@@ -381,6 +379,7 @@
   <HelpKINode Title="CloudFilesProvider.CreateObjectInSegments method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_CreateObjectInSegments.htm" />
   <HelpKINode Title="CloudFilesProvider.DeleteContainer method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_DeleteContainer.htm" />
   <HelpKINode Title="CloudFilesProvider.DeleteObject method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_DeleteObject.htm" />
+  <HelpKINode Title="CloudFilesProvider.DestinationMetadataKey field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_DestinationMetadataKey.htm" />
   <HelpKINode Title="CloudFilesProvider.DisableCDNOnContainer method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_DisableCDNOnContainer.htm" />
   <HelpKINode Title="CloudFilesProvider.DisableStaticWebOnContainer method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_DisableStaticWebOnContainer.htm" />
   <HelpKINode Title="CloudFilesProvider.EnableCDNOnContainer method" Url="html/Overload_net_openstack_Providers_Rackspace_CloudFilesProvider_EnableCDNOnContainer.htm" />
@@ -392,7 +391,6 @@
   <HelpKINode Title="CloudFilesProvider.GetContainerHeader method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetContainerHeader.htm" />
   <HelpKINode Title="CloudFilesProvider.GetContainerMetaData method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetContainerMetaData.htm" />
   <HelpKINode Title="CloudFilesProvider.GetObject method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObject.htm" />
-  <HelpKINode Title="CloudFilesProvider.GetObjectContentLength method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectContentLength.htm" />
   <HelpKINode Title="CloudFilesProvider.GetObjectHeaders method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectHeaders.htm" />
   <HelpKINode Title="CloudFilesProvider.GetObjectMetaData method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectMetaData.htm" />
   <HelpKINode Title="CloudFilesProvider.GetObjectSaveToFile method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectSaveToFile.htm" />
@@ -402,6 +400,7 @@
   <HelpKINode Title="CloudFilesProvider.ListCDNContainers method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_ListCDNContainers.htm" />
   <HelpKINode Title="CloudFilesProvider.ListContainers method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_ListContainers.htm" />
   <HelpKINode Title="CloudFilesProvider.ListObjects method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_ListObjects.htm" />
+  <HelpKINode Title="CloudFilesProvider.MoveObject method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_MoveObject.htm" />
   <HelpKINode Title="CloudFilesProvider.ObjectDeleteAfter field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ObjectDeleteAfter.htm" />
   <HelpKINode Title="CloudFilesProvider.ObjectDeleteAt field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ObjectDeleteAt.htm" />
   <HelpKINode Title="CloudFilesProvider.ObjectManifestMetadataKey field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ObjectManifestMetadataKey.htm" />
@@ -487,8 +486,8 @@
   </HelpKINode>
   <HelpKINode Title="CloudIdentityProviderFactory.CloudIdentityProviderFactory constructor" Url="html/M_net_openstack_Providers_Rackspace_CloudIdentityProviderFactory__ctor.htm" />
   <HelpKINode Title="CloudIdentityProviderFactory.Get method" Url="html/M_net_openstack_Providers_Rackspace_CloudIdentityProviderFactory_Get.htm" />
-  <HelpKINode Title="CloudInstance enumeration" Url="html/T_net_openstack_Providers_Rackspace_CloudInstance.htm" />
-  <HelpKINode Title="CloudInstance property" Url="html/P_net_openstack_Providers_Rackspace_RackspaceCloudIdentity_CloudInstance.htm" />
+  <HelpKINode Title="CloudInstance enumeration" Url="html/T_net_openstack_Providers_Rackspace_Objects_CloudInstance.htm" />
+  <HelpKINode Title="CloudInstance property" Url="html/P_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity_CloudInstance.htm" />
   <HelpKINode Title="CloudNetwork class">
     <HelpKINode Title="CloudNetwork Class" Url="html/T_net_openstack_Core_Domain_CloudNetwork.htm" />
     <HelpKINode Title="CloudNetwork Members" Url="html/AllMembers_T_net_openstack_Core_Domain_CloudNetwork.htm" />
@@ -682,10 +681,7 @@
   <HelpKINode Title="ContainerObject.Name property" Url="html/P_net_openstack_Core_Domain_ContainerObject_Name.htm" />
   <HelpKINode Title="ContainerObjectCount field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContainerObjectCount.htm" />
   <HelpKINode Title="Content property" Url="html/P_net_openstack_Core_Domain_Personality_Content.htm" />
-  <HelpKINode Title="ContentLength field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContentLength.htm" />
-  <HelpKINode Title="ContentType field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_ContentType.htm" />
   <HelpKINode Title="ContentType property" Url="html/P_net_openstack_Core_Domain_ContainerObject_ContentType.htm" />
-  <HelpKINode Title="CopyFrom field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_CopyFrom.htm" />
   <HelpKINode Title="CopyObject method">
     <HelpKINode Title="CloudFilesProvider.CopyObject Method " Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_CopyObject.htm" />
     <HelpKINode Title="IObjectStorageProvider.CopyObject Method " Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_CopyObject.htm" />
@@ -784,6 +780,7 @@
     <HelpKINode Title="CloudServersProvider.CreateImage Method " Url="html/M_net_openstack_Providers_Rackspace_CloudServersProvider_CreateImage.htm" />
     <HelpKINode Title="IComputeProvider.CreateImage Method " Url="html/M_net_openstack_Core_Providers_IComputeProvider_CreateImage.htm" />
   </HelpKINode>
+  <HelpKINode Title="CreateInstance method" Url="html/M_net_openstack_Core_Caching_UserAccessCache_CreateInstance.htm" />
   <HelpKINode Title="CreateNetwork method">
     <HelpKINode Title="CloudNetworksProvider.CreateNetwork Method " Url="html/M_net_openstack_Providers_Rackspace_CloudNetworksProvider_CreateNetwork.htm" />
     <HelpKINode Title="INetworksProvider.CreateNetwork Method " Url="html/M_net_openstack_Core_Providers_INetworksProvider_CreateNetwork.htm" />
@@ -890,7 +887,7 @@
   <HelpKINode Title="Credentials.Credentials constructor" Url="html/M_net_openstack_Providers_Rackspace_Objects_Credentials__ctor.htm" />
   <HelpKINode Title="Credentials.Password property" Url="html/P_net_openstack_Providers_Rackspace_Objects_Credentials_Password.htm" />
   <HelpKINode Title="Credentials.Username property" Url="html/P_net_openstack_Providers_Rackspace_Objects_Credentials_Username.htm" />
-  <HelpKINode Title="Default enumeration member" Url="html/T_net_openstack_Providers_Rackspace_CloudInstance.htm" />
+  <HelpKINode Title="Default enumeration member" Url="html/T_net_openstack_Providers_Rackspace_Objects_CloudInstance.htm" />
   <HelpKINode Title="DefaultIdentity field" Url="html/F_net_openstack_Providers_Rackspace_ProviderBase_1_DefaultIdentity.htm" />
   <HelpKINode Title="DefaultIdentity property">
     <HelpKINode Title="CloudIdentityProvider.DefaultIdentity Property " Url="html/P_net_openstack_Providers_Rackspace_CloudIdentityProvider_DefaultIdentity.htm" />
@@ -971,6 +968,7 @@
     <HelpKINode Title="IBlockStorageProvider.DescribeVolumeType Method " Url="html/M_net_openstack_Core_Providers_IBlockStorageProvider_DescribeVolumeType.htm" />
   </HelpKINode>
   <HelpKINode Title="Description property" Url="html/P_net_openstack_Core_Domain_Role_Description.htm" />
+  <HelpKINode Title="DestinationMetadataKey field" Url="html/F_net_openstack_Providers_Rackspace_CloudFilesProvider_DestinationMetadataKey.htm" />
   <HelpKINode Title="DetachServerVolume method">
     <HelpKINode Title="CloudServersProvider.DetachServerVolume Method " Url="html/M_net_openstack_Providers_Rackspace_CloudServersProvider_DetachServerVolume.htm" />
     <HelpKINode Title="IComputeProvider.DetachServerVolume Method " Url="html/M_net_openstack_Core_Providers_IComputeProvider_DetachServerVolume.htm" />
@@ -1026,6 +1024,21 @@
     <HelpKINode Title="Snapshot.DisplayName Property " Url="html/P_net_openstack_Core_Domain_Snapshot_DisplayName.htm" />
     <HelpKINode Title="Volume.DisplayName Property " Url="html/P_net_openstack_Core_Domain_Volume_DisplayName.htm" />
   </HelpKINode>
+  <HelpKINode Title="Domain class">
+    <HelpKINode Title="Domain Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="Domain Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="about Domain class" Url="html/T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="all members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="constructor" Url="html/M_net_openstack_Providers_Rackspace_Objects_Domain__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Domain property">
+    <HelpKINode Title="AuthDetails.Domain Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_AuthDetails_Domain.htm" />
+    <HelpKINode Title="RackspaceCloudIdentity.Domain Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity_Domain.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Domain.Domain constructor" Url="html/M_net_openstack_Providers_Rackspace_Objects_Domain__ctor.htm" />
+  <HelpKINode Title="Domain.Name property" Url="html/P_net_openstack_Providers_Rackspace_Objects_Domain_Name.htm" />
   <HelpKINode Title="Email property">
     <HelpKINode Title="NewUser.Email Property " Url="html/P_net_openstack_Core_Domain_NewUser_Email.htm" />
     <HelpKINode Title="User.Email Property " Url="html/P_net_openstack_Core_Domain_User_Email.htm" />
@@ -1278,7 +1291,6 @@
     <HelpKINode Title="CloudFilesProvider.GetObject Method " Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObject.htm" />
     <HelpKINode Title="IObjectStorageProvider.GetObject Method " Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_GetObject.htm" />
   </HelpKINode>
-  <HelpKINode Title="GetObjectContentLength method" Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectContentLength.htm" />
   <HelpKINode Title="GetObjectHeaders method">
     <HelpKINode Title="CloudFilesProvider.GetObjectHeaders Method " Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_GetObjectHeaders.htm" />
     <HelpKINode Title="IObjectStorageProvider.GetObjectHeaders Method " Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_GetObjectHeaders.htm" />
@@ -1716,6 +1728,7 @@
   <HelpKINode Title="IObjectStorageProvider.ListCDNContainers method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_ListCDNContainers.htm" />
   <HelpKINode Title="IObjectStorageProvider.ListContainers method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_ListContainers.htm" />
   <HelpKINode Title="IObjectStorageProvider.ListObjects method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_ListObjects.htm" />
+  <HelpKINode Title="IObjectStorageProvider.MoveObject method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_MoveObject.htm" />
   <HelpKINode Title="IObjectStorageProvider.PurgeObjectFromCDN method" Url="html/Overload_net_openstack_Core_Providers_IObjectStorageProvider_PurgeObjectFromCDN.htm" />
   <HelpKINode Title="IObjectStorageProvider.UpdateAccountHeaders method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_UpdateAccountHeaders.htm" />
   <HelpKINode Title="IObjectStorageProvider.UpdateAccountMetadata method" Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_UpdateAccountMetadata.htm" />
@@ -1765,6 +1778,7 @@
   <HelpKINode Title="IsExpired method" Url="html/M_net_openstack_Core_Domain_IdentityToken_IsExpired.htm" />
   <HelpKINode Title="IsIpAddress method" Url="html/M_net_openstack_Providers_Rackspace_Validators_CloudNetworksValidator_IsIpAddress.htm" />
   <HelpKINode Title="IsLondonIdentity method" Url="html/M_net_openstack_Providers_Rackspace_ProviderBase_1_IsLondonIdentity.htm" />
+  <HelpKINode Title="IsValid method" Url="html/M_net_openstack_Core_Caching_UserAccessCache_IsValid.htm" />
   <HelpKINode Title="ItemNotFoundException class">
     <HelpKINode Title="ItemNotFoundException Class" Url="html/T_net_openstack_Core_Exceptions_Response_ItemNotFoundException.htm" />
     <HelpKINode Title="ItemNotFoundException Members" Url="html/AllMembers_T_net_openstack_Core_Exceptions_Response_ItemNotFoundException.htm" />
@@ -2064,11 +2078,16 @@
   <HelpKINode Title="MIGRATING property" Url="html/P_net_openstack_Core_Domain_ServerState_MIGRATING.htm" />
   <HelpKINode Title="MinDisk property" Url="html/P_net_openstack_Core_Domain_ServerImage_MinDisk.htm" />
   <HelpKINode Title="MinRAM property" Url="html/P_net_openstack_Core_Domain_ServerImage_MinRAM.htm" />
+  <HelpKINode Title="MoveObject method">
+    <HelpKINode Title="CloudFilesProvider.MoveObject Method " Url="html/M_net_openstack_Providers_Rackspace_CloudFilesProvider_MoveObject.htm" />
+    <HelpKINode Title="IObjectStorageProvider.MoveObject Method " Url="html/M_net_openstack_Core_Providers_IObjectStorageProvider_MoveObject.htm" />
+  </HelpKINode>
   <HelpKINode Title="Name property">
     <HelpKINode Title="Container.Name Property " Url="html/P_net_openstack_Core_Domain_Container_Name.htm" />
     <HelpKINode Title="ContainerCDN.Name Property " Url="html/P_net_openstack_Core_Domain_ContainerCDN_Name.htm" />
     <HelpKINode Title="ContainerObject.Name Property " Url="html/P_net_openstack_Core_Domain_ContainerObject_Name.htm" />
     <HelpKINode Title="CreateServerDetails.Name Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_CreateServerDetails_Name.htm" />
+    <HelpKINode Title="Domain.Name Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Domain_Name.htm" />
     <HelpKINode Title="Flavor.Name Property " Url="html/P_net_openstack_Core_Domain_Flavor_Name.htm" />
     <HelpKINode Title="Role.Name Property " Url="html/P_net_openstack_Core_Domain_Role_Name.htm" />
     <HelpKINode Title="ServerRebuildDetails.Name Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_ServerRebuildDetails_Name.htm" />
@@ -2454,7 +2473,6 @@
     <HelpKINode Title="CloudIdentityProviderFactory Class" Url="html/T_net_openstack_Providers_Rackspace_CloudIdentityProviderFactory.htm" />
     <HelpKINode Title="CloudIdentityProviderFactory Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_CloudIdentityProviderFactory.htm" />
   </HelpKINode>
-  <HelpKINode Title="net.openstack.Providers.Rackspace.CloudInstance enumeration" Url="html/T_net_openstack_Providers_Rackspace_CloudInstance.htm" />
   <HelpKINode Title="net.openstack.Providers.Rackspace.CloudNetworksProvider class">
     <HelpKINode Title="CloudNetworksProvider Class" Url="html/T_net_openstack_Providers_Rackspace_CloudNetworksProvider.htm" />
     <HelpKINode Title="CloudNetworksProvider Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_CloudNetworksProvider.htm" />
@@ -2501,9 +2519,18 @@
     <HelpKINode Title="AuthDetails Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_AuthDetails.htm" />
     <HelpKINode Title="AuthDetails Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_AuthDetails.htm" />
   </HelpKINode>
+  <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.CloudInstance enumeration" Url="html/T_net_openstack_Providers_Rackspace_Objects_CloudInstance.htm" />
   <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.Credentials class">
     <HelpKINode Title="Credentials Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_Credentials.htm" />
     <HelpKINode Title="Credentials Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_Credentials.htm" />
+  </HelpKINode>
+  <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.Domain class">
+    <HelpKINode Title="Domain Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+    <HelpKINode Title="Domain Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_Domain.htm" />
+  </HelpKINode>
+  <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.RackspaceCloudIdentity class">
+    <HelpKINode Title="RackspaceCloudIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="RackspaceCloudIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
   </HelpKINode>
   <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.Request namespace" Url="html/N_net_openstack_Providers_Rackspace_Objects_Request.htm" />
   <HelpKINode Title="net.openstack.Providers.Rackspace.Objects.Request.AddRoleRequest class">
@@ -2799,10 +2826,6 @@
     <HelpKINode Title="ProviderBase(TProvider) Class" Url="html/T_net_openstack_Providers_Rackspace_ProviderBase_1.htm" />
     <HelpKINode Title="ProviderBase(TProvider) Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_ProviderBase_1.htm" />
   </HelpKINode>
-  <HelpKINode Title="net.openstack.Providers.Rackspace.RackspaceCloudIdentity class">
-    <HelpKINode Title="RackspaceCloudIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="RackspaceCloudIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-  </HelpKINode>
   <HelpKINode Title="net.openstack.Providers.Rackspace.RackspaceImpersonationIdentity class">
     <HelpKINode Title="RackspaceImpersonationIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_RackspaceImpersonationIdentity.htm" />
     <HelpKINode Title="RackspaceImpersonationIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_RackspaceImpersonationIdentity.htm" />
@@ -2937,10 +2960,10 @@
   <HelpKINode Title="ObjectStore enumeration" Url="html/T_net_openstack_Core_Domain_ObjectStore.htm" />
   <HelpKINode Title="PASSWORD property" Url="html/P_net_openstack_Core_Domain_ServerState_PASSWORD.htm" />
   <HelpKINode Title="Password property">
-    <HelpKINode Title="CloudIdentity.Password Property " Url="html/P_net_openstack_Core_Domain_CloudIdentity_Password.htm" />
     <HelpKINode Title="Credentials.Password Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Credentials_Password.htm" />
     <HelpKINode Title="NewUser.Password Property " Url="html/P_net_openstack_Core_Domain_NewUser_Password.htm" />
     <HelpKINode Title="PasswordCredencial.Password Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_PasswordCredencial_Password.htm" />
+    <HelpKINode Title="CloudIdentity.Password Property " Url="html/P_net_openstack_Core_Domain_CloudIdentity_Password.htm" />
   </HelpKINode>
   <HelpKINode Title="PasswordCredencial class">
     <HelpKINode Title="PasswordCredencial Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_Request_PasswordCredencial.htm" />
@@ -3087,16 +3110,17 @@
     <HelpKINode Title="IObjectStorageProvider.PurgeObjectFromCDN Method " Url="html/Overload_net_openstack_Core_Providers_IObjectStorageProvider_PurgeObjectFromCDN.htm" />
   </HelpKINode>
   <HelpKINode Title="RackspaceCloudIdentity class">
-    <HelpKINode Title="RackspaceCloudIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="RackspaceCloudIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="about RackspaceCloudIdentity class" Url="html/T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="all members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="constructor" Url="html/Overload_net_openstack_Providers_Rackspace_RackspaceCloudIdentity__ctor.htm" />
-    <HelpKINode Title="methods" Url="html/Methods_T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
-    <HelpKINode Title="properties" Url="html/Properties_T_net_openstack_Providers_Rackspace_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="RackspaceCloudIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="RackspaceCloudIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="about RackspaceCloudIdentity class" Url="html/T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="all members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="constructor" Url="html/Overload_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity.htm" />
   </HelpKINode>
-  <HelpKINode Title="RackspaceCloudIdentity.CloudInstance property" Url="html/P_net_openstack_Providers_Rackspace_RackspaceCloudIdentity_CloudInstance.htm" />
-  <HelpKINode Title="RackspaceCloudIdentity.RackspaceCloudIdentity constructor" Url="html/Overload_net_openstack_Providers_Rackspace_RackspaceCloudIdentity__ctor.htm" />
+  <HelpKINode Title="RackspaceCloudIdentity.CloudInstance property" Url="html/P_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity_CloudInstance.htm" />
+  <HelpKINode Title="RackspaceCloudIdentity.Domain property" Url="html/P_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity_Domain.htm" />
+  <HelpKINode Title="RackspaceCloudIdentity.RackspaceCloudIdentity constructor" Url="html/Overload_net_openstack_Providers_Rackspace_Objects_RackspaceCloudIdentity__ctor.htm" />
   <HelpKINode Title="RackspaceImpersonationIdentity class">
     <HelpKINode Title="RackspaceImpersonationIdentity Class" Url="html/T_net_openstack_Providers_Rackspace_RackspaceImpersonationIdentity.htm" />
     <HelpKINode Title="RackspaceImpersonationIdentity Members" Url="html/AllMembers_T_net_openstack_Providers_Rackspace_RackspaceImpersonationIdentity.htm" />
@@ -3786,7 +3810,7 @@
     <HelpKINode Title="ServerRebootDetails.Type Property " Url="html/P_net_openstack_Providers_Rackspace_Objects_Request_ServerRebootDetails_Type.htm" />
     <HelpKINode Title="ServiceCatalog.Type Property " Url="html/P_net_openstack_Core_Domain_ServiceCatalog_Type.htm" />
   </HelpKINode>
-  <HelpKINode Title="UK enumeration member" Url="html/T_net_openstack_Providers_Rackspace_CloudInstance.htm" />
+  <HelpKINode Title="UK enumeration member" Url="html/T_net_openstack_Providers_Rackspace_Objects_CloudInstance.htm" />
   <HelpKINode Title="Unknown enumeration member" Url="html/T_net_openstack_Core_Domain_ObjectStore.htm" />
   <HelpKINode Title="UNKNOWN property" Url="html/P_net_openstack_Core_Domain_ServerState_UNKNOWN.htm" />
   <HelpKINode Title="UnknownGeographyException class">
@@ -3992,13 +4016,15 @@
     <HelpKINode Title="UserAccessCache Members" Url="html/AllMembers_T_net_openstack_Core_Caching_UserAccessCache.htm" />
     <HelpKINode Title="about UserAccessCache class" Url="html/T_net_openstack_Core_Caching_UserAccessCache.htm" />
     <HelpKINode Title="all members" Url="html/AllMembers_T_net_openstack_Core_Caching_UserAccessCache.htm" />
-    <HelpKINode Title="constructor" Url="html/M_net_openstack_Core_Caching_UserAccessCache__cctor.htm" />
     <HelpKINode Title="constructor" Url="html/M_net_openstack_Core_Caching_UserAccessCache__ctor.htm" />
+    <HelpKINode Title="constructor" Url="html/M_net_openstack_Core_Caching_UserAccessCache__cctor.htm" />
     <HelpKINode Title="methods" Url="html/Methods_T_net_openstack_Core_Caching_UserAccessCache.htm" />
     <HelpKINode Title="properties" Url="html/Properties_T_net_openstack_Core_Caching_UserAccessCache.htm" />
   </HelpKINode>
+  <HelpKINode Title="UserAccessCache.CreateInstance method" Url="html/M_net_openstack_Core_Caching_UserAccessCache_CreateInstance.htm" />
   <HelpKINode Title="UserAccessCache.Get method" Url="html/M_net_openstack_Core_Caching_UserAccessCache_Get.htm" />
   <HelpKINode Title="UserAccessCache.Instance property" Url="html/P_net_openstack_Core_Caching_UserAccessCache_Instance.htm" />
+  <HelpKINode Title="UserAccessCache.IsValid method" Url="html/M_net_openstack_Core_Caching_UserAccessCache_IsValid.htm" />
   <HelpKINode Title="UserAccessCache.UserAccessCache constructor">
     <HelpKINode Title="UserAccessCache Constructor " Url="html/M_net_openstack_Core_Caching_UserAccessCache__ctor.htm" />
     <HelpKINode Title="UserAccessCache Constructor " Url="html/M_net_openstack_Core_Caching_UserAccessCache__cctor.htm" />

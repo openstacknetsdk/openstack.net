@@ -46,75 +46,7 @@
             <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[This is preliminary documentation and is subject to change.]</p>
             <p></p>The <a href="T_net_openstack_Core_Providers_IBlockStorageProvider.htm" target="">IBlockStorageProvider</a> type exposes the following members.<div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">Methods</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div><table id="memberList" class="members"><tr><th class="ps_iconColumn">
 							 
-						</th><th class="ps_nameColumn">Name</th><th class="ps_descriptionColumn">Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_CreateSnapshot.htm" target="">CreateSnapshot</a></td><td><div class="summary">
-            Creates a new snapshot.
-            <p></p>
-            Creating a snapshot makes a point-in-time copy of the volume. 
-            All writes to the volume should be flushed before creating the snapshot, either by un-mounting any file systems on the volume, or by detaching the volume before creating the snapshot. 
-            Snapshots are incremental, so each time you create a new snapshot, you are appending the incremental changes for the new snapshot to the previous one. 
-            The previous snapshot is still available. Note that you can create a new volume from the snapshot if desired.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/POST_createSnapshot__v1__tenant_id__snapshots.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_CreateVolume.htm" target="">CreateVolume</a></td><td><div class="summary">
-            Creates a new volume.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/POST_createVolume__v1__tenant_id__volumes.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DeleteSnapshot.htm" target="">DeleteSnapshot</a></td><td><div class="summary">
-            Deletes a single snapshot.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/DELETE_deleteSnapshot__v1__tenant_id__snapshots.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DeleteVolume.htm" target="">DeleteVolume</a></td><td><div class="summary">
-            Deletes a volume.
-            <p></p>
-            NOTE:  It is not currently possible to delete a volume once you have created a snapshot from it.  Any snapshots will need to be deleted prior to deleting the Volume.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/DELETE_deleteVolume__v1__tenant_id__volumes.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DescribeVolumeType.htm" target="">DescribeVolumeType</a></td><td><div class="summary">
-            View information about a single volume type.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumeType__v1__tenant_id__types.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListSnapshots.htm" target="">ListSnapshots</a></td><td><div class="summary">
-            View a list of snapshots.
-            <p></p>
-            Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getSnapshotsSimple__v1__tenant_id__snapshots.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListVolumes.htm" target="">ListVolumes</a></td><td><div class="summary">
-            View a list of volumes.
-            <p></p>
-            Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumesSimple__v1__tenant_id__volumes.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListVolumeTypes.htm" target="">ListVolumeTypes</a></td><td><div class="summary">
-            Request a list of volume types.
-            <p></p>
-            Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolumeTypes__v1__tenant_id__types.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ShowSnapshot.htm" target="">ShowSnapshot</a></td><td><div class="summary">
-            View all information about a single snapshot.
-            <p></p>
-            Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getSnapshot__v1__tenant_id__snapshots.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ShowVolume.htm" target="">ShowVolume</a></td><td><div class="summary">
-            View information about a single volume.
-            <p></p>
-            Documenatation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/GET_getVolume__v1__tenant_id__volumes.html
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotAvailable.htm" target="">WaitForSnapshotAvailable</a></td><td><div class="summary">
-            Waits for a snapshot to be set to AVAILABLE status.  
-            This method will be helpful to ensure that a snapshot is correctly created prior to executing additional requests against it.
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotDeleted.htm" target="">WaitForSnapshotDeleted</a></td><td><div class="summary">
-            Waits for a snapshot to be deleted.  
-            This method will be helpful to ensure that a snapshot is completely removed.
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotState.htm" target="">WaitForSnapshotState</a></td><td><div class="summary">
-            Waits for a snapshot to be set to be set to a particular status.  
-            This method will be helpful to ensure that a snapshot is in an intended state prior to executing additional requests against it.
-            
-            <a href="T_net_openstack_Core_Domain_SnapshotState.htm" target="">SnapshotState</a></div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeAvailable.htm" target="">WaitForVolumeAvailable</a></td><td><div class="summary">
-            Waits for a volume to be set to AVAILABLE status.  
-            This method will be helpful to ensure that a volume is correctly created prior to executing additional requests against it.
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeDeleted.htm" target="">WaitForVolumeDeleted</a></td><td><div class="summary">
-            Waits for a volume to be deleted.  
-            This method will be helpful to ensure that a volume is completely removed.
-            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeState.htm" target="">WaitForVolumeState</a></td><td><div class="summary">
-            Waits for a volume to be set to be set to a particular status.  
-            This method will be helpful to ensure that a volume is in an intended state prior to executing additional requests against it.
-            <p></p>
-            Volume State reference URL:  http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/volume_status.html
-            <a href="T_net_openstack_Core_Domain_VolumeState.htm" target="">VolumeState</a></div></td></tr></table><a href="#mainBody" target="">Back to Top</a><a name="seeAlsoSection"><!----></a><div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">See Also</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div><div class="seeAlsoStyle"><a href="T_net_openstack_Core_Providers_IBlockStorageProvider.htm" target="">IBlockStorageProvider Interface</a></div><div class="seeAlsoStyle"><a href="N_net_openstack_Core_Providers.htm" target="">net.openstack.Core.Providers Namespace</a></div></div>
+						</th><th class="ps_nameColumn">Name</th><th class="ps_descriptionColumn">Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_CreateSnapshot.htm" target="">CreateSnapshot</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_CreateVolume.htm" target="">CreateVolume</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DeleteSnapshot.htm" target="">DeleteSnapshot</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DeleteVolume.htm" target="">DeleteVolume</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_DescribeVolumeType.htm" target="">DescribeVolumeType</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListSnapshots.htm" target="">ListSnapshots</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListVolumes.htm" target="">ListVolumes</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ListVolumeTypes.htm" target="">ListVolumeTypes</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ShowSnapshot.htm" target="">ShowSnapshot</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_ShowVolume.htm" target="">ShowVolume</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotAvailable.htm" target="">WaitForSnapshotAvailable</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotDeleted.htm" target="">WaitForSnapshotDeleted</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForSnapshotState.htm" target="">WaitForSnapshotState</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeAvailable.htm" target="">WaitForVolumeAvailable</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeDeleted.htm" target="">WaitForVolumeDeleted</a></td><td></td></tr><tr data="public;declared;notNetfw;"><td><img src="./../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_net_openstack_Core_Providers_IBlockStorageProvider_WaitForVolumeState.htm" target="">WaitForVolumeState</a></td><td></td></tr></table><a href="#mainBody" target="">Back to Top</a><a name="seeAlsoSection"><!----></a><div class="OH_CollapsibleAreaRegion"><div class="OH_regiontitle">See Also</div><div class="OH_CollapsibleArea_HrDiv"><hr class="OH_CollapsibleArea_Hr" /></div></div><div class="OH_clear"></div><div class="seeAlsoStyle"><a href="T_net_openstack_Core_Providers_IBlockStorageProvider.htm" target="">IBlockStorageProvider Interface</a></div><div class="seeAlsoStyle"><a href="N_net_openstack_Core_Providers.htm" target="">net.openstack.Core.Providers Namespace</a></div></div>
         </div>
       </div>
     </div>
