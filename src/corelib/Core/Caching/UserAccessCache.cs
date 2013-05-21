@@ -57,7 +57,7 @@ namespace net.openstack.Core.Caching
                 }
                 else
                 {
-                    userAccess = null;
+                    userAccess = _tokenCache.AddOrUpdate(key, k => refreshCallback(), (k, existing) => refreshCallback());
                 }
             }
 
