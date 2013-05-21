@@ -39,11 +39,12 @@ namespace net.openstack.Core.Providers
         /// Deletes the container.
         /// </summary>
         /// <param name="container">The container name.</param>
+        /// <param name="deleteObjects">Indicates whether all objects in the container should be deleted prior to trying to delete the container.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore DeleteContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore DeleteContainer(string container, bool deleteObjects = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the container header.
@@ -353,7 +354,7 @@ namespace net.openstack.Core.Providers
         ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes the object.
+        /// Deletes a specified object.
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
