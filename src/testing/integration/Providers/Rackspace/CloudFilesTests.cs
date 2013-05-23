@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
+using net.openstack.Providers.Rackspace.Exceptions;
 using net.openstack.Providers.Rackspace.Objects;
 
 namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
@@ -20,6 +21,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private static RackspaceCloudIdentity _testIdentity;
 
         private static readonly string containerName = string.Format("Cloud Files Integration Tests_{0}",Guid.NewGuid().ToString());
+        private static readonly string containerName2 = string.Format("Cloud Files Integration Tests 2_{0}",Guid.NewGuid().ToString());
         const string webIndex = "index.html";
         const string webError = "error.html";
         const string webListingsCSS = "index.css";
@@ -44,6 +46,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         private TestContext testContextInstance;
+        private static long _originalThreshold;
 
 
         /// <summary>
@@ -513,41 +516,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
-        //[TestMethod]
-        //public void Should_Create_Object_From_Stream_With_Headers_For_Destination_Container()
-        //{
-        //    string fileName = Path.GetFileName(filePath);
-        //    Stream stream = System.IO.File.OpenRead(filePath);
-        //    var etag = GetMD5Hash(filePath);
-        //    stream.Position = 0;
-        //    var headers = new Dictionary<string, string>();
-        //    headers.Add("ETag", etag);
-        //    int cnt = 0;
-        //    var info = new FileInfo(filePath);
-        //    var totalBytest = info.Length;
-        //    var provider = new CloudFilesProvider(_testIdentity);
-        //    provider.CreateObject(destinationContainerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
-        //    {
-        //        cnt = cnt + 1;
-        //        if (cnt % 10 != 0)
-        //            return;
-
-        //        var x = (float)bytesWritten / (float)totalBytest;
-        //        var percentCompleted = (float)x * 100.00;
-
-        //        Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
-        //    });
-
-        //    var containerGetObjectsResponse = provider.ListObjects(destinationContainerName, identity: _testIdentity);
-        //    Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
-
-        //    var objectHeadersResponse = provider.GetObjectHeaders(destinationContainerName, fileName, identity: _testIdentity);
-
-        //    Assert.IsNotNull(objectHeadersResponse);
-        //    Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-
-        //}
-
 
         private static string GetMD5Hash(string filePath)
         {
@@ -757,6 +725,109 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+        }
+
+        [TestMethod]
+        public void Should_Reset_The_Batch_Threshold()
+        {
+            _originalThreshold = CloudFilesProvider.LargeFileBatchThreshold;
+            CloudFilesProvider.LargeFileBatchThreshold = 81920;
+        }
+
+
+        [TestMethod]
+        public void Should_Create_New_Test_Container_2()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.CreateContainer(containerName2);
+
+            var containers = provider.ListContainers();
+            Assert.IsTrue(containers.Any(c => c.Name.Equals(containerName2)));
+        }
+
+        [TestMethod]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public void Should_Upload_File_In_Segments()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
+
+            provider.CreateObjectFromFile(containerName2, filePath);
+
+            var objects = provider.ListObjects(containerName2).ToArray();
+
+            Assert.AreEqual(12, objects.Count());
+            Assert.IsTrue(objects.Any(o => o.Name.Equals(objectName)));
+            for (int i = 0; i < 11; i++)
+            {
+                Assert.IsTrue(objects.Any(o => o.Name.Equals(string.Format("{0}.seg{1}", objectName, i.ToString("0000")))));
+            }
+        }
+
+        [TestMethod]
+        public void Should_Delete_Object_And_All_Segments()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.DeleteObject(containerName2, objectName, deleteSegments: true);
+
+            var objects = provider.ListObjects(containerName2).ToArray();
+
+            Assert.AreEqual(0, objects.Count());
+            Assert.IsFalse(objects.Any(o => o.Name.Equals(objectName)));
+            for (int i = 0; i < 11; i++)
+            {
+                Assert.IsFalse(objects.Any(o => o.Name.Equals(string.Format("{0}.seg{1}", objectName, i.ToString("0000")))));
+            }
+        }
+
+        [TestMethod]
+        public void Should_Delete_Object_But_Not_The_Segments()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.DeleteObject(containerName2, objectName, deleteSegments: false);
+
+            var objects = provider.ListObjects(containerName2).ToArray();
+
+            Assert.AreEqual(11, objects.Count());
+            Assert.IsFalse(objects.Any(o => o.Name.Equals(objectName)));
+            for (int i = 0; i < 11; i++)
+            {
+                Assert.IsTrue(objects.Any(o => o.Name.Equals(string.Format("{0}.seg{1}", objectName, i.ToString("0000")))));
+            }
+        }
+
+        [TestMethod]
+        public void Should_Bulk_Delete_All_Objects()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.BulkDelete(provider.ListObjects(containerName2).Select(o => string.Format("{0}/{1}", containerName2, o.Name)));
+
+            var objects = provider.ListObjects(containerName2).ToArray();
+
+            Assert.AreEqual(0, objects.Count());
+        }
+
+        [TestMethod]
+        public void Should_Purge_Objects_Before_Deleting_The_Conatiner()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.DeleteContainer(containerName2);
+
+            var containers = provider.ListContainers();
+            Assert.IsFalse(containers.Any(c => c.Name.Equals(containerName2)));
+        }
+
+
+        [TestMethod]
+        public void Should_Reset_The_Batch_Threshold_To_Original()
+        {
+            CloudFilesProvider.LargeFileBatchThreshold = _originalThreshold;
         }
 
         #endregion Object Tests

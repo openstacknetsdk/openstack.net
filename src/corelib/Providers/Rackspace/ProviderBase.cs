@@ -85,6 +85,8 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (body is JObject)
                     bodyStr = body.ToString();
+                else if (body is string)
+                    bodyStr = body as string;
                 else
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
