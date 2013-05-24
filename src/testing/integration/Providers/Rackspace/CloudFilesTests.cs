@@ -224,36 +224,69 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Throw_An_Exception_When_Calling_Get_Objects_From_Container_And_Objects_Does_Not_Exist()
         {
             var provider = new CloudFilesProvider();
-            var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
+            provider.ListObjects(containerName, identity: _testIdentity);
             Assert.Fail("Expected exception was not thrown.");
-        }
-
-        [TestMethod]
-        public void Should_Get_Headers_For_Container()
-        {
-            var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetContainerHeader(containerName, identity: _testIdentity);
-
-            Assert.IsNotNull(objectHeadersResponse);
-            //Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-        }
-
-        [TestMethod]
-        public void Should_Get_MetaData_For_Container()
-        {
-            var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
-            Assert.IsNotNull(objectHeadersResponse);
-            Assert.AreEqual("Action", objectHeadersResponse.Where(x => x.Key.Equals("Genre", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
         public void Should_Add_MetaData_For_Container()
         {
             var metaData = new Dictionary<string, string>();
-            metaData.Add("X-Container-Meta-XXXX", "Test");
+            metaData.Add("key1", "value1");
+            metaData.Add("key2", "value2");
+            metaData.Add("key3", "value3");
+            metaData.Add("key4", "value4");
             var provider = new CloudFilesProvider();
             provider.UpdateContainerMetadata(containerName, metaData, identity: _testIdentity);
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Container_And_Include_Key1_And_Key2_And_Key3_And_Key4()
+        {
+            var provider = new CloudFilesProvider( _testIdentity);
+            var metaData = provider.GetContainerMetaData(containerName);
+            Assert.IsNotNull(metaData);
+            Assert.IsTrue(metaData.Any());
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Remove_Multiple_Metadata_For_Container_Items_Key2_and_Key3()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+            var metaData = new Dictionary<string, string> {{"key2", "value2"}, {"key3", "value3"}};
+            
+            provider.DeleteContainerMetadata(containerName, metaData);
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Container_After_Multiple_Delete_And_Include_Key1_And_Key4()
+        {
+            var provider = new CloudFilesProvider();
+            var metaData = provider.GetContainerMetaData(containerName, identity: _testIdentity);
+            Assert.IsNotNull(metaData);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Remove_Single_Metadata_For_Container_Item_Key1()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.DeleteContainerMetadata(containerName, "key1");
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Container_After_Single_Delete_And_Include__Key4()
+        {
+            var provider = new CloudFilesProvider();
+            var metaData = provider.GetContainerMetaData(containerName, identity: _testIdentity);
+            Assert.IsNotNull(metaData);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -264,6 +297,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             metaData.Add("X-Container-Meta-Genre", "Action");
             var provider = new CloudFilesProvider();
             provider.AddContainerHeaders(containerName, metaData, identity: _testIdentity);
+        }
+
+        [TestMethod]
+        public void Should_Get_Headers_For_Container()
+        {
+            var provider = new CloudFilesProvider();
+            var objectHeadersResponse = provider.GetContainerHeader(containerName, identity: _testIdentity);
+
+            Assert.IsNotNull(objectHeadersResponse);
+            Assert.IsTrue(objectHeadersResponse.Any());
         }
 
         [TestMethod]
@@ -456,7 +499,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
-            //Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -485,32 +527,18 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [DeploymentItem("DarkKnightRises.jpg")]
         public void Should_Create_Object_From_Stream_With_Headers()
         {
-            string fileName = objectName;
-            Stream stream = System.IO.File.OpenRead(objectName);
             var etag = GetMD5Hash(objectName);
-            stream.Position = 0;
-            var headers = new Dictionary<string, string>();
-            headers.Add("ETag", etag);
-            int cnt = 0;
-            var info = new FileInfo(objectName);
-            var totalBytest = info.Length;
+            var headers = new Dictionary<string, string> {{"ETag", etag}};
             var provider = new CloudFilesProvider(_testIdentity);
-            provider.CreateObject(containerName, stream, fileName, 65536, headers, null, (bytesWritten) =>
+            using (var stream = File.OpenRead(objectName))
             {
-                cnt = cnt + 1;
-                if (cnt % 10 != 0)
-                    return;
-
-                var x = (float)bytesWritten / (float)totalBytest;
-                var percentCompleted = (float)x * 100.00;
-
-                Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
-            });
+                provider.CreateObject(containerName, stream, objectName, headers: headers);
+            }
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
 
-            var objectHeadersResponse = provider.GetObjectHeaders(containerName, fileName, identity: _testIdentity);
+            var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
             Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
@@ -533,7 +561,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Create_Object_From_Stream_Without_Headers()
         {
             string fileName = objectName;
-            Stream stream = System.IO.File.OpenRead(objectName);
+            Stream stream = File.OpenRead(objectName);
             stream.Position = 0;
 
             var headers = new Dictionary<string, string>();
@@ -550,32 +578,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Create_Object_From_File_With_Headers()
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
-            string fileName = Path.GetFileName(filePath);
-            Stream stream = System.IO.File.OpenRead(filePath);
             var etag = GetMD5Hash(filePath);
-            stream.Position = 0;
-            var headers = new Dictionary<string, string>();
-            headers.Add("ETag", etag);
-            int cnt = 0;
-            var info = new FileInfo(filePath);
-            var totalBytest = info.Length;
+            var headers = new Dictionary<string, string> {{"ETag", etag}};
             var provider = new CloudFilesProvider(_testIdentity);
-            provider.CreateObjectFromFile(containerName, filePath, fileName, 65536, headers, null, (bytesWritten) =>
-            {
-                cnt = cnt + 1;
-                if (cnt % 10 != 0)
-                    return;
-
-                var x = (float)bytesWritten / (float)totalBytest;
-                var percentCompleted = (float)x * 100.00;
-
-                Console.WriteLine(string.Format("{0:0.00} % Completed (Writen: {1} of {2})", percentCompleted, bytesWritten, totalBytest));
-            });
+            provider.CreateObjectFromFile(containerName, filePath, objectName, headers: headers);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
 
-            var objectHeadersResponse = provider.GetObjectHeaders(containerName, fileName, identity: _testIdentity);
+            var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
             Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
@@ -639,7 +650,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             // TODO: Also need to make 404 as an acceptable status.
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(containerName, objectName, headers, identity: _testIdentity);
+            provider.DeleteObject(containerName, objectName, headers, identity: _testIdentity);
 
             Assert.Fail("Expected exception was not thrown.");
         }
@@ -690,13 +701,64 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
-        public void Should_Get_MetaData_For_Object1()
+        public void Should_Add_MetaData_For_Object()
         {
+            var metaData = new Dictionary<string, string>();
+            metaData.Add("key1", "value1");
+            metaData.Add("key2", "value2");
+            metaData.Add("key3", "value3");
+            metaData.Add("key4", "value4");
             var provider = new CloudFilesProvider();
-            var objectHeadersResponse = provider.GetObjectMetaData(containerName, objectName, identity: _testIdentity);
+            provider.UpdateObjectMetadata(containerName, objectName, metaData, identity: _testIdentity);
+        }
 
-            Assert.IsNotNull(objectHeadersResponse);
-            //Assert.AreEqual("Christian Bale", objectHeadersResponse.Where(x => x.Key.Equals("X-Object-Meta-Actor", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        [TestMethod]
+        public void Should_Get_MetaData_For_Object_And_Include_Key1_And_Key2_And_Key3_And_Key4()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+            var metaData = provider.GetObjectMetaData(containerName, objectName);
+            Assert.IsNotNull(metaData);
+            Assert.IsTrue(metaData.Any());
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Remove_Multiple_Metadata_For_Object_Items_Key2_and_Key3()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+            var metaData = new Dictionary<string, string> { { "key2", "value2" }, { "key3", "value3" } };
+
+            provider.DeleteObjectMetadata(containerName, objectName, metaData);
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Object_After_Multiple_Delete_And_Include_Key1_And_Key4()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+            var metaData = provider.GetObjectMetaData(containerName, objectName);
+            Assert.IsNotNull(metaData);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+        }
+
+        [TestMethod]
+        public void Should_Remove_Single_Metadata_For_Object_Item_Key1()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+
+            provider.DeleteObjectMetadata(containerName, objectName, "key1");
+        }
+
+        [TestMethod]
+        public void Should_Get_MetaData_For_Object_After_Single_Delete_And_Include__Key4()
+        {
+            var provider = new CloudFilesProvider(_testIdentity);
+            var metaData = provider.GetObjectMetaData(containerName, objectName);
+            Assert.IsNotNull(metaData);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
