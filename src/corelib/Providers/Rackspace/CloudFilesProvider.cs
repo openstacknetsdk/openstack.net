@@ -363,7 +363,7 @@ namespace net.openstack.Providers.Rackspace
             var headers = new Dictionary<string, string>();
             foreach (KeyValuePair<string, string> m in metadata)
             {
-                if (m.Key.Contains(ContainerMetaDataPrefix))
+                if (m.Key.StartsWith(ContainerMetaDataPrefix))
                 {
                     headers.Add(m.Key, m.Value);
                 }
@@ -376,6 +376,48 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+
+        /// <inheritdoc />
+        public void DeleteContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _cloudFilesValidator.ValidateContainerName(container);
+            if (metadata.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> m in metadata)
+            {
+                if (m.Key.StartsWith(ContainerRemoveMetaDataPrefix))
+                {
+                    headers.Add(m.Key, m.Value);
+                }
+                else
+                {
+                    headers.Add(ContainerRemoveMetaDataPrefix + m.Key, m.Value);
+                }
+            }
+
+            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+
+        /// <inheritdoc />
+        public void DeleteContainerMetadata(string container, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _cloudFilesValidator.ValidateContainerName(container);
+            if (String.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            headers.Add(key, "xxxx"); // when deleting metadata, we must still provide a value for the key
+
+            DeleteContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -536,6 +578,73 @@ namespace net.openstack.Providers.Rackspace
             var processedHeaders = _cloudFilesMetadataProcessor.ProcessMetadata(response.Headers);
 
             return processedHeaders[ProcessedHeadersMetadataKey];
+        }
+
+        /// <inheritdoc />
+        public void UpdateObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+            if (metadata.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> m in metadata)
+            {
+                if (m.Key.StartsWith(ObjectMetaDataPrefix) || m.Key.StartsWith(ObjectRemoveMetaDataPrefix))
+                {
+                    headers.Add(m.Key, m.Value);
+                }
+                else
+                {
+                    headers.Add(ObjectMetaDataPrefix + m.Key, m.Value);
+                }
+            }
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+
+        /// <inheritdoc />
+        public void DeleteObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+            if (metadata.Equals(null))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = GetObjectMetaData(container, objectName, region, useInternalUrl, identity);
+            foreach (KeyValuePair<string, string> m in metadata)
+            {
+                if (headers.ContainsKey(m.Key))
+                {
+                    headers.Remove(m.Key);
+                    headers.Add(ObjectRemoveMetaDataPrefix + m.Key, m.Value);
+                }
+            }
+
+            UpdateObjectMetadata(container, objectName, headers, region, useInternalUrl, identity);
+        }
+
+        /// <inheritdoc />
+        public void DeleteObjectMetadata(string container, string objectName, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+            if (String.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var headers = new Dictionary<string, string>();
+            headers.Add(key, "xxxx"); // when deleting metadata, we must still provide a value for the key
+
+            DeleteObjectMetadata(container, objectName, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -1011,6 +1120,7 @@ namespace net.openstack.Providers.Rackspace
         public const string AccountObjectCount = "x-account-object-count";
         //Container Constants
         public const string ContainerMetaDataPrefix = "x-container-meta-";
+        public const string ContainerRemoveMetaDataPrefix = "x-remove-container-meta-";
         public const string ContainerBytesUsed = "x-container-bytes-used";
         public const string ContainerObjectCount = "x-container-object-count";
         public const string WebIndex = "x-container-meta-web-index";
@@ -1028,6 +1138,7 @@ namespace net.openstack.Providers.Rackspace
         public const string CdnIosUri = "x-cdn-ios-uri";
         //Object Constants
         public const string ObjectMetaDataPrefix = "x-object-meta-";
+        public const string ObjectRemoveMetaDataPrefix = "x-remove-object-meta-";
         public const string ObjectDeleteAfter = "x-delete-after";
         public const string ObjectDeleteAt = "x-delete-at";
         public const string Etag = "etag";
