@@ -145,7 +145,7 @@ namespace net.openstack.Core.Providers
         void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes multiple key, value pairs from a container
+        /// Deletes multiple metadata items from the container
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="metadata">The metadata to delete. <remarks>Dictionary&lt;string,string&gt;</remarks></param>
@@ -156,7 +156,7 @@ namespace net.openstack.Core.Providers
         void DeleteContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes single container metadata
+        /// Deletes single metadata item from the container
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="key">The single metadata item to delete. <c>string</c></param>
@@ -275,12 +275,12 @@ namespace net.openstack.Core.Providers
         Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the object meta data.
+        /// Updates the specified metadata items for the object.  <remarks>If the metadata key already exists, it will updated, else it will be added.</remarks>
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="metadata">Dictionary of metadata keys/value pairs to associate with the object</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="metadata">Dictionary of metadata keys, values to associate with the object</param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns>Dictionary&lt;string,string&gt; of Meta data</returns>
