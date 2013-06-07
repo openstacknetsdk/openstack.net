@@ -271,6 +271,84 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             Assert.AreEqual("LON", endpoint.Region);
         }
 
+        [TestMethod]
+        public void Should_Return_Null_While_Building_Optional_Parameter_List_When_A_Null_Value_Is_Passed()
+        {
+            var providerBase = new MockProvider(null, null, null);
+
+            var paramList = providerBase.BuildOptionalParameterList(null);
+
+            Assert.IsNull(paramList);
+        }
+
+        [TestMethod]
+        public void Should_Return_Null_While_Building_Optional_Parameter_List_When_An_Empty_Value_Is_Passed()
+        {
+            var providerBase = new MockProvider(null, null, null);
+
+            var paramList = providerBase.BuildOptionalParameterList(new Dictionary<string, string>());
+
+            Assert.IsNull(paramList);
+        }
+
+        [TestMethod]
+        public void Should_Return_Null_While_Building_Optional_Parameter_List_When_All_Values_In_List_Are_InValid()
+        {
+            var providerBase = new MockProvider(null, null, null);
+
+            var paramList = providerBase.BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"key1", ""},
+                    {"key2", null},
+                    {"key3", ""},
+                    {"key4", null},
+                });
+
+            Assert.IsNull(paramList);
+        }
+
+        [TestMethod]
+        public void Should_Return_All_Parameters_While_Building_Optional_Parameter_List_When_All_Values_In_List_Are_Valid()
+        {
+            var providerBase = new MockProvider(null, null, null);
+
+            var paramList = providerBase.BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"key1", "val1"},
+                    {"key2", "val2"},
+                    {"key3", "val3"},
+                    {"key4", "val4"},
+                });
+
+            Assert.AreEqual(4, paramList.Count);
+            Assert.IsTrue(paramList.Any(p => p.Key == "key1" && p.Value == "val1"));
+            Assert.IsTrue(paramList.Any(p => p.Key == "key2" && p.Value == "val2"));
+            Assert.IsTrue(paramList.Any(p => p.Key == "key3" && p.Value == "val3"));
+            Assert.IsTrue(paramList.Any(p => p.Key == "key4" && p.Value == "val4"));
+        }
+
+        [TestMethod]
+        public void Should_Return_Only_Valid_Parameters_While_Building_Optional_Parameter_List_When_Some_Values_In_List_Are_Valid()
+        {
+            var providerBase = new MockProvider(null, null, null);
+
+            var paramList = providerBase.BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"key1", "val1"},
+                    {"key2", ""},
+                    {"key3", "val3"},
+                    {"key4", null},
+                });
+
+            Assert.AreEqual(2, paramList.Count);
+            Assert.IsTrue(paramList.Any(p => p.Key == "key1" && p.Value == "val1"));
+            Assert.IsFalse(paramList.Any(p => p.Key == "key2" && p.Value == "val2"));
+            Assert.IsTrue(paramList.Any(p => p.Key == "key3" && p.Value == "val3"));
+            Assert.IsFalse(paramList.Any(p => p.Key == "key4" && p.Value == "val4"));
+        }
+
+
+
         public class MockProvider : ProviderBase<IIdentityProvider>
         {
             internal MockProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService) : base(defaultIdentity, identityProvider, restService)
@@ -286,6 +364,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
                 throw new NotImplementedException();
             }
+
+            public Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+            {
+                return base.BuildOptionalParameterList(optionalParameters);
+            }  
         }
     }
 }

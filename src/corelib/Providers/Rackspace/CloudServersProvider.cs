@@ -100,7 +100,18 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"image", imageId},
+                    {"flavor", flavorId},
+                    {"name", name},
+                    {"status", status},
+                    {"marker", markerId},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                    {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
+                });
+
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -112,8 +123,19 @@ namespace net.openstack.Providers.Rackspace
         public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
-            
-            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
+
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"image", imageId},
+                    {"flavor", flavorId},
+                    {"name", name},
+                    {"status", status},
+                    {"marker", markerId},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                    {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
+                });
+
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;

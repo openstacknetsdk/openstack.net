@@ -54,22 +54,22 @@ namespace net.openstack.Providers.Rackspace
             _defaultIdentity = defaultIdentity;
         }
 
-        public IEnumerable<Role> ListRoles(CloudIdentity identity)
+        public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
         {
             var provider = GetProvider(identity);
-            return provider.ListRoles(identity);
+            return provider.ListRoles(serviceId, markerId, limit, identity);
         }
 
-        public Role AddRole(Role role, CloudIdentity identity)
+        public Role AddRole(string name, string descritpion, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
-            return provider.AddRole(role, identity: identity);
+            return provider.AddRole(name, descritpion, identity);
         }
 
         public Role GetRole(string roleId, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
-            return provider.GetRole(roleId, identity: identity);
+            return provider.GetRole(roleId, identity);
         }
 
         public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
