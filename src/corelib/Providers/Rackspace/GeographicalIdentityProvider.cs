@@ -143,8 +143,8 @@ namespace net.openstack.Providers.Rackspace
                     creds.Add(new UserCredential
                             {
                                 Name = property.Name,
-                                APIKey = cred["apiKey"].ToString(),
-                                Username = cred["username"].ToString()
+                                APIKey = cred["apiKey"].ToString().Replace("\"", string.Empty),
+                                Username = cred["username"].ToString().Replace("\"", string.Empty),
                             }); 
                 }
                    
