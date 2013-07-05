@@ -136,6 +136,7 @@
     <Compile Include="Core\Validators\INetworksValidator.cs" />
     <Compile Include="Core\UserAgentGenerator.cs" />
     <Compile Include="Core\Validators\IHttpResponseCodeValidator.cs" />
+    <Compile Include="Core\WebRequestExtensions.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
     <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\Providers\IObjectStorageProvider.cs" />
