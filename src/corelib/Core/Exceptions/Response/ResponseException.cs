@@ -1,7 +1,6 @@
 using System;
-using System.Net;
 using System.Runtime.Serialization;
-using JSIStudios.SimpleRESTServices.Client.Json;
+using System.Security;
 using Newtonsoft.Json;
 
 namespace net.openstack.Core.Exceptions.Response
@@ -10,6 +9,7 @@ namespace net.openstack.Core.Exceptions.Response
     public class ResponseException : Exception
     {
         public JSIStudios.SimpleRESTServices.Client.Response Response { get; private set; }
+
         public ResponseException(string message, JSIStudios.SimpleRESTServices.Client.Response response)
             : base(message)
         {
@@ -89,6 +89,7 @@ namespace net.openstack.Core.Exceptions.Response
                 }
             }
 
+            [SecurityCritical]
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
                 throw new NotImplementedException();
@@ -106,6 +107,22 @@ namespace net.openstack.Core.Exceptions.Response
 
             [DataMember(Name = "details")]
             public string Details;
+        }
+
+        protected ResponseException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Response = (JSIStudios.SimpleRESTServices.Client.Response)info.GetValue("Response", typeof(JSIStudios.SimpleRESTServices.Client.Response));
+        }
+
+        [SecurityCritical]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            base.GetObjectData(info, context);
+            info.AddValue("Response", Response);
         }
     }
 }
