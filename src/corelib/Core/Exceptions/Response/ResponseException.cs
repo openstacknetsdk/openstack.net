@@ -2,15 +2,16 @@ using System;
 using System.Runtime.Serialization;
 using System.Security;
 using Newtonsoft.Json;
+using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
 
 namespace net.openstack.Core.Exceptions.Response
 {
     [Serializable]
     public class ResponseException : Exception
     {
-        public JSIStudios.SimpleRESTServices.Client.Response Response { get; private set; }
+        public RestResponse Response { get; private set; }
 
-        public ResponseException(string message, JSIStudios.SimpleRESTServices.Client.Response response)
+        public ResponseException(string message, RestResponse response)
             : base(message)
         {
             Response = response;
@@ -112,7 +113,7 @@ namespace net.openstack.Core.Exceptions.Response
         protected ResponseException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Response = (JSIStudios.SimpleRESTServices.Client.Response)info.GetValue("Response", typeof(JSIStudios.SimpleRESTServices.Client.Response));
+            Response = (RestResponse)info.GetValue("Response", typeof(RestResponse));
         }
 
         [SecurityCritical]
