@@ -5,7 +5,7 @@ using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
 namespace net.openstack.Core.Exceptions.Response
 {
     [Serializable]
-    class MethodNotImplementedException : ResponseException
+    public class MethodNotImplementedException : ResponseException
     {
         public MethodNotImplementedException(RestResponse response) : base("The requested method is not implemented at the service.", response) { }
 
