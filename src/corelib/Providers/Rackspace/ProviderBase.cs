@@ -207,7 +207,7 @@ namespace net.openstack.Providers.Rackspace
         
         internal static string GetUserAgentHeaderValue()
         {
-            return UserAgentGenerator.Generate();
+            return UserAgentGenerator.UserAgent;
         }
 
         protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>

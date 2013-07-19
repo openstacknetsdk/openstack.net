@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Reflection;
 
 namespace net.openstack.Core
 {
-    public class UserAgentGenerator
+    public static class UserAgentGenerator
     {
-        private static Version _currentVersion;
+        private static readonly Version _currentVersion = typeof(UserAgentGenerator).Assembly.GetName().Version;
+        private static readonly string _userAgent = string.Format("openstack.net/{0}", _currentVersion);
 
-        public static string Generate()
+        public static string UserAgent
         {
-            if (_currentVersion == null)
-                _currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-            return string.Format("openstack.net/{0}", _currentVersion.ToString());
+            get
+            {
+                return _userAgent;
+            }
         }
     }
 }
