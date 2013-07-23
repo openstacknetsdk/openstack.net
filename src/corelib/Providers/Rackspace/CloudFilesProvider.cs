@@ -648,7 +648,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null,  string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
@@ -663,6 +663,9 @@ namespace net.openstack.Providers.Rackspace
 
             if (!string.IsNullOrWhiteSpace(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
+
+            if (!string.IsNullOrWhiteSpace(prefix))
+                queryStringParameter.Add("prefix", prefix);
 
             var response = ExecuteRESTRequest<ContainerObject[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
 

@@ -316,11 +316,12 @@ namespace net.openstack.Core.Providers
         /// <param name="limit">The limit.</param>
         /// <param name="marker">The marker.</param>
         /// <param name="markerEnd">The marker end.</param>
+        /// <param name="prefix">Prefix of object names to include</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerObject"/></returns>
-        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates the object from file.
