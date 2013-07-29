@@ -55,5 +55,11 @@ CommandLineHooks.xml
 #MSTest Test Results
 TestResults
 
+# Sandcastle Per-User File
+*.shfbproj_*
+
+# Sandcastle Output
+docs/html/
+
 #NuGet
 *.nupkg
