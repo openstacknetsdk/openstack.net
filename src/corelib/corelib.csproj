@@ -182,7 +182,6 @@
     <Compile Include="Core\Domain\ServerIps.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateIPv4Request.cs" />
     <Compile Include="Core\Domain\User.cs" />
-    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Core\Providers\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
     <Compile Include="Providers\Rackspace\Objects\RackspaceCloudIdentity.cs" />
@@ -203,7 +202,6 @@
     <Compile Include="Providers\Rackspace\Validators\CloudNetworksValidator.cs" />
     <Compile Include="Core\Caching\UserAccessCache.cs" />
     <Compile Include="Core\Providers\IIdentityProvider.cs" />
-    <Compile Include="Core\IRetryLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\GeographicalCloudIdentityProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudIdentityProviderFactory.cs" />
