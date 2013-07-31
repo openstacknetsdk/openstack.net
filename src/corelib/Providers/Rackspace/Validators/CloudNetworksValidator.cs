@@ -24,10 +24,13 @@ namespace net.openstack.Providers.Rackspace.Validators
             }
         }
 
+        /// <inheritdoc/>
         public void ValidateCidr(string cidr)
         {
-            if (string.IsNullOrWhiteSpace(cidr))
-                throw new ArgumentNullException("cidr", "ERROR: CIDR cannot be null");
+            if (cidr == null)
+                throw new ArgumentNullException("cidr");
+            if (string.IsNullOrEmpty(cidr))
+                throw new CidrFormatException("cidr cannot be empty");
 
             if (!cidr.Contains("/"))
                 throw new CidrFormatException(string.Format("ERROR: CIDR {0} is missing /", cidr));
