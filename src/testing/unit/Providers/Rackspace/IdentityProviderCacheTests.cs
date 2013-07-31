@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -20,8 +21,8 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             var cacheMock = new Mock<ICache<UserAccess>>();
             var restServiceMock = new Mock<IRestService>();
 
-            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
-            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
+            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(HttpStatusCode.OK, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
+            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(HttpStatusCode.OK, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
 
             var identityProvider = new CloudIdentityProvider(restServiceMock.Object, cacheMock.Object);
 
@@ -36,8 +37,8 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             var cacheMock = new Mock<ICache<UserAccess>>();
             var restServiceMock = new Mock<IRestService>();
 
-            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
-            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(200, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
+            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<string>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(HttpStatusCode.OK, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
+            restServiceMock.Setup(m => m.Execute<AuthenticationResponse>(It.IsAny<Uri>(), It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<RequestSettings>())).Returns(new Response<AuthenticationResponse>(HttpStatusCode.OK, "OK", new AuthenticationResponse(), new List<HttpHeader>(), null));
             
             var identityProvider = new CloudIdentityProvider(restServiceMock.Object, cacheMock.Object);
 

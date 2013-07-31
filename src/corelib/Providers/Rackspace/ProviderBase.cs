@@ -5,8 +5,6 @@ using System.Linq;
 using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
@@ -14,6 +12,8 @@ using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Validators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -97,7 +97,7 @@ namespace net.openstack.Providers.Rackspace
             var response = callback(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 if (!isRetry)
                 {
@@ -117,7 +117,7 @@ namespace net.openstack.Providers.Rackspace
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
 
-            requestSettings.Timeout = 14400000; // Need to pass this in.
+            requestSettings.Timeout = TimeSpan.FromMilliseconds(14400000); // Need to pass this in.
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
@@ -130,7 +130,7 @@ namespace net.openstack.Providers.Rackspace
             var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 if (!isRetry)
                 {
@@ -143,13 +143,13 @@ namespace net.openstack.Providers.Rackspace
             return response;
         }
 
-        internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)
+        internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<HttpStatusCode> non200SuccessCodes = null)
         {
-            var non200SuccessCodesAggregate = new List<int>{ 401, 409 };
+            var non200SuccessCodesAggregate = new List<HttpStatusCode>{ HttpStatusCode.Unauthorized, HttpStatusCode.Conflict };
             if(non200SuccessCodes != null)
                 non200SuccessCodesAggregate.AddRange(non200SuccessCodes);
 
-            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
+            return new JsonRequestSettings { RetryCount = 2, RetryDelay = TimeSpan.FromMilliseconds(200), Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
         protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
