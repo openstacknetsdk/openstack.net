@@ -174,26 +174,26 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForVolumeState(volumeId, VolumeState.AVAILABLE, new[] { VolumeState.ERROR, VolumeState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForVolumeState(volumeId, VolumeState.AVAILABLE, new[] { VolumeState.ERROR, VolumeState.ERROR_DELETING }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), region, identity);
         }
 
         /// <inheritdoc />
-        public bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForItemToBeDeleted(ShowVolume, volumeId, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForItemToBeDeleted(ShowVolume, volumeId, refreshCount, refreshDelay ?? TimeSpan.FromSeconds(10), region, identity);
         }
 
         /// <inheritdoc />
-        public Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null)
+        public Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
             var volumeInfo = ShowVolume(volumeId, region, identity);
 
             var count = 0;
             while (!volumeInfo.Status.Equals(expectedState, StringComparison.OrdinalIgnoreCase) && !errorStates.Contains(volumeInfo.Status) && count < refreshCount)
             {
-                Thread.Sleep(refreshDelayInMS);
+                Thread.Sleep(refreshDelay ?? TimeSpan.FromMilliseconds(2400));
                 volumeInfo = ShowVolume(volumeId, region, identity);
                 count++;
             }
@@ -264,26 +264,26 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForSnapshotState(snapshotId, SnapshotState.AVAILABLE, new[] { SnapshotState.ERROR, SnapshotState.ERROR_DELETING }, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForSnapshotState(snapshotId, SnapshotState.AVAILABLE, new[] { SnapshotState.ERROR, SnapshotState.ERROR_DELETING }, refreshCount, refreshDelay ?? TimeSpan.FromSeconds(10), region, identity);
         }
 
         /// <inheritdoc />
-        public bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForItemToBeDeleted(ShowSnapshot, snapshotId, refreshCount, refreshDelayInMS, region, identity);
+            return WaitForItemToBeDeleted(ShowSnapshot, snapshotId, refreshCount, refreshDelay ?? TimeSpan.FromSeconds(10), region, identity);
         }
 
         /// <inheritdoc />
-        public Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        public Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
             var snapshotInfo = ShowSnapshot(snapshotId, region, identity);
 
             var count = 0;
             while (!snapshotInfo.Status.Equals(expectedState, StringComparison.OrdinalIgnoreCase) && !errorStates.Contains(snapshotInfo.Status) && count < refreshCount)
             {
-                Thread.Sleep(refreshDelayInMS);
+                Thread.Sleep(refreshDelay ?? TimeSpan.FromSeconds(10));
                 snapshotInfo = ShowSnapshot(snapshotId, region, identity);
                 count++;
             }
@@ -315,7 +315,7 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "cloudBlockStorage", region);
         }
 
-        private bool WaitForItemToBeDeleted<T>(Func<string, string, CloudIdentity, T> retrieveItemMethod, string id, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null)
+        private bool WaitForItemToBeDeleted<T>(Func<string, string, CloudIdentity, T> retrieveItemMethod, string id, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
         {
             try
             {
@@ -324,7 +324,7 @@ namespace net.openstack.Providers.Rackspace
                 var count = 0;
                 while (count < refreshCount)
                 {
-                    Thread.Sleep(refreshDelayInMS);
+                    Thread.Sleep(refreshDelay ?? TimeSpan.FromSeconds(10));
                     retrieveItemMethod(id, region, identity);
                     count++;
                 }
