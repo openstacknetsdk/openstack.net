@@ -456,16 +456,16 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected state.</param>
         /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
-        /// <param name="refreshDelayInMS">The number of milisecods to wait each time before requesting the status for the server.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to build the server.<remarks>[Optional]: If not specified, the users default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the deatils of the <see cref="Server"/> after the process completes</returns>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -474,36 +474,36 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedStates">The set expected state.</param>
         /// <param name="errorStates">A list of states in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>[Optional]: If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="serverId">The cloud server ID.</param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        Server WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        Server WaitForServerActive(string serverId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the server to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the server enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="serverId">The cloud server ID.</param>
         /// <param name="refreshCount">Number of times to check the servers status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the server.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns></returns>
-        void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        void WaitForServerDeleted(string serverId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter a specified state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -512,12 +512,12 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected <see cref="ServerState"/></param>
         /// <param name="errorStates">A list of <see cref="ServerState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter a set of specified states. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
@@ -526,35 +526,35 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedStates">The set expected <see cref="ServerState"/>s</param>
         /// <param name="errorStates">A list of <see cref="ServerState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the ACTIVE state. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="imageId">The image ID.</param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>Returns the details of the <see cref="Server"/> after the process completes</returns>
-        ServerImage WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        ServerImage WaitForImageActive(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Waits for the image to enter the DELETED state or to be removed. <remarks>NOTE: This is a blocking operation and will new return until the image enters either the expected state, an error state, or the retry count is exceeded</remarks>
         /// </summary>
         /// <param name="imageId">The image ID.</param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
+        void WaitForImageDeleted(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null);
 
     }
 }

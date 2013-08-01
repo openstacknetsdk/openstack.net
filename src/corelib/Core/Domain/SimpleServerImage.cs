@@ -21,11 +21,11 @@ namespace net.openstack.Core.Domain
         /// Waits for the image to enter the ACTIVE state
         /// </summary>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForActive(int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null)
+        public void WaitForActive(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageActive(Id, refreshCount, refreshDelayInMS, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageActive(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region);
             UpdateThis(details);
         }
 
@@ -33,11 +33,11 @@ namespace net.openstack.Core.Domain
         /// Waits for the image to enter the DELETED state
         /// </summary>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForDelete(int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null)
+        public void WaitForDelete(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            Provider.WaitForImageDeleted(Id, refreshCount, refreshDelayInMS, progressUpdatedCallback, Region);
+            Provider.WaitForImageDeleted(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region);
         }
 
 
@@ -47,11 +47,11 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedState">The expected <see cref="ImageState"/></param>
         /// <param name="errorStates">A list of <see cref="ImageState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageState(Id, expectedState, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageState(Id, expectedState, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
             UpdateThis(details);
         }
 
@@ -61,11 +61,11 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedStates">The set expected <see cref="ImageState"/>s</param>
         /// <param name="errorStates">A list of <see cref="ImageState"/>s in which to throw an exception if the server enters. </param>
         /// <param name="refreshCount">Number of times to check the images status</param>
-        /// <param name="refreshDelayInMS">The number of milliseconds to wait each time before requesting the status for the image.</param>
+        /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageState(Id, expectedStates, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageState(Id, expectedStates, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
             UpdateThis(details);
         }
 
