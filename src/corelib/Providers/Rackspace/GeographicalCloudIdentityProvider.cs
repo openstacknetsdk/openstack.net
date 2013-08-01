@@ -409,15 +409,12 @@ namespace net.openstack.Providers.Rackspace
 
         protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null)
         {
-            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200),
-                (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute);
         }
 
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null,  bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null) where T : new()
         {
-            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200),
-                (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
-
+            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute<T>);
         }
 
         protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, TimeSpan retryDelay, 
