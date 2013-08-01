@@ -447,7 +447,7 @@ namespace net.openstack.Providers.Rackspace
                                    RetryCount = retryCount,
                                    RetryDelay = retryDelay,
                                    Non200SuccessCodes = new[] {HttpStatusCode.Unauthorized, HttpStatusCode.Conflict},
-                                   UserAgent = UserAgentGenerator.Generate()
+                                   UserAgent = UserAgentGenerator.UserAgent
                                };
 
             var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
