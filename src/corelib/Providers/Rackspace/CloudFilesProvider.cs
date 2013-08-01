@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
@@ -151,9 +152,9 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
-            if (response.StatusCode == 201)
+            if (response.StatusCode == HttpStatusCode.Created)
                 return ObjectStore.ContainerCreated;
-            if (response.StatusCode == 202)
+            if (response.StatusCode == HttpStatusCode.Accepted)
                 return ObjectStore.ContainerExists;
 
             return ObjectStore.Unknown;
@@ -729,7 +730,7 @@ namespace net.openstack.Providers.Rackspace
                         CopyStream(respStream, outputStream, chunkSize, progressUpdated);
                     }
 
-                    var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader { Key = key, Value = resp.GetResponseHeader(key) }).ToList();
+                    var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader(key, resp.GetResponseHeader(key))).ToList();
 
                     return new Response(resp.StatusCode, respHeaders, "[Binary]");
                 }
@@ -941,7 +942,7 @@ namespace net.openstack.Providers.Rackspace
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
-            if (response.StatusCode == 204)
+            if (response.StatusCode == HttpStatusCode.NoContent)
                 return ObjectStore.ObjectPurged;
 
             return ObjectStore.Unknown;

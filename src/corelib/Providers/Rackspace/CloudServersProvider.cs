@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
@@ -28,7 +28,7 @@ namespace net.openstack.Providers.Rackspace
     /// <inheritdoc />
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
-        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203, 204 };
+        private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
@@ -163,7 +163,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            if (response.StatusCode != 200 && response.StatusCode != 202)
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
                 return null; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
 
             return BuildCloudServersProviderAwareObject<NewServer>(response.Data.Server, region, identity);
@@ -193,7 +193,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return false;
 
-            if (response.StatusCode != 200 && response.StatusCode != 202)
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
                 return false; 
 
             return true;
@@ -204,7 +204,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var defaultSettings = BuildDefaultRequestSettings(new [] {404});
+            var defaultSettings = BuildDefaultRequestSettings(new [] {HttpStatusCode.NotFound});
             var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
@@ -611,7 +611,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
-            var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
+            var defaultSettings = BuildDefaultRequestSettings(new[] { HttpStatusCode.NotFound });
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
@@ -699,7 +699,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -712,7 +712,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -725,7 +725,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
-            if (response == null || (response.StatusCode != 200 && response.StatusCode != 203) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
+            if (response == null || (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NonAuthoritativeInformation) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
                 return null;
 
             return response.Data.Metadata.First().Value;
@@ -738,7 +738,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -751,7 +751,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response.StatusCode == 204)
+            if (response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;
@@ -781,7 +781,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -794,7 +794,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -820,7 +820,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -833,7 +833,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response.StatusCode == 204)
+            if (response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;

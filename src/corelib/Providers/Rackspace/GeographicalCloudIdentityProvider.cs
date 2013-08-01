@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
@@ -12,6 +11,8 @@ using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -82,7 +83,7 @@ namespace net.openstack.Providers.Rackspace
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
-            if (response == null || (response.StatusCode >= 400 && response.StatusCode != 409))
+            if (response == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
                 return false;
 
             return true;
@@ -93,7 +94,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response != null && response.StatusCode == 204)
+            if (response != null && response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;
@@ -125,7 +126,7 @@ namespace net.openstack.Providers.Rackspace
             };
             var response = ExecuteRESTRequest<PasswordCredencialResponse>(identity, urlPath, HttpMethod.POST, request);
 
-            if (response == null || response.StatusCode != 201 || response.Data == null)
+            if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)
                 return false;
 
             return response.Data.PasswordCredencial.Password.Equals(password);
@@ -201,7 +202,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response == null || response.StatusCode != 200)
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
                 return false;
 
             return true;
@@ -281,7 +282,7 @@ namespace net.openstack.Providers.Rackspace
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.POST, updateUserRequest);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
-            if (response == null || response.Data == null || (response.StatusCode >= 400 && response.StatusCode != 409))
+            if (response == null || response.Data == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
                 return null;
 
             return response.Data.User;
@@ -292,7 +293,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("/v2.0/users/{0}", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response != null && response.StatusCode == 204)
+            if (response != null && response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;
@@ -406,20 +407,20 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-        protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200)
+        protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null)
         {
-            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay,
+            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200),
                 (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
         }
 
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null,  bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, int retryDelay = 200) where T : new()
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null,  bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null) where T : new()
         {
-            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay,
+            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200),
                 (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => _restService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
 
         }
 
-        protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, int retryDelay, 
+        protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, TimeSpan retryDelay, 
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
         {
             if (identity == null)
@@ -444,17 +445,17 @@ namespace net.openstack.Providers.Rackspace
             var settings = new JsonRequestSettings()
                                {
                                    RetryCount = retryCount,
-                                   RetryDelayInMS = retryDelay,
-                                   Non200SuccessCodes = new[] {401, 409},
+                                   RetryDelay = retryDelay,
+                                   Non200SuccessCodes = new[] {HttpStatusCode.Unauthorized, HttpStatusCode.Conflict},
                                    UserAgent = UserAgentGenerator.Generate()
                                };
 
             var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401 && !isRetry && !isTokenRequest)
+            if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && !isTokenRequest)
             {
-                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity), retryCount, retryCount, callback);
+                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity), retryCount, retryDelay, callback);
             }
 
             _responseCodeValidator.Validate(response);

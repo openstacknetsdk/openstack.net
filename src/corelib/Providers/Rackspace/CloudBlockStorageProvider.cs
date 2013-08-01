@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
@@ -40,7 +40,7 @@ namespace net.openstack.Providers.Rackspace
     public class CloudBlockStorageProvider : ProviderBase<IBlockStorageProvider>, IBlockStorageProvider
     {
 
-        private readonly int[] _validResponseCode = new[] { 200, 201, 202 };
+        private readonly HttpStatusCode[] _validResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.Accepted };
         private readonly IBlockStorageValidator _cloudBlockStorageValidator;
 
         /// <summary>
