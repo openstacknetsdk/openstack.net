@@ -59,6 +59,7 @@ TestResults
 *.shfbproj_*
 
 # Sandcastle Output
+docs/Api/
 docs/html/
 
 #NuGet
