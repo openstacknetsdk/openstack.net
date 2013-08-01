@@ -55,6 +55,8 @@
     <Compile Include="Core\Domain\SimpleServer.cs" />
     <Compile Include="Core\Domain\SimpleServerImage.cs" />
     <Compile Include="Core\Domain\Snapshot.cs" />
+    <Compile Include="Core\Domain\VirtualInterface.cs" />
+    <Compile Include="Core\Domain\VirtualInterfaceAddress.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
     <Compile Include="Core\Domain\VolumeState.cs" />
     <Compile Include="Core\Domain\VolumeType.cs" />
@@ -114,7 +116,9 @@
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
     <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />

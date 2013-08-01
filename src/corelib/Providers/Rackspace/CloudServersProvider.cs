@@ -30,6 +30,7 @@ namespace net.openstack.Providers.Rackspace
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
+        private readonly IJsonObjectMapper<VirtualInterface> _virtualInterfaceReponseMapper;
 
         #region Constructors
 
@@ -487,6 +488,49 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
+        #endregion
+
+        #region Virtual Interfaces
+
+        /// <inheritdoc />
+        public IEnumerable<VirtualInterface> ListVirtualInterfaces(string serverId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2", GetServiceEndpoint(identity, region), serverId));
+
+            var response = ExecuteRESTRequest<ListVirtualInterfacesResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.VirtualInterfaces;
+        }
+
+        /// <inheritdoc />
+        public VirtualInterface CreateVirtualInterface(string serverId, string networkId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2", GetServiceEndpoint(identity, region), serverId));
+
+            var request = new CreateVirtualInterfaceRequest(networkId);
+            var response = ExecuteRESTRequest<ListVirtualInterfacesResponse>(identity, urlPath, HttpMethod.POST, request);
+
+            if (response == null || response.Data == null || response.Data.VirtualInterfaces == null)
+                return null;
+
+            return response.Data.VirtualInterfaces.FirstOrDefault();
+        }
+
+        /// <inheritdoc />
+        public bool DeleteVirtualInterface(string serverId, string virtualInterfaceId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2/{2}", GetServiceEndpoint(identity, region), serverId, virtualInterfaceId));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
+                return false;
+
+            return true;
+        }
         #endregion
 
         #region Flavors

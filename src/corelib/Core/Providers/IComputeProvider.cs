@@ -248,6 +248,36 @@ namespace net.openstack.Core.Providers
         bool DetachServerVolume(string serverId, string volumeId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
+        /// Lists the virtual interfaces for the specified server.
+        /// </summary>
+        /// <param name="serverId">The server ID.</param>
+        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
+        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
+        /// <returns>List of <see cref="VirtualInterface"/></returns>
+        IEnumerable<VirtualInterface> ListVirtualInterfaces(string serverId, string region = null, CloudIdentity identity = null);
+
+        /// <summary>
+        /// Creates a virtual interface for the specified network and attaches the network to the specified server
+        /// </summary>
+        /// <param name="serverId">The server ID.</param>
+        /// <param name="networkId">The network ID</param>
+        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
+        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
+        /// <returns>The newly created <see cref="VirtualInterface"/></returns>
+        VirtualInterface CreateVirtualInterface(string serverId, string networkId, string region = null, CloudIdentity identity = null);
+
+        /// <summary>
+        /// Deletes the specified virtual interface from the specified server
+        /// </summary>
+        /// <param name="serverId">The server ID.</param>
+        /// <param name="virtualInterfaceId">The virtual interface ID</param>
+        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
+        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
+        /// <returns><c>bool</c> indicating if the action was successful</returns>
+        bool DeleteVirtualInterface(string serverId, string virtualInterfaceId, string region = null, CloudIdentity identity = null);
+
+
+        /// <summary>
         /// Lists all available flavors.
         /// </summary>
         /// <param name="minDiskInGB">Filters the list of flavors to those with the specified minimum number of gigabytes of disk storage. </param>
