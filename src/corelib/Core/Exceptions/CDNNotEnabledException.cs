@@ -16,6 +16,7 @@ namespace net.openstack.Core.Exceptions
         /// Initializes a new instance of the <see cref="CDNNotEnabledException"/> class.
         /// </summary>
         public CDNNotEnabledException()
+            : base("The specified container is not CDN-enabled.")
         {
         }
 

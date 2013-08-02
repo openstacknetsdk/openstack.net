@@ -14,6 +14,7 @@ namespace net.openstack.Core.Exceptions
         /// Initializes a new instance of the <see cref="TTLLengthException"/> class.
         /// </summary>
         public TTLLengthException()
+            : base("The specified TTL is outside the range supported by the provider.")
         {
         }
 

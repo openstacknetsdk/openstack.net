@@ -16,6 +16,7 @@ namespace net.openstack.Core.Exceptions
         /// Initializes a new instance of the <see cref="ContainerNameException"/> class.
         /// </summary>
         public ContainerNameException()
+            : base("The specified container name is not valid.")
         {
         }
 

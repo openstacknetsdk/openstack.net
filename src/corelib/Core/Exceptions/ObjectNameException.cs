@@ -16,6 +16,7 @@ namespace net.openstack.Core.Exceptions
         /// Initializes a new instance of the <see cref="ObjectNameException"/> class.
         /// </summary>
         public ObjectNameException()
+            : base("The specified object name is not valid.")
         {
         }
 

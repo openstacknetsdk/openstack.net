@@ -15,6 +15,7 @@ namespace net.openstack.Core.Exceptions
         /// Initializes a new instance of the <see cref="CidrFormatException"/> class.
         /// </summary>
         public CidrFormatException()
+            : base("The specified CIDR is not in the correct format.")
         {
         }
 
