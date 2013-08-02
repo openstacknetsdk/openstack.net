@@ -33,6 +33,7 @@ namespace net.openstack.Providers.Rackspace
             _defaultIdentity = defaultIdentity;
         }
 
+        /// <inheritdoc/>
         public IExtendedCloudIdentityProvider Get(CloudIdentity identity)
         {
             if (identity == null)

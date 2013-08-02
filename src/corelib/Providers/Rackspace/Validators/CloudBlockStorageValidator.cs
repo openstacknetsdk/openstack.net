@@ -1,4 +1,5 @@
-﻿using net.openstack.Core.Validators;
+﻿using System;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace.Validators
@@ -21,8 +22,12 @@ namespace net.openstack.Providers.Rackspace.Validators
             }
         }
 
+        /// <inheritdoc/>
         public void ValidateVolumeSize(int size)
         {
+            if (size < 0)
+                throw new ArgumentOutOfRangeException("size");
+
             if (size < 100 || size > 1000)
                 throw new InvalidVolumeSizeException(size);
         }
