@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>openstack.net</id>
     <version>$version$</version>
@@ -9,9 +9,12 @@
     <licenseUrl>https://github.com/openstacknetsdk/openstack.net/wiki/Copyright</licenseUrl>
     <projectUrl>https://github.com/openstacknetsdk/openstack.net</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>openstack.net - An OpenStack SDK for Microsoft >NET</description>
-    <releaseNotes>https://github.com/openstacknetsdk/openstack.net/wiki/v$version$</releaseNotes>
+    <description>An OpenStack SDK for Microsoft .NET</description>
+    <releaseNotes>https://github.com/openstacknetsdk/openstack.net/releases/v$version$</releaseNotes>
     <copyright></copyright>
     <tags>openstack</tags>
   </metadata>
+  <files>
+    <file src="..\..\docs\Api\openstacknet.xml" target="lib\net40"/>
+  </files>
 </package>

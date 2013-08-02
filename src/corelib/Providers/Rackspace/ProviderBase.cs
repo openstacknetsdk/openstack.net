@@ -5,8 +5,6 @@ using System.Linq;
 using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
@@ -14,6 +12,8 @@ using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Validators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -39,7 +39,7 @@ namespace net.openstack.Providers.Rackspace
                 restService = new JsonRestServices();
 
             if (httpStatusCodeValidator == null)
-                httpStatusCodeValidator = new HttpResponseCodeValidator();
+                httpStatusCodeValidator = HttpResponseCodeValidator.Default;
 
             DefaultIdentity = defaultIdentity;
             IdentityProvider = identityProvider;
@@ -49,21 +49,18 @@ namespace net.openstack.Providers.Rackspace
 
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null,  bool isRetry = false, JsonRequestSettings settings = null)
         {
-            return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                                   (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute<T>(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+            return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings, RestService.Execute<T>);
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
         {
-            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings));
+            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings, RestService.Execute);
 
         }
 
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, JsonRequestSettings settings = null)
         {
-            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
-                                       (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, buildResponseCallback, requestBody, requestHeaders, requestQueryParams, requestSettings));
+            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings, RestService.Execute);
 
         }
 
@@ -78,13 +75,15 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry);
 
             string bodyStr = null;
             if (body != null)
             {
                 if (body is JObject)
                     bodyStr = body.ToString();
+                else if (body is string)
+                    bodyStr = body as string;
                 else
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
@@ -95,7 +94,7 @@ namespace net.openstack.Providers.Rackspace
             var response = callback(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 if (!isRetry)
                 {
@@ -115,12 +114,12 @@ namespace net.openstack.Providers.Rackspace
             if (requestSettings == null)
                 requestSettings = BuildDefaultRequestSettings();
 
-            requestSettings.Timeout = 14400000; // Need to pass this in.
+            requestSettings.Timeout = TimeSpan.FromMilliseconds(14400000); // Need to pass this in.
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry);
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();
@@ -128,7 +127,7 @@ namespace net.openstack.Providers.Rackspace
             var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
 
             // on errors try again 1 time.
-            if (response.StatusCode == 401)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 if (!isRetry)
                 {
@@ -141,13 +140,13 @@ namespace net.openstack.Providers.Rackspace
             return response;
         }
 
-        internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<int> non200SuccessCodes = null)
+        internal JsonRequestSettings BuildDefaultRequestSettings(IEnumerable<HttpStatusCode> non200SuccessCodes = null)
         {
-            var non200SuccessCodesAggregate = new List<int>{ 401, 409 };
+            var non200SuccessCodesAggregate = new List<HttpStatusCode>{ HttpStatusCode.Unauthorized, HttpStatusCode.Conflict };
             if(non200SuccessCodes != null)
                 non200SuccessCodesAggregate.AddRange(non200SuccessCodes);
 
-            return new JsonRequestSettings { RetryCount = 2, RetryDelayInMS = 200, Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
+            return new JsonRequestSettings { RetryCount = 2, RetryDelay = TimeSpan.FromMilliseconds(200), Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
         protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
@@ -205,7 +204,7 @@ namespace net.openstack.Providers.Rackspace
         
         internal static string GetUserAgentHeaderValue()
         {
-            return UserAgentGenerator.Generate();
+            return UserAgentGenerator.UserAgent;
         }
 
         protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>
@@ -256,5 +255,18 @@ namespace net.openstack.Providers.Rackspace
 
             return rsCloudIdentity.CloudInstance == CloudInstance.UK;
         }
+
+        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+        {
+            if (optionalParameters == null)
+                return null;
+
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrWhiteSpace(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+
+            if (!paramList.Any())
+                return null;
+
+            return paramList;
+        } 
     }
 }

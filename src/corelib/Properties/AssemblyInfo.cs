@@ -37,3 +37,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("OpenStackNet.Testing.Integration")]
 [assembly: InternalsVisibleTo("OpenStackNet.Testing.Unit")]
+[assembly: InternalsVisibleTo("net.openstack.console")]

@@ -263,5 +263,34 @@ namespace net.openstack.Core.Domain
         {
             return Provider.DeleteServer(Id, Region);
         }
+
+        /// <summary>
+        /// Lists the server's virtual interfaces.
+        /// </summary>
+        /// <returns>List of <see cref="VirtualInterface"/></returns>
+        public IEnumerable<VirtualInterface> ListVirtualInterfaces()
+        {
+            return Provider.ListVirtualInterfaces(Id, Region);
+        }
+
+        /// <summary>
+        /// Creates a virtual interface for the specified network and attaches the network to the server
+        /// </summary>
+        /// <param name="networkId">The network ID</param>
+        /// <returns>The newly created <see cref="VirtualInterface"/></returns>
+        public VirtualInterface CreateVirtualInterface(string networkId)
+        {
+            return Provider.CreateVirtualInterface(Id, networkId, Region);
+        }
+
+        /// <summary>
+        /// Deletes the specified virtual interface from the server
+        /// </summary>
+        /// <param name="virtualInterfaceId">The virtual interface ID</param>
+        /// <returns><c>bool</c> indicating if the action was successful</returns>
+        public bool DeleteVirtualInterface(string virtualInterfaceId)
+        {
+            return Provider.DeleteVirtualInterface(Id, virtualInterfaceId, Region);
+        }
     }
 }

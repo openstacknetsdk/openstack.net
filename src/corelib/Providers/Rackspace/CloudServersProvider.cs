@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
@@ -28,7 +28,7 @@ namespace net.openstack.Providers.Rackspace
     /// <inheritdoc />
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
-        private readonly int[] _validServerActionResponseCode = new[] { 200, 202, 203, 204 };
+        private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
@@ -100,7 +100,18 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"image", imageId},
+                    {"flavor", flavorId},
+                    {"name", name},
+                    {"status", status},
+                    {"marker", markerId},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                    {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
+                });
+
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -112,8 +123,19 @@ namespace net.openstack.Providers.Rackspace
         public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
-            
-            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET);
+
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"image", imageId},
+                    {"flavor", flavorId},
+                    {"name", name},
+                    {"status", status},
+                    {"marker", markerId},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                    {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
+                });
+
+            var response = ExecuteRESTRequest<ListServersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -163,7 +185,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return null;
 
-            if (response.StatusCode != 200 && response.StatusCode != 202)
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
                 return null; // throw new ExternalServiceException(response.StatusCode, response.Status, response.RawBody);
 
             return BuildCloudServersProviderAwareObject<NewServer>(response.Data.Server, region, identity);
@@ -193,7 +215,7 @@ namespace net.openstack.Providers.Rackspace
             if (response == null || response.Data == null || response.Data.Server == null)
                 return false;
 
-            if (response.StatusCode != 200 && response.StatusCode != 202)
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
                 return false; 
 
             return true;
@@ -204,7 +226,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), cloudServerId));
 
-            var defaultSettings = BuildDefaultRequestSettings(new [] {404});
+            var defaultSettings = BuildDefaultRequestSettings(new [] {HttpStatusCode.NotFound});
             var response = ExecuteRESTRequest<object>(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
@@ -214,13 +236,13 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+            return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
-        public Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var serverDetails = GetDetails(serverId, region, identity);
 
@@ -237,7 +259,7 @@ namespace net.openstack.Providers.Rackspace
                     }
                 }
 
-                Thread.Sleep(refreshDelayInMS);
+                Thread.Sleep(refreshDelay ?? TimeSpan.FromMilliseconds(2400));
                 serverDetails = GetDetails(serverId, region, identity);
                 count++;
             }
@@ -249,19 +271,19 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Server WaitForServerActive(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null,  string region = null, CloudIdentity identity = null)
+        public Server WaitForServerActive(string serverId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
-        public void WaitForServerDeleted(string serverId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public void WaitForServerDeleted(string serverId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
             {
                 WaitForServerState(serverId, ServerState.DELETED,
                                    new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED},
-                                   refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+                                   refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
             }
             catch (Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
@@ -489,6 +511,49 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
+        #region Virtual Interfaces
+
+        /// <inheritdoc />
+        public IEnumerable<VirtualInterface> ListVirtualInterfaces(string serverId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2", GetServiceEndpoint(identity, region), serverId));
+
+            var response = ExecuteRESTRequest<ListVirtualInterfacesResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.VirtualInterfaces;
+        }
+
+        /// <inheritdoc />
+        public VirtualInterface CreateVirtualInterface(string serverId, string networkId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2", GetServiceEndpoint(identity, region), serverId));
+
+            var request = new CreateVirtualInterfaceRequest(networkId);
+            var response = ExecuteRESTRequest<ListVirtualInterfacesResponse>(identity, urlPath, HttpMethod.POST, request);
+
+            if (response == null || response.Data == null || response.Data.VirtualInterfaces == null)
+                return null;
+
+            return response.Data.VirtualInterfaces.FirstOrDefault();
+        }
+
+        /// <inheritdoc />
+        public bool DeleteVirtualInterface(string serverId, string virtualInterfaceId, string region = null, CloudIdentity identity = null)
+        {
+            var urlPath = new Uri(string.Format("{0}/servers/{1}/os-virtual-interfacesv2/{2}", GetServiceEndpoint(identity, region), serverId, virtualInterfaceId));
+
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
+                return false;
+
+            return true;
+        }
+        #endregion
+
         #region Flavors
 
         /// <inheritdoc />
@@ -611,7 +676,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/images/{1}", GetServiceEndpoint(identity, region), imageId));
 
-            var defaultSettings = BuildDefaultRequestSettings(new[] { 404 });
+            var defaultSettings = BuildDefaultRequestSettings(new[] { HttpStatusCode.NotFound });
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, settings: defaultSettings);
 
             if (response == null || !_validServerActionResponseCode.Contains(response.StatusCode))
@@ -621,7 +686,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var details = GetImage(imageId, region, identity);
 
@@ -638,7 +703,7 @@ namespace net.openstack.Providers.Rackspace
                     }
                 }
 
-                Thread.Sleep(refreshDelayInMS);
+                Thread.Sleep(refreshDelay ?? TimeSpan.FromMilliseconds(2400));
                 details = GetImage(imageId, region, identity);
                 count++;
             }
@@ -650,25 +715,25 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+            return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
-        public ServerImage WaitForImageActive(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public ServerImage WaitForImageActive(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
-        public void WaitForImageDeleted(string imageId, int refreshCount = 600, int refreshDelayInMS = 2400, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public void WaitForImageDeleted(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             try
             {
                 WaitForImageState(imageId, ImageState.DELETED,
                                   new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED},
-                                  refreshCount, refreshDelayInMS, progressUpdatedCallback, region, identity);
+                                  refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
             }
             catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 
                                                                                    // by the next pass a 404 is returned.  This is due to the VERY limited window in which
@@ -699,7 +764,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -712,7 +777,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -725,7 +790,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
 
-            if (response == null || (response.StatusCode != 200 && response.StatusCode != 203) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
+            if (response == null || (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NonAuthoritativeInformation) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
                 return null;
 
             return response.Data.Metadata.First().Value;
@@ -738,7 +803,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -751,7 +816,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response.StatusCode == 204)
+            if (response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;
@@ -781,7 +846,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -794,7 +859,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -820,7 +885,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
 
-            if (response.StatusCode == 200)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
@@ -833,7 +898,7 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
-            if (response.StatusCode == 204)
+            if (response.StatusCode == HttpStatusCode.NoContent)
                 return true;
 
             return false;

@@ -15,7 +15,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudBlockStorageValidator = new CloudBlockStorageValidator();
+                var cloudBlockStorageValidator = CloudBlockStorageValidator.Default;
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
             }
             catch (Exception)
@@ -32,7 +32,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudBlockStorageValidator = new CloudBlockStorageValidator();
+                var cloudBlockStorageValidator = CloudBlockStorageValidator.Default;
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -49,7 +49,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudBlockStorageValidator = new CloudBlockStorageValidator();
+                var cloudBlockStorageValidator = CloudBlockStorageValidator.Default;
                 cloudBlockStorageValidator.ValidateVolumeSize(size);
                 Assert.Fail("Expected  was not thrown.");
             }

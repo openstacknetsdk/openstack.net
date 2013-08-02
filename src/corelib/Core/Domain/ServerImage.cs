@@ -61,61 +61,61 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Retrieves a list of the server's metadata from the provider's service.
+        /// Retrieves a list of the image's metadata from the provider's service.
         /// </summary>
         /// <value>
         /// <see cref="GetMetadata"/>
         /// </value>
         public Metadata GetMetadata()
         {
-            return Provider.ListServerMetadata(Id, Region);
+            return Provider.ListImageMetadata(Id, Region);
         }
 
         /// <summary>
-        /// Replaces the server's metadata with the metadata provided.
+        /// Replaces the image's metadata with the metadata provided.
         /// </summary>
-        /// <param name="metadata">List of metadata to associate with the server</param>
+        /// <param name="metadata">List of metadata to associate with the image</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool SetMetadata(Metadata metadata)
         {
-            return Provider.SetServerMetadata(Id, metadata, Region);
+            return Provider.SetImageMetadata(Id, metadata, Region);
         }
 
         /// <summary>
-        /// Adds a set of metadata to the server.
+        /// Adds a set of metadata to the image.
         /// </summary>
-        /// <param name="metadata">List of metadata to associate with the server</param>
+        /// <param name="metadata">List of metadata to associate with the image</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(Metadata metadata)
         {
-            return Provider.UpdateServerMetadata(Id, metadata, Region);
+            return Provider.UpdateImageMetadata(Id, metadata, Region);
         }
 
         /// <summary>
-        /// Adds a single metadata item to the server's metadata
+        /// Adds a single metadata item to the image's metadata
         /// </summary>
         /// <param name="key">The new metadata key.</param>
         /// <param name="value">The new metadata value.</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(string key, string value)
         {
-            return Provider.SetServerMetadataItem(Id, key, value, Region);
+            return Provider.SetImageMetadataItem(Id, key, value, Region);
         }
 
         /// <summary>
-        /// Updates the server's metadata with the metadata provided. <remarks>For each metadata item, if the key exists, the value is updated, else the item is added.</remarks>
+        /// Updates the image's metadata with the metadata provided. <remarks>For each metadata item, if the key exists, the value is updated, else the item is added.</remarks>
         /// </summary>
-        /// <param name="metadata">List of metadata to associate with the server</param>
+        /// <param name="metadata">List of metadata to associate with the image</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadata(Metadata metadata)
         {
-            return Provider.UpdateServerMetadata(Id, metadata, Region);
+            return Provider.UpdateImageMetadata(Id, metadata, Region);
         }
 
         /// <summary>
-        /// Removes the specified metadata items from the server
+        /// Removes the specified metadata items from the image
         /// </summary>
-        /// <param name="metadata">List of metadata to associate with the server</param>
+        /// <param name="metadata">List of metadata to associate with the image</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DeleteMetadata(Metadata metadata)
         {
@@ -128,24 +128,24 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Removes a metadata item from the server by the specified key
+        /// Removes a metadata item from the image by the specified key
         /// </summary>
         /// <param name="key">The key of the metadata item to be deleted.</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DeleteMetadataItem(string key)
         {
-            return Provider.DeleteServerMetadataItem(Id, key, Region);
+            return Provider.DeleteImageMetadataItem(Id, key, Region);
         }
 
         /// <summary>
-        /// Updates a single metadata item to the server's metadata. <remarks>If the metadata item does not already exist, it will be added.</remarks>
+        /// Updates a single metadata item to the image's metadata. <remarks>If the metadata item does not already exist, it will be added.</remarks>
         /// </summary>
         /// <param name="key">The key of the metadata item to update.</param>
         /// <param name="value">The value of the metadata item to update.</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadataItem(string key, string value)
         {
-            return Provider.SetServerMetadataItem(Id, key, value, Region);
+            return Provider.SetImageMetadataItem(Id, key, value, Region);
         }
     }
 }

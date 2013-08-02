@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Validators;
@@ -10,30 +7,46 @@ namespace net.openstack.Providers.Rackspace.Validators
 {
     internal class HttpResponseCodeValidator : IHttpResponseCodeValidator
     {
+        /// <summary>
+        /// A default instance of <see cref="HttpResponseCodeValidator"/>.
+        /// </summary>
+        private static readonly HttpResponseCodeValidator _default = new HttpResponseCodeValidator();
+
+        /// <summary>
+        /// Gets a default instance of <see cref="HttpResponseCodeValidator"/>.
+        /// </summary>
+        public static HttpResponseCodeValidator Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
         public bool Validate(Response response)
         {
-            if (response.StatusCode <= 299)
+            if (response.StatusCode <= (HttpStatusCode)299)
                 return true;
 
             switch (response.StatusCode)
             {
-                case 400:
+                case HttpStatusCode.BadRequest:
                     throw new BadServiceRequestException(response);
-                case 401:
-                case 403:
-                case 405:
+                case HttpStatusCode.Unauthorized:
+                case HttpStatusCode.Forbidden:
+                case HttpStatusCode.MethodNotAllowed:
                     throw new UserNotAuthorizedException(response);
-                case 404:
+                case HttpStatusCode.NotFound:
                     throw new ItemNotFoundException(response);
-                case 409:
+                case HttpStatusCode.Conflict:
                     throw new ServiceConflictException(response);
-                case 413:
+                case HttpStatusCode.RequestEntityTooLarge:
                     throw new ServiceLimitReachedException(response);
-                case 500:
+                case HttpStatusCode.InternalServerError:
                     throw new ServiceFaultException(response);
-                case 501:
+                case HttpStatusCode.NotImplemented:
                     throw new MethodNotImplementedException(response);
-                case 503:
+                case HttpStatusCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(response);
             }
 

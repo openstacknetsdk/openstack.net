@@ -19,7 +19,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -40,7 +40,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -60,7 +60,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -79,7 +79,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -98,7 +98,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -117,7 +117,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -136,7 +136,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -155,7 +155,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var cloudNetworksValidator = new CloudNetworksValidator();
+                var cloudNetworksValidator = CloudNetworksValidator.Default;
                 cloudNetworksValidator.ValidateCidr(cidr);
                 Assert.Fail("Expected CidrFormatException was not thrown");
             }
@@ -172,7 +172,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             var validatorMock = new Mock<INetworksValidator>();
             validatorMock.Setup(v => v.ValidateCidr(cidr));
 
-            var cloudNetworksValidator = new CloudNetworksValidator();
+            var cloudNetworksValidator = CloudNetworksValidator.Default;
             cloudNetworksValidator.ValidateCidr(cidr);
         }
 
@@ -183,7 +183,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             var validatorMock = new Mock<INetworksValidator>();
             validatorMock.Setup(v => v.ValidateCidr(cidr));
 
-            var cloudNetworksValidator = new CloudNetworksValidator();
+            var cloudNetworksValidator = CloudNetworksValidator.Default;
             cloudNetworksValidator.ValidateCidr(cidr);
         }
     }
