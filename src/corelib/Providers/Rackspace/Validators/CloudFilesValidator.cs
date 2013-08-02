@@ -24,8 +24,12 @@ namespace net.openstack.Providers.Rackspace.Validators
             }
         }
 
+        /// <inheritdoc/>
         public void ValidateContainerName(string containerName)
         {
+            if (containerName == null)
+                throw new ArgumentNullException("containerName");
+
             var containerNameString = string.Format("Container Name:[{0}]", containerName);
             if (string.IsNullOrWhiteSpace(containerName))
                 throw new ArgumentNullException("ContainerName", "ERROR: Container Name cannot be Null.");
@@ -35,8 +39,12 @@ namespace net.openstack.Providers.Rackspace.Validators
                 throw new ContainerNameException(string.Format("ERROR: Container Name contains a /. {0}", containerNameString));
         }
 
+        /// <inheritdoc/>
         public void ValidateObjectName(string objectName)
         {
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+
             if (string.IsNullOrEmpty(objectName))
                 throw new ArgumentNullException();
             if (HttpUtility.UrlEncode(objectName).Length > 1024)

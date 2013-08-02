@@ -16,6 +16,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
             _statusParser = statusParser;
         }
 
+        /// <inheritdoc/>
         public BulkDeletionResults Map(BulkDeleteResponse from)
         {
             return new BulkDeletionResults
@@ -54,6 +55,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
             };
         }
 
+        /// <inheritdoc/>
         public BulkDeleteResponse Map(BulkDeletionResults to)
         {
             throw new NotImplementedException();
