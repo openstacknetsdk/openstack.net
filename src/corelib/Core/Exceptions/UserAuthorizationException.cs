@@ -12,7 +12,7 @@ namespace net.openstack.Core.Exceptions
     /// <see cref="UserAccess.ServiceCatalog"/>.
     /// </summary>
     [Serializable]
-    public class UserAuthorizationException : Exception
+    public class UserAuthorizationException : InvalidOperationException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserAuthorizationException"/> class

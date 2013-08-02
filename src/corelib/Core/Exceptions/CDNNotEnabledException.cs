@@ -10,7 +10,7 @@ namespace net.openstack.Core.Exceptions
     /// </summary>
     /// <seealso cref="IObjectStorageProvider"/>
     [Serializable]
-    public class CDNNotEnabledException : Exception
+    public class CDNNotEnabledException : InvalidOperationException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CDNNotEnabledException"/> class.

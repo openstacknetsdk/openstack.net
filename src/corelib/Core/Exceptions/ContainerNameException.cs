@@ -10,7 +10,7 @@ namespace net.openstack.Core.Exceptions
     /// </summary>
     /// <seealso cref="IObjectStorageValidator.ValidateContainerName"/>
     [Serializable]
-    public class ContainerNameException : Exception
+    public class ContainerNameException : ArgumentException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ContainerNameException"/> class.

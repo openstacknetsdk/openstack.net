@@ -8,7 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// the range supported by the provider.
     /// </summary>
     [Serializable]
-    public class TTLLengthException : Exception
+    public class TTLLengthException : ArgumentException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TTLLengthException"/> class.

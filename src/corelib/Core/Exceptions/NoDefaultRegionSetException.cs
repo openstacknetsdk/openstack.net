@@ -8,7 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// no region was specified and no default region is available for the provider.
     /// </summary>
     [Serializable]
-    public class NoDefaultRegionSetException : Exception
+    public class NoDefaultRegionSetException : InvalidOperationException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NoDefaultRegionSetException"/> class

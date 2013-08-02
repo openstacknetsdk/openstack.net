@@ -9,7 +9,7 @@ namespace net.openstack.Core.Exceptions
     /// to a provider method is not supported by that provider.
     /// </summary>
     [Serializable]
-    internal class InvalidCloudIdentityException : Exception
+    internal class InvalidCloudIdentityException : NotSupportedException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidCloudIdentityException"/> class

@@ -9,7 +9,7 @@ namespace net.openstack.Core.Exceptions
     /// </summary>
     /// <seealso cref="INetworksValidator.ValidateCidr"/>
     [Serializable]
-    public class CidrFormatException : Exception
+    public class CidrFormatException : FormatException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CidrFormatException"/> class.
