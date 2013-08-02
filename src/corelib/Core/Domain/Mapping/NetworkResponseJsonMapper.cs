@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Core.Domain.Mapping
 {
-    public class NetworkResponseJsonMapper : IJsonObjectMapper<Network>
+    internal class NetworkResponseJsonMapper : IJsonObjectMapper<Network>
     {
         public Network Map(JObject @from)
         {

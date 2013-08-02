@@ -6,7 +6,23 @@ namespace net.openstack.Providers.Rackspace
 {
     internal class CloudFilesMetadataProcessor : IObjectStorageMetadataProcessor
     {
-        public Dictionary<string, Dictionary<string, string>> ProcessMetadata(IList<HttpHeader> httpHeaders)
+        /// <summary>
+        /// A default instance of <see cref="CloudFilesMetadataProcessor"/>.
+        /// </summary>
+        private static readonly CloudFilesMetadataProcessor _default = new CloudFilesMetadataProcessor();
+
+        /// <summary>
+        /// Gets a default instance of <see cref="CloudFilesMetadataProcessor"/>.
+        /// </summary>
+        public static CloudFilesMetadataProcessor Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
+        public virtual Dictionary<string, Dictionary<string, string>> ProcessMetadata(IList<HttpHeader> httpHeaders)
         {
             var pheaders = new Dictionary<string, string>();
             var metadata = new Dictionary<string, string>();

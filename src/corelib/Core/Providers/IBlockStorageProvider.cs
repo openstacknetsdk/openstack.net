@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Core.Providers
@@ -80,22 +81,22 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="volumeId">The ID of the volume to poll.</param>
         /// <param name="refreshCount">The number of times to poll for the volume to become "available".</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelayInMS">The refresh delay. If the value is <c>null</c>, the default value is 2.4 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Volume"></see></returns>
-        Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Waits for a volume to be deleted.  
         /// This method will be helpful to ensure that a volume is completely removed.
         /// </summary>
         /// <param name="volumeId">The ID of the volume to poll.</param>
         /// <param name="refreshCount">The number of times to poll for the volume to be deleted.</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelayInMS">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="bool"></see></returns>
-        bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null);
+        bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Waits for a volume to be set to be set to a particular status.  
         /// This method will be helpful to ensure that a volume is in an intended state prior to executing additional requests against it.
@@ -107,12 +108,12 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected state for the volume.</param>
         /// <param name="errorStates">The error state(s) in which to stop polling once reached.</param>
         /// <param name="refreshCount">The number of times to poll the volume.</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelayInMS">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Volume"></see></returns>
         /// <exception cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider.VolumeEnteredErrorStateException"></exception>
-        Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, int refreshDelayInMS = 2400, string region = null, CloudIdentity identity = null);
+        Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         #endregion
 
         #region Snapshot
@@ -169,22 +170,22 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="snapshotId">The ID of the snapshot to poll.</param>
         /// <param name="refreshCount">The number of times to poll for the snapshot to become "available".</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Snapshot"></see></returns>
-        Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null);
+        Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Waits for a snapshot to be deleted.  
         /// This method will be helpful to ensure that a snapshot is completely removed.
         /// </summary>
         /// <param name="snapshotId">The ID of the snapshot to poll.</param>
         /// <param name="refreshCount">The number of times to poll for the snapshot to be deleted.</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="bool"></see></returns>
-        bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null);
+        bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Waits for a snapshot to be set to be set to a particular status.  
         /// This method will be helpful to ensure that a snapshot is in an intended state prior to executing additional requests against it.
@@ -195,12 +196,12 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected state for the snapshot.</param>
         /// <param name="errorStates">The error state(s) in which to stop polling once reached.</param>
         /// <param name="refreshCount">The number of times to poll the snapshot.</param>
-        /// <param name="refreshDelayInMS">The refresh delay in milliseconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Snapshot"></see></returns>
         /// <exception cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider.SnapshotEnteredErrorStateException"></exception>
-        Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, int refreshDelayInMS = 10000, string region = null, CloudIdentity identity = null);
+        Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         #endregion
     }
 }

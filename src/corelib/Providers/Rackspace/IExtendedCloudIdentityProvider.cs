@@ -10,17 +10,21 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Lists all roles.
         /// </summary>
+        /// <param name="serviceId">The ID of service to filter by.</param>
+        /// <param name="markerId">The index of the last item in the previous list. <remarks>Used for pagination.</remarks></param>
+        /// <param name="limit">Indicates the number of items to return <remarks>Default value depends on the provider's implemenation.</remarks><remarks>Used for pagination.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>List of <see cref="Role"/></returns>
-        IEnumerable<Role> ListRoles(CloudIdentity identity = null);
+        IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Create a new role.
         /// </summary>
-        /// <param name="role">The new role.</param>
+        /// <param name="name">The name for the new role.</param>
+        /// <param name="description">The description for the new role.</param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>The <see cref="Role"/></returns>
-        Role AddRole(Role role, CloudIdentity identity = null);
+        Role AddRole(string name, string description, CloudIdentity identity = null);
 
         /// <summary>
         /// Retrieves the specified role

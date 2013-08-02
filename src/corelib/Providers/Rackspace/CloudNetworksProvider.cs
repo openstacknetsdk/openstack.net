@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
-using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -25,7 +24,7 @@ namespace net.openstack.Providers.Rackspace
     /// <inheritdoc />
     public class CloudNetworksProvider : ProviderBase<INetworksProvider>, INetworksProvider
     {
-        private readonly int[] _validResponseCode = new[] { 200, 201, 202 };
+        private readonly HttpStatusCode[] _validResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.Accepted };
 
         #region Constructors
 
@@ -136,7 +135,7 @@ namespace net.openstack.Providers.Rackspace
             } 
             catch(UserNotAuthorizedException ex)
             {
-                if(ex.Response.StatusCode == 403)
+                if(ex.Response.StatusCode == HttpStatusCode.Forbidden)
                     throw new UserAuthorizationException("ERROR: Cannot delete network. Ensure that all servers are removed from this network first.");
             }
 

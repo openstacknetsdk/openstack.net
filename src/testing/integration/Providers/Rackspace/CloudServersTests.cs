@@ -36,6 +36,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private static SimpleServerImage _initImage;
         private static Flavor _initFlavor;
         private const string NewPassword = "my_new_password";
+        private static CloudNetwork _testNetwork;
+        private static VirtualInterface _virtualInterface;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -64,6 +66,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             _initImage = provider.ListImages(imageName: "CentOS 6.3").First();
             _initFlavor = provider.ListFlavors().OrderBy(f => f.Id).First();
+
+            var netProvider = new CloudNetworksProvider(_testIdentity);
+            var networks = netProvider.ListNetworks();
+            _testNetwork = networks.FirstOrDefault(n => !n.Label.Equals("public") && !n.Label.Equals("private"));
         }
 
         [Timeout(1800000), TestMethod]
@@ -928,8 +934,84 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         #endregion
 
-        #region Cleanup
+        #region Virtual Interfaces
         
+        [TestMethod]
+        public void Should_Get_List_Of_Virtual_Interfaces()
+        {
+            var interfaces = _testServer.ListVirtualInterfaces();
+
+            Assert.IsNotNull(interfaces);
+            Assert.IsTrue(interfaces.Any());
+        }
+
+        [TestMethod]
+        public void Should_Creat_Virtual_Interface_For_Test_Network()
+        {
+            Assert.IsNotNull(_testNetwork, "Cannot run test because no test network was found");
+
+            var virtualInterface = _testServer.CreateVirtualInterface(_testNetwork.Id);
+
+            Assert.IsNotNull(virtualInterface);
+        }
+
+        [TestMethod]
+        public void Should_Get_List_Of_Virtual_Interfaces_Including_New_Virtual_Interface()
+        {
+            Assert.IsNotNull(_testNetwork, "Cannot run test because no test network was found");
+
+            int count = 0;
+            _virtualInterface = null;
+
+            while (_virtualInterface == null && count < 120)
+            {
+                var virtualInterfaces = _testServer.ListVirtualInterfaces();
+                _virtualInterface = virtualInterfaces.FirstOrDefault(vi => vi.Addresses.Any(a => a.NetworkLabel.Equals(_testNetwork.Label)));
+
+                if(_virtualInterface == null)
+                    Thread.Sleep(5000);
+
+                count = count + 1;
+            }
+
+            Assert.IsNotNull(_virtualInterface);
+        }
+
+        [TestMethod]
+        public void Should_Delete_New_Virtual_Interface_For_Test_Network()
+        {
+            Assert.IsNotNull(_virtualInterface, "Cannot run test because no test network was found");
+
+            var virtualInterface = _testServer.DeleteVirtualInterface(_virtualInterface.Id);
+
+            Assert.IsNotNull(virtualInterface);
+        }
+
+        [TestMethod]
+        public void Should_Get_List_Of_Virtual_Interfaces_Without_New_Virtual_Interface()
+        {
+            Assert.IsNotNull(_testNetwork, "Cannot run test because no test network was found");
+
+            int count = 0;
+
+            while (_virtualInterface != null && count < 120)
+            {
+                var virtualInterfaces = _testServer.ListVirtualInterfaces();
+                _virtualInterface = virtualInterfaces.FirstOrDefault(vi => vi.Addresses.Any(a => a.NetworkLabel.Equals(_testNetwork.Label)));
+
+                if (_virtualInterface != null)
+                    Thread.Sleep(5000);
+
+                count = count + 1;
+            }
+
+            Assert.IsNull(_virtualInterface);
+        }
+
+        #endregion
+
+        #region Cleanup
+
         [TestMethod]
         public void Should_Mark_The_Server_For_Deletion()
         {

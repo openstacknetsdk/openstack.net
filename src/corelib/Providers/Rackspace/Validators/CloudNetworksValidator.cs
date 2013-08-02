@@ -8,6 +8,22 @@ namespace net.openstack.Providers.Rackspace.Validators
 {
     public class CloudNetworksValidator : INetworksValidator
     {
+        /// <summary>
+        /// A default instance of <see cref="CloudNetworksValidator"/>.
+        /// </summary>
+        private static readonly CloudNetworksValidator _default;
+
+        /// <summary>
+        /// Gets a default instance of <see cref="CloudNetworksValidator"/>.
+        /// </summary>
+        public static CloudNetworksValidator Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
         public void ValidateCidr(string cidr)
         {
             if (string.IsNullOrWhiteSpace(cidr))

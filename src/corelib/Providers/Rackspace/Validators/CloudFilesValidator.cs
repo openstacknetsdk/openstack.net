@@ -8,6 +8,22 @@ namespace net.openstack.Providers.Rackspace.Validators
 {
     public class CloudFilesValidator : IObjectStorageValidator
     {
+        /// <summary>
+        /// A default instance of <see cref="CloudBlockStorageValidator"/>.
+        /// </summary>
+        private static readonly CloudFilesValidator _default = new CloudFilesValidator();
+
+        /// <summary>
+        /// Gets a default instance of <see cref="CloudBlockStorageValidator"/>.
+        /// </summary>
+        public static CloudFilesValidator Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
         public void ValidateContainerName(string containerName)
         {
             var containerNameString = string.Format("Container Name:[{0}]", containerName);

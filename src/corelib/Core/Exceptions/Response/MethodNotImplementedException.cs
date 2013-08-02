@@ -1,14 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
 
 namespace net.openstack.Core.Exceptions.Response
 {
-    class MethodNotImplementedException : ResponseException
+    [Serializable]
+    public class MethodNotImplementedException : ResponseException
     {
-        public MethodNotImplementedException(JSIStudios.SimpleRESTServices.Client.Response response) : base("The requested method is not implemented at the service.", response) { }
+        public MethodNotImplementedException(RestResponse response) : base("The requested method is not implemented at the service.", response) { }
 
-        public MethodNotImplementedException(string message, JSIStudios.SimpleRESTServices.Client.Response response) : base(message, response) { }
+        public MethodNotImplementedException(string message, RestResponse response) : base(message, response) { }
+
+        protected MethodNotImplementedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
     }
 }
