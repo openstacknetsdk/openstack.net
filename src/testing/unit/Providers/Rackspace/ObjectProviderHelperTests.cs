@@ -20,7 +20,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             validatorMock.Setup(v => v.ValidateContainerName(containerName));
 
-            var objectStoreValidator = new CloudFilesValidator();
+            var objectStoreValidator = CloudFilesValidator.Default;
             objectStoreValidator.ValidateContainerName(containerName);
 
         }
@@ -36,7 +36,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var objectStoreValidator = new CloudFilesValidator();
+                var objectStoreValidator = CloudFilesValidator.Default;
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -57,7 +57,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var objectStoreValidator = new CloudFilesValidator();
+                var objectStoreValidator = CloudFilesValidator.Default;
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -83,7 +83,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var objectStoreValidator = new CloudFilesValidator();
+                var objectStoreValidator = CloudFilesValidator.Default;
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }
@@ -105,7 +105,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             try
             {
-                var objectStoreValidator = new CloudFilesValidator();
+                var objectStoreValidator = CloudFilesValidator.Default;
                 objectStoreValidator.ValidateContainerName(containerName);
                 Assert.Fail("Expected exception was not thrown.");
             }

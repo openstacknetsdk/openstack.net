@@ -39,7 +39,7 @@ namespace net.openstack.Providers.Rackspace
                 restService = new JsonRestServices();
 
             if (httpStatusCodeValidator == null)
-                httpStatusCodeValidator = new HttpResponseCodeValidator();
+                httpStatusCodeValidator = HttpResponseCodeValidator.Default;
 
             DefaultIdentity = defaultIdentity;
             IdentityProvider = identityProvider;

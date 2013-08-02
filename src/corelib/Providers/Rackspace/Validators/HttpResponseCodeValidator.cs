@@ -7,6 +7,22 @@ namespace net.openstack.Providers.Rackspace.Validators
 {
     internal class HttpResponseCodeValidator : IHttpResponseCodeValidator
     {
+        /// <summary>
+        /// A default instance of <see cref="HttpResponseCodeValidator"/>.
+        /// </summary>
+        private static readonly HttpResponseCodeValidator _default = new HttpResponseCodeValidator();
+
+        /// <summary>
+        /// Gets a default instance of <see cref="HttpResponseCodeValidator"/>.
+        /// </summary>
+        public static HttpResponseCodeValidator Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
         public bool Validate(Response response)
         {
             if (response.StatusCode <= (HttpStatusCode)299)
