@@ -278,7 +278,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="networkId">The network ID</param>
         /// <returns>The newly created <see cref="VirtualInterface"/></returns>
-        public VirtualInterface CreateVirtualInterfaces(string networkId)
+        public VirtualInterface CreateVirtualInterface(string networkId)
         {
             return Provider.CreateVirtualInterface(Id, networkId, Region);
         }

@@ -30,7 +30,6 @@ namespace net.openstack.Providers.Rackspace
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
         private readonly IJsonObjectMapper<Network> _networkResponseMapper;
-        private readonly IJsonObjectMapper<VirtualInterface> _virtualInterfaceReponseMapper;
 
         #region Constructors
 
