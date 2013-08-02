@@ -78,7 +78,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry);
 
             string bodyStr = null;
             if (body != null)
@@ -122,7 +122,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add("X-Auth-Token", IdentityProvider.GetToken(identity, isRetry));
+            headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry);
 
             if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();

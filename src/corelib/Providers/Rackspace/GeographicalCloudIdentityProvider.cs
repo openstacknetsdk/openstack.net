@@ -431,7 +431,7 @@ namespace net.openstack.Providers.Rackspace
             var headers = new Dictionary<string, string>();
 
             if (!isTokenRequest)
-                headers.Add("X-Auth-Token", string.IsNullOrWhiteSpace(token) ? GetToken(identity) : token);
+                headers["X-Auth-Token"] = string.IsNullOrWhiteSpace(token) ? GetToken(identity) : token;
 
             string bodyStr = null;
             if (body != null)
