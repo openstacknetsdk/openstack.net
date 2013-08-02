@@ -35,19 +35,26 @@ namespace net.openstack.Providers.Rackspace
 
         #region Roles
 
-        public IEnumerable<Role> ListRoles(CloudIdentity identity)
+        public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
         {
-            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles",
-                                                                             HttpMethod.GET);
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"serviceId", serviceId},
+                    {"marker", markerId},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                });
+
+            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET, queryStringParameter: parameters);
+
             if (response == null || response.Data == null)
                 return null;
 
             return response.Data.Roles;
         }
 
-        public Role AddRole(Role role, CloudIdentity identity)
+        public Role AddRole(string name, string description, CloudIdentity identity)
         {
-            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = role});
+            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role{Name = name, Description = description}});
 
             if (response == null || response.Data == null)
                 return null;
@@ -459,5 +466,18 @@ namespace net.openstack.Providers.Rackspace
 
             return response;
         }
+
+        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+        {
+            if (optionalParameters == null)
+                return null;
+
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrWhiteSpace(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+
+            if (!paramList.Any())
+                return null;
+
+            return paramList;
+        } 
     }
 }

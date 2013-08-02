@@ -255,5 +255,18 @@ namespace net.openstack.Providers.Rackspace
 
             return rsCloudIdentity.CloudInstance == CloudInstance.UK;
         }
+
+        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+        {
+            if (optionalParameters == null)
+                return null;
+
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrWhiteSpace(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+
+            if (!paramList.Any())
+                return null;
+
+            return paramList;
+        } 
     }
 }
