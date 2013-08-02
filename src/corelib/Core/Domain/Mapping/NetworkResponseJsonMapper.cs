@@ -5,6 +5,7 @@ namespace net.openstack.Core.Domain.Mapping
 {
     internal class NetworkResponseJsonMapper : IJsonObjectMapper<Network>
     {
+        /// <inheritdoc/>
         public Network Map(JObject @from)
         {
             if (from == null)
@@ -18,11 +19,13 @@ namespace net.openstack.Core.Domain.Mapping
                 };
         }
 
+        /// <inheritdoc/>
         public JObject Map(Network to)
         {
             throw new System.NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public Network Map(string rawJson)
         {
             if (string.IsNullOrWhiteSpace(rawJson))

@@ -6,11 +6,28 @@ using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
 
 namespace net.openstack.Core.Exceptions.Response
 {
+    /// <summary>
+    /// Represents errors resulting from a call to a REST API.
+    /// </summary>
     [Serializable]
-    public class ResponseException : Exception
+    public abstract class ResponseException : Exception
     {
-        public RestResponse Response { get; private set; }
+        /// <summary>
+        /// Gets the REST <see cref="RestResponse"/> containing the details
+        /// about this error.
+        /// </summary>
+        public RestResponse Response
+        {
+            get;
+            private set;
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResponseException"/> class with the
+        /// specified error message and REST response.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        /// <param name="response">The REST response.</param>
         public ResponseException(string message, RestResponse response)
             : base(message)
         {
@@ -97,25 +114,38 @@ namespace net.openstack.Core.Exceptions.Response
             }
         }
 
-        [DataContract]
+        [JsonObject(MemberSerialization.OptIn)]
         private sealed class ErrorDetails
         {
-            [DataMember(Name = "code")]
+#pragma warning disable 649 // Field '{fieldname}' is never assigned to, and will always have its default value {0 | null}
+            [JsonProperty("code")]
             public int Code;
 
-            [DataMember(Name = "message")]
+            [JsonProperty("message")]
             public string Message;
 
-            [DataMember(Name = "details")]
+            [JsonProperty("details")]
             public string Details;
+#pragma warning restore 649
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResponseException"/> class with
+        /// serialized data.
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
         protected ResponseException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
             Response = (RestResponse)info.GetValue("Response", typeof(RestResponse));
         }
 
+        /// <inheritdoc/>
         [SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
