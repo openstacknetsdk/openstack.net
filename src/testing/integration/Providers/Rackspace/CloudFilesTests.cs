@@ -566,7 +566,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider(_testIdentity);
-            provider.CreateObject(containerName, stream, fileName, 65536, headers);
+            provider.CreateObject(containerName, stream, fileName, null, 65536, headers);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
@@ -600,7 +600,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             string fileName = Path.GetFileName(filePath);
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider(_testIdentity);
-            provider.CreateObjectFromFile(containerName, filePath, fileName, 65536, headers, identity: _testIdentity);
+            provider.CreateObjectFromFile(containerName, filePath, fileName, null, 65536, headers, identity: _testIdentity);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
             Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
@@ -688,7 +688,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var header = new Dictionary<string, string> { { CloudFilesProvider.ObjectDeleteAt, epoch.ToString() } };
 
             var provider = new CloudFilesProvider(_testIdentity);
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, header);
+            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, null, header);
 
             Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
 
