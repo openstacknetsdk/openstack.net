@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
@@ -72,24 +73,38 @@ namespace net.openstack.Providers.Rackspace
             return provider.GetRole(roleId, identity);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.GetRolesByUser(userId, identity: identity);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<User> ListUsers(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListUsers(identity);
         }
 
+        /// <inheritdoc/>
         public User GetUserByName(string name, CloudIdentity identity)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("name cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.GetUserByName(name, identity: identity);
         }
 
+        /// <inheritdoc/>
         public UserAccess Authenticate(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
@@ -102,26 +117,50 @@ namespace net.openstack.Providers.Rackspace
             return provider.AddRoleToUser(userId, roleId, identity: identity);
         }
 
+        /// <inheritdoc/>
         public User GetUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.GetUser(userId, identity: identity);
         }
 
-        public NewUser AddUser(NewUser newUser, CloudIdentity identity)
+        /// <inheritdoc/>
+        public NewUser AddUser(NewUser user, CloudIdentity identity)
         {
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (string.IsNullOrEmpty(user.Username))
+                throw new ArgumentException("user.Username cannot be null or empty");
+
             var provider = GetProvider(identity);
-            return provider.AddUser(newUser, identity: identity);
+            return provider.AddUser(user, identity: identity);
         }
 
+        /// <inheritdoc/>
         public User UpdateUser(User user, CloudIdentity identity)
         {
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (string.IsNullOrEmpty(user.Id))
+                throw new ArgumentException("user.Id cannot be null or empty");
+
             var provider = GetProvider(identity);
             return provider.UpdateUser(user, identity: identity);
         }
 
+        /// <inheritdoc/>
         public bool DeleteUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.DeleteUser(userId, identity: identity);
         }
@@ -156,8 +195,14 @@ namespace net.openstack.Providers.Rackspace
             return provider.UpdateUserCredentials(userId, username, apiKey, identity: identity);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.ListUserCredentials(userId, identity: identity);
         }
@@ -174,27 +219,41 @@ namespace net.openstack.Providers.Rackspace
             return provider.DeleteUserCredentials(userId, identity: identity);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
             var provider = GetProvider(identity);
             return provider.ListTenants(identity);
         }
 
+        /// <inheritdoc/>
         public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
             return provider.GetUserAccess(identity, forceCacheRefresh);
         }
 
+        /// <inheritdoc/>
         public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (credentialKey == null)
+                throw new ArgumentNullException("credentialKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(credentialKey))
+                throw new ArgumentException("credentialKey cannot be empty");
+
             var provider = GetProvider(identity);
             return provider.GetUserCredential(userId, credentialKey, identity: identity);
         }
 
+        /// <inheritdoc/>
         public CloudIdentity DefaultIdentity { get { return _defaultIdentity; } }
 
-        public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
+        /// <inheritdoc/>
+        public IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             var provider = GetProvider(identity);
             return provider.GetToken(identity, forceCacheRefresh);
@@ -206,15 +265,13 @@ namespace net.openstack.Providers.Rackspace
             return provider.DeleteRoleFromUser(userId, roleId, identity: identity);
         }
 
-        public IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false)
-        {
-            var provider = GetProvider(identity);
-            return provider.GetTokenInfo(identity);
-        }
-
         private IExtendedCloudIdentityProvider GetProvider(CloudIdentity identity)
         {
-            return _factory.Get(identity);
+            IExtendedCloudIdentityProvider result = _factory.Get(identity);
+            if (result == null && identity == null)
+                throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
+
+            return result;
         }
     }
 }

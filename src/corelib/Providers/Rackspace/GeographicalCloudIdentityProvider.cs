@@ -73,8 +73,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Role;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
             var response = ExecuteRESTRequest<RolesResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -139,8 +146,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.PasswordCredential.Password.Equals(password);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
 
@@ -169,8 +183,19 @@ namespace net.openstack.Providers.Rackspace
             return creds.ToArray();
         }
 
+        /// <inheritdoc/>
         public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (credentialKey == null)
+                throw new ArgumentNullException("credentialKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(credentialKey))
+                throw new ArgumentException("credentialKey cannot be empty");
+            CheckIdentity(identity);
+
             var creds = ListUserCredentials(userId, identity);
 
             var cred = creds.FirstOrDefault(c => c.Name.Equals(credentialKey, StringComparison.OrdinalIgnoreCase));
@@ -178,6 +203,7 @@ namespace net.openstack.Providers.Rackspace
             return cred;
         }
 
+        /// <inheritdoc/>
         public CloudIdentity DefaultIdentity { get { return _defaultIdentity;  } }
 
         public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
@@ -219,8 +245,10 @@ namespace net.openstack.Providers.Rackspace
 
         #region Users
 
+        /// <inheritdoc/>
         public IEnumerable<User> ListUsers(CloudIdentity identity)
         {
+            CheckIdentity(identity);
 
             var response = ExecuteRESTRequest<UsersResponse>(identity, "/v2.0/users", HttpMethod.GET);
 
@@ -242,8 +270,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Users;
         }
 
+        /// <inheritdoc/>
         public User GetUserByName(string name, CloudIdentity identity)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("name cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/users/?name={0}", name);
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -253,8 +288,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
+        /// <inheritdoc/>
         public User GetUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("v2.0/users/{0}", userId);
 
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
@@ -262,8 +304,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
+        /// <inheritdoc/>
         public NewUser AddUser(NewUser newUser, CloudIdentity identity)
         {
+            if (newUser == null)
+                throw new ArgumentNullException("newUser");
+            if (string.IsNullOrEmpty(newUser.Username))
+                throw new ArgumentException("newUser.Username cannot be null or empty");
+            CheckIdentity(identity);
+
             newUser.Id = null;
 
             var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = newUser });
@@ -278,10 +327,14 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.NewUser;
         }
 
+        /// <inheritdoc/>
         public User UpdateUser(User user, CloudIdentity identity)
         {
-            if(user == null || string.IsNullOrWhiteSpace(user.Id))
-                throw new ArgumentException("The User or User.Id values cannot be null.");
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (string.IsNullOrEmpty(user.Id))
+                throw new ArgumentException("user.Id cannot be null or empty");
+            CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
@@ -295,8 +348,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
+        /// <inheritdoc/>
         public bool DeleteUser(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/users/{0}", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -310,8 +370,11 @@ namespace net.openstack.Providers.Rackspace
 
         #region Tenants
 
+        /// <inheritdoc/>
         public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
+            CheckIdentity(identity);
+
             var response = ExecuteRESTRequest<TenantsResponse>(identity, "v2.0/tenants", HttpMethod.GET);
 
             if (response == null || response.Data == null)
@@ -324,45 +387,34 @@ namespace net.openstack.Providers.Rackspace
 
         #region Token and Authentication
 
-        public string GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
+        /// <inheritdoc/>
+        public IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
+            CheckIdentity(identity);
+
             var auth = GetUserAccess(identity, forceCacheRefresh);
 
             if (auth == null || auth.Token == null)
-                return null;
-
-            return auth.Token.Id;
-        }
-
-        public string GetToken(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
-        {
-            var auth = GetUserAccess(identity, forceCacheRefresh);
-
-            if (auth == null || auth.Token == null)
-                return null;
-
-            return auth.Token.Id;
-        }
-
-        public IdentityToken GetTokenInfo(CloudIdentity identity, bool forceCacheRefresh = false)
-        {
-            var auth = GetUserAccess(identity, forceCacheRefresh);
-
-            if (auth == null)
                 return null;
 
             return auth.Token;
         }
 
+        /// <inheritdoc/>
         public UserAccess Authenticate(CloudIdentity identity)
         {
+            CheckIdentity(identity);
+
             return GetUserAccess(identity, true);
         }
 
+        /// <inheritdoc/>
         public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
+            CheckIdentity(identity);
+
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
@@ -428,14 +480,14 @@ namespace net.openstack.Providers.Rackspace
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
         {
             if (identity == null)
-                identity = _defaultIdentity;
+                identity = DefaultIdentity;
 
             var url = new Uri(_urlBase, urlPath);
 
             var headers = new Dictionary<string, string>();
 
             if (!isTokenRequest)
-                headers["X-Auth-Token"] = string.IsNullOrWhiteSpace(token) ? GetToken(identity) : token;
+                headers["X-Auth-Token"] = string.IsNullOrWhiteSpace(token) ? GetToken(identity).Id : token;
 
             string bodyStr = null;
             if (body != null)
@@ -459,7 +511,7 @@ namespace net.openstack.Providers.Rackspace
             // on errors try again 1 time.
             if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && !isTokenRequest)
             {
-                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity), retryCount, retryDelay, callback);
+                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity).Id, retryCount, retryDelay, callback);
             }
 
             _responseCodeValidator.Validate(response);
@@ -478,6 +530,12 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return paramList;
-        } 
+        }
+
+        protected virtual void CheckIdentity(CloudIdentity identity)
+        {
+            if (identity == null && DefaultIdentity == null)
+                throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
+        }
     }
 }
