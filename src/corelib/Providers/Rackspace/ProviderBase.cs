@@ -266,6 +266,12 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return paramList;
-        } 
+        }
+
+        protected virtual void CheckIdentity(CloudIdentity identity)
+        {
+            if (identity == null && DefaultIdentity == null)
+                throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
+        }
     }
 }
