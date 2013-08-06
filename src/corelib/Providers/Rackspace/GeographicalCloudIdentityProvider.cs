@@ -52,8 +52,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Roles;
         }
 
+        /// <inheritdoc/>
         public Role AddRole(string name, string description, CloudIdentity identity)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("name cannot be empty");
+            CheckIdentity(identity);
+
             var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role{Name = name, Description = description}});
 
             if (response == null || response.Data == null)
@@ -62,8 +69,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Role;
         }
 
+        /// <inheritdoc/>
         public Role GetRole(string roleId, CloudIdentity identity)
         {
+            if (roleId == null)
+                throw new ArgumentNullException("roleId");
+            if (string.IsNullOrEmpty(roleId))
+                throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}", roleId);
             var response = ExecuteRESTRequest<RoleResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -91,8 +105,19 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Roles;
         }
 
+        /// <inheritdoc/>
         public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (roleId == null)
+                throw new ArgumentNullException("roleId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(roleId))
+                throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
@@ -103,8 +128,19 @@ namespace net.openstack.Providers.Rackspace
             return true;
         }
 
+        /// <inheritdoc/>
         public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (roleId == null)
+                throw new ArgumentNullException("roleId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(roleId))
+                throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
@@ -118,20 +154,59 @@ namespace net.openstack.Providers.Rackspace
 
         #region Credentials
 
+        /// <inheritdoc/>
         public bool SetUserPassword(string userId, string password, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (password == null)
+                throw new ArgumentNullException("password");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("password cannot be empty");
+            CheckIdentity(identity);
+
             var user = GetUser(userId, identity);
 
             return SetUserPassword(user, password, identity);
         }
 
+        /// <inheritdoc/>
         public bool SetUserPassword(User user, string password, CloudIdentity identity)
         {
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (password == null)
+                throw new ArgumentNullException("password");
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("password cannot be empty");
+            if (string.IsNullOrEmpty(user.Id))
+                throw new ArgumentException("user.Id cannot be null or empty");
+            if (string.IsNullOrEmpty(user.Username))
+                throw new ArgumentException("user.Username cannot be null or empty");
+            CheckIdentity(identity);
+
             return SetUserPassword(user.Id, user.Username, password, identity);
         }
 
+        /// <inheritdoc/>
         public bool SetUserPassword(string userId, string username, string password, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (username == null)
+                throw new ArgumentNullException("username");
+            if (password == null)
+                throw new ArgumentNullException("password");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("username cannot be empty");
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("password cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var request = new SetPasswordRequest
             {
@@ -206,20 +281,59 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc/>
         public CloudIdentity DefaultIdentity { get { return _defaultIdentity;  } }
 
+        /// <inheritdoc/>
         public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (apiKey == null)
+                throw new ArgumentNullException("apiKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("apiKey cannot be empty");
+            CheckIdentity(identity);
+
             var user = GetUser(userId, identity);
 
             return UpdateUserCredentials(user, apiKey, identity);
         }
 
+        /// <inheritdoc/>
         public UserCredential UpdateUserCredentials(User user, string apiKey, CloudIdentity identity)
         {
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (apiKey == null)
+                throw new ArgumentNullException("apiKey");
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("apiKey cannot be empty");
+            if (string.IsNullOrEmpty(user.Id))
+                throw new ArgumentException("user.Id cannot be null or empty");
+            if (string.IsNullOrEmpty(user.Username))
+                throw new ArgumentException("user.Username cannot be null or empty");
+            CheckIdentity(identity);
+
             return UpdateUserCredentials(user.Id, user.Username, apiKey, identity);
         }
 
+        /// <inheritdoc/>
         public UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (username == null)
+                throw new ArgumentNullException("username");
+            if (apiKey == null)
+                throw new ArgumentNullException("apiKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("username cannot be empty");
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("apiKey cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
@@ -230,8 +344,15 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.UserCredential;
         }
 
+        /// <inheritdoc/>
         public bool DeleteUserCredentials(string userId, CloudIdentity identity)
         {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
 
