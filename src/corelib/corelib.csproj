@@ -72,6 +72,7 @@
     <Compile Include="Core\Domain\ContainerObject.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\Exceptions\ContainerNotEmptyException.cs" />
     <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
     <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />

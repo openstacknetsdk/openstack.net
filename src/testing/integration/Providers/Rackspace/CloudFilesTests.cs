@@ -186,20 +186,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(containerName, deleteObjects: true, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+            provider.DeleteContainer(containerName, deleteObjects: true, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Delete_Destination_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(destinationContainerName, deleteObjects: true, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+            provider.DeleteContainer(destinationContainerName, deleteObjects: true, identity: _testIdentity);
         }
-
 
         [TestMethod]
         public void Should_Get_Objects_From_Container()
@@ -259,7 +254,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = new Dictionary<string, string> {{"key2", "value2"}, {"key3", "value3"}};
             
-            provider.DeleteContainerMetadata(containerName, metaData);
+            provider.DeleteContainerMetadata(containerName, metaData.Keys);
         }
 
         [TestMethod]

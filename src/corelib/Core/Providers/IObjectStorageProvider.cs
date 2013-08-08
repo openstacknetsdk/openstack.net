@@ -3,251 +3,808 @@ using System.Collections.Generic;
 using System.IO;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Exceptions.Response;
+using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Core.Providers
 {
     /// <summary>
-    /// Provides simple access to the Rackspace Cloud Files Services.
+    /// Represents a provider for the OpenStack Object Storage service.
     /// </summary>
+    /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">Object Storage API v1 Reference</seealso>
     public interface IObjectStorageProvider
     {
         #region Container
+
         /// <summary>
-        /// Lists the containers.
+        /// Gets a list of containers stored in the account.
         /// </summary>
-        /// <param name="limit">The limit.</param>
-        /// <param name="marker">The marker.</param>
-        /// <param name="markerEnd">The marker end.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.Container"/></returns>
+        /// <param name="limit">The maximum number of containers to return. If the value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="marker">When specified, only containers with names greater than <paramref name="marker"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="Container"/> objects containing the details of the specified containers.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_listcontainers.html">List Containers (OpenStack Object Storage API v1 Reference)</seealso>
         IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Creates the container.
+        /// Creates a container if it does not already exist.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>
+        /// This method returns one of the following <see cref="ObjectStore"/> values.
+        ///
+        /// <list type="bullet">
+        /// <item><see cref="ObjectStore.ContainerCreated"/> - if the container was created.</item>
+        /// <item><see cref="ObjectStore.ContainerExists"/> - if the container was not created because it already exists.</item>
+        /// </list>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
         ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes the container.
+        /// Deletes a container, and optionally all objects stored in the container.
         /// </summary>
+        /// <remarks>
+        /// Containers cannot be deleted unless they are empty. The <paramref name="deleteObjects"/> parameter provides
+        /// a mechanism to combine the deletion of container objects with the deletion of the container itself.
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="deleteObjects">Indicates whether all objects in the container should be deleted prior to trying to delete the container.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        /// <param name="deleteObjects">When <c>true</c>, all objects in the specified container are deleted before deleting the container.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ContainerNotEmptyException">If the container could not be deleted because it was not empty and <paramref name="deleteObjects"/> was <c>false</c>.</exception>
+        /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container.html">Delete Container (OpenStack Object Storage API v1 Reference)</seealso>
+        void DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the container header.
+        /// Gets the non-metadata headers associated with the container.
         /// </summary>
+        /// <remarks>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt;</returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of non-metadata HTTP headers returned with the container.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the container meta data.
+        /// Gets the container metadata.
         /// </summary>
+        /// <remarks>
+        /// The metadata associated with containers in the Object Storage Service are
+        /// case-insensitive.
+        ///
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt;</returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of metadata associated with the container.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the container CDN header.
         /// </summary>
+        /// <remarks>
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ContainerCDN"/></returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A <see cref="ContainerCDN"/> object describing the CDN properties of the container.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Details-d1e2566.html">View CDN Container Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         ContainerCDN GetContainerCDNHeader(string container, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Lists the CDN containers.
+        /// Gets a list of CDN properties for a group of containers.
         /// </summary>
-        /// <param name="limit">The limit.</param>
-        /// <param name="marker">The marker.</param>
-        /// <param name="markerEnd">The marker end.</param>
-        /// <param name="cdnEnabled">If set to <c>true</c> lists CDN enabled containers.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerCDN"/></returns>
+        /// <remarks>
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// </remarks>
+        /// <param name="limit">The maximum number of containers to return. If the value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="markerId">When specified, only containers with names greater than <paramref name="markerId"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
+        /// <param name="cdnEnabled">If set to <c>true</c>, the result is filtered to only include CDN-enabled containers.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="ContainerCDN"/> objects describing the CDN properties of the specified containers.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Containers-d1e2414.html">List CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string markerId = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null);
 
+        /// <overloads>
         /// <summary>
-        /// Enables CDN on the container.
+        /// When you CDN-enable a container, all the objects within it become available through the
+        /// Content Delivery Network (CDN). Similarly, once a container is CDN-enabled, any objects
+        /// added to it in the storage service become CDN-enabled.
         /// </summary>
+        /// <remarks>
+        /// <alert note="note">
+        /// This feature is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// </remarks>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// </overloads>
+        ///
+        /// <summary>
+        /// Enables CDN on the container using the specified TTL and without log retention.
+        /// </summary>
+        /// <remarks>
+        /// If the specified container is already CDN-enabled, this method updates the TTL
+        /// for the container based on the <paramref name="timeToLive"/> argument.
+        ///
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        ///
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="ttl">The TTL in seconds.<c>[Range 900 to 1577836800]</c></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="TTLLengthException">TTL range must be 900 to 1577836800 seconds TTL:  + ttl.ToString(CultureInfo.InvariantCulture)</exception>
-        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
-        Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, string region = null, CloudIdentity identity = null);
+        /// <param name="timeToLive">The time (in seconds) to cache objects in the CDN. Each time the object is accessed after the TTL expires, the CDN re-fetches and caches the object for the TTL period.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is less than 0.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="TTLLengthException">If the provider does not support the specified <paramref name="timeToLive"/>.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables CDN on the container.
+        /// Enables CDN on the container using the specified log retention and a provider-specific
+        /// default TTL.
         /// </summary>
+        /// <remarks>
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="logRetention">If set to <c>true</c> enables log retention on container.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="logRetention"><c>true</c> to enable log retention on the container; otherwise, <c>false</c>.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
+        /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables CDN on the container.
+        /// Enables CDN on the container using the specified TTL and log retention values.
         /// </summary>
+        /// <remarks>
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container.</param>
-        /// <param name="ttl">The TTL in seconds.<c>[Range 900 to 1577836800]</c></param>
-        /// <param name="logRetention">If set to <c>true</c> enables log retention on container.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="TTLLengthException">TTL range must be 900 to 1577836800 seconds TTL:  + ttl.ToString(CultureInfo.InvariantCulture)</exception>
-        Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null);
+        /// <param name="timeToLive">The time (in seconds) to cache objects in the CDN. Each time the object is accessed after the TTL expires, the CDN re-fetches and caches the object for the TTL period.</param>
+        /// <param name="logRetention"><c>true</c> to enable log retention on the container; otherwise, <c>false</c>.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is less than 0.</exception>
+        /// <exception cref="TTLLengthException">If the provider does not support the specified <paramref name="timeToLive"/>.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, bool logRetention, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Disables CDN on the container.
         /// </summary>
+        /// <remarks>
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null);
 
-
         /// <summary>
-        /// Updates the container metadata.
+        /// Sets the container metadata, replacing any existing metadata values.
         /// </summary>
+        /// <remarks>
+        /// <alert class="warning">
+        /// This method replaces all existing metadata for the container with the values
+        /// found in <paramref name="metadata"/>. To add or change existing metadata values
+        /// without affecting all metadata for the container, first call <see cref="GetContainerMetaData"/>,
+        /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
+        /// then call <see cref="UpdateContainerMetadata"/> with the modified metadata dictionary.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="metadata">The metadata. <remarks>Dictionary&lt;string,string&gt;</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <param name="metadata">The complete metadata to associate with the container.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">Create or Update Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes multiple metadata items from the container
+        /// Deletes multiple metadata items from the container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="metadata">The metadata to delete. <remarks>Dictionary&lt;string,string&gt;</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        void DeleteContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        /// <param name="keys">The metadata items to delete.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="keys"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="keys"/> contains any <c>null</c> or empty values.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        void DeleteContainerMetadata(string container, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes single metadata item from the container
+        /// Deletes the specified metadata item from the container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="key">The single metadata item to delete. <c>string</c></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <param name="key">The metadata item to delete.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteContainerMetadata(string container, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Adds the container headers.
+        /// Adds the non-metadata headers to the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="headers">The headers.<remarks>Dictionary&lt;string,string&gt;</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <param name="headers">The headers.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
         void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the container CDN headers.
+        /// Sets the CDN headers for the specified container, replacing any existing headers.
         /// </summary>
+        /// <remarks>
+        /// <alert class="warning">
+        /// This method replaces <em>all</em> existing CDN headers for the container with the
+        /// values found in <paramref name="headers"/>.
+        /// </alert>
+        ///
+        /// <alert note="note">
+        /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="headers">The headers.<remarks>Dictionary&lt;string,string&gt;</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="headers">The complete set of CDN headers for the container.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables the static web on container.
+        /// Enables anonymous web access to the static content of the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
-        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
-        /// <param name="css">Value for <c>x-container-meta-web-listings-css</c>.</param>
-        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
+        /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
+        /// <param name="css">The style sheet to use for file listings, such as <fictionalUri>lists.css</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebListingsCSS"/> header.</param>
+        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="css"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="css"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">
+        /// If <paramref name="index"/> is not a valid object name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is not a valid object name.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="css"/> is not a valid object name.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables the static web on container.
+        /// Enables anonymous web access to the static content of the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
-        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
-        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
+        /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
+        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">
+        /// If <paramref name="index"/> is not a valid object name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is not a valid object name.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables the static web on container.
+        /// Enables anonymous web access to the static content of the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="css">Value for <c>x-container-meta-web-listings-css</c>.</param>
-        /// <param name="listing">Value for <c>x-container-meta-web-listings</c></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="css">The style sheet to use for file listings, such as <fictionalUri>lists.css</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebListingsCSS"/> header.</param>
+        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="css"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="css"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="css"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Enables the static web on container.
+        /// Enables anonymous web access to the static content of the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="index">Value for <c>x-container-meta-web-index</c>.</param>
-        /// <param name="error">Value for <c>x-container-meta-web-error</c>.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
+        /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="index"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">
+        /// If <paramref name="index"/> is not a valid object name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="error"/> is not a valid object name.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Disables the static web on container.
+        /// Disables anonymous web access to the static content of the specified container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="CDNNotEnabledException"></exception>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
         void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+
         #endregion
 
         #region Container Objects
@@ -470,41 +1027,121 @@ namespace net.openstack.Core.Providers
         #region Accounts
 
         /// <summary>
-        /// Gets the account headers.
+        /// Gets the non-metadata headers associated with the specified account.
         /// </summary>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of headers</returns>
+        /// <remarks>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of non-metadata headers associated with the account.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the account meta data.
+        /// Gets the account metadata.
         /// </summary>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of meta data</returns>
+        /// <remarks>
+        /// The metadata associated with accounts in the Object Storage Service are
+        /// case-insensitive.
+        ///
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of metadata associated with the account.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the account metadata.
+        /// Sets the account metadata, replacing any existing metadata values.
         /// </summary>
-        /// <param name="metadata">The metadata.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <remarks>
+        /// <alert class="warning">
+        /// This method replaces all existing metadata for the account with the values
+        /// found in <paramref name="metadata"/>. To add or change existing metadata values
+        /// without affecting all metadata for the account, first call <see cref="GetAccountMetaData"/>,
+        /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
+        /// then call <see cref="UpdateAccountMetadata"/> with the modified metadata dictionary.
+        /// </alert>
+        /// </remarks>
+        /// <param name="metadata">The complete metadata to associate with the account.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the account headers.
+        /// Sets the non-metadata headers associated with the specified account, replacing any existing non-metadata headers.
         /// </summary>
-        /// <param name="headers">The headers.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <param name="headers">The complete set of headers to associate with the account.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="headers"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         #endregion
