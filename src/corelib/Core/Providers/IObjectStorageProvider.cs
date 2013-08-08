@@ -782,218 +782,738 @@ namespace net.openstack.Core.Providers
         #region Container Objects
 
         /// <summary>
-        /// Gets the object headers.
+        /// Gets the non-metadata headers for the specified object.
         /// </summary>
+        /// <remarks>
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of CDN Headers</returns>
+        /// <param name="objectName">The object name.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of non-metadata headers associated with the specified object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the object meta data.
+        /// Gets the object data.
         /// </summary>
+        /// <remarks>
+        /// The metadata associated with objects in the Object Storage Service are
+        /// case-insensitive.
+        ///
+        /// <alert class="implement">
+        /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
+        /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
+        /// lookups are not case sensitive.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of Meta data</returns>
+        /// <param name="objectName">The object name.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of metadata associated with the object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the specified metadata items for the object.  <remarks>If the metadata key already exists, it will updated, else it will be added.</remarks>
+        /// Sets the object metadata, replacing any existing metadata values.
         /// </summary>
+        /// <remarks>
+        /// <alert class="warning">
+        /// This method replaces all existing metadata for the object with the values
+        /// found in <paramref name="metadata"/>. To add or change existing metadata values
+        /// without affecting all metadata for the object, first call <see cref="GetObjectMetaData"/>,
+        /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
+        /// then call <see cref="UpdateObjectMetadata"/> with the modified metadata dictionary.
+        /// </alert>
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="metadata">Dictionary of metadata keys/value pairs to associate with the object</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>Dictionary&lt;string,string&gt; of Meta data</returns>
+        /// <param name="objectName">The object name.</param>
+        /// <param name="metadata">The complete metadata to associate with the object.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes multiple metadata keys, values from an object
+        /// Deletes multiple metadata items from the object.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="metadata">Dictionary of metadata keys, values to delete</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        void DeleteObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        /// <param name="objectName">The object name.</param>
+        /// <param name="keys">The metadata items to delete.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="keys"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="keys"/> contains any <c>null</c> or empty values.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        void DeleteObjectMetadata(string container, string objectName, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Deletes a single metadata key, value from an object
+        /// Deletes the specified metadata item from the object.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="key">Single metadata key to delete</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="objectName">The object name.</param>
+        /// <param name="key">The metadata item to delete.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteObjectMetadata(string container, string objectName, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
-
         /// <summary>
-        /// Lists the objects.
+        /// Lists the objects in a container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="limit">The limit.</param>
-        /// <param name="marker">The marker.</param>
-        /// <param name="markerEnd">The marker end.</param>
+        /// <param name="limit">The maximum number of objects to return. If the value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="marker">When specified, only objects with names greater than <paramref name="marker"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only objects with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
         /// <param name="prefix">Prefix of object names to include</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns>IEnumerable of <see cref="net.openstack.Core.Domain.ContainerObject"/></returns>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="ContainerObject"/> objects containing the details of the specified objects.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/list-objects.html">List Objects (OpenStack Object Storage API v1 Reference)</seealso>
         IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Creates the object from file.
+        /// Creates an object using data from a file. If the destination file already exists, the contents are overwritten.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="filePath">The file path.<remarks>Example c:\folder1\folder2\image_name.jpeg</remarks></param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg.  If null, the name of the upload file will be used</remarks></param>
+        /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\image_name.jpeg</localUri></param>
+        /// <param name="objectName">The destination object name. If <c>null</c>, the filename portion of <paramref name="filePath"/> will be used.</param>
         /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
-        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="filePath"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="filePath"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="FileNotFoundException">If the file <paramref name="filePath"/> could not be found.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Creates the object.
+        /// Creates an object using data from a <see cref="Stream"/>. If the destination file already exists, the contents are overwritten.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="stream">The stream. <see cref="Stream"/></param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
+        /// <param name="objectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
         /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
-        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="stream"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the object.
+        /// Gets an object, writing the data to the specified <see cref="Stream"/>.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="outputStream">The output stream.<see cref="Stream"/></param>
-        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="verifyEtag">If set to <c>true</c> will verify etag.</param>
-        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <exception cref="InvalidETagException"></exception>
+        /// <param name="objectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="outputStream">The output stream.</param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="verifyEtag">If <c>true</c> and the object includes an ETag, the retrieved data will be verified before returning.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="outputStream"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <c>true</c>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the object save to file.
+        /// Gets an object, saving the data to the specified file.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="saveDirectory">The save directory path. <remarks>Example c:\user\</remarks></param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="fileName">Name of the file.<remarks>Example image_name1.jpeg</remarks></param>
-        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="verifyEtag">If set to <c>true</c> will verify etag.</param>
-        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="saveDirectory">The destination directory name. Example <localUri>c:\user\</localUri></param>
+        /// <param name="objectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="fileName">The destination file name. Example <localUri>image_name1.jpeg</localUri></param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="verifyEtag">If <c>true</c> and the object includes an ETag, the retrieved data will be verified before returning.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="saveDirectory"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="saveDirectory"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="DirectoryNotFoundException">If the directory <paramref name="saveDirectory"/> could not be found.</exception>
+        /// <exception cref="IOException">If an error occurs while writing to the destination file.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <c>true</c>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Copies the object.
+        /// Copies an object to a new location within the Object Storage provider.
         /// </summary>
+        /// <param name="sourceContainer">The source container name.</param>
+        /// <param name="sourceObjectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="destinationContainer">The destination container name.</param>
+        /// <param name="destinationObjectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the created object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="sourceContainer"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="sourceObjectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="sourceContainer"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="sourceObjectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">
+        /// If <paramref name="sourceContainer"/> is not a valid container name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is not a valid container name.</para>
+        /// </exception>
+        /// <exception cref="ObjectNameException">
+        /// If <paramref name="sourceObjectName"/> is not a valid object name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is not a valid object name.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
+        void CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+
+        /// <summary>
+        /// Moves an object to a new location within the Object Storage provider.
+        /// </summary>
+        /// <remarks>
+        /// The original object is removed only if the move is completed successfully.
+        ///
+        /// <alert class="implement">
+        /// If your specific provider does not provide a "Move Object" API function, this
+        /// method may be implemented by performing a <see cref="CopyObject"/> operation,
+        /// followed by a <see cref="DeleteObject"/> operation if the copy completed
+        /// successfully.
+        /// </alert>
+        /// </remarks>
         /// <param name="sourceContainer">The source container name.</param>
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
-        /// <param name="headers">A list of HTTP headers to send to the service. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="sourceContainer"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="sourceObjectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="sourceContainer"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="sourceObjectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">
+        /// If <paramref name="sourceContainer"/> is not a valid container name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationContainer"/> is not a valid container name.</para>
+        /// </exception>
+        /// <exception cref="ObjectNameException">
+        /// If <paramref name="sourceObjectName"/> is not a valid object name.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="destinationObjectName"/> is not a valid object name.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object.html">Delete Object (OpenStack Object Storage API v1 Reference)</seealso>
+        void MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Moves an object.  <remarks>The original source object will be deleted only if the move is successful.</remarks>
+        /// Deletes an object from a container.
         /// </summary>
-        /// <param name="sourceContainer">The source container name.</param>
-        /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="destinationContainer">The destination container name.</param>
-        /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
-        /// <param name="headers">A list of HTTP headers to send to the service. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-
-        /// <summary>
-        /// Deletes a specified object.
-        /// </summary>
+        /// <remarks>
+        /// To support large files, the object storage services allows for a single logical file
+        /// to be split into multiple segments. The <paramref name="deleteSegments"/> parameter
+        /// provides a way to delete a segmented file as though it were stored as a single object
+        /// by deleting both the logical file's metadata and the individual segments. The
+        /// <paramref name="deleteSegments"/> parameter is ignored if the specified object is not
+        /// a segmented file.
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="headers">A list of HTTP headers to send to the service. </param>
+        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="deleteSegments">Indicates whether the file's segments should be deleted if any exist.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object.html">Delete Object (OpenStack Object Storage API v1 Reference)</seealso>
+        void DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Purges the object from CDN.
+        /// Purges an object from the CDN.
         /// </summary>
+        /// <remarks>
+        /// The purge operation is performed asynchronously. To receive an email notification when
+        /// the object has been purged, use one of the other overloads of <see cref="O:PurgeObjectFromCDN"/>.
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        /// <exception cref="CDNNotEnabledException"></exception>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null);
+        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        void PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Purges the object from CDN.
+        /// Purges an object from the CDN, sending an email notification to the specified address when the object has been purged.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="email">Email Address.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="CDNNotEnabledException"></exception>
-        ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null);
+        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="email">A comma-separated list of email addresses to notify when the object has been purged. If the value is <c>null</c>, no email notification is sent.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        void PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Purges the object from CDN.
+        /// Purges an object from the CDN, sending an email notification to the specified addresses when the object has been purged.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="emails">string[] of email address.</param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        /// <exception cref="CDNNotEnabledException"></exception>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        ObjectStore PurgeObjectFromCDN(string container, string objectName, string[] emails, string region = null, CloudIdentity identity = null);
+        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="emails">The email addresses to notify once the object has been purged.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="emails"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="emails"/> contains a null or empty value.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails, string region = null, CloudIdentity identity = null);
+
         #endregion
 
         #region Accounts

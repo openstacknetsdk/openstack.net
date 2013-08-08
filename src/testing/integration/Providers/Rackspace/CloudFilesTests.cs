@@ -623,9 +623,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             string fileName = objectName;
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+            provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -633,9 +631,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(destinationContainerName, destinationObjectName, headers, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+            provider.DeleteObject(destinationContainerName, destinationObjectName, headers, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -654,18 +650,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Copy_Object_When_Not_Passing_Content_Length()
         {
             var provider = new CloudFilesProvider();
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Copy_Object_When_Passing_Content_Length()
         {
             var provider = new CloudFilesProvider(_testIdentity);
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName);
 
             var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
             var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
@@ -683,9 +675,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var header = new Dictionary<string, string> { { CloudFilesProvider.ObjectDeleteAt, epoch.ToString() } };
 
             var provider = new CloudFilesProvider(_testIdentity);
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, null, header);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, null, header);
 
             var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
             var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
@@ -726,7 +716,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = new Dictionary<string, string> { { "key2", "value2" }, { "key3", "value3" } };
 
-            provider.DeleteObjectMetadata(containerName, objectName, metaData);
+            provider.DeleteObjectMetadata(containerName, objectName, metaData.Keys);
         }
 
         [TestMethod]
@@ -760,18 +750,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_CDN_Enabled_Object_No_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Purge_CDN_Enabled_Object_Single_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
 
         }
 
@@ -779,9 +765,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_CDN_Enabled_Object_Multiple_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
         }
 
         [TestMethod]
