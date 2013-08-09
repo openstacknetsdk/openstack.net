@@ -7,7 +7,7 @@ using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
 namespace net.openstack.Core.Exceptions.Response
 {
     /// <summary>
-    /// Represents errors resulting from a call to a REST API.
+    /// Defines the base class for errors resulting from a call to a REST API.
     /// </summary>
     [Serializable]
     public abstract class ResponseException : Exception
