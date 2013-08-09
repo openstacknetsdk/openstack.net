@@ -48,9 +48,12 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
     <Compile Include="Core\Domain\SnapshotState.cs" />
+    <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\ProviderStateBase.cs" />
     <Compile Include="Core\Domain\ServerBase.cs" />
     <Compile Include="Core\Domain\ServerImage.cs" />
@@ -70,8 +73,13 @@
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
     <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />
+    <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\Providers\NamespaceDoc.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\BulkDeletionException.cs" />
     <Compile Include="Core\HttpStatusCodeParser.cs" />
     <Compile Include="Core\IStatusParser.cs" />
@@ -116,12 +124,18 @@
     <Compile Include="Core\IEncodeDecodeProvider.cs" />
     <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
     <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
@@ -227,6 +241,7 @@
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />
     <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
