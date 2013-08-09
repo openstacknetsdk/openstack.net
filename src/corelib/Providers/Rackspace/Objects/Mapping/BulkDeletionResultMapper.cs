@@ -35,14 +35,11 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
                     }
                     else
                     {
-                        errorStatus = _statusParser.Parse(eParts[0]);
                         errorItem = eParts[1];
-                        if (errorStatus == null)
+                        if (!_statusParser.TryParse(eParts[0], out errorStatus))
                         {
-                            errorStatus = _statusParser.Parse(eParts[1]);
                             errorItem = eParts[0];
-
-                            if (errorStatus == null)
+                            if (!_statusParser.TryParse(eParts[1], out errorStatus))
                             {
                                 errorStatus = new Status { Code = 0, Description = "Unknown" };
                                 errorItem = string.Format("The error array is in an unknown format. Array: {0}", string.Join("||", eParts));

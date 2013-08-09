@@ -1106,12 +1106,14 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
-            var status = _statusParser.Parse(response.Data.Status);
- 
-            if (status.Code != 200 && !response.Data.Errors.Any())
+            Status status;
+            if (_statusParser.TryParse(response.Data.Status, out status))
             {
-                response.Data.AllItems = items;
-                throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));    
+                if (status.Code != 200 && !response.Data.Errors.Any())
+                {
+                    response.Data.AllItems = items;
+                    throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));
+                }
             }
 
             return ObjectStore.ObjectDeleted;

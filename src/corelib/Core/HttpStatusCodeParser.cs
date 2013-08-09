@@ -75,13 +75,24 @@ namespace net.openstack.Core
             }
         }
 
-        public Status Parse(string value)
+        /// <inheritdoc/>
+        public virtual bool TryParse(string value, out Status result)
         {
+            if (value == null)
+            {
+                result = null;
+                return false;
+            }
+
             var match = _expression.Match(value);
             if (!match.Success)
-                return null;
+            {
+                result = null;
+                return false;
+            }
 
-            return new Status{Code = int.Parse(match.Groups["StatusCode"].Value), Description = match.Groups["Status"].Value};
+            result = new Status{Code = int.Parse(match.Groups["StatusCode"].Value), Description = match.Groups["Status"].Value};
+            return true;
         }
     }
 }
