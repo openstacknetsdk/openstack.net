@@ -83,7 +83,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
         /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
         public  CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : this(identity, identityProvider, restService, new NetworkResponseJsonMapper()) { }
+            : this(identity, identityProvider, restService, NetworkResponseJsonMapper.Default) { }
 
         internal CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
             : base(identity, identityProvider, restService)

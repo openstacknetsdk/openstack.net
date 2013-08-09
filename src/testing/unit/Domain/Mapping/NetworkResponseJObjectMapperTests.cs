@@ -11,7 +11,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Null_When_Null_JObject_Is_Mapped()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             JObject obj = null;
             var actual = mapper.Map(obj);
@@ -22,7 +22,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Null_When_Null_String_Is_Mapped()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = null;
             var actual = mapper.Map(obj);
@@ -33,7 +33,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Null_When_Empty_String_Is_Mapped()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "";
             var actual = mapper.Map(obj);
@@ -44,7 +44,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Null_When_Whitespace_String_Is_Mapped()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "   ";
             var actual = mapper.Map(obj);
@@ -55,7 +55,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Network_With_No_Addresses()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "{\"public\": []}";
             var actual = mapper.Map(obj);
@@ -67,7 +67,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Network_With_Single_Addresses()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}]}";
             var actual = mapper.Map(obj);
@@ -79,7 +79,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Network_With_2_Addresseses()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}, {\"version\": 6, \"addr\": \"2001:4800:7812:0514:95e4:7f4d:ff04:d1eb\"}]}";
             var actual = mapper.Map(obj);
@@ -91,7 +91,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         [TestMethod]
         public void Should_Return_Network_With_Both_v4_And_v6_Addresseses()
         {
-            var mapper = new NetworkResponseJsonMapper();
+            var mapper = NetworkResponseJsonMapper.Default;
 
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}, {\"version\": 6, \"addr\": \"2001:4800:7812:0514:95e4:7f4d:ff04:d1eb\"}]}";
             var actual = mapper.Map(obj);
