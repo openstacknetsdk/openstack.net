@@ -338,7 +338,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public bool RebootServer(string serverId, RebootType rebootType, string region = null, CloudIdentity identity = null)
         {
-            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType.ToString()}};
+            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
