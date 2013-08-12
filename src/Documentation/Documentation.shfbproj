@@ -70,7 +70,7 @@
     <TocOrder>-1</TocOrder>
     <ProductTitle>openstack.net SDK</ProductTitle>
     <VendorName>openstacknet</VendorName>
-    <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
+    <MSHelpViewerSdkLinkType>Id</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
   </PropertyGroup>
