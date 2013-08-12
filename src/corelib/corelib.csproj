@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
+    <Compile Include="Core\Domain\SnapshotState.cs" />
     <Compile Include="Core\Domain\ProviderStateBase.cs" />
     <Compile Include="Core\Domain\ServerBase.cs" />
     <Compile Include="Core\Domain\ServerImage.cs" />

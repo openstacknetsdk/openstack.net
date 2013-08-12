@@ -7,6 +7,9 @@ namespace net.openstack.Core.Domain
     [DataContract]
     public class Volume
     {
+        [DataMember(Name = "status")]
+        private string _status;
+
         [DataMember]
         public string Id { get; set; }
 
@@ -28,8 +31,16 @@ namespace net.openstack.Core.Domain
         [DataMember]
         public Dictionary<string, string>[] Attachments { get; set; }
 
-        [DataMember]
-        public string Status { get; set; }
+        public VolumeState Status
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_status))
+                    return null;
+
+                return VolumeState.FromName(_status);
+            }
+        }
 
         [DataMember(Name = "availability_zone")]
         public string AvailabilityZone { get; set; }
