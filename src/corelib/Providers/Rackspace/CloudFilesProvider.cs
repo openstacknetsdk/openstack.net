@@ -1127,24 +1127,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null)
-        {
-            PurgeObjectFromCDN(container, objectName, default(string), region, identity);
-        }
-
-        /// <inheritdoc />
-        public void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails, string region = null, CloudIdentity identity = null)
-        {
-            if (emails == null)
-                throw new ArgumentNullException("emails");
-            if (emails.Any(string.IsNullOrEmpty))
-                throw new ArgumentException("emails cannot contain any null or empty values");
-
-            PurgeObjectFromCDN(container, objectName, string.Join(",", emails), region, identity);
-        }
-
-        /// <inheritdoc />
-        public void PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null)
+        public void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails = null, string region = null, CloudIdentity identity = null)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
@@ -1154,6 +1137,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("container cannot be empty");
             if (string.IsNullOrEmpty(objectName))
                 throw new ArgumentException("objectName cannot be empty");
+            if (emails != null && emails.Any(string.IsNullOrEmpty))
+                throw new ArgumentException("emails cannot contain any null or empty values");
 
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
@@ -1163,6 +1148,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new CDNNotEnabledException();
             }
 
+            string email = emails != null ? string.Join(",", emails) : null;
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (!string.IsNullOrEmpty(email))
             {

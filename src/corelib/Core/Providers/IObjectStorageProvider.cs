@@ -1403,92 +1403,17 @@ namespace net.openstack.Core.Providers
         void DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Purges an object from the CDN.
-        /// </summary>
-        /// <remarks>
-        /// The purge operation is performed asynchronously. To receive an email notification when
-        /// the object has been purged, use one of the other overloads of <see cref="O:PurgeObjectFromCDN"/>.
-        /// </remarks>
-        /// <param name="container">The container name.</param>
-        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="container"/> is empty.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is empty.</para>
-        /// </exception>
-        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
-        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
-        /// <exception cref="NotSupportedException">
-        /// If the provider does not support the given <paramref name="identity"/> type.
-        /// <para>-or-</para>
-        /// <para>The specified <paramref name="region"/> is not supported.</para>
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
-        /// </exception>
-        /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
-        /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
-        void PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null);
-
-        /// <summary>
-        /// Purges an object from the CDN, sending an email notification to the specified address when the object has been purged.
-        /// </summary>
-        /// <param name="container">The container name.</param>
-        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="email">A comma-separated list of email addresses to notify when the object has been purged. If the value is <c>null</c>, no email notification is sent.</param>
-        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="container"/> is empty.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is empty.</para>
-        /// </exception>
-        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
-        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
-        /// <exception cref="NotSupportedException">
-        /// If the provider does not support the given <paramref name="identity"/> type.
-        /// <para>-or-</para>
-        /// <para>The specified <paramref name="region"/> is not supported.</para>
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
-        /// </exception>
-        /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
-        /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
-        void PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null);
-
-        /// <summary>
         /// Purges an object from the CDN, sending an email notification to the specified addresses when the object has been purged.
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="emails">The email addresses to notify once the object has been purged.</param>
+        /// <param name="emails">The email addresses to notify once the object has been purged. If this value is <c>null</c>, no email notifications are sent.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="container"/> is <c>null</c>.
         /// <para>-or-</para>
         /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
-        /// <para>-or-</para>
-        /// <para>If <paramref name="emails"/> is <c>null</c>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1512,7 +1437,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
-        void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails, string region = null, CloudIdentity identity = null);
+        void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails = null, string region = null, CloudIdentity identity = null);
 
         #endregion
 

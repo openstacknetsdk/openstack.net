@@ -757,7 +757,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_CDN_Enabled_Object_Single_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
+            provider.PurgeObjectFromCDN(containerName, objectName, new[] { emailTo }, identity: _testIdentity);
 
         }
 
