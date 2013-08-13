@@ -431,7 +431,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             _testImage.WaitForActive();
 
-            Assert.AreEqual(ImageState.ACTIVE, _testImage.Status);
+            Assert.AreEqual(ImageState.Active, _testImage.Status);
         }
 
         [TestMethod]
@@ -665,9 +665,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
 
-            _testServer.WaitForState(ServerState.REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.Reboot, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
-            Assert.AreEqual(ServerState.REBOOT, _testServer.Status);
+            Assert.AreEqual(ServerState.Reboot, _testServer.Status);
         }
 
         [TestMethod]
@@ -683,9 +683,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsTrue(_rebootSuccess); // If the reboot was not successful in the previous test, then fail this one too.
 
-            _testServer.WaitForState(ServerState.HARD_REBOOT, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.HardReboot, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
-            Assert.AreEqual(ServerState.HARD_REBOOT, _testServer.Status);
+            Assert.AreEqual(ServerState.HardReboot, _testServer.Status);
         }
 
         [TestMethod]
@@ -706,7 +706,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsTrue(_rebuildServerSuccess);
 
-            _testServer.WaitForState(ServerState.REBUILD, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.Rebuild, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
             Assert.AreEqual(_preBuildDetails.Id, _testServer.Id);
         }
@@ -718,7 +718,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             _testServer.WaitForActive();
 
-            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
+            Assert.AreEqual(ServerState.Active, _testServer.Status);
         }
 
         [TestMethod]
@@ -746,9 +746,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsTrue(_resizeSuccess);
 
-            _testServer.WaitForState(ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
-            Assert.AreEqual(ServerState.VERIFY_RESIZE, _testServer.Status);
+            Assert.AreEqual(ServerState.VerifyResize, _testServer.Status);
         }
 
         [TestMethod]
@@ -781,7 +781,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             _testServer.WaitForActive();
 
-            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
+            Assert.AreEqual(ServerState.Active, _testServer.Status);
         }
 
         [Timeout(1800000), TestMethod]
@@ -789,9 +789,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsTrue(_confirmResizeSuccess);
 
-            _testServer.WaitForState(ServerState.VERIFY_RESIZE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
-            Assert.AreEqual(ServerState.VERIFY_RESIZE, _testServer.Status);
+            Assert.AreEqual(ServerState.VerifyResize, _testServer.Status);
         }
 
         [TestMethod]
@@ -811,7 +811,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             _testServer.WaitForActive();
 
-            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
+            Assert.AreEqual(ServerState.Active, _testServer.Status);
         }
 
         [TestMethod]
@@ -827,9 +827,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(_rescueAdminPass));
 
-            _testServer.WaitForState(ServerState.RESCUE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED });
+            _testServer.WaitForState(ServerState.Rescue, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
 
-            Assert.AreEqual(ServerState.RESCUE, _testServer.Status);
+            Assert.AreEqual(ServerState.Rescue, _testServer.Status);
         }
 
         [TestMethod]
@@ -847,7 +847,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             _testServer.WaitForActive();
 
-            Assert.AreEqual(ServerState.ACTIVE, _testServer.Status);
+            Assert.AreEqual(ServerState.Active, _testServer.Status);
         }
 
         #endregion

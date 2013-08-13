@@ -6,11 +6,30 @@ namespace net.openstack.Core.Domain
     [DataContract]
     public class ServerImage : SimpleServerImage
     {
+        [DataMember(Name = "status")]
+        private string _status;
+
         [DataMember(Name = "OS-DCF:diskConfig")]
         public string DiskConfig { get; internal set; }
 
-        [DataMember]
-        public string Status { get; internal set; }
+        public ImageState Status
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_status))
+                    return null;
+
+                return ImageState.FromName(_status);
+            }
+
+            internal set
+            {
+                if (value == null)
+                    _status = null;
+
+                _status = value.Name;
+            }
+        }
 
         [DataMember]
         public DateTime Created { get; internal set; }

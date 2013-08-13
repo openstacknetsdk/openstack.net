@@ -96,7 +96,7 @@ namespace net.openstack.Providers.Rackspace
         #region Servers
         
         /// <inheritdoc />
-        public IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
@@ -105,7 +105,7 @@ namespace net.openstack.Providers.Rackspace
                     {"image", imageId},
                     {"flavor", flavorId},
                     {"name", name},
-                    {"status", status},
+                    {"status", status != null ? status.Name : null},
                     {"marker", markerId},
                     {"limit", !limit.HasValue ? null : limit.Value.ToString()},
                     {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
@@ -120,7 +120,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, string status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/servers/detail", GetServiceEndpoint(identity, region)));
 
@@ -129,7 +129,7 @@ namespace net.openstack.Providers.Rackspace
                     {"image", imageId},
                     {"flavor", flavorId},
                     {"name", name},
-                    {"status", status},
+                    {"status", status != null ? status.Name : null},
                     {"marker", markerId},
                     {"limit", !limit.HasValue ? null : limit.Value.ToString()},
                     {"changes-since", !changesSince.HasValue ? null : changesSince.Value.ToString("yyyy-MM-ddThh:mm:ss")}
@@ -236,13 +236,13 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Server WaitForServerState(string serverId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public Server WaitForServerState(string serverId, ServerState expectedState, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             return WaitForServerState(serverId, new[] { expectedState }, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
-        public Server WaitForServerState(string serverId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public Server WaitForServerState(string serverId, ServerState[] expectedStates, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var serverDetails = GetDetails(serverId, region, identity);
 
@@ -273,7 +273,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Server WaitForServerActive(string serverId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForServerState(serverId, ServerState.ACTIVE, new[] { ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
+            return WaitForServerState(serverId, ServerState.Active, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
@@ -281,8 +281,8 @@ namespace net.openstack.Providers.Rackspace
         {
             try
             {
-                WaitForServerState(serverId, ServerState.DELETED,
-                                   new[] {ServerState.ERROR, ServerState.UNKNOWN, ServerState.SUSPENDED},
+                WaitForServerState(serverId, ServerState.Deleted,
+                                   new[] {ServerState.Error, ServerState.Unknown, ServerState.Suspended},
                                    refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
             }
             catch (Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the server can be ACTIVE for one pass and then 
@@ -600,7 +600,7 @@ namespace net.openstack.Providers.Rackspace
         #region Images
 
         /// <inheritdoc />
-        public IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, ImageState imageStatus = null, DateTime changesSince = new DateTime(), string markerId = null, int limit = 0, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images", GetServiceEndpoint(identity, region)));
 
@@ -615,7 +615,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, ImageState imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/images/detail", GetServiceEndpoint(identity, region)));
 
@@ -630,7 +630,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, string imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, string imageType = null)
+        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId = null, string imageName = null, ImageState imageStatus = null, DateTime changesSince = default(DateTime), string markerId = null, int limit = 0, ImageType imageType = null)
         {
             var queryParameters = new Dictionary<string, string>();
 
@@ -640,8 +640,8 @@ namespace net.openstack.Providers.Rackspace
             if (!string.IsNullOrWhiteSpace(imageName))
                 queryParameters.Add("name", imageName);
 
-            if (!string.IsNullOrWhiteSpace(imageStatus))
-                queryParameters.Add("status", imageStatus);
+            if (imageStatus != null && !string.IsNullOrWhiteSpace(imageStatus.Name))
+                queryParameters.Add("status", imageStatus.Name);
 
             if (changesSince != default(DateTime))
                 queryParameters.Add("changes-since", changesSince.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
@@ -652,8 +652,8 @@ namespace net.openstack.Providers.Rackspace
             if (limit > 0)
                 queryParameters.Add("limit", limit.ToString());
 
-            if(!string.IsNullOrWhiteSpace(imageType))
-                queryParameters.Add("type", imageType);
+            if(imageType != null)
+                queryParameters.Add("type", imageType.Name);
 
             return queryParameters;
         }
@@ -686,7 +686,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ServerImage WaitForImageState(string imageId, string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public ServerImage WaitForImageState(string imageId, ImageState[] expectedStates, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             var details = GetImage(imageId, region, identity);
 
@@ -709,13 +709,13 @@ namespace net.openstack.Providers.Rackspace
             }
 
             if (errorStates.Contains(details.Status))
-                throw new ServerEnteredErrorStateException(details.Status);
+                throw new ImageEnteredErrorStateException(details.Status);
 
             return BuildCloudServersProviderAwareObject<ServerImage>(details, region, identity);
         }
 
         /// <inheritdoc />
-        public ServerImage WaitForImageState(string imageId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
+        public ServerImage WaitForImageState(string imageId, ImageState expectedState, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
             return WaitForImageState(imageId, new[] { expectedState }, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
@@ -723,7 +723,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public ServerImage WaitForImageActive(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, ImageState.ACTIVE, new[] { ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
+            return WaitForImageState(imageId, ImageState.Active, new[] { ImageState.Error, ImageState.Unknown, ImageState.Suspended }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
@@ -731,8 +731,8 @@ namespace net.openstack.Providers.Rackspace
         {
             try
             {
-                WaitForImageState(imageId, ImageState.DELETED,
-                                  new[] {ImageState.ERROR, ImageState.UNKNOWN, ImageState.SUSPENDED},
+                WaitForImageState(imageId, ImageState.Deleted,
+                                  new[] {ImageState.Error, ImageState.Unknown, ImageState.Suspended},
                                   refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
             }
             catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 
