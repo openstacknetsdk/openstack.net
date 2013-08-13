@@ -28,7 +28,7 @@ namespace net.openstack.Core.Caching
         /// <item>The cache does not contain any value associated with <paramref name="key"/>.</item>
         /// <item><paramref name="forceCacheRefresh"/> is <c>true</c>.</item>
         /// <item>The previously cached <see cref="UserAccess"/> for <paramref name="key"/> has expired
-        /// (see <see cref="IdentityToken.IsExpired()"/>).</item>
+        /// (see <see cref="IdentityToken.IsExpired"/>).</item>
         /// </list>
         ///
         /// <para>If any of the above conditions is met and <paramref name="refreshCallback"/> is <c>null</c>,
@@ -117,7 +117,7 @@ namespace net.openstack.Core.Caching
         private static bool IsValid(UserAccess userAccess)
         {
             IdentityToken token = userAccess != null ? userAccess.Token : null;
-            return token != null && !token.IsExpired();
+            return token != null && !token.IsExpired;
         }
     }
 

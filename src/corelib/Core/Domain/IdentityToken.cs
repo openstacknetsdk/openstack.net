@@ -32,22 +32,25 @@
         public Tenant Tenant { get; set; }
 
         /// <summary>
-        /// Gets whether or not the token has expired. This method simply checks
+        /// Gets whether or not the token has expired. This property simply checks
         /// the <see cref="Expires"/> property against the current system time.
         /// If the <see cref="Expires"/> value is missing or not in a recognized
         /// format, the token is assumed to have expired.
         /// </summary>
-        /// <returns><c>true</c> if the token has expired; otherwise, <c>false</c>.</returns>
-        public bool IsExpired()
+        /// <value><c>true</c> if the token has expired; otherwise, <c>false</c>.</value>
+        public bool IsExpired
         {
-            if (string.IsNullOrWhiteSpace(Expires))
-                return true;
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Expires))
+                    return true;
 
-            DateTime expiration;
-            if (!DateTime.TryParse(Expires, out expiration))
-                return true;
+                DateTime expiration;
+                if (!DateTime.TryParse(Expires, out expiration))
+                    return true;
 
-            return expiration.ToUniversalTime() <= DateTime.UtcNow;
+                return expiration.ToUniversalTime() <= DateTime.UtcNow;
+            }
         }
     }
 }
