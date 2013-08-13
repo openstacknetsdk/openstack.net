@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Core.Caching
@@ -101,6 +102,7 @@ namespace net.openstack.Core.Caching
         /// <summary>
         /// Gets a default instance of <see cref="UserAccessCache"/>.
         /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static UserAccessCache Instance
         {
             get
