@@ -742,7 +742,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public ServerImage WaitForImageActive(string imageId, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null, string region = null, CloudIdentity identity = null)
         {
-            return WaitForImageState(imageId, ImageState.Active, new[] { ImageState.Error, ImageState.Unknown, ImageState.Suspended }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
+            return WaitForImageState(imageId, ImageState.Active, new[] { ImageState.Error, ImageState.Unknown }, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
         }
 
         /// <inheritdoc />
@@ -751,7 +751,7 @@ namespace net.openstack.Providers.Rackspace
             try
             {
                 WaitForImageState(imageId, ImageState.Deleted,
-                                  new[] {ImageState.Error, ImageState.Unknown, ImageState.Suspended},
+                                  new[] {ImageState.Error, ImageState.Unknown},
                                   refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, region, identity);
             }
             catch (net.openstack.Core.Exceptions.Response.ItemNotFoundException){} // there is the possibility that the image can be ACTIVE for one pass and then 

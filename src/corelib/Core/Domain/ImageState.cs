@@ -16,22 +16,10 @@
         private static readonly ConcurrentDictionary<string, ImageState> _states =
             new ConcurrentDictionary<string, ImageState>(StringComparer.OrdinalIgnoreCase);
         private static readonly ImageState _active = FromName("ACTIVE");
-        private static readonly ImageState _build = FromName("BUILD");
+        private static readonly ImageState _saving = FromName("SAVING");
         private static readonly ImageState _deleted = FromName("DELETED");
         private static readonly ImageState _error = FromName("ERROR");
-        private static readonly ImageState _hardReboot = FromName("HARD_REBOOT");
-        private static readonly ImageState _migrating = FromName("MIGRATING");
-        private static readonly ImageState _password = FromName("PASSWORD");
-        private static readonly ImageState _reboot = FromName("REBOOT");
-        private static readonly ImageState _rebuild = FromName("REBUILD");
-        private static readonly ImageState _rescue = FromName("RESCUE");
-        private static readonly ImageState _resize = FromName("RESIZE");
-        private static readonly ImageState _revertResize = FromName("REVERT_RESIZE");
-        private static readonly ImageState _suspended = FromName("SUSPENDED");
         private static readonly ImageState _unknown = FromName("UNKNOWN");
-        private static readonly ImageState _verifyResize = FromName("VERIFY_RESIZE");
-        private static readonly ImageState _prepRescue = FromName("PREP_RESCUE");
-        private static readonly ImageState _prepUnrescue = FromName("PREP_UNRESCUE");
 
         private readonly string _name;
 
@@ -79,13 +67,13 @@
         }
 
         /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image which is currently being built.
+        /// Gets an <see cref="ImageState"/> representing an image currently being saved.
         /// </summary>
-        public static ImageState Build
+        public static ImageState Saving
         {
             get
             {
-                return _build;
+                return _saving;
             }
         }
 
@@ -119,132 +107,6 @@
         }
 
         /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently performing a hard
-        /// reboot. When the reboot operation completes, the image will be in the <see cref="Active"/>
-        /// state.
-        /// </summary>
-        /// <seealso cref="ImageBase.HardReboot"/>
-        /// <seealso cref="IComputeProvider.RebootImage"/>
-        public static ImageState HardReboot
-        {
-            get
-            {
-                return _hardReboot;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image which is currently being moved
-        /// from one physical node to another.
-        /// </summary>
-        /// <remarks>
-        /// <note>Image migration is a Rackspace-specific extension.</note>
-        /// </remarks>
-        public static ImageState Migrating
-        {
-            get
-            {
-                return _migrating;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing the password for the image is being changed.
-        /// </summary>
-        /// <seealso cref="IComputeProvider.ChangeAdministratorPassword"/>
-        public static ImageState Password
-        {
-            get
-            {
-                return _password;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently performing a soft
-        /// reboot. When the reboot operation completes, the image will be in the <see cref="Active"/>
-        /// state.
-        /// </summary>
-        /// <seealso cref="ImageBase.SoftReboot"/>
-        /// <seealso cref="IComputeProvider.RebootImage"/>
-        public static ImageState Reboot
-        {
-            get
-            {
-                return _reboot;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently being rebuilt.
-        /// When the rebuild operation completes, the image will be in the <see cref="Active"/>
-        /// state if the rebuild was successful; otherwise, it will be in the <see cref="Error"/> state
-        /// if the rebuild operation failed.
-        /// </summary>
-        /// <seealso cref="ImageBase.Rebuild"/>
-        /// <seealso cref="IComputeProvider.RebuildImage"/>
-        public static ImageState Rebuild
-        {
-            get
-            {
-                return _rebuild;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently in rescue mode.
-        /// </summary>
-        /// <seealso cref="ImageBase.Rescue"/>
-        /// <seealso cref="IComputeProvider.RescueImage"/>
-        public static ImageState Rescue
-        {
-            get
-            {
-                return _rescue;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently executing a resize action.
-        /// When the resize operation completes, the image will be in the <see cref="VerifyResize"/>
-        /// state if the resize was successful; otherwise, it will be in the <see cref="Active"/> state
-        /// if the resize operation failed.
-        /// </summary>
-        /// <seealso cref="ImageBase.Resize"/>
-        /// <seealso cref="IComputeProvider.ResizeImage"/>
-        public static ImageState Resize
-        {
-            get
-            {
-                return _resize;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently executing a revert resize action.
-        /// </summary>
-        /// <seealso cref="ImageBase.RevertResize"/>
-        /// <seealso cref="IComputeProvider.RevertImageResize"/>
-        public static ImageState RevertResize
-        {
-            get
-            {
-                return _revertResize;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> for an image that is currently inactive, either by request or necessity.
-        /// </summary>
-        public static ImageState Suspended
-        {
-            get
-            {
-                return _suspended;
-            }
-        }
-
-        /// <summary>
         /// Gets an <see cref="ImageState"/> for an image that is currently in an unknown state.
         /// </summary>
         public static ImageState Unknown
@@ -252,48 +114,6 @@
             get
             {
                 return _unknown;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image which completed a resize operation
-        /// and is now waiting for the operation to be confirmed or reverted.
-        /// </summary>
-        /// <seealso cref="ImageBase.Resize"/>
-        /// <seealso cref="IComputeProvider.ResizeImage"/>
-        /// <seealso cref="ImageBase.ConfirmResize"/>
-        /// <seealso cref="IComputeProvider.ConfirmImageResize"/>
-        public static ImageState VerifyResize
-        {
-            get
-            {
-                return _verifyResize;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently executing a rescue action.
-        /// </summary>
-        /// <seealso cref="ImageBase.Rescue"/>
-        /// <seealso cref="IComputeProvider.RescueImage"/>
-        public static ImageState PrepRescue
-        {
-            get
-            {
-                return _prepRescue;
-            }
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ImageState"/> representing an image currently executing an un-rescue action.
-        /// </summary>
-        /// <seealso cref="ImageBase.UnRescue"/>
-        /// <seealso cref="IComputeProvider.UnRescueImage"/>
-        public static ImageState PrepUnrescue
-        {
-            get
-            {
-                return _prepUnrescue;
             }
         }
 
