@@ -1,0 +1,30 @@
+[submodule "Reference/OpenStack/identity-api"]
+	path = Reference/OpenStack/identity-api
+	url = git@github.com:openstack/identity-api.git
+[submodule "Reference/OpenStack/volume-api"]
+	path = Reference/OpenStack/volume-api
+	url = git@github.com:openstack/volume-api.git
+[submodule "Reference/OpenStack/object-api"]
+	path = Reference/OpenStack/object-api
+	url = git@github.com:openstack/object-api.git
+[submodule "Reference/OpenStack/netconn-api"]
+	path = Reference/OpenStack/netconn-api
+	url = git@github.com:openstack/netconn-api.git
+[submodule "Reference/OpenStack/compute-api"]
+	path = Reference/OpenStack/compute-api
+	url = git@github.com:openstack/compute-api.git
+[submodule "Reference/Rackspace/auth-2.0"]
+	path = Reference/Rackspace/auth-2.0
+	url = git@github.rackspace.com:IX/auth-2.0.git
+[submodule "Reference/Rackspace/cbs-api"]
+	path = Reference/Rackspace/cbs-api
+	url = git@github.rackspace.com:IX/cbs-api.git
+[submodule "Reference/Rackspace/cloud-files"]
+	path = Reference/Rackspace/cloud-files
+	url = git@github.rackspace.com:IX/cloud-files.git
+[submodule "Reference/Rackspace/cloud-networks"]
+	path = Reference/Rackspace/cloud-networks
+	url = git@github.rackspace.com:IX/cloud-networks.git
+[submodule "Reference/Rackspace/cloud-servers"]
+	path = Reference/Rackspace/cloud-servers
+	url = git@github.rackspace.com:IX/cloud-servers.git
