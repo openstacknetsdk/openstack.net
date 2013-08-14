@@ -31,10 +31,6 @@ namespace net.openstack.Core.Domain
         [JsonProperty("ram")]
         public int RAMInMB { get; private set; }
 
-        //"rxtx_factor": 2.0,
- 
-        //"swap": 512, 
-
         /// <summary>
         /// Gets the "vcpus" property associated with the flavor.
         /// <note type="warning">The value of this property is not defined. Do not use.</note>

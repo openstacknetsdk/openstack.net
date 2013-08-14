@@ -22,12 +22,5 @@
         /// </summary>
         [JsonProperty("bytes")]
         public long Bytes { get; private set; }
-
-        //internal IObjectStorageProvider CloudFilesProvider { get; set; }
-
-        //public void AddHeader(string name)
-        //{
-        //    CloudFilesProvider.Add
-        //}
     }
 }
