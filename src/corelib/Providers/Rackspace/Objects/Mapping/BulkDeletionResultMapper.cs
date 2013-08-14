@@ -30,7 +30,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
 
                     if (eParts.Length != 2)
                     {
-                        errorStatus = new Status { Code = 0, Description = "Unknown" };
+                        errorStatus = new Status(0, "Unknown");
                         errorItem = string.Format("The error array has an unexpected length. Array: {0}", string.Join("||", eParts));
                     }
                     else
@@ -41,7 +41,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
                             errorItem = eParts[0];
                             if (!_statusParser.TryParse(eParts[1], out errorStatus))
                             {
-                                errorStatus = new Status { Code = 0, Description = "Unknown" };
+                                errorStatus = new Status(0, "Unknown");
                                 errorItem = string.Format("The error array is in an unknown format. Array: {0}", string.Join("||", eParts));
                             }
                         }

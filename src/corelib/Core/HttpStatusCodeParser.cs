@@ -91,7 +91,7 @@ namespace net.openstack.Core
                 return false;
             }
 
-            result = new Status{Code = int.Parse(match.Groups["StatusCode"].Value), Description = match.Groups["Status"].Value};
+            result = new Status(int.Parse(match.Groups["StatusCode"].Value), match.Groups["Status"].Value);
             return true;
         }
     }
