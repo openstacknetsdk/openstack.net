@@ -30,7 +30,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -50,7 +50,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -70,7 +70,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
@@ -90,7 +90,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -110,7 +110,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
@@ -130,7 +130,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "DFW" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
@@ -150,7 +150,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "LON" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -170,7 +170,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "LON" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -190,7 +190,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "LON" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
 
@@ -210,7 +210,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "LON" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
 
@@ -230,7 +230,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""""}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -250,7 +250,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = "" }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""""}")
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
 
@@ -270,7 +270,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = null }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":null}")
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
@@ -290,7 +290,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 new UserAccess
                 {
                     ServiceCatalog = new[] { serviceCatalog },
-                    User = new UserDetails { DefaultRegion = null }
+                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":null}")
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
 
