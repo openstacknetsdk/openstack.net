@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using net.openstack.Core.Domain;
 
 namespace net.openstack.Core.Providers
@@ -104,9 +105,8 @@ namespace net.openstack.Core.Providers
         /// <param name="network">The network name.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>List of network <see cref="AddressDetails"/></returns>
-        IEnumerable<AddressDetails> ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null);
-
+        /// <returns>A collection of <see cref="IPAddress"/> containing the network addresses associated with the server on the specified network.</returns>
+        IEnumerable<IPAddress> ListAddressesByNetwork(string serverId, string network, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Changes the administrator password for a specified server.

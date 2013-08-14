@@ -51,7 +51,9 @@
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\AddressDetails.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
+    <Compile Include="Core\Domain\IPAddressList.cs" />
     <Compile Include="Core\Domain\SnapshotState.cs" />
+    <Compile Include="Core\Domain\IPAddressConverter.cs" />
     <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\ProviderStateBase.cs" />

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Core.Domain.Mapping
@@ -35,14 +38,16 @@ namespace net.openstack.Core.Domain.Mapping
             if (from == null)
                 return null;
 
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new IPAddressConverter());
             var network = from.Properties().First();
-            return new Network(network.Name, network.Value.Select(o => o.ToObject<AddressDetails>()).ToArray());
+            return new Network(network.Name, network.Value.Select(o => o.ToObject<IPAddress>(serializer)).ToArray());
         }
 
         /// <inheritdoc/>
         public JObject Map(Network to)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <inheritdoc/>

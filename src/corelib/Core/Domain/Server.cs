@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-
 namespace net.openstack.Core.Domain
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using Newtonsoft.Json;
+
     [JsonObject(MemberSerialization.OptIn)]
     public class Server : SimpleServer
     {
@@ -253,7 +254,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="networkName">The network name.</param>
         /// <returns>List of network <see cref="AddressDetails"/></returns>
-        public IEnumerable<AddressDetails> ListAddressesByNetwork(string networkName)
+        public IEnumerable<IPAddress> ListAddressesByNetwork(string networkName)
         {
             return Provider.ListAddressesByNetwork(Id, networkName, Region);
         }

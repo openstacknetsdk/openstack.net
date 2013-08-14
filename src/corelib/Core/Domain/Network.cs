@@ -1,5 +1,6 @@
 namespace net.openstack.Core.Domain
 {
+    using System.Net;
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -8,10 +9,10 @@ namespace net.openstack.Core.Domain
         [JsonProperty("id")]
         public string Id { get; private set; }
 
-        [JsonProperty("ip")]
-        public AddressDetails[] Addresses { get; private set; }
+        [JsonProperty("ip", ItemConverterType = typeof(IPAddressConverter))]
+        public IPAddress[] Addresses { get; private set; }
 
-        public Network(string id, AddressDetails[] addresses)
+        public Network(string id, IPAddress[] addresses)
         {
             Id = id;
             Addresses = addresses;

@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Linq;
 using net.openstack.Core.Domain.Mapping;
+using Newtonsoft.Json.Linq;
 
 namespace OpenStackNet.Testing.Unit.Domain.Mapping
 {
@@ -61,7 +63,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
             var actual = mapper.Map(obj);
 
             Assert.IsNotNull(actual);
-            Assert.IsFalse(actual.Addresses.Any());
+            Assert.AreEqual(0, actual.Addresses.Length);
         }
 
         [TestMethod]
@@ -73,7 +75,10 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
             var actual = mapper.Map(obj);
 
             Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Addresses.Count(), 1);
+            Assert.AreEqual(1, actual.Addresses.Length);
+            CollectionAssert.AllItemsAreNotNull(actual.Addresses);
+            Assert.AreEqual(AddressFamily.InterNetwork, actual.Addresses[0].AddressFamily);
+            Assert.AreEqual(IPAddress.Parse("166.78.156.150"), actual.Addresses[0]);
         }
 
         [TestMethod]
@@ -85,7 +90,12 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
             var actual = mapper.Map(obj);
 
             Assert.IsNotNull(actual);
-            Assert.AreEqual(actual.Addresses.Count(), 2);
+            Assert.AreEqual(2, actual.Addresses.Length);
+            CollectionAssert.AllItemsAreNotNull(actual.Addresses);
+            Assert.AreEqual(AddressFamily.InterNetwork, actual.Addresses[0].AddressFamily);
+            Assert.AreEqual(IPAddress.Parse("166.78.156.150"), actual.Addresses[0]);
+            Assert.AreEqual(AddressFamily.InterNetworkV6, actual.Addresses[1].AddressFamily);
+            Assert.AreEqual(IPAddress.Parse("2001:4800:7812:0514:95e4:7f4d:ff04:d1eb"), actual.Addresses[1]);
         }
 
         [TestMethod]
@@ -97,8 +107,8 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
             var actual = mapper.Map(obj);
 
             Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual.Addresses.SingleOrDefault(a => a.Version == "4"));
-            Assert.IsNotNull(actual.Addresses.SingleOrDefault(a => a.Version == "6"));
+            Assert.IsNotNull(actual.Addresses.SingleOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork));
+            Assert.IsNotNull(actual.Addresses.SingleOrDefault(a => a.AddressFamily == AddressFamily.InterNetworkV6));
         }
     }
 }
