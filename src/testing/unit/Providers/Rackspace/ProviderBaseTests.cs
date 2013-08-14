@@ -23,15 +23,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "DFW", new CloudIdentity());
@@ -43,15 +39,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Different_Than_Default_Region()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "ORD", new CloudIdentity());
@@ -63,15 +55,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Set_On_Provider_And_Region_Is_Different_Than_Default_Region()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "ORD", null);
@@ -83,15 +71,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, new CloudIdentity());
@@ -103,15 +87,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "DFW", null);
@@ -123,15 +103,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""DFW""}, {region:""ORD""}]}], user:{""RAX-AUTH:defaultRegion"":""DFW""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""DFW""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
@@ -143,15 +119,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""LON""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "LON", new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK});
@@ -163,15 +135,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""LON""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK});
@@ -183,15 +151,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""LON""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "LON", null);
@@ -203,15 +167,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""LON""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""LON""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
@@ -223,15 +183,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_And_Region_Is_Always_Empty()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""LON""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK });
@@ -243,15 +199,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Always_Empty()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":""""} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":""""}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
@@ -263,15 +215,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_And_Region_Is_Always_Null()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":null} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":null}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK });
@@ -283,15 +231,11 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         [TestMethod]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Always_Null()
         {
-            ServiceCatalog serviceCatalog = JsonConvert.DeserializeObject<ServiceCatalog>(@"{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}");
+            UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
+                @"{ serviceCatalog:[{ type : """ + _testService + @""", endpoints : [{region:""LON""}, {region:""LON2""}]}], user:{""RAX-AUTH:defaultRegion"":null} }");
 
             var identityProviderMock = new Mock<IIdentityProvider>();
-            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
-                new UserAccess
-                {
-                    ServiceCatalog = new[] { serviceCatalog },
-                    User = JsonConvert.DeserializeObject<UserDetails>(@"{""RAX-AUTH:defaultRegion"":null}")
-                });
+            identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
