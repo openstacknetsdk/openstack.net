@@ -254,7 +254,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
-            var newTestUser = provider.AddUser(new NewUser { Username = "openstacknettestuser1", Email = "newuser@me.com", Enabled = true });
+            var newTestUser = provider.AddUser(new NewUser("openstacknettestuser1", "newuser@me.com", enabled : true));
 
             _newTestUserPassword = newTestUser.Password;
             Assert.IsNotNull(newTestUser);
@@ -344,7 +344,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             IIdentityProvider provider = new CloudIdentityProvider(_testIdentity);
 
-            var newUser = provider.AddUser(new NewUser { Username = "openstacknettestuser2", Email = "newuser2@me.com", Enabled = true, Password = NewUserPassword });
+            var newUser = provider.AddUser(new NewUser("openstacknettestuser2", "newuser2@me.com", enabled : true, password : NewUserPassword));
             _newTestUserPassword = newUser.Password;
 
             Assert.IsNotNull(newUser);

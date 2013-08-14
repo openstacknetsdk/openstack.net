@@ -158,6 +158,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("user");
             if (string.IsNullOrEmpty(user.Username))
                 throw new ArgumentException("user.Username cannot be null or empty");
+            if (user.Id != null)
+                throw new InvalidOperationException("user.Id must be null");
 
             var provider = GetProvider(identity);
             return provider.AddUser(user, identity: identity);

@@ -432,9 +432,9 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("newUser");
             if (string.IsNullOrEmpty(newUser.Username))
                 throw new ArgumentException("newUser.Username cannot be null or empty");
+            if (newUser.Id != null)
+                throw new InvalidOperationException("newUser.Id must be null");
             CheckIdentity(identity);
-
-            newUser.Id = null;
 
             var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = newUser });
 

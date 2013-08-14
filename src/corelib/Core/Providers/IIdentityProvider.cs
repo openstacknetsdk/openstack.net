@@ -127,7 +127,11 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If the provider does not support the given <paramref name="identity"/> type.</para>
         /// </exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="user"/>.<see cref="NewUser.Id"/> is not <c>null</c> (i.e. <paramref name="user"/> represents a user that already exists).
+        /// <para>-or-</para>
+        /// <para>If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</para>
+        /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_addUser_v2.0_users_.html">Add User (OpenStack Identity Service API v2.0 Reference)</seealso>
         NewUser AddUser(NewUser user, CloudIdentity identity = null);

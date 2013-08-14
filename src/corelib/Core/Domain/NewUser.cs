@@ -6,18 +6,26 @@
     public class NewUser
     {
         [JsonProperty("OS-KSADM:password")]
-        public string Password { get; set; }
+        public string Password { get; internal set; }
 
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string Username { get; private set; }
 
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
         [JsonProperty("enabled")]
-        public bool Enabled { get; set; }
+        public bool Enabled { get; private set; }
+
+        public NewUser(string username, string email, string password = null, bool enabled = true)
+        {
+            Username = username;
+            Email = email;
+            Password = password;
+            Enabled = enabled;
+        }
     }
 }
