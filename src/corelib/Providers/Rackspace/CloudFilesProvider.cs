@@ -266,40 +266,48 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
-            var result = new ContainerCDN { Name = container };
+            string name = container;
+            string uri = null;
+            string streamingUri = null;
+            string sslUri = null;
+            string iosUri = null;
+            bool enabled = false;
+            long ttl = 0;
+            bool logRetention = false;
 
             foreach (var header in response.Headers)
             {
-                if (header.Key.ToLower().Equals(CdnUri))
+                if (header.Key.Equals(CdnUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNUri = header.Value;
+                    uri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnSslUri))
+                else if (header.Key.Equals(CdnSslUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNSslUri = header.Value;
+                    sslUri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnStreamingUri))
+                else if (header.Key.Equals(CdnStreamingUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNStreamingUri = header.Value;
+                    streamingUri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnTTL))
+                else if (header.Key.Equals(CdnTTL, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.Ttl = long.Parse(header.Value);
+                    ttl = long.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnEnabled))
+                else if (header.Key.Equals(CdnEnabled, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNEnabled = bool.Parse(header.Value);
+                    enabled = bool.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnLogRetention))
+                else if (header.Key.Equals(CdnLogRetention, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.LogRetention = bool.Parse(header.Value);
+                    logRetention = bool.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnIosUri))
+                else if (header.Key.Equals(CdnIosUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNIosUri = header.Value;
+                    iosUri = header.Value;
                 }
             }
 
+            ContainerCDN result = new ContainerCDN(name, uri, streamingUri, sslUri, iosUri, enabled, ttl, logRetention);
             return result;
         }
 
