@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using System.Collections.Generic;
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class ServerVolumeListResponse
     {
-        [DataMember(Name = "volumeAttachments")]
+        [JsonProperty("volumeAttachments")]
         public IEnumerable<ServerVolume> ServerVolumes { get; set; }
     }
 }

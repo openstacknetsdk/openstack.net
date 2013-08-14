@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class ServerVolume
     {
-        [DataMember(Name ="device")]
+        [JsonProperty("device")]
         public string Device { get; set; }
 
-        [DataMember(Name = "serverId")]
+        [JsonProperty("serverId")]
         public string ServerId { get; set; }
 
-        [DataMember(Name = "id")]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
-        [DataMember(Name = "volumeId")]
+        [JsonProperty("volumeId")]
         public string VolumeId { get; set; }
     }
 }

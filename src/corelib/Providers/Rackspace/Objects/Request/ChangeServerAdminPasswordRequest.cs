@@ -1,18 +1,18 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ChangeServerAdminPasswordRequest
     {
-        [DataMember(Name = "changePassword")]
+        [JsonProperty("changePassword")]
         public ChangeAdminPasswordDetails Details { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ChangeAdminPasswordDetails
     {
-        [DataMember(Name = "adminPass")]
+        [JsonProperty("adminPass")]
         public string AdminPassword { get; set; }
     }
 }

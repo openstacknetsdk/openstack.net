@@ -1,22 +1,22 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class RolesResponse
     {
-        [DataMember]
+        [JsonProperty]
         public Role[] Roles { get; set; }
 
-        [DataMember(Name="roles_links")]
+        [JsonProperty("roles_links")]
         public string[] RoleLinks { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class RoleResponse
     {
-        [DataMember]
+        [JsonProperty]
         public Role Role { get; set; }
     }
 }

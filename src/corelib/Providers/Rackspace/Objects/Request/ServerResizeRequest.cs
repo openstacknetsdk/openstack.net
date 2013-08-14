@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerResizeRequest
     {
-        [DataMember(Name = "resize")]
+        [JsonProperty("resize")]
         public ServerResizeDetails Details { get; set; }
     }
 }

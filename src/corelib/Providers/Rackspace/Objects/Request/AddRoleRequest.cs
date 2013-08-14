@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class AddRoleRequest
     {
-        [DataMember(Name = "role")]
+        [JsonProperty("role")]
         public Role Role { get; set; } 
 
     }

@@ -1,24 +1,24 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class FlavorDetails : Flavor
     {
-        [DataMember(Name ="OS-FLV-DISABLED:disabled")]
+        [JsonProperty("OS-FLV-DISABLED:disabled")]
         public bool Disabled { get; set; }
 
-        [DataMember(Name ="disk")] 
+        [JsonProperty("disk")] 
         public int DiskSizeInGB { get; set; }
 
-        [DataMember(Name = "ram")]
+        [JsonProperty("ram")]
         public int RAMInMB { get; set; }
 
         //"rxtx_factor": 2.0,
  
         //"swap": 512, 
 
-        [DataMember(Name ="vcpus")]
+        [JsonProperty("vcpus")]
         public int VirtualCPUCount { get; set; }
     }
 }

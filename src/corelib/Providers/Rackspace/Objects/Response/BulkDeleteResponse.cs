@@ -1,25 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using System.Collections.Generic;
+    using System.Linq;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class BulkDeleteResponse
     {
-        [DataMember(Name = "Number Not Found")]
+        [JsonProperty("Number Not Found")]
         public int NumberNotFound { get; set; }
 
-        [DataMember(Name = "Response Status")]
+        [JsonProperty("Response Status")]
         public string Status { get; set; }
 
-        [DataMember(Name = "Errors")]
+        [JsonProperty("Errors")]
         public IEnumerable<IEnumerable<string>> Errors { get; set; }
 
-        [DataMember(Name = "Number Deleted")]
+        [JsonProperty("Number Deleted")]
         public int NumberDeleted { get; set; }
 
-        [DataMember(Name = "Response Body")]
+        [JsonProperty("Response Body")]
         public string ResponseBody { get; set; }
 
         public IEnumerable<string> AllItems { get; set; }  

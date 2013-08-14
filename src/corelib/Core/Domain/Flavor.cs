@@ -1,17 +1,17 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class Flavor
     {
-        [DataMember]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
-        [DataMember]
+        [JsonProperty("links")]
         public Link[] Links { get; set; }
 
-        [DataMember]
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 }

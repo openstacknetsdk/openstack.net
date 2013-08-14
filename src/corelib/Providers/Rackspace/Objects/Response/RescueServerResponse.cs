@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class RescueServerResponse
     {
-        [DataMember(Name = "adminPass")]
+        [JsonProperty("adminPass")]
         public string AdminPassword { get; set; }
     }
 }

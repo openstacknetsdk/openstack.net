@@ -1,13 +1,18 @@
-﻿using System;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
+    using System;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class IdentityToken
     {
+        [JsonProperty("expires")]
         public string Expires { get; set; }
 
+        [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("tenant")]
         public Tenant Tenant { get; set; }
 
         public bool IsExpired()

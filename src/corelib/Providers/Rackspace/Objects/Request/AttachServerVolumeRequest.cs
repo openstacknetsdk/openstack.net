@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class AttachServerVolumeRequest
     {
-        [DataMember(Name = "volumeAttachment")]
+        [JsonProperty("volumeAttachment")]
         public AttachServerVolumeData ServerVolumeData { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class AttachServerVolumeData
     {
-        [DataMember(Name = "device")]
+        [JsonProperty("device")]
         public string Device { get; set; }
 
-        [DataMember(Name = "volumeId")]
+        [JsonProperty("volumeId")]
         public string VolumeId { get; set; }
     }
 }
