@@ -12,13 +12,13 @@
         /// Gets the network ID.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         /// <summary>
         /// Gets the CIDR for the network.
         /// </summary>
         [JsonProperty("cidr")]
-        public string Cidr { get; set; }
+        public string Cidr { get; private set; }
 
         /// <summary>
         /// Gets the name of the network.
@@ -32,6 +32,6 @@
         /// </remarks>
         /// <seealso href="http://docs.rackspace.com/networks/api/v2/cn-devguide/content/ch_overview.html">Overview (Rackspace Cloud Networks Developer Guide - OpenStack Networking API v2)</seealso>
         [JsonProperty("label")]
-        public string Label { get; set; }
+        public string Label { get; private set; }
     }
 }

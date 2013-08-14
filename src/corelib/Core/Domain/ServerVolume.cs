@@ -6,15 +6,15 @@
     public class ServerVolume
     {
         [JsonProperty("device")]
-        public string Device { get; set; }
+        public string Device { get; private set; }
 
         [JsonProperty("serverId")]
-        public string ServerId { get; set; }
+        public string ServerId { get; private set; }
 
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("volumeId")]
-        public string VolumeId { get; set; }
+        public string VolumeId { get; private set; }
     }
 }

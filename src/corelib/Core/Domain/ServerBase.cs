@@ -9,10 +9,10 @@ namespace net.openstack.Core.Domain
     public abstract class ServerBase : ProviderStateBase<IComputeProvider>
     {
         [JsonProperty]
-        public string Id { get; internal set; }
+        public string Id { get; private set; }
 
         [JsonProperty]
-        public Link[] Links { get; internal set; }
+        public Link[] Links { get; private set; }
 
         protected virtual void UpdateThis(ServerBase server)
         {

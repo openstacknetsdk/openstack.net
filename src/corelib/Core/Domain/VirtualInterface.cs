@@ -6,12 +6,12 @@
     public class VirtualInterface
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("ip_addresses")]
-        public VirtualInterfaceAddress[] Addresses { get; set; }
+        public VirtualInterfaceAddress[] Addresses { get; private set; }
 
         [JsonProperty("mac_address")]
-        public string MACAddress { get; set; }
+        public string MACAddress { get; private set; }
     }
 }

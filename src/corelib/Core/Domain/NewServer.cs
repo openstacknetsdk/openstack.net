@@ -6,10 +6,10 @@ namespace net.openstack.Core.Domain
     public class NewServer : ServerBase
     {
         [JsonProperty("OS-DCF:diskConfig")]
-        public string DiskConfig { get; set; }
+        public string DiskConfig { get; private set; }
 
         [JsonProperty("adminPass")]
-        public string AdminPassword { get; set; }
+        public string AdminPassword { get; private set; }
 
         protected override void UpdateThis(ServerBase server)
         {

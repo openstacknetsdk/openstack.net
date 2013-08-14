@@ -6,12 +6,12 @@ namespace net.openstack.Core.Domain
     public class VirtualInterfaceAddress
     {
         [JsonProperty("address")]
-        public string Address { get; set; }
+        public string Address { get; private set; }
 
         [JsonProperty("network_id")]
-        public string NetworkId { get; set; }
+        public string NetworkId { get; private set; }
 
         [JsonProperty("network_label")]
-        public string NetworkLabel { get; set; }
+        public string NetworkLabel { get; private set; }
     }
 }

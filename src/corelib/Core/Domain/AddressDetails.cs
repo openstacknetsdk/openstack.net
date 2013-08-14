@@ -16,12 +16,12 @@
         /// or an IPv6 address if <see cref="Version"/> is <c>"6"</c>.
         /// </summary>
         [JsonProperty("addr")]
-        public string Address { get; set; }
+        public string Address { get; private set; }
 
         /// <summary>
         /// Gets the network address version. The value is either <c>"4"</c> or <c>"6"</c>.
         /// </summary>
         [JsonProperty("version")]
-        public string Version { get; set; }
+        public string Version { get; private set; }
     }
 }

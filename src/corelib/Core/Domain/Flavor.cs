@@ -15,20 +15,20 @@ namespace net.openstack.Core.Domain
         /// <note type="warning">The value of this property is not defined. Do not use.</note>
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         /// <summary>
         /// Gets the "links" property associated with the flavor.
         /// <note type="warning">The value of this property is not defined. Do not use.</note>
         /// </summary>
         [JsonProperty("links")]
-        public Link[] Links { get; set; }
+        public Link[] Links { get; private set; }
 
         /// <summary>
         /// Gets the name of the flavor.
         /// <note type="warning">The value of this property is not defined. Do not use.</note>
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
     }
 }

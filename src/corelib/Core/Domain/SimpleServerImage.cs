@@ -8,13 +8,13 @@ namespace net.openstack.Core.Domain
     public class SimpleServerImage : ProviderStateBase<IComputeProvider>
     {
         [JsonProperty]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty]
-        public Link[] Links { get; set; }
+        public Link[] Links { get; private set; }
 
         [JsonProperty]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
 
         /// <summary>

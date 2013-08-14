@@ -12,25 +12,25 @@ namespace net.openstack.Core.Domain
         private string _status;
 
         [JsonProperty("OS-DCF:diskConfig" )]
-        public string DiskConfig { get; internal set; }
+        public string DiskConfig { get; private set; }
 
         [JsonProperty("OS-EXT-STS:power_state")]
-        public bool PowerState { get; internal set; }
+        public bool PowerState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:task_state")]
-        public string TaskState { get; internal set; }
+        public string TaskState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:vm_state")]
-        public string VMState { get; internal set; }
+        public string VMState { get; private set; }
 
         [JsonProperty]
-        public string AccessIPv4 { get; internal set; }
+        public string AccessIPv4 { get; private set; }
 
         [JsonProperty]
-        public string AccessIPv6 { get; internal set; }
+        public string AccessIPv6 { get; private set; }
 
         [JsonProperty("user_id")]
-        public string UserId { get; internal set; }
+        public string UserId { get; private set; }
 
         private SimpleServerImage _image;
         [JsonProperty]
@@ -45,7 +45,7 @@ namespace net.openstack.Core.Domain
 
                 return _image;
             }
-            internal set { _image = value;  }
+            private set { _image = value;  }
         }
 
         public ServerState Status
@@ -58,7 +58,7 @@ namespace net.openstack.Core.Domain
                 return ServerState.FromName(_status);
             }
 
-            set
+            private set
             {
                 if (value == null)
                     _status = null;
@@ -68,28 +68,28 @@ namespace net.openstack.Core.Domain
         }
 
         [JsonProperty]
-        public Flavor Flavor { get; internal set; }
+        public Flavor Flavor { get; private set; }
 
         [JsonProperty]
-        public ServerAddresses Addresses { get; internal set; }
+        public ServerAddresses Addresses { get; private set; }
 
         [JsonProperty]
-        public DateTime Created { get; internal set; }
+        public DateTime Created { get; private set; }
 
         [JsonProperty]
-        public string HostId { get; internal set; }
+        public string HostId { get; private set; }
 
         [JsonProperty]
-        public int Progress { get; internal set; }
+        public int Progress { get; private set; }
 
         [JsonProperty("rax-bandwidth:bandwidth")]
-        public string[] Bandwidth { get; internal set; }
+        public string[] Bandwidth { get; private set; }
 
         [JsonProperty("tenant_id")]
-        public string TenantId { get; internal set; }
+        public string TenantId { get; private set; }
 
         [JsonProperty]
-        public DateTime Updated { get; internal set; }
+        public DateTime Updated { get; private set; }
 
         protected override void UpdateThis(ServerBase server)
         {
