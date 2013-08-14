@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
 
 namespace net.openstack.Core.Caching
 {

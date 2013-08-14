@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Core.Domain
 {
     using System;
+    using net.openstack.Core.Providers;
     using Newtonsoft.Json;
 
     /// <summary>
