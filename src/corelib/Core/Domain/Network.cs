@@ -6,9 +6,15 @@ namespace net.openstack.Core.Domain
     public class Network
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("ip")]
-        public AddressDetails[] Addresses { get; set; }
+        public AddressDetails[] Addresses { get; private set; }
+
+        public Network(string id, AddressDetails[] addresses)
+        {
+            Id = id;
+            Addresses = addresses;
+        }
     }
 }

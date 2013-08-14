@@ -36,11 +36,7 @@ namespace net.openstack.Core.Domain.Mapping
                 return null;
 
             var network = from.Properties().First();
-            return new Network
-                {
-                    Id = network.Name,
-                    Addresses = network.Value.Select(o => o.ToObject<AddressDetails>()).ToArray()
-                };
+            return new Network(network.Name, network.Value.Select(o => o.ToObject<AddressDetails>()).ToArray());
         }
 
         /// <inheritdoc/>
