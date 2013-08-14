@@ -6,12 +6,12 @@ namespace net.openstack.Core.Domain
     public class ServiceCatalog
     {
         [JsonProperty("endpoints")]
-        public Endpoint[] Endpoints { get; set; }
+        public Endpoint[] Endpoints { get; private set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; private set; }
     }
 }
