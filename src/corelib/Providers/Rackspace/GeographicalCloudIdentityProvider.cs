@@ -61,7 +61,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("name cannot be empty");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role{Name = name, Description = description}});
+            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role(name, description)});
 
             if (response == null || response.Data == null)
                 return null;
@@ -245,12 +245,7 @@ namespace net.openstack.Providers.Rackspace
                 foreach (JProperty property in jToken.Properties())
                 {
                     var cred = (JObject)property.Value;
-                    creds.Add(new UserCredential
-                            {
-                                Name = property.Name,
-                                APIKey = cred["apiKey"].ToString(),
-                                Username = cred["username"].ToString()
-                            }); 
+                    creds.Add(new UserCredential(property.Name, cred["username"].ToString(), cred["apiKey"].ToString())); 
                 }
                    
             }
@@ -335,7 +330,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
+            var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential(null, username, apiKey) };
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)

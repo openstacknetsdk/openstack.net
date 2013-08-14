@@ -6,12 +6,18 @@ namespace net.openstack.Core.Domain
     public class Role
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string Description { get; private set; }
+
+        public Role(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
     }
 }
