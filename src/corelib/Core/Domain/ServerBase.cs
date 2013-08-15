@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using net.openstack.Core.Providers;
 using Newtonsoft.Json;
 
@@ -105,7 +106,7 @@ namespace net.openstack.Core.Domain
         /// <param name="diskConfig">The disk configuration value. <remarks>Available values are [AUTO, MANUAL]</remarks></param>
         /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <c>null</c>, no file is injected.</param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
-        public bool Rebuild(string name, string imageId, string flavor, string adminPassword, string accessIPv4 = null, string accessIPv6 = null, Metadata metadata = null, string diskConfig = null, Personality personality = null)
+        public bool Rebuild(string name, string imageId, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration? diskConfig = null, Personality personality = null)
         {
             var details = Provider.RebuildServer(Id, name, imageId, flavor, adminPassword, accessIPv4, accessIPv6, metadata, diskConfig, personality, Region);
 
@@ -124,7 +125,7 @@ namespace net.openstack.Core.Domain
         /// <param name="flavor">The new flavor.</param>
         /// <param name="diskConfig">The disk configuration value. <remarks>Available values are {AUTO|MANUAL}</remarks></param>
         /// <returns><c>bool</c> indicating if the action was successful</returns>
-        public bool Resize(string name, string flavor, string diskConfig = null)
+        public bool Resize(string name, string flavor, DiskConfiguration? diskConfig = null)
         {
             return Provider.ResizeServer(Id, name, flavor, diskConfig, Region);
         }

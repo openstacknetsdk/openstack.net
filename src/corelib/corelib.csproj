@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\DiskConfiguration.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
     <Compile Include="Core\Domain\IPAddressList.cs" />
     <Compile Include="Core\Domain\SnapshotState.cs" />
