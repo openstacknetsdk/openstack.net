@@ -11,6 +11,11 @@
         public const string Identity = "Identity";
 
         /// <summary>
+        /// Object storage service tests.
+        /// </summary>
+        public const string ObjectStorage = "ObjectStorage";
+
+        /// <summary>
         /// Tests which require user credentials.
         /// </summary>
         public const string User = "User";

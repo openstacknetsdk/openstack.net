@@ -70,6 +70,7 @@
     <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
     <Compile Include="Providers\Rackspace\TestCategories.cs" />
     <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
+    <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.csproj">
