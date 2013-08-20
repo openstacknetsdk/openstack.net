@@ -21,6 +21,11 @@
         public const string ObjectStorage = "ObjectStorage";
 
         /// <summary>
+        /// Networks service tests.
+        /// </summary>
+        public const string Networks = "Networks";
+
+        /// <summary>
         /// Tests which require user credentials.
         /// </summary>
         public const string User = "User";
