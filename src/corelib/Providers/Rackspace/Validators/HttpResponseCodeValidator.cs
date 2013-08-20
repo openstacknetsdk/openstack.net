@@ -53,6 +53,8 @@ namespace net.openstack.Providers.Rackspace.Validators
                     throw new MethodNotImplementedException(response);
                 case HttpStatusCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(response);
+                default:
+                    throw new ResponseException(string.Format("Unexpected HTTP error: {0}", response.StatusCode), response);
             }
         }
     }
