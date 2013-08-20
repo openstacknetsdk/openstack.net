@@ -69,6 +69,7 @@
     <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
     <Compile Include="Providers\Rackspace\TestCategories.cs" />
+    <Compile Include="Providers\Rackspace\UserBlockStorageTests.cs" />
     <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
     <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
   </ItemGroup>

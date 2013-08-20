@@ -11,6 +11,11 @@
         public const string Identity = "Identity";
 
         /// <summary>
+        /// Block storage service tests.
+        /// </summary>
+        public const string BlockStorage = "BlockStorage";
+
+        /// <summary>
         /// Object storage service tests.
         /// </summary>
         public const string ObjectStorage = "ObjectStorage";
