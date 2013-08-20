@@ -74,7 +74,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.VolumeType"></see></returns>
-        VolumeType DescribeVolumeType(int volumeTypeId, string region = null, CloudIdentity identity = null);
+        VolumeType DescribeVolumeType(string volumeTypeId, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// Waits for a volume to be set to <see cref="VolumeState.Available"/> status.  
         /// This method will be helpful to ensure that a volume is correctly created prior to executing additional requests against it.

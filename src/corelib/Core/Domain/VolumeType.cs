@@ -6,7 +6,7 @@ namespace net.openstack.Core.Domain
     public class VolumeType
     {
         [DataMember]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [DataMember]
         public string Name { get; set; }
