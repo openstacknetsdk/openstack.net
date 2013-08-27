@@ -7,9 +7,9 @@ namespace net.openstack.Core.Domain
     public class ServerAddresses : Dictionary<string, AddressDetails[]>
     {
         [IgnoreDataMember]
-        public AddressDetails[] Private { get { return this["private"]; } }
+        public AddressDetails[] Private { get { return ContainsKey("private") ? this["private"] : null; } }
 
         [IgnoreDataMember]
-        public AddressDetails[] Public { get { return this["public"]; } }
+        public AddressDetails[] Public { get { return ContainsKey("public") ? this["public"] : null; } }
     }
 }
