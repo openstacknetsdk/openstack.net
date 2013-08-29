@@ -328,9 +328,9 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             {
             }
 
-            public Endpoint GetEndpoint(string serviceName, string region, CloudIdentity identity)
+            public Endpoint GetEndpoint(string serviceType, string region, CloudIdentity identity)
             {
-                return base.GetServiceEndpoint(identity, serviceName, region);
+                return base.GetServiceEndpoint(identity, serviceType, region);
             }
 
             protected override IIdentityProvider BuildProvider(CloudIdentity identity)
