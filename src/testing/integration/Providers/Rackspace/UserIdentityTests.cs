@@ -120,6 +120,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.Cleanup)]
         public void CleanupUsers()
         {
             IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);

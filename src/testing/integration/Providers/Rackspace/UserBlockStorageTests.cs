@@ -37,6 +37,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.BlockStorage)]
+        [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestVolumes()
         {
             IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
@@ -194,6 +195,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.BlockStorage)]
+        [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestSnapshots()
         {
             IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);

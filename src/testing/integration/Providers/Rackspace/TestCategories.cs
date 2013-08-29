@@ -26,6 +26,13 @@
         public const string Networks = "Networks";
 
         /// <summary>
+        /// Unit tests designed to remove resources from an account which were created
+        /// by previous unit test runs which were cancelled, failed, or designed in such
+        /// a way that resources were not deleted automatically at the end of the test.
+        /// </summary>
+        public const string Cleanup = "Cleanup";
+
+        /// <summary>
         /// Tests which require user credentials.
         /// </summary>
         public const string User = "User";

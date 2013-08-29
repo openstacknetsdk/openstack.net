@@ -95,6 +95,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Networks)]
+        [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestNetworks()
         {
             INetworksProvider provider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
