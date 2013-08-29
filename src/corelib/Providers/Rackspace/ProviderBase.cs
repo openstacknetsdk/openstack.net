@@ -148,7 +148,7 @@ namespace net.openstack.Providers.Rackspace
             return new JsonRequestSettings { RetryCount = 2, RetryDelay = TimeSpan.FromMilliseconds(200), Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
-        protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceName, string region = null)
+        protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceType, string region = null)
         {
             identity = GetDefaultIdentity(identity);
 
@@ -157,7 +157,7 @@ namespace net.openstack.Providers.Rackspace
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints.");
 
-            var serviceDetails = userAccess.ServiceCatalog.FirstOrDefault(sc => sc.Name == serviceName);
+            var serviceDetails = userAccess.ServiceCatalog.FirstOrDefault(sc => string.Equals(sc.Type, serviceType, StringComparison.OrdinalIgnoreCase));
 
             if (serviceDetails == null || serviceDetails.Endpoints == null || serviceDetails.Endpoints.Length == 0)
                 throw new UserAuthorizationException("The user does not have access to the requested service.");
@@ -181,16 +181,16 @@ namespace net.openstack.Providers.Rackspace
             return endpoint;
         }
 
-        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceName, string region)
+        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceType, string region)
         {
-            var endpoint = GetServiceEndpoint(identity, serviceName, region);
+            var endpoint = GetServiceEndpoint(identity, serviceType, region);
 
             return endpoint.PublicURL;
         }
 
-        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceName, string region)
+        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceType, string region)
         {
-            var endpoint = GetServiceEndpoint(identity, serviceName, region);
+            var endpoint = GetServiceEndpoint(identity, serviceType, region);
 
             return endpoint.InternalURL;
         }

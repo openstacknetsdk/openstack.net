@@ -1024,12 +1024,12 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null, bool useInternalUrl = false)
         {
-            return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "cloudFiles", region) : base.GetPublicServiceEndpoint(identity, "cloudFiles", region);
+            return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "object-store", region) : base.GetPublicServiceEndpoint(identity, "object-store", region);
         }
 
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
-            return base.GetPublicServiceEndpoint(identity, "cloudFilesCDN", region);
+            return base.GetPublicServiceEndpoint(identity, "rax:object-cdn", region);
         }
 
         public static void CopyStream(Stream input, Stream output, int bufferSize, Action<long> progressUpdated)
