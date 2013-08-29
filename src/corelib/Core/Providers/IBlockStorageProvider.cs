@@ -24,7 +24,7 @@ namespace net.openstack.Core.Providers
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <exception cref="net.openstack.Providers.Rackspace.Exceptions.InvalidVolumeSizeException"></exception>
         /// <returns><see cref="bool"></see></returns>
-        bool CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null);
+        Volume CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null);
         /// <summary>
         /// View a list of volumes.
         /// <para/>

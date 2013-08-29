@@ -72,7 +72,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = new CloudBlockStorageProvider();
             var volumeCreatedResponse = provider.CreateVolume(100, identity: _testIdentity);
-            Assert.IsTrue(volumeCreatedResponse);
+            Assert.IsNotNull(volumeCreatedResponse);
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = new CloudBlockStorageProvider();
             var volumeCreatedResponse = provider.CreateVolume(100, volumeDisplayDescription, volumeDisplayName, null, "SATA", null, _testIdentity);
-            Assert.IsTrue(volumeCreatedResponse);
+            Assert.IsNotNull(volumeCreatedResponse);
 
 
         }
