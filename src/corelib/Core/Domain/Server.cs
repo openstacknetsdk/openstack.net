@@ -83,9 +83,6 @@ namespace net.openstack.Core.Domain
         [JsonProperty]
         public int Progress { get; private set; }
 
-        [JsonProperty("rax-bandwidth:bandwidth")]
-        public string[] Bandwidth { get; private set; }
-
         [JsonProperty("tenant_id")]
         public string TenantId { get; private set; }
 
@@ -115,7 +112,6 @@ namespace net.openstack.Core.Domain
             Created = details.Created;
             HostId = details.HostId;
             Progress = details.Progress;
-            Bandwidth = details.Bandwidth;
             TenantId = details.TenantId;
             Updated = details.Updated;
         }
@@ -250,13 +246,13 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Lists of network addresses associated with the serverk.
+        /// Lists of network addresses associated with the server.
         /// </summary>
-        /// <param name="networkName">The network name.</param>
+        /// <param name="networkLabel">The network label.</param>
         /// <returns>List of network <see cref="AddressDetails"/></returns>
-        public IEnumerable<IPAddress> ListAddressesByNetwork(string networkName)
+        public IEnumerable<IPAddress> ListAddressesByNetwork(string networkLabel)
         {
-            return Provider.ListAddressesByNetwork(Id, networkName, Region);
+            return Provider.ListAddressesByNetwork(Id, networkLabel, Region);
         }
 
         /// <summary>
