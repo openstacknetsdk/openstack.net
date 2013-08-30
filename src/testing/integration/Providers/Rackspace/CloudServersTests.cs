@@ -858,7 +858,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Attach_Server_Volume()
         {
-            _testVolume = _testServer.AttachVolume("2da9ce90-076e-450a-be3e-c822c9aa73f5");
+            _testVolume = _testServer.AttachVolume("2da9ce90-076e-450a-be3e-c822c9aa73f5", null);
 
             Assert.IsNotNull(_testVolume);
         }

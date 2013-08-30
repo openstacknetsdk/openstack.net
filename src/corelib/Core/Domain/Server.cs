@@ -128,27 +128,6 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Attaches the specified volume to the server.
-        /// </summary>
-        /// <param name="volumeId">The volume ID.</param>
-        /// <param name="storageDevice">The name of the device, such as /dev/xvdb. <remarks>If null, this value will be auto assigned</remarks></param>
-        /// <returns>The <see cref="ServerVolume"/> details.</returns>
-        public ServerVolume AttachVolume(string volumeId, string storageDevice = null)
-        {
-            return Provider.AttachServerVolume(Id, volumeId, storageDevice, Region);
-        }
-
-        /// <summary>
-        /// Detaches the specified volume from the server.
-        /// </summary>
-        /// <param name="volumeId">The volume ID.</param>
-        /// <returns><c>bool</c> indicating if the action was successful</returns>
-        public bool DetachVolume(string volumeId)
-        {
-            return Provider.DetachServerVolume(Id, volumeId, Region);
-        }
-
-        /// <summary>
         /// Retrieves a list of the server's metadata from the provider's service.
         /// </summary>
         /// <value>
