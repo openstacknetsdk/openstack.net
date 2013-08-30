@@ -24,13 +24,19 @@
         /// This prefix is used for volumes created by unit tests, to avoid
         /// overwriting volumes created by other applications.
         /// </summary>
-        private const string UnitTestVolumePrefix = "UnitTestVolume-";
+        public const string UnitTestVolumePrefix = "UnitTestVolume-";
 
         /// <summary>
         /// This prefix is used for snapshots created by unit tests, to avoid
         /// overwriting snapshots created by other applications.
         /// </summary>
-        private const string UnitTestSnapshotPrefix = "UnitTestSnapshot-";
+        public const string UnitTestSnapshotPrefix = "UnitTestSnapshot-";
+
+        /// <summary>
+        /// Gets the minimum volume size that the provider allows. This size will perform
+        /// the fastest imaging operations during integration testing.
+        /// </summary>
+        public static readonly int MinimumVolumeSize = 100;
 
         #region Volume
 
@@ -82,7 +88,7 @@
         {
             IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
             string displayName = UnitTestVolumePrefix + Path.GetRandomFileName();
-            Volume result = provider.CreateVolume(100, displayName: displayName);
+            Volume result = provider.CreateVolume(MinimumVolumeSize, displayName: displayName);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Id);
 
@@ -252,7 +258,7 @@
             else
                 Console.WriteLine("No SSD volume type is available for the snapshot test... falling back to the default.");
 
-            Volume result = provider.CreateVolume(100, displayName: volumeDisplayName, volumeType: ssdType != null ? ssdType.Id : null);
+            Volume result = provider.CreateVolume(MinimumVolumeSize, displayName: volumeDisplayName, volumeType: ssdType != null ? ssdType.Id : null);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Id);
 
@@ -314,7 +320,7 @@
             Assert.IsTrue(deletedVolume);
         }
 
-        private static VolumeType GetSsdVolumeTypeOrDefault(IBlockStorageProvider provider)
+        public static VolumeType GetSsdVolumeTypeOrDefault(IBlockStorageProvider provider)
         {
             foreach (var volumeType in provider.ListVolumeTypes())
             {
