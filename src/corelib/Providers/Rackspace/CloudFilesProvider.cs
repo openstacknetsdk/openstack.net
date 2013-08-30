@@ -846,7 +846,7 @@ namespace net.openstack.Providers.Rackspace
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            RequestSettings settings = BuildDefaultRequestSettings();
             settings.ChunkRequest = true;
             settings.ContentType = contentType;
 
@@ -994,7 +994,7 @@ namespace net.openstack.Providers.Rackspace
 
             headers.Add(DestinationMetadataKey, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
 
-            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            RequestSettings settings = BuildDefaultRequestSettings();
             if (destinationContentType != null)
             {
                 settings.ContentType = destinationContentType;
@@ -1267,7 +1267,7 @@ namespace net.openstack.Providers.Rackspace
                 Uri urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
                 long segmentBytesWritten = 0;
 
-                JsonRequestSettings settings = BuildDefaultRequestSettings();
+                RequestSettings settings = BuildDefaultRequestSettings();
                 settings.ChunkRequest = true;
                 settings.ContentType = contentType;
 
@@ -1292,7 +1292,7 @@ namespace net.openstack.Providers.Rackspace
 
             headers.Add(ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
 
-            JsonRequestSettings requestSettings = BuildDefaultRequestSettings();
+            RequestSettings requestSettings = BuildDefaultRequestSettings();
             requestSettings.ChunkRequest = true;
             requestSettings.ContentType = contentType;
 
