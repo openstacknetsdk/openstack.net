@@ -1197,12 +1197,12 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
 
-            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<MetadataItemResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NonAuthoritativeInformation) || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
                 return null;
 
-            return response.Data.Metadata.First().Value;
+            return response.Data.Metadata[key];
         }
 
         /// <inheritdoc />
@@ -1337,12 +1337,12 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
 
-            var response = ExecuteRESTRequest<MetaDataResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<MetadataItemResponse>(identity, urlPath, HttpMethod.GET);
 
             if (response == null || response.Data == null || response.Data.Metadata == null || response.Data.Metadata.Count == 0)
                 return null;
 
-            return response.Data.Metadata.First().Value;
+            return response.Data.Metadata[key];
         }
 
         /// <inheritdoc />
