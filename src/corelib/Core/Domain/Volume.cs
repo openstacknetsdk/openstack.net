@@ -10,7 +10,7 @@
         [JsonProperty("status")]
         private string _status;
 
-        [JsonProperty]
+        [JsonProperty("id")]
         public string Id { get; private set; }
 
         [JsonProperty("display_name")]
@@ -19,7 +19,7 @@
         [JsonProperty("display_description")]
         public string DisplayDescription { get; private set; }
 
-        [JsonProperty]
+        [JsonProperty("size")]
         public int Size { get; private set; }
 
         [JsonProperty("volume_type")]
@@ -28,7 +28,7 @@
         [JsonProperty("snapshot_id")]
         public string SnapshotId { get; private set; }
 
-        [JsonProperty]
+        [JsonProperty("attachments")]
         public Dictionary<string, string>[] Attachments { get; private set; }
 
         public VolumeState Status

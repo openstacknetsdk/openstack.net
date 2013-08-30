@@ -14,13 +14,13 @@
         /// <summary>
         /// Gets the volume type ID.
         /// </summary>
-        [JsonProperty]
+        [JsonProperty("id")]
         public string Id { get; private set; }
 
         /// <summary>
         /// Gets the name of the volume type.
         /// </summary>
-        [JsonProperty]
+        [JsonProperty("name")]
         public string Name { get; private set; }
     }
 }
