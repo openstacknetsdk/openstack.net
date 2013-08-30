@@ -46,8 +46,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         private TestContext testContextInstance;
-        private static long _originalThreshold;
-
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -769,17 +767,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
-        public void Should_Reset_The_Batch_Threshold()
-        {
-            _originalThreshold = CloudFilesProvider.LargeFileBatchThreshold;
-            CloudFilesProvider.LargeFileBatchThreshold = 81920;
-        }
-
-
-        [TestMethod]
         public void Should_Create_New_Test_Container_2()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.CreateContainer(containerName2);
 
@@ -792,6 +783,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Upload_File_In_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
 
@@ -811,6 +803,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Object_And_All_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteObject(containerName2, objectName, deleteSegments: true);
 
@@ -828,6 +821,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Object_But_Not_The_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteObject(containerName2, objectName, deleteSegments: false);
 
@@ -845,6 +839,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Bulk_Delete_All_Objects()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.BulkDelete(provider.ListObjects(containerName2).Select(o => string.Format("{0}/{1}", containerName2, o.Name)));
 
@@ -857,18 +852,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_Objects_Before_Deleting_The_Conatiner()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteContainer(containerName2, deleteObjects: true);
 
             var containers = provider.ListContainers();
             Assert.IsFalse(containers.Any(c => c.Name.Equals(containerName2)));
-        }
-
-
-        [TestMethod]
-        public void Should_Reset_The_Batch_Threshold_To_Original()
-        {
-            CloudFilesProvider.LargeFileBatchThreshold = _originalThreshold;
         }
 
         #endregion Object Tests

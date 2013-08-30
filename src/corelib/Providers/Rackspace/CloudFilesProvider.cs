@@ -1369,13 +1369,27 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-        private static long _largeFileBatchThreshold = 5368709120; // 5GB
+        public static readonly long MaxLargeFileBatchThreshold = 5368709120; // 5GB
+        private long _largeFileBatchThreshold = MaxLargeFileBatchThreshold;
 
-        public static long LargeFileBatchThreshold
+        public long LargeFileBatchThreshold
         {
-            get { return _largeFileBatchThreshold; }
-            internal set { _largeFileBatchThreshold = value; }
+            get
+            {
+                return _largeFileBatchThreshold;
+            }
+
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+                if (value > MaxLargeFileBatchThreshold)
+                    throw new ArgumentException(string.Format("The large file threshold cannot exceed the provider's maximum value {0}", MaxLargeFileBatchThreshold), "value");
+
+                _largeFileBatchThreshold = value;
+            }
         }
+
         public const string ProcessedHeadersMetadataKey = "metadata";
         public const string ProcessedHeadersHeaderKey = "headers";
         #endregion
