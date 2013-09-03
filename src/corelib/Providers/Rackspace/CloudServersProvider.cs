@@ -561,7 +561,9 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/flavors", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListFlavorsResponse>(identity, urlPath, HttpMethod.GET);
+            var queryStringParameters = BuildListFlavorsQueryStringParameters(minDiskInGB, minRamInMB, markerId, limit);
+
+            var response = ExecuteRESTRequest<ListFlavorsResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -574,7 +576,9 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/flavors/detail", GetServiceEndpoint(identity, region)));
 
-            var response = ExecuteRESTRequest<ListFlavorDetailsResponse>(identity, urlPath, HttpMethod.GET);
+            var queryStringParameters = BuildListFlavorsQueryStringParameters(minDiskInGB, minRamInMB, markerId, limit);
+
+            var response = ExecuteRESTRequest<ListFlavorDetailsResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: queryStringParameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -654,6 +658,21 @@ namespace net.openstack.Providers.Rackspace
 
             if(imageType != null)
                 queryParameters.Add("type", imageType.Name);
+
+            return queryParameters;
+        }
+
+        private Dictionary<string, string> BuildListFlavorsQueryStringParameters(int? minDiskInGB, int? minRamInMB, string markerId, int? limit)
+        {
+            var queryParameters = new Dictionary<string, string>();
+            if (minDiskInGB != null)
+                queryParameters.Add("minDisk", minDiskInGB.ToString());
+            if (minRamInMB != null)
+                queryParameters.Add("minRam", minRamInMB.ToString());
+            if (!string.IsNullOrEmpty(markerId))
+                queryParameters.Add("marker", markerId);
+            if (limit != null)
+                queryParameters.Add("limit", limit.ToString());
 
             return queryParameters;
         }
