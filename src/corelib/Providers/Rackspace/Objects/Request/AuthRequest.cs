@@ -7,7 +7,7 @@
     internal class AuthRequest
     {
         [JsonProperty("auth")]
-        public AuthDetails Credencials { get; set; }
+        public AuthDetails Credentials { get; set; }
 
         public static AuthRequest FromCloudIdentity(CloudIdentity identity)
         {
@@ -23,7 +23,7 @@
                 creds.Domain = raxIdentity.Domain;
             }
 
-            return new AuthRequest { Credencials = creds };
+            return new AuthRequest { Credentials = creds };
         }
     }
 }

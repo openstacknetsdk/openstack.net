@@ -128,15 +128,15 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var request = new SetPasswordRequest
             {
-                PasswordCredencial =
-                    new PasswordCredencial { Username = username, Password = password }
+                PasswordCredential =
+                    new PasswordCredential { Username = username, Password = password }
             };
-            var response = ExecuteRESTRequest<PasswordCredencialResponse>(identity, urlPath, HttpMethod.POST, request);
+            var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)
                 return false;
 
-            return response.Data.PasswordCredencial.Password.Equals(password);
+            return response.Data.PasswordCredential.Password.Equals(password);
         }
 
         public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
@@ -195,7 +195,7 @@ namespace net.openstack.Providers.Rackspace
         public UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity)
         {
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var request = new UpdateUserCredencialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
+            var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential { Username = username, APIKey = apiKey } };
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)

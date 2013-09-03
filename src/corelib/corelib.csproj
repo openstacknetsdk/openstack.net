@@ -167,7 +167,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\SetPasswordRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataItemRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataRequest.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredencialRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredentialRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageSnapshotResponse.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredencialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredentialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
