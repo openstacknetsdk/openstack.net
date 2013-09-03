@@ -26,7 +26,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -44,7 +44,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -62,7 +62,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
@@ -80,7 +80,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -98,7 +98,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
@@ -116,7 +116,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "DFW" }, new Endpoint { Region = "ORD" } } } },
                     User = new UserDetails { DefaultRegion = "DFW" }
                 });
             var provider = new MockProvider(new CloudIdentity(), identityProviderMock.Object, null);
@@ -134,7 +134,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "LON" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -152,7 +152,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "LON" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -170,7 +170,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "LON" }
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
@@ -188,7 +188,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "LON" }
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
@@ -206,7 +206,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "" }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -224,7 +224,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = "" }
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
@@ -242,7 +242,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = null }
                 });
             var provider = new MockProvider(null, identityProviderMock.Object, null);
@@ -260,7 +260,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(
                 new UserAccess
                 {
-                    ServiceCatalog = new[] { new ServiceCatalog() { Name = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
+                    ServiceCatalog = new[] { new ServiceCatalog() { Type = _testService, Endpoints = new[] { new Endpoint { Region = "LON" }, new Endpoint { Region = "LON2" } } } },
                     User = new UserDetails { DefaultRegion = null }
                 });
             var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
