@@ -806,7 +806,18 @@ namespace net.openstack.Providers.Rackspace
             headers.Add(DestinationMetadataKey, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
 
             JsonRequestSettings settings = BuildDefaultRequestSettings();
-            settings.ContentType = destinationContentType;
+            if (destinationContentType != null)
+            {
+                settings.ContentType = destinationContentType;
+            }
+            else
+            {
+                // make sure to preserve the content type during the copy operation
+                Dictionary<string, string> sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region, useInternalUrl, identity);
+                string contentType;
+                if (sourceHeaders.TryGetValue("Content-Type", out contentType))
+                    settings.ContentType = contentType;
+            }
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers, settings: settings);
 
