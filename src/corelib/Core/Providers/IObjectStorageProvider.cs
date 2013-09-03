@@ -406,19 +406,17 @@ namespace net.openstack.Core.Providers
         Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Sets the container metadata, replacing any existing metadata values.
+        /// Updates the metadata associated with the container. This method is used to add, update, and
+        /// remove metadata items associated with a storage container.
         /// </summary>
         /// <remarks>
-        /// <alert class="warning">
-        /// This method replaces all existing metadata for the container with the values
-        /// found in <paramref name="metadata"/>. To add or change existing metadata values
-        /// without affecting all metadata for the container, first call <see cref="GetContainerMetaData"/>,
-        /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
-        /// then call <see cref="UpdateContainerMetadata"/> with the modified metadata dictionary.
-        /// </alert>
+        /// Each key/value pair in <paramref name="metadata"/> represents an updated metadata item.
+        /// If the value is <c>null</c> or empty, then the metadata item represented by the key is
+        /// removed if it exists. If a metadata item already exists for the key, its value is updated.
+        /// Otherwise, a new metadata item is added for the key/value pair.
         /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="metadata">The complete metadata to associate with the container.</param>
+        /// <param name="metadata">The account metadata to update.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -431,10 +429,16 @@ namespace net.openstack.Core.Providers
         /// If <paramref name="container"/> is empty.
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key or value with invalid characters.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key that is <c>null</c> or empty.</para>
         /// </exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key or value with characters that are not supported by the implementation.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
@@ -471,6 +475,8 @@ namespace net.openstack.Core.Providers
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
+        /// <para>If <paramref name="keys"/> contains a key with characters that are not supported by the implementation.</para>
+        /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
         /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
@@ -505,6 +511,8 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> contains a character that is not supported by the implementation.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
@@ -1054,25 +1062,31 @@ namespace net.openstack.Core.Providers
         Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Sets the account metadata, replacing any existing metadata values.
+        /// Updates the metadata associated with the account. This method is used to add, update, and
+        /// remove metadata items associated with a storage account.
         /// </summary>
         /// <remarks>
-        /// <alert class="warning">
-        /// This method replaces all existing metadata for the account with the values
-        /// found in <paramref name="metadata"/>. To add or change existing metadata values
-        /// without affecting all metadata for the account, first call <see cref="GetAccountMetaData"/>,
-        /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
-        /// then call <see cref="UpdateAccountMetadata"/> with the modified metadata dictionary.
-        /// </alert>
+        /// Each key/value pair in <paramref name="metadata"/> represents an updated metadata item.
+        /// If the value is <c>null</c> or empty, then the metadata item represented by the key is
+        /// removed if it exists. If a metadata item already exists for the key, its value is updated.
+        /// Otherwise, a new metadata item is added for the key/value pair.
         /// </remarks>
-        /// <param name="metadata">The complete metadata to associate with the account.</param>
+        /// <param name="metadata">The account metadata to update.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key or value with invalid characters.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key that is <c>null</c> or empty.</para>
+        /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> contains a key or value with characters that are not supported by the implementation.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>

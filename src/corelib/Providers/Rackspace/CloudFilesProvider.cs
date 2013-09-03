@@ -419,11 +419,13 @@ namespace net.openstack.Providers.Rackspace
 
             _cloudFilesValidator.ValidateContainerName(container);
 
-            var headers = new Dictionary<string, string>(GetContainerHeader(container, region, useInternalUrl, identity), StringComparer.OrdinalIgnoreCase);
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
                 if (string.IsNullOrEmpty(m.Key))
                     throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('\''))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
 
                 headers.Add(ContainerMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
@@ -444,23 +446,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("container cannot be empty");
             CheckIdentity(identity);
 
-            _cloudFilesValidator.ValidateContainerName(container);
-
-            var headers = new Dictionary<string, string>(GetContainerHeader(container, region, useInternalUrl, identity), StringComparer.OrdinalIgnoreCase);
-            foreach (KeyValuePair<string, string> pair in GetContainerMetaData(container, region, useInternalUrl, identity))
-                headers.Add(ContainerMetaDataPrefix + pair.Key, pair.Value);
-
-            foreach (string key in metadata)
-            {
-                if (string.IsNullOrEmpty(key))
-                    throw new ArgumentException("metadata cannot contain any null or empty values");
-
-                headers.Remove(key);
-            }
-
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+            Dictionary<string, string> headers = metadata.ToDictionary(i => i, i => default(string), StringComparer.OrdinalIgnoreCase);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -527,14 +514,14 @@ namespace net.openstack.Providers.Rackspace
                 throw new CDNNotEnabledException();
             }
 
-            var headers = new Dictionary<string, string>
+            var metadata = new Dictionary<string, string>
                                 {
                                     {WebIndex, index},
                                     {WebError, error},
                                     {WebListingsCSS, css},
                                     {WebListings, listing.ToString()}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, metadata, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -569,7 +556,7 @@ namespace net.openstack.Providers.Rackspace
                                       {WebError, error},
                                       {WebListings, listing.ToString()}
                                   };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -598,7 +585,7 @@ namespace net.openstack.Providers.Rackspace
                                     {WebListingsCSS, css},
                                     {WebListings, listing.ToString()}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -632,7 +619,7 @@ namespace net.openstack.Providers.Rackspace
                                       {WebIndex, index},
                                       {WebError, error}
                                   };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
@@ -658,7 +645,7 @@ namespace net.openstack.Providers.Rackspace
                                     {WebListingsCSS, string.Empty},
                                     {WebListings, string.Empty}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         #endregion
@@ -703,7 +690,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException();
             }
 
-            var headers = new Dictionary<string, string>();
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
                 if (m.Key.StartsWith(ObjectMetaDataPrefix) || m.Key.StartsWith(ObjectRemoveMetaDataPrefix))
@@ -1120,18 +1107,18 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("metadata");
             CheckIdentity(identity);
 
-            // start with the account headers to ensure this method doesn't overwrite them
-            var headers = GetAccountHeaders(region, useInternalUrl, identity);
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
                 if (string.IsNullOrEmpty(m.Key))
                     throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('\''))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
 
                 headers.Add(AccountMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
 
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
-
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
@@ -1263,10 +1250,10 @@ namespace net.openstack.Providers.Rackspace
         public const string ContainerRemoveMetaDataPrefix = "x-remove-container-meta-";
         public const string ContainerBytesUsed = "x-container-bytes-used";
         public const string ContainerObjectCount = "x-container-object-count";
-        public const string WebIndex = "x-container-meta-web-index";
-        public const string WebError = "x-container-meta-web-error";
-        public const string WebListings = "x-container-meta-web-listings";
-        public const string WebListingsCSS = "x-container-meta-web-listings-css";
+        public const string WebIndex = "web-index";
+        public const string WebError = "web-error";
+        public const string WebListings = "web-listings";
+        public const string WebListingsCSS = "web-listings-css";
         public const string VersionsLocation = "x-versions-location";
         //CDN Container Constants
         public const string CdnUri = "x-cdn-uri";
