@@ -100,7 +100,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
                 var volumeDetails = provider.WaitForVolumeAvailable(testVolume.Id, identity: _testIdentity);
                 Assert.IsNotNull(volumeDetails);
-                Assert.AreEqual(VolumeState.AVAILABLE, volumeDetails.Status, true);
+                Assert.AreEqual(VolumeState.Available, volumeDetails.Status);
 
             }
             else
@@ -235,7 +235,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
                 var snapshotDetails = provider.WaitForSnapshotAvailable(testSnapshot.Id, identity: _testIdentity);
                 Assert.IsNotNull(snapshotDetails);
-                Assert.AreEqual(SnapshotState.AVAILABLE, snapshotDetails.Status, true);
+                Assert.AreEqual(SnapshotState.Available, snapshotDetails.Status);
 
             }
             else

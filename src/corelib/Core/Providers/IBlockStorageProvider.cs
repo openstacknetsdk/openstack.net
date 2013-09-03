@@ -76,7 +76,7 @@ namespace net.openstack.Core.Providers
         /// <returns><see cref="net.openstack.Core.Domain.VolumeType"></see></returns>
         VolumeType DescribeVolumeType(int volumeTypeId, string region = null, CloudIdentity identity = null);
         /// <summary>
-        /// Waits for a volume to be set to AVAILABLE status.  
+        /// Waits for a volume to be set to <see cref="VolumeState.Available"/> status.  
         /// This method will be helpful to ensure that a volume is correctly created prior to executing additional requests against it.
         /// </summary>
         /// <param name="volumeId">The ID of the volume to poll.</param>
@@ -113,7 +113,7 @@ namespace net.openstack.Core.Providers
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Volume"></see></returns>
         /// <exception cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider.VolumeEnteredErrorStateException"></exception>
-        Volume WaitForVolumeState(string volumeId, string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
+        Volume WaitForVolumeState(string volumeId, VolumeState expectedState, VolumeState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         #endregion
 
         #region Snapshot
@@ -165,7 +165,7 @@ namespace net.openstack.Core.Providers
         /// <returns><see cref="bool"></see></returns>
         bool DeleteSnapshot(string snapshotId, string region = null, CloudIdentity identity = null);
         /// <summary>
-        /// Waits for a snapshot to be set to AVAILABLE status.  
+        /// Waits for a snapshot to be set to <see cref="SnapshotState.Available"/> status.
         /// This method will be helpful to ensure that a snapshot is correctly created prior to executing additional requests against it.
         /// </summary>
         /// <param name="snapshotId">The ID of the snapshot to poll.</param>
@@ -201,7 +201,7 @@ namespace net.openstack.Core.Providers
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity"/><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns><see cref="net.openstack.Core.Domain.Snapshot"></see></returns>
         /// <exception cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider.SnapshotEnteredErrorStateException"></exception>
-        Snapshot WaitForSnapshotState(string snapshotId, string expectedState, string[] errorStates, int refreshCount = 60, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
+        Snapshot WaitForSnapshotState(string snapshotId, SnapshotState expectedState, SnapshotState[] errorStates, int refreshCount = 60, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
         #endregion
     }
 }
