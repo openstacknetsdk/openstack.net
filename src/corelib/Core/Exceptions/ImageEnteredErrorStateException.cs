@@ -8,46 +8,46 @@ namespace net.openstack.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when the server enters an error state during a
-    /// call to <see cref="O:IComputeProvider.WaitForServerState"/>.
+    /// call to <see cref="O:IComputeProvider.WaitForImageState"/>.
     /// </summary>
     [Serializable]
-    public class ServerEnteredErrorStateException : Exception
+    public class ImageEnteredErrorStateException : Exception
     {
         /// <summary>
-        /// The state of the server.
+        /// The state of the image.
         /// </summary>
-        /// <seealso cref="ServerState"/>
-        public ServerState Status
+        /// <seealso cref="ImageState"/>
+        public ImageState Status
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerEnteredErrorStateException"/> class
+        /// Initializes a new instance of the <see cref="ImageEnteredErrorStateException"/> class
         /// with the specified error state.
         /// </summary>
-        /// <param name="status">The error state entered by the server.</param>
-        public ServerEnteredErrorStateException(ServerState status)
-            : base(string.Format("The server entered an error state: '{0}'", status))
+        /// <param name="status">The error state entered by the image.</param>
+        public ImageEnteredErrorStateException(ImageState status)
+            : base(string.Format("The image entered an error state: '{0}'", status))
         {
             Status = status;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerEnteredErrorStateException"/> class with
+        /// Initializes a new instance of the <see cref="ImageEnteredErrorStateException"/> class with
         /// serialized data.
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
-        protected ServerEnteredErrorStateException(SerializationInfo info, StreamingContext context)
+        protected ImageEnteredErrorStateException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            Status = ServerState.FromName((string)info.GetValue("Status", typeof(string)));
+            Status = ImageState.FromName((string)info.GetValue("Status", typeof(string)));
         }
 
         /// <inheritdoc/>

@@ -54,7 +54,7 @@ namespace net.openstack.Core.Domain
         /// <param name="refreshCount">Number of times to check the server status</param>
         /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(ServerState expectedState, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
             var details = Provider.WaitForServerState(Id, expectedState, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
             UpdateThis(details);
@@ -68,7 +68,7 @@ namespace net.openstack.Core.Domain
         /// <param name="refreshCount">Number of times to check the server status</param>
         /// <param name="refreshDelay">The time to wait each time before requesting the status for the server. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(ServerState[] expectedStates, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
             var details = Provider.WaitForServerState(Id, expectedStates, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
             UpdateThis(details);
