@@ -149,7 +149,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
         {
-            return base.GetPublicServiceEndpoint(identity, "cloudServersOpenStack", region);
+            return base.GetPublicServiceEndpoint(identity, "compute", region);
         }
 
         protected override INetworksProvider BuildProvider(CloudIdentity identity)

@@ -312,7 +312,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
         {
-            return base.GetPublicServiceEndpoint(identity, "cloudBlockStorage", region);
+            return base.GetPublicServiceEndpoint(identity, "volume", region);
         }
 
         private bool WaitForItemToBeDeleted<T>(Func<string, string, CloudIdentity, T> retrieveItemMethod, string id, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
