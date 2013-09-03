@@ -91,9 +91,9 @@ namespace net.openstack.Core.Providers
         /// Deletes a volume.
         /// </summary>
         /// <remarks>
-        /// <alert class="note">
+        /// <note type="note">
         /// It is not currently possible to delete a volume once you have created a snapshot from it. Any snapshots will need to be deleted prior to deleting the volume.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="volumeId">The ID of the volume to delete. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>

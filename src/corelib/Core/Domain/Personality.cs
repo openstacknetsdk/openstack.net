@@ -41,10 +41,10 @@
         /// that is guaranteed to apply to all images in the deployment. Providers can set
         /// additional per-image personality limits.
         ///
-        /// <alert class="warning">
+        /// <note type="warning">
         /// The behavior of the related <see cref="IComputeProvider"/> methods is undefined
         /// if the value is not a UTF-8 encoded text file.
-        /// </alert>
+        /// </note>
         /// </remarks>
         [JsonProperty("contents")]
         [JsonConverter(typeof(BinaryConverter))]

@@ -1723,10 +1723,10 @@ namespace net.openstack.Core.Providers
         /// Waits for the image to enter the <see cref="ImageState.Deleted"/> state or to be removed.
         /// </summary>
         /// <remarks>
-        /// <alert class="warning">
+        /// <note type="warning">
         /// This is a blocking operation and will not return until the image enters either the
         /// <see cref="ImageState.Deleted"/> state, an error state, is removed, or the retry count is exceeded.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="imageId">The image ID. This is obtained from <see cref="SimpleServerImage.Id">SimpleServerImage.Id</see>.</param>
         /// <param name="refreshCount">Number of times to poll the image's status.</param>

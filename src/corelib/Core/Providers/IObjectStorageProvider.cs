@@ -115,11 +115,11 @@ namespace net.openstack.Core.Providers
         /// Gets the non-metadata headers associated with the container.
         /// </summary>
         /// <remarks>
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -152,11 +152,11 @@ namespace net.openstack.Core.Providers
         /// The metadata associated with containers in the Object Storage Service are
         /// case-insensitive.
         ///
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -186,9 +186,9 @@ namespace net.openstack.Core.Providers
         /// Gets the container CDN header.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -215,9 +215,9 @@ namespace net.openstack.Core.Providers
         /// Gets a list of CDN properties for a group of containers.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="limit">The maximum number of containers to return. If the value is <c>null</c>, a provider-specific default is used.</param>
         /// <param name="markerId">When specified, only containers with names greater than <paramref name="markerId"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
@@ -248,9 +248,9 @@ namespace net.openstack.Core.Providers
         /// added to it in the storage service become CDN-enabled.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This feature is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         /// </overloads>
@@ -262,15 +262,15 @@ namespace net.openstack.Core.Providers
         /// If the specified container is already CDN-enabled, this method updates the TTL
         /// for the container based on the <paramref name="timeToLive"/> argument.
         ///
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
+        /// </note>
         ///
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="timeToLive">The time (in seconds) to cache objects in the CDN. Each time the object is accessed after the TTL expires, the CDN re-fetches and caches the object for the TTL period.</param>
@@ -301,14 +301,14 @@ namespace net.openstack.Core.Providers
         /// default TTL.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
-        /// <alert class="implement">
+        /// </note>
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="logRetention"><c>true</c> to enable log retention on the container; otherwise, <c>false</c>.</param>
@@ -337,14 +337,14 @@ namespace net.openstack.Core.Providers
         /// Enables CDN on the container using the specified TTL and log retention values.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
-        /// <alert class="implement">
+        /// </note>
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container.</param>
         /// <param name="timeToLive">The time (in seconds) to cache objects in the CDN. Each time the object is accessed after the TTL expires, the CDN re-fetches and caches the object for the TTL period.</param>
@@ -375,14 +375,14 @@ namespace net.openstack.Core.Providers
         /// Disables CDN on the container.
         /// </summary>
         /// <remarks>
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
-        /// <alert class="implement">
+        /// </note>
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -531,14 +531,14 @@ namespace net.openstack.Core.Providers
         /// Sets the CDN headers for the specified container, replacing any existing headers.
         /// </summary>
         /// <remarks>
-        /// <alert class="warning">
+        /// <note type="warning">
         /// This method replaces <em>all</em> existing CDN headers for the container with the
         /// values found in <paramref name="headers"/>.
-        /// </alert>
+        /// </note>
         ///
-        /// <alert note="note">
+        /// <note type="note">
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="headers">The complete set of CDN headers for the container.</param>
@@ -785,11 +785,11 @@ namespace net.openstack.Core.Providers
         /// Gets the non-metadata headers for the specified object.
         /// </summary>
         /// <remarks>
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name.</param>
@@ -832,11 +832,11 @@ namespace net.openstack.Core.Providers
         /// The metadata associated with objects in the Object Storage Service are
         /// case-insensitive.
         ///
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name.</param>
@@ -876,13 +876,13 @@ namespace net.openstack.Core.Providers
         /// Sets the object metadata, replacing any existing metadata values.
         /// </summary>
         /// <remarks>
-        /// <alert class="warning">
+        /// <note type="warning">
         /// This method replaces all existing metadata for the object with the values
         /// found in <paramref name="metadata"/>. To add or change existing metadata values
         /// without affecting all metadata for the object, first call <see cref="GetObjectMetaData"/>,
         /// modify the returned <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>,
         /// then call <see cref="UpdateObjectMetadata"/> with the modified metadata dictionary.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name.</param>
@@ -1290,12 +1290,12 @@ namespace net.openstack.Core.Providers
         /// <remarks>
         /// The original object is removed only if the move is completed successfully.
         ///
-        /// <alert class="implement">
+        /// <note type="implement">
         /// If your specific provider does not provide a "Move Object" API function, this
         /// method may be implemented by performing a <see cref="CopyObject"/> operation,
         /// followed by a <see cref="DeleteObject"/> operation if the copy completed
         /// successfully.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="sourceContainer">The source container name.</param>
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
@@ -1447,11 +1447,11 @@ namespace net.openstack.Core.Providers
         /// Gets the non-metadata headers associated with the specified account.
         /// </summary>
         /// <remarks>
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
@@ -1480,11 +1480,11 @@ namespace net.openstack.Core.Providers
         /// The metadata associated with accounts in the Object Storage Service are
         /// case-insensitive.
         ///
-        /// <alert class="implement">
+        /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
         /// lookups are not case sensitive.
-        /// </alert>
+        /// </note>
         /// </remarks>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
