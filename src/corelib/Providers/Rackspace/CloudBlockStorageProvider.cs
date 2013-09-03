@@ -162,7 +162,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public VolumeType DescribeVolumeType(int volumeTypeId, string region = null, CloudIdentity identity = null)
+        public VolumeType DescribeVolumeType(string volumeTypeId, string region = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/types/{1}", GetServiceEndpoint(identity, region), volumeTypeId));
             var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeTypeResponse>(identity, urlPath, HttpMethod.GET);
