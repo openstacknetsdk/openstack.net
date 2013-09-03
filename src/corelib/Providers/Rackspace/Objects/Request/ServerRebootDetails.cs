@@ -7,6 +7,25 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     internal class ServerRebootDetails
     {
         [DataMember(Name = "type")]
-        public string Type { get; set; }
+        private string _type;
+
+        public RebootType Type
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_type))
+                    return null;
+
+                return RebootType.FromName(_type);
+            }
+
+            set
+            {
+                if (value == null)
+                    _type = null;
+                else
+                    _type = value.Name;
+            }
+        }
     }
 }

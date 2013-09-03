@@ -80,7 +80,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool SoftReboot()
         {
-            return Provider.RebootServer(Id, RebootType.SOFT, Region);
+            return Provider.RebootServer(Id, RebootType.Soft, Region);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool HardReboot()
         {
-            return Provider.RebootServer(Id, RebootType.HARD, Region);
+            return Provider.RebootServer(Id, RebootType.Hard, Region);
         }
 
         /// <summary>
