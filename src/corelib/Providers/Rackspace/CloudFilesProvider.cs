@@ -161,7 +161,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ObjectStore DeleteContainer(string container, bool deleteObjects = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ObjectStore DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
 
