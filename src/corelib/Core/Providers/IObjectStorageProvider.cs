@@ -44,7 +44,7 @@ namespace net.openstack.Core.Providers
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore DeleteContainer(string container, bool deleteObjects = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the container header.
