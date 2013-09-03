@@ -6,6 +6,9 @@ namespace net.openstack.Core.Domain
     [DataContract]
     public class Snapshot
     {
+        [DataMember(Name = "status")]
+        private string _status;
+
         [DataMember]
         public string Id { get; set; }
 
@@ -18,8 +21,16 @@ namespace net.openstack.Core.Domain
         [DataMember(Name = "volume_id")]
         public string VolumeId { get; set; }
 
-        [DataMember]
-        public string Status { get; set; }
+        public SnapshotState Status
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_status))
+                    return null;
+
+                return SnapshotState.FromName(_status);
+            }
+        }
 
         [DataMember]
         public string Size { get; set; }
