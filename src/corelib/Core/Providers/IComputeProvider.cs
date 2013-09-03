@@ -47,7 +47,7 @@ namespace net.openstack.Core.Providers
         /// <param name="flavor">The flavor.</param>
         /// <param name="diskConfig">The disk configuration. <remarks>Available values are [AUTO, MANUAL]</remarks></param>
         /// <param name="metadata">A list of metadata to associate with the server. </param>
-        /// <param name="personality">File path and contents.</param>
+        /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <c>null</c>, no files are injected.</param>
         /// <param name="attachToServiceNetwork">If set to <c>true</c> the Internal Service Network will be attached to the server. <remarks>default value = <c>false</c></remarks></param>
         /// <param name="attachToPublicNetwork">If set to <c>true</c> the Public Network will be attached to the server. <remarks>default value = <c>false</c></remarks></param>
         /// <param name="networks">A list of networks to attach to the server </param>
@@ -140,7 +140,7 @@ namespace net.openstack.Core.Providers
         /// <param name="accessIPv6">The new access IP v6 address for the server. </param>
         /// <param name="metadata">The list of any metadata to associate with the server. </param>
         /// <param name="diskConfig">The disk configuration value. <remarks>Available values are [AUTO, MANUAL]</remarks></param>
-        /// <param name="personality">The file path and file contents. </param>
+        /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <c>null</c>, no file is injected.</param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>The <see cref="Server"/></returns>
