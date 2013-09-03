@@ -49,7 +49,7 @@ namespace net.openstack.Core.Domain
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string expectedState, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(ImageState expectedState, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
             var details = Provider.WaitForImageState(Id, expectedState, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
             UpdateThis(details);
@@ -63,7 +63,7 @@ namespace net.openstack.Core.Domain
         /// <param name="refreshCount">Number of times to check the images status</param>
         /// <param name="refreshDelay">The time to wait each time before requesting the status for the image. If this value is <c>null</c>, the default is 2.4 seconds.</param>
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
-        public void WaitForState(string[] expectedStates, string[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
+        public void WaitForState(ImageState[] expectedStates, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
             var details = Provider.WaitForImageState(Id, expectedStates, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
             UpdateThis(details);

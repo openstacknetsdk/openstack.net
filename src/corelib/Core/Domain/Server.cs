@@ -8,6 +8,9 @@ namespace net.openstack.Core.Domain
     [DataContract]
     public class Server : SimpleServer
     {
+        [DataMember(Name = "status")]
+        private string _status;
+
         [DataMember(Name = "OS-DCF:diskConfig" )]
         public string DiskConfig { get; internal set; }
 
@@ -45,8 +48,24 @@ namespace net.openstack.Core.Domain
             internal set { _image = value;  }
         }
 
-        [DataMember]
-        public string Status { get; internal set; }
+        public ServerState Status
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_status))
+                    return null;
+
+                return ServerState.FromName(_status);
+            }
+
+            set
+            {
+                if (value == null)
+                    _status = null;
+
+                _status = value.Name;
+            }
+        }
 
         [DataMember]
         public Flavor Flavor { get; internal set; }
