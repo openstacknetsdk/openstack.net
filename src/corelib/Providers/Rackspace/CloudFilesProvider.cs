@@ -424,6 +424,8 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (string.IsNullOrEmpty(m.Key))
                     throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('_'))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an underscore.");
                 if (m.Key.Contains('\''))
                     throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
 
@@ -1176,6 +1178,8 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (string.IsNullOrEmpty(m.Key))
                     throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('_'))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an underscore.");
                 if (m.Key.Contains('\''))
                     throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
 
