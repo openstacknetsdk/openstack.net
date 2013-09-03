@@ -473,11 +473,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             _cloudFilesValidator.ValidateContainerName(container);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
@@ -508,11 +504,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateObjectName(index);
             _cloudFilesValidator.ValidateObjectName(error);
             _cloudFilesValidator.ValidateObjectName(css);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var metadata = new Dictionary<string, string>
                                 {
@@ -544,11 +536,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(index);
             _cloudFilesValidator.ValidateObjectName(error);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                   {
@@ -574,11 +562,7 @@ namespace net.openstack.Providers.Rackspace
 
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(css);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                 {
@@ -608,11 +592,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(index);
             _cloudFilesValidator.ValidateObjectName(error);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                   {
@@ -632,11 +612,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             _cloudFilesValidator.ValidateContainerName(container);
-
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                 {
@@ -1142,11 +1118,7 @@ namespace net.openstack.Providers.Rackspace
 
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-
-            if (!GetContainerCDNHeader(container, region, identity: identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             string email = emails != null ? string.Join(",", emails) : null;
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -1321,6 +1293,30 @@ namespace net.openstack.Providers.Rackspace
         protected override IObjectStorageProvider BuildProvider(CloudIdentity identity)
         {
             return new CloudFilesProvider(identity, IdentityProvider, RestService, _cloudFilesValidator, _cloudFilesMetadataProcessor, _encodeDecodeProvider, _statusParser, _bulkDeletionResultMapper);
+        }
+
+        protected void VerifyContainerIsCDNEnabled(string container, string region, CloudIdentity identity)
+        {
+            try
+            {
+                // If the container is currently CDN enabled, or was CDN enabled at some
+                // point in the past, GetContainerCDNHeader returns non-null and the CDNEnabled
+                // property determines whether or not the container is currently CDN enabled.
+                if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
+                {
+                    throw new CDNNotEnabledException("The specified container is not CDN-enabled.");
+                }
+            }
+            catch (ItemNotFoundException ex)
+            {
+                // In response to an ItemNotFoundException, the GetContainerHeader method is used
+                // to distinguish between cases where the container does not exist (or is not
+                // accessible), and cases where the container exists but has never been CDN enabled.
+                GetContainerHeader(container, region, false, identity);
+
+                // If we get to this line, we know the container exists but has never been CDN enabled.
+                throw new CDNNotEnabledException("The specified container is not CDN-enabled.", ex);
+            }
         }
 
         #endregion
