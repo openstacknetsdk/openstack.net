@@ -1,12 +1,12 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerVolumeResponse
     {
-        [DataMember(Name = "volumeAttachment")]
+        [JsonProperty("volumeAttachment")]
         public ServerVolume ServerVolume { get; set; }
     }
 }

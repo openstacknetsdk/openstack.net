@@ -1,45 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using System;
+    using System.Collections.Generic;
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerRequest
     {
-        [DataMember(Name = "server")]
+        [JsonProperty("server")]
         public CreateServerDetails Details { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerDetails
     {
-        [DataMember(Name = "name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "imageRef")]
+        [JsonProperty("imageRef")]
         public string ImageName { get; set; }
 
-        [DataMember(Name = "flavorRef")]
+        [JsonProperty("flavorRef")]
         public string Flavor { get; set; }
 
-        [DataMember(Name = "OS-DCF:diskConfig")]
+        [JsonProperty("OS-DCF:diskConfig")]
         public string DiskConfig { get; set; }
 
-        [DataMember(Name = "metadata", EmitDefaultValue = true)]
+        [JsonProperty("metadata", DefaultValueHandling = DefaultValueHandling.Include)]
         public Dictionary<string, string> Metadata { get; set; }
 
-        [DataMember(Name = "accessIPv4", EmitDefaultValue = true)]
+        [JsonProperty("accessIPv4", DefaultValueHandling = DefaultValueHandling.Include)]
         public string AccessIPv4 { get; set; }
 
-        [DataMember(Name = "accessIPv6", EmitDefaultValue = true)]
+        [JsonProperty("accessIPv6", DefaultValueHandling = DefaultValueHandling.Include)]
         public string AccessIPv6 { get; set; }
 
-        [DataMember(Name = "networks", EmitDefaultValue = true)]
+        [JsonProperty("networks", DefaultValueHandling = DefaultValueHandling.Include)]
         public NewServerNetwork[] Networks { get; set; }
 
-        [DataMember(Name = "personality", EmitDefaultValue = true)]
+        [JsonProperty("personality", DefaultValueHandling = DefaultValueHandling.Include)]
         public Personality[] Personality { get; set; }
 
         public CreateServerDetails()
@@ -48,10 +48,10 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class NewServerNetwork
     {
-        [DataMember(Name = "uuid")]
+        [JsonProperty("uuid")]
         public Guid Id { get; set; }
     }
 }

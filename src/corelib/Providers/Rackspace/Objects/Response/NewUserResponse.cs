@@ -1,12 +1,12 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class NewUserResponse
     {
-        [DataMember(Name = "user")]
+        [JsonProperty("user")]
         public NewUser NewUser { get; set; }
     }
 }

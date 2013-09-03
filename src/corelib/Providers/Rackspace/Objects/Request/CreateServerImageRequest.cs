@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerImageRequest
     {
-        [DataMember(Name = "createImage")]
+        [JsonProperty("createImage")]
         public CreateServerImageDetails Details { get; set; }
     }
 }

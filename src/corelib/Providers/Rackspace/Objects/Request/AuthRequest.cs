@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class AuthRequest
     {
-        [DataMember(Name = "auth")]
+        [JsonProperty("auth")]
         public AuthDetails Credencials { get; set; }
 
         public static AuthRequest FromCloudIdentity(CloudIdentity identity)

@@ -1,19 +1,19 @@
-using System;
-using System.Runtime.Serialization;
-using net.openstack.Core.Providers;
-
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using System;
+    using net.openstack.Core.Providers;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class SimpleServerImage : ProviderStateBase<IComputeProvider>
     {
-        [DataMember]
+        [JsonProperty]
         public string Id { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public Link[] Links { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public string Name { get; set; }
 
 

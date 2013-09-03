@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ConfirmServerResizeRequest
     {
-        [DataMember(Name = "confirmResize")]
+        [JsonProperty("confirmResize")]
         public string Details { get; set; }
 
         public ConfirmServerResizeRequest()

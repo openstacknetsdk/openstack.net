@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class GetCloudBlockStorageVolumeTypeResponse
     {
-        [DataMember(Name = "volume_type")]
+        [JsonProperty("volume_type")]
         public VolumeType VolumeType { get; set; }
     }
 }

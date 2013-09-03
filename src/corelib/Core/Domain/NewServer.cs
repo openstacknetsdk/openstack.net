@@ -1,15 +1,14 @@
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class NewServer : ServerBase
     {
-        [DataMember(Name = "OS-DCF:diskConfig")]
+        [JsonProperty("OS-DCF:diskConfig")]
         public string DiskConfig { get; set; }
 
-        [DataMember(Name = "adminPass")]
+        [JsonProperty("adminPass")]
         public string AdminPassword { get; set; }
 
         protected override void UpdateThis(ServerBase server)

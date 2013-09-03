@@ -1,27 +1,27 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class CloudNetwork
     {
         /// <summary>
         /// The network ID.
         /// </summary>
-        [DataMember]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// The CIDR for an isolated network.
         /// </summary>
-        [DataMember]
+        [JsonProperty("cidr")]
         public string Cidr { get; set; }
 
         /// <summary>
         /// The name of the network. ServiceNet is labeled as private and PublicNet 
         /// is labeled as public in the network list.
         /// </summary>
-        [DataMember]
+        [JsonProperty("label")]
         public string Label { get; set; }
     }
 }

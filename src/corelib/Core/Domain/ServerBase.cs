@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using net.openstack.Core.Providers;
+using Newtonsoft.Json;
 
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public abstract class ServerBase : ProviderStateBase<IComputeProvider>
     {
-        [DataMember]
+        [JsonProperty]
         public string Id { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public Link[] Links { get; internal set; }
 
         protected virtual void UpdateThis(ServerBase server)

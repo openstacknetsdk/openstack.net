@@ -1,14 +1,14 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class VolumeType
     {
-        [DataMember]
+        [JsonProperty]
         public string Id { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public string Name { get; set; }
     }
 }

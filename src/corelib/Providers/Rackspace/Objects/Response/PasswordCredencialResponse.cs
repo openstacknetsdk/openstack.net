@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using net.openstack.Providers.Rackspace.Objects.Request;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Providers.Rackspace.Objects.Request;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class PasswordCredencialResponse
     {
-        [DataMember(Name = "passwordCredentials")]
+        [JsonProperty("passwordCredentials")]
         public PasswordCredencial PasswordCredencial { get; set; }
     }
 }

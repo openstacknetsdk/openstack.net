@@ -1,17 +1,17 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class UserCredential
     {
-        [DataMember]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "username")]
+        [JsonProperty("username")]
         public string Username { get; set; }
 
-        [DataMember(Name = "apiKey")]
+        [JsonProperty("apiKey")]
         public string APIKey { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class UpdateServerRequest
     {
-        [DataMember(Name="server")]
+        [JsonProperty("server")]
         public ServerUpdateDetails Server { get; set; }
 
         public UpdateServerRequest()
@@ -19,16 +19,16 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerUpdateDetails
     {
-        [DataMember(Name="name", EmitDefaultValue = true)]
+        [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Include)]
         public string Name { get; set; }
 
-        [DataMember(Name = "accessIPv4", EmitDefaultValue = true)]
+        [JsonProperty("accessIPv4", DefaultValueHandling = DefaultValueHandling.Include)]
         public string AccessIpV4 { get; set; }
 
-        [DataMember(Name = "accessIPv6", EmitDefaultValue = true)]
+        [JsonProperty("accessIPv6", DefaultValueHandling = DefaultValueHandling.Include)]
         public string AccessIPv6 { get; set; }
     }
 }

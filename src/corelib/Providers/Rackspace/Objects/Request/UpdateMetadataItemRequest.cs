@@ -1,12 +1,12 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class UpdateMetadataItemRequest
     {
-        [DataMember(Name = "meta")]
+        [JsonProperty("meta")]
         public Metadata Metadata { get; set; }
     }
 }

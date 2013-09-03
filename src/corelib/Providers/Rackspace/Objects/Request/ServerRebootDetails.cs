@@ -1,12 +1,12 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerRebootDetails
     {
-        [DataMember(Name = "type")]
+        [JsonProperty("type")]
         private string _type;
 
         public RebootType Type

@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using System;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class Volume
     {
-        [DataMember(Name = "status")]
+        [JsonProperty("status")]
         private string _status;
 
-        [DataMember]
+        [JsonProperty]
         public string Id { get; set; }
 
-        [DataMember(Name = "display_name")]
+        [JsonProperty("display_name")]
         public string DisplayName { get; set; }
 
-        [DataMember(Name = "display_description")]
+        [JsonProperty("display_description")]
         public string DisplayDescription { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public int Size { get; set; }
 
-        [DataMember(Name = "volume_type")]
+        [JsonProperty("volume_type")]
         public string VolumeType { get; set; }
 
-        [DataMember(Name = "snapshot_id")]
+        [JsonProperty("snapshot_id")]
         public string SnapshotId { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public Dictionary<string, string>[] Attachments { get; set; }
 
         public VolumeState Status
@@ -42,10 +42,10 @@ namespace net.openstack.Core.Domain
             }
         }
 
-        [DataMember(Name = "availability_zone")]
+        [JsonProperty("availability_zone")]
         public string AvailabilityZone { get; set; }
 
-        [DataMember(Name = "created_at")]
+        [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class UnrescueServerRequest
     {
-        [DataMember(Name = "unrescue")]
+        [JsonProperty("unrescue")]
         public string Details { get; set; }
     }
 }

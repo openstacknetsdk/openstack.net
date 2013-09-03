@@ -1,39 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Server : SimpleServer
     {
-        [DataMember(Name = "status")]
+        [JsonProperty("status")]
         private string _status;
 
-        [DataMember(Name = "OS-DCF:diskConfig" )]
+        [JsonProperty("OS-DCF:diskConfig" )]
         public string DiskConfig { get; internal set; }
 
-        [DataMember(Name = "OS-EXT-STS:power_state")]
+        [JsonProperty("OS-EXT-STS:power_state")]
         public bool PowerState { get; internal set; }
 
-        [DataMember(Name = "OS-EXT-STS:task_state")]
+        [JsonProperty("OS-EXT-STS:task_state")]
         public string TaskState { get; internal set; }
 
-        [DataMember(Name = "OS-EXT-STS:vm_state")]
+        [JsonProperty("OS-EXT-STS:vm_state")]
         public string VMState { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public string AccessIPv4 { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public string AccessIPv6 { get; internal set; }
 
-        [DataMember(Name = "user_id")]
+        [JsonProperty("user_id")]
         public string UserId { get; internal set; }
 
         private SimpleServerImage _image;
-        [DataMember]
+        [JsonProperty]
         public SimpleServerImage Image 
         { 
             get {
@@ -67,28 +67,28 @@ namespace net.openstack.Core.Domain
             }
         }
 
-        [DataMember]
+        [JsonProperty]
         public Flavor Flavor { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public ServerAddresses Addresses { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public DateTime Created { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public string HostId { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public int Progress { get; internal set; }
 
-        [DataMember(Name = "rax-bandwidth:bandwidth")]
+        [JsonProperty("rax-bandwidth:bandwidth")]
         public string[] Bandwidth { get; internal set; }
 
-        [DataMember(Name = "tenant_id")]
+        [JsonProperty("tenant_id")]
         public string TenantId { get; internal set; }
 
-        [DataMember]
+        [JsonProperty]
         public DateTime Updated { get; internal set; }
 
         protected override void UpdateThis(ServerBase server)
