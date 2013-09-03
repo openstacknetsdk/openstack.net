@@ -186,7 +186,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(containerName, identity: _testIdentity);
+            var containerCreatedResponse = provider.DeleteContainer(containerName, deleteObjects: true, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
         }
@@ -195,7 +195,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Destination_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(destinationContainerName, identity: _testIdentity);
+            var containerCreatedResponse = provider.DeleteContainer(destinationContainerName, deleteObjects: true, identity: _testIdentity);
 
             Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
         }
@@ -879,7 +879,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var provider = new CloudFilesProvider(_testIdentity);
 
-            provider.DeleteContainer(containerName2);
+            provider.DeleteContainer(containerName2, deleteObjects: true);
 
             var containers = provider.ListContainers();
             Assert.IsFalse(containers.Any(c => c.Name.Equals(containerName2)));
