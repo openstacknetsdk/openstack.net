@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core;
 
@@ -56,15 +57,15 @@ namespace net.openstack.Providers.Rackspace
 
                 if (header.Key.StartsWith(CloudFilesProvider.AccountMetaDataPrefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    metadata.Add(header.Key.Substring(CloudFilesProvider.AccountMetaDataPrefix.Length), header.Value);
+                    metadata.Add(header.Key.Substring(CloudFilesProvider.AccountMetaDataPrefix.Length), DecodeUnicodeValue(header.Value));
                 }
                 else if (header.Key.StartsWith(CloudFilesProvider.ContainerMetaDataPrefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    metadata.Add(header.Key.Substring(CloudFilesProvider.ContainerMetaDataPrefix.Length), header.Value);
+                    metadata.Add(header.Key.Substring(CloudFilesProvider.ContainerMetaDataPrefix.Length), DecodeUnicodeValue(header.Value));
                 }
                 else if (header.Key.StartsWith(CloudFilesProvider.ObjectMetaDataPrefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    metadata.Add(header.Key.Substring(CloudFilesProvider.ObjectMetaDataPrefix.Length), header.Value);
+                    metadata.Add(header.Key.Substring(CloudFilesProvider.ObjectMetaDataPrefix.Length), DecodeUnicodeValue(header.Value));
                 }
                 else
                 {
@@ -79,6 +80,11 @@ namespace net.openstack.Providers.Rackspace
                 };
 
             return processedHeaders;
+        }
+
+        private string DecodeUnicodeValue(string value)
+        {
+            return Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
         }
     }
 }

@@ -366,11 +366,11 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (m.Key.StartsWith(ContainerMetaDataPrefix))
                 {
-                    headers.Add(m.Key, m.Value);
+                    headers.Add(m.Key, EncodeUnicodeValue(m.Value));
                 }
                 else
                 {
-                    headers.Add(ContainerMetaDataPrefix + m.Key, m.Value);
+                    headers.Add(ContainerMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
                 }
             }
 
@@ -596,11 +596,11 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (m.Key.StartsWith(ObjectMetaDataPrefix) || m.Key.StartsWith(ObjectRemoveMetaDataPrefix))
                 {
-                    headers.Add(m.Key, m.Value);
+                    headers.Add(m.Key, EncodeUnicodeValue(m.Value));
                 }
                 else
                 {
-                    headers.Add(ObjectMetaDataPrefix + m.Key, m.Value);
+                    headers.Add(ObjectMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
                 }
             }
 
@@ -1010,17 +1010,25 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (m.Key.Contains(AccountMetaDataPrefix))
                 {
-                    headers.Add(m.Key, m.Value);
+                    headers.Add(m.Key, EncodeUnicodeValue(m.Value));
                 }
                 else
                 {
-                    headers.Add(AccountMetaDataPrefix + m.Key, m.Value);
+                    headers.Add(AccountMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
                 }
             }
 
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+        }
+
+        private static string EncodeUnicodeValue(string value)
+        {
+            if (value == null)
+                return null;
+
+            return Encoding.GetEncoding("ISO-8859-1").GetString(Encoding.UTF8.GetBytes(value));
         }
 
         /// <inheritdoc />
