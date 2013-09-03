@@ -889,25 +889,27 @@ namespace net.openstack.Providers.Rackspace
                 }
             }, headers: headers);
 
-            if (verifyEtag && response.Headers.Any(h => h.Key.Equals(Etag, StringComparison.OrdinalIgnoreCase)))
+            string etag;
+            if (verifyEtag && response.TryGetHeader(Etag, out etag))
             {
                 outputStream.Flush(); // flush the contents of the stream to the output device
                 outputStream.Position = 0;  // reset the head of the stream to the beginning
 
-                var md5 = MD5.Create();
-                md5.ComputeHash(outputStream);
-
-                var sbuilder = new StringBuilder();
-                var hash = md5.Hash;
-                foreach (var b in hash)
+                using (var md5 = MD5.Create())
                 {
-                    sbuilder.Append(b.ToString("x2").ToLower());
-                }
-                var convertedMd5 = sbuilder.ToString();
-                if (convertedMd5 != response.Headers.First(h => h.Key.Equals(Etag, StringComparison.OrdinalIgnoreCase)).Value.ToLower())
-                {
+                    md5.ComputeHash(outputStream);
 
-                    throw new InvalidETagException();
+                    var sbuilder = new StringBuilder();
+                    var hash = md5.Hash;
+                    foreach (var b in hash)
+                    {
+                        sbuilder.Append(b.ToString("x2").ToLower());
+                    }
+                    var convertedMd5 = sbuilder.ToString();
+                    if (!string.Equals(convertedMd5, etag, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidETagException();
+                    }
                 }
             }
         }
