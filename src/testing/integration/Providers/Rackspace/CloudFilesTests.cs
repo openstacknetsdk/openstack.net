@@ -288,10 +288,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Add_Headers_For_Container()
         {
             var metaData = new Dictionary<string, string>();
-            metaData.Add("X-Container-Meta-Movie", "Batman");
-            metaData.Add("X-Container-Meta-Genre", "Action");
+            metaData.Add("Movie", "Batman");
+            metaData.Add("Genre", "Action");
             var provider = new CloudFilesProvider();
-            provider.AddContainerHeaders(containerName, metaData, identity: _testIdentity);
+            provider.UpdateContainerMetadata(containerName, metaData, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -931,16 +931,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Update_Headers_For_Account()
         {
             var headers = new Dictionary<string, string>();
-            headers.Add("X-Account-Meta-Test-Accountmetadata", "Test1");
+            headers.Add("Test-Accountmetadata", "Test1");
 
             var provider = new CloudFilesProvider();
-            provider.UpdateAccountHeaders(headers, identity: _testIdentity);
+            provider.UpdateAccountMetadata(headers, identity: _testIdentity);
             var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
 
             Assert.IsNotNull(accountHeadersResponse);
-            Assert.IsTrue(accountHeadersResponse.ContainsKey("Test-Accountmetadata"));
-            Assert.AreEqual("Test1", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-
+            string value;
+            Assert.IsTrue(accountHeadersResponse.TryGetValue("Test-Accountmetadata", out value));
+            Assert.AreEqual("Test1", value);
         }
 
         #endregion

@@ -520,42 +520,6 @@ namespace net.openstack.Core.Providers
         void DeleteContainerMetadata(string container, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
-        /// Adds the non-metadata headers to the specified container.
-        /// </summary>
-        /// <param name="container">The container name.</param>
-        /// <param name="headers">The headers.</param>
-        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
-        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="headers"/> is <c>null</c>.</para>
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="container"/> is empty.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
-        /// </exception>
-        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
-        /// <exception cref="NotSupportedException">
-        /// If the provider does not support the given <paramref name="identity"/> type.
-        /// <para>-or-</para>
-        /// <para>The specified <paramref name="region"/> is not supported.</para>
-        /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
-        /// </exception>
-        /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
-        /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
-        void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-
-        /// <summary>
         /// Sets the CDN headers for the specified container, replacing any existing headers.
         /// </summary>
         /// <remarks>
@@ -1120,29 +1084,6 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
-
-        /// <summary>
-        /// Sets the non-metadata headers associated with the specified account, replacing any existing non-metadata headers.
-        /// </summary>
-        /// <param name="headers">The complete set of headers to associate with the account.</param>
-        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
-        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="headers"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</exception>
-        /// <exception cref="NotSupportedException">
-        /// If the provider does not support the given <paramref name="identity"/> type.
-        /// <para>-or-</para>
-        /// <para>The specified <paramref name="region"/> is not supported.</para>
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
-        /// </exception>
-        /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
-        void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         #endregion
     }

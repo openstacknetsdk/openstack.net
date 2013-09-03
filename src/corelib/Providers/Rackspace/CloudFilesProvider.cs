@@ -475,29 +475,6 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
-        {
-            if (container == null)
-                throw new ArgumentNullException("container");
-            if (headers == null)
-                throw new ArgumentNullException("headers");
-            if (string.IsNullOrEmpty(container))
-                throw new ArgumentException("container cannot be empty");
-            CheckIdentity(identity);
-
-            _cloudFilesValidator.ValidateContainerName(container);
-
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
-
-            // Make sure the container exists. This will throw an ItemNotFoundException, where
-            // the PUT method below used alone would *create* the container instead of throwing
-            // the expected exception.
-            GetContainerHeader(container, region, useInternalUrl, identity);
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
-        }
-
-        /// <inheritdoc />
         public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
         {
             if (container == null)
@@ -1165,25 +1142,6 @@ namespace net.openstack.Providers.Rackspace
 
             return Encoding.GetEncoding("ISO-8859-1").GetString(Encoding.UTF8.GetBytes(value));
         }
-
-        /// <inheritdoc />
-        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
-        {
-            if (headers == null)
-                throw new ArgumentNullException("headers");
-            CheckIdentity(identity);
-
-            var fullHeaders = new Dictionary<string, string>(headers, StringComparer.OrdinalIgnoreCase);
-            foreach (KeyValuePair<string, string> metadata in GetAccountMetaData(region, useInternalUrl, identity))
-            {
-                fullHeaders.Add(AccountMetaDataPrefix + metadata.Key, metadata.Value);
-            }
-
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: fullHeaders);
-        }
-
 
         #endregion
 
