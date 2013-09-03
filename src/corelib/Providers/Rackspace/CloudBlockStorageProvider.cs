@@ -105,15 +105,18 @@ namespace net.openstack.Providers.Rackspace
         #region Volumes
 
         /// <inheritdoc />
-        public bool CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null)
+        public Volume CreateVolume(int size, string displayDescription = null, string displayName = null, string snapshotId = null, string volumeType = null, string region = null, CloudIdentity identity = null)
         {
             _cloudBlockStorageValidator.ValidateVolumeSize(size);
 
             var urlPath = new Uri(string.Format("{0}/volumes", GetServiceEndpoint(identity, region)));
             var requestBody = new CreateCloudBlockStorageVolumeRequest { CreateCloudBlockStorageVolumeDetails = new CreateCloudBlockStorageVolumeDetails { Size = size, DisplayDescription = displayDescription, DisplayName = displayName, SnapshotId = snapshotId, VolumeType = volumeType } };
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, requestBody);
+            var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeResponse>(identity, urlPath, HttpMethod.POST, requestBody);
 
-            return response != null && _validResponseCode.Contains(response.StatusCode);
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Volume;
         }
 
         /// <inheritdoc />
