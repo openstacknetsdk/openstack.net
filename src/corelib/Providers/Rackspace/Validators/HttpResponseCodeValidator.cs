@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Validators;
@@ -23,10 +24,14 @@ namespace net.openstack.Providers.Rackspace.Validators
             }
         }
 
-        public bool Validate(Response response)
+        /// <inheritdoc/>
+        public void Validate(Response response)
         {
+            if (response == null)
+                throw new ArgumentNullException("response");
+
             if (response.StatusCode <= (HttpStatusCode)299)
-                return true;
+                return;
 
             switch (response.StatusCode)
             {
@@ -48,9 +53,9 @@ namespace net.openstack.Providers.Rackspace.Validators
                     throw new MethodNotImplementedException(response);
                 case HttpStatusCode.ServiceUnavailable:
                     throw new ServiceUnavailableException(response);
+                default:
+                    throw new ResponseException(string.Format("Unexpected HTTP error: {0}", response.StatusCode), response);
             }
-
-            return true;
         }
     }
 }
