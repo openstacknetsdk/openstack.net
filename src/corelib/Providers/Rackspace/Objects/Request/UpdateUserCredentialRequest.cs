@@ -4,7 +4,7 @@
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class UpdateUserCredencialRequest
+    internal class UpdateUserCredentialRequest
     {
         [JsonProperty("RAX-KSKEY:apiKeyCredentials")]
         public UserCredential UserCredential { get; set; }

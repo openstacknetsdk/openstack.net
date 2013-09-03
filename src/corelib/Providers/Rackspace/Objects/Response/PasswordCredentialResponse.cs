@@ -4,9 +4,9 @@
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class PasswordCredencialResponse
+    internal class PasswordCredentialResponse
     {
         [JsonProperty("passwordCredentials")]
-        public PasswordCredencial PasswordCredencial { get; set; }
+        public PasswordCredential PasswordCredential { get; set; }
     }
 }

@@ -184,7 +184,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         [TestMethod]
-        public void Test011_Should_Successfully_Authenticate_Using_Domain_Credencials()
+        public void Test011_Should_Successfully_Authenticate_Using_Domain_Credentials()
         {
             var provider = BuildProvider();
 

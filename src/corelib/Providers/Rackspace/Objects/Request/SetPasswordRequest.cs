@@ -6,11 +6,11 @@
     internal class SetPasswordRequest
     {
         [JsonProperty("passwordCredentials")]
-        public PasswordCredencial PasswordCredencial { get; set; }
+        public PasswordCredential PasswordCredential { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class PasswordCredencial
+    internal class PasswordCredential
     {
         [JsonProperty("username")]
         public string Username { get; set; }

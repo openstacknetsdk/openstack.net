@@ -186,7 +186,7 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Lists all volumes attached to ther server.
+        /// Lists all volumes attached to their server.
         /// </summary>
         /// <returns>a list of <see cref="ServerVolume"/>s</returns>
         public IEnumerable<ServerVolume> ListVolumes()
