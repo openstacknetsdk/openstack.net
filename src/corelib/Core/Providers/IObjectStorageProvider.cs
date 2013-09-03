@@ -329,13 +329,14 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="filePath">The file path.<remarks>Example c:\folder1\folder2\image_name.jpeg</remarks></param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg.  If null, the name of the upload file will be used</remarks></param>
+        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
         /// <param name="headers">The headers. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        void CreateObjectFromFile(string container, string filePath, string objectName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates the object.
@@ -343,13 +344,14 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="stream">The stream. <see cref="Stream"/></param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
         /// <param name="headers">The headers. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        void CreateObject(string container, Stream stream, string objectName, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the object.
@@ -390,12 +392,13 @@ namespace net.openstack.Core.Providers
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
         /// <param name="headers">A list of HTTP headers to send to the service. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Moves an object.  <remarks>The original source object will be deleted only if the move is successful.</remarks>
@@ -404,12 +407,13 @@ namespace net.openstack.Core.Providers
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
         /// <param name="headers">A list of HTTP headers to send to the service. </param>
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         ///<param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
         /// <returns><see cref="ObjectStore"/></returns>
-        ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Deletes a specified object.

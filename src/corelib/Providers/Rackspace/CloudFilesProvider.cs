@@ -677,7 +677,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void CreateObjectFromFile(string container, string filePath, string objectName = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (string.IsNullOrWhiteSpace(objectName))
             {
@@ -687,12 +687,12 @@ namespace net.openstack.Providers.Rackspace
 
             using (var stream = File.OpenRead(filePath))
             {
-                CreateObject(container, stream, objectName, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
+                CreateObject(container, stream, objectName, contentType, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
             }
         }
 
         /// <inheritdoc />
-        public void CreateObject(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (stream == null)
                 throw new ArgumentNullException();
@@ -702,12 +702,16 @@ namespace net.openstack.Providers.Rackspace
 
             if (stream.Length > LargeFileBatchThreshold)
             {
-                CreateObjectInSegments(_encodeDecodeProvider.UrlEncode(container), stream, _encodeDecodeProvider.UrlEncode(objectName), chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
+                CreateObjectInSegments(_encodeDecodeProvider.UrlEncode(container), stream, _encodeDecodeProvider.UrlEncode(objectName), contentType, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
                 return;
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, progressUpdated: progressUpdated, requestSettings: new RequestSettings {ChunkRequest = true});
+            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            settings.ChunkRequest = true;
+            settings.ContentType = contentType;
+
+            StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, progressUpdated: progressUpdated, requestSettings: settings);
         }
 
         /// <inheritdoc />
@@ -786,7 +790,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(sourceContainer);
             _cloudFilesValidator.ValidateObjectName(sourceObjectName);
@@ -800,7 +804,11 @@ namespace net.openstack.Providers.Rackspace
                 headers = new Dictionary<string, string>();
 
             headers.Add(DestinationMetadataKey, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers);
+
+            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            settings.ContentType = destinationContentType;
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers, settings: settings);
 
             return ObjectStore.ObjectCreated;
         }
@@ -892,9 +900,9 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var result = CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, headers, region, useInternalUrl, identity);
+            var result = CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, destinationContentType, headers, region, useInternalUrl, identity);
 
             if (result != ObjectStore.ObjectCreated)
                 return result;
@@ -1054,13 +1062,14 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="stream">The stream. <see cref="Stream"/></param>
         /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
+        /// <param name="contentType">The content type of the object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
         /// <param name="headers">The headers. </param>
         /// <param name="region">The region.</param>
         /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
         /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The identity. <see cref="CloudIdentity"/>  </param>
-        private void CreateObjectInSegments(string container, Stream stream, string objectName, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        private void CreateObjectInSegments(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var totalLength = stream.Length;
             var segmentCount = Math.Ceiling((double)totalLength / (double)LargeFileBatchThreshold);
@@ -1073,7 +1082,12 @@ namespace net.openstack.Providers.Rackspace
 
                 var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
                 long segmentBytesWritten = 0;
-                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
+
+                JsonRequestSettings settings = BuildDefaultRequestSettings();
+                settings.ChunkRequest = true;
+                settings.ContentType = contentType;
+
+                StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, length, headers: headers, requestSettings: settings, progressUpdated:
                     bytesWritten =>
                     {
                         if (progressUpdated != null)
@@ -1093,7 +1107,12 @@ namespace net.openstack.Providers.Rackspace
                 headers = new Dictionary<string, string>();
 
             headers.Add(ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
-            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, requestSettings: new RequestSettings {ChunkRequest = true}, progressUpdated:
+
+            JsonRequestSettings requestSettings = BuildDefaultRequestSettings();
+            requestSettings.ChunkRequest = true;
+            requestSettings.ContentType = contentType;
+
+            StreamRESTRequest(identity, segmentUrlPath, HttpMethod.PUT, new MemoryStream(new Byte[0]), chunkSize, headers: headers, requestSettings: requestSettings, progressUpdated:
                 (bytesWritten) =>
                 {
                     if (progressUpdated != null)
