@@ -879,7 +879,7 @@ namespace net.openstack.Providers.Rackspace
                 _cloudFilesValidator.ValidateObjectName(objectName);
             }
 
-            return BulkDelete(objects.Select(o => string.Format("{0}/{1}", container, o)), headers, region, useInternalUrl, identity);
+            return BulkDelete(objects.Select(o => string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(o))), headers, region, useInternalUrl, identity);
         }
 
         /// <summary>
@@ -895,7 +895,7 @@ namespace net.openstack.Providers.Rackspace
         {
             var urlPath = new Uri(string.Format("{0}/?bulk-delete", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
-            var body = string.Join('\n'.ToString(), items.Select(o => _encodeDecodeProvider.UrlEncode(o)));
+            var body = string.Join("\n", items);
 
             var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
