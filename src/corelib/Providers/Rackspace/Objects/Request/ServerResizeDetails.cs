@@ -1,17 +1,17 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerResizeDetails
     {
-        [DataMember(Name = "name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "flavorRef")]
+        [JsonProperty("flavorRef")]
         public string Flavor { get; set; }
 
-        [DataMember(Name = "OS-DCF:diskConfig", EmitDefaultValue = true)]
+        [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Include)]
         public string DiskConfig { get; set; }
     }
 }

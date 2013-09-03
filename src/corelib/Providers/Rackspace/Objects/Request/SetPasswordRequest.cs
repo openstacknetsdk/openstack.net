@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class SetPasswordRequest
     {
-        [DataMember(Name = "passwordCredentials")]
+        [JsonProperty("passwordCredentials")]
         public PasswordCredencial PasswordCredencial { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class PasswordCredencial
     {
-        [DataMember(Name = "username")]
+        [JsonProperty("username")]
         public string Username { get; set; }
 
-        [DataMember(Name = "password")]
+        [JsonProperty("password")]
         public string Password { get; set; }
     }
 }

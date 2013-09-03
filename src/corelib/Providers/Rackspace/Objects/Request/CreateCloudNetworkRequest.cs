@@ -1,11 +1,11 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateCloudNetworkRequest
     {
-        [DataMember(Name = "network")]
+        [JsonProperty("network")]
         public CreateCloudNetworksDetails Details { get; set; }
     }
 }

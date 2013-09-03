@@ -1,20 +1,20 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class CreateCloudBlockStorageSnapshotDetails
     {
-        [DataMember(Name = "volume_id")]
+        [JsonProperty("volume_id")]
         public string VolumeId { get; set; }
 
-        [DataMember]
+        [JsonProperty]
         public bool Force { get; set; }
 
-        [DataMember(Name = "display_name")]
+        [JsonProperty("display_name")]
         public string DisplayName { get; set; }
         
-        [DataMember(Name = "display_description")]
+        [JsonProperty("display_description")]
         public string DisplayDescription { get; set; }
     }
 }

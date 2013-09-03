@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using System;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class ContainerObject
     {
-        [DataMember]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [DataMember]
+        [JsonProperty("hash")]
         public Guid Hash { get; set; }
 
-        [DataMember]
+        [JsonProperty("bytes")]
         public long Bytes { get; set; }
 
-        [DataMember(Name = "content_type")]
+        [JsonProperty("content_type")]
         public string ContentType { get; set; }
 
-        [DataMember(Name = "last_modified")]
+        [JsonProperty("last_modified")]
         public DateTime LastModified { get; set; }
     }
 }

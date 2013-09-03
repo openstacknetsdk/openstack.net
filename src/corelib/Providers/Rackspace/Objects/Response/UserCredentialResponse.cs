@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using System.Collections.Generic;
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class UserCredentialResponse
     {
-        [DataMember(Name = "RAX-KSKEY:apiKeyCredentials")]
+        [JsonProperty("RAX-KSKEY:apiKeyCredentials")]
         public UserCredential UserCredential { get; set; }
     }
     
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class UserCredentialsResponse
     {
         public List<UserCredential> Credentials { get; set; }

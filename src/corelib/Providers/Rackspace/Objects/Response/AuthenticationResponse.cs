@@ -1,13 +1,12 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class AuthenticationResponse
     {
-        [DataMember(Name = "access")]
-        public UserAccess UserAccess { get; set; }
+        [JsonProperty("access")]
+        public UserAccess UserAccess { get; private set; }
     }
 }

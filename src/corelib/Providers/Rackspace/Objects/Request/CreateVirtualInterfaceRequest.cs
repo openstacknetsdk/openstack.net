@@ -1,11 +1,11 @@
-﻿using System.Runtime.Serialization;
-
-namespace net.openstack.Providers.Rackspace.Objects.Request
+﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateVirtualInterfaceRequest
     {
-        [DataMember(Name = "virtual_interface")]
+        [JsonProperty("virtual_interface")]
         public CreateVirtualInterface VirtualInterface { get; set; }
 
         public CreateVirtualInterfaceRequest(string networkId)
@@ -14,10 +14,10 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateVirtualInterface
     {
-        [DataMember(Name = "network_id")]
+        [JsonProperty("network_id")]
         public string NetworkId { get; set; }
     }
 }

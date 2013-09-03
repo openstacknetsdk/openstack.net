@@ -1,25 +1,25 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ListServersResponse
     {
-        [DataMember(Name = "servers")]
+        [JsonProperty("servers")]
         public Server[] Servers { get; set; }
 
-        [DataMember(Name = "servers_links")]
+        [JsonProperty("servers_links")]
         public ServerLink[] Links { get; set; }
     }
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ServerLink
     {
-        [DataMember(Name = "href")]
+        [JsonProperty("href")]
         public string Link { get; set; }
 
-        [DataMember(Name = "rel")]
+        [JsonProperty("rel")]
         public string Type { get; set; }
     }
 }

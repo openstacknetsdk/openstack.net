@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class Container
     {
-        [DataMember]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [DataMember]
+        [JsonProperty("count")]
         public int Count { get; set; }
 
-        [DataMember]
+        [JsonProperty("bytes")]
         public long Bytes { get; set; }
 
         //internal IObjectStorageProvider CloudFilesProvider { get; set; }

@@ -1,15 +1,15 @@
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Request
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerImageDetails
     {
-        [DataMember(Name = "name")]
+        [JsonProperty("name")]
         public string ImageName { get; set; }
 
-        [DataMember(Name = "metadata", EmitDefaultValue = true)]
+        [JsonProperty("metadata", DefaultValueHandling = DefaultValueHandling.Include)]
         public Metadata Metadata { get; set; }
     }
 }

@@ -1,24 +1,23 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Core.Domain
 {
+    using Newtonsoft.Json;
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class User
     {
-        [DataMember(Name = "RAX-AUTH:defaultRegion")]
+        [JsonProperty("RAX-AUTH:defaultRegion")]
         public string DefaultRegion { get; set; }
 
-        [DataMember(Name="id", EmitDefaultValue = true)]
+        [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
         public string Id { get; set; }
 
-        [DataMember(Name="username")]
+        [JsonProperty("username")]
         public string Username { get; set; }
 
-        [DataMember(Name="email")]
+        [JsonProperty("email")]
         public string Email { get; set; }
 
-        [DataMember(Name = "enabled")]
+        [JsonProperty("enabled")]
         public bool Enabled { get; set; }
     }
 }

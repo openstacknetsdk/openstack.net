@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Providers.Rackspace.Objects.Response
+﻿namespace net.openstack.Providers.Rackspace.Objects.Response
 {
-    [DataContract]
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class ListSnapshotResponse
     {
-        [DataMember(Name = "snapshots")]
+        [JsonProperty("snapshots")]
         public Snapshot[] Snapshots { get; set; }
     }
 }

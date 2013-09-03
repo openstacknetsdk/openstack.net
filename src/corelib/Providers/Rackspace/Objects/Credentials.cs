@@ -1,17 +1,17 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     internal class Credentials
     {
-        [DataMember(Name="username", EmitDefaultValue = true)]
+        [JsonProperty("username", DefaultValueHandling = DefaultValueHandling.Include)]
         public string Username { get; set; }
 
-        [DataMember(Name="password", EmitDefaultValue = true)]
+        [JsonProperty("password", DefaultValueHandling = DefaultValueHandling.Include)]
         public string Password { get; set; }
 
-        [DataMember(Name = "apiKey", EmitDefaultValue = true)]
+        [JsonProperty("apiKey", DefaultValueHandling = DefaultValueHandling.Include)]
         public string APIKey { get; set; }
     }
 }

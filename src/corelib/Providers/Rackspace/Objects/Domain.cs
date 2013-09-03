@@ -1,11 +1,11 @@
-using System.Runtime.Serialization;
-
 namespace net.openstack.Providers.Rackspace.Objects
 {
-    [DataContract]
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class Domain
     {
-        [DataMember(Name = "name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 }
