@@ -1245,16 +1245,18 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identity">The identity. <see cref="CloudIdentity"/>  </param>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var totalLength = stream.Length;
-            var segmentCount = Math.Ceiling((double)totalLength / (double)LargeFileBatchThreshold);
+            long totalLength = stream.Length - stream.Position;
+            long segmentCount = (totalLength / LargeFileBatchThreshold) + (((totalLength % LargeFileBatchThreshold) != 0) ? 1 : 0);
 
             long totalBytesWritten = 0;
             for (int i = 0; i < segmentCount; i++)
             {
-                var remaining = (totalLength - LargeFileBatchThreshold * i);
-                var length = (remaining < LargeFileBatchThreshold) ? remaining : LargeFileBatchThreshold;
+                // the total amount of data left to write
+                long remaining = (totalLength - LargeFileBatchThreshold * i);
+                // the size of the current segment
+                long length = Math.Min(remaining, LargeFileBatchThreshold);
 
-                var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
+                Uri urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
                 long segmentBytesWritten = 0;
 
                 JsonRequestSettings settings = BuildDefaultRequestSettings();
@@ -1271,11 +1273,11 @@ namespace net.openstack.Providers.Rackspace
                         }
                     });
 
-                totalBytesWritten += segmentBytesWritten;
+                totalBytesWritten += length;
             }
 
             // upload the manifest file
-            var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
+            Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
