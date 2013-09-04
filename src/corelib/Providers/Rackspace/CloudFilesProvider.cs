@@ -1065,8 +1065,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             foreach (var objectName in objects)
@@ -1074,7 +1073,7 @@ namespace net.openstack.Providers.Rackspace
                 _cloudFilesValidator.ValidateObjectName(objectName);
             }
 
-            return BulkDelete(objects.Select(o => string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(o))), headers, region, useInternalUrl, identity);
+            BulkDelete(objects.Select(o => string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(o))), headers, region, useInternalUrl, identity);
         }
 
         /// <summary>
@@ -1085,8 +1084,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore BulkDelete(IEnumerable<string> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void BulkDelete(IEnumerable<string> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/?bulk-delete", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
@@ -1103,8 +1101,6 @@ namespace net.openstack.Providers.Rackspace
                     throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));
                 }
             }
-
-            return ObjectStore.ObjectDeleted;
         }
 
         /// <inheritdoc />
