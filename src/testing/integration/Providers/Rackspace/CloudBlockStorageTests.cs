@@ -187,7 +187,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 }
 
                 var snapshotCreatedResponse = provider.CreateSnapshot(testVolume.Id, identity: _testIdentity);
-                Assert.IsTrue(snapshotCreatedResponse);
+                Assert.IsNotNull(snapshotCreatedResponse);
             }
             else
             {
@@ -211,7 +211,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 var snapshotCreatedResponse = provider.CreateSnapshot(testVolume.Id, true, snapshotDisplayName,
                                                                       snapshotDisplayDescription,
                                                                       identity: _testIdentity);
-                Assert.IsTrue(snapshotCreatedResponse);
+                Assert.IsNotNull(snapshotCreatedResponse);
             }
             else
             {

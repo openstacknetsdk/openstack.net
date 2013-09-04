@@ -50,8 +50,11 @@
   <ItemGroup>
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\DiskConfiguration.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
+    <Compile Include="Core\Domain\IPAddressList.cs" />
     <Compile Include="Core\Domain\SnapshotState.cs" />
+    <Compile Include="Core\Domain\IPAddressConverter.cs" />
     <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\ProviderStateBase.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="Core\Domain\ContainerObject.cs" />
     <Compile Include="Core\Domain\Flavor.cs" />
     <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\Exceptions\ContainerNotEmptyException.cs" />
     <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
     <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />

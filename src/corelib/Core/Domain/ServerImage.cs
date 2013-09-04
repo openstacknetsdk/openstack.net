@@ -10,7 +10,7 @@ namespace net.openstack.Core.Domain
         private string _status;
 
         [JsonProperty("OS-DCF:diskConfig")]
-        public string DiskConfig { get; internal set; }
+        public string DiskConfig { get; private set; }
 
         public ImageState Status
         {
@@ -22,7 +22,7 @@ namespace net.openstack.Core.Domain
                 return ImageState.FromName(_status);
             }
 
-            internal set
+            private set
             {
                 if (value == null)
                     _status = null;
@@ -32,16 +32,16 @@ namespace net.openstack.Core.Domain
         }
 
         [JsonProperty]
-        public DateTime Created { get; internal set; }
+        public DateTime Created { get; private set; }
 
         [JsonProperty]
-        public int Progress { get; internal set; }
+        public int Progress { get; private set; }
 
         [JsonProperty]
-        public DateTime Updated { get; internal set; }
+        public DateTime Updated { get; private set; }
 
         [JsonProperty]
-        public int MinDisk { get; internal set; }
+        public int MinDisk { get; private set; }
 
         private SimpleServer _server;
         [JsonProperty]
@@ -55,11 +55,11 @@ namespace net.openstack.Core.Domain
 
                 return _server;
             } 
-            internal set { _server = value; } 
+            private set { _server = value; } 
         }
 
         [JsonProperty]
-        public int MinRAM { get; internal set; }
+        public int MinRAM { get; private set; }
 
         protected override void UpdateThis(SimpleServerImage serverImage)
         {

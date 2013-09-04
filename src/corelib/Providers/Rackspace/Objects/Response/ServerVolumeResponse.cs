@@ -5,7 +5,7 @@
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class ServerVolumeListResponse
+    internal class ServerVolumeListResponse
     {
         [JsonProperty("volumeAttachments")]
         public IEnumerable<ServerVolume> ServerVolumes { get; set; }

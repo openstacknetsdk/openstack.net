@@ -10,8 +10,8 @@ namespace net.openstack.Core.Domain
             AccessIPv4 = ipAddress;
         }
 
-        public string AccessIPv4 { get; set; }
+        public string AccessIPv4 { get; private set; }
 
-        public string AccessIPv6 { get; set; }
+        public string AccessIPv6 { get; private set; }
     }
 }

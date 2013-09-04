@@ -88,6 +88,8 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public IEnumerable<CloudNetwork> ListNetworks(string region = null, CloudIdentity identity = null)
         {
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/os-networksv2", GetServiceEndpoint(identity, region)));
             var response = ExecuteRESTRequest<ListCloudNetworksResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -100,6 +102,16 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public CloudNetwork CreateNetwork(string cidr, string label, string region = null, CloudIdentity identity = null)
         {
+            if (cidr == null)
+                throw new ArgumentNullException("cidr");
+            if (label == null)
+                throw new ArgumentNullException("label");
+            if (string.IsNullOrEmpty(cidr))
+                throw new ArgumentException("cidr cannot be empty");
+            if (string.IsNullOrEmpty(label))
+                throw new ArgumentException("label cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/os-networksv2", GetServiceEndpoint(identity, region)));
             var cloudNetworkRequest = new CreateCloudNetworkRequest { Details = new CreateCloudNetworksDetails { Cidr = cidr, Label = label } };
 
@@ -114,6 +126,12 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public CloudNetwork ShowNetwork(string networkId, string region = null, CloudIdentity identity = null)
         {
+            if (networkId == null)
+                throw new ArgumentNullException("networkId");
+            if (string.IsNullOrEmpty(networkId))
+                throw new ArgumentException("networkId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), networkId));
             var response = ExecuteRESTRequest<CloudNetworkResponse>(identity, urlPath, HttpMethod.GET);
 
@@ -126,6 +144,12 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public bool DeleteNetwork(string networkId, string region = null, CloudIdentity identity = null)
         {
+            if (networkId == null)
+                throw new ArgumentNullException("networkId");
+            if (string.IsNullOrEmpty(networkId))
+                throw new ArgumentException("networkId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/os-networksv2/{1}", GetServiceEndpoint(identity, region), networkId));
 
             Response response = null;

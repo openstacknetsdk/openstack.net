@@ -14,6 +14,7 @@
     [JsonObject(MemberSerialization.OptIn)]
     internal class UserCredentialsResponse
     {
+        [JsonProperty("credentials")]
         public List<UserCredential> Credentials { get; set; }
     }
 }

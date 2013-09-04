@@ -32,6 +32,13 @@ obj/
 [Rr]elease*/
 Ankh.NoLoad
 
+# Visual Studio Profiling Output
+*.psess
+*.vsp
+*.vspx
+*.krn.ctl
+*.app.ctl
+
 #Tooling
 _ReSharper*/
 *.resharper

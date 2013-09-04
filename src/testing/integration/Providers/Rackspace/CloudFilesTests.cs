@@ -46,8 +46,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         }
 
         private TestContext testContextInstance;
-        private static long _originalThreshold;
-
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -186,20 +184,15 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(containerName, deleteObjects: true, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+            provider.DeleteContainer(containerName, deleteObjects: true, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Delete_Destination_Container()
         {
             var provider = new CloudFilesProvider();
-            var containerCreatedResponse = provider.DeleteContainer(destinationContainerName, deleteObjects: true, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ContainerDeleted, containerCreatedResponse);
+            provider.DeleteContainer(destinationContainerName, deleteObjects: true, identity: _testIdentity);
         }
-
 
         [TestMethod]
         public void Should_Get_Objects_From_Container()
@@ -259,7 +252,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = new Dictionary<string, string> {{"key2", "value2"}, {"key3", "value3"}};
             
-            provider.DeleteContainerMetadata(containerName, metaData);
+            provider.DeleteContainerMetadata(containerName, metaData.Keys);
         }
 
         [TestMethod]
@@ -293,10 +286,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Add_Headers_For_Container()
         {
             var metaData = new Dictionary<string, string>();
-            metaData.Add("X-Container-Meta-Movie", "Batman");
-            metaData.Add("X-Container-Meta-Genre", "Action");
+            metaData.Add("Movie", "Batman");
+            metaData.Add("Genre", "Action");
             var provider = new CloudFilesProvider();
-            provider.AddContainerHeaders(containerName, metaData, identity: _testIdentity);
+            provider.UpdateContainerMetadata(containerName, metaData, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -628,9 +621,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             string fileName = objectName;
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+            provider.DeleteObject(containerName, fileName, headers, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -638,9 +629,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var headers = new Dictionary<string, string>();
             var provider = new CloudFilesProvider();
-            var deleteResponse = provider.DeleteObject(destinationContainerName, destinationObjectName, headers, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectDeleted, deleteResponse);
+            provider.DeleteObject(destinationContainerName, destinationObjectName, headers, identity: _testIdentity);
         }
 
         [TestMethod]
@@ -659,18 +648,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Copy_Object_When_Not_Passing_Content_Length()
         {
             var provider = new CloudFilesProvider();
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Copy_Object_When_Passing_Content_Length()
         {
             var provider = new CloudFilesProvider(_testIdentity);
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName);
 
             var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
             var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
@@ -688,9 +673,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var header = new Dictionary<string, string> { { CloudFilesProvider.ObjectDeleteAt, epoch.ToString() } };
 
             var provider = new CloudFilesProvider(_testIdentity);
-            var copyResponse = provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, null, header);
-
-            Assert.AreEqual(ObjectStore.ObjectCreated, copyResponse);
+            provider.CopyObject(sourceContainerName, sourceObjectName, destinationContainerName, destinationObjectName, null, header);
 
             var sourceheader = provider.GetObjectHeaders(sourceContainerName, sourceObjectName);
             var destinationHeader = provider.GetObjectHeaders(destinationContainerName, destinationObjectName);
@@ -731,7 +714,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = new Dictionary<string, string> { { "key2", "value2" }, { "key3", "value3" } };
 
-            provider.DeleteObjectMetadata(containerName, objectName, metaData);
+            provider.DeleteObjectMetadata(containerName, objectName, metaData.Keys);
         }
 
         [TestMethod]
@@ -765,18 +748,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_CDN_Enabled_Object_No_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, identity: _testIdentity);
         }
 
         [TestMethod]
         public void Should_Purge_CDN_Enabled_Object_Single_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, email: emailTo, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, new[] { emailTo }, identity: _testIdentity);
 
         }
 
@@ -784,23 +763,14 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_CDN_Enabled_Object_Multiple_Email_Notification()
         {
             var provider = new CloudFilesProvider();
-            var objectDeleteResponse = provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
-
-            Assert.AreEqual(ObjectStore.ObjectPurged, objectDeleteResponse);
+            provider.PurgeObjectFromCDN(containerName, objectName, emailToList, identity: _testIdentity);
         }
-
-        [TestMethod]
-        public void Should_Reset_The_Batch_Threshold()
-        {
-            _originalThreshold = CloudFilesProvider.LargeFileBatchThreshold;
-            CloudFilesProvider.LargeFileBatchThreshold = 81920;
-        }
-
 
         [TestMethod]
         public void Should_Create_New_Test_Container_2()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.CreateContainer(containerName2);
 
@@ -813,6 +783,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Upload_File_In_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), objectName);
 
@@ -832,6 +803,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Object_And_All_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteObject(containerName2, objectName, deleteSegments: true);
 
@@ -849,6 +821,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Delete_Object_But_Not_The_Segments()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteObject(containerName2, objectName, deleteSegments: false);
 
@@ -866,6 +839,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Bulk_Delete_All_Objects()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.BulkDelete(provider.ListObjects(containerName2).Select(o => string.Format("{0}/{1}", containerName2, o.Name)));
 
@@ -878,18 +852,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Purge_Objects_Before_Deleting_The_Conatiner()
         {
             var provider = new CloudFilesProvider(_testIdentity);
+            provider.LargeFileBatchThreshold = 81920;
 
             provider.DeleteContainer(containerName2, deleteObjects: true);
 
             var containers = provider.ListContainers();
             Assert.IsFalse(containers.Any(c => c.Name.Equals(containerName2)));
-        }
-
-
-        [TestMethod]
-        public void Should_Reset_The_Batch_Threshold_To_Original()
-        {
-            CloudFilesProvider.LargeFileBatchThreshold = _originalThreshold;
         }
 
         #endregion Object Tests
@@ -936,16 +904,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Update_Headers_For_Account()
         {
             var headers = new Dictionary<string, string>();
-            headers.Add("X-Account-Meta-Test-Accountmetadata", "Test1");
+            headers.Add("Test-Accountmetadata", "Test1");
 
             var provider = new CloudFilesProvider();
-            provider.UpdateAccountHeaders(headers, identity: _testIdentity);
+            provider.UpdateAccountMetadata(headers, identity: _testIdentity);
             var accountHeadersResponse = provider.GetAccountMetaData(identity: _testIdentity);
 
             Assert.IsNotNull(accountHeadersResponse);
-            Assert.IsTrue(accountHeadersResponse.ContainsKey("Test-Accountmetadata"));
-            Assert.AreEqual("Test1", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-
+            string value;
+            Assert.IsTrue(accountHeadersResponse.TryGetValue("Test-Accountmetadata", out value));
+            Assert.AreEqual("Test1", value);
         }
 
         #endregion
