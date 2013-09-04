@@ -6,6 +6,11 @@ namespace net.openstack.Providers.Rackspace.Objects
     public class Domain
     {
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
+
+        public Domain(string name)
+        {
+            Name = name;
+        }
     }
 }
