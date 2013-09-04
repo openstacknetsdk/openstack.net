@@ -13,9 +13,9 @@
         {
             var creds = new AuthDetails();
             if (string.IsNullOrWhiteSpace(identity.Password))
-                creds.APIKeyCredentials = new Credentials() { Username = identity.Username, APIKey = identity.APIKey};
+                creds.APIKeyCredentials = new Credentials(identity.Username, null, identity.APIKey);
             else
-                creds.PasswordCredentials = new Credentials(){Username = identity.Username, Password = identity.Password};
+                creds.PasswordCredentials = new Credentials(identity.Username, identity.Password, null);
 
             var raxIdentity = identity as RackspaceCloudIdentity;
             if (raxIdentity != null)

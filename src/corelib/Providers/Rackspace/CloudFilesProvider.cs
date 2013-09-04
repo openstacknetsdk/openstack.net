@@ -12,6 +12,7 @@ using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Exceptions;
@@ -122,6 +123,10 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var queryStringParameter = new Dictionary<string, string>();
@@ -147,6 +152,12 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
@@ -161,8 +172,14 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ObjectStore DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
 
             if (deleteObjects)
@@ -187,14 +204,25 @@ namespace net.openstack.Providers.Rackspace
             
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
-
-            return ObjectStore.ContainerDeleted;
+            try
+            {
+                ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+            }
+            catch (ServiceConflictException ex)
+            {
+                throw new ContainerNotEmptyException(null, ex);
+            }
         }
 
         /// <inheritdoc />
         public Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
@@ -208,6 +236,12 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
@@ -221,51 +255,69 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public ContainerCDN GetContainerCDNHeader(string container, string region = null, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
 
-            var result = new ContainerCDN { Name = container };
+            string name = container;
+            string uri = null;
+            string streamingUri = null;
+            string sslUri = null;
+            string iosUri = null;
+            bool enabled = false;
+            long ttl = 0;
+            bool logRetention = false;
 
             foreach (var header in response.Headers)
             {
-                if (header.Key.ToLower().Equals(CdnUri))
+                if (header.Key.Equals(CdnUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNUri = header.Value;
+                    uri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnSslUri))
+                else if (header.Key.Equals(CdnSslUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNSslUri = header.Value;
+                    sslUri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnStreamingUri))
+                else if (header.Key.Equals(CdnStreamingUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNStreamingUri = header.Value;
+                    streamingUri = header.Value;
                 }
-                if (header.Key.ToLower().Equals(CdnTTL))
+                else if (header.Key.Equals(CdnTTL, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.Ttl = long.Parse(header.Value);
+                    ttl = long.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnEnabled))
+                else if (header.Key.Equals(CdnEnabled, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNEnabled = bool.Parse(header.Value);
+                    enabled = bool.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnLogRetention))
+                else if (header.Key.Equals(CdnLogRetention, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.LogRetention = bool.Parse(header.Value);
+                    logRetention = bool.Parse(header.Value);
                 }
-                if (header.Key.ToLower().Equals(CdnIosUri))
+                else if (header.Key.Equals(CdnIosUri, StringComparison.OrdinalIgnoreCase))
                 {
-                    result.CDNIosUri = header.Value;
+                    iosUri = header.Value;
                 }
             }
 
+            ContainerCDN result = new ContainerCDN(name, uri, streamingUri, sslUri, iosUri, enabled, ttl, logRetention);
             return result;
         }
 
         /// <inheritdoc />
         public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
         {
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFilesCDN(identity, region)));
 
             var queryStringParameter = new Dictionary<string, string>
@@ -292,9 +344,9 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, string region = null, CloudIdentity identity = null)
         {
-            return EnableCDNOnContainer(container, ttl, false, identity: identity);
+            return EnableCDNOnContainer(container, timeToLive, false, identity: identity);
         }
 
         /// <inheritdoc />
@@ -304,22 +356,26 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Dictionary<string, string> EnableCDNOnContainer(string container, long ttl, bool logRetention, string region = null, CloudIdentity identity = null)
+        public Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, bool logRetention, string region = null, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            if (ttl.Equals(null) || logRetention.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (timeToLive < 0)
+                throw new ArgumentOutOfRangeException("timeToLive");
+            CheckIdentity(identity);
 
-            if (ttl > 1577836800 || ttl < 900)
+            _cloudFilesValidator.ValidateContainerName(container);
+
+            if (timeToLive > 1577836800 || timeToLive < 900)
             {
-                throw new TTLLengthException("TTL range must be 900 to 1577836800 seconds TTL: " + ttl.ToString(CultureInfo.InvariantCulture));
+                throw new TTLLengthException("TTL range must be 900 to 1577836800 seconds TTL: " + timeToLive.ToString(CultureInfo.InvariantCulture));
             }
 
             var headers = new Dictionary<string, string>
                 {
-                 {CdnTTL, ttl.ToString(CultureInfo.InvariantCulture)},
+                 {CdnTTL, timeToLive.ToString(CultureInfo.InvariantCulture)},
                  {CdnLogRetention, logRetention.ToString(CultureInfo.InvariantCulture)},
                  {CdnEnabled, "true"}
                 };
@@ -336,6 +392,12 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
 
             var headers = new Dictionary<string, string>
@@ -355,23 +417,27 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            if (metadata.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
 
-            var headers = new Dictionary<string, string>();
+            _cloudFilesValidator.ValidateContainerName(container);
+
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
-                if (m.Key.StartsWith(ContainerMetaDataPrefix))
-                {
-                    headers.Add(m.Key, m.Value);
-                }
-                else
-                {
-                    headers.Add(ContainerMetaDataPrefix + m.Key, m.Value);
-                }
+                if (string.IsNullOrEmpty(m.Key))
+                    throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('_'))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an underscore.");
+                if (m.Key.Contains('\''))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
+
+                headers.Add(ContainerMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
@@ -380,74 +446,44 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void DeleteContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteContainerMetadata(string container, IEnumerable<string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            if (metadata.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
 
-            var headers = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, string> m in metadata)
-            {
-                if (m.Key.StartsWith(ContainerRemoveMetaDataPrefix))
-                {
-                    headers.Add(m.Key, m.Value);
-                }
-                else
-                {
-                    headers.Add(ContainerRemoveMetaDataPrefix + m.Key, m.Value);
-                }
-            }
-
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+            Dictionary<string, string> headers = metadata.ToDictionary(i => i, i => default(string), StringComparer.OrdinalIgnoreCase);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void DeleteContainerMetadata(string container, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            if (String.IsNullOrWhiteSpace(key))
-            {
-                throw new ArgumentNullException();
-            }
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("key cannot be empty");
 
-            var headers = new Dictionary<string, string>();
-            headers.Add(key, "xxxx"); // when deleting metadata, we must still provide a value for the key
-
-            DeleteContainerMetadata(container, headers, region, useInternalUrl, identity);
-        }
-
-        /// <inheritdoc />
-        public void AddContainerHeaders(string container, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
-        {
-            _cloudFilesValidator.ValidateContainerName(container);
-            if (headers == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+            DeleteContainerMetadata(container, new[] { key }, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
+            if (container == null)
+                throw new ArgumentNullException("container");
             if (headers == null)
-            {
-                throw new ArgumentNullException();
-            }
+                throw new ArgumentNullException("headers");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            _cloudFilesValidator.ValidateContainerName(container);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container)));
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
@@ -456,33 +492,61 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (index == null)
+                throw new ArgumentNullException("index");
+            if (error == null)
+                throw new ArgumentNullException("error");
+            if (css == null)
+                throw new ArgumentNullException("css");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(index))
+                throw new ArgumentException("index cannot be empty");
+            if (string.IsNullOrEmpty(error))
+                throw new ArgumentException("error cannot be empty");
+            if (string.IsNullOrEmpty(css))
+                throw new ArgumentException("css cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(index);
+            _cloudFilesValidator.ValidateObjectName(error);
+            _cloudFilesValidator.ValidateObjectName(css);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
-
-            var headers = new Dictionary<string, string>
+            var metadata = new Dictionary<string, string>
                                 {
                                     {WebIndex, index},
                                     {WebError, error},
                                     {WebListingsCSS, css},
                                     {WebListings, listing.ToString()}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
-
+            UpdateContainerMetadata(container, metadata, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (index == null)
+                throw new ArgumentNullException("index");
+            if (error == null)
+                throw new ArgumentNullException("error");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(index))
+                throw new ArgumentException("index cannot be empty");
+            if (string.IsNullOrEmpty(error))
+                throw new ArgumentException("error cannot be empty");
+            CheckIdentity(identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(index);
+            _cloudFilesValidator.ValidateObjectName(error);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                   {
@@ -490,54 +554,75 @@ namespace net.openstack.Providers.Rackspace
                                       {WebError, error},
                                       {WebListings, listing.ToString()}
                                   };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (css == null)
+                throw new ArgumentNullException("css");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(css))
+                throw new ArgumentException("css cannot be empty");
+            CheckIdentity(identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(css);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                 {
                                     {WebListingsCSS, css},
                                     {WebListings, listing.ToString()}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (index == null)
+                throw new ArgumentNullException("index");
+            if (error == null)
+                throw new ArgumentNullException("error");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(index))
+                throw new ArgumentException("index cannot be empty");
+            if (string.IsNullOrEmpty(error))
+                throw new ArgumentException("error cannot be empty");
+            CheckIdentity(identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(index);
+            _cloudFilesValidator.ValidateObjectName(error);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                   {
                                       {WebIndex, index},
                                       {WebError, error}
                                   };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            CheckIdentity(identity);
 
-            if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
+            _cloudFilesValidator.ValidateContainerName(container);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
             var headers = new Dictionary<string, string>
                                 {
@@ -546,7 +631,7 @@ namespace net.openstack.Providers.Rackspace
                                     {WebListingsCSS, string.Empty},
                                     {WebListings, string.Empty}
                                 };
-            AddContainerHeaders(container, headers, region, useInternalUrl, identity);
+            UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
         #endregion
@@ -556,6 +641,16 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
@@ -570,6 +665,16 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
@@ -584,24 +689,28 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void UpdateObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            if (metadata.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
 
-            var headers = new Dictionary<string, string>();
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
-                if (m.Key.StartsWith(ObjectMetaDataPrefix) || m.Key.StartsWith(ObjectRemoveMetaDataPrefix))
-                {
-                    headers.Add(m.Key, m.Value);
-                }
-                else
-                {
-                    headers.Add(ObjectMetaDataPrefix + m.Key, m.Value);
-                }
+                if (string.IsNullOrEmpty(m.Key))
+                    throw new ArgumentException("metadata cannot contain any null or empty keys");
+
+                headers.Add(ObjectMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
@@ -610,23 +719,30 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void DeleteObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteObjectMetadata(string container, string objectName, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
-            if (metadata.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
 
-            var headers = GetObjectMetaData(container, objectName, region, useInternalUrl, identity);
-            foreach (KeyValuePair<string, string> m in metadata)
+            var headers = new Dictionary<string, string>(GetObjectMetaData(container, objectName, region, useInternalUrl, identity), StringComparer.OrdinalIgnoreCase);
+            foreach (string key in keys)
             {
-                if (headers.ContainsKey(m.Key))
-                {
-                    headers.Remove(m.Key);
-                    headers.Add(ObjectRemoveMetaDataPrefix + m.Key, m.Value);
-                }
+                if (string.IsNullOrEmpty(key))
+                    throw new ArgumentException("keys cannot contain any null or empty values");
+
+                headers.Remove(key);
             }
 
             UpdateObjectMetadata(container, objectName, headers, region, useInternalUrl, identity);
@@ -635,22 +751,25 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void DeleteObjectMetadata(string container, string objectName, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            _cloudFilesValidator.ValidateObjectName(objectName);
-            if (String.IsNullOrWhiteSpace(key))
-            {
-                throw new ArgumentNullException();
-            }
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("key cannot be empty");
 
-            var headers = new Dictionary<string, string>();
-            headers.Add(key, "xxxx"); // when deleting metadata, we must still provide a value for the key
-
-            DeleteObjectMetadata(container, objectName, headers, region, useInternalUrl, identity);
+            DeleteObjectMetadata(container, objectName, new[] { key }, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
         public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null,  string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
@@ -679,11 +798,20 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            if (string.IsNullOrWhiteSpace(objectName))
-            {
-                var info = new FileInfo(filePath);
-                objectName = info.Name;
-            }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (filePath == null)
+                throw new ArgumentNullException("filePath");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(filePath))
+                throw new ArgumentException("filePath cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
+            if (string.IsNullOrEmpty(objectName))
+                objectName = Path.GetFileName(filePath);
 
             using (var stream = File.OpenRead(filePath))
             {
@@ -694,8 +822,19 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
             if (stream == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("stream");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
 
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
@@ -707,7 +846,7 @@ namespace net.openstack.Providers.Rackspace
             }
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            RequestSettings settings = BuildDefaultRequestSettings();
             settings.ChunkRequest = true;
             settings.ContentType = contentType;
 
@@ -717,6 +856,20 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (outputStream == null)
+                throw new ArgumentNullException("outputStream");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
@@ -744,25 +897,27 @@ namespace net.openstack.Providers.Rackspace
                 }
             }, headers: headers);
 
-            if (verifyEtag && response.Headers.Any(h => h.Key.Equals(Etag, StringComparison.OrdinalIgnoreCase)))
+            string etag;
+            if (verifyEtag && response.TryGetHeader(Etag, out etag))
             {
                 outputStream.Flush(); // flush the contents of the stream to the output device
                 outputStream.Position = 0;  // reset the head of the stream to the beginning
 
-                var md5 = MD5.Create();
-                md5.ComputeHash(outputStream);
-
-                var sbuilder = new StringBuilder();
-                var hash = md5.Hash;
-                foreach (var b in hash)
+                using (var md5 = MD5.Create())
                 {
-                    sbuilder.Append(b.ToString("x2").ToLower());
-                }
-                var convertedMd5 = sbuilder.ToString();
-                if (convertedMd5 != response.Headers.First(h => h.Key.Equals(Etag, StringComparison.OrdinalIgnoreCase)).Value.ToLower())
-                {
+                    md5.ComputeHash(outputStream);
 
-                    throw new InvalidETagException();
+                    var sbuilder = new StringBuilder();
+                    var hash = md5.Hash;
+                    foreach (var b in hash)
+                    {
+                        sbuilder.Append(b.ToString("x2").ToLower());
+                    }
+                    var convertedMd5 = sbuilder.ToString();
+                    if (!string.Equals(convertedMd5, etag, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidETagException();
+                    }
                 }
             }
         }
@@ -770,8 +925,24 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            if (String.IsNullOrEmpty(saveDirectory))
-                throw new ArgumentNullException();
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (saveDirectory == null)
+                throw new ArgumentNullException("saveDirectory");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(saveDirectory))
+                throw new ArgumentException("saveDirectory cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
+            if (string.IsNullOrEmpty(fileName))
+                fileName = objectName;
 
             var filePath = Path.Combine(saveDirectory, string.IsNullOrWhiteSpace(fileName) ? objectName : fileName);
 
@@ -790,8 +961,26 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public ObjectStore CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (sourceContainer == null)
+                throw new ArgumentNullException("sourceContainer");
+            if (sourceObjectName == null)
+                throw new ArgumentNullException("sourceObjectName");
+            if (destinationContainer == null)
+                throw new ArgumentNullException("destinationContainer");
+            if (destinationObjectName == null)
+                throw new ArgumentNullException("destinationObjectName");
+            if (string.IsNullOrEmpty(sourceContainer))
+                throw new ArgumentException("sourceContainer cannot be empty");
+            if (string.IsNullOrEmpty(sourceObjectName))
+                throw new ArgumentException("sourceObjectName cannot be empty");
+            if (string.IsNullOrEmpty(destinationContainer))
+                throw new ArgumentException("destinationContainer cannot be empty");
+            if (string.IsNullOrEmpty(destinationObjectName))
+                throw new ArgumentException("destinationObjectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(sourceContainer);
             _cloudFilesValidator.ValidateObjectName(sourceObjectName);
 
@@ -799,13 +988,13 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateObjectName(destinationObjectName);
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(sourceContainer), _encodeDecodeProvider.UrlEncode(sourceObjectName)));
-            
-            if(headers == null)
-                headers = new Dictionary<string, string>();
+
+            if (headers == null)
+                headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             headers.Add(DestinationMetadataKey, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
 
-            JsonRequestSettings settings = BuildDefaultRequestSettings();
+            RequestSettings settings = BuildDefaultRequestSettings();
             if (destinationContentType != null)
             {
                 settings.ContentType = destinationContentType;
@@ -820,13 +1009,21 @@ namespace net.openstack.Providers.Rackspace
             }
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers, settings: settings);
-
-            return ObjectStore.ObjectCreated;
         }
 
         /// <inheritdoc />
-        public ObjectStore DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
 
@@ -857,8 +1054,6 @@ namespace net.openstack.Providers.Rackspace
 
                 ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
             }
-            
-            return ObjectStore.ObjectDeleted;
         }
 
         /// <summary>
@@ -870,8 +1065,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             _cloudFilesValidator.ValidateContainerName(container);
             foreach (var objectName in objects)
@@ -879,7 +1073,7 @@ namespace net.openstack.Providers.Rackspace
                 _cloudFilesValidator.ValidateObjectName(objectName);
             }
 
-            return BulkDelete(objects.Select(o => string.Format("{0}/{1}", container, o)), headers, region, useInternalUrl, identity);
+            BulkDelete(objects.Select(o => string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(o))), headers, region, useInternalUrl, identity);
         }
 
         /// <summary>
@@ -890,82 +1084,59 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
         /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
         /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        /// <returns><see cref="ObjectStore"/></returns>
-        public ObjectStore BulkDelete(IEnumerable<string> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void BulkDelete(IEnumerable<string> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/?bulk-delete", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
-            var body = string.Join('\n'.ToString(), items.Select(o => _encodeDecodeProvider.UrlEncode(o)));
+            var body = string.Join("\n", items);
 
             var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
-            var status = _statusParser.Parse(response.Data.Status);
- 
-            if (status.Code != 200 && !response.Data.Errors.Any())
+            Status status;
+            if (_statusParser.TryParse(response.Data.Status, out status))
             {
-                response.Data.AllItems = items;
-                throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));    
+                if (status.Code != 200 && !response.Data.Errors.Any())
+                {
+                    response.Data.AllItems = items;
+                    throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));
+                }
             }
-
-            return ObjectStore.ObjectDeleted;
         }
 
         /// <inheritdoc />
-        public ObjectStore MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var result = CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, destinationContentType, headers, region, useInternalUrl, identity);
-
-            if (result != ObjectStore.ObjectCreated)
-                return result;
-
-            return DeleteObject(sourceContainer, sourceObjectName, headers, true, region, useInternalUrl, identity);
+            CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, destinationContentType, headers, region, useInternalUrl, identity);
+            DeleteObject(sourceContainer, sourceObjectName, headers, true, region, useInternalUrl, identity);
         }
 
         /// <inheritdoc />
-        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string region = null, CloudIdentity identity = null)
+        public void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails = null, string region = null, CloudIdentity identity = null)
         {
-            return PurgeObjectFromCDN(container, objectName, " ", region, identity);
-        }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (emails != null && emails.Any(string.IsNullOrEmpty))
+                throw new ArgumentException("emails cannot contain any null or empty values");
 
-        /// <inheritdoc />
-        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string[] emails, string region = null, CloudIdentity identity = null)
-        {
-            if (emails.Length < 0)
-            {
-                throw new ArgumentNullException();
-            }
-
-            return PurgeObjectFromCDN(container, objectName, string.Join(",", emails), region, identity);
-        }
-
-        /// <inheritdoc />
-        public ObjectStore PurgeObjectFromCDN(string container, string objectName, string email, string region = null, CloudIdentity identity = null)
-        {
             _cloudFilesValidator.ValidateContainerName(container);
             _cloudFilesValidator.ValidateObjectName(objectName);
+            VerifyContainerIsCDNEnabled(container, region, identity);
 
-            if (string.IsNullOrEmpty(email))
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (!GetContainerCDNHeader(container, region, identity: identity).CDNEnabled)
-            {
-                throw new CDNNotEnabledException();
-            }
-
-            var headers = new Dictionary<string, string>();
-            if (email.Trim().Length > 0)
+            string email = emails != null ? string.Join(",", emails) : null;
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (!string.IsNullOrEmpty(email))
             {
                 headers[CdnPurgeEmail] = email;
             }
+
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFilesCDN(identity, region), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
-            if (response.StatusCode == HttpStatusCode.NoContent)
-                return ObjectStore.ObjectPurged;
-
-            return ObjectStore.Unknown;
-
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, headers: headers);
         }
 
         #endregion
@@ -975,6 +1146,8 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
@@ -988,6 +1161,8 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.HEAD);
@@ -1000,42 +1175,34 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            if (metadata.Equals(null))
-            {
-                throw new ArgumentNullException();
-            }
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+            CheckIdentity(identity);
 
-            var headers = new Dictionary<string, string>();
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> m in metadata)
             {
-                if (m.Key.Contains(AccountMetaDataPrefix))
-                {
-                    headers.Add(m.Key, m.Value);
-                }
-                else
-                {
-                    headers.Add(AccountMetaDataPrefix + m.Key, m.Value);
-                }
+                if (string.IsNullOrEmpty(m.Key))
+                    throw new ArgumentException("metadata keys cannot be null or empty");
+                if (m.Key.Contains('_'))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an underscore.");
+                if (m.Key.Contains('\''))
+                    throw new NotSupportedException("This provider does not support metadata keys containing an apostrophe.");
+
+                headers.Add(AccountMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
 
             var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
-
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
-        /// <inheritdoc />
-        public void UpdateAccountHeaders(Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        private static string EncodeUnicodeValue(string value)
         {
-            if (headers == null)
-            {
-                throw new ArgumentNullException();
-            }
+            if (value == null)
+                return null;
 
-            var urlPath = new Uri(string.Format("{0}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
-
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+            return Encoding.GetEncoding("ISO-8859-1").GetString(Encoding.UTF8.GetBytes(value));
         }
-
 
         #endregion
 
@@ -1082,19 +1249,21 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identity">The identity. <see cref="CloudIdentity"/>  </param>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            var totalLength = stream.Length;
-            var segmentCount = Math.Ceiling((double)totalLength / (double)LargeFileBatchThreshold);
+            long totalLength = stream.Length - stream.Position;
+            long segmentCount = (totalLength / LargeFileBatchThreshold) + (((totalLength % LargeFileBatchThreshold) != 0) ? 1 : 0);
 
             long totalBytesWritten = 0;
             for (int i = 0; i < segmentCount; i++)
             {
-                var remaining = (totalLength - LargeFileBatchThreshold * i);
-                var length = (remaining < LargeFileBatchThreshold) ? remaining : LargeFileBatchThreshold;
+                // the total amount of data left to write
+                long remaining = (totalLength - LargeFileBatchThreshold * i);
+                // the size of the current segment
+                long length = Math.Min(remaining, LargeFileBatchThreshold);
 
-                var urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
+                Uri urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
                 long segmentBytesWritten = 0;
 
-                JsonRequestSettings settings = BuildDefaultRequestSettings();
+                RequestSettings settings = BuildDefaultRequestSettings();
                 settings.ChunkRequest = true;
                 settings.ContentType = contentType;
 
@@ -1108,18 +1277,18 @@ namespace net.openstack.Providers.Rackspace
                         }
                     });
 
-                totalBytesWritten += segmentBytesWritten;
+                totalBytesWritten += length;
             }
 
             // upload the manifest file
-            var segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
+            Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
             headers.Add(ObjectManifestMetadataKey, string.Format("{0}/{1}", container, objectName));
 
-            JsonRequestSettings requestSettings = BuildDefaultRequestSettings();
+            RequestSettings requestSettings = BuildDefaultRequestSettings();
             requestSettings.ChunkRequest = true;
             requestSettings.ContentType = contentType;
 
@@ -1136,6 +1305,30 @@ namespace net.openstack.Providers.Rackspace
         protected override IObjectStorageProvider BuildProvider(CloudIdentity identity)
         {
             return new CloudFilesProvider(identity, IdentityProvider, RestService, _cloudFilesValidator, _cloudFilesMetadataProcessor, _encodeDecodeProvider, _statusParser, _bulkDeletionResultMapper);
+        }
+
+        protected void VerifyContainerIsCDNEnabled(string container, string region, CloudIdentity identity)
+        {
+            try
+            {
+                // If the container is currently CDN enabled, or was CDN enabled at some
+                // point in the past, GetContainerCDNHeader returns non-null and the CDNEnabled
+                // property determines whether or not the container is currently CDN enabled.
+                if (!GetContainerCDNHeader(container, region, identity).CDNEnabled)
+                {
+                    throw new CDNNotEnabledException("The specified container is not CDN-enabled.");
+                }
+            }
+            catch (ItemNotFoundException ex)
+            {
+                // In response to an ItemNotFoundException, the GetContainerHeader method is used
+                // to distinguish between cases where the container does not exist (or is not
+                // accessible), and cases where the container exists but has never been CDN enabled.
+                GetContainerHeader(container, region, false, identity);
+
+                // If we get to this line, we know the container exists but has never been CDN enabled.
+                throw new CDNNotEnabledException("The specified container is not CDN-enabled.", ex);
+            }
         }
 
         #endregion
@@ -1157,10 +1350,10 @@ namespace net.openstack.Providers.Rackspace
         public const string ContainerRemoveMetaDataPrefix = "x-remove-container-meta-";
         public const string ContainerBytesUsed = "x-container-bytes-used";
         public const string ContainerObjectCount = "x-container-object-count";
-        public const string WebIndex = "x-container-meta-web-index";
-        public const string WebError = "x-container-meta-web-error";
-        public const string WebListings = "x-container-meta-web-listings";
-        public const string WebListingsCSS = "x-container-meta-web-listings-css";
+        public const string WebIndex = "web-index";
+        public const string WebError = "web-error";
+        public const string WebListings = "web-listings";
+        public const string WebListingsCSS = "web-listings-css";
         public const string VersionsLocation = "x-versions-location";
         //CDN Container Constants
         public const string CdnUri = "x-cdn-uri";
@@ -1184,13 +1377,27 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-        private static long _largeFileBatchThreshold = 5368709120; // 5GB
+        public static readonly long MaxLargeFileBatchThreshold = 5368709120; // 5GB
+        private long _largeFileBatchThreshold = MaxLargeFileBatchThreshold;
 
-        public static long LargeFileBatchThreshold
+        public long LargeFileBatchThreshold
         {
-            get { return _largeFileBatchThreshold; }
-            internal set { _largeFileBatchThreshold = value; }
+            get
+            {
+                return _largeFileBatchThreshold;
+            }
+
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+                if (value > MaxLargeFileBatchThreshold)
+                    throw new ArgumentException(string.Format("The large file threshold cannot exceed the provider's maximum value {0}", MaxLargeFileBatchThreshold), "value");
+
+                _largeFileBatchThreshold = value;
+            }
         }
+
         public const string ProcessedHeadersMetadataKey = "metadata";
         public const string ProcessedHeadersHeaderKey = "headers";
         #endregion

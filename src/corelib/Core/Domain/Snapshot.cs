@@ -10,16 +10,16 @@
         private string _status;
 
         [JsonProperty]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("display_name")]
-        public string DisplayName { get; set; }
+        public string DisplayName { get; private set; }
 
         [JsonProperty("display_description")]
-        public string DisplayDescription { get; set; }
+        public string DisplayDescription { get; private set; }
 
         [JsonProperty("volume_id")]
-        public string VolumeId { get; set; }
+        public string VolumeId { get; private set; }
 
         public SnapshotState Status
         {
@@ -33,9 +33,9 @@
         }
 
         [JsonProperty]
-        public string Size { get; set; }
+        public string Size { get; private set; }
 
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; private set; }
     }
 }

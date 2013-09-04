@@ -3,7 +3,7 @@
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class CreateCloudBlockStorageVolumeDetails
+    internal class CreateCloudBlockStorageVolumeDetails
     {
         [JsonProperty("size")]
         public int Size { get; set; }

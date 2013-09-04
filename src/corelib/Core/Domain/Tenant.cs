@@ -6,9 +6,9 @@
     public class Tenant
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
     }
 }

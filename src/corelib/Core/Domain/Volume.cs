@@ -10,26 +10,26 @@
         [JsonProperty("status")]
         private string _status;
 
-        [JsonProperty]
-        public string Id { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; private set; }
 
         [JsonProperty("display_name")]
-        public string DisplayName { get; set; }
+        public string DisplayName { get; private set; }
 
         [JsonProperty("display_description")]
-        public string DisplayDescription { get; set; }
+        public string DisplayDescription { get; private set; }
 
-        [JsonProperty]
-        public int Size { get; set; }
+        [JsonProperty("size")]
+        public int Size { get; private set; }
 
         [JsonProperty("volume_type")]
-        public string VolumeType { get; set; }
+        public string VolumeType { get; private set; }
 
         [JsonProperty("snapshot_id")]
-        public string SnapshotId { get; set; }
+        public string SnapshotId { get; private set; }
 
-        [JsonProperty]
-        public Dictionary<string, string>[] Attachments { get; set; }
+        [JsonProperty("attachments")]
+        public Dictionary<string, string>[] Attachments { get; private set; }
 
         public VolumeState Status
         {
@@ -43,9 +43,9 @@
         }
 
         [JsonProperty("availability_zone")]
-        public string AvailabilityZone { get; set; }
+        public string AvailabilityZone { get; private set; }
 
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; private set; }
     }
 }

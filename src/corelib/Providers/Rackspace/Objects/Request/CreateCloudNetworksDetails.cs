@@ -3,7 +3,7 @@
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class CreateCloudNetworksDetails
+    internal class CreateCloudNetworksDetails
     {
         [JsonProperty("cidr")]
         public string Cidr { get; set; }

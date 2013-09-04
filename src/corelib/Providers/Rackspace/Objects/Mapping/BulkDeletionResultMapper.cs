@@ -19,40 +19,36 @@ namespace net.openstack.Providers.Rackspace.Objects.Mapping
         /// <inheritdoc/>
         public BulkDeletionResults Map(BulkDeleteResponse from)
         {
-            return new BulkDeletionResults
+            var successfulObjects = from.AllItems.Where(i => !from.IsItemError(i));
+            var failedObjects = from.Errors.Select(e =>
             {
-                SuccessfulObjects = from.AllItems.Where(i => !from.IsItemError(i)),
-                FailedObjects = from.Errors.Select(e =>
+                var eParts = e.ToArray();
+                Status errorStatus;
+                string errorItem;
+
+                if (eParts.Length != 2)
                 {
-                    var eParts = e.ToArray();
-                    Status errorStatus;
-                    string errorItem;
-
-                    if (eParts.Length != 2)
+                    errorStatus = new Status(0, "Unknown");
+                    errorItem = string.Format("The error array has an unexpected length. Array: {0}", string.Join("||", eParts));
+                }
+                else
+                {
+                    errorItem = eParts[1];
+                    if (!_statusParser.TryParse(eParts[0], out errorStatus))
                     {
-                        errorStatus = new Status { Code = 0, Description = "Unknown" };
-                        errorItem = string.Format("The error array has an unexpected length. Array: {0}", string.Join("||", eParts));
-                    }
-                    else
-                    {
-                        errorStatus = _statusParser.Parse(eParts[0]);
-                        errorItem = eParts[1];
-                        if (errorStatus == null)
+                        errorItem = eParts[0];
+                        if (!_statusParser.TryParse(eParts[1], out errorStatus))
                         {
-                            errorStatus = _statusParser.Parse(eParts[1]);
-                            errorItem = eParts[0];
-
-                            if (errorStatus == null)
-                            {
-                                errorStatus = new Status { Code = 0, Description = "Unknown" };
-                                errorItem = string.Format("The error array is in an unknown format. Array: {0}", string.Join("||", eParts));
-                            }
+                            errorStatus = new Status(0, "Unknown");
+                            errorItem = string.Format("The error array is in an unknown format. Array: {0}", string.Join("||", eParts));
                         }
                     }
+                }
 
-                    return new BulkDeletionFailedObject { Status = errorStatus, Object = errorItem };
-                })
-            };
+                return new BulkDeletionFailedObject(errorItem, errorStatus);
+            });
+
+            return new BulkDeletionResults(successfulObjects, failedObjects);
         }
 
         /// <inheritdoc/>

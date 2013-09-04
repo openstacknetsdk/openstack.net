@@ -68,6 +68,13 @@
     <Compile Include="Providers\Rackspace\IdentityTests.cs" />
     <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
+    <Compile Include="Providers\Rackspace\TestCategories.cs" />
+    <Compile Include="Providers\Rackspace\UserBlockStorageTests.cs" />
+    <Compile Include="Providers\Rackspace\UserComputeTests.cs" />
+    <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
+    <Compile Include="Providers\Rackspace\UserNetworksTests.cs" />
+    <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
+    <Compile Include="Providers\Rackspace\UserServerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.csproj">

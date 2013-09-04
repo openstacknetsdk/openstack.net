@@ -31,6 +31,20 @@ namespace net.openstack.Core.Exceptions
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="CDNNotEnabledException"/> class
+        /// with the specified error message and a reference to the inner exception that
+        /// is the cause of this exception.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception.
+        /// If the <paramref name="innerException"/> parameter is not a null reference, the current
+        /// exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+        public CDNNotEnabledException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CDNNotEnabledException"/> class with
         /// serialized data.
         /// </summary>

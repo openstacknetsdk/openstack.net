@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-
 namespace net.openstack.Core.Domain
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using Newtonsoft.Json;
+
     [JsonObject(MemberSerialization.OptIn)]
     public class Server : SimpleServer
     {
@@ -12,25 +13,25 @@ namespace net.openstack.Core.Domain
         private string _status;
 
         [JsonProperty("OS-DCF:diskConfig" )]
-        public string DiskConfig { get; internal set; }
+        public string DiskConfig { get; private set; }
 
         [JsonProperty("OS-EXT-STS:power_state")]
-        public bool PowerState { get; internal set; }
+        public bool PowerState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:task_state")]
-        public string TaskState { get; internal set; }
+        public string TaskState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:vm_state")]
-        public string VMState { get; internal set; }
+        public string VMState { get; private set; }
 
         [JsonProperty]
-        public string AccessIPv4 { get; internal set; }
+        public string AccessIPv4 { get; private set; }
 
         [JsonProperty]
-        public string AccessIPv6 { get; internal set; }
+        public string AccessIPv6 { get; private set; }
 
         [JsonProperty("user_id")]
-        public string UserId { get; internal set; }
+        public string UserId { get; private set; }
 
         private SimpleServerImage _image;
         [JsonProperty]
@@ -45,7 +46,7 @@ namespace net.openstack.Core.Domain
 
                 return _image;
             }
-            internal set { _image = value;  }
+            private set { _image = value;  }
         }
 
         public ServerState Status
@@ -58,7 +59,7 @@ namespace net.openstack.Core.Domain
                 return ServerState.FromName(_status);
             }
 
-            set
+            private set
             {
                 if (value == null)
                     _status = null;
@@ -68,28 +69,25 @@ namespace net.openstack.Core.Domain
         }
 
         [JsonProperty]
-        public Flavor Flavor { get; internal set; }
+        public Flavor Flavor { get; private set; }
 
         [JsonProperty]
-        public ServerAddresses Addresses { get; internal set; }
+        public ServerAddresses Addresses { get; private set; }
 
         [JsonProperty]
-        public DateTime Created { get; internal set; }
+        public DateTime Created { get; private set; }
 
         [JsonProperty]
-        public string HostId { get; internal set; }
+        public string HostId { get; private set; }
 
         [JsonProperty]
-        public int Progress { get; internal set; }
-
-        [JsonProperty("rax-bandwidth:bandwidth")]
-        public string[] Bandwidth { get; internal set; }
+        public int Progress { get; private set; }
 
         [JsonProperty("tenant_id")]
-        public string TenantId { get; internal set; }
+        public string TenantId { get; private set; }
 
         [JsonProperty]
-        public DateTime Updated { get; internal set; }
+        public DateTime Updated { get; private set; }
 
         protected override void UpdateThis(ServerBase server)
         {
@@ -114,7 +112,6 @@ namespace net.openstack.Core.Domain
             Created = details.Created;
             HostId = details.HostId;
             Progress = details.Progress;
-            Bandwidth = details.Bandwidth;
             TenantId = details.TenantId;
             Updated = details.Updated;
         }
@@ -128,27 +125,6 @@ namespace net.openstack.Core.Domain
         public IEnumerable<ServerVolume> GetVolumes()
         {
             return Provider.ListServerVolumes(Id, Region);
-        }
-
-        /// <summary>
-        /// Attaches the specified volume to the server.
-        /// </summary>
-        /// <param name="volumeId">The volume ID.</param>
-        /// <param name="storageDevice">The name of the device, such as /dev/xvdb. <remarks>If null, this value will be auto assigned</remarks></param>
-        /// <returns>The <see cref="ServerVolume"/> details.</returns>
-        public ServerVolume AttachVolume(string volumeId, string storageDevice = null)
-        {
-            return Provider.AttachServerVolume(Id, volumeId, storageDevice, Region);
-        }
-
-        /// <summary>
-        /// Detaches the specified volume from the server.
-        /// </summary>
-        /// <param name="volumeId">The volume ID.</param>
-        /// <returns><c>bool</c> indicating if the action was successful</returns>
-        public bool DetachVolume(string volumeId)
-        {
-            return Provider.DetachServerVolume(Id, volumeId, Region);
         }
 
         /// <summary>
@@ -249,13 +225,13 @@ namespace net.openstack.Core.Domain
         }
 
         /// <summary>
-        /// Lists of network addresses associated with the serverk.
+        /// Lists of network addresses associated with the server.
         /// </summary>
-        /// <param name="networkName">The network name.</param>
+        /// <param name="networkLabel">The network label.</param>
         /// <returns>List of network <see cref="AddressDetails"/></returns>
-        public IEnumerable<AddressDetails> ListAddressesByNetwork(string networkName)
+        public IEnumerable<IPAddress> ListAddressesByNetwork(string networkLabel)
         {
-            return Provider.ListAddressesByNetwork(Id, networkName, Region);
+            return Provider.ListAddressesByNetwork(Id, networkLabel, Region);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Domain;
@@ -204,7 +205,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var server = _testServer2.GetDetails();
 
-            Assert.AreEqual(server.AccessIPv4, server.Addresses.Public.First(a => a.Version.Equals("4")).Address);
+            Assert.AreEqual(server.AccessIPv4, server.Addresses.Public.First(a => a.AddressFamily == AddressFamily.InterNetwork).ToString());
         }
 
         [TestMethod]
@@ -212,7 +213,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             var server = _testServer2.GetDetails();
 
-            Assert.AreEqual(server.AccessIPv6, server.Addresses.Public.First(a => a.Version.Equals("6")).Address);
+            Assert.AreEqual(server.AccessIPv6, server.Addresses.Public.First(a => a.AddressFamily == AddressFamily.InterNetworkV6).ToString());
         }
 
         [TestMethod]
@@ -857,7 +858,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Attach_Server_Volume()
         {
-            _testVolume = _testServer.AttachVolume("2da9ce90-076e-450a-be3e-c822c9aa73f5");
+            _testVolume = _testServer.AttachVolume("2da9ce90-076e-450a-be3e-c822c9aa73f5", null);
 
             Assert.IsNotNull(_testVolume);
         }
