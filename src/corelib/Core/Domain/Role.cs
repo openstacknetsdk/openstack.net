@@ -1,5 +1,6 @@
 namespace net.openstack.Core.Domain
 {
+    using System.Diagnostics;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -14,6 +15,7 @@ namespace net.openstack.Core.Domain
     /// role grants access.
     /// </remarks>
     [JsonObject(MemberSerialization.OptIn)]
+    [DebuggerDisplay("{Name,nq} ({Id, nq})")]
     public class Role
     {
         /// <summary>

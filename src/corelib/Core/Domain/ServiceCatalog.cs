@@ -1,5 +1,6 @@
 namespace net.openstack.Core.Domain
 {
+    using System.Diagnostics;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -9,6 +10,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_authenticate_v2.0_tokens_.html">Authenticate (OpenStack Identity Service API v2.0 Reference)</seealso>
     [JsonObject(MemberSerialization.OptIn)]
+    [DebuggerDisplay("{Name,nq} ({Type,nq})")]
     public class ServiceCatalog
     {
         /// <summary>
