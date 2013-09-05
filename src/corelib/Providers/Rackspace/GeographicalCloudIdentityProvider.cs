@@ -450,7 +450,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
-            var updateUserRequest = new UpdateUserRequest { User = user };
+            var updateUserRequest = new UpdateUserRequest(user);
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.POST, updateUserRequest);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
