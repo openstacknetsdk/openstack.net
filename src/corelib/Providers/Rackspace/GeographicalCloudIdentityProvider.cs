@@ -326,7 +326,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential(null, username, apiKey) };
+            var request = new UpdateUserCredentialRequest(username, apiKey);
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
