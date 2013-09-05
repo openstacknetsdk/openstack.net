@@ -113,7 +113,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/os-networksv2", GetServiceEndpoint(identity, region)));
-            var cloudNetworkRequest = new CreateCloudNetworkRequest { Details = new CreateCloudNetworksDetails { Cidr = cidr, Label = label } };
+            var cloudNetworkRequest = new CreateCloudNetworkRequest(new CreateCloudNetworksDetails(cidr, label));
 
             var response = ExecuteRESTRequest<CloudNetworkResponse>(identity, urlPath, HttpMethod.POST, cloudNetworkRequest);
 
