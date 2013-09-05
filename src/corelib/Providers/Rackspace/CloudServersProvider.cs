@@ -450,7 +450,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("serverId cannot be empty");
             CheckIdentity(identity);
 
-            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
+            var request = new ServerRebootRequest(new ServerRebootDetails(rebootType));
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
