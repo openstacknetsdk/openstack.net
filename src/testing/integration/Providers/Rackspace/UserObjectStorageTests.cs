@@ -180,6 +180,59 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        public void TestContainerProperties()
+        {
+            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IEnumerable<Container> containers = ListAllContainers(provider);
+            if (!containers.Any())
+                Assert.Inconclusive("The account does not have any containers in the region.");
+
+            int containersTested = 0;
+            long objectsTested = 0;
+            long totalSizeTested = 0;
+            int nonEmptyContainersTested = 0;
+            int nonEmptyBytesContainersTested = 0;
+            foreach (Container container in containers)
+            {
+                Assert.IsTrue(container.Count >= 0);
+                Assert.IsTrue(container.Bytes >= 0);
+
+                containersTested++;
+                if (container.Count > 0)
+                    nonEmptyContainersTested++;
+                if (container.Bytes > 0)
+                    nonEmptyBytesContainersTested++;
+
+                long objectCount = 0;
+                long objectSize = 0;
+                foreach (var obj in ListAllObjects(provider, container.Name))
+                {
+                    objectCount++;
+                    objectSize += obj.Bytes;
+                }
+
+                objectsTested += objectCount;
+                totalSizeTested += objectSize;
+
+                Assert.AreEqual(container.Count, objectCount);
+                Assert.AreEqual(container.Bytes, objectSize);
+
+                if (containersTested >= 5 && nonEmptyContainersTested >= 5 && nonEmptyBytesContainersTested >= 5)
+                    break;
+            }
+
+            if (containersTested == 0 || nonEmptyContainersTested == 0 || nonEmptyBytesContainersTested == 0)
+                Assert.Inconclusive("The account does not have any non-empty containers in the region.");
+
+            Console.WriteLine("Verified container properties for:");
+            Console.WriteLine("  {0} containers", containersTested);
+            Console.WriteLine("  {0} objects", objectsTested);
+            Console.WriteLine("  {0} bytes", totalSizeTested);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateContainer()
         {
             IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
