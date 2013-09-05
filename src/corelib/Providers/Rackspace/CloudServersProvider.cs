@@ -671,7 +671,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments", GetServiceEndpoint(identity, region), serverId));
 
-            var request = new AttachServerVolumeRequest { ServerVolumeData = new AttachServerVolumeData { Device = storageDevice, VolumeId = volumeId } };
+            var request = new AttachServerVolumeRequest(storageDevice, volumeId);
             var response = ExecuteRESTRequest<ServerVolumeResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
