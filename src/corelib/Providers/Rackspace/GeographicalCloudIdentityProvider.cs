@@ -539,7 +539,7 @@ namespace net.openstack.Providers.Rackspace
 
             var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
                             {
-                                var auth = AuthRequest.FromCloudIdentity(identity);
+                                var auth = new AuthRequest(identity);
                                 var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
 
