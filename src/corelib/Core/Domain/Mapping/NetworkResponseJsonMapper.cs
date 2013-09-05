@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using net.openstack.Core.Domain.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -39,7 +40,7 @@ namespace net.openstack.Core.Domain.Mapping
                 return null;
 
             JsonSerializer serializer = new JsonSerializer();
-            serializer.Converters.Add(new IPAddressConverter());
+            serializer.Converters.Add(new IPAddressDetailsConverter());
             var network = from.Properties().First();
             return new Network(network.Name, network.Value.Select(o => o.ToObject<IPAddress>(serializer)).ToArray());
         }

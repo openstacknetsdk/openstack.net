@@ -2,9 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Net;
+    using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
 
-    [JsonArray(ItemConverterType = typeof(IPAddressConverter))]
+    [JsonArray(ItemConverterType = typeof(IPAddressDetailsConverter))]
     public class IPAddressList : List<IPAddress>
     {
         public IPAddressList()
