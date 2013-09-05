@@ -505,15 +505,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new NotSupportedException("The specified disk configuration is not supported.");
             CheckIdentity(identity);
 
-            var request = new ServerResizeRequest
-                {
-                    Details = new ServerResizeDetails
-                    {
-                        Name = serverName,
-                        Flavor = flavor,
-                        DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                    }
-                };
+            var details = new ServerResizeDetails(serverName, flavor, diskConfig);
+            var request = new ServerResizeRequest(details);
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
