@@ -208,7 +208,6 @@
     <Compile Include="Core\Domain\Server.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ServerDetailsResponse.cs" />
     <Compile Include="Core\Domain\ServerIps.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Request\UpdateIPv4Request.cs" />
     <Compile Include="Core\Domain\User.cs" />
     <Compile Include="Core\Providers\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />
