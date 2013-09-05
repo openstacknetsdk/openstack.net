@@ -2,6 +2,7 @@
 {
     using System.Net;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core.Domain.Converters;
     using net.openstack.Providers.Rackspace.Objects.Request;
     using net.openstack.Providers.Rackspace.Objects.Response;
     using Newtonsoft.Json;
@@ -42,6 +43,46 @@
             string expectedJson = @"{""server"":{""name"":""new-name"",""accessIPv4"":""10.0.0.1"",""accessIPv6"":""2607:f0d0:1002:51::4""}}";
             string actual = JsonConvert.SerializeObject(request, Formatting.None);
             Assert.AreEqual(expectedJson, actual);
+        }
+
+        [TestMethod]
+        public void TestIPAddressDetailsConverter()
+        {
+            IPAddressDetailsConverter converter = new IPAddressDetailsConverter();
+
+            string json = @"{ ""version"" : 4, ""addr"" : ""10.0.0.1"" }";
+            IPAddress address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("10.0.0.1"), address);
+
+            json = @"{ ""version"" : 6, ""addr"" : ""::babe:4317:0A83"" }";
+            address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("::babe:4317:0A83"), address);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("10.0.0.1"), converter);
+            Assert.AreEqual(@"{""addr"":""10.0.0.1"",""version"":""4""}", json);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("::babe:4317:0A83"), converter);
+            Assert.AreEqual(@"{""addr"":""::babe:4317:a83"",""version"":""6""}", json);
+        }
+
+        [TestMethod]
+        public void TestIPAddressSimpleConverter()
+        {
+            IPAddressSimpleConverter converter = new IPAddressSimpleConverter();
+
+            string json = @"""10.0.0.1""";
+            IPAddress address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("10.0.0.1"), address);
+
+            json = @"""::babe:4317:0A83""";
+            address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("::babe:4317:0A83"), address);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("10.0.0.1"), converter);
+            Assert.AreEqual(@"""10.0.0.1""", json);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("::babe:4317:0A83"), converter);
+            Assert.AreEqual(@"""::babe:4317:a83""", json);
         }
     }
 }
