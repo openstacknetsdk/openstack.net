@@ -568,7 +568,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("serverId cannot be empty");
             CheckIdentity(identity);
 
-            var request = new RescueServerRequest{Details = "none"};
+            var request = new RescueServerRequest();
             var resp = ExecuteServerAction<RescueServerResponse>(serverId, request, region, identity);
 
             return resp.AdminPassword;
