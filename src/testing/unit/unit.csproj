@@ -56,7 +56,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Mapping\NetworkResponseJObjectMapperTests.cs" />
+    <Compile Include="Domain\Mapping\NetworkAddressDeserializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksValidatorTests.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />

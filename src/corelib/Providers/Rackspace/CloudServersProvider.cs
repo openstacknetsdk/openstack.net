@@ -7,7 +7,6 @@ using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace.Objects.Request;
@@ -30,7 +29,6 @@ namespace net.openstack.Providers.Rackspace
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
-        private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
 
@@ -84,13 +82,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
         /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
         public  CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : this(identity, identityProvider, restService, NetworkResponseJsonMapper.Default) { }
-
-        internal CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
-            : base(identity, identityProvider, restService)
-        {
-            _networkResponseMapper = networkResponseMapper;
-        }
+            : base(identity, identityProvider, restService) { }
 
         #endregion
 
@@ -406,14 +398,11 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
-
-            if (response == null)
+            var response = ExecuteRESTRequest<ServerAddresses>(identity, urlPath, HttpMethod.GET);
+            if (response == null || response.Data == null)
                 return null;
 
-            var data = _networkResponseMapper.Map(response.RawBody);
-
-            return data.Addresses;
+            return response.Data[network];
         }
 
         #endregion
@@ -1368,7 +1357,7 @@ namespace net.openstack.Providers.Rackspace
 
         protected override IComputeProvider BuildProvider(CloudIdentity identity)
         {
-            return new CloudServersProvider(identity, IdentityProvider, RestService, _networkResponseMapper);
+            return new CloudServersProvider(identity, IdentityProvider, RestService);
         }
 
         #endregion

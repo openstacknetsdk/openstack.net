@@ -95,8 +95,6 @@
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
     <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
-    <Compile Include="Core\Domain\Mapping\NetworkResponseJsonMapper.cs" />
-    <Compile Include="Core\Domain\Network.cs" />
     <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\ObjectStore.cs" />
     <Compile Include="Core\Domain\Personality.cs" />
