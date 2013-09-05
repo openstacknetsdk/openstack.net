@@ -452,7 +452,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("password cannot be empty");
             CheckIdentity(identity);
 
-            var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
+            var request = new ChangeServerAdminPasswordRequest(password);
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
