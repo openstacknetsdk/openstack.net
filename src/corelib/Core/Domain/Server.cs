@@ -228,7 +228,7 @@ namespace net.openstack.Core.Domain
         /// Lists of network addresses associated with the server.
         /// </summary>
         /// <param name="networkLabel">The network label.</param>
-        /// <returns>List of network <see cref="AddressDetails"/></returns>
+        /// <returns>List of network addresses</returns>
         public IEnumerable<IPAddress> ListAddressesByNetwork(string networkLabel)
         {
             return Provider.ListAddressesByNetwork(Id, networkLabel, Region);
