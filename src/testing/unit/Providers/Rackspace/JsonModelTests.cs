@@ -1,5 +1,6 @@
 ﻿namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {
+    using System.Net;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Providers.Rackspace.Objects.Request;
     using net.openstack.Providers.Rackspace.Objects.Response;
@@ -31,6 +32,16 @@
             Assert.IsNotNull(response.PasswordCredential);
             Assert.AreEqual("test_user", response.PasswordCredential.Username);
             Assert.AreEqual("mypass", response.PasswordCredential.Password);
+        }
+
+        /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/ServerUpdate.html">Update Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+        [TestMethod]
+        public void TestUpdateServerRequest()
+        {
+            UpdateServerRequest request = new UpdateServerRequest("new-name", IPAddress.Parse("10.0.0.1"), IPAddress.Parse("2607:f0d0:1002:51::4"));
+            string expectedJson = @"{""server"":{""name"":""new-name"",""accessIPv4"":""10.0.0.1"",""accessIPv6"":""2607:f0d0:1002:51::4""}}";
+            string actual = JsonConvert.SerializeObject(request, Formatting.None);
+            Assert.AreEqual(expectedJson, actual);
         }
     }
 }

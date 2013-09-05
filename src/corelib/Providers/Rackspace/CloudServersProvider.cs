@@ -231,7 +231,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), serverId));
 
-            var requestJson = new UpdateServerRequest(name, accessIPv4 != null ? accessIPv4.ToString() : null, accessIPv6 != null ? accessIPv6.ToString() : null);
+            var requestJson = new UpdateServerRequest(name, accessIPv4, accessIPv6);
             var response = ExecuteRESTRequest<ServerDetailsResponse>(identity, urlPath, HttpMethod.PUT, requestJson);
 
             if (response == null || response.Data == null || response.Data.Server == null)
