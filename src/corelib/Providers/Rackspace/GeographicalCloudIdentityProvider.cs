@@ -208,11 +208,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
-            var request = new SetPasswordRequest
-            {
-                PasswordCredential =
-                    new PasswordCredential { Username = username, Password = password }
-            };
+            var request = new SetPasswordRequest(username, password);
             var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)

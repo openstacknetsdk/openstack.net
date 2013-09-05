@@ -138,6 +138,7 @@
     <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
