@@ -10,13 +10,13 @@
     public class ContainerCDN
     {
         /// <summary>
-        /// The name of the container.
+        /// Gets the name of the container.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; private set; }
 
         /// <summary>
-        /// A streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <c>null</c>.
+        /// Gets a streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <c>null</c>.
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Streaming-CDN-Enabled_Containers-d1f3721.html">Streaming CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_streaming_uri")]

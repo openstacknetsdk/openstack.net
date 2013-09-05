@@ -124,7 +124,7 @@ namespace net.openstack.Core.Providers
         /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <c>null</c>, no files are injected.</param>
         /// <param name="attachToServiceNetwork"><c>true</c> if the private network will be attached to the newly created server; otherwise, <c>false</c>.</param>
         /// <param name="attachToPublicNetwork"><c>true</c> if the public network will be attached to the newly created server; otherwise, <c>false</c>.</param>
-        /// <param name="networks">A collection of IDs of networks to attach to the server. This is obtained from <see cref="Network.Id">Network.Id</see>.</param>
+        /// <param name="networks">A collection of IDs of networks to attach to the server. This is obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="NewServer"/> instance containing the details for the newly created server.</returns>
