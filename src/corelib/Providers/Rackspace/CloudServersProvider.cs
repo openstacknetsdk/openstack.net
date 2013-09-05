@@ -479,18 +479,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new NotSupportedException("The specified disk configuration is not supported.");
             CheckIdentity(identity);
 
-            var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
-                                                                   {
-                                                                       Name = serverName,
-                                                                       ImageName = imageName,
-                                                                       Flavor = flavor,
-                                                                       DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                                                                       AdminPassword = adminPassword,
-                                                                       Metadata = metadata,
-                                                                       Personality = personality,
-                                                                       AccessIPv4 = accessIPv4 != null ? accessIPv4.ToString() : null,
-                                                                       AccessIPv6 = accessIPv6 != null ? accessIPv6.ToString() : null,
-                                                                   } };
+            var details = new ServerRebuildDetails(serverName, imageName, flavor, adminPassword, accessIPv4, accessIPv6, metadata, diskConfig, personality);
+            var request = new ServerRebuildRequest(details);
             var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
             return BuildCloudServersProviderAwareObject<Server>(resp.Server, region, identity);
