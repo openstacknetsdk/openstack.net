@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace net.openstack.Core.Domain
 {
@@ -9,6 +10,7 @@ namespace net.openstack.Core.Domain
     /// <remarks>
     /// The metadata keys for the compute provider are case-sensitive.
     /// </remarks>
+    [JsonDictionary]
     [Serializable]
     public class Metadata : Dictionary<string, string>
     {
