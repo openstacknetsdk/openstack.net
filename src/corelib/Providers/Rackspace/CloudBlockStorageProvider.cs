@@ -289,7 +289,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/snapshots", GetServiceEndpoint(identity, region)));
-            var requestBody = new CreateCloudBlockStorageSnapshotRequest { CreateCloudBlockStorageSnapshotDetails = new CreateCloudBlockStorageSnapshotDetails { VolumeId = volumeId, Force = force, DisplayName = displayName, DisplayDescription = displayDescription } };
+            var requestBody = new CreateCloudBlockStorageSnapshotRequest(new CreateCloudBlockStorageSnapshotDetails(volumeId, force, displayName, displayDescription));
             var response = ExecuteRESTRequest<GetCloudBlockStorageSnapshotResponse>(identity, urlPath, HttpMethod.POST, requestBody);
             if (response == null || response.Data == null)
                 return null;
