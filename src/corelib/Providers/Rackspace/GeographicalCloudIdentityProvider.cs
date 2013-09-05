@@ -61,7 +61,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("name cannot be empty");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role(name, description)});
+            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest(new Role(name, description)));
 
             if (response == null || response.Data == null)
                 return null;
