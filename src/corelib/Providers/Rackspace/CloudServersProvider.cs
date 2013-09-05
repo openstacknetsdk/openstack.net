@@ -173,38 +173,19 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            NewServerNetwork[] networksToAttach = null;
-
-            var networkList = new List<NewServerNetwork>();
-
+            List<string> networksToAttach = new List<string>();
             if (attachToServiceNetwork || attachToPublicNetwork)
             {
                 if(attachToPublicNetwork)
-                    networkList.Add(new NewServerNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
+                    networksToAttach.Add("00000000-0000-0000-0000-000000000000");
 
                 if(attachToServiceNetwork)
-                    networkList.Add(new NewServerNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
+                    networksToAttach.Add("11111111-1111-1111-1111-111111111111");
             }
 
-            if (networks != null && networks.Any())
-                networkList.AddRange(networks.Select(id => new NewServerNetwork() { Id = id }));
-
-            if(networkList.Any())
-                networksToAttach = networkList.ToArray();
-
-            var request = new CreateServerRequest
-                              {
-                                  Details = new CreateServerDetails
-                                                {
-                                                    Name = cloudServerName,
-                                                    DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                                                    Flavor = flavor,
-                                                    ImageName = imageName,
-                                                    Metadata = metadata,
-                                                    Networks = networksToAttach,
-                                                    Personality = personality,
-                                                }
-                              };
+            const string accessIPv4 = null;
+            const string accessIPv6 = null;
+            var request = new CreateServerRequest(cloudServerName, imageName, flavor, diskConfig, metadata, accessIPv4, accessIPv6, networksToAttach, personality);
             var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null || response.Data.Server == null)
