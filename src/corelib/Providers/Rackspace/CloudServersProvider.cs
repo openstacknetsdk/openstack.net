@@ -621,7 +621,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("imageName cannot be empty");
             CheckIdentity(identity);
 
-            var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
+            var request = new CreateServerImageRequest(new CreateServerImageDetails(imageName, metadata));
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
