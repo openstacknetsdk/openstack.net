@@ -1,12 +1,13 @@
-﻿namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain.Converters
 {
     using System;
     using System.Globalization;
     using System.Net;
     using System.Net.Sockets;
+    using net.openstack.Core.Providers;
     using Newtonsoft.Json;
 
-    public class IPAddressConverter : JsonConverter
+    public class IPAddressDetailsConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

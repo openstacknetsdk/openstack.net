@@ -12,7 +12,6 @@ using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using net.openstack.Providers.Rackspace.Validators;
-using CreateCloudBlockStorageVolumeDetails = net.openstack.Providers.Rackspace.Objects.Request.CreateCloudBlockStorageVolumeDetails;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -114,7 +113,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudBlockStorageValidator.ValidateVolumeSize(size);
 
             var urlPath = new Uri(string.Format("{0}/volumes", GetServiceEndpoint(identity, region)));
-            var requestBody = new CreateCloudBlockStorageVolumeRequest { CreateCloudBlockStorageVolumeDetails = new CreateCloudBlockStorageVolumeDetails { Size = size, DisplayDescription = displayDescription, DisplayName = displayName, SnapshotId = snapshotId, VolumeType = volumeType } };
+            var requestBody = new CreateCloudBlockStorageVolumeRequest(new CreateCloudBlockStorageVolumeDetails(size, displayDescription, displayName, snapshotId, volumeType));
             var response = ExecuteRESTRequest<GetCloudBlockStorageVolumeResponse>(identity, urlPath, HttpMethod.POST, requestBody);
 
             if (response == null || response.Data == null)
@@ -289,7 +288,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/snapshots", GetServiceEndpoint(identity, region)));
-            var requestBody = new CreateCloudBlockStorageSnapshotRequest { CreateCloudBlockStorageSnapshotDetails = new CreateCloudBlockStorageSnapshotDetails { VolumeId = volumeId, Force = force, DisplayName = displayName, DisplayDescription = displayDescription } };
+            var requestBody = new CreateCloudBlockStorageSnapshotRequest(new CreateCloudBlockStorageSnapshotDetails(volumeId, force, displayName, displayDescription));
             var response = ExecuteRESTRequest<GetCloudBlockStorageSnapshotResponse>(identity, urlPath, HttpMethod.POST, requestBody);
             if (response == null || response.Data == null)
                 return null;

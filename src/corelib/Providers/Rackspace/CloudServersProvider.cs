@@ -173,38 +173,19 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers", GetServiceEndpoint(identity, region)));
 
-            NewServerNetwork[] networksToAttach = null;
-
-            var networkList = new List<NewServerNetwork>();
-
+            List<string> networksToAttach = new List<string>();
             if (attachToServiceNetwork || attachToPublicNetwork)
             {
                 if(attachToPublicNetwork)
-                    networkList.Add(new NewServerNetwork { Id = new Guid("00000000-0000-0000-0000-000000000000") });
+                    networksToAttach.Add("00000000-0000-0000-0000-000000000000");
 
                 if(attachToServiceNetwork)
-                    networkList.Add(new NewServerNetwork { Id = new Guid("11111111-1111-1111-1111-111111111111") });
+                    networksToAttach.Add("11111111-1111-1111-1111-111111111111");
             }
 
-            if (networks != null && networks.Any())
-                networkList.AddRange(networks.Select(id => new NewServerNetwork() { Id = id }));
-
-            if(networkList.Any())
-                networksToAttach = networkList.ToArray();
-
-            var request = new CreateServerRequest
-                              {
-                                  Details = new CreateServerDetails
-                                                {
-                                                    Name = cloudServerName,
-                                                    DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                                                    Flavor = flavor,
-                                                    ImageName = imageName,
-                                                    Metadata = metadata,
-                                                    Networks = networksToAttach,
-                                                    Personality = personality,
-                                                }
-                              };
+            const string accessIPv4 = null;
+            const string accessIPv6 = null;
+            var request = new CreateServerRequest(cloudServerName, imageName, flavor, diskConfig, metadata, accessIPv4, accessIPv6, networksToAttach, personality);
             var response = ExecuteRESTRequest<CreateServerResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null || response.Data.Server == null)
@@ -250,7 +231,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}", GetServiceEndpoint(identity, region), serverId));
 
-            var requestJson = new UpdateServerRequest(name, accessIPv4 != null ? accessIPv4.ToString() : null, accessIPv6 != null ? accessIPv6.ToString() : null);
+            var requestJson = new UpdateServerRequest(name, accessIPv4, accessIPv6);
             var response = ExecuteRESTRequest<ServerDetailsResponse>(identity, urlPath, HttpMethod.PUT, requestJson);
 
             if (response == null || response.Data == null || response.Data.Server == null)
@@ -452,7 +433,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("password cannot be empty");
             CheckIdentity(identity);
 
-            var request = new ChangeServerAdminPasswordRequest { Details = new ChangeAdminPasswordDetails { AdminPassword = password } };
+            var request = new ChangeServerAdminPasswordRequest(password);
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -469,7 +450,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("serverId cannot be empty");
             CheckIdentity(identity);
 
-            var request = new ServerRebootRequest {Details = new ServerRebootDetails {Type = rebootType}};
+            var request = new ServerRebootRequest(new ServerRebootDetails(rebootType));
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -498,18 +479,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new NotSupportedException("The specified disk configuration is not supported.");
             CheckIdentity(identity);
 
-            var request = new ServerRebuildRequest { Details = new ServerRebuildDetails
-                                                                   {
-                                                                       Name = serverName,
-                                                                       ImageName = imageName,
-                                                                       Flavor = flavor,
-                                                                       DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                                                                       AdminPassword = adminPassword,
-                                                                       Metadata = metadata,
-                                                                       Personality = personality,
-                                                                       AccessIPv4 = accessIPv4 != null ? accessIPv4.ToString() : null,
-                                                                       AccessIPv6 = accessIPv6 != null ? accessIPv6.ToString() : null,
-                                                                   } };
+            var details = new ServerRebuildDetails(serverName, imageName, flavor, adminPassword, accessIPv4, accessIPv6, metadata, diskConfig, personality);
+            var request = new ServerRebuildRequest(details);
             var resp = ExecuteServerAction<ServerDetailsResponse>(serverId, request, region, identity);
 
             return BuildCloudServersProviderAwareObject<Server>(resp.Server, region, identity);
@@ -534,15 +505,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new NotSupportedException("The specified disk configuration is not supported.");
             CheckIdentity(identity);
 
-            var request = new ServerResizeRequest
-                {
-                    Details = new ServerResizeDetails
-                    {
-                        Name = serverName,
-                        Flavor = flavor,
-                        DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null,
-                    }
-                };
+            var details = new ServerResizeDetails(serverName, flavor, diskConfig);
+            var request = new ServerResizeRequest(details);
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -587,7 +551,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("serverId cannot be empty");
             CheckIdentity(identity);
 
-            var request = new RescueServerRequest{Details = "none"};
+            var request = new RescueServerRequest();
             var resp = ExecuteServerAction<RescueServerResponse>(serverId, request, region, identity);
 
             return resp.AdminPassword;
@@ -602,7 +566,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("serverId cannot be empty");
             CheckIdentity(identity);
 
-            var request = new UnrescueServerRequest { Details = "none" };
+            var request = new UnrescueServerRequest();
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -621,7 +585,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("imageName cannot be empty");
             CheckIdentity(identity);
 
-            var request = new CreateServerImageRequest { Details = new CreateServerImageDetails{ImageName = imageName, Metadata = metadata} };
+            var request = new CreateServerImageRequest(new CreateServerImageDetails(imageName, metadata));
             var resp = ExecuteServerAction(serverId, request, region, identity);
 
             return resp;
@@ -671,7 +635,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/os-volume_attachments", GetServiceEndpoint(identity, region), serverId));
 
-            var request = new AttachServerVolumeRequest { ServerVolumeData = new AttachServerVolumeData { Device = storageDevice, VolumeId = volumeId } };
+            var request = new AttachServerVolumeRequest(storageDevice, volumeId);
             var response = ExecuteRESTRequest<ServerVolumeResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
@@ -1151,7 +1115,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest(metadata));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
@@ -1174,7 +1138,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest(metadata));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
@@ -1222,7 +1186,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata/{2}", GetServiceEndpoint(identity, region), serverId, key));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata {{key, value}} });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest(key, value));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
@@ -1291,7 +1255,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataRequest(metadata));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
@@ -1314,7 +1278,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest { Metadata = metadata });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, new UpdateMetadataRequest(metadata));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;
@@ -1362,7 +1326,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata/{2}", GetServiceEndpoint(identity, region), imageId, key));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest { Metadata = new Metadata { { key, value } } });
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, new UpdateMetadataItemRequest(key, value));
 
             if (response.StatusCode == HttpStatusCode.OK)
                 return true;

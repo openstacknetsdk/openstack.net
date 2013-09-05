@@ -61,7 +61,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("name cannot be empty");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest{Role = new Role(name, description)});
+            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest(new Role(name, description)));
 
             if (response == null || response.Data == null)
                 return null;
@@ -208,11 +208,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
-            var request = new SetPasswordRequest
-            {
-                PasswordCredential =
-                    new PasswordCredential { Username = username, Password = password }
-            };
+            var request = new SetPasswordRequest(username, password);
             var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)
@@ -330,7 +326,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var request = new UpdateUserCredentialRequest { UserCredential = new UserCredential(null, username, apiKey) };
+            var request = new UpdateUserCredentialRequest(username, apiKey);
             var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
@@ -431,7 +427,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new InvalidOperationException("newUser.Id must be null");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = newUser });
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest(newUser));
 
             if (response == null || response.Data == null)
                 return null;
@@ -454,7 +450,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
-            var updateUserRequest = new UpdateUserRequest { User = user };
+            var updateUserRequest = new UpdateUserRequest(user);
             var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.POST, updateUserRequest);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
@@ -539,7 +535,7 @@ namespace net.openstack.Providers.Rackspace
 
             var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
                             {
-                                var auth = AuthRequest.FromCloudIdentity(identity);
+                                var auth = new AuthRequest(identity);
                                 var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
 
