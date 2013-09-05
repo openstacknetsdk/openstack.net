@@ -431,7 +431,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new InvalidOperationException("newUser.Id must be null");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest { User = newUser });
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest(newUser));
 
             if (response == null || response.Data == null)
                 return null;
