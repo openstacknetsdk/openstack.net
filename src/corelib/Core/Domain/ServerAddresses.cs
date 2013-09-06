@@ -8,9 +8,29 @@ namespace net.openstack.Core.Domain
     public class ServerAddresses : Dictionary<string, IPAddressList>
     {
         [JsonIgnore]
-        public IList<IPAddress> Private { get { return ContainsKey("private") ? this["private"] : null; } }
+        public IList<IPAddress> Private
+        {
+            get
+            {
+                IPAddressList result;
+                if (!TryGetValue("private", out result))
+                    return null;
+
+                return result;
+            }
+        }
 
         [JsonIgnore]
-        public IList<IPAddress> Public { get { return ContainsKey("public") ? this["public"] : null; } }
+        public IList<IPAddress> Public
+        {
+            get
+            {
+                IPAddressList result;
+                if (!TryGetValue("public", out result))
+                    return null;
+
+                return result;
+            }
+        }
     }
 }
