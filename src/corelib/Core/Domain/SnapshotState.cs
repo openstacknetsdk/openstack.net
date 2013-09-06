@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the state of a block storage snapshot.
@@ -10,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known snapshot states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(SnapshotState.Converter))]
     public sealed class SnapshotState : IEquatable<SnapshotState>
     {
         private static readonly ConcurrentDictionary<string, SnapshotState> _states =
@@ -154,6 +157,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="SnapshotState"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<SnapshotState>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(SnapshotState obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override SnapshotState ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

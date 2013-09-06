@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
-using net.openstack.Core.Providers;
-
-namespace net.openstack.Core.Domain
+﻿namespace net.openstack.Core.Domain
 {
+    using System;
+    using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using net.openstack.Core.Providers;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Represents the state of a compute server.
     /// </summary>
@@ -14,6 +13,7 @@ namespace net.openstack.Core.Domain
     /// This class functions as a strongly-typed enumeration of known server states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(ServerState.Converter))]
     public sealed class ServerState : IEquatable<ServerState>
     {
         private static readonly ConcurrentDictionary<string, ServerState> _states =
@@ -321,6 +321,35 @@ namespace net.openstack.Core.Domain
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="ServerState"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<ServerState>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(ServerState obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override ServerState ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

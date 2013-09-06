@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents an image type.
@@ -10,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known image types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(ImageType.Converter))]
     public sealed class ImageType : IEquatable<ImageType>
     {
         private static readonly ConcurrentDictionary<string, ImageType> _types =
@@ -94,6 +97,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="ImageType"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<ImageType>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(ImageType obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override ImageType ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

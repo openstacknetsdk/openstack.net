@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
     using net.openstack.Core.Providers;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the state of a compute image.
@@ -11,6 +13,7 @@
     /// This class functions as a strongly-typed enumeration of known image states,
     /// with added support for unknown states returned by an image extension.
     /// </remarks>
+    [JsonConverter(typeof(ImageState.Converter))]
     public sealed class ImageState : IEquatable<ImageState>
     {
         private static readonly ConcurrentDictionary<string, ImageState> _states =
@@ -138,6 +141,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="ImageState"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<ImageState>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(ImageState obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override ImageState ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }
