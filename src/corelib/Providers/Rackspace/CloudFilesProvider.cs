@@ -163,12 +163,17 @@ namespace net.openstack.Providers.Rackspace
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
 
-            if (response.StatusCode == HttpStatusCode.Created)
+            switch (response.StatusCode)
+            {
+            case HttpStatusCode.Created:
                 return ObjectStore.ContainerCreated;
-            if (response.StatusCode == HttpStatusCode.Accepted)
+
+            case HttpStatusCode.Accepted:
                 return ObjectStore.ContainerExists;
 
-            return ObjectStore.Unknown;
+            default:
+                throw new ResponseException(string.Format("Unexpected status {0} returned by Create Container.", response.StatusCode), response);
+            }
         }
 
         /// <inheritdoc />
