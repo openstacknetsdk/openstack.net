@@ -6,9 +6,6 @@
     [JsonObject(MemberSerialization.OptIn)]
     public class Snapshot
     {
-        [JsonProperty("status")]
-        private string _status;
-
         [JsonProperty]
         public string Id { get; private set; }
 
@@ -21,15 +18,11 @@
         [JsonProperty("volume_id")]
         public string VolumeId { get; private set; }
 
+        [JsonProperty("status")]
         public SnapshotState Status
         {
-            get
-            {
-                if (string.IsNullOrEmpty(_status))
-                    return null;
-
-                return SnapshotState.FromName(_status);
-            }
+            get;
+            private set;
         }
 
         [JsonProperty]

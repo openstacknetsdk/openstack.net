@@ -6,29 +6,14 @@ namespace net.openstack.Core.Domain
     [JsonObject(MemberSerialization.OptIn)]
     public class ServerImage : SimpleServerImage
     {
-        [JsonProperty("status")]
-        private string _status;
-
         [JsonProperty("OS-DCF:diskConfig")]
         public string DiskConfig { get; private set; }
 
+        [JsonProperty("status")]
         public ImageState Status
         {
-            get
-            {
-                if (string.IsNullOrEmpty(_status))
-                    return null;
-
-                return ImageState.FromName(_status);
-            }
-
-            private set
-            {
-                if (value == null)
-                    _status = null;
-
-                _status = value.Name;
-            }
+            get;
+            private set;
         }
 
         [JsonProperty]

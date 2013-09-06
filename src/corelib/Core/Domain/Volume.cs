@@ -7,9 +7,6 @@
     [JsonObject(MemberSerialization.OptIn)]
     public class Volume
     {
-        [JsonProperty("status")]
-        private string _status;
-
         [JsonProperty("id")]
         public string Id { get; private set; }
 
@@ -31,15 +28,11 @@
         [JsonProperty("attachments")]
         public Dictionary<string, string>[] Attachments { get; private set; }
 
+        [JsonProperty("status")]
         public VolumeState Status
         {
-            get
-            {
-                if (string.IsNullOrEmpty(_status))
-                    return null;
-
-                return VolumeState.FromName(_status);
-            }
+            get;
+            private set;
         }
 
         [JsonProperty("availability_zone")]
