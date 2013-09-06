@@ -6,7 +6,7 @@ namespace net.openstack.Core.Domain
     public class NewServer : ServerBase
     {
         [JsonProperty("OS-DCF:diskConfig")]
-        public string DiskConfig { get; private set; }
+        public DiskConfiguration DiskConfig { get; private set; }
 
         [JsonProperty("adminPass")]
         public string AdminPassword { get; private set; }

@@ -158,7 +158,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/CreateServers.html">Create Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration? diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the detailed information for a specific server.
@@ -420,7 +420,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Rebuild_Server-d1e3538.html">Rebuild Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration? diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
+        Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Initiates an asynchronous resize of the specified server. A server resize is performed by
@@ -467,7 +467,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Resize_Server-d1e3707.html">Resize Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration? diskConfig = null, string region = null, CloudIdentity identity = null);
+        bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration diskConfig = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Confirms a completed asynchronous server resize action.

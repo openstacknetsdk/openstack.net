@@ -34,7 +34,7 @@
         /// <param name="accessIPv4">The behavior of this value is unspecified. Do not use.</param>
         /// <param name="accessIPv6">The behavior of this value is unspecified. Do not use.</param>
         /// <param name="networks">A collection of identifiers for networks to initially connect to the server. These are obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see></param>
-        public CreateServerRequest(string name, string imageName, string flavor, DiskConfiguration? diskConfig, Dictionary<string, string> metadata, string accessIPv4, string accessIPv6, IEnumerable<string> networks, IEnumerable<Personality> personality)
+        public CreateServerRequest(string name, string imageName, string flavor, DiskConfiguration diskConfig, Dictionary<string, string> metadata, string accessIPv4, string accessIPv6, IEnumerable<string> networks, IEnumerable<Personality> personality)
         {
             Details = new CreateServerDetails(name, imageName, flavor, diskConfig, metadata, accessIPv4, accessIPv6, networks, personality);
         }
@@ -69,7 +69,7 @@
             /// Gets the disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.
             /// </summary>
             [JsonProperty("OS-DCF:diskConfig")]
-            public string DiskConfig { get; private set; }
+            public DiskConfiguration DiskConfig { get; private set; }
 
             /// <summary>
             /// Gets the metadata to associate with the server.
@@ -118,12 +118,12 @@
             /// <param name="accessIPv4">The behavior of this value is unspecified. Do not use.</param>
             /// <param name="accessIPv6">The behavior of this value is unspecified. Do not use.</param>
             /// <param name="networks">A collection of identifiers for networks to initially connect to the server. These are obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see></param>
-            public CreateServerDetails(string name, string imageName, string flavor, DiskConfiguration? diskConfig, Dictionary<string, string> metadata, string accessIPv4, string accessIPv6, IEnumerable<string> networks, IEnumerable<Personality> personality)
+            public CreateServerDetails(string name, string imageName, string flavor, DiskConfiguration diskConfig, Dictionary<string, string> metadata, string accessIPv4, string accessIPv6, IEnumerable<string> networks, IEnumerable<Personality> personality)
             {
                 Name = name;
                 ImageName = imageName;
                 Flavor = flavor;
-                DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null;
+                DiskConfig = diskConfig;
                 Metadata = metadata;
                 AccessIPv4 = accessIPv4;
                 AccessIPv6 = accessIPv6;

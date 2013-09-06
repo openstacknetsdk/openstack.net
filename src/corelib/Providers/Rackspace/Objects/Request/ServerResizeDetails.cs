@@ -29,7 +29,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// The disk configuration. If the value is <c>null</c>, the default configuration for the image is used.
         /// </summary>
         [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Include)]
-        public string DiskConfig { get; private set; }
+        public DiskConfiguration DiskConfig { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerResizeDetails"/> class with the specified details.
@@ -47,7 +47,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <para>-or-</para>
         /// <para>If <paramref name="flavor"/> is empty.</para>
         /// </exception>
-        public ServerResizeDetails(string name, string flavor, DiskConfiguration? diskConfig)
+        public ServerResizeDetails(string name, string flavor, DiskConfiguration diskConfig)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -60,7 +60,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
 
             Name = name;
             Flavor = flavor;
-            DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null;
+            DiskConfig = diskConfig;
         }
     }
 }

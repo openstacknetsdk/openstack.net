@@ -145,7 +145,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration? diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
         {
             if (cloudServerName == null)
                 throw new ArgumentNullException("cloudServerName");
@@ -446,7 +446,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration? diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
+        public Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -476,7 +476,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration? diskConfig = null, string region = null, CloudIdentity identity = null)
+        public bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration diskConfig = null, string region = null, CloudIdentity identity = null)
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");

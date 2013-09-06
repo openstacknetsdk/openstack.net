@@ -88,6 +88,12 @@
         }
 
         [TestMethod]
+        public void TestDiskConfigurationConversions()
+        {
+            TestExtensibleEnumSerialization(DiskConfiguration.Auto, "OTHER", DiskConfiguration.FromName);
+        }
+
+        [TestMethod]
         public void TestImageState()
         {
             TestExtensibleEnumSerialization(ImageState.Active, "OTHER", ImageState.FromName);
