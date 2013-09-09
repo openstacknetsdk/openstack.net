@@ -62,11 +62,16 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <summary>
         /// The Rackspace cloud for US-based accounts.
         /// </summary>
-        Default,
+        US,
 
         /// <summary>
         /// The Rackspace cloud for UK-based accounts.
         /// </summary>
         UK,
+
+        /// <summary>
+        /// The default Rackspace cloud, which is currently equal to <see cref="US"/>.
+        /// </summary>
+        Default = US,
     }
 }
