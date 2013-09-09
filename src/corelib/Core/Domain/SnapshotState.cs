@@ -19,8 +19,6 @@
             new ConcurrentDictionary<string, SnapshotState>(StringComparer.OrdinalIgnoreCase);
         private static readonly SnapshotState _creating = FromName("CREATING");
         private static readonly SnapshotState _available = FromName("AVAILABLE");
-        private static readonly SnapshotState _attaching = FromName("ATTACHING");
-        private static readonly SnapshotState _inUse = FromName("IN-USE");
         private static readonly SnapshotState _deleting = FromName("DELETING");
         private static readonly SnapshotState _error = FromName("ERROR");
         private static readonly SnapshotState _errorDeleting = FromName("ERROR_DELETING");
@@ -78,28 +76,6 @@
             get
             {
                 return _available;
-            }
-        }
-
-        /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating the snapshot is attaching to an instance.
-        /// </summary>
-        public static SnapshotState Attaching
-        {
-            get
-            {
-                return _attaching;
-            }
-        }
-
-        /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating the snapshot is attached to an instance.
-        /// </summary>
-        public static SnapshotState InUse
-        {
-            get
-            {
-                return _inUse;
             }
         }
 
