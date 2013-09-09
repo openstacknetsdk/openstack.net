@@ -47,6 +47,6 @@
         /// </summary>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/serialized-list-output.html">Serialized List Output (OpenStack Object Storage API v1 Reference)</seealso>
         [JsonProperty("last_modified")]
-        public DateTime LastModified { get; private set; }
+        public DateTimeOffset LastModified { get; private set; }
     }
 }

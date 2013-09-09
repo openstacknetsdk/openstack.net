@@ -29,6 +29,6 @@
         public string Size { get; private set; }
 
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; }
     }
 }

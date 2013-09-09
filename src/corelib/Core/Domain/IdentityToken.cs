@@ -43,11 +43,11 @@
         {
             get
             {
-                DateTime expiration;
-                if (!DateTime.TryParse(Expires, out expiration))
+                DateTimeOffset expiration;
+                if (!DateTimeOffset.TryParse(Expires, out expiration))
                     return true;
 
-                return expiration.ToUniversalTime() <= DateTime.UtcNow;
+                return expiration <= DateTimeOffset.Now;
             }
         }
     }

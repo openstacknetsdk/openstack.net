@@ -139,7 +139,7 @@ namespace net.openstack.Core.Domain
         /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
         /// </summary>
         [JsonProperty("created")]
-        public DateTime Created { get; private set; }
+        public DateTimeOffset Created { get; private set; }
 
         /// <summary>
         /// Gets the host ID for the server.
@@ -177,7 +177,7 @@ namespace net.openstack.Core.Domain
         /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
         /// </summary>
         [JsonProperty("updated")]
-        public DateTime Updated { get; private set; }
+        public DateTimeOffset Updated { get; private set; }
 
         /// <inheritdoc/>
         protected override void UpdateThis(ServerBase server)

@@ -668,7 +668,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Copy_Object_When_Not_Passing_Content_Length_And_Passing_Expiring_Header()
         {
             // Object will expire 2 days from now.
-            var epoch = (int)(DateTime.UtcNow.AddDays(2) - new DateTime(1970, 1, 1)).TotalSeconds;
+            var epoch = (int)(DateTimeOffset.UtcNow.AddDays(2) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds;
 
             var header = new Dictionary<string, string> { { CloudFilesProvider.ObjectDeleteAt, epoch.ToString() } };
 

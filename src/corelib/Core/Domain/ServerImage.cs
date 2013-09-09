@@ -17,13 +17,13 @@ namespace net.openstack.Core.Domain
         }
 
         [JsonProperty]
-        public DateTime Created { get; private set; }
+        public DateTimeOffset Created { get; private set; }
 
         [JsonProperty]
         public int Progress { get; private set; }
 
         [JsonProperty]
-        public DateTime Updated { get; private set; }
+        public DateTimeOffset Updated { get; private set; }
 
         [JsonProperty]
         public int MinDisk { get; private set; }
