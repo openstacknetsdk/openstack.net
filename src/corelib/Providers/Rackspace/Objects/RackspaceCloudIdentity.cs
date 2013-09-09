@@ -39,7 +39,7 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// to an <em>account</em>), so any changes made to this property value will not be
         /// reflected in the account.
         ///
-        /// <para>The default value is <see cref="CloudInstance.Default"/>.</para>
+        /// <para>The default value is <see cref="net.openstack.Providers.Rackspace.Objects.CloudInstance.Default"/>.</para>
         /// </remarks>
         public CloudInstance CloudInstance { get; set; }
 

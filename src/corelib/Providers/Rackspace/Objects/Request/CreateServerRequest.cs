@@ -60,7 +60,7 @@
 
             /// <summary>
             /// Gets the flavor to use for the new server instance. This
-            /// is specified as a flavor ID (see <see cref="Flavor.Id"/>) or a full URL.
+            /// is specified as a flavor ID (see <see cref="net.openstack.Core.Domain.Flavor.Id"/>) or a full URL.
             /// </summary>
             [JsonProperty("flavorRef")]
             public string Flavor { get; private set; }

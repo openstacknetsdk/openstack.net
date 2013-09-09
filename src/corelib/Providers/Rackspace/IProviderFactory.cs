@@ -1,5 +1,7 @@
 namespace net.openstack.Providers.Rackspace
 {
+    using System;
+
     /// <summary>
     /// Represents a factory for obtaining service providers for particular keys.
     /// </summary>
