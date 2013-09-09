@@ -10,6 +10,10 @@ namespace net.openstack.Core.Domain
         [JsonProperty]
         public string Id { get; private set; }
 
+        /// <summary>
+        /// Gets a collection of links related to the current image.
+        /// </summary>
+        /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/LinksReferences.html">Links and References (OpenStack Compute API v2 and Extensions Reference - API v2)</seealso>
         [JsonProperty]
         public Link[] Links { get; private set; }
 

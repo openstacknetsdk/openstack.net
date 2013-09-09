@@ -18,9 +18,9 @@ namespace net.openstack.Core.Domain
         public string Id { get; private set; }
 
         /// <summary>
-        /// Gets the "links" property associated with the flavor.
-        /// <note type="warning">The value of this property is not defined. Do not use.</note>
+        /// Gets a collection of links related to the current flavor.
         /// </summary>
+        /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/LinksReferences.html">Links and References (OpenStack Compute API v2 and Extensions Reference - API v2)</seealso>
         [JsonProperty("links")]
         public Link[] Links { get; private set; }
 
