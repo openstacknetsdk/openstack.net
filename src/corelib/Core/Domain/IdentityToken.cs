@@ -43,9 +43,6 @@
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(Expires))
-                    return true;
-
                 DateTime expiration;
                 if (!DateTime.TryParse(Expires, out expiration))
                     return true;
