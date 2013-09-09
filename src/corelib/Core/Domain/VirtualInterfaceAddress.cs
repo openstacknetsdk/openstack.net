@@ -1,34 +1,18 @@
 namespace net.openstack.Core.Domain
 {
     using System.Net;
+    using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptIn)]
     public class VirtualInterfaceAddress
     {
         [JsonProperty("address")]
-        private string _address;
-
+        [JsonConverter(typeof(IPAddressSimpleConverter))]
         public IPAddress Address
         {
-            get
-            {
-                if (_address == null)
-                    return null;
-
-                return IPAddress.Parse(_address);
-            }
-
-            private set
-            {
-                if (value == null)
-                {
-                    _address = null;
-                    return;
-                }
-
-                _address = value.ToString();
-            }
+            get;
+            private set;
         }
 
         [JsonProperty("network_id")]
