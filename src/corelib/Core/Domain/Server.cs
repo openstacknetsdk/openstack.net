@@ -12,17 +12,17 @@ namespace net.openstack.Core.Domain
         [JsonProperty("status")]
         private string _status;
 
-        [JsonProperty("OS-DCF:diskConfig" )]
-        public string DiskConfig { get; private set; }
+        [JsonProperty("OS-DCF:diskConfig")]
+        public DiskConfiguration DiskConfig { get; private set; }
 
         [JsonProperty("OS-EXT-STS:power_state")]
-        public bool PowerState { get; private set; }
+        public PowerState PowerState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:task_state")]
-        public string TaskState { get; private set; }
+        public TaskState TaskState { get; private set; }
 
         [JsonProperty("OS-EXT-STS:vm_state")]
-        public string VMState { get; private set; }
+        public VirtualMachineState VMState { get; private set; }
 
         [JsonProperty]
         public string AccessIPv4 { get; private set; }
