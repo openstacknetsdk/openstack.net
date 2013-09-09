@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Core.Domain
 {
     using System.Net.NetworkInformation;
+    using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -9,9 +10,6 @@
     [JsonObject(MemberSerialization.OptIn)]
     public class VirtualInterface
     {
-        [JsonProperty("mac_address")]
-        private string _macAddress;
-
         /// <summary>
         /// Gets the virtual interface ID.
         /// </summary>
@@ -30,15 +28,12 @@
         /// Gets the Media Access Control (MAC) address for the virtual interface.
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/networks/api/v2/cn-devguide/content/list_virt_interfaces.html">List Virtual Interfaces (Rackspace Cloud Networks Developer Guide - OpenStack Networking API v2)</seealso>
+        [JsonProperty("mac_address")]
+        [JsonConverter(typeof(PhysicalAddressSimpleConverter))]
         public PhysicalAddress MACAddress
         {
-            get
-            {
-                if (_macAddress == null)
-                    return null;
-
-                return PhysicalAddress.Parse(_macAddress);
-            }
+            get;
+            private set;
         }
     }
 }
