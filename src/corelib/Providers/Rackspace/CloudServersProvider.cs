@@ -1355,11 +1355,6 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "compute", region);
         }
 
-        protected override IComputeProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudServersProvider(identity, IdentityProvider, RestService);
-        }
-
         #endregion
     }
 }

@@ -42,6 +42,7 @@ namespace net.openstack.Core.Domain
                 {
                     _image.Provider = Provider;
                     _image.Region = Region;
+                    _image.Identity = Identity;
                 }
 
                 return _image;
@@ -124,7 +125,7 @@ namespace net.openstack.Core.Domain
         /// </value>
         public IEnumerable<ServerVolume> GetVolumes()
         {
-            return Provider.ListServerVolumes(Id, Region);
+            return Provider.ListServerVolumes(Id, Region, Identity);
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace net.openstack.Core.Domain
         /// </value>
         public Metadata GetMetadata()
         {
-            return Provider.ListServerMetadata(Id, Region);
+            return Provider.ListServerMetadata(Id, Region, Identity);
         }
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool SetMetadata(Metadata metadata)
         {
-            return Provider.SetServerMetadata(Id, metadata, Region);
+            return Provider.SetServerMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -155,7 +156,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(Metadata metadata)
         {
-            return Provider.UpdateServerMetadata(Id, metadata, Region);
+            return Provider.UpdateServerMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -166,7 +167,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(string key, string value)
         {
-            return Provider.SetServerMetadataItem(Id, key, value, Region);
+            return Provider.SetServerMetadataItem(Id, key, value, Region, Identity);
         }
 
         /// <summary>
@@ -176,7 +177,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadata(Metadata metadata)
         {
-            return Provider.UpdateServerMetadata(Id, metadata, Region);
+            return Provider.UpdateServerMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -201,7 +202,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DeleteMetadataItem(string key)
         {
-            return Provider.DeleteServerMetadataItem(Id, key, Region);
+            return Provider.DeleteServerMetadataItem(Id, key, Region, Identity);
         }
 
         /// <summary>
@@ -212,7 +213,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadataItem(string key, string value)
         {
-            return Provider.SetServerMetadataItem(Id, key, value, Region);
+            return Provider.SetServerMetadataItem(Id, key, value, Region, Identity);
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace net.openstack.Core.Domain
         /// <returns><see cref="ServerAddresses"/> containing the list of network addresses</returns>
         public ServerAddresses ListAddresses()
         {
-            return Provider.ListAddresses(Id, Region);
+            return Provider.ListAddresses(Id, Region, Identity);
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace net.openstack.Core.Domain
         /// <returns>List of network addresses</returns>
         public IEnumerable<IPAddress> ListAddressesByNetwork(string networkLabel)
         {
-            return Provider.ListAddressesByNetwork(Id, networkLabel, Region);
+            return Provider.ListAddressesByNetwork(Id, networkLabel, Region, Identity);
         }
 
         /// <summary>
@@ -242,7 +243,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public ServerImage Snapshot(string imageName, Metadata metadata = null)
         {
-            if (!Provider.CreateImage(Id, imageName, metadata, Region))
+            if (!Provider.CreateImage(Id, imageName, metadata, Region, Identity))
                 return null;
 
             return Provider.ListImagesWithDetails(Id, imageName, imageType: ImageType.Snapshot)
@@ -256,7 +257,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool Delete()
         {
-            return Provider.DeleteServer(Id, Region);
+            return Provider.DeleteServer(Id, Region, Identity);
         }
 
         /// <summary>
@@ -265,7 +266,7 @@ namespace net.openstack.Core.Domain
         /// <returns>List of <see cref="VirtualInterface"/></returns>
         public IEnumerable<VirtualInterface> ListVirtualInterfaces()
         {
-            return Provider.ListVirtualInterfaces(Id, Region);
+            return Provider.ListVirtualInterfaces(Id, Region, Identity);
         }
 
         /// <summary>
@@ -275,7 +276,7 @@ namespace net.openstack.Core.Domain
         /// <returns>The newly created <see cref="VirtualInterface"/></returns>
         public VirtualInterface CreateVirtualInterface(string networkId)
         {
-            return Provider.CreateVirtualInterface(Id, networkId, Region);
+            return Provider.CreateVirtualInterface(Id, networkId, Region, Identity);
         }
 
         /// <summary>
@@ -285,7 +286,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DeleteVirtualInterface(string virtualInterfaceId)
         {
-            return Provider.DeleteVirtualInterface(Id, virtualInterfaceId, Region);
+            return Provider.DeleteVirtualInterface(Id, virtualInterfaceId, Region, Identity);
         }
     }
 }

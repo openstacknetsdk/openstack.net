@@ -21,6 +21,7 @@ namespace net.openstack.Providers.Rackspace
     /// Adds common functionality for all Rackspace Providers.
     /// </summary>
     public abstract class ProviderBase<TProvider>
+        where TProvider : class
     {
         protected readonly IIdentityProvider IdentityProvider;
         protected readonly IRestService RestService;
@@ -206,33 +207,19 @@ namespace net.openstack.Providers.Rackspace
             return UserAgentGenerator.UserAgent;
         }
 
-        protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>
-        {
-            return BuildCloudServersProviderAwareObject(input, region, identity, CheckIdentityAndBuildProvider(identity));
-        }
-
         protected IEnumerable<T> BuildCloudServersProviderAwareObject<T>(IEnumerable<T> input, string region, CloudIdentity identity) where T : ProviderStateBase<TProvider>
         {
-            var provider = CheckIdentityAndBuildProvider(identity);
-
-            return input.Select(obj => BuildCloudServersProviderAwareObject(obj, region, identity, provider)).ToList();
+            return input.Select(obj => BuildCloudServersProviderAwareObject(obj, region, identity)).ToList();
         }
 
-        protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity, TProvider provider) where T : ProviderStateBase<TProvider>
+        protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity)
+            where T : ProviderStateBase<TProvider>
         {
-            input.Provider = provider;
+            input.Provider = this as TProvider;
             input.Region = region;
+            input.Identity = identity;
             return input;
         }
-
-        private TProvider CheckIdentityAndBuildProvider(CloudIdentity identity)
-        {
-            identity = GetDefaultIdentity(identity);
-
-            return BuildProvider(identity);
-        }
-
-        protected abstract TProvider BuildProvider(CloudIdentity identity);
 
         protected CloudIdentity GetDefaultIdentity(CloudIdentity identity)
         {

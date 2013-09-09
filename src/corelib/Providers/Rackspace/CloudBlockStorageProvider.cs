@@ -451,10 +451,6 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        protected override IBlockStorageProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudBlockStorageProvider(identity, IdentityProvider, RestService, _cloudBlockStorageValidator);
-        }
         #endregion
 
         

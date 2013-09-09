@@ -36,6 +36,7 @@ namespace net.openstack.Core.Domain
                 {
                     _server.Provider = Provider;
                     _server.Region = Region;
+                    _server.Identity = Identity;
                 }
 
                 return _server;
@@ -72,7 +73,7 @@ namespace net.openstack.Core.Domain
         /// </value>
         public Metadata GetMetadata()
         {
-            return Provider.ListImageMetadata(Id, Region);
+            return Provider.ListImageMetadata(Id, Region, Identity);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool SetMetadata(Metadata metadata)
         {
-            return Provider.SetImageMetadata(Id, metadata, Region);
+            return Provider.SetImageMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(Metadata metadata)
         {
-            return Provider.UpdateImageMetadata(Id, metadata, Region);
+            return Provider.UpdateImageMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool AddMetadata(string key, string value)
         {
-            return Provider.SetImageMetadataItem(Id, key, value, Region);
+            return Provider.SetImageMetadataItem(Id, key, value, Region, Identity);
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadata(Metadata metadata)
         {
-            return Provider.UpdateImageMetadata(Id, metadata, Region);
+            return Provider.UpdateImageMetadata(Id, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DeleteMetadataItem(string key)
         {
-            return Provider.DeleteImageMetadataItem(Id, key, Region);
+            return Provider.DeleteImageMetadataItem(Id, key, Region, Identity);
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UpdateMetadataItem(string key, string value)
         {
-            return Provider.SetImageMetadataItem(Id, key, value, Region);
+            return Provider.SetImageMetadataItem(Id, key, value, Region, Identity);
         }
     }
 }

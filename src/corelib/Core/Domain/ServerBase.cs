@@ -32,7 +32,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForActive(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForServerActive(Id, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
+            var details = Provider.WaitForServerActive(Id, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -44,7 +44,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForDeleted(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            Provider.WaitForServerDeleted(Id, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
+            Provider.WaitForServerDeleted(Id, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region, Identity);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForState(ServerState expectedState, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForServerState(Id, expectedState, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
+            var details = Provider.WaitForServerState(Id, expectedState, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -71,7 +71,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForState(ServerState[] expectedStates, ServerState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForServerState(Id, expectedStates, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region);
+            var details = Provider.WaitForServerState(Id, expectedStates, errorStates, refreshCount, refreshDelay ?? TimeSpan.FromMilliseconds(2400), progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -81,7 +81,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool SoftReboot()
         {
-            return Provider.RebootServer(Id, RebootType.Soft, Region);
+            return Provider.RebootServer(Id, RebootType.Soft, Region, Identity);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool HardReboot()
         {
-            return Provider.RebootServer(Id, RebootType.Hard, Region);
+            return Provider.RebootServer(Id, RebootType.Hard, Region, Identity);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool Rebuild(string name, string imageId, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration diskConfig = null, Personality personality = null)
         {
-            var details = Provider.RebuildServer(Id, name, imageId, flavor, adminPassword, accessIPv4, accessIPv6, metadata, diskConfig, personality, Region);
+            var details = Provider.RebuildServer(Id, name, imageId, flavor, adminPassword, accessIPv4, accessIPv6, metadata, diskConfig, personality, Region, Identity);
 
             if (details == null)
                 return false;
@@ -127,7 +127,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool Resize(string name, string flavor, DiskConfiguration diskConfig = null)
         {
-            return Provider.ResizeServer(Id, name, flavor, diskConfig, Region);
+            return Provider.ResizeServer(Id, name, flavor, diskConfig, Region, Identity);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool ConfirmResize()
         {
-            return Provider.ConfirmServerResize(Id, Region);
+            return Provider.ConfirmServerResize(Id, Region, Identity);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool RevertResize()
         {
-            return Provider.RevertServerResize(Id, Region);
+            return Provider.RevertServerResize(Id, Region, Identity);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public string Rescue()
         {
-            return Provider.RescueServer(Id, Region);
+            return Provider.RescueServer(Id, Region, Identity);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool UnRescue()
         {
-            return Provider.UnRescueServer(Id, Region);
+            return Provider.UnRescueServer(Id, Region, Identity);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool CreateSnapshot(string imageName, Metadata metadata = null)
         {
-            return Provider.CreateImage(Id, imageName, metadata, Region);
+            return Provider.CreateImage(Id, imageName, metadata, Region, Identity);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace net.openstack.Core.Domain
         /// <returns><see cref="Server"/></returns>
         public Server GetDetails()
         {
-            return Provider.GetDetails(Id, Region);
+            return Provider.GetDetails(Id, Region, Identity);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace net.openstack.Core.Domain
         /// <returns>a list of <see cref="ServerVolume"/>s</returns>
         public IEnumerable<ServerVolume> ListVolumes()
         {
-            return Provider.ListServerVolumes(Id, Region);
+            return Provider.ListServerVolumes(Id, Region, Identity);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace net.openstack.Core.Domain
         /// <returns></returns>
         public ServerVolume AttachVolume(string volumeId, string storageDevice)
         {
-            return Provider.AttachServerVolume(Id, volumeId, storageDevice, Region);
+            return Provider.AttachServerVolume(Id, volumeId, storageDevice, Region, Identity);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool DetachVolume(string volumeId)
         {
-            return Provider.DetachServerVolume(Id, volumeId, Region);
+            return Provider.DetachServerVolume(Id, volumeId, Region, Identity);
         }
 
         /// <summary>

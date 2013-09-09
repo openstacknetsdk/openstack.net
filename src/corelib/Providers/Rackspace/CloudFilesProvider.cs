@@ -1307,11 +1307,6 @@ namespace net.openstack.Providers.Rackspace
                 });
         }
 
-        protected override IObjectStorageProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudFilesProvider(identity, IdentityProvider, RestService, _cloudFilesValidator, _cloudFilesMetadataProcessor, _encodeDecodeProvider, _statusParser, _bulkDeletionResultMapper);
-        }
-
         protected void VerifyContainerIsCDNEnabled(string container, string region, CloudIdentity identity)
         {
             try

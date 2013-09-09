@@ -25,7 +25,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForActive(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageActive(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageActive(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -37,7 +37,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForDelete(int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            Provider.WaitForImageDeleted(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region);
+            Provider.WaitForImageDeleted(Id, refreshCount, refreshDelay, progressUpdatedCallback, Region, Identity);
         }
 
 
@@ -51,7 +51,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForState(ImageState expectedState, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageState(Id, expectedState, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageState(Id, expectedState, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -65,7 +65,7 @@ namespace net.openstack.Core.Domain
         /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="SimpleServer"/>s Progress value increases.</param>
         public void WaitForState(ImageState[] expectedStates, ImageState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, Action<int> progressUpdatedCallback = null)
         {
-            var details = Provider.WaitForImageState(Id, expectedStates, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region);
+            var details = Provider.WaitForImageState(Id, expectedStates, errorStates, refreshCount, refreshDelay, progressUpdatedCallback, Region, Identity);
             UpdateThis(details);
         }
 
@@ -85,7 +85,7 @@ namespace net.openstack.Core.Domain
         /// <returns><c>bool</c> indicating if the action was successful</returns>
         public bool Delete()
         {
-            return Provider.DeleteImage(Id, Region);
+            return Provider.DeleteImage(Id, Region, Identity);
         }
     }
 }

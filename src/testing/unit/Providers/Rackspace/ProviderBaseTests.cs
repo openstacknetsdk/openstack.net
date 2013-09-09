@@ -333,11 +333,6 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 return base.GetServiceEndpoint(identity, serviceType, region);
             }
 
-            protected override IIdentityProvider BuildProvider(CloudIdentity identity)
-            {
-                throw new NotImplementedException();
-            }
-
             public Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
             {
                 return base.BuildOptionalParameterList(optionalParameters);
