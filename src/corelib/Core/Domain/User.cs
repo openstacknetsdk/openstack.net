@@ -9,7 +9,7 @@ namespace net.openstack.Core.Domain
         public string DefaultRegion { get; set; }
 
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [JsonProperty("username")]
         public string Username { get; set; }
