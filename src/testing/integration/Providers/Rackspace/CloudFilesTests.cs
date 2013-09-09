@@ -240,10 +240,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metaData = provider.GetContainerMetaData(containerName);
             Assert.IsNotNull(metaData);
             Assert.IsTrue(metaData.Any());
-            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -261,8 +261,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider();
             var metaData = provider.GetContainerMetaData(containerName, identity: _testIdentity);
             Assert.IsNotNull(metaData);
-            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -279,7 +279,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider();
             var metaData = provider.GetContainerMetaData(containerName, identity: _testIdentity);
             Assert.IsNotNull(metaData);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -388,7 +388,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             Assert.IsTrue(cdnContainerHeaderResponse.LogRetention);
             Assert.IsTrue(cdnContainerHeaderResponse.CDNEnabled);
             Assert.IsTrue(!string.IsNullOrWhiteSpace(cdnContainerHeaderResponse.CDNIosUri));
-            Assert.IsTrue(containerName.Equals(cdnContainerHeaderResponse.Name, StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(containerName.Equals(cdnContainerHeaderResponse.Name, StringComparison.OrdinalIgnoreCase));
 
         }
 
@@ -412,10 +412,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListingsCSS, webListing, null, false, _testIdentity);
             var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value));
 
         }
 
@@ -428,8 +428,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.EnableStaticWebOnContainer(containerName, webListingsCSS, webListing, null, false, _testIdentity);
             var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual(webListingsCSS, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings-css", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value));
 
         }
 
@@ -442,9 +442,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.EnableStaticWebOnContainer(containerName, webIndex, webError, webListing, null, false, _testIdentity);
             var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value));
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.IsTrue(bool.Parse(cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-listings", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value));
 
         }
 
@@ -457,8 +457,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.EnableStaticWebOnContainer(containerName, webIndex, webError, null, false, _testIdentity);
             var cdnContainerMetaDataResponse = provider.GetContainerMetaData(containerName, identity: _testIdentity);
 
-            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webIndex, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("Web-index", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(webError, cdnContainerMetaDataResponse.Where(x => x.Key.Equals("web-error", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -529,12 +529,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.Ordinal)).FirstOrDefault().Name);
 
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
-            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
 
@@ -562,7 +562,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.CreateObject(containerName, stream, fileName, null, 65536, headers);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.Ordinal)).FirstOrDefault().Name);
 
         }
 
@@ -577,12 +577,12 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.CreateObjectFromFile(containerName, filePath, objectName, headers: headers);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(objectName, containerGetObjectsResponse.Where(x => x.Name.Equals(objectName, StringComparison.Ordinal)).FirstOrDefault().Name);
 
             var objectHeadersResponse = provider.GetObjectHeaders(containerName, objectName, identity: _testIdentity);
 
             Assert.IsNotNull(objectHeadersResponse);
-            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual(etag, objectHeadersResponse.Where(x => x.Key.Equals("ETag", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -596,7 +596,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             provider.CreateObjectFromFile(containerName, filePath, fileName, null, 65536, headers, identity: _testIdentity);
 
             var containerGetObjectsResponse = provider.ListObjects(containerName, identity: _testIdentity);
-            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Name);
+            Assert.AreEqual(fileName, containerGetObjectsResponse.Where(x => x.Name.Equals(fileName, StringComparison.Ordinal)).FirstOrDefault().Name);
         }
 
         [TestMethod]
@@ -702,10 +702,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var metaData = provider.GetObjectMetaData(containerName, objectName);
             Assert.IsNotNull(metaData);
             Assert.IsTrue(metaData.Any());
-            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value2", metaData.Where(x => x.Key.Equals("key2", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value3", metaData.Where(x => x.Key.Equals("key3", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -723,8 +723,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = provider.GetObjectMetaData(containerName, objectName);
             Assert.IsNotNull(metaData);
-            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value1", metaData.Where(x => x.Key.Equals("key1", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -741,7 +741,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             var metaData = provider.GetObjectMetaData(containerName, objectName);
             Assert.IsNotNull(metaData);
-            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("value4", metaData.Where(x => x.Key.Equals("key4", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
         }
 
         [TestMethod]
@@ -896,7 +896,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
             Assert.IsNotNull(accountHeadersResponse);
             Assert.IsTrue(accountHeadersResponse.ContainsKey("Test-Accountmetadata"));
-            Assert.AreEqual("Test", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault().Value);
+            Assert.AreEqual("Test", accountHeadersResponse.Where(x => x.Key.Equals("Test-Accountmetadata", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
 
         }
 
