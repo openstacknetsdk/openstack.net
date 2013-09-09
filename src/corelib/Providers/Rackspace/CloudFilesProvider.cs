@@ -1213,14 +1213,57 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
+        /// <summary>
+        /// Gets the public or internal service endpoint to use for Cloud Files requests for the specified identity and region.
+        /// </summary>
+        /// <remarks>
+        /// This method uses <c>object-store</c> for the service type, and <c>cloudFiles</c> for the preferred service name.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the internal service endpoint; otherwise <c>false</c> to use the public service endpoint.</param>
+        /// <returns>The URL for the requested Cloud Files endpoint.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected string GetServiceEndpointCloudFiles(CloudIdentity identity, string region = null, bool useInternalUrl = false)
         {
-            return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "object-store", region) : base.GetPublicServiceEndpoint(identity, "object-store", region);
+            return useInternalUrl ? base.GetInternalServiceEndpoint(identity, "object-store", "cloudFiles", region) : base.GetPublicServiceEndpoint(identity, "object-store", "cloudFiles", region);
         }
 
+        /// <summary>
+        /// Gets the public service endpoint to use for Cloud Files CDN requests for the specified identity and region.
+        /// </summary>
+        /// <remarks>
+        /// This method uses <c>rax:object-cdn</c> for the service type, and <c>cloudFilesCDN</c> for the preferred service name.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The public URL for the requested Cloud Files CDN endpoint.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected string GetServiceEndpointCloudFilesCDN(CloudIdentity identity, string region = null)
         {
-            return base.GetPublicServiceEndpoint(identity, "rax:object-cdn", region);
+            return base.GetPublicServiceEndpoint(identity, "rax:object-cdn", "cloudFilesCDN", region);
         }
 
         public static void CopyStream(Stream input, Stream output, int bufferSize, Action<long> progressUpdated)

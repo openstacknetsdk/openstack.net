@@ -8,6 +8,7 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
@@ -149,8 +150,48 @@ namespace net.openstack.Providers.Rackspace
             return new JsonRequestSettings { RetryCount = 2, RetryDelay = TimeSpan.FromMilliseconds(200), Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = GetUserAgentHeaderValue()};
         }
 
-        protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceType, string region = null)
+        /// <summary>
+        /// Gets the <see cref="Endpoint"/> associated with the specified service in the user's service catalog.
+        /// </summary>
+        /// <remarks>
+        /// The endpoint returned by this method may not be an exact match for all arguments to this method.
+        /// This method filters the service catalog in the following order to locate an acceptable endpoint.
+        /// If more than one acceptable endpoint remains after all filters are applied, it is unspecified
+        /// which one is returned by this method.
+        ///
+        /// <list type="number">
+        /// <item>This method only considers services which match the specified <paramref name="serviceType"/>.</item>
+        /// <item>This method attempts to filter the remaining items to those matching <paramref name="serviceName"/>. If <paramref name="serviceName"/> is <c>null</c>, or if no services match the specified name, <em>this argument is ignored</em>.</item>
+        /// <item>This method attempts to filter the remaining items to those matching <paramref name="region"/>. If <paramref name="region"/> is <c>null</c>, the user's default region is used. If no services match the specified region, <em>this argument is ignored</em>.</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
+        /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>An <see cref="Endpoint"/> object containing the details of the requested service.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected Endpoint GetServiceEndpoint(CloudIdentity identity, string serviceType, string serviceName, string region)
         {
+            if (serviceType == null)
+                throw new ArgumentNullException("serviceType");
+            if (string.IsNullOrEmpty(serviceType))
+                throw new ArgumentException("serviceType cannot be empty");
+            CheckIdentity(identity);
+
             identity = GetDefaultIdentity(identity);
 
             var userAccess = IdentityProvider.GetUserAccess(identity);
@@ -158,40 +199,105 @@ namespace net.openstack.Providers.Rackspace
             if (userAccess == null || userAccess.ServiceCatalog == null)
                 throw new UserAuthenticationException("Unable to authenticate user and retrieve authorized service endpoints.");
 
-            var serviceDetails = userAccess.ServiceCatalog.FirstOrDefault(sc => string.Equals(sc.Type, serviceType, StringComparison.OrdinalIgnoreCase));
+            IEnumerable<ServiceCatalog> services = userAccess.ServiceCatalog.Where(sc => string.Equals(sc.Type, serviceType, StringComparison.OrdinalIgnoreCase));
 
-            if (serviceDetails == null || serviceDetails.Endpoints == null || serviceDetails.Endpoints.Length == 0)
-                throw new UserAuthorizationException("The user does not have access to the requested service.");
-
-            if (string.IsNullOrEmpty(region))
+            if (serviceName != null)
             {
-                var isLondon = IsLondonIdentity(identity);
-                region = string.IsNullOrEmpty(userAccess.User.DefaultRegion) ?
-                    isLondon ? "LON" : null : userAccess.User.DefaultRegion;
+                IEnumerable<ServiceCatalog> namedServices = services.Where(sc => string.Equals(sc.Name, serviceName, StringComparison.OrdinalIgnoreCase));
+                if (namedServices.Any())
+                    services = namedServices;
+            }
 
-                if (string.IsNullOrEmpty(region))
+            IEnumerable<Tuple<ServiceCatalog, Endpoint>> endpoints =
+                services.SelectMany(service => service.Endpoints.Select(endpoint => Tuple.Create(service, endpoint)));
+
+            string effectiveRegion = region;
+            if (string.IsNullOrEmpty(effectiveRegion))
+            {
+                if (!string.IsNullOrEmpty(userAccess.User.DefaultRegion))
+                    effectiveRegion = userAccess.User.DefaultRegion;
+                else if (IsLondonIdentity(identity))
+                    effectiveRegion = "LON";
+
+                if (string.IsNullOrEmpty(effectiveRegion))
                     throw new NoDefaultRegionSetException("No region was provided and there is no default region set for the user's account.");
             }
 
-            var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase)) ??
-                           serviceDetails.Endpoints.FirstOrDefault(e => string.IsNullOrEmpty(e.Region));
+            IEnumerable<Tuple<ServiceCatalog, Endpoint>> regionEndpoints =
+                endpoints.Where(i => string.Equals(i.Item2.Region, effectiveRegion, StringComparison.OrdinalIgnoreCase));
 
-            if (endpoint == null)
+            if (regionEndpoints.Any())
+                endpoints = regionEndpoints;
+
+            Tuple<ServiceCatalog, Endpoint> serviceEndpoint = endpoints.FirstOrDefault();
+            if (serviceEndpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");
 
-            return endpoint;
+            return serviceEndpoint.Item2;
         }
 
-        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceType, string region)
+        /// <summary>
+        /// Gets the <see cref="Endpoint.PublicURL"/> for the <see cref="Endpoint"/> associated with the
+        /// specified service in the user's service catalog.
+        /// </summary>
+        /// <remarks>
+        /// For details on how endpoint resolution is performed, see <see cref="GetServiceEndpoint"/>.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
+        /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The <see cref="Endpoint.PublicURL"/> value for the <see cref="Endpoint"/> object containing the details of the requested service.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected virtual string GetPublicServiceEndpoint(CloudIdentity identity, string serviceType, string serviceName, string region)
         {
-            var endpoint = GetServiceEndpoint(identity, serviceType, region);
+            var endpoint = GetServiceEndpoint(identity, serviceType, serviceName, region);
 
             return endpoint.PublicURL;
         }
 
-        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceType, string region)
+        /// <summary>
+        /// Gets the <see cref="Endpoint.InternalURL"/> for the <see cref="Endpoint"/> associated with the
+        /// specified service in the user's service catalog.
+        /// </summary>
+        /// <remarks>
+        /// For details on how endpoint resolution is performed, see <see cref="GetServiceEndpoint"/>.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
+        /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The <see cref="Endpoint.InternalURL"/> value for the <see cref="Endpoint"/> object containing the details of the requested service.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected virtual string GetInternalServiceEndpoint(CloudIdentity identity, string serviceType, string serviceName, string region)
         {
-            var endpoint = GetServiceEndpoint(identity, serviceType, region);
+            var endpoint = GetServiceEndpoint(identity, serviceType, serviceName, region);
 
             return endpoint.InternalURL;
         }

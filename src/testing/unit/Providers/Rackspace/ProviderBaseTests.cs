@@ -330,7 +330,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             public Endpoint GetEndpoint(string serviceType, string region, CloudIdentity identity)
             {
-                return base.GetServiceEndpoint(identity, serviceType, region);
+                return base.GetServiceEndpoint(identity, serviceType, null, region);
             }
 
             public Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
