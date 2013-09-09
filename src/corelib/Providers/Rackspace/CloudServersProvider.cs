@@ -883,19 +883,19 @@ namespace net.openstack.Providers.Rackspace
         {
             var queryParameters = new Dictionary<string, string>();
 
-            if(!string.IsNullOrWhiteSpace(serverId))
+            if(!string.IsNullOrEmpty(serverId))
                 queryParameters.Add("server", serverId);
 
-            if (!string.IsNullOrWhiteSpace(imageName))
+            if (!string.IsNullOrEmpty(imageName))
                 queryParameters.Add("name", imageName);
 
-            if (imageStatus != null && !string.IsNullOrWhiteSpace(imageStatus.Name))
+            if (imageStatus != null && !string.IsNullOrEmpty(imageStatus.Name))
                 queryParameters.Add("status", imageStatus.Name);
 
             if (changesSince != null)
                 queryParameters.Add("changes-since", changesSince.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
 
-            if (!string.IsNullOrWhiteSpace(markerId))
+            if (!string.IsNullOrEmpty(markerId))
                 queryParameters.Add("marker", markerId);
 
             if (limit > 0)

@@ -88,7 +88,7 @@ namespace net.openstack.Providers.Rackspace
                     bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
-            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+            if (string.IsNullOrEmpty(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();
 
             var response = callback(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
@@ -121,7 +121,7 @@ namespace net.openstack.Providers.Rackspace
 
             headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry).Id;
 
-            if (string.IsNullOrWhiteSpace(requestSettings.UserAgent))
+            if (string.IsNullOrEmpty(requestSettings.UserAgent))
                 requestSettings.UserAgent = GetUserAgentHeaderValue();
 
             var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
@@ -163,18 +163,18 @@ namespace net.openstack.Providers.Rackspace
             if (serviceDetails == null || serviceDetails.Endpoints == null || serviceDetails.Endpoints.Length == 0)
                 throw new UserAuthorizationException("The user does not have access to the requested service.");
 
-            if (string.IsNullOrWhiteSpace(region))
+            if (string.IsNullOrEmpty(region))
             {
                 var isLondon = IsLondonIdentity(identity);
-                region = string.IsNullOrWhiteSpace(userAccess.User.DefaultRegion) ?
+                region = string.IsNullOrEmpty(userAccess.User.DefaultRegion) ?
                     isLondon ? "LON" : null : userAccess.User.DefaultRegion;
 
-                if (string.IsNullOrWhiteSpace(region))
+                if (string.IsNullOrEmpty(region))
                     throw new NoDefaultRegionSetException("No region was provided and there is no default region set for the user's account.");
             }
 
             var endpoint = serviceDetails.Endpoints.FirstOrDefault(e => e.Region.Equals(region, StringComparison.OrdinalIgnoreCase)) ??
-                           serviceDetails.Endpoints.FirstOrDefault(e => string.IsNullOrWhiteSpace(e.Region));
+                           serviceDetails.Endpoints.FirstOrDefault(e => string.IsNullOrEmpty(e.Region));
 
             if (endpoint == null)
                 throw new UserAuthorizationException("The user does not have access to the requested service or region.");
@@ -247,7 +247,7 @@ namespace net.openstack.Providers.Rackspace
             if (optionalParameters == null)
                 return null;
 
-            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrWhiteSpace(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrEmpty(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
 
             if (!paramList.Any())
                 return null;

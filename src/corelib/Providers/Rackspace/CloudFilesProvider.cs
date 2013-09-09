@@ -134,10 +134,10 @@ namespace net.openstack.Providers.Rackspace
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
 
-            if (!string.IsNullOrWhiteSpace(marker))
+            if (!string.IsNullOrEmpty(marker))
                 queryStringParameter.Add("marker", marker);
 
-            if (!string.IsNullOrWhiteSpace(markerEnd))
+            if (!string.IsNullOrEmpty(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
 
             var response = ExecuteRESTRequest<Container[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
@@ -334,10 +334,10 @@ namespace net.openstack.Providers.Rackspace
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
 
-            if (!string.IsNullOrWhiteSpace(marker))
+            if (!string.IsNullOrEmpty(marker))
                 queryStringParameter.Add("marker", marker);
 
-            if (!string.IsNullOrWhiteSpace(markerEnd))
+            if (!string.IsNullOrEmpty(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
 
             var response = ExecuteRESTRequest<ContainerCDN[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
@@ -783,13 +783,13 @@ namespace net.openstack.Providers.Rackspace
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
 
-            if (!string.IsNullOrWhiteSpace(marker))
+            if (!string.IsNullOrEmpty(marker))
                 queryStringParameter.Add("marker", marker);
 
-            if (!string.IsNullOrWhiteSpace(markerEnd))
+            if (!string.IsNullOrEmpty(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
 
-            if (!string.IsNullOrWhiteSpace(prefix))
+            if (!string.IsNullOrEmpty(prefix))
                 queryStringParameter.Add("prefix", prefix);
 
             var response = ExecuteRESTRequest<ContainerObject[]>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
@@ -949,7 +949,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(fileName))
                 fileName = objectName;
 
-            var filePath = Path.Combine(saveDirectory, string.IsNullOrWhiteSpace(fileName) ? objectName : fileName);
+            var filePath = Path.Combine(saveDirectory, string.IsNullOrEmpty(fileName) ? objectName : fileName);
 
             try
             {
