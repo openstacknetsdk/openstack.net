@@ -7,6 +7,12 @@
     /// <summary>
     /// Represents the detailed configuration of a virtual network interface.
     /// </summary>
+    /// <remarks>
+    /// <note>
+    /// Virtual network interfaces are a Rackspace-specific extension to the OpenStack Networking Service.
+    /// </note>
+    /// </remarks>
+    /// <seealso href="http://docs.rackspace.com/networks/api/v2/cn-devguide/content/list_virt_interfaces.html">List Virtual Interfaces (Rackspace Cloud Networks Developer Guide - OpenStack Networking API v2)</seealso>
     [JsonObject(MemberSerialization.OptIn)]
     public class VirtualInterface
     {
