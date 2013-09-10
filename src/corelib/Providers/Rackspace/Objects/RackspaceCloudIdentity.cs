@@ -2,6 +2,8 @@
 
 namespace net.openstack.Providers.Rackspace.Objects
 {
+    using System;
+
     /// <summary>
     /// Extends the <see cref="CloudIdentity"/> class by adding support for specifying
     /// a <see cref="CloudInstance"/> and <see cref="Domain"/> for the identity.
@@ -26,6 +28,9 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <exception cref="ArgumentNullException">If <paramref name="cloudIdentity"/> is <c>null</c>.</exception>
         public RackspaceCloudIdentity(CloudIdentity cloudIdentity) : this()
         {
+            if (cloudIdentity == null)
+                throw new ArgumentNullException("cloudIdentity");
+
             this.Username = cloudIdentity.Username;
             this.Password = cloudIdentity.Password;
             this.APIKey = cloudIdentity.APIKey;
