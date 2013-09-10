@@ -6,6 +6,10 @@ using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
+    /// <summary>
+    /// Provides an implementation of <see cref="IHttpResponseCodeValidator"/> for
+    /// operation with Rackspace's products.
+    /// </summary>
     internal class HttpResponseCodeValidator : IHttpResponseCodeValidator
     {
         /// <summary>

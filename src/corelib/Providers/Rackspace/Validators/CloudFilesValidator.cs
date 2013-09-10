@@ -6,6 +6,10 @@ using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
+    /// <summary>
+    /// Provides an implementation of <see cref="IObjectStorageValidator"/> for
+    /// operation with Rackspace's Cloud Files product.
+    /// </summary>
     public class CloudFilesValidator : IObjectStorageValidator
     {
         /// <summary>

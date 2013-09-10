@@ -5,6 +5,10 @@ using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
+    /// <summary>
+    /// Provides an implementation of <see cref="INetworksValidator"/> for
+    /// operation with Rackspace's Cloud Networks product.
+    /// </summary>
     public class CloudNetworksValidator : INetworksValidator
     {
         /// <summary>
