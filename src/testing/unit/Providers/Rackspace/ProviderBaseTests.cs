@@ -333,7 +333,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
                 return base.GetServiceEndpoint(identity, serviceType, null, region);
             }
 
-            public Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+            public new Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
             {
                 return base.BuildOptionalParameterList(optionalParameters);
             }  
