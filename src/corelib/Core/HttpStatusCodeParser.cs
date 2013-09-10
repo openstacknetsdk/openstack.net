@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using net.openstack.Core.Domain;
 
@@ -91,7 +92,12 @@ namespace net.openstack.Core
                 return false;
             }
 
-            result = new Status(int.Parse(match.Groups["StatusCode"].Value), match.Groups["Status"].Value);
+            HttpStatusCode statusCode = (HttpStatusCode)int.Parse(match.Groups["StatusCode"].Value);
+            string description = match.Groups["Status"].Value;
+            if (string.IsNullOrEmpty(description))
+                description = statusCode.ToString();
+
+            result = new Status((int)statusCode, description);
             return true;
         }
     }
