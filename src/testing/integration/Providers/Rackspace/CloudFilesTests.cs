@@ -841,7 +841,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var provider = new CloudFilesProvider(_testIdentity);
             provider.LargeFileBatchThreshold = 81920;
 
-            provider.BulkDelete(provider.ListObjects(containerName2).Select(o => string.Format("{0}/{1}", containerName2, o.Name)));
+            provider.BulkDelete(provider.ListObjects(containerName2).Select(o => new KeyValuePair<string, string>(containerName2, o.Name)));
 
             var objects = provider.ListObjects(containerName2).ToArray();
 

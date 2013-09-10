@@ -24,90 +24,177 @@ using net.openstack.Providers.Rackspace.Validators;
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
-    /// <para>The Cloud Files Provider enable simple access to the Rackspace Cloud Files Services.
-    /// Rackspace Cloud Files™ is an affordable, redundant, scalable, and dynamic storage service offering. 
-    /// The core storage system is designed to provide a safe, secure, automatically re-sizing and network-accessible way to store data. 
-    /// You can store an unlimited quantity of files and each one can be as large as 5 gigabytes. 
-    /// Users can store as much as they want and pay only for storage space they actually use.</para>
-    /// <para />
-    /// <para>Additionally, Cloud Files provides a simple yet powerful way to publish and distribute content behind the industry-leading Akamai Content Distribution Network (CDN). 
-    /// Cloud Files users get access to this network automatically without having to worry about contracts, additional costs, or technical hurdles.</para>
-    /// <para />
-    /// <para>Cloud Files allows users to store/retrieve files and CDN-enable content via a simple ReST (Representational State Transfer) web service interface. 
-    /// There are also language-specific APIs that utilize the ReST API to make it much easier for developers to integrate into their applications.</para>
-    /// <para />
-    /// <para>Documentation URL: http://docs.rackspace.com/files/api/v1/cf-intro/content/Introduction-d1e82.html</para>
+    /// Provides an implementation of <see cref="IObjectStorageProvider"/>
+    /// for operating with Rackspace's Cloud Files product.
     /// </summary>
-    /// <see cref="IObjectStorageProvider"/>
-    /// <inheritdoc />
+    /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">OpenStack Object Storage API v1 Reference</seealso>
+    /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Overview-d1e70.html">Rackspace Cloud Files Developer Guide - API v1</seealso>
     public class CloudFilesProvider : ProviderBase<IObjectStorageProvider>, IObjectStorageProvider
     {
+        /// <summary>
+        /// The <see cref="IObjectStorageValidator"/> to use for this provider. This is
+        /// typically set to <see cref="CloudFilesValidator.Default"/>.
+        /// </summary>
         private readonly IObjectStorageValidator _cloudFilesValidator;
+
+        /// <summary>
+        /// The <see cref="IObjectStorageMetadataProcessor"/> to use for this provider. This is
+        /// typically set to <see cref="CloudFilesMetadataProcessor.Default"/>.
+        /// </summary>
         private readonly IObjectStorageMetadataProcessor _cloudFilesMetadataProcessor;
+
+        /// <summary>
+        /// The <see cref="IEncodeDecodeProvider"/> to use for this provider. This is
+        /// typically set to <see cref="EncodeDecodeProvider.Default"/>.
+        /// </summary>
         private readonly IEncodeDecodeProvider _encodeDecodeProvider;
+
+        /// <summary>
+        /// The <see cref="IStatusParser"/> to use for this provider. This is
+        /// typically set to <see cref="HttpStatusCodeParser.Default"/>.
+        /// </summary>
         private readonly IStatusParser _statusParser;
+
+        /// <summary>
+        /// The <see cref="IObjectMapper{BulkDeleteResponse, BulkDeletionResults}"/> to use for
+        /// this provider. This is typically set to a new instance of <see cref="BulkDeletionResultMapper"/>.
+        /// </summary>
         private readonly IObjectMapper<BulkDeleteResponse, BulkDeletionResults> _bulkDeletionResultMapper;
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, and the default identity provider and REST service implementation.
         /// </summary>
         public CloudFilesProvider()
             : this(null, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, and the default identity provider and REST service
+        /// implementation.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity. An instance of <see cref="net.openstack.Core.Domain.CloudIdentity"/></param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, the default identity provider, and the specified REST service
+        /// implementation.
         /// </summary>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(IRestService restService)
             : this(null, null, restService) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, the specified identity provider, and the default REST service
+        /// implementation.
         /// </summary>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudFilesProvider(IIdentityProvider identityProvider)
             : this(null, identityProvider, null) { }
 
-                /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity and identity provider, and the default REST service
+        /// implementation.
         /// </summary>
-        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
-        public CloudFilesProvider(CloudIdentity identity, IIdentityProvider identityProvider)
-            : this(identity, identityProvider, null) { }
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider)
+            : this(defaultIdentity, identityProvider, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity and REST service implementation, and the default
+        /// identity provider.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
-        public CloudFilesProvider(CloudIdentity identity, IRestService restService)
-            : this(identity, null, restService) { }
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        public CloudFilesProvider(CloudIdentity defaultIdentity, IRestService restService)
+            : this(defaultIdentity, null, restService) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudFilesProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, identity provider, and REST service implementation,
+        /// and the default Rackspace-Cloud-Files-specific implementations of the object storage
+        /// validator, metadata processor, encoder, status parser, and bulk delete results mapper.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
-        public CloudFilesProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : this(identity, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
+            : this(defaultIdentity, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
 
-        internal CloudFilesProvider(IIdentityProvider cloudIdentityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
-            : this(null, cloudIdentityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, and the default identity provider, REST service implementation,
+        /// validator, metadata processor, encoder, status parser, and bulk delete results
+        /// mapper.
+        /// </summary>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
+        /// <param name="cloudFilesMetadataProcessor">The <see cref="IObjectStorageMetadataProcessor"/> to use for processing metadata returned in HTTP headers.</param>
+        /// <param name="encodeDecodeProvider">The <see cref="IEncodeDecodeProvider"/> to use for encoding data in URI query strings.</param>
+        /// <param name="statusParser">The <see cref="IStatusParser"/> to use for parsing HTTP status codes.</param>
+        /// <param name="mapper">The object mapper to use for mapping <see cref="BulkDeleteResponse"/> objects to <see cref="BulkDeletionResults"/> objects.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="cloudFilesValidator"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="encodeDecodeProvider"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="statusParser"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="mapper"/> is <c>null</c>.</para>
+        /// </exception>
+        internal CloudFilesProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
+            : this(null, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
 
-        internal CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider cloudIdentityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> bulkDeletionResultMapper)
-            : base(defaultIdentity, cloudIdentityProvider, restService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, identity provider, REST service implementation,
+        /// validator, metadata processor, encoder, status parser, and bulk delete results
+        /// mapper.
+        /// </summary>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
+        /// <param name="cloudFilesMetadataProcessor">The <see cref="IObjectStorageMetadataProcessor"/> to use for processing metadata returned in HTTP headers.</param>
+        /// <param name="encodeDecodeProvider">The <see cref="IEncodeDecodeProvider"/> to use for encoding data in URI query strings.</param>
+        /// <param name="statusParser">The <see cref="IStatusParser"/> to use for parsing HTTP status codes.</param>
+        /// <param name="bulkDeletionResultMapper">The object mapper to use for mapping <see cref="BulkDeleteResponse"/> objects to <see cref="BulkDeletionResults"/> objects.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="cloudFilesValidator"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="encodeDecodeProvider"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="statusParser"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="bulkDeletionResultMapper"/> is <c>null</c>.</para>
+        /// </exception>
+        internal CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> bulkDeletionResultMapper)
+            : base(defaultIdentity, identityProvider, restService)
         {
+            if (cloudFilesValidator == null)
+                throw new ArgumentNullException("cloudFilesValidator");
+            if (cloudFilesMetadataProcessor == null)
+                throw new ArgumentNullException("cloudFilesMetadataProcessor");
+            if (encodeDecodeProvider == null)
+                throw new ArgumentNullException("encodeDecodeProvider");
+            if (statusParser == null)
+                throw new ArgumentNullException("statusParser");
+            if (bulkDeletionResultMapper == null)
+                throw new ArgumentNullException("bulkDeletionResultMapper");
+
             _cloudFilesValidator = cloudFilesValidator;
             _cloudFilesMetadataProcessor = cloudFilesMetadataProcessor;
             _encodeDecodeProvider = encodeDecodeProvider;
@@ -1062,38 +1149,103 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <summary>
-        /// Deletes container objects.
+        /// Deletes a collection of objects from a container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="objects">List of container object names for the objects that should be deleted.</param>
-        /// <param name="headers">A list of HTTP headers to send to the service. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
+        /// <param name="objects">A names of objects to delete.</param>
+        /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objects"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objects"/> contains any null or empty values.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objects"/> contains an item that is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public void DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            _cloudFilesValidator.ValidateContainerName(container);
-            foreach (var objectName in objects)
-            {
-                _cloudFilesValidator.ValidateObjectName(objectName);
-            }
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objects == null)
+                throw new ArgumentNullException("objects");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
 
-            BulkDelete(objects.Select(o => string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(o))), headers, region, useInternalUrl, identity);
+            BulkDelete(objects.Select(o => new KeyValuePair<string, string>(container, o)), headers, region, useInternalUrl, identity);
         }
 
         /// <summary>
-        /// Deletes a list of items.  Items can be containers or objects.
+        /// Deletes a collection of objects stored in object storage.
         /// </summary>
-        /// <param name="items">List of items (containers or objects) that should be deleted. <remarks>Should be in the form of: Container = \"/container_name\"  Object = \"container_name/my_image.jpg\"</remarks></param>
-        /// <param name="headers">A list of HTTP headers to send to the service. </param>
-        /// <param name="region">The region in which to execute this action.<remarks>If not specified, the user’s default region will be used.</remarks></param>
-        /// <param name="useInternalUrl">If set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The users Cloud Identity. <see cref="CloudIdentity"/> <remarks>If not specified, the default identity given in the constructor will be used.</remarks> </param>
-        public void BulkDelete(IEnumerable<string> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        /// <param name="items">The collection of items to delete. The keys of each pair specifies the container name, and the value specifies the object name.</param>
+        /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="items"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="items"/> contains any values with null or empty keys or values.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="items"/> contains a pair where the key is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="items"/> contains a pair where the value is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        public void BulkDelete(IEnumerable<KeyValuePair<string, string>> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/?bulk-delete", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
 
-            var body = string.Join("\n", items);
+            var encoded = items.Select(
+                pair =>
+                {
+                    if (string.IsNullOrEmpty(pair.Key))
+                        throw new ArgumentException("items", "items cannot contain any entries with a null or empty key (container name)");
+                    if (string.IsNullOrEmpty(pair.Value))
+                        throw new ArgumentException("items", "items cannot contain any entries with a null or empty value (object name)");
+                    _cloudFilesValidator.ValidateContainerName(pair.Key);
+                    _cloudFilesValidator.ValidateObjectName(pair.Value);
+
+                    return string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(pair.Key), _encodeDecodeProvider.UrlEncode(pair.Value));
+                });
+            var body = string.Join("\n", encoded);
 
             var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
@@ -1102,7 +1254,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (status.Code != 200 && !response.Data.Errors.Any())
                 {
-                    response.Data.AllItems = items;
+                    response.Data.AllItems = encoded;
                     throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));
                 }
             }
@@ -1266,8 +1418,33 @@ namespace net.openstack.Providers.Rackspace
             return base.GetPublicServiceEndpoint(identity, "rax:object-cdn", "cloudFilesCDN", region);
         }
 
+        /// <summary>
+        /// Copy data from an input stream to an output stream.
+        /// </summary>
+        /// <remarks>
+        /// The argument to the callback method is the total number of bytes written to the output stream thus far.
+        /// Note that <see cref="Stream.Flush()"/> is not called on <paramref name="output"/> prior to reporting a
+        /// progress update, so data may remain in the stream's buffer.
+        /// </remarks>
+        /// <param name="input">The input stream.</param>
+        /// <param name="output">The output stream.</param>
+        /// <param name="bufferSize">The size of the buffer to use for copying data.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="input"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="output"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="bufferSize"/> is less than or equal to 0.</exception>
         public static void CopyStream(Stream input, Stream output, int bufferSize, Action<long> progressUpdated)
         {
+            if (input == null)
+                throw new ArgumentNullException("input");
+            if (output == null)
+                throw new ArgumentNullException("output");
+            if (bufferSize <= 0)
+                throw new ArgumentOutOfRangeException("bufferSize");
+
             var buffer = new byte[bufferSize];
             int len;
             long bytesWritten = 0;
@@ -1283,20 +1460,76 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <summary>
-        /// Creates the object in segments.
+        /// Creates an object consisting of multiple segments, each no larger than
+        /// <see cref="LargeFileBatchThreshold"/>, using data from a <see cref="Stream"/>.
+        /// If the destination file already exists, the contents are overwritten.
         /// </summary>
+        /// <remarks>
+        /// In addition to the individual segments containing file data, this method creates
+        /// the manifest required for treating the segments as a single object in future GET
+        /// requests.
+        /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="stream">The stream. <see cref="Stream"/></param>
-        /// <param name="objectName">Name of the object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="contentType">The content type of the object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
-        /// <param name="chunkSize">Chunk size.<remarks>[Default = 4096]</remarks> </param>
-        /// <param name="headers">The headers. </param>
-        /// <param name="region">The region.</param>
-        /// <param name="progressUpdated">The progress updated. <see cref="Action&lt;T&gt;"/> </param>
-        /// <param name="useInternalUrl">if set to <c>true</c> uses ServiceNet URL.</param>
-        /// <param name="identity">The identity. <see cref="CloudIdentity"/>  </param>
+        /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
+        /// <param name="objectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="stream"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+
             long totalLength = stream.Length - stream.Position;
             long segmentCount = (totalLength / LargeFileBatchThreshold) + (((totalLength % LargeFileBatchThreshold) != 0) ? 1 : 0);
 
@@ -1350,8 +1583,44 @@ namespace net.openstack.Providers.Rackspace
                 });
         }
 
+        /// <summary>
+        /// Verifies that a particular container is CDN-enabled.
+        /// </summary>
+        /// <remarks>
+        /// Normally, the <see cref="ContainerCDN.CDNEnabled"/> property is used to check if a container is
+        /// CDN-enabled. However, if a container has <em>never</em> been CDN-enabled, the
+        /// <see cref="GetContainerCDNHeader"/> method throws a misleading <see cref="ItemNotFoundException"/>.
+        /// This method uses <see cref="GetContainerHeader"/> to distinguish between these cases, ensuring
+        /// that a <see cref="CDNNotEnabledException"/> gets thrown whenever a container exists but is not
+        /// CDN-enabled.
+        /// </remarks>
+        /// <param name="container">The container name.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="CDNNotEnabledException">If the container does not have a CDN header, or if the <see cref="ContainerCDN.CDNEnabled"/> property is <c>false</c>.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected void VerifyContainerIsCDNEnabled(string container, string region, CloudIdentity identity)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            _cloudFilesValidator.ValidateContainerName(container);
+            CheckIdentity(identity);
+
             try
             {
                 // If the container is currently CDN enabled, or was CDN enabled at some
@@ -1700,6 +1969,10 @@ namespace net.openstack.Providers.Rackspace
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
         public static readonly long MaxLargeFileBatchThreshold = 5368709120; // 5GB
 
+        /// <summary>
+        /// This is the backing field for <see cref="LargeFileBatchThreshold"/>. The
+        /// default value is <see cref="MaxLargeFileBatchThreshold"/>.
+        /// </summary>
         private long _largeFileBatchThreshold = MaxLargeFileBatchThreshold;
 
         /// <summary>
