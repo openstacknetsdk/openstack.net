@@ -4,9 +4,19 @@ namespace net.openstack.Core.Domain
     using System.Net;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Represents a map of network labels to collections of IP addresses.
+    /// </summary>
+    /// <remarks>
+    /// The keys of this collection are network labels (see <see cref="CloudNetwork.Label"/>),
+    /// and the values are collections of IP addresses.
+    /// </remarks>
     [JsonDictionary]
     public class ServerAddresses : Dictionary<string, IPAddressList>
     {
+        /// <summary>
+        /// Gets the server IP addresses associated with the <c>private</c> network.
+        /// </summary>
         [JsonIgnore]
         public IList<IPAddress> Private
         {
@@ -20,6 +30,9 @@ namespace net.openstack.Core.Domain
             }
         }
 
+        /// <summary>
+        /// Gets the server IP addresses associated with the <c>public</c> network.
+        /// </summary>
         [JsonIgnore]
         public IList<IPAddress> Public
         {

@@ -36,6 +36,12 @@ namespace net.openstack.Core.Domain
         [JsonProperty("description")]
         public string Description { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Role"/> class with
+        /// the specified name and description.
+        /// </summary>
+        /// <param name="name">The name of the role.</param>
+        /// <param name="description">The description of the role.</param>
         public Role(string name, string description)
         {
             Name = name;
