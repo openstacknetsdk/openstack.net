@@ -11,7 +11,7 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     /// requested for a <see cref="CloudInstance"/> which is not current supported.
     /// </summary>
     [Serializable]
-    public class UnknownGeographyException : Exception
+    public class UnknownGeographyException : NotSupportedException
     {
         /// <summary>
         /// Gets the requested geography.
