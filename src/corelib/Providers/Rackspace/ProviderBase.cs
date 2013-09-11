@@ -749,7 +749,7 @@ namespace net.openstack.Providers.Rackspace
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the request.</exception>
         protected virtual void CheckIdentity(CloudIdentity identity)
         {
-            if (identity == null && DefaultIdentity == null)
+            if (GetDefaultIdentity(identity) == null)
                 throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
         }
     }
