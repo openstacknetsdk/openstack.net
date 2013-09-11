@@ -78,7 +78,7 @@ namespace net.openstack.Providers.Rackspace.Objects
                 throw new ArgumentException("obj cannot be empty");
 
             Object = obj;
-            Status = Status;
+            Status = status;
         }
     }
 }
