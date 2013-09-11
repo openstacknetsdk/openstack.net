@@ -539,7 +539,7 @@ namespace net.openstack.Core.Providers
         /// <param name="serverId">The server ID. This is obtained from <see cref="ServerBase.Id">ServerBase.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns>The root password is assigned for use during rescue mode.</returns>
+        /// <returns>The root password assigned for use during rescue mode.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="serverId"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serverId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
@@ -1226,7 +1226,7 @@ namespace net.openstack.Core.Providers
         bool DeleteServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the metadata associated with the specified server.
+        /// Gets the metadata associated with the specified image.
         /// </summary>
         /// <param name="imageId">The image ID. This is obtained from <see cref="SimpleServerImage.Id">SimpleServerImage.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -1249,7 +1249,7 @@ namespace net.openstack.Core.Providers
         Metadata ListImageMetadata(string imageId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Sets the metadata associated with the specified server, replacing any existing metadata.
+        /// Sets the metadata associated with the specified image, replacing any existing metadata.
         /// </summary>
         /// <param name="imageId">The image ID. This is obtained from <see cref="SimpleServerImage.Id">SimpleServerImage.Id</see>.</param>
         /// <param name="metadata">The metadata to associate with the image.</param>
@@ -1281,7 +1281,7 @@ namespace net.openstack.Core.Providers
         bool SetImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the metadata for the specified server.
+        /// Updates the metadata for the specified image.
         /// </summary>
         /// <remarks>
         /// For each item in <paramref name="metadata"/>, if the key exists, the value is updated; otherwise, the item is added.

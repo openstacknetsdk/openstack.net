@@ -11,6 +11,7 @@ namespace net.openstack.Providers.Rackspace
     /// Represents an identity provider that implements Rackspace-specific extensions to the
     /// OpenStack Identity API.
     /// </summary>
+    /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/index.html">Rackspace Cloud Identity Client Developer Guide - API v2.0</seealso>
     public interface IExtendedCloudIdentityProvider : IIdentityProvider
     {
         /// <summary>
