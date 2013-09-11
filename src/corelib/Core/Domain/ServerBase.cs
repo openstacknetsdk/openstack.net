@@ -45,7 +45,7 @@ namespace net.openstack.Core.Domain
         protected virtual void UpdateThis(ServerBase server)
         {
             if (server == null)
-                return;
+                throw new ArgumentNullException("server");
 
             Id = server.Id;
             Links = server.Links;

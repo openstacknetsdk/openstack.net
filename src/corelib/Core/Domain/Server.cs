@@ -182,6 +182,9 @@ namespace net.openstack.Core.Domain
         /// <inheritdoc/>
         protected override void UpdateThis(ServerBase server)
         {
+            if (server == null)
+                throw new ArgumentNullException("server");
+
             base.UpdateThis(server);
 
             var details = server as Server;

@@ -1,5 +1,6 @@
 namespace net.openstack.Core.Domain
 {
+    using System;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
 
@@ -32,6 +33,9 @@ namespace net.openstack.Core.Domain
         /// <inheritdoc/>
         protected override void UpdateThis(ServerBase server)
         {
+            if (server == null)
+                throw new ArgumentNullException("server");
+
             base.UpdateThis(server);
 
             var details = server as NewServer;
