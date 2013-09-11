@@ -66,20 +66,11 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="httpStatusCodeValidator">The HTTP status code validator to use. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
         protected ProviderBase(CloudIdentity defaultIdentity,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
-            if(identityProvider == null)
-                identityProvider = new CloudIdentityProvider(defaultIdentity);
-
-            if (restService == null)
-                restService = new JsonRestServices();
-
-            if (httpStatusCodeValidator == null)
-                httpStatusCodeValidator = HttpResponseCodeValidator.Default;
-
             DefaultIdentity = defaultIdentity;
-            IdentityProvider = identityProvider;
-            RestService = restService;
-            ResponseCodeValidator = httpStatusCodeValidator;
-        }        
+            IdentityProvider = identityProvider ?? new CloudIdentityProvider(defaultIdentity);
+            RestService = restService ?? new JsonRestServices();
+            ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
+        }
 
         /// <summary>
         /// Execute a REST request with an <see cref="object"/> body and strongly-typed result.
