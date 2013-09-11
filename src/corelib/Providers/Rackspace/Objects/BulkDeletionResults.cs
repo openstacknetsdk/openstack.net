@@ -7,6 +7,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// <summary>
     /// Represents the detailed results of a bulk deletion operation.
     /// </summary>
+    [Serializable]
     public class BulkDeletionResults
     {
         /// <summary>
@@ -43,6 +44,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// Describes an object which could not be deleted by a bulk deletion operation,
     /// along with a status providing the reason why the deletion failed.
     /// </summary>
+    [Serializable]
     public class BulkDeletionFailedObject
     {
         /// <summary>

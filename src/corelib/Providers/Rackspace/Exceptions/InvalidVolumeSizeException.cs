@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Security;
 using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Exceptions
@@ -37,6 +38,21 @@ namespace net.openstack.Providers.Rackspace.Exceptions
         protected InvalidVolumeSizeException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            Size = info.GetInt32("VolumeSize");
+        }
+
+        /// <inheritdoc/>
+        [SecurityCritical]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            base.GetObjectData(info, context);
+            info.AddValue("VolumeSize", Size);
         }
     }
 }
