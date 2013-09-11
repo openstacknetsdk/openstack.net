@@ -1,60 +1,127 @@
 ﻿using System;
 using System.Collections.Generic;
 using JSIStudios.SimpleRESTServices.Client;
+using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
+using net.openstack.Providers.Rackspace.Objects;
 
 namespace net.openstack.Providers.Rackspace
 {
-    public class CloudIdentityProvider : IExtendedCloudIdentityProvider
+    /// <summary>
+    /// Provides an implementation of <see cref="IIdentityProvider"/> and <see cref="IExtendedCloudIdentityProvider"/>
+    /// for operating with Rackspace's Cloud Identity product.
+    /// </summary>
+    /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/">OpenStack Identity Service API v2.0 Reference</seealso>
+    /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/index.html">Rackspace Cloud Identity Client Developer Guide - API v2.0</seealso>
+    public class CloudIdentityProvider : IExtendedCloudIdentityProvider, IIdentityProvider
     {
         private readonly CloudIdentityProviderFactory _factory;
         private readonly CloudIdentity _defaultIdentity;
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudIdentityProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, and the default <see cref="CloudInstance"/> base URLs,
+        /// the REST service implementation, and token cache.
         /// </summary>
         public CloudIdentityProvider() : this(null, null, null, null, null)
         {}
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudIdentityProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with the specified default identity, and the default <see cref="CloudInstance"/>
+        /// base URLs, the REST service implementation, and token cache.
         /// </summary>
-        /// <param name="defaultIdentity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null, null)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, the specified <see cref="CloudInstance"/> base URLs,
+        /// and the default REST service implementation and token cache.
+        /// </summary>
+        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with the specified default identity and <see cref="CloudInstance"/> base URLs,
+        /// and the default REST service implementation and token cache.
+        /// </summary>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(defaultIdentity, null, null, usInstanceUrlBase, ukInstanceUrlBase)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, and the specified <see cref="CloudInstance"/> base URLs,
+        /// REST service implementation, and token cache.
+        /// </summary>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
             : this(null, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase)
         {}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
+        /// the default REST service implementation, and the specified token cache.
+        /// </summary>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(ICache<UserAccess> tokenCache)
             : this( null, tokenCache)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
+        /// the specified REST service implementation, and the <see cref="UserAccessCache.Instance"/>
+        /// token cache.
+        /// </summary>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudIdentityProvider(IRestService restService)
             : this(restService, null)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
+        /// and the specified REST service implementation and token cache.
+        /// </summary>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null, null)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// using the provided values.
+        /// </summary>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
         {
             _factory = new CloudIdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
             _defaultIdentity = defaultIdentity;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
         {
             var provider = GetProvider(identity);
