@@ -7,8 +7,22 @@
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This implementation of <see cref="JsonConverter"/> allows for JSON serialization
+    /// and deserialization of <see cref="IPAddress"/> objects in the "address details"
+    /// format used by operations such as <see cref="IComputeProvider.ListAddresses"/>
+    /// and  <see cref="IComputeProvider.ListAddressesByNetwork"/>.
+    /// </summary>
+    /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Addresses-d1e3014.html">List Addresses (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Addresses_by_Network-d1e3118.html">List Addresses by Network (OpenStack Compute API v2 and Extensions Reference)</seealso>
     public class IPAddressDetailsConverter : JsonConverter
     {
+        /// <remarks>
+        /// Serialization is performed by creating an <see cref="AddressDetails"/> instance
+        /// equivalent to the given <see cref="IPAddress"/> instance and serializing that as
+        /// a JSON object.
+        /// </remarks>
+        /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)
@@ -25,6 +39,12 @@
             serializer.Serialize(writer, details);
         }
 
+        /// <remarks>
+        /// Deserialization is performed by deserializing the JSON value as an <see cref="AddressDetails"/>
+        /// object, following by using <see cref="IPAddress.Parse"/> to convert the value of
+        /// <see cref="AddressDetails.Address"/> to an <see cref="IPAddress"/> instance.
+        /// </remarks>
+        /// <inheritdoc/>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (objectType != typeof(IPAddress))
@@ -37,6 +57,8 @@
             return IPAddress.Parse(details.Address);
         }
 
+        /// <returns><c>true</c> if <paramref name="objectType"/> equals <see cref="IPAddress"/>; otherwise, <c>false</c>.</returns>
+        /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(IPAddress);
@@ -71,12 +93,28 @@
                 private set;
             }
 
-            public AddressDetails()
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AddressDetails"/> class.
+            /// </summary>
+            /// <remarks>
+            /// This constructor is used for JSON deserialization.
+            /// </remarks>
+            [JsonConstructor]
+            private AddressDetails()
             {
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AddressDetails"/> class
+            /// using the given IP address.
+            /// </summary>
+            /// <param name="address">The IP address.</param>
+            /// <exception cref="ArgumentNullException">If <paramref name="address"/> is <c>null</c>.</exception>
             public AddressDetails(IPAddress address)
             {
+                if (address == null)
+                    throw new ArgumentNullException("address");
+
                 Address = address.ToString();
                 switch (address.AddressFamily)
                 {

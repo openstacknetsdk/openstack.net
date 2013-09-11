@@ -7,8 +7,8 @@ using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
+using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
@@ -30,7 +30,6 @@ namespace net.openstack.Providers.Rackspace
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };
-        private readonly IJsonObjectMapper<Network> _networkResponseMapper;
 
         #region Constructors
 
@@ -84,20 +83,14 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
         /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
         public  CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : this(identity, identityProvider, restService, NetworkResponseJsonMapper.Default) { }
-
-        internal CloudServersProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IJsonObjectMapper<Network> networkResponseMapper)
-            : base(identity, identityProvider, restService)
-        {
-            _networkResponseMapper = networkResponseMapper;
-        }
+            : base(identity, identityProvider, restService) { }
 
         #endregion
 
         #region Servers
         
         /// <inheritdoc />
-        public IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -125,7 +118,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -153,7 +146,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration? diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
         {
             if (cloudServerName == null)
                 throw new ArgumentNullException("cloudServerName");
@@ -406,14 +399,11 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
-
-            if (response == null)
+            var response = ExecuteRESTRequest<ServerAddresses>(identity, urlPath, HttpMethod.GET);
+            if (response == null || response.Data == null)
                 return null;
 
-            var data = _networkResponseMapper.Map(response.RawBody);
-
-            return data.Addresses;
+            return response.Data[network];
         }
 
         #endregion
@@ -457,7 +447,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration? diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
+        public Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null)
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -487,7 +477,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration? diskConfig = null, string region = null, CloudIdentity identity = null)
+        public bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration diskConfig = null, string region = null, CloudIdentity identity = null)
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -853,7 +843,7 @@ namespace net.openstack.Providers.Rackspace
         #region Images
 
         /// <inheritdoc />
-        public IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -872,7 +862,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -890,23 +880,23 @@ namespace net.openstack.Providers.Rackspace
             return BuildCloudServersProviderAwareObject<ServerImage>(response.Data.Images, region, identity);
         }
 
-        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId, string imageName, ImageState imageStatus, DateTime? changesSince, string markerId, int? limit, ImageType imageType)
+        private Dictionary<string, string> BuildListImagesQueryStringParameters(string serverId, string imageName, ImageState imageStatus, DateTimeOffset? changesSince, string markerId, int? limit, ImageType imageType)
         {
             var queryParameters = new Dictionary<string, string>();
 
-            if(!string.IsNullOrWhiteSpace(serverId))
+            if(!string.IsNullOrEmpty(serverId))
                 queryParameters.Add("server", serverId);
 
-            if (!string.IsNullOrWhiteSpace(imageName))
+            if (!string.IsNullOrEmpty(imageName))
                 queryParameters.Add("name", imageName);
 
-            if (imageStatus != null && !string.IsNullOrWhiteSpace(imageStatus.Name))
+            if (imageStatus != null && !string.IsNullOrEmpty(imageStatus.Name))
                 queryParameters.Add("status", imageStatus.Name);
 
             if (changesSince != null)
                 queryParameters.Add("changes-since", changesSince.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
 
-            if (!string.IsNullOrWhiteSpace(markerId))
+            if (!string.IsNullOrEmpty(markerId))
                 queryParameters.Add("marker", markerId);
 
             if (limit > 0)
@@ -1359,16 +1349,32 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
-        #region Private methods
-        
-        protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
-        {
-            return base.GetPublicServiceEndpoint(identity, "compute", region);
-        }
+        #region Protected methods
 
-        protected override IComputeProvider BuildProvider(CloudIdentity identity)
+        /// <summary>
+        /// Gets the public service endpoint to use for Cloud Servers requests for the specified identity and region.
+        /// </summary>
+        /// <remarks>
+        /// This method uses <c>compute</c> for the service type, and <c>cloudServersOpenStack</c> for the preferred service name.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The public URL for the requested Cloud Servers endpoint.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected string GetServiceEndpoint(CloudIdentity identity, string region)
         {
-            return new CloudServersProvider(identity, IdentityProvider, RestService, _networkResponseMapper);
+            return base.GetPublicServiceEndpoint(identity, "compute", "cloudServersOpenStack", region);
         }
 
         #endregion

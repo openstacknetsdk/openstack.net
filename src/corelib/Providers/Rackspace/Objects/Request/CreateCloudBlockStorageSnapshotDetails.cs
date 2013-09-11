@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Request
 {
     using System;
+    using net.openstack.Core.Domain;
     using Newtonsoft.Json;
 
     /// <summary>

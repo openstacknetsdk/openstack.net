@@ -53,7 +53,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Servers-d1e2078.html">List Servers (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<SimpleServer> ListServers(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Returns a list of detailed information servers for servers in the account.
@@ -94,7 +94,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Servers-d1e2078.html">List Servers (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<Server> ListServersWithDetails(string imageId = null, string flavorId = null, string name = null, ServerState status = null, string markerId = null, int? limit = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates a new server.
@@ -124,7 +124,7 @@ namespace net.openstack.Core.Providers
         /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <c>null</c>, no files are injected.</param>
         /// <param name="attachToServiceNetwork"><c>true</c> if the private network will be attached to the newly created server; otherwise, <c>false</c>.</param>
         /// <param name="attachToPublicNetwork"><c>true</c> if the public network will be attached to the newly created server; otherwise, <c>false</c>.</param>
-        /// <param name="networks">A collection of IDs of networks to attach to the server. This is obtained from <see cref="Network.Id">Network.Id</see>.</param>
+        /// <param name="networks">A collection of IDs of networks to attach to the server. This is obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="NewServer"/> instance containing the details for the newly created server.</returns>
@@ -158,7 +158,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/CreateServers.html">Create Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration? diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the detailed information for a specific server.
@@ -420,7 +420,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Rebuild_Server-d1e3538.html">Rebuild Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration? diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
+        Server RebuildServer(string serverId, string serverName, string imageName, string flavor, string adminPassword, IPAddress accessIPv4 = null, IPAddress accessIPv6 = null, Metadata metadata = null, DiskConfiguration diskConfig = null, Personality personality = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Initiates an asynchronous resize of the specified server. A server resize is performed by
@@ -467,7 +467,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Resize_Server-d1e3707.html">Resize Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration? diskConfig = null, string region = null, CloudIdentity identity = null);
+        bool ResizeServer(string serverId, string serverName, string flavor, DiskConfiguration diskConfig = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Confirms a completed asynchronous server resize action.
@@ -539,7 +539,7 @@ namespace net.openstack.Core.Providers
         /// <param name="serverId">The server ID. This is obtained from <see cref="ServerBase.Id">ServerBase.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns>The root password is assigned for use during rescue mode.</returns>
+        /// <returns>The root password assigned for use during rescue mode.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="serverId"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serverId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
@@ -954,7 +954,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="ListImagesWithDetails"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Images-d1e4435.html">List Images (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<SimpleServerImage> ListImages(string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Lists detailed information for all available images.
@@ -988,7 +988,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="ListImages"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Images-d1e4435.html">List Images (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null);
+        IEnumerable<ServerImage> ListImagesWithDetails(string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, string markerId = null, int? limit = null, ImageType imageType = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets detailed information for the specified image.
@@ -1226,7 +1226,7 @@ namespace net.openstack.Core.Providers
         bool DeleteServerMetadataItem(string serverId, string key, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Gets the metadata associated with the specified server.
+        /// Gets the metadata associated with the specified image.
         /// </summary>
         /// <param name="imageId">The image ID. This is obtained from <see cref="SimpleServerImage.Id">SimpleServerImage.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
@@ -1249,7 +1249,7 @@ namespace net.openstack.Core.Providers
         Metadata ListImageMetadata(string imageId, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Sets the metadata associated with the specified server, replacing any existing metadata.
+        /// Sets the metadata associated with the specified image, replacing any existing metadata.
         /// </summary>
         /// <param name="imageId">The image ID. This is obtained from <see cref="SimpleServerImage.Id">SimpleServerImage.Id</see>.</param>
         /// <param name="metadata">The metadata to associate with the image.</param>
@@ -1281,7 +1281,7 @@ namespace net.openstack.Core.Providers
         bool SetImageMetadata(string imageId, Metadata metadata, string region = null, CloudIdentity identity = null);
 
         /// <summary>
-        /// Updates the metadata for the specified server.
+        /// Updates the metadata for the specified image.
         /// </summary>
         /// <remarks>
         /// For each item in <paramref name="metadata"/>, if the key exists, the value is updated; otherwise, the item is added.

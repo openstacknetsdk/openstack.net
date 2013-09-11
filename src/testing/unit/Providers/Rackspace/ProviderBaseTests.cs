@@ -330,15 +330,10 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             public Endpoint GetEndpoint(string serviceType, string region, CloudIdentity identity)
             {
-                return base.GetServiceEndpoint(identity, serviceType, region);
+                return base.GetServiceEndpoint(identity, serviceType, null, region);
             }
 
-            protected override IIdentityProvider BuildProvider(CloudIdentity identity)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+            public new Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
             {
                 return base.BuildOptionalParameterList(optionalParameters);
             }  

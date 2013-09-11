@@ -6,17 +6,23 @@
     /// <summary>
     /// Provides the CDN properties for a container in an Object Storage provider.
     /// </summary>
+    /// <remarks>
+    /// <note>
+    /// CDN-enabled containers are a Rackspace-specific extension to the OpenStack Object Storage Service.
+    /// </note>
+    /// </remarks>
+    /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
     [JsonObject(MemberSerialization.OptIn)]
     public class ContainerCDN
     {
         /// <summary>
-        /// The name of the container.
+        /// Gets the name of the container.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; private set; }
 
         /// <summary>
-        /// A streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <c>null</c>.
+        /// Gets a streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <c>null</c>.
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Streaming-CDN-Enabled_Containers-d1f3721.html">Streaming CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_streaming_uri")]
@@ -37,12 +43,14 @@
         /// </value>
         /// <seealso cref="O:IObjectStorageProvider.EnableCDNOnContainer"/>
         /// <seealso cref="IObjectStorageProvider.DisableCDNOnContainer"/>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_enabled")]
         public bool CDNEnabled { get; private set; }
 
         /// <summary>
         /// Gets the Time To Live (TTL) in seconds for a CDN-Enabled container.
         /// </summary>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("ttl")]
         public long Ttl { get; private set; }
 

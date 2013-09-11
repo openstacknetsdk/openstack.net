@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the state of a block storage snapshot.
@@ -10,14 +12,13 @@
     /// This class functions as a strongly-typed enumeration of known snapshot states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(SnapshotState.Converter))]
     public sealed class SnapshotState : IEquatable<SnapshotState>
     {
         private static readonly ConcurrentDictionary<string, SnapshotState> _states =
             new ConcurrentDictionary<string, SnapshotState>(StringComparer.OrdinalIgnoreCase);
         private static readonly SnapshotState _creating = FromName("CREATING");
         private static readonly SnapshotState _available = FromName("AVAILABLE");
-        private static readonly SnapshotState _attaching = FromName("ATTACHING");
-        private static readonly SnapshotState _inUse = FromName("IN-USE");
         private static readonly SnapshotState _deleting = FromName("DELETING");
         private static readonly SnapshotState _error = FromName("ERROR");
         private static readonly SnapshotState _errorDeleting = FromName("ERROR_DELETING");
@@ -79,28 +80,6 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating the snapshot is attaching to an instance.
-        /// </summary>
-        public static SnapshotState Attaching
-        {
-            get
-            {
-                return _attaching;
-            }
-        }
-
-        /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating the snapshot is attached to an instance.
-        /// </summary>
-        public static SnapshotState InUse
-        {
-            get
-            {
-                return _inUse;
-            }
-        }
-
-        /// <summary>
         /// Gets a <see cref="SnapshotState"/> indicating the snapshot is being deleted.
         /// </summary>
         public static SnapshotState Deleting
@@ -154,6 +133,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="SnapshotState"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<SnapshotState>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(SnapshotState obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override SnapshotState ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

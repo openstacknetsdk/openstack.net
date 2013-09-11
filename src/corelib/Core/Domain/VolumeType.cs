@@ -12,13 +12,15 @@
     public class VolumeType
     {
         /// <summary>
-        /// Gets the volume type ID.
+        /// Gets the unique identifier for this volume type.
+        /// <note type="warning">The value of this property is not defined. Do not use.</note>
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; private set; }
 
         /// <summary>
         /// Gets the name of the volume type.
+        /// <note type="warning">The value of this property is not defined. Do not use.</note>
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; private set; }

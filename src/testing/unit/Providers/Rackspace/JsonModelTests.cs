@@ -1,7 +1,10 @@
 ﻿namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 {
+    using System;
     using System.Net;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core.Domain;
+    using net.openstack.Core.Domain.Converters;
     using net.openstack.Providers.Rackspace.Objects.Request;
     using net.openstack.Providers.Rackspace.Objects.Response;
     using Newtonsoft.Json;
@@ -42,6 +45,121 @@
             string expectedJson = @"{""server"":{""name"":""new-name"",""accessIPv4"":""10.0.0.1"",""accessIPv6"":""2607:f0d0:1002:51::4""}}";
             string actual = JsonConvert.SerializeObject(request, Formatting.None);
             Assert.AreEqual(expectedJson, actual);
+        }
+
+        [TestMethod]
+        public void TestIPAddressDetailsConverter()
+        {
+            IPAddressDetailsConverter converter = new IPAddressDetailsConverter();
+
+            string json = @"{ ""version"" : 4, ""addr"" : ""10.0.0.1"" }";
+            IPAddress address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("10.0.0.1"), address);
+
+            json = @"{ ""version"" : 6, ""addr"" : ""::babe:4317:0A83"" }";
+            address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("::babe:4317:0A83"), address);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("10.0.0.1"), converter);
+            Assert.AreEqual(@"{""addr"":""10.0.0.1"",""version"":""4""}", json);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("::babe:4317:0A83"), converter);
+            Assert.AreEqual(@"{""addr"":""::babe:4317:a83"",""version"":""6""}", json);
+        }
+
+        [TestMethod]
+        public void TestIPAddressSimpleConverter()
+        {
+            IPAddressSimpleConverter converter = new IPAddressSimpleConverter();
+
+            string json = @"""10.0.0.1""";
+            IPAddress address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("10.0.0.1"), address);
+
+            json = @"""::babe:4317:0A83""";
+            address = JsonConvert.DeserializeObject<IPAddress>(json, converter);
+            Assert.AreEqual(IPAddress.Parse("::babe:4317:0A83"), address);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("10.0.0.1"), converter);
+            Assert.AreEqual(@"""10.0.0.1""", json);
+
+            json = JsonConvert.SerializeObject(IPAddress.Parse("::babe:4317:0A83"), converter);
+            Assert.AreEqual(@"""::babe:4317:a83""", json);
+        }
+
+        [TestMethod]
+        public void TestDiskConfigurationConversions()
+        {
+            TestExtensibleEnumSerialization(DiskConfiguration.Auto, "OTHER", DiskConfiguration.FromName);
+        }
+
+        [TestMethod]
+        public void TestImageState()
+        {
+            TestExtensibleEnumSerialization(ImageState.Active, "OTHER", ImageState.FromName);
+        }
+
+        [TestMethod]
+        public void TestImageType()
+        {
+            TestExtensibleEnumSerialization(ImageType.Base, "OTHER", ImageType.FromName);
+        }
+
+        [TestMethod]
+        public void TestRebootType()
+        {
+            TestExtensibleEnumSerialization(RebootType.Hard, "OTHER", RebootType.FromName);
+        }
+
+        [TestMethod]
+        public void TestServerState()
+        {
+            TestExtensibleEnumSerialization(ServerState.Build, "OTHER", ServerState.FromName);
+        }
+
+        [TestMethod]
+        public void TestSnapshotState()
+        {
+            TestExtensibleEnumSerialization(SnapshotState.Available, "OTHER", SnapshotState.FromName);
+        }
+
+        [TestMethod]
+        public void TestVolumeState()
+        {
+            TestExtensibleEnumSerialization(VolumeState.Creating, "OTHER", VolumeState.FromName);
+        }
+
+        private void TestExtensibleEnumSerialization<T>(T standardItem, string nonStandardName, Func<string, T> fromName)
+        {
+            if (fromName == null)
+                throw new ArgumentNullException("fromName");
+
+            T obj = JsonConvert.DeserializeObject<T>("null");
+            Assert.IsNull(obj);
+
+            obj = JsonConvert.DeserializeObject<T>(@"""""");
+            Assert.IsNull(obj);
+
+            // matching case, predefined value
+            obj = JsonConvert.DeserializeObject<T>('"' + standardItem.ToString() + '"');
+            Assert.AreEqual(standardItem, obj);
+
+            // different case, predefined value
+            Assert.AreNotEqual(standardItem.ToString(), standardItem.ToString().ToLowerInvariant());
+            obj = JsonConvert.DeserializeObject<T>('"' + standardItem.ToString().ToLowerInvariant() + '"');
+            Assert.AreEqual(standardItem, obj);
+
+            // new value
+            obj = JsonConvert.DeserializeObject<T>('"' + nonStandardName + '"');
+            Assert.AreEqual(fromName(nonStandardName), obj);
+
+            // different case, same as value encountered before
+            Assert.AreNotEqual(nonStandardName, nonStandardName.ToLowerInvariant());
+            obj = JsonConvert.DeserializeObject<T>('"' + nonStandardName.ToLowerInvariant() + '"');
+            Assert.AreEqual(fromName(nonStandardName), obj);
+
+            string json = JsonConvert.SerializeObject(standardItem);
+            Assert.AreEqual('"' + standardItem.ToString() + '"', json);
         }
     }
 }

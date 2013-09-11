@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the state of a block storage volume.
@@ -10,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known volume states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(VolumeState.Converter))]
     public sealed class VolumeState : IEquatable<VolumeState>
     {
         private static readonly ConcurrentDictionary<string, VolumeState> _states =
@@ -154,6 +157,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="VolumeState"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<VolumeState>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(VolumeState obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override VolumeState ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

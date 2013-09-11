@@ -6,6 +6,10 @@ using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
+    /// <summary>
+    /// Provides an implementation of <see cref="IObjectStorageValidator"/> for
+    /// operation with Rackspace's Cloud Files product.
+    /// </summary>
     public class CloudFilesValidator : IObjectStorageValidator
     {
         /// <summary>
@@ -31,8 +35,8 @@ namespace net.openstack.Providers.Rackspace.Validators
                 throw new ArgumentNullException("containerName");
 
             var containerNameString = string.Format("Container Name:[{0}]", containerName);
-            if (string.IsNullOrWhiteSpace(containerName))
-                throw new ArgumentNullException("ContainerName", "ERROR: Container Name cannot be Null.");
+            if (string.IsNullOrEmpty(containerName))
+                throw new ArgumentNullException("containerName", "ERROR: Container Name cannot be empty.");
             if (HttpUtility.UrlEncode(containerName).Length > 256)
                 throw new ContainerNameException(string.Format("ERROR: encoded URL Length greater than 256 char's. {0}", containerNameString));
             if (containerName.Contains("/"))

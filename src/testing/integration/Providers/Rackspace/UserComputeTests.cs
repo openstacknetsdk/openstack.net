@@ -37,7 +37,7 @@
         /// </summary>
         public const string UnitTestInterfacePrefix = "UnitTestInterface-";
 
-        public static IEnumerable<SimpleServer> ListAllServers(IComputeProvider provider, int? blockSize = null, string imageId = null, string flavorId = null, string name = null, ServerState status = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public static IEnumerable<SimpleServer> ListAllServers(IComputeProvider provider, int? blockSize = null, string imageId = null, string flavorId = null, string name = null, ServerState status = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
@@ -57,7 +57,7 @@
             } while (lastServer != null);
         }
 
-        public static IEnumerable<Server> ListAllServersWithDetails(IComputeProvider provider, int? blockSize = null, string imageId = null, string flavorId = null, string name = null, ServerState status = null, DateTime? changesSince = null, string region = null, CloudIdentity identity = null)
+        public static IEnumerable<Server> ListAllServersWithDetails(IComputeProvider provider, int? blockSize = null, string imageId = null, string flavorId = null, string name = null, ServerState status = null, DateTimeOffset? changesSince = null, string region = null, CloudIdentity identity = null)
         {
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
@@ -77,7 +77,7 @@
             } while (lastServer != null);
         }
 
-        public static IEnumerable<SimpleServerImage> ListAllImages(IComputeProvider provider, int? blockSize = null, string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public static IEnumerable<SimpleServerImage> ListAllImages(IComputeProvider provider, int? blockSize = null, string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
@@ -97,7 +97,7 @@
             } while (lastImage != null);
         }
 
-        public static IEnumerable<ServerImage> ListAllImagesWithDetails(IComputeProvider provider, int? blockSize = null, string server = null, string imageName = null, ImageState imageStatus = null, DateTime? changesSince = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
+        public static IEnumerable<ServerImage> ListAllImagesWithDetails(IComputeProvider provider, int? blockSize = null, string server = null, string imageName = null, ImageState imageStatus = null, DateTimeOffset? changesSince = null, ImageType imageType = null, string region = null, CloudIdentity identity = null)
         {
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");

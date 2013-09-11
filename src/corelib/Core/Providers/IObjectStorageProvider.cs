@@ -12,7 +12,7 @@ namespace net.openstack.Core.Providers
     /// <summary>
     /// Represents a provider for the OpenStack Object Storage service.
     /// </summary>
-    /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">Object Storage API v1 Reference</seealso>
+    /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">OpenStack Object Storage API v1 Reference</seealso>
     public interface IObjectStorageProvider
     {
         #region Container

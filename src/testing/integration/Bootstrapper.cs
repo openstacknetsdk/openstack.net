@@ -76,7 +76,7 @@ namespace Net.OpenStack.Testing.Integration
             this.Password = cloudIdentity.Password;
             this.Username = cloudIdentity.Username;
             this.TenantId = cloudIdentity.TenantId;
-            this.Domain = string.IsNullOrWhiteSpace(cloudIdentity.Domain) ? null : new Domain(cloudIdentity.Domain);
+            this.Domain = string.IsNullOrEmpty(cloudIdentity.Domain) ? null : new Domain(cloudIdentity.Domain);
         }
     }
 }

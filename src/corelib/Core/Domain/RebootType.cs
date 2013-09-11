@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using net.openstack.Core.Domain.Converters;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the type of a reboot operation.
@@ -10,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known reboot types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
+    [JsonConverter(typeof(RebootType.Converter))]
     public sealed class RebootType : IEquatable<RebootType>
     {
         private static readonly ConcurrentDictionary<string, RebootType> _types =
@@ -95,6 +98,35 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provides support for serializing and deserializing <see cref="RebootType"/>
+        /// objects to JSON string values.
+        /// </summary>
+        private sealed class Converter : SimpleStringJsonConverter<RebootType>
+        {
+            /// <remarks>
+            /// This method uses <see cref="Name"/> for serialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override string ConvertToString(RebootType obj)
+            {
+                return obj.Name;
+            }
+
+            /// <remarks>
+            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
+            /// </remarks>
+            /// <inheritdoc/>
+            protected override RebootType ConvertToObject(string str)
+            {
+                if (string.IsNullOrEmpty(str))
+                    return null;
+
+                return FromName(str);
+            }
         }
     }
 }

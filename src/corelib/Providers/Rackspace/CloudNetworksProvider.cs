@@ -171,18 +171,32 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
+        /// <summary>
+        /// Gets the public service endpoint to use for Cloud Networks requests for the specified identity and region.
+        /// </summary>
+        /// <remarks>
+        /// This method uses <c>compute</c> for the service type, and <c>cloudServersOpenStack</c> for the preferred service name.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The public URL for the requested Cloud Networks endpoint.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected string GetServiceEndpoint(CloudIdentity identity, string region)
         {
-            return base.GetPublicServiceEndpoint(identity, "compute", region);
-        }
-
-        protected override INetworksProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudNetworksProvider(identity, IdentityProvider, RestService);
+            return base.GetPublicServiceEndpoint(identity, "compute", "cloudServersOpenStack", region);
         }
 
         #endregion
-
-        
     }
 }

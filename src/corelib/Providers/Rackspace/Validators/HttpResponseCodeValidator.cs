@@ -6,7 +6,11 @@ using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
-    internal class HttpResponseCodeValidator : IHttpResponseCodeValidator
+    /// <summary>
+    /// Provides an implementation of <see cref="IHttpResponseCodeValidator"/> for
+    /// operation with Rackspace's products.
+    /// </summary>
+    public class HttpResponseCodeValidator : IHttpResponseCodeValidator
     {
         /// <summary>
         /// A default instance of <see cref="HttpResponseCodeValidator"/>.

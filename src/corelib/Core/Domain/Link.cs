@@ -5,6 +5,7 @@ namespace net.openstack.Core.Domain
     /// <summary>
     /// Represents a link associated with a resource.
     /// </summary>
+    /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/LinksReferences.html">Links and References (OpenStack Compute API v2 and Extensions Reference)</seealso>
     [JsonObject(MemberSerialization.OptIn)]
     public class Link
     {
