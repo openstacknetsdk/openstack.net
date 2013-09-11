@@ -48,12 +48,15 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Caching\ICache`1.cs" />
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
-    <Compile Include="Core\Domain\AddressDetails.cs" />
+    <Compile Include="Core\Domain\Converters\PhysicalAddressSimpleConverter.cs" />
+    <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
     <Compile Include="Core\Domain\IPAddressList.cs" />
+    <Compile Include="Core\Domain\PowerState.cs" />
     <Compile Include="Core\Domain\SnapshotState.cs" />
     <Compile Include="Core\Domain\Converters\IPAddressDetailsConverter.cs" />
     <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
@@ -64,8 +67,10 @@
     <Compile Include="Core\Domain\SimpleServer.cs" />
     <Compile Include="Core\Domain\SimpleServerImage.cs" />
     <Compile Include="Core\Domain\Snapshot.cs" />
+    <Compile Include="Core\Domain\TaskState.cs" />
     <Compile Include="Core\Domain\VirtualInterface.cs" />
     <Compile Include="Core\Domain\VirtualInterfaceAddress.cs" />
+    <Compile Include="Core\Domain\VirtualMachineState.cs" />
     <Compile Include="Core\Domain\Volume.cs" />
     <Compile Include="Core\Domain\VolumeState.cs" />
     <Compile Include="Core\Domain\VolumeType.cs" />
@@ -95,8 +100,6 @@
     <Compile Include="Core\Domain\Link.cs" />
     <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
     <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
-    <Compile Include="Core\Domain\Mapping\NetworkResponseJsonMapper.cs" />
-    <Compile Include="Core\Domain\Network.cs" />
     <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\ObjectStore.cs" />
     <Compile Include="Core\Domain\Personality.cs" />
@@ -207,7 +210,6 @@
     <Compile Include="Providers\Rackspace\Objects\Response\MetaDataResponse.cs" />
     <Compile Include="Core\Domain\Server.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ServerDetailsResponse.cs" />
-    <Compile Include="Core\Domain\ServerIps.cs" />
     <Compile Include="Core\Domain\User.cs" />
     <Compile Include="Core\Providers\IComputeProvider.cs" />
     <Compile Include="Core\Domain\IdentityToken.cs" />

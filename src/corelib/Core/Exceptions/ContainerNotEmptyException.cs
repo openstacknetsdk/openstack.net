@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using net.openstack.Core.Validators;
+using net.openstack.Core.Providers;
 
 namespace net.openstack.Core.Exceptions
 {
     /// <summary>
     /// Thrown when an Object Storage container operation fails because the specified container was not empty.
     /// </summary>
-    /// <seealso cref="IObjectStorageValidator.DeleteContainer"/>
+    /// <seealso cref="IObjectStorageProvider.DeleteContainer"/>
     [Serializable]
     public class ContainerNotEmptyException : InvalidOperationException
     {

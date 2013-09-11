@@ -6,29 +6,38 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Represents an image type.
+    /// Represents the power state of a server.
     /// </summary>
     /// <remarks>
-    /// This class functions as a strongly-typed enumeration of known image types,
-    /// with added support for unknown types returned by a server extension.
+    /// This class functions as a strongly-typed enumeration of known power states,
+    /// with added support for unknown states returned by a server extension.
+    ///
+    /// <note>
+    /// This property is defined by the Rackspace-specific Extended Status Extension
+    /// to the OpenStack Compute API. The API does not regulate the status values,
+    /// so it is possible that values can be added, removed, or renamed.
+    /// </note>
     /// </remarks>
-    [JsonConverter(typeof(ImageType.Converter))]
-    public sealed class ImageType : IEquatable<ImageType>
+    /// <seealso cref="Server.PowerState"/>
+    /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#power_state">OS-EXT-STS:power_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    [JsonConverter(typeof(PowerState.Converter))]
+    public sealed class PowerState : IEquatable<PowerState>
     {
-        private static readonly ConcurrentDictionary<string, ImageType> _types =
-            new ConcurrentDictionary<string, ImageType>(StringComparer.OrdinalIgnoreCase);
-        private static readonly ImageType _base = FromName("BASE");
-        private static readonly ImageType _snapshot = FromName("SNAPSHOT");
+        private static readonly ConcurrentDictionary<string, PowerState> _states =
+            new ConcurrentDictionary<string, PowerState>(StringComparer.OrdinalIgnoreCase);
+        private static readonly PowerState _poweredDown = FromName("0");
+        private static readonly PowerState _poweredUp = FromName("1");
+        private static readonly PowerState _shutOff = FromName("4");
 
         private readonly string _name;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageType"/> class with the specified name.
+        /// Initializes a new instance of the <see cref="PowerState"/> class with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-        private ImageType(string name)
+        private PowerState(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -39,45 +48,56 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="ImageType"/> instance with the specified name.
+        /// Gets the <see cref="PowerState"/> instance with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-        public static ImageType FromName(string name)
+        public static PowerState FromName(string name)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("name cannot be empty");
 
-            return _types.GetOrAdd(name, i => new ImageType(i));
+            return _states.GetOrAdd(name, i => new PowerState(i));
         }
 
         /// <summary>
-        /// Gets an <see cref="ImageType"/> representing a base image.
+        /// Gets a <see cref="PowerState"/> instance representing <placeholder>description</placeholder>.
         /// </summary>
-        public static ImageType Base
+        public static PowerState PoweredDown
         {
             get
             {
-                return _base;
+                return _poweredDown;
             }
         }
 
         /// <summary>
-        /// Gets an <see cref="ImageType"/> representing an image created as a snapshot.
+        /// Gets a <see cref="PowerState"/> instance representing <placeholder>description</placeholder>.
         /// </summary>
-        public static ImageType Snapshot
+        public static PowerState PoweredUp
         {
             get
             {
-                return _snapshot;
+                return _poweredUp;
             }
         }
 
         /// <summary>
-        /// Gets the canonical name of this image type.
+        /// Gets a <see cref="PowerState"/> instance representing <placeholder>description</placeholder>.
+        /// </summary>
+        public static PowerState ShutOff
+        {
+            get
+            {
+                return _shutOff;
+            }
+        }
+
+        /// <summary>
+        /// Gets the canonical name of this power state.
         /// </summary>
         public string Name
         {
@@ -88,7 +108,7 @@
         }
 
         /// <inheritdoc/>
-        public bool Equals(ImageType other)
+        public bool Equals(PowerState other)
         {
             return this == other;
         }
@@ -100,16 +120,16 @@
         }
 
         /// <summary>
-        /// Provides support for serializing and deserializing <see cref="ImageType"/>
+        /// Provides support for serializing and deserializing <see cref="PowerState"/>
         /// objects to JSON string values.
         /// </summary>
-        private sealed class Converter : SimpleStringJsonConverter<ImageType>
+        private sealed class Converter : SimpleStringJsonConverter<PowerState>
         {
             /// <remarks>
             /// This method uses <see cref="Name"/> for serialization.
             /// </remarks>
             /// <inheritdoc/>
-            protected override string ConvertToString(ImageType obj)
+            protected override string ConvertToString(PowerState obj)
             {
                 return obj.Name;
             }
@@ -119,7 +139,7 @@
             /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
             /// </remarks>
             /// <inheritdoc/>
-            protected override ImageType ConvertToObject(string str)
+            protected override PowerState ConvertToObject(string str)
             {
                 if (string.IsNullOrEmpty(str))
                     return null;

@@ -433,7 +433,7 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             // If the user specifies a password, then the password will not be in the response, so we need to fill it in on the return object.
-            if (string.IsNullOrWhiteSpace(response.Data.NewUser.Password))
+            if (string.IsNullOrEmpty(response.Data.NewUser.Password))
                 response.Data.NewUser.Password = newUser.Password;
 
             return response.Data.NewUser;
@@ -599,7 +599,7 @@ namespace net.openstack.Providers.Rackspace
             var headers = new Dictionary<string, string>();
 
             if (!isTokenRequest)
-                headers["X-Auth-Token"] = string.IsNullOrWhiteSpace(token) ? GetToken(identity).Id : token;
+                headers["X-Auth-Token"] = string.IsNullOrEmpty(token) ? GetToken(identity).Id : token;
 
             string bodyStr = null;
             if (body != null)
@@ -636,7 +636,7 @@ namespace net.openstack.Providers.Rackspace
             if (optionalParameters == null)
                 return null;
 
-            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrWhiteSpace(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrEmpty(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
 
             if (!paramList.Any())
                 return null;

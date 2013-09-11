@@ -49,8 +49,8 @@
         /// <remarks>
         /// This constructor implements the <see cref="ISerializable"/> interface for the <see cref="RestWebHeaderCollection"/> class.
         /// </remarks>
-        /// <exception cref="ArgumentException"><paramref name="headerName"/> contains invalid characters.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="headerName"/> is a null reference or <see cref="string.Empty"/>.</exception>
+        /// <exception cref="ArgumentException">If a serialized header name contains invalid characters.</exception>
+        /// <exception cref="ArgumentNullException">If a serialized header name is a null reference or <see cref="string.Empty"/>.</exception>
         protected RestWebHeaderCollection(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

@@ -9,11 +9,6 @@
     public enum ObjectStore
     {
         /// <summary>
-        /// <placeholder>What should we do with this?</placeholder>
-        /// </summary>
-        Unknown,
-
-        /// <summary>
         /// The container was created.
         /// </summary>
         /// <seealso cref="IObjectStorageProvider.CreateContainer"/>

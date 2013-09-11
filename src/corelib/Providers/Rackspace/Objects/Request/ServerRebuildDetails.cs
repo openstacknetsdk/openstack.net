@@ -38,7 +38,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.
         /// </summary>
         [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Include)]
-        public string DiskConfig { get; private set; }
+        public DiskConfiguration DiskConfig { get; private set; }
 
         /// <summary>
         /// Gets the new admin password for the server.
@@ -102,7 +102,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <para>-or-</para>
         /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
         /// </exception>
-        public ServerRebuildDetails(string name, string imageName, string flavor, string adminPassword, IPAddress accessIPv4, IPAddress accessIPv6, Metadata metadata, DiskConfiguration? diskConfig, Personality personality)
+        public ServerRebuildDetails(string name, string imageName, string flavor, string adminPassword, IPAddress accessIPv4, IPAddress accessIPv6, Metadata metadata, DiskConfiguration diskConfig, Personality personality)
         {
             if (imageName == null)
                 throw new ArgumentNullException("imageName");
@@ -128,7 +128,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
             AccessIPv4 = accessIPv4;
             AccessIPv6 = accessIPv6;
             Metadata = metadata;
-            DiskConfig = diskConfig != null ? diskConfig.ToString().ToUpperInvariant() : null;
+            DiskConfig = diskConfig;
             Personality = personality;
         }
     }

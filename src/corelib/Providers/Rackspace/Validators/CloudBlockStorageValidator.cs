@@ -4,6 +4,10 @@ using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Providers.Rackspace.Validators
 {
+    /// <summary>
+    /// Provides an implementation of <see cref="IBlockStorageValidator"/> for
+    /// operation with Rackspace's Cloud Block Storage product.
+    /// </summary>
     public class CloudBlockStorageValidator : IBlockStorageValidator
     {
         /// <summary>

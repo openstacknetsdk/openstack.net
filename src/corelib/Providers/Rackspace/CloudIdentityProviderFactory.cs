@@ -25,8 +25,8 @@ namespace net.openstack.Providers.Rackspace
             if (tokenCache == null)
                 tokenCache = UserAccessCache.Instance;
 
-            USIdentityUrlBase = string.IsNullOrWhiteSpace(usInstanceUrlBase) ? "https://identity.api.rackspacecloud.com" : usInstanceUrlBase;
-            LONIdentityUrlBase = string.IsNullOrWhiteSpace(ukInstanceUrlBase) ? "https://lon.identity.api.rackspacecloud.com" : ukInstanceUrlBase;
+            USIdentityUrlBase = string.IsNullOrEmpty(usInstanceUrlBase) ? "https://identity.api.rackspacecloud.com" : usInstanceUrlBase;
+            LONIdentityUrlBase = string.IsNullOrEmpty(ukInstanceUrlBase) ? "https://lon.identity.api.rackspacecloud.com" : ukInstanceUrlBase;
 
             _restService = restService;
             _tokenCache = tokenCache;

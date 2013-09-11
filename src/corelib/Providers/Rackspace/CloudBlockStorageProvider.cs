@@ -6,6 +6,7 @@ using System.Threading;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
@@ -262,11 +263,22 @@ namespace net.openstack.Providers.Rackspace
             return volumeInfo;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Represents errors that occur when a volume enters an error state while waiting
+        /// on it to enter a particular state.
+        /// </summary>
         public class VolumeEnteredErrorStateException : Exception
         {
+            /// <summary>
+            /// Gets the error state the volume entered.
+            /// </summary>
             public VolumeState Status { get; private set; }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="VolumeEnteredErrorStateException"/> with the
+            /// specified volume state.
+            /// </summary>
+            /// <param name="status">The erroneous volume state.</param>
             public VolumeEnteredErrorStateException(VolumeState status)
                 : base(string.Format("The volume entered an error state: '{0}'", status))
             {
@@ -408,11 +420,22 @@ namespace net.openstack.Providers.Rackspace
             return snapshotInfo;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Represents errors that occur when a snapshot enters an error state while waiting
+        /// on it to enter a particular state.
+        /// </summary>
         public class SnapshotEnteredErrorStateException : Exception
         {
+            /// <summary>
+            /// Gets the error state the snapshot entered.
+            /// </summary>
             public SnapshotState Status { get; private set; }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SnapshotEnteredErrorStateException"/> with the
+            /// specified snapshot state.
+            /// </summary>
+            /// <param name="status">The erroneous snapshot state.</param>
             public SnapshotEnteredErrorStateException(SnapshotState status)
                 : base(string.Format("The snapshot entered an error state: '{0}'", status))
             {
@@ -424,9 +447,30 @@ namespace net.openstack.Providers.Rackspace
 
         #region Private methods
 
-        protected string GetServiceEndpoint(CloudIdentity identity = null, string region = null)
+        /// <summary>
+        /// Gets the public service endpoint to use for Cloud Block Storage requests for the specified identity and region.
+        /// </summary>
+        /// <remarks>
+        /// This method uses <c>volume</c> for the service type, and <c>cloudBlockStorage</c> for the preferred service name.
+        /// </remarks>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <returns>The public URL for the requested Cloud Block Storage endpoint.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// </exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
+        /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected string GetServiceEndpoint(CloudIdentity identity, string region)
         {
-            return base.GetPublicServiceEndpoint(identity, "volume", region);
+            return base.GetPublicServiceEndpoint(identity, "volume", "cloudBlockStorage", region);
         }
 
         private bool WaitForItemToBeDeleted<T>(Func<string, string, CloudIdentity, T> retrieveItemMethod, string id, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null)
@@ -451,10 +495,6 @@ namespace net.openstack.Providers.Rackspace
             return false;
         }
 
-        protected override IBlockStorageProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudBlockStorageProvider(identity, IdentityProvider, RestService, _cloudBlockStorageValidator);
-        }
         #endregion
 
         

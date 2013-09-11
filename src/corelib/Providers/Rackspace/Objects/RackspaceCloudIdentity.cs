@@ -2,6 +2,8 @@
 
 namespace net.openstack.Providers.Rackspace.Objects
 {
+    using System;
+
     /// <summary>
     /// Extends the <see cref="CloudIdentity"/> class by adding support for specifying
     /// a <see cref="CloudInstance"/> and <see cref="Domain"/> for the identity.
@@ -26,6 +28,9 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <exception cref="ArgumentNullException">If <paramref name="cloudIdentity"/> is <c>null</c>.</exception>
         public RackspaceCloudIdentity(CloudIdentity cloudIdentity) : this()
         {
+            if (cloudIdentity == null)
+                throw new ArgumentNullException("cloudIdentity");
+
             this.Username = cloudIdentity.Username;
             this.Password = cloudIdentity.Password;
             this.APIKey = cloudIdentity.APIKey;
@@ -39,7 +44,7 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// to an <em>account</em>), so any changes made to this property value will not be
         /// reflected in the account.
         ///
-        /// <para>The default value is <see cref="CloudInstance.Default"/>.</para>
+        /// <para>The default value is <see cref="net.openstack.Providers.Rackspace.Objects.CloudInstance.Default"/>.</para>
         /// </remarks>
         public CloudInstance CloudInstance { get; set; }
 
@@ -62,11 +67,16 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <summary>
         /// The Rackspace cloud for US-based accounts.
         /// </summary>
-        Default,
+        US,
 
         /// <summary>
         /// The Rackspace cloud for UK-based accounts.
         /// </summary>
         UK,
+
+        /// <summary>
+        /// The default Rackspace cloud, which is currently equal to <see cref="US"/>.
+        /// </summary>
+        Default = US,
     }
 }
