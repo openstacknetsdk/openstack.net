@@ -65,6 +65,7 @@
     <Compile Include="Providers\Rackspace\JsonModelTests.cs" />
     <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
     <Compile Include="Providers\Rackspace\ProviderBaseTests.cs" />
+    <Compile Include="Providers\Rackspace\SerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
