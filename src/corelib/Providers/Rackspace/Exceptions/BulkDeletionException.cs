@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Security;
 using net.openstack.Providers.Rackspace.Objects;
 
 namespace net.openstack.Providers.Rackspace.Exceptions
@@ -12,10 +11,19 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     [Serializable]
     public class BulkDeletionException : Exception
     {
+        [NonSerialized]
+        private ExceptionData _state;
+
         /// <summary>
         /// Gets the detailed results of the bulk delete operation.
         /// </summary>
-        public BulkDeletionResults Results { get; private set; }
+        public BulkDeletionResults Results
+        {
+            get
+            {
+                return _state.Results;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BulkDeletionException"/> class
@@ -41,34 +49,23 @@ namespace net.openstack.Providers.Rackspace.Exceptions
             if (string.IsNullOrEmpty(status))
                 throw new ArgumentException("status cannot be empty");
 
-            Results = results;
+            _state.Results = results;
+            SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BulkDeletionException"/> class with
-        /// serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
-        protected BulkDeletionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        [Serializable]
+        private struct ExceptionData : ISafeSerializationData
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            public BulkDeletionResults Results
+            {
+                get;
+                set;
+            }
 
-            Results = (BulkDeletionResults)info.GetValue("BulkDeletionResults", typeof(BulkDeletionResults));
-        }
-
-        /// <inheritdoc/>
-        [SecurityCritical]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException("info");
-
-            base.GetObjectData(info, context);
-            info.AddValue("BulkDeletionResults", Results);
+            void ISafeSerializationData.CompleteDeserialization(object deserialized)
+            {
+                ((BulkDeletionException)deserialized)._state = this;
+            }
         }
     }
 }
