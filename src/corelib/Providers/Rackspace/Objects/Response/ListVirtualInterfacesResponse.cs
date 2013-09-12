@@ -8,6 +8,6 @@
     internal class ListVirtualInterfacesResponse
     {
         [JsonProperty("virtual_interfaces")]
-        public IEnumerable<VirtualInterface> VirtualInterfaces { get; set; }
+        public IEnumerable<VirtualInterface> VirtualInterfaces { get; private set; }
     }
 }

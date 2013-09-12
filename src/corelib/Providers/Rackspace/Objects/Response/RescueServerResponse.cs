@@ -6,6 +6,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     internal class RescueServerResponse
     {
         [JsonProperty("adminPass")]
-        public string AdminPassword { get; set; }
+        public string AdminPassword { get; private set; }
     }
 }

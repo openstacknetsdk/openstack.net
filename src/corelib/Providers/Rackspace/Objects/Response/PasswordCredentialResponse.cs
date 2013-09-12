@@ -7,6 +7,6 @@
     internal class PasswordCredentialResponse
     {
         [JsonProperty("passwordCredentials")]
-        public PasswordCredential PasswordCredential { get; set; }
+        public PasswordCredential PasswordCredential { get; private set; }
     }
 }

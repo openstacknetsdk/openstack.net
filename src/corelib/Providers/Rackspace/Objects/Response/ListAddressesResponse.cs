@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class ListAddressesResponse
     {
-        public ServerAddresses Addresses { get; set; }
+        public ServerAddresses Addresses { get; private set; }
     }
 }

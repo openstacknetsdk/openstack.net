@@ -7,6 +7,6 @@
     internal class ListCloudNetworksResponse
     {
         [JsonProperty("networks")]
-        public CloudNetwork[] Networks { get; set; }
+        public CloudNetwork[] Networks { get; private set; }
     }
 }

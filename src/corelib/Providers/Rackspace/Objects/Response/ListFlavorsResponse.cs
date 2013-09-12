@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class ListFlavorsResponse
     {
-        public Flavor[] Flavors { get; set; }
+        public Flavor[] Flavors { get; private set; }
     }
 }

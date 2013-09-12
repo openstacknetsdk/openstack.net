@@ -8,6 +8,6 @@
     internal class ServerVolumeListResponse
     {
         [JsonProperty("volumeAttachments")]
-        public IEnumerable<ServerVolume> ServerVolumes { get; set; }
+        public IEnumerable<ServerVolume> ServerVolumes { get; private set; }
     }
 }

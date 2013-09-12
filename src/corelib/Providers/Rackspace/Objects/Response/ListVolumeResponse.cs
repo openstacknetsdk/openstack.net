@@ -7,6 +7,6 @@
     internal class ListVolumeResponse
     {
         [JsonProperty("volumes")]
-        public Volume[] Volumes { get; set; }
+        public Volume[] Volumes { get; private set; }
     }
 }

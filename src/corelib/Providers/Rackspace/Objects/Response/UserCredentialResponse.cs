@@ -8,13 +8,13 @@
     internal class UserCredentialResponse
     {
         [JsonProperty("RAX-KSKEY:apiKeyCredentials")]
-        public UserCredential UserCredential { get; set; }
+        public UserCredential UserCredential { get; private set; }
     }
     
     [JsonObject(MemberSerialization.OptIn)]
     internal class UserCredentialsResponse
     {
         [JsonProperty("credentials")]
-        public List<UserCredential> Credentials { get; set; }
+        public List<UserCredential> Credentials { get; private set; }
     }
 }

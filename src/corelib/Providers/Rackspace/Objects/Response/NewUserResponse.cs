@@ -7,6 +7,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     internal class NewUserResponse
     {
         [JsonProperty("user")]
-        public NewUser NewUser { get; set; }
+        public NewUser NewUser { get; private set; }
     }
 }

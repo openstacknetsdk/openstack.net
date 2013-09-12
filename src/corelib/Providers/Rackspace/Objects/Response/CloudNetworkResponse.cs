@@ -7,6 +7,6 @@
     internal class CloudNetworkResponse
     {
         [JsonProperty("network")]
-        public CloudNetwork Network { get; set; }
+        public CloudNetwork Network { get; private set; }
     }
 }

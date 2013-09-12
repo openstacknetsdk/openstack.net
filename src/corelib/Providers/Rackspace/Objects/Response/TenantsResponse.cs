@@ -8,6 +8,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class TenantsResponse
     {
-        public Tenant[] Tenants { get; set; }
+        public Tenant[] Tenants { get; private set; }
     }
 }

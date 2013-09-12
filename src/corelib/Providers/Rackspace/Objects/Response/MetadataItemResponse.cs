@@ -7,6 +7,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     internal class MetadataItemResponse
     {
         [JsonProperty("meta")]
-        public Metadata Metadata { get; set; }
+        public Metadata Metadata { get; private set; }
     }
 }

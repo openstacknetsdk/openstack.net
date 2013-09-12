@@ -7,6 +7,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     internal class ServerVolumeResponse
     {
         [JsonProperty("volumeAttachment")]
-        public ServerVolume ServerVolume { get; set; }
+        public ServerVolume ServerVolume { get; private set; }
     }
 }

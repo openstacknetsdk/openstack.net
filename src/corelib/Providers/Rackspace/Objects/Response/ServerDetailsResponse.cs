@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class ServerDetailsResponse
     {
-        public Server Server { get; set; }
+        public Server Server { get; private set; }
     }
 }

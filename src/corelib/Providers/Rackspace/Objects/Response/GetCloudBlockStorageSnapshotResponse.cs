@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class GetCloudBlockStorageSnapshotResponse
     {
-        public Snapshot Snapshot { get; set; }
+        public Snapshot Snapshot { get; private set; }
     }                                     
 }

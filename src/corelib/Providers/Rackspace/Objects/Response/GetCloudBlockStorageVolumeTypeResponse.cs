@@ -7,6 +7,6 @@
     internal class GetCloudBlockStorageVolumeTypeResponse
     {
         [JsonProperty("volume_type")]
-        public VolumeType VolumeType { get; set; }
+        public VolumeType VolumeType { get; private set; }
     }
 }

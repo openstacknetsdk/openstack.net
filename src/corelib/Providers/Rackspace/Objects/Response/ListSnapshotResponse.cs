@@ -7,6 +7,6 @@
     internal class ListSnapshotResponse
     {
         [JsonProperty("snapshots")]
-        public Snapshot[] Snapshots { get; set; }
+        public Snapshot[] Snapshots { get; private set; }
     }
 }

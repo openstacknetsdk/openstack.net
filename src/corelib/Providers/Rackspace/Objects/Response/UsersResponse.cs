@@ -4,6 +4,6 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
 {
     internal class UsersResponse
     {
-        public User[] Users { get; set; }
+        public User[] Users { get; private set; }
     }
 }
