@@ -6,7 +6,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     [JsonObject(MemberSerialization.OptIn)]
     internal class RolesResponse
     {
-        [JsonProperty]
+        [JsonProperty("roles")]
         public Role[] Roles { get; private set; }
 
         [JsonProperty("roles_links")]
@@ -16,7 +16,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     [JsonObject(MemberSerialization.OptIn)]
     internal class RoleResponse
     {
-        [JsonProperty]
+        [JsonProperty("role")]
         public Role Role { get; private set; }
     }
 }
