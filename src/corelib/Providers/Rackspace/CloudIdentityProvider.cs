@@ -124,6 +124,9 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc/>
         public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
         {
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+
             var provider = GetProvider(identity);
             return provider.ListRoles(serviceId, markerId, limit, identity);
         }

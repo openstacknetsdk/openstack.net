@@ -4,10 +4,17 @@
     using net.openstack.Core.Domain;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// This models the JSON response used for the List Volume Attachments request.
+    /// </summary>
+    /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/List_Volume_Attachments.html">List Volume Attachments (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ServerVolumeListResponse
     {
+        /// <summary>
+        /// Gets a collection of information about the volume attachments.
+        /// </summary>
         [JsonProperty("volumeAttachments")]
-        public IEnumerable<ServerVolume> ServerVolumes { get; set; }
+        public IEnumerable<ServerVolume> ServerVolumes { get; private set; }
     }
 }

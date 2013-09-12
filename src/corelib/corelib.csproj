@@ -186,7 +186,6 @@
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\IProviderFactory.cs" />
     <Compile Include="Core\Domain\NewServer.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Response\ListAddressesByNetworkResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListAddressesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorDetailsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorsResponse.cs" />
