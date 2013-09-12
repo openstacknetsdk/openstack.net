@@ -8,5 +8,5 @@
     {
         [JsonProperty("snapshot")]
         public Snapshot Snapshot { get; private set; }
-    }                                     
+    }
 }

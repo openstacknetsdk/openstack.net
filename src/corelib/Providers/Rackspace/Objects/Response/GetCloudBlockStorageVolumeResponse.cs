@@ -8,5 +8,5 @@
     {
         [JsonProperty("volume")]
         public Volume Volume { get; private set; }
-    }                                     
+    }
 }
