@@ -1,10 +1,19 @@
-using System;
-using net.openstack.Core.Domain;
-
 namespace net.openstack.Providers.Rackspace.Objects.Response
 {
+    using net.openstack.Core.Domain;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// This models the JSON response used for the List Metadata request.
+    /// </summary>
+    /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Metadata-d1e5089.html">List Metadata (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    [JsonObject(MemberSerialization.OptIn)]
     internal class MetaDataResponse
     {
-        public Metadata Metadata { get; set; }
+        /// <summary>
+        /// Gets the metadata information.
+        /// </summary>
+        [JsonProperty("metadata")]
+        public Metadata Metadata { get; private set; }
     }
 }
