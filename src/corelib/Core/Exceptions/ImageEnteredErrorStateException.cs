@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Security;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Providers;
 
 namespace net.openstack.Core.Exceptions
 {
@@ -13,14 +11,19 @@ namespace net.openstack.Core.Exceptions
     [Serializable]
     public class ImageEnteredErrorStateException : Exception
     {
+        [NonSerialized]
+        private ExceptionData _state;
+
         /// <summary>
         /// The state of the image.
         /// </summary>
         /// <seealso cref="ImageState"/>
         public ImageState Status
         {
-            get;
-            private set;
+            get
+            {
+                return _state.Status;
+            }
         }
 
         /// <summary>
@@ -31,34 +34,23 @@ namespace net.openstack.Core.Exceptions
         public ImageEnteredErrorStateException(ImageState status)
             : base(string.Format("The image entered an error state: '{0}'", status))
         {
-            Status = status;
+            _state.Status = status;
+            SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageEnteredErrorStateException"/> class with
-        /// serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
-        protected ImageEnteredErrorStateException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        [Serializable]
+        private struct ExceptionData : ISafeSerializationData
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            public ImageState Status
+            {
+                get;
+                set;
+            }
 
-            Status = ImageState.FromName((string)info.GetValue("Status", typeof(string)));
-        }
-
-        /// <inheritdoc/>
-        [SecurityCritical]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException("info");
-
-            base.GetObjectData(info, context);
-            info.AddValue("Status", Status.Name);
+            void ISafeSerializationData.CompleteDeserialization(object deserialized)
+            {
+                ((ImageEnteredErrorStateException)deserialized)._state = this;
+            }
         }
     }
 }

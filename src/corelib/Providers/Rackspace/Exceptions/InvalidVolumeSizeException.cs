@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Security;
 using net.openstack.Core.Validators;
 
 namespace net.openstack.Providers.Rackspace.Exceptions
@@ -12,10 +11,19 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     [Serializable]
     public class InvalidVolumeSizeException : Exception
     {
+        [NonSerialized]
+        private ExceptionData _state;
+
         /// <summary>
         /// Gets the requested volume size.
         /// </summary>
-        public int Size { get; private set; }
+        public int Size
+        {
+            get
+            {
+                return _state.Size;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidVolumeSizeException"/> class
@@ -25,34 +33,23 @@ namespace net.openstack.Providers.Rackspace.Exceptions
         public InvalidVolumeSizeException(int size)
             : base(string.Format("The volume size value must be between 100 and 1000. The size requested was: {0}", size))
         {
-            Size = size;
+            _state.Size = size;
+            SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidVolumeSizeException"/> class with
-        /// serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
-        protected InvalidVolumeSizeException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        [Serializable]
+        private struct ExceptionData : ISafeSerializationData
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            public int Size
+            {
+                get;
+                set;
+            }
 
-            Size = info.GetInt32("VolumeSize");
-        }
-
-        /// <inheritdoc/>
-        [SecurityCritical]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException("info");
-
-            base.GetObjectData(info, context);
-            info.AddValue("VolumeSize", Size);
+            void ISafeSerializationData.CompleteDeserialization(object deserialized)
+            {
+                ((InvalidVolumeSizeException)deserialized)._state = this;
+            }
         }
     }
 }

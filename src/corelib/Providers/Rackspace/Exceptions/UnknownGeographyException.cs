@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.Serialization;
-using System.Security;
 using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace.Objects;
 
@@ -13,47 +12,46 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     [Serializable]
     public class UnknownGeographyException : NotSupportedException
     {
+        [NonSerialized]
+        private ExceptionData _state;
+
         /// <summary>
         /// Gets the requested geography.
         /// </summary>
         /// <seealso cref="CloudInstance"/>
-        public string Geo { get; private set; }
+        public string Geo
+        {
+            get
+            {
+                return _state.Geo;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownGeographyException"/> class
         /// with the specified geography.
         /// </summary>
         /// <param name="geo">The requested geography which is not supported.</param>
-        public UnknownGeographyException(string geo) : base(string.Format("Unknown Geography: {0}", geo))
+        public UnknownGeographyException(string geo)
+            : base(string.Format("Unknown Geography: {0}", geo))
         {
-            Geo = geo;
+            _state.Geo = geo;
+            SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UnknownGeographyException"/> class with
-        /// serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
-        protected UnknownGeographyException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        [Serializable]
+        private struct ExceptionData : ISafeSerializationData
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            public string Geo
+            {
+                get;
+                set;
+            }
 
-            Geo = (string)info.GetValue("Geo", typeof(string));
-        }
-
-        /// <inheritdoc/>
-        [SecurityCritical]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException("info");
-
-            base.GetObjectData(info, context);
-            info.AddValue("Geo", Geo);
+            void ISafeSerializationData.CompleteDeserialization(object deserialized)
+            {
+                ((UnknownGeographyException)deserialized)._state = this;
+            }
         }
     }
 }
