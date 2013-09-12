@@ -16,12 +16,18 @@ namespace net.openstack.Providers.Rackspace
     {
         /// <summary>
         /// Lists all roles.
+        /// <note type="warning">The behavior of this API method is not defined. Do not use.</note>
         /// </summary>
-        /// <param name="serviceId">The ID of service to filter by.</param>
-        /// <param name="markerId">The index of the last item in the previous list. <remarks>Used for pagination.</remarks></param>
-        /// <param name="limit">Indicates the number of items to return <remarks>Default value depends on the provider's implemenation.</remarks><remarks>Used for pagination.</remarks></param>
-        /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
-        /// <returns>List of <see cref="Role"/></returns>
+        /// <param name="serviceId">The "serviceId".</param>
+        /// <param name="markerId">The <see cref="Role.Id"/> of the last item in the previous list. Used for pagination. If the value is <c>null</c>, the list starts at the beginning.</param>
+        /// <param name="limit">Indicates the maximum number of items to return. Used for pagination. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="Role"/> objects describing the requested roles.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/openstack-extensions/auth/OS-KSADM-admin-devguide/content/GET_listRoles_v2.0_OS-KSADM_roles_Admin_API_Service_Developer_Operations-d1e1357.html">List Roles (Rackspace OS-KSADM Extension - API v2.0)</seealso>
         IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null);
 
         /// <summary>

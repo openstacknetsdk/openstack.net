@@ -35,8 +35,13 @@ namespace net.openstack.Providers.Rackspace
 
         #region Roles
 
+        /// <inheritdoc/>
         public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
         {
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+            CheckIdentity(identity);
+
             var parameters = BuildOptionalParameterList(new Dictionary<string, string>
                 {
                     {"serviceId", serviceId},
