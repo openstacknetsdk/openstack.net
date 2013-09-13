@@ -350,13 +350,30 @@
                 Assert.AreEqual(image.Created, details.Created);
                 Assert.AreEqual(image.DiskConfig, details.DiskConfig);
                 Assert.AreEqual(image.Id, details.Id);
-                //Assert.AreEqual(image.Links, details.Links);
+
+                Assert.IsNotNull(details.Links);
+                Assert.AreEqual(image.Links.Length, details.Links.Length);
+                for (int i = 0; i < image.Links.Length; i++)
+                {
+                    // this could start to fail if the server reorders links; if that occurs the test should be rewritten to allow it
+                    Assert.AreEqual(image.Links[i].Href, details.Links[i].Href);
+                    Assert.AreEqual(image.Links[i].Rel, details.Links[i].Rel);
+                }
+
                 Assert.AreEqual(image.MinDisk, details.MinDisk);
                 Assert.AreEqual(image.MinRAM, details.MinRAM);
                 Assert.AreEqual(image.Name, details.Name);
-                //Assert.AreEqual(image.Progress, details.Progress);
-                Assert.AreEqual(image.Server, details.Server);
-                //Assert.AreEqual(image.Status, details.Status);
+
+                Assert.IsTrue(details.Progress >= 0 && details.Progress <= 100);
+
+                if (image.Server != null)
+                {
+                    Assert.IsNotNull(details.Server);
+                    Assert.AreEqual(image.Server.Id, details.Server.Id);
+                }
+
+                Assert.IsNotNull(details.Status);
+
                 Assert.AreEqual(image.Updated, details.Updated);
             }
         }
