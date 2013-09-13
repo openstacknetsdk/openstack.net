@@ -9,9 +9,9 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     [JsonObject(MemberSerialization.OptIn)]
     internal class RevertServerResizeRequest
     {
-#pragma warning disable 169 // The field 'fieldName' is never used
-        [JsonProperty("revertResize", DefaultValueHandling = DefaultValueHandling.Include)]
-        private string _command;
-#pragma warning restore 169
+#pragma warning disable 414 // The field 'fieldName' is assigned but its value is never used
+        [JsonProperty("revertResize")]
+        private string _command = "none";
+#pragma warning restore 414
     }
 }

@@ -10,7 +10,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     internal class RescueServerRequest
     {
 #pragma warning disable 414 // The field 'fieldName' is assigned but its value is never used
-        [JsonProperty("rescue", DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonProperty("rescue")]
         private string _command = "none";
 #pragma warning restore 414
     }
