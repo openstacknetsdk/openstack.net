@@ -325,7 +325,7 @@
 
             bool resized = provider.ResizeServer(_server.Id, serverName, flavor.Id);
             Assert.IsTrue(resized);
-            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Active, ServerState.Error });
+            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
             Assert.AreEqual(ServerState.Active, resizedServer.Status);
             _server = resizedServer;
 
@@ -351,7 +351,7 @@
 
             bool resized = provider.ResizeServer(_server.Id, serverName, flavor.Id);
             Assert.IsTrue(resized);
-            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Active, ServerState.Error });
+            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
             Assert.AreEqual(ServerState.Active, resizedServer.Status);
             _server = resizedServer;
 
