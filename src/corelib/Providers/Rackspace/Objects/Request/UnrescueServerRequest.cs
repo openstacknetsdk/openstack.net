@@ -9,9 +9,9 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     [JsonObject(MemberSerialization.OptIn)]
     internal class UnrescueServerRequest
     {
-#pragma warning disable 169 // The field 'fieldName' is never used
+#pragma warning disable 414 // The field 'fieldName' is assigned but its value is never used
         [JsonProperty("unrescue", DefaultValueHandling = DefaultValueHandling.Include)]
-        private string _command;
-#pragma warning restore 169
+        private string _command = "none";
+#pragma warning restore 414
     }
 }
