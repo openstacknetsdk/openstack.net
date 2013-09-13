@@ -130,6 +130,9 @@
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Execute(System.String,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -220,6 +223,9 @@
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Execute(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.Func{System.Net.HttpWebResponse,System.Boolean,JSIStudios.SimpleRESTServices.Client.Response},System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -306,6 +312,9 @@
             and strongly-typed data from the REST response.</returns>
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Execute``1(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,``0,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -365,6 +374,9 @@
             and strongly-typed data from the REST response.</returns>
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Stream``1(System.String,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.IO.Stream,System.Int32,System.Int64,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings,System.Action{System.Int64})">
       <summary>
@@ -410,6 +422,9 @@
             <para>-or-</para><para>If <paramref name="maxReadLength" /> is less than zero.</para></exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Stream(System.String,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.IO.Stream,System.Int32,System.Int64,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings,System.Action{System.Int64})">
       <summary>
@@ -498,6 +513,9 @@
             If <paramref name="bufferSize" /> is less than or equal to zero.
             <para>-or-</para><para>If <paramref name="maxReadLength" /> is less than zero.</para></exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.IRestService.Stream(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.IO.Stream,System.Int32,System.Int64,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings,System.Action{System.Int64})">
       <summary>
@@ -900,6 +918,9 @@
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute(System.String,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -1084,6 +1105,9 @@
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.Func{System.Net.HttpWebResponse,System.Boolean,JSIStudios.SimpleRESTServices.Client.Response},System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -1142,6 +1166,9 @@
             and strongly-typed data from the REST response.</returns>
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -1244,6 +1271,9 @@
             and strongly-typed data from the REST response.</returns>
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute``1(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,``0,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
@@ -1509,6 +1539,9 @@
             <para>-or-</para><para>If <paramref name="maxReadLength" /> is less than zero.</para></exception>
       <exception cref="T:System.UriFormatException">If <paramref name="url" /> is not a valid base URI.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Stream(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.Func{System.Net.HttpWebResponse,System.Boolean,JSIStudios.SimpleRESTServices.Client.Response},System.IO.Stream,System.Int32,System.Int64,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings,System.Action{System.Int64})">
       <summary>
@@ -1602,6 +1635,9 @@
             If <paramref name="bufferSize" /> is less than or equal to zero.
             <para>-or-</para><para>If <paramref name="maxReadLength" /> is less than zero.</para></exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="!:StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Stream(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.IO.Stream,System.Int32,System.Int64,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings,System.Action{System.Int64})">
       <summary>
