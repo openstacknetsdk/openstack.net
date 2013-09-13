@@ -974,7 +974,7 @@
         {
             IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
-            string[] objectNames = { Path.GetRandomFileName(), Path.GetRandomFileName(), "#", " ", " lead", "trail ", "%", "x//x" };
+            string[] objectNames = { Path.GetRandomFileName(), Path.GetRandomFileName() };
             // another random name counts as random content
             string fileData = Path.GetRandomFileName();
 
@@ -998,6 +998,43 @@
             /* Cleanup
              */
             provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestSpecialCharacters()
+        {
+            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            string[] specialNames = { "#", " ", " lead", "trail ", "%", "x//x" };
+            // another random name counts as random content
+            string fileData = Path.GetRandomFileName();
+
+            foreach (string containerSuffix in specialNames)
+            {
+                string containerName = TestContainerPrefix + Path.GetRandomFileName() + containerSuffix;
+
+                ObjectStore containerResult = provider.CreateContainer(containerName);
+                Assert.AreEqual(ObjectStore.ContainerCreated, containerResult);
+
+                foreach (string objectName in specialNames)
+                {
+                    using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
+                    {
+                        provider.CreateObject(containerName, uploadStream, objectName);
+                    }
+                }
+
+                Console.WriteLine("Objects in container {0}", containerName);
+                foreach (ContainerObject containerObject in ListAllObjects(provider, containerName))
+                {
+                    Console.WriteLine("  {0}", containerObject.Name);
+                }
+
+                /* Cleanup
+                 */
+                provider.DeleteContainer(containerName, deleteObjects: true);
+            }
         }
 
         [TestMethod]
