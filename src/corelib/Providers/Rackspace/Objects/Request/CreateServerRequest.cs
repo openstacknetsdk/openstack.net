@@ -128,7 +128,7 @@
                 AccessIPv4 = accessIPv4;
                 AccessIPv6 = accessIPv6;
                 Networks = networks.Select(i => new NewServerNetwork(i)).ToArray();
-                Personality = personality.ToArray();
+                Personality = personality != null ? personality.ToArray() : null;
             }
 
             /// <summary>
