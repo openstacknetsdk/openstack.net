@@ -9,7 +9,7 @@ namespace net.openstack.Core.Providers
     /// <summary>
     /// Represents a provider for the OpenStack Networking service.
     /// </summary>
-    /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/">Networking API v2.0 Reference</seealso>
+    /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/">OpenStack Networking API v2.0 Reference</seealso>
     public interface INetworksProvider
     {
         /// <summary>
