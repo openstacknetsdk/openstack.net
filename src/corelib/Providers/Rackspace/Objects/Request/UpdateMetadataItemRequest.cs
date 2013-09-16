@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     /// This models the JSON request used for the Set Metadata Item request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Create_or_Update_a_Metadata_Item-d1e5633.html">Set Metadata Item (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class UpdateMetadataItemRequest
     {

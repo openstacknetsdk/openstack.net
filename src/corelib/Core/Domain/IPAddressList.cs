@@ -10,6 +10,7 @@
     /// This implementation of <see cref="List{T}"/> is used to ensure the elements
     /// are deserialized from a JSON string using the <see cref="IPAddressDetailsConverter"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [JsonArray(ItemConverterType = typeof(IPAddressDetailsConverter))]
     public class IPAddressList : List<IPAddress>
     {

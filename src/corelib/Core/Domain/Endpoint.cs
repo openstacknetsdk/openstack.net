@@ -5,6 +5,7 @@ namespace net.openstack.Core.Domain
     /// <summary>
     /// Represents an endpoint for a service provided in the <see cref="ServiceCatalog"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Endpoint
     {

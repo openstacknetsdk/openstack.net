@@ -9,6 +9,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso cref="IComputeProvider.CreateServer"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/CreateServers.html">Create Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class NewServer : ServerBase
     {

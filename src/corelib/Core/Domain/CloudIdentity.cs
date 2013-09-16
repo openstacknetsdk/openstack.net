@@ -4,6 +4,7 @@
     /// Represents a set of credentials used for accessing a cloud account. Individual providers
     /// may impose restrictions on the values allowed for individual properties.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudIdentity
     {
         /// <summary>

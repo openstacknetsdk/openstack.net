@@ -6,6 +6,7 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     /// <summary>
     /// Represents errors which occur while validating the ETag following an object transfer.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class InvalidETagException : Exception
     {

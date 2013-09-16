@@ -7,6 +7,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     /// This models the JSON response used for the Get Metadata Item request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Get_Metadata_Item-d1e5507.html">Get Metadata Item (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class MetadataItemResponse
     {

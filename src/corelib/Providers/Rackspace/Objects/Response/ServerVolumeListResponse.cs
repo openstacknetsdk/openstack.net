@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     /// </summary>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Attach_Volume_to_Server.html">Attach Volume to Server (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Get_Volume_Attachment_Details.html">Get Volume Attachment Details (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ServerVolumeResponse
     {

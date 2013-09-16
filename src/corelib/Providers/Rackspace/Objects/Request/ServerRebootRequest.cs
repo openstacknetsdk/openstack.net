@@ -7,6 +7,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     /// This models the JSON request used for the Reboot Server request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Reboot_Server-d1e3371.html">Reboot Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ServerRebootRequest
     {

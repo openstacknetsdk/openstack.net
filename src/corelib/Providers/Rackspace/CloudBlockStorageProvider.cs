@@ -37,6 +37,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <see cref="IBlockStorageProvider"/>
     /// <inheritdoc />
+    /// <threadsafety static="true" instance="false"/>
     public class CloudBlockStorageProvider : ProviderBase<IBlockStorageProvider>, IBlockStorageProvider
     {
 
@@ -267,6 +268,7 @@ namespace net.openstack.Providers.Rackspace
         /// Represents errors that occur when a volume enters an error state while waiting
         /// on it to enter a particular state.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         public class VolumeEnteredErrorStateException : Exception
         {
             /// <summary>
@@ -424,6 +426,7 @@ namespace net.openstack.Providers.Rackspace
         /// Represents errors that occur when a snapshot enters an error state while waiting
         /// on it to enter a particular state.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         public class SnapshotEnteredErrorStateException : Exception
         {
             /// <summary>

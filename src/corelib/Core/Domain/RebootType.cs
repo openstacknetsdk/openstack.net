@@ -12,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known reboot types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(RebootType.Converter))]
     public sealed class RebootType : IEquatable<RebootType>
     {
@@ -104,6 +105,7 @@
         /// Provides support for serializing and deserializing <see cref="RebootType"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<RebootType>
         {
             /// <remarks>

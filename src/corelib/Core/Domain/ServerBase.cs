@@ -14,6 +14,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Servers-d1e2073.html">Servers (OpenStack Compute API v2 and Extensions Reference - API v2)</seealso>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Servers-d1e2073.html">Servers (Rackspace Next Generation Cloud Servers Developer Guide  - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public abstract class ServerBase : ProviderStateBase<IComputeProvider>
     {

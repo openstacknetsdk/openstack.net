@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception thrown when the <see cref="CloudIdentity"/> instance passed
     /// to a provider method is not supported by that provider.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     internal class InvalidCloudIdentityException : NotSupportedException
     {

@@ -15,6 +15,7 @@
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Addresses-d1e3014.html">List Addresses (OpenStack Compute API v2 and Extensions Reference)</seealso>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/List_Addresses_by_Network-d1e3118.html">List Addresses by Network (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     public class IPAddressDetailsConverter : JsonConverter
     {
         /// <remarks>
@@ -69,6 +70,7 @@
         /// </summary>
         /// <seealso cref="IComputeProvider.ListAddresses"/>
         /// <seealso cref="IComputeProvider.ListAddressesByNetwork"/>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         private class AddressDetails
         {

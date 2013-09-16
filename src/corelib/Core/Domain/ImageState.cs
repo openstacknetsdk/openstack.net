@@ -13,6 +13,7 @@
     /// This class functions as a strongly-typed enumeration of known image states,
     /// with added support for unknown states returned by an image extension.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(ImageState.Converter))]
     public sealed class ImageState : IEquatable<ImageState>
     {
@@ -147,6 +148,7 @@
         /// Provides support for serializing and deserializing <see cref="ImageState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<ImageState>
         {
             /// <remarks>

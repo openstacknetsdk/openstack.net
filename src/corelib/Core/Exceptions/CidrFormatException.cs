@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// Represents errors that occur while validating a CIDR.
     /// </summary>
     /// <seealso cref="INetworksValidator.ValidateCidr"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class CidrFormatException : FormatException
     {

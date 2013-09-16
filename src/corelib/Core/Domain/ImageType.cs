@@ -12,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known image types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(ImageType.Converter))]
     public sealed class ImageType : IEquatable<ImageType>
     {
@@ -103,6 +104,7 @@
         /// Provides support for serializing and deserializing <see cref="ImageType"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<ImageType>
         {
             /// <remarks>

@@ -8,6 +8,7 @@
     /// This models the JSON response used for the List Volume Attachments request.
     /// </summary>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/List_Volume_Attachments.html">List Volume Attachments (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ServerVolumeListResponse
     {

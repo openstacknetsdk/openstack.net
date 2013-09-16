@@ -10,6 +10,7 @@ namespace net.openstack.Core.Domain
     /// <remarks>
     /// The metadata keys for the compute provider are case-sensitive.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonDictionary]
     [Serializable]
     public class Metadata : Dictionary<string, string>

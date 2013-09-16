@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception that is thrown when the server enters an error state during a
     /// call to <see cref="O:IComputeProvider.WaitForServerState"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ServerEnteredErrorStateException : Exception
     {

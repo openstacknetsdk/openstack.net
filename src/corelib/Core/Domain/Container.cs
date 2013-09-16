@@ -9,6 +9,7 @@
     /// <seealso cref="IObjectStorageProvider"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_serializedlistoutput.html">Serialized List Output (OpenStack Object Storage API v1 Reference)</seealso>
     /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Format_Container_List-d1e124.html">Format Container List (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Container
     {

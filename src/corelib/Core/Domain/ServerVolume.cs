@@ -9,6 +9,7 @@
     /// <note>Volume attachments are a Rackspace-specific extension to the OpenStack Compute Service.</note>
     /// </remarks>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/List_Volume_Attachments.html">List Volume Attachments (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class ServerVolume
     {

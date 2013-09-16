@@ -10,6 +10,7 @@ namespace net.openstack.Providers.Rackspace.Validators
     /// Provides an implementation of <see cref="IHttpResponseCodeValidator"/> for
     /// operation with Rackspace's products.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class HttpResponseCodeValidator : IHttpResponseCodeValidator
     {
         /// <summary>

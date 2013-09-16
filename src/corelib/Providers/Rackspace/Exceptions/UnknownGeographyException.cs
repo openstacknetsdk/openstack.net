@@ -9,6 +9,7 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     /// Represents errors which occur when an <see cref="IIdentityProvider"/> is
     /// requested for a <see cref="CloudInstance"/> which is not current supported.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class UnknownGeographyException : NotSupportedException
     {

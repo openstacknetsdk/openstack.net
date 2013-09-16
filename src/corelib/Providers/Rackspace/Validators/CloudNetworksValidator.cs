@@ -9,6 +9,7 @@ namespace net.openstack.Providers.Rackspace.Validators
     /// Provides an implementation of <see cref="INetworksValidator"/> for
     /// operation with Rackspace's Cloud Networks product.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudNetworksValidator : INetworksValidator
     {
         /// <summary>

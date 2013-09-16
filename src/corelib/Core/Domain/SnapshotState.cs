@@ -12,6 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known snapshot states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(SnapshotState.Converter))]
     public sealed class SnapshotState : IEquatable<SnapshotState>
     {
@@ -139,6 +140,7 @@
         /// Provides support for serializing and deserializing <see cref="SnapshotState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<SnapshotState>
         {
             /// <remarks>

@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Validators
     /// Provides an implementation of <see cref="IBlockStorageValidator"/> for
     /// operation with Rackspace's Cloud Block Storage product.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudBlockStorageValidator : IBlockStorageValidator
     {
         /// <summary>

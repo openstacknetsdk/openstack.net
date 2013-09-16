@@ -21,6 +21,7 @@ namespace net.openstack.Providers.Rackspace
     /// <summary>
     /// Adds common functionality for all Rackspace Providers.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public abstract class ProviderBase<TProvider>
         where TProvider : class
     {

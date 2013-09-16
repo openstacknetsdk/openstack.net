@@ -6,6 +6,7 @@
     /// <summary>
     /// Provides the details of an object stored in an Object Storage provider.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class ContainerObject
     {

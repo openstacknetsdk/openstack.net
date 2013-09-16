@@ -8,6 +8,7 @@
     /// </summary>
     /// <seealso cref="IBlockStorageProvider.ListVolumeTypes"/>
     /// <seealso cref="IBlockStorageProvider.DescribeVolumeType"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class VolumeType
     {

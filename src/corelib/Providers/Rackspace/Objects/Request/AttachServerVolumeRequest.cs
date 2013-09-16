@@ -8,6 +8,7 @@
     /// This models the JSON request used for the Attach Volume to Server request.
     /// </summary>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Attach_Volume_to_Server.html">Attach Volume to Server (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class AttachServerVolumeRequest
     {
@@ -41,6 +42,7 @@
         /// <summary>
         /// This models the JSON body containing the details of the Attach Volume to Server request.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         public class AttachServerVolumeData
         {

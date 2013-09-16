@@ -8,6 +8,7 @@
     /// This models the JSON request used for the Create Virtual Interface request.
     /// </summary>
     /// <seealso href="http://docs.rackspace.com/networks/api/v2/cn-devguide/content/api_create_virtual_interface.html">Create Virtual Interface (Rackspace Cloud Networks Developer Guide - OpenStack Networking API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateVirtualInterfaceRequest
     {
@@ -37,6 +38,7 @@
         /// <summary>
         /// This models the JSON body containing details for a Create Virtual Interface request.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         internal class CreateVirtualInterface
         {

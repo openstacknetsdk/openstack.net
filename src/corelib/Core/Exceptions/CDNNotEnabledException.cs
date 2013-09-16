@@ -9,6 +9,7 @@ namespace net.openstack.Core.Exceptions
     /// of a container which is not CDN-enabled.
     /// </summary>
     /// <seealso cref="IObjectStorageProvider"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class CDNNotEnabledException : InvalidOperationException
     {

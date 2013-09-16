@@ -13,6 +13,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso cref="IComputeProvider.GetDetails"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Get_Server_Details-d1e2623.html">Get Server Details (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Server : SimpleServer
     {

@@ -9,6 +9,7 @@ namespace net.openstack.Core.Exceptions
     /// Represents errors that occur while validating an object name for an <see cref="IObjectStorageProvider"/>.
     /// </summary>
     /// <seealso cref="IObjectStorageValidator.ValidateObjectName"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ObjectNameException : ArgumentException
     {

@@ -11,6 +11,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// This property is an undocumented Rackspace-specific extension to the OpenStack Identity Service.
     /// </note>
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Domain
     {

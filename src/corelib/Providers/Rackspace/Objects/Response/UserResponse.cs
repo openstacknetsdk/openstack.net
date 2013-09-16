@@ -15,6 +15,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_getUserById_v2.0_users__user_id__User_Operations.html">Get User Information by ID (OpenStack Identity Service API v2.0 Reference)</seealso>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUser_v2.0_users__userId__.html">Update User (OpenStack Identity Service API v2.0 Reference)</seealso>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_listUsers_v2.0_users_.html">List Users (OpenStack Identity Service API v2.0 Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class UserResponse
     {

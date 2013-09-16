@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// Extends the <see cref="CloudIdentity"/> class by adding support for specifying
     /// a <see cref="CloudInstance"/> and <see cref="Domain"/> for the identity.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class RackspaceCloudIdentity : CloudIdentity
     {
         /// <summary>
