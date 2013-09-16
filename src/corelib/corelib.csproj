@@ -207,7 +207,7 @@
     <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
     <Compile Include="Providers\Rackspace\RackspaceImpersonationIdentity.cs" />
-    <Compile Include="Core\Domain\MetaData.cs" />
+    <Compile Include="Core\Domain\Metadata.cs" />
     <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\MetaDataResponse.cs" />
     <Compile Include="Core\Domain\Server.cs" />
