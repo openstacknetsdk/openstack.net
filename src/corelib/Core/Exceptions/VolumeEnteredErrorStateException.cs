@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Core.Exceptions
 {
     using System;
+    using System.Runtime.Serialization;
     using net.openstack.Core.Domain;
 
     /// <summary>
@@ -8,15 +9,22 @@
     /// on it to enter a particular state.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
+    [Serializable]
     public class VolumeEnteredErrorStateException : Exception
     {
+        [NonSerialized]
+        private ExceptionData _state;
+
         /// <summary>
         /// Gets the error state the volume entered.
         /// </summary>
+        /// <seealso cref="VolumeState"/>
         public VolumeState Status
         {
-            get;
-            private set;
+            get
+            {
+                return VolumeState.FromName(_state.Status);
+            }
         }
 
         /// <summary>
@@ -24,10 +32,30 @@
         /// specified volume state.
         /// </summary>
         /// <param name="status">The erroneous volume state.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
         public VolumeEnteredErrorStateException(VolumeState status)
             : base(string.Format("The volume entered an error state: '{0}'", status))
         {
-            Status = status;
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            _state.Status = status.Name;
+            SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
+        }
+
+        [Serializable]
+        private struct ExceptionData : ISafeSerializationData
+        {
+            public string Status
+            {
+                get;
+                set;
+            }
+
+            void ISafeSerializationData.CompleteDeserialization(object deserialized)
+            {
+                ((VolumeEnteredErrorStateException)deserialized)._state = this;
+            }
         }
     }
 }
