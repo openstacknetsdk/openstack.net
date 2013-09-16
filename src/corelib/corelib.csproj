@@ -137,7 +137,9 @@
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\BulkDeletionFailedObject.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
+    <Compile Include="Providers\Rackspace\Objects\CloudInstance.cs" />
     <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RoleResponse.cs" />
     <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
     <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
     <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
