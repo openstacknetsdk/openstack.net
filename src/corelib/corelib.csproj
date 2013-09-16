@@ -62,7 +62,7 @@
     <Compile Include="Core\Domain\Converters\IPAddressDetailsConverter.cs" />
     <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\NamespaceDoc.cs" />
-    <Compile Include="Core\Domain\ProviderStateBase.cs" />
+    <Compile Include="Core\Domain\ProviderStateBase`1.cs" />
     <Compile Include="Core\Domain\ServerBase.cs" />
     <Compile Include="Core\Domain\ServerImage.cs" />
     <Compile Include="Core\Domain\SimpleServer.cs" />
@@ -101,8 +101,8 @@
     <Compile Include="Core\Validators\IBlockStorageValidator.cs" />
     <Compile Include="Core\Domain\ImageType.cs" />
     <Compile Include="Core\Domain\Link.cs" />
-    <Compile Include="Core\Domain\Mapping\IJsonObjectMapper.cs" />
-    <Compile Include="Core\Domain\Mapping\IObjectMapper.cs" />
+    <Compile Include="Core\Domain\Mapping\IJsonObjectMapper`1.cs" />
+    <Compile Include="Core\Domain\Mapping\IObjectMapper`2.cs" />
     <Compile Include="Core\Domain\NewUser.cs" />
     <Compile Include="Core\Domain\ObjectStore.cs" />
     <Compile Include="Core\Domain\Personality.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeTypeResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
-    <Compile Include="Providers\Rackspace\IProviderFactory.cs" />
+    <Compile Include="Providers\Rackspace\IProviderFactory`2.cs" />
     <Compile Include="Core\Domain\NewServer.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListAddressesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorDetailsResponse.cs" />
@@ -249,7 +249,7 @@
     <Compile Include="Core\Domain\UserDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\RolesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\UpdateServerRequest.cs" />
-    <Compile Include="Providers\Rackspace\ProviderBase.cs" />
+    <Compile Include="Providers\Rackspace\ProviderBase`1.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />
