@@ -10,7 +10,7 @@ namespace net.openstack.Core.Providers
     /// <summary>
     /// Represents a provider for the OpenStack Block Storage Service.
     /// </summary>
-    /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/">Block Storage Service API v2 Reference</seealso>
+    /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/">OpenStack Block Storage Service API v2 Reference</seealso>
     public interface IBlockStorageProvider
     {
         #region Volume
