@@ -91,6 +91,10 @@ namespace net.openstack.Core.Providers
         /// Deletes a volume.
         /// </summary>
         /// <remarks>
+        /// The deletion operation is performed asynchronously. After this call returns,
+        /// <see cref="WaitForVolumeDeleted"/> may be called to wait until the volume
+        /// is finally deleted.
+        ///
         /// <note type="note">
         /// It is not currently possible to delete a volume once you have created a snapshot from it. Any snapshots will need to be deleted prior to deleting the volume.
         /// </note>
