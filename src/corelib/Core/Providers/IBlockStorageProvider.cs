@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
-using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Exceptions;
 
 namespace net.openstack.Core.Providers
@@ -264,7 +264,7 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="CloudBlockStorageProvider.VolumeEnteredErrorStateException">If the method returned due to the volume entering one of the <paramref name="errorStates"/>.</exception>
+        /// <exception cref="VolumeEnteredErrorStateException">If the method returned due to the volume entering one of the <paramref name="errorStates"/>.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/volume_status.html">Volume Status (Rackspace Cloud Block Storage Developer Guide - API V1.0)</seealso>
         Volume WaitForVolumeState(string volumeId, VolumeState expectedState, VolumeState[] errorStates, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
@@ -484,7 +484,7 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="CloudBlockStorageProvider.SnapshotEnteredErrorStateException">If the method returned due to the snapshot entering one of the <paramref name="errorStates"/>.</exception>
+        /// <exception cref="SnapshotEnteredErrorStateException">If the method returned due to the snapshot entering one of the <paramref name="errorStates"/>.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         Snapshot WaitForSnapshotState(string snapshotId, SnapshotState expectedState, SnapshotState[] errorStates, int refreshCount = 60, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
 

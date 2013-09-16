@@ -86,6 +86,8 @@
     <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
     <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\Providers\NamespaceDoc.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
