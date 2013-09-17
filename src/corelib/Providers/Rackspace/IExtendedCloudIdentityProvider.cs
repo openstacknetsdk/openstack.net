@@ -33,7 +33,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Lists all users for a given role.
         /// </summary>
-        /// <param name="roleId">The role ID. The behavior is unspecified if this is not obtained from <see cref="Role.Id"/>.</param>
+        /// <param name="roleId">The role ID. This is obtained from <see cref="Role.Id">Role.Id</see>.</param>
         /// <param name="enabled">Allows you to filter enabled or un-enabled users. If the value is <c>null</c>, a provider-specific default value is used.</param>
         /// <param name="marker">The index of the last item in the previous list. Used for pagination. If the value is <c>null</c>, the list starts at the beginning.</param>
         /// <param name="limit">Indicates the maximum number of items to return. Used for pagination. If the value is <c>null</c>, a provider-specific default value is used.</param>
@@ -67,7 +67,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Gets details about the specified role.
         /// </summary>
-        /// <param name="roleId">The role ID. The behavior is unspecified if this is not obtained from <see cref="Role.Id">Role.Id</see>.</param>
+        /// <param name="roleId">The role ID. This is obtained from <see cref="Role.Id">Role.Id</see>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Role"/> containing the details of the role.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="roleId"/> is <c>null</c>.</exception>
@@ -85,8 +85,8 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Adds the specified global role to the user.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
-        /// <param name="roleId">The role ID. The behavior is unspecified if this is not obtained from <see cref="Role.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="roleId">The role ID. This is obtained from <see cref="Role.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the role was removed from the user; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -112,8 +112,8 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Deletes the specified global role from the user.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
-        /// <param name="roleId">The role ID. The behavior is unspecified if this is not obtained from <see cref="Role.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="roleId">The role ID. This is obtained from <see cref="Role.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the role was removed from the user; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -145,7 +145,7 @@ namespace net.openstack.Providers.Rackspace
         /// method, where the credentials are always specified in the form of an API key.
         /// </remarks>
         /// <returns>A <see cref="UserCredential"/> object containing the updated user information.</returns>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
         /// <param name="apiKey">The new API key.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
@@ -176,7 +176,7 @@ namespace net.openstack.Providers.Rackspace
         /// <see href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/DELETE_deleteUserCredential_v2.0_users__userId__OS-KSADM_credentials__credential-type__.html">Delete User Credentials</see>
         /// method, where the credentials are always specified in the form of an API key.
         /// </remarks>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the credentials were removed from the user; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <c>null</c>.</exception>
@@ -194,7 +194,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Sets the password for the specified user.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
         /// <param name="password">The new password.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the operation succeeded; otherwise, <c>false</c>.</returns>
@@ -250,7 +250,7 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Updates the username and password for the specified user.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
         /// <param name="username">The new username.</param>
         /// <param name="password">The new password.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -321,7 +321,7 @@ namespace net.openstack.Providers.Rackspace
         /// <see href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUserCredential_v2.0_users__userId__OS-KSADM_credentials__credential-type__.html">Update User Credentials</see>
         /// method, where the credentials are always specified in the form of an API key.
         /// </remarks>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="NewUser.Id"/> or <see cref="User.Id"/>.</param>
         /// <param name="username">The new username.</param>
         /// <param name="apiKey">The new API key.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
