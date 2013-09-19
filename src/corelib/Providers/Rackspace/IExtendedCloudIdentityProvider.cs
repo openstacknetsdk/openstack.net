@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using net.openstack.Core;
+﻿using System;
+using System.Collections.Generic;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 
 namespace net.openstack.Providers.Rackspace
@@ -16,6 +17,21 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identity">The users Cloud Identity <see cref="net.openstack.Core.Domain.CloudIdentity" /><remarks>If not specified, the default identity given in the constructor will be used.</remarks></param>
         /// <returns>List of <see cref="Role"/></returns>
         IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null);
+
+        /// <summary>
+        /// Lists all users by role.
+        /// </summary>
+        /// <param name="roleId">The role ID. The behavior is unspecified if this is not obtained from <see cref="Role.Id"/>.</param>
+        /// <param name="enabled">Allows you to filter enabled or un-enabled users. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">The index of the last item in the previous list. Used for pagination. If the value is <c>null</c>, the list starts at the beginning.</param>
+        /// <param name="limit">Indicates the maximum number of items to return. Used for pagination. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="Role"/> objects describing the requested roles.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0 or greater than 1000.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Create a new role.

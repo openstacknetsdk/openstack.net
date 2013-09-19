@@ -60,6 +60,13 @@ namespace net.openstack.Providers.Rackspace
             return provider.ListRoles(serviceId, markerId, limit, identity);
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
+        {
+            var provider = GetProvider(identity);
+            return provider.ListUsersByRole(roleId, enabled, marker, limit, identity);
+        }
+
         public Role AddRole(string name, string descritpion, CloudIdentity identity)
         {
             var provider = GetProvider(identity);
