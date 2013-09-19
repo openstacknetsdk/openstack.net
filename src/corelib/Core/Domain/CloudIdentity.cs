@@ -56,5 +56,19 @@
         /// provider supports authenticating without a project.
         /// </value>
         public string ProjectName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default region to use.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="CloudIdentity"/> class represents <em>credentials</em> (as opposed
+        /// to an <em>account</em>), so any changes made to this property value will not be
+        /// reflected in the account.
+        /// </remarks>
+        /// <value>
+        /// The name of the region to use by this identity. The value may be <c>null</c> if no
+        /// default region shall be set from here.
+        /// </value>
+        public string DefaultRegion { get; set; }
     }
 }

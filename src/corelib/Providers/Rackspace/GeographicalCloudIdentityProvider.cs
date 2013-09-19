@@ -550,6 +550,12 @@ namespace net.openstack.Providers.Rackspace
                                 return response.Data.UserAccess;
                             }, forceCacheRefresh);
 
+            if (!String.IsNullOrEmpty(identity.DefaultRegion) && userAccess != null && userAccess.User != null)
+            {
+                // Overwrite the default region with the one specified by the identity.
+                userAccess.User.OverrideDefaultRegion(identity.DefaultRegion);
+            }
+
             return userAccess;
         }
 
