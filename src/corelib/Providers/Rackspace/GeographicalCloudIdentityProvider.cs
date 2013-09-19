@@ -36,7 +36,7 @@ namespace net.openstack.Providers.Rackspace
         #region Roles
 
         /// <inheritdoc/>
-        public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
+        public IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -45,7 +45,7 @@ namespace net.openstack.Providers.Rackspace
             var parameters = BuildOptionalParameterList(new Dictionary<string, string>
                 {
                     {"serviceId", serviceId},
-                    {"marker", markerId},
+                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
                     {"limit", !limit.HasValue ? null : limit.Value.ToString()},
                 });
 
@@ -156,7 +156,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
+        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0 || limit > 1000)
                 throw new ArgumentOutOfRangeException("limit");
@@ -166,7 +166,7 @@ namespace net.openstack.Providers.Rackspace
             var parameters = BuildOptionalParameterList(new Dictionary<string, string>
                 {
                     {"enabled", !enabled.HasValue ? null : enabled.Value ? "true" : "false"},
-                    {"marker", markerId},
+                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
                     {"limit", !limit.HasValue ? null : limit.Value.ToString()},
                 });
 
