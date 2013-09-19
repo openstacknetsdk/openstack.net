@@ -122,23 +122,23 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<Role> ListRoles(string serviceId = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
+        public IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
 
             var provider = GetProvider(identity);
-            return provider.ListRoles(serviceId, markerId, limit, identity);
+            return provider.ListRoles(serviceId, marker, limit, identity);
         }
 
         /// <inheritdoc/>
-        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, string markerId = null, int? limit = null, CloudIdentity identity = null)
+        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0 || limit > 1000)
                 throw new ArgumentOutOfRangeException("limit");
 
             var provider = GetProvider(identity);
-            return provider.ListUsersByRole(roleId, enabled, markerId, limit, identity);
+            return provider.ListUsersByRole(roleId, enabled, marker, limit, identity);
         }
 
         /// <inheritdoc/>
