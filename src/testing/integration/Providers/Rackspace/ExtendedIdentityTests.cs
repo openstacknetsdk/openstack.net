@@ -52,7 +52,10 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         private static IExtendedCloudIdentityProvider BuildProvider(IRestService restService = null, ICache<UserAccess> cache = null)
         {
-            return new CloudIdentityProvider(restService, cache, Bootstrapper.Settings.RackspaceExtendedIdentityUrl);
+            Uri baseUri = null;
+            if (Bootstrapper.Settings.RackspaceExtendedIdentityUrl != null)
+                baseUri = new Uri(Bootstrapper.Settings.RackspaceExtendedIdentityUrl);
+            return new CloudIdentityProvider(restService, cache, baseUri);
         }
 
         [TestMethod]
