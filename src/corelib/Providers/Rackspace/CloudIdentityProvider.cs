@@ -718,7 +718,7 @@ namespace net.openstack.Providers.Rackspace
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the authentication request failed.</exception>
-        public UserAccess Authenticate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
+        public UserAccess Impersonate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
         {
             if (identity == null)
                 throw new ArgumentNullException("identity");
