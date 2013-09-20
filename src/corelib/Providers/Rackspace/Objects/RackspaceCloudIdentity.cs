@@ -6,7 +6,7 @@ namespace net.openstack.Providers.Rackspace.Objects
 
     /// <summary>
     /// Extends the <see cref="CloudIdentity"/> class by adding support for specifying
-    /// a <see cref="CloudInstance"/> and <see cref="Domain"/> for the identity.
+    /// a <see cref="Domain"/> for the identity.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class RackspaceCloudIdentity : CloudIdentity
@@ -17,13 +17,11 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// </summary>
         public RackspaceCloudIdentity()
         {
-            CloudInstance = CloudInstance.Default;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RackspaceCloudIdentity"/> class
-        /// from the given <see cref="CloudIdentity"/> instance and the default
-        /// <see cref="CloudInstance"/>.
+        /// from the given <see cref="CloudIdentity"/> instance.
         /// </summary>
         /// <param name="cloudIdentity">The generic cloud identity.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="cloudIdentity"/> is <c>null</c>.</exception>
@@ -35,19 +33,11 @@ namespace net.openstack.Providers.Rackspace.Objects
             this.Username = cloudIdentity.Username;
             this.Password = cloudIdentity.Password;
             this.APIKey = cloudIdentity.APIKey;
-        }
 
-        /// <summary>
-        /// Gets or sets the <see cref="CloudInstance"/> for this account.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="RackspaceCloudIdentity"/> class represents <em>credentials</em> (as opposed
-        /// to an <em>account</em>), so any changes made to this property value will not be
-        /// reflected in the account.
-        ///
-        /// <para>The default value is <see cref="net.openstack.Providers.Rackspace.Objects.CloudInstance.Default"/>.</para>
-        /// </remarks>
-        public CloudInstance CloudInstance { get; set; }
+            RackspaceCloudIdentity raxIdentity = cloudIdentity as RackspaceCloudIdentity;
+            if (raxIdentity != null)
+                this.Domain = raxIdentity.Domain;
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="Domain"/> for this account.
