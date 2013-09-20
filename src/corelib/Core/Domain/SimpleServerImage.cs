@@ -11,6 +11,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Images-d1e4427.html">Images (OpenStack Compute API v2 and Extensions Reference - API v2)</seealso>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Images-d1e4427.html">Images (Rackspace Next Generation Cloud Servers Developer Guide  - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class SimpleServerImage : ProviderStateBase<IComputeProvider>
     {

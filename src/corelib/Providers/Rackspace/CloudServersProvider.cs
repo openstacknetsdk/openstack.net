@@ -27,6 +27,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <see cref="IComputeProvider"/>
     /// <inheritdoc />
+    /// <threadsafety static="true" instance="false"/>
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };

@@ -22,6 +22,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <see cref="INetworksProvider"/>
     /// <inheritdoc />
+    /// <threadsafety static="true" instance="false"/>
     public class CloudNetworksProvider : ProviderBase<INetworksProvider>, INetworksProvider
     {
         private readonly HttpStatusCode[] _validResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.Accepted };

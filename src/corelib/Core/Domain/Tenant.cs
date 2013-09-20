@@ -7,6 +7,7 @@
     /// This models the basic JSON description of a tenant.
     /// </summary>
     /// <seealso cref="IIdentityProvider.ListTenants"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Tenant
     {

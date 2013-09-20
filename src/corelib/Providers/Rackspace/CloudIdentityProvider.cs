@@ -15,6 +15,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/">OpenStack Identity Service API v2.0 Reference</seealso>
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/index.html">Rackspace Cloud Identity Client Developer Guide - API v2.0</seealso>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudIdentityProvider : IExtendedCloudIdentityProvider, IIdentityProvider
     {
         private readonly CloudIdentityProviderFactory _factory;

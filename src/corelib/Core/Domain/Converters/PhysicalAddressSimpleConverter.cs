@@ -11,6 +11,7 @@
     /// <literal>00:11:22:33:44:55</literal>, and deserialization supports representations
     /// using hyphens or colons, along with bare strings containing 12 hexadecimal digits.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class PhysicalAddressSimpleConverter : SimpleStringJsonConverter<PhysicalAddress>
     {
         private static readonly Regex Ieee802Expression =

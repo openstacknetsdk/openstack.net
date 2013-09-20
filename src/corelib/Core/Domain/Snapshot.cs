@@ -8,6 +8,7 @@
     /// This models the basic JSON description of a snapshot.
     /// </summary>
     /// <seealso cref="IBlockStorageProvider.ListSnapshots"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Snapshot
     {

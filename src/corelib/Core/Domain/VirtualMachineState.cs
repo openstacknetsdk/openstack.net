@@ -20,6 +20,7 @@
     /// </remarks>
     /// <seealso cref="Server.VMState"/>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#vm_state">OS-EXT-STS:vm_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(VirtualMachineState.Converter))]
     public sealed class VirtualMachineState : IEquatable<VirtualMachineState>
     {
@@ -207,6 +208,7 @@
         /// Provides support for serializing and deserializing <see cref="VirtualMachineState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<VirtualMachineState>
         {
             /// <remarks>

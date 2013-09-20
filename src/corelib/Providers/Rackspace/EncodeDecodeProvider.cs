@@ -10,6 +10,7 @@ namespace net.openstack.Providers.Rackspace
     /// encodes the <c>+</c> character to <c>%20</c>, effectively rendering it to a space
     /// character.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     internal class EncodeDecodeProvider : IEncodeDecodeProvider
     {
         /// <summary>

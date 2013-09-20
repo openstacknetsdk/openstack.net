@@ -6,6 +6,7 @@ namespace net.openstack.Core.Domain
     /// Represents the response to a user authentication.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_authenticate_v2.0_tokens_.html">Authenticate (OpenStack Identity Service API v2.0 Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class UserAccess
     {

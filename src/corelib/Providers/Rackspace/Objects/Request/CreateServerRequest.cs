@@ -10,6 +10,7 @@
     /// This models the JSON request used for the Create Server request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/CreateServers.html">Create Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerRequest
     {
@@ -42,6 +43,7 @@
         /// <summary>
         /// This models the JSON body containing details for a Create Server request.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         public class CreateServerDetails
         {
@@ -135,6 +137,7 @@
             /// This models the JSON body containing details for a connected network
             /// within the Create Server request.
             /// </summary>
+            /// <threadsafety static="true" instance="false"/>
             [JsonObject(MemberSerialization.OptIn)]
             public class NewServerNetwork
             {

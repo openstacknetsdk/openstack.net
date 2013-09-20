@@ -11,6 +11,7 @@ namespace net.openstack.Core.Domain
     /// The keys of this collection are network labels (see <see cref="CloudNetwork.Label"/>),
     /// and the values are collections of IP addresses.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonDictionary]
     public class ServerAddresses : Dictionary<string, IPAddressList>
     {

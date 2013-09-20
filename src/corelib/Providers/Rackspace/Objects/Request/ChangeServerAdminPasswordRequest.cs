@@ -7,6 +7,7 @@
     /// This models the JSON request used for the Change Administrator Password request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Change_Password-d1e3234.html">Change Administrator Password (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ChangeServerAdminPasswordRequest
     {
@@ -34,6 +35,7 @@
         /// <summary>
         /// This models the JSON body containing the details of the Change Administrator Password request.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         internal class ChangeAdminPasswordDetails
         {

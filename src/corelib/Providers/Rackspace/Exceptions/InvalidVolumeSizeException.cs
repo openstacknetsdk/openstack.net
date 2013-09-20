@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     /// Represents errors which occur during validation of a block storage volume size.
     /// </summary>
     /// <seealso cref="IBlockStorageValidator.ValidateVolumeSize"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class InvalidVolumeSizeException : Exception
     {

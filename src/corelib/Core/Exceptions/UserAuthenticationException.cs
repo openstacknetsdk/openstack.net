@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception thrown when the user authentication process fails, or
     /// the authentication process did not provide a value for the <see cref="UserAccess.ServiceCatalog"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class UserAuthenticationException : Exception
     {

@@ -8,6 +8,7 @@
     /// Represents the authentication token used for making authenticated calls to
     /// multiple APIs.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class IdentityToken
     {

@@ -5,6 +5,7 @@ namespace net.openstack.Providers.Rackspace
     /// <summary>
     /// Represents a cloud identity that impersonates another <see cref="RackspaceCloudIdentity"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class RackspaceImpersonationIdentity : RackspaceCloudIdentity
     {
         /// <summary>

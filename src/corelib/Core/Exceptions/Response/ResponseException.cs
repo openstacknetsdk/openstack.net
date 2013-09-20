@@ -11,6 +11,7 @@ namespace net.openstack.Core.Exceptions.Response
     /// <summary>
     /// Defines the base class for errors resulting from a call to a REST API.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ResponseException : Exception
     {

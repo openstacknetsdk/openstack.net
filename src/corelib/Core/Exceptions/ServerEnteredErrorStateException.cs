@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception that is thrown when the server enters an error state during a
     /// call to <see cref="O:IComputeProvider.WaitForServerState"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ServerEnteredErrorStateException : Exception
     {
@@ -15,14 +16,14 @@ namespace net.openstack.Core.Exceptions
         private ExceptionData _state;
 
         /// <summary>
-        /// The state of the server.
+        /// Gets the error state the server entered.
         /// </summary>
         /// <seealso cref="ServerState"/>
         public ServerState Status
         {
             get
             {
-                return _state.Status;
+                return ServerState.FromName(_state.Status);
             }
         }
 
@@ -31,17 +32,21 @@ namespace net.openstack.Core.Exceptions
         /// with the specified error state.
         /// </summary>
         /// <param name="status">The error state entered by the server.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
         public ServerEnteredErrorStateException(ServerState status)
             : base(string.Format("The server entered an error state: '{0}'", status))
         {
-            _state.Status = status;
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            _state.Status = status.Name;
             SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
         }
 
         [Serializable]
         private struct ExceptionData : ISafeSerializationData
         {
-            public ServerState Status
+            public string Status
             {
                 get;
                 set;

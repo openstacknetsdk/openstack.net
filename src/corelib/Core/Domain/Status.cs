@@ -6,6 +6,7 @@
     /// Represents the status of an operation with a status code and description
     /// of the status.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class Status
     {

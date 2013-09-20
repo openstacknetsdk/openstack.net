@@ -13,6 +13,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     /// </summary>
     /// <seealso cref="ServerRebuildRequest"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Rebuild_Server-d1e3538.html">Rebuild Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class ServerRebuildDetails
     {

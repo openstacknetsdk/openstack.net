@@ -13,6 +13,7 @@
     /// This class functions as a strongly-typed enumeration of known server states,
     /// with added support for unknown states returned by a server extension.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(ServerState.Converter))]
     public sealed class ServerState : IEquatable<ServerState>
     {
@@ -327,6 +328,7 @@
         /// Provides support for serializing and deserializing <see cref="ServerState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<ServerState>
         {
             /// <remarks>

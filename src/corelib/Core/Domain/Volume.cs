@@ -9,6 +9,7 @@
     /// Represents a volume in a block storage provider.
     /// </summary>
     /// <seealso cref="IBlockStorageProvider"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Volume
     {

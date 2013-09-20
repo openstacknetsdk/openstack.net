@@ -1,40 +1,40 @@
-﻿using System;
-using System.Runtime.Serialization;
-using net.openstack.Core.Domain;
-
-namespace net.openstack.Core.Exceptions
+﻿namespace net.openstack.Core.Exceptions
 {
+    using System;
+    using System.Runtime.Serialization;
+    using net.openstack.Core.Domain;
+
     /// <summary>
-    /// The exception that is thrown when the server enters an error state during a
-    /// call to <see cref="O:IComputeProvider.WaitForImageState"/>.
+    /// Represents errors that occur when a volume enters an error state while waiting
+    /// on it to enter a particular state.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [Serializable]
-    public class ImageEnteredErrorStateException : Exception
+    public class VolumeEnteredErrorStateException : Exception
     {
         [NonSerialized]
         private ExceptionData _state;
 
         /// <summary>
-        /// Gets the error state the image entered.
+        /// Gets the error state the volume entered.
         /// </summary>
-        /// <seealso cref="ImageState"/>
-        public ImageState Status
+        /// <seealso cref="VolumeState"/>
+        public VolumeState Status
         {
             get
             {
-                return ImageState.FromName(_state.Status);
+                return VolumeState.FromName(_state.Status);
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageEnteredErrorStateException"/> class
-        /// with the specified error state.
+        /// Initializes a new instance of the <see cref="VolumeEnteredErrorStateException"/> with the
+        /// specified volume state.
         /// </summary>
-        /// <param name="status">The error state entered by the image.</param>
+        /// <param name="status">The erroneous volume state.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
-        public ImageEnteredErrorStateException(ImageState status)
-            : base(string.Format("The image entered an error state: '{0}'", status))
+        public VolumeEnteredErrorStateException(VolumeState status)
+            : base(string.Format("The volume entered an error state: '{0}'", status))
         {
             if (status == null)
                 throw new ArgumentNullException("status");
@@ -54,7 +54,7 @@ namespace net.openstack.Core.Exceptions
 
             void ISafeSerializationData.CompleteDeserialization(object deserialized)
             {
-                ((ImageEnteredErrorStateException)deserialized)._state = this;
+                ((VolumeEnteredErrorStateException)deserialized)._state = this;
             }
         }
     }

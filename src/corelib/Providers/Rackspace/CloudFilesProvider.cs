@@ -29,6 +29,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">OpenStack Object Storage API v1 Reference</seealso>
     /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Overview-d1e70.html">Rackspace Cloud Files Developer Guide - API v1</seealso>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudFilesProvider : ProviderBase<IObjectStorageProvider>, IObjectStorageProvider
     {
         /// <summary>

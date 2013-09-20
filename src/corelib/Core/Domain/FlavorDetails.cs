@@ -8,6 +8,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso cref="IComputeProvider.ListFlavorsWithDetails"/>
     /// <seealso cref="IComputeProvider.GetFlavor"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class FlavorDetails : Flavor
     {

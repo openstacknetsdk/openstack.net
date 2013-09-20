@@ -10,6 +10,7 @@
     /// This models the JSON request used for the Update Server request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/ServerUpdate.html">Update Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class UpdateServerRequest
     {
@@ -44,6 +45,7 @@
         /// <summary>
         /// This models the JSON body containing details for the Update Server request.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
         public class ServerUpdateDetails
         {

@@ -9,6 +9,7 @@
     /// </summary>
     /// <seealso cref="CreateCloudBlockStorageVolumeRequest"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Create_Volume.html">Create Volume (OpenStack Block Storage Service API Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateCloudBlockStorageVolumeDetails
     {

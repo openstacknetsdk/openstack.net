@@ -14,6 +14,7 @@ namespace net.openstack.Core.Domain
     /// they interpret the set of roles a user has and to which operations or resources each
     /// role grants access.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("{Name,nq} ({Id, nq})")]
     public class Role

@@ -7,6 +7,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Flavors-d1e4180.html">Flavors (OpenStack Compute API v2 and Extensions Reference - API v2)</seealso>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/Flavors-d1e4180.html">Flavors (Rackspace Next Generation Cloud Servers Developer Guide  - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class Flavor
     {

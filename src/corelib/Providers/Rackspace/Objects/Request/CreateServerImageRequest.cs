@@ -7,6 +7,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
     /// This models the JSON request used for the Create Image request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Create_Image-d1e4655.html">Create Image (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateServerImageRequest
     {

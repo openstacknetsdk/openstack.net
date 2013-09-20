@@ -10,6 +10,7 @@ namespace net.openstack.Core.Exceptions.Response
     /// <see cref="HttpStatusCode.Forbidden"/>, or <see cref="HttpStatusCode.MethodNotAllowed"/>
     /// resulting from a call to a REST API.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class UserNotAuthorizedException : ResponseException
     {
