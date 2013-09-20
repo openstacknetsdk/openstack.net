@@ -1,10 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using net.openstack.Core;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Validators;
-using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Validators;
 
 namespace OpenStackNet.Testing.Unit.Providers.Rackspace
@@ -43,7 +41,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             catch (Exception ex)
             {
 
-                Assert.AreEqual("ERROR: Container Name cannot be Null.\r\nParameter name: ContainerName", ex.Message);
+                Assert.AreEqual("ERROR: Container Name cannot be empty.\r\nParameter name: containerName", ex.Message);
             }
         }
 
@@ -64,7 +62,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             catch (Exception ex)
             {
 
-                Assert.AreEqual("ERROR: Container Name cannot be Null.\r\nParameter name: ContainerName", ex.Message);
+                Assert.AreEqual("Value cannot be null.\r\nParameter name: containerName", ex.Message);
             }
         }
 

@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Providers;
+using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
+using net.openstack.Providers.Rackspace.Objects.Request;
+using net.openstack.Providers.Rackspace.Objects.Response;
+using net.openstack.Providers.Rackspace.Validators;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -17,12 +26,15 @@ namespace net.openstack.Providers.Rackspace
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/index.html">Rackspace Cloud Identity Client Developer Guide - API v2.0</seealso>
     public class CloudIdentityProvider : IExtendedCloudIdentityProvider, IIdentityProvider
     {
-        private readonly CloudIdentityProviderFactory _factory;
+        private readonly IRestService _restService;
+        private readonly ICache<UserAccess> _userAccessCache;
         private readonly CloudIdentity _defaultIdentity;
+        private readonly Uri _urlBase;
+        private readonly IHttpResponseCodeValidator _responseCodeValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, and the default <see cref="CloudInstance"/> base URLs,
+        /// with no default identity, and the default base URL,
         /// the REST service implementation, and token cache.
         /// </summary>
         public CloudIdentityProvider() : this(null, null, null, null, null)
@@ -30,8 +42,17 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with the specified default identity, and the default <see cref="CloudInstance"/>
-        /// base URLs, the REST service implementation, and token cache.
+        /// with the specified base URL, no default identity, and the default REST service implementation, and token cache.
+        /// </summary>
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(string urlBase)
+            : this(null, null, null, urlBase, null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with the specified default identity, and the default base URL, 
+        /// the REST service implementation, and token cache.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
@@ -40,64 +61,60 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, the specified <see cref="CloudInstance"/> base URLs,
-        /// and the default REST service implementation and token cache.
-        /// </summary>
-        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
-        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
-        public CloudIdentityProvider(string usInstanceUrlBase, string ukInstanceUrlBase)
-            : this(null, null, null, usInstanceUrlBase, ukInstanceUrlBase)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with the specified default identity and <see cref="CloudInstance"/> base URLs,
-        /// and the default REST service implementation and token cache.
+        /// with the specified default identity and base URL, 
+        /// and the default the REST service implementation, and token cache.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
-        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
-        public CloudIdentityProvider(CloudIdentity defaultIdentity, string usInstanceUrlBase, string ukInstanceUrlBase)
-            : this(defaultIdentity, null, null, usInstanceUrlBase, ukInstanceUrlBase)
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, string urlBase)
+            : this(defaultIdentity, null, null, urlBase, null)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, and the specified <see cref="CloudInstance"/> base URLs,
-        /// REST service implementation, and token cache.
+        /// with no default identity, the default base URL,
+        /// the specified REST service implementation, and the default token cache.
         /// </summary>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
-        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
-        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
-        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
-            : this(null, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase)
-        {}
+        public CloudIdentityProvider(IRestService restService)
+            : this(null, restService, null, null, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
+        /// with no default identity, the specified base URL and REST service implementation, 
+        /// and the default token cache.
+        /// </summary>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(IRestService restService, string urlBase)
+            : this(null, restService, null, urlBase, null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// with no default identity, the default base URL,
         /// the default REST service implementation, and the specified token cache.
         /// </summary>
         /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(ICache<UserAccess> tokenCache)
-            : this( null, tokenCache)
+            : this( null, null, tokenCache, null, null)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
-        /// the specified REST service implementation, and the <see cref="UserAccessCache.Instance"/>
-        /// token cache.
+        /// with no default identity, the specified base URL,
+        /// the default REST service implementation, and the specified token cache.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        public CloudIdentityProvider(IRestService restService)
-            : this(restService, null)
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(ICache<UserAccess> tokenCache, string urlBase)
+            : this(null, null, tokenCache, urlBase, null)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
-        /// with no default identity, the default <see cref="CloudInstance"/> base URLs,
+        /// with no default identity, the default base URL,
         /// and the specified REST service implementation and token cache.
         /// </summary>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
@@ -110,35 +127,77 @@ namespace net.openstack.Providers.Rackspace
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
         /// using the provided values.
         /// </summary>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, string urlBase)
+            : this(null, restService, tokenCache, urlBase, null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// using the provided values.
+        /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
-        /// <param name="usInstanceUrlBase">The base URL for the <see cref="CloudInstance.US"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
-        /// <param name="ukInstanceUrlBase">The base URL for the <see cref="CloudInstance.UK"/> cloud instance. If this value is <c>null</c>, the provider will use <c>https://lon.identity.api.rackspacecloud.com</c>.</param>
-        public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string usInstanceUrlBase, string ukInstanceUrlBase)
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string urlBase)
+            : this(defaultIdentity, restService, tokenCache, urlBase, null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
+        /// using the provided values.
+        /// </summary>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="urlBase">The base URL for the Identity provider. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="responseCodeValidator">The implementation of <see cref="IHttpResponseCodeValidator"/> to use for validating the REST request responses.. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
+        public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, string urlBase, IHttpResponseCodeValidator responseCodeValidator)
         {
-            _factory = new CloudIdentityProviderFactory(defaultIdentity, restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
+            if (restService == null)
+                restService = new JsonRestServices();
+
+            if (tokenCache == null)
+                tokenCache = UserAccessCache.Instance;
+
+            if (string.IsNullOrWhiteSpace(urlBase))
+                urlBase = "https://identity.api.rackspacecloud.com";
+
+            if (responseCodeValidator == null)
+                responseCodeValidator = HttpResponseCodeValidator.Default;
+
+            _restService = restService;
+            _userAccessCache = tokenCache;
             _defaultIdentity = defaultIdentity;
+            _urlBase = new Uri(urlBase);
+            _responseCodeValidator = responseCodeValidator;
         }
+
+        #region Roles
 
         /// <inheritdoc/>
         public IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.ListRoles(serviceId, marker, limit, identity);
-        }
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"serviceId", serviceId},
+                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                });
 
-        /// <inheritdoc/>
-        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
-        {
-            if (limit < 0 || limit > 1000)
-                throw new ArgumentOutOfRangeException("limit");
+            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET, queryStringParameter: parameters);
 
-            var provider = GetProvider(identity);
-            return provider.ListUsersByRole(roleId, enabled, marker, limit, identity);
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Roles;
         }
 
         /// <inheritdoc/>
@@ -148,9 +207,14 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("name");
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("name cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.AddRole(name, description, identity);
+            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest(new Role(name, description)));
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Role;
         }
 
         /// <inheritdoc/>
@@ -160,9 +224,15 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("roleId");
             if (string.IsNullOrEmpty(roleId))
                 throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.GetRole(roleId, identity);
+            var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}", roleId);
+            var response = ExecuteRESTRequest<RoleResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Role;
         }
 
         /// <inheritdoc/>
@@ -172,35 +242,15 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("userId");
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.GetRolesByUser(userId, identity: identity);
-        }
+            var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
+            var response = ExecuteRESTRequest<RolesResponse>(identity, urlPath, HttpMethod.GET);
 
-        /// <inheritdoc/>
-        public IEnumerable<User> ListUsers(CloudIdentity identity)
-        {
-            var provider = GetProvider(identity);
-            return provider.ListUsers(identity);
-        }
+            if (response == null || response.Data == null)
+                return null;
 
-        /// <inheritdoc/>
-        public User GetUserByName(string name, CloudIdentity identity)
-        {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name cannot be empty");
-
-            var provider = GetProvider(identity);
-            return provider.GetUserByName(name, identity: identity);
-        }
-
-        /// <inheritdoc/>
-        public UserAccess Authenticate(CloudIdentity identity)
-        {
-            var provider = GetProvider(identity);
-            return provider.Authenticate(identity);
+            return response.Data.Roles;
         }
 
         /// <inheritdoc/>
@@ -214,60 +264,78 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("userId cannot be empty");
             if (string.IsNullOrEmpty(roleId))
                 throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.AddRoleToUser(userId, roleId, identity: identity);
+            var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
+
+            // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
+            if (response == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
+                return false;
+
+            return true;
         }
 
         /// <inheritdoc/>
-        public User GetUser(string userId, CloudIdentity identity)
+        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
+            if (roleId == null)
+                throw new ArgumentNullException("roleId");
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(roleId))
+                throw new ArgumentException("roleId cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.GetUser(userId, identity: identity);
+            var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response != null && response.StatusCode == HttpStatusCode.NoContent)
+                return true;
+
+            return false;
         }
 
         /// <inheritdoc/>
-        public NewUser AddUser(NewUser user, CloudIdentity identity)
+        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
-            if (user == null)
-                throw new ArgumentNullException("user");
-            if (string.IsNullOrEmpty(user.Username))
-                throw new ArgumentException("user.Username cannot be null or empty");
-            if (user.Id != null)
-                throw new InvalidOperationException("user.Id must be null");
+            if (limit < 0 || limit > 1000)
+                throw new ArgumentOutOfRangeException("limit");
 
-            var provider = GetProvider(identity);
-            return provider.AddUser(user, identity: identity);
+            CheckIdentity(identity);
+
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"enabled", !enabled.HasValue ? null : enabled.Value ? "true" : "false"},
+                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                });
+
+            var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}/RAX-AUTH/users", roleId);
+            var response = ExecuteRESTRequest<UsersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
+
+            if (response == null || response.Data == null)
+                return null;
+            // Due to the fact the sometimes the API returns a JSON array of users and sometimes it returns a single JSON user object.  
+            // Therefore if we get a null data object (which indicates that the deserializer could not parse to an array) we need to try and parse as a single User object.
+            if (response.Data.Users == null)
+            {
+                var userResponse = JsonConvert.DeserializeObject<UserResponse>(response.RawBody);
+
+                if (response == null || response.Data == null)
+                    return null;
+
+                return new[] { userResponse.User };
+            }
+
+            return response.Data.Users;
         }
 
-        /// <inheritdoc/>
-        public User UpdateUser(User user, CloudIdentity identity)
-        {
-            if (user == null)
-                throw new ArgumentNullException("user");
-            if (string.IsNullOrEmpty(user.Id))
-                throw new ArgumentException("user.Id cannot be null or empty");
+        #endregion
 
-            var provider = GetProvider(identity);
-            return provider.UpdateUser(user, identity: identity);
-        }
-
-        /// <inheritdoc/>
-        public bool DeleteUser(string userId, CloudIdentity identity)
-        {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
-
-            var provider = GetProvider(identity);
-            return provider.DeleteUser(userId, identity: identity);
-        }
+        #region Credentials
 
         /// <inheritdoc/>
         public bool SetUserPassword(string userId, string password, CloudIdentity identity)
@@ -280,9 +348,11 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("userId cannot be empty");
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("password cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.SetUserPassword(userId, password, identity: identity);
+            var user = GetUser(userId, identity);
+
+            return SetUserPassword(user, password, identity);
         }
 
         /// <inheritdoc/>
@@ -298,9 +368,9 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("user.Id cannot be null or empty");
             if (string.IsNullOrEmpty(user.Username))
                 throw new ArgumentException("user.Username cannot be null or empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.SetUserPassword(user, password, identity: identity);
+            return SetUserPassword(user.Id, user.Username, password, identity);
         }
 
         /// <inheritdoc/>
@@ -318,9 +388,89 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("username cannot be empty");
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("password cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.SetUserPassword(userId, username, password, identity: identity);
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
+            var request = new SetPasswordRequest(username, password);
+            var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
+
+            if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)
+                return false;
+
+            return response.Data.PasswordCredential.Password.Equals(password);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || string.IsNullOrWhiteSpace(response.RawBody))
+                return null;
+
+            var jObject = JObject.Parse(response.RawBody);
+            var credsArray = (JArray)jObject["credentials"];
+            var creds = new List<UserCredential>();
+
+            foreach (JObject jToken in credsArray)
+            {
+                foreach (JProperty property in jToken.Properties())
+                {
+                    var cred = (JObject)property.Value;
+                    creds.Add(new UserCredential(property.Name, cred["username"].ToString(), cred["apiKey"].ToString()));
+                }
+
+            }
+
+            return creds.ToArray();
+        }
+
+        /// <inheritdoc/>
+        public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (credentialKey == null)
+                throw new ArgumentNullException("credentialKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(credentialKey))
+                throw new ArgumentException("credentialKey cannot be empty");
+            CheckIdentity(identity);
+
+            var creds = ListUserCredentials(userId, identity);
+
+            var cred = creds.FirstOrDefault(c => c.Name.Equals(credentialKey, StringComparison.OrdinalIgnoreCase));
+
+            return cred;
+        }
+
+        /// <inheritdoc/>
+        public CloudIdentity DefaultIdentity { get { return _defaultIdentity; } }
+
+        /// <inheritdoc/>
+        public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (apiKey == null)
+                throw new ArgumentNullException("apiKey");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("apiKey cannot be empty");
+            CheckIdentity(identity);
+
+            var user = GetUser(userId, identity);
+
+            return UpdateUserCredentials(user, apiKey, identity);
         }
 
         /// <inheritdoc/>
@@ -336,9 +486,9 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("user.Id cannot be null or empty");
             if (string.IsNullOrEmpty(user.Username))
                 throw new ArgumentException("user.Username cannot be null or empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.UpdateUserCredentials(user, apiKey, identity: identity);
+            return UpdateUserCredentials(user.Id, user.Username, apiKey, identity);
         }
 
         /// <inheritdoc/>
@@ -356,37 +506,16 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("username cannot be empty");
             if (string.IsNullOrEmpty(apiKey))
                 throw new ArgumentException("apiKey cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.UpdateUserCredentials(userId, username, apiKey, identity: identity);
-        }
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
+            var request = new UpdateUserCredentialRequest(username, apiKey);
+            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
 
-        /// <inheritdoc/>
-        public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
-        {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
+            if (response == null || response.Data == null)
+                return null;
 
-            var provider = GetProvider(identity);
-            return provider.ListUserCredentials(userId, identity: identity);
-        }
-
-        /// <inheritdoc/>
-        public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
-        {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (apiKey == null)
-                throw new ArgumentNullException("apiKey");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
-            if (string.IsNullOrEmpty(apiKey))
-                throw new ArgumentException("apiKey cannot be empty");
-
-            var provider = GetProvider(identity);
-            return provider.UpdateUserCredentials(userId, apiKey, identity: identity);
+            return response.Data.UserCredential;
         }
 
         /// <inheritdoc/>
@@ -396,74 +525,313 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("userId");
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
 
-            var provider = GetProvider(identity);
-            return provider.DeleteUserCredentials(userId, identity: identity);
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response == null || response.StatusCode != HttpStatusCode.OK)
+                return false;
+
+            return true;
         }
+
+        #endregion
+
+        #region Users
+
+        /// <inheritdoc/>
+        public IEnumerable<User> ListUsers(CloudIdentity identity)
+        {
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest<UsersResponse>(identity, "/v2.0/users", HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            // Due to the fact the sometimes the API returns a JSON array of users and sometimes it returns a single JSON user object.  
+            // Therefore if we get a null data object (which indicates that the deserializer could not parse to an array) we need to try and parse as a single User object.
+            if (response.Data.Users == null)
+            {
+                var userResponse = JsonConvert.DeserializeObject<UserResponse>(response.RawBody);
+
+                if (response == null || response.Data == null)
+                    return null;
+
+                return new[] { userResponse.User };
+            }
+
+            return response.Data.Users;
+        }
+
+        /// <inheritdoc/>
+        public User GetUserByName(string name, CloudIdentity identity)
+        {
+            if (name == null)
+                throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("name cannot be empty");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("/v2.0/users/?name={0}", name);
+            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.User;
+        }
+
+        /// <inheritdoc/>
+        public User GetUser(string userId, CloudIdentity identity)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("v2.0/users/{0}", userId);
+
+            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
+
+            return response.Data.User;
+        }
+
+        /// <inheritdoc/>
+        public NewUser AddUser(NewUser newUser, CloudIdentity identity)
+        {
+            if (newUser == null)
+                throw new ArgumentNullException("newUser");
+            if (string.IsNullOrEmpty(newUser.Username))
+                throw new ArgumentException("newUser.Username cannot be null or empty");
+            if (newUser.Id != null)
+                throw new InvalidOperationException("newUser.Id must be null");
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest(newUser));
+
+            if (response == null || response.Data == null)
+                return null;
+
+            // If the user specifies a password, then the password will not be in the response, so we need to fill it in on the return object.
+            if (string.IsNullOrEmpty(response.Data.NewUser.Password))
+                response.Data.NewUser.Password = newUser.Password;
+
+            return response.Data.NewUser;
+        }
+
+        /// <inheritdoc/>
+        public User UpdateUser(User user, CloudIdentity identity)
+        {
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (string.IsNullOrEmpty(user.Id))
+                throw new ArgumentException("user.Id cannot be null or empty");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("v2.0/users/{0}", user.Id);
+
+            var updateUserRequest = new UpdateUserRequest(user);
+            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.POST, updateUserRequest);
+
+            // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
+            if (response == null || response.Data == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
+                return null;
+
+            return response.Data.User;
+        }
+
+        /// <inheritdoc/>
+        public bool DeleteUser(string userId, CloudIdentity identity)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("userId cannot be empty");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("/v2.0/users/{0}", userId);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+
+            if (response != null && response.StatusCode == HttpStatusCode.NoContent)
+                return true;
+
+            return false;
+        }
+
+        #endregion
+
+        #region Tenants
 
         /// <inheritdoc/>
         public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
-            var provider = GetProvider(identity);
-            return provider.ListTenants(identity);
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest<TenantsResponse>(identity, "v2.0/tenants", HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Tenants;
+        }
+
+        #endregion
+
+        #region Token and Authentication
+
+        /// <inheritdoc/>
+        public IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
+        {
+            CheckIdentity(identity);
+
+            var auth = GetUserAccess(identity, forceCacheRefresh);
+
+            if (auth == null || auth.Token == null)
+                return null;
+
+            return auth.Token;
+        }
+
+        /// <inheritdoc/>
+        public UserAccess Authenticate(CloudIdentity identity)
+        {
+            CheckIdentity(identity);
+
+            return GetUserAccess(identity, true);
         }
 
         /// <inheritdoc/>
         public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
-            var provider = GetProvider(identity);
-            return provider.GetUserAccess(identity, forceCacheRefresh);
+            CheckIdentity(identity);
+
+            if (identity == null)
+                identity = DefaultIdentity;
+
+            var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
+
+            if (rackspaceCloudIdentity == null)
+                rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
+
+            var userAccess = _userAccessCache.Get(rackspaceCloudIdentity.Username, () =>
+            {
+                var auth = new AuthRequest(identity);
+                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
+
+
+                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                    return null;
+
+                return response.Data.UserAccess;
+            }, forceCacheRefresh);
+
+            return userAccess;
         }
 
-        /// <inheritdoc/>
-        public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
+        public UserAccess Authenticate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
         {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (credentialKey == null)
-                throw new ArgumentNullException("credentialKey");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
-            if (string.IsNullOrEmpty(credentialKey))
-                throw new ArgumentException("credentialKey cannot be empty");
+            var impToken = _userAccessCache.Get(string.Format("imp/{0}", identity.UserToImpersonate.Username), () =>
+            {
+                const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
+                var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
+                var response = ExecuteRESTRequest<UserImpersonationResponse>(identity, urlPath, HttpMethod.POST, request);
 
-            var provider = GetProvider(identity);
-            return provider.GetUserCredential(userId, credentialKey, identity: identity);
+                if (response == null || response.Data == null || response.Data.UserAccess == null)
+                    return null;
+
+                return response.Data.UserAccess;
+            }, forceCacheRefresh);
+
+            return impToken;
         }
 
-        /// <inheritdoc/>
-        public CloudIdentity DefaultIdentity { get { return _defaultIdentity; } }
-
-        /// <inheritdoc/>
-        public IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
+        private JObject BuildImpersonationRequestJson(string path, string userName, int expirationInSeconds)
         {
-            var provider = GetProvider(identity);
-            return provider.GetToken(identity, forceCacheRefresh);
+            var request = new JObject();
+            var impInfo = new JObject();
+            var user = new JObject { { "username", userName }, { "expire-in-seconds", expirationInSeconds } };
+            impInfo.Add("user", user);
+            var parts = path.Split('/');
+            request.Add(string.Format("{0}:impersonation", parts[1]), impInfo);
+
+            return request;
         }
 
-        /// <inheritdoc/>
-        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
-        {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (roleId == null)
-                throw new ArgumentNullException("roleId");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
-            if (string.IsNullOrEmpty(roleId))
-                throw new ArgumentException("roleId cannot be empty");
+        #endregion
 
-            var provider = GetProvider(identity);
-            return provider.DeleteRoleFromUser(userId, roleId, identity: identity);
+        protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null)
+        {
+            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute);
         }
 
-        private IExtendedCloudIdentityProvider GetProvider(CloudIdentity identity)
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null) where T : new()
         {
-            IExtendedCloudIdentityProvider result = _factory.Get(identity);
-            if (result == null && identity == null)
+            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute<T>);
+        }
+
+        protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, TimeSpan retryDelay,
+            Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
+        {
+            if (identity == null)
+                identity = DefaultIdentity;
+
+            var url = new Uri(_urlBase, urlPath);
+
+            var headers = new Dictionary<string, string>();
+
+            if (!isTokenRequest)
+                headers["X-Auth-Token"] = string.IsNullOrEmpty(token) ? GetToken(identity).Id : token;
+
+            string bodyStr = null;
+            if (body != null)
+            {
+                if (body is JObject)
+                    bodyStr = body.ToString();
+                else
+                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+
+            var settings = new JsonRequestSettings()
+            {
+                RetryCount = retryCount,
+                RetryDelay = retryDelay,
+                Non200SuccessCodes = new[] { HttpStatusCode.Unauthorized, HttpStatusCode.Conflict },
+                UserAgent = UserAgentGenerator.UserAgent
+            };
+
+            var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
+
+            // on errors try again 1 time.
+            if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && !isTokenRequest)
+            {
+                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity).Id, retryCount, retryDelay, callback);
+            }
+
+            _responseCodeValidator.Validate(response);
+
+            return response;
+        }
+
+        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+        {
+            if (optionalParameters == null)
+                return null;
+
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrEmpty(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
+
+            if (!paramList.Any())
+                return null;
+
+            return paramList;
+        }
+
+        protected virtual void CheckIdentity(CloudIdentity identity)
+        {
+            if (identity == null && DefaultIdentity == null)
                 throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
-
-            return result;
         }
     }
 }

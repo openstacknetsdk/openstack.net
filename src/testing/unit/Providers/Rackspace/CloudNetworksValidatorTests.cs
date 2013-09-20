@@ -26,7 +26,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             catch (Exception ex)
             {
 
-                Assert.AreEqual("ERROR: CIDR cannot be null\r\nParameter name: cidr", ex.Message);
+                Assert.AreEqual("cidr cannot be empty", ex.Message);
             }
         }
 
@@ -47,7 +47,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             catch (Exception ex)
             {
 
-                Assert.AreEqual("ERROR: CIDR cannot be null\r\nParameter name: cidr", ex.Message);
+                Assert.AreEqual("Value cannot be null.\r\nParameter name: cidr", ex.Message);
             }
         }
 

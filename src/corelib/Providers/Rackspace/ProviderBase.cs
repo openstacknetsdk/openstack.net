@@ -530,20 +530,8 @@ namespace net.openstack.Providers.Rackspace
             IEnumerable<Tuple<ServiceCatalog, Endpoint>> endpoints =
                 services.SelectMany(service => service.Endpoints.Select(endpoint => Tuple.Create(service, endpoint)));
 
-            string effectiveRegion = region;
-            if (string.IsNullOrEmpty(effectiveRegion))
-            {
-                if (!string.IsNullOrEmpty(userAccess.User.DefaultRegion))
-                    effectiveRegion = userAccess.User.DefaultRegion;
-                else if (IsLondonIdentity(identity))
-                    effectiveRegion = "LON";
-
-                if (string.IsNullOrEmpty(effectiveRegion))
-                    throw new NoDefaultRegionSetException("No region was provided and there is no default region set for the user's account.");
-            }
-
             IEnumerable<Tuple<ServiceCatalog, Endpoint>> regionEndpoints =
-                endpoints.Where(i => string.Equals(i.Item2.Region, effectiveRegion, StringComparison.OrdinalIgnoreCase));
+                endpoints.Where(i => string.Equals(i.Item2.Region, region, StringComparison.OrdinalIgnoreCase));
 
             if (regionEndpoints.Any())
                 endpoints = regionEndpoints;
@@ -698,25 +686,6 @@ namespace net.openstack.Providers.Rackspace
                 return DefaultIdentity;
 
             return IdentityProvider.DefaultIdentity;
-        }
-
-        /// <summary>
-        /// Tests whether the specified identity is associated with the London cloud instance
-        /// (<see cref="CloudInstance.UK"/>).
-        /// </summary>
-        /// <param name="identity">The identity to test.</param>
-        /// <returns><c>true</c> if <paramref name="identity"/> is a Rackspace identity associated with the <see cref="CloudInstance.UK"/> cloud instance; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <c>null</c>.</exception>
-        private static bool IsLondonIdentity(CloudIdentity identity)
-        {
-            if (identity == null)
-                throw new ArgumentNullException("identity");
-
-            var rsCloudIdentity = identity as RackspaceCloudIdentity;
-            if (rsCloudIdentity == null)
-                return false;
-
-            return rsCloudIdentity.CloudInstance == CloudInstance.UK;
         }
 
         /// <summary>
