@@ -112,6 +112,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 {
                     Username = _testAdminIdentity.Username,
                     Password = AdminNewPassword,
+                    Domain = _testAdminIdentity.Domain,
                 });
 
             Assert.IsNotNull(userAcess);
@@ -158,6 +159,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 {
                     Username = _testAdminIdentity.Username,
                     Password = AdminNewPassword,
+                    Domain = _testAdminIdentity.Domain,
                 });
 
             Assert.IsNotNull(userAcess);

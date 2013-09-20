@@ -33,6 +33,10 @@ namespace net.openstack.Providers.Rackspace.Objects
             this.Username = cloudIdentity.Username;
             this.Password = cloudIdentity.Password;
             this.APIKey = cloudIdentity.APIKey;
+
+            RackspaceCloudIdentity raxIdentity = cloudIdentity as RackspaceCloudIdentity;
+            if (raxIdentity != null)
+                this.Domain = raxIdentity.Domain;
         }
 
         /// <summary>

@@ -68,7 +68,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var identity = new RackspaceCloudIdentity()
                                {
                                    Username = _testIdentity.Username,
-                                   Password = "bad password"
+                                   Password = "bad password",
+                                   Domain = _testIdentity.Domain,
                                };
             IIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
 
@@ -90,7 +91,8 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             var identity = new RackspaceCloudIdentity()
                                {
                                    Username = _testIdentity.Username,
-                                   APIKey = "bad api key"
+                                   APIKey = "bad api key",
+                                   Domain = _testIdentity.Domain,
                                };
             IIdentityProvider serviceProvider = new CloudIdentityProvider(identity);
 
