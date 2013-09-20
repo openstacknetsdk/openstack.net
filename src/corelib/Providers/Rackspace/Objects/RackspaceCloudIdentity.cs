@@ -14,10 +14,7 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// Initializes a new instance of the <see cref="RackspaceCloudIdentity"/> class
         /// with the default values.
         /// </summary>
-        public RackspaceCloudIdentity()
-        {
-            CloudInstance = CloudInstance.Default;
-        }
+        public RackspaceCloudIdentity() {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RackspaceCloudIdentity"/> class
@@ -37,18 +34,6 @@ namespace net.openstack.Providers.Rackspace.Objects
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="CloudInstance"/> for this account.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="RackspaceCloudIdentity"/> class represents <em>credentials</em> (as opposed
-        /// to an <em>account</em>), so any changes made to this property value will not be
-        /// reflected in the account.
-        ///
-        /// <para>The default value is <see cref="net.openstack.Providers.Rackspace.Objects.CloudInstance.Default"/>.</para>
-        /// </remarks>
-        public CloudInstance CloudInstance { get; set; }
-
-        /// <summary>
         /// Gets or sets the <see cref="Domain"/> for this account.
         /// </summary>
         /// <remarks>
@@ -57,26 +42,5 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// reflected in the account.
         /// </remarks>
         public Domain Domain { get; set; }
-    }
-
-    /// <summary>
-    /// Represents a particular Rackspace entity where a user's account is located.
-    /// </summary>
-    public enum CloudInstance
-    {
-        /// <summary>
-        /// The Rackspace cloud for US-based accounts.
-        /// </summary>
-        US,
-
-        /// <summary>
-        /// The Rackspace cloud for UK-based accounts.
-        /// </summary>
-        UK,
-
-        /// <summary>
-        /// The default Rackspace cloud, which is currently equal to <see cref="US"/>.
-        /// </summary>
-        Default = US,
     }
 }

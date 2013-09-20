@@ -126,7 +126,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
-            var endpoint = provider.GetEndpoint(_testService, "LON", new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK});
+            var endpoint = provider.GetEndpoint(_testService, "LON", new RackspaceCloudIdentity());
 
             Assert.IsNotNull(endpoint);
             Assert.AreEqual("LON", endpoint.Region);
@@ -142,7 +142,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
-            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK});
+            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity());
 
             Assert.IsNotNull(endpoint);
             Assert.AreEqual("LON", endpoint.Region);
@@ -156,7 +156,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
-            var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
+            var provider = new MockProvider(new RackspaceCloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, "LON", null);
 
@@ -172,7 +172,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
-            var provider = new MockProvider(new RackspaceCloudIdentity {CloudInstance = CloudInstance.UK}, identityProviderMock.Object, null);
+            var provider = new MockProvider(new RackspaceCloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
 
@@ -190,7 +190,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
-            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK });
+            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity());
 
             Assert.IsNotNull(endpoint);
             Assert.AreEqual("LON", endpoint.Region);
@@ -204,7 +204,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
-            var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
+            var provider = new MockProvider(new RackspaceCloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
 
@@ -222,7 +222,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
             var provider = new MockProvider(null, identityProviderMock.Object, null);
 
-            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK });
+            var endpoint = provider.GetEndpoint(_testService, null, new RackspaceCloudIdentity());
 
             Assert.IsNotNull(endpoint);
             Assert.AreEqual("LON", endpoint.Region);
@@ -236,7 +236,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
             var identityProviderMock = new Mock<IIdentityProvider>();
             identityProviderMock.Setup(m => m.GetUserAccess(It.IsAny<CloudIdentity>(), It.IsAny<bool>())).Returns(userAccess);
-            var provider = new MockProvider(new RackspaceCloudIdentity { CloudInstance = CloudInstance.UK }, identityProviderMock.Object, null);
+            var provider = new MockProvider(new RackspaceCloudIdentity(), identityProviderMock.Object, null);
 
             var endpoint = provider.GetEndpoint(_testService, null, null);
 
