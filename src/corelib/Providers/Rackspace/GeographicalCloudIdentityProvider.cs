@@ -569,7 +569,7 @@ namespace net.openstack.Providers.Rackspace
             if (rackspaceCloudIdentity == null)
                 rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
+            var userAccess = _userAccessCache.Get(string.Format("{0}", rackspaceCloudIdentity.Username), () =>
                             {
                                 var auth = new AuthRequest(identity);
                                 var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(_urlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
@@ -586,7 +586,7 @@ namespace net.openstack.Providers.Rackspace
 
         public UserAccess Authenticate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
         {
-            var impToken = _userAccessCache.Get(string.Format("imp/{0}/{1}", identity.UserToImpersonate.CloudInstance, identity.UserToImpersonate.Username), () => {
+            var impToken = _userAccessCache.Get(string.Format("imp/{0}", identity.UserToImpersonate.Username), () => {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
                 var response = ExecuteRESTRequest<UserImpersonationResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.POST, request);

@@ -538,8 +538,6 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!string.IsNullOrEmpty(userAccess.User.DefaultRegion))
                     effectiveRegion = userAccess.User.DefaultRegion;
-                else if (IsLondonIdentity(identity))
-                    effectiveRegion = "LON";
 
                 if (string.IsNullOrEmpty(effectiveRegion))
                     throw new NoDefaultRegionSetException("No region was provided and there is no default region set for the user's account.");
@@ -701,25 +699,6 @@ namespace net.openstack.Providers.Rackspace
                 return DefaultIdentity;
 
             return IdentityProvider.DefaultIdentity;
-        }
-
-        /// <summary>
-        /// Tests whether the specified identity is associated with the London cloud instance
-        /// (<see cref="CloudInstance.UK"/>).
-        /// </summary>
-        /// <param name="identity">The identity to test.</param>
-        /// <returns><c>true</c> if <paramref name="identity"/> is a Rackspace identity associated with the <see cref="CloudInstance.UK"/> cloud instance; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <c>null</c>.</exception>
-        private static bool IsLondonIdentity(CloudIdentity identity)
-        {
-            if (identity == null)
-                throw new ArgumentNullException("identity");
-
-            var rsCloudIdentity = identity as RackspaceCloudIdentity;
-            if (rsCloudIdentity == null)
-                return false;
-
-            return rsCloudIdentity.CloudInstance == CloudInstance.UK;
         }
 
         /// <summary>

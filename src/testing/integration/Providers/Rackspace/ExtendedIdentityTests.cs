@@ -52,7 +52,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
 
         private static IExtendedCloudIdentityProvider BuildProvider(IRestService restService = null, ICache<UserAccess> cache = null)
         {
-            return new CloudIdentityProvider(restService, cache, Bootstrapper.Settings.RackspaceExtendedIdentityUSUrl, Bootstrapper.Settings.RackspaceExtendedIdentityUKUrl);
+            return new CloudIdentityProvider(restService, cache, Bootstrapper.Settings.RackspaceExtendedIdentityUrl);
         }
 
         [TestMethod]
@@ -109,7 +109,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 {
                     Username = _testAdminIdentity.Username,
                     Password = AdminNewPassword,
-                    CloudInstance = _testAdminIdentity.CloudInstance
                 });
 
             Assert.IsNotNull(userAcess);
@@ -156,7 +155,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
                 {
                     Username = _testAdminIdentity.Username,
                     Password = AdminNewPassword,
-                    CloudInstance = _testAdminIdentity.CloudInstance
                 });
 
             Assert.IsNotNull(userAcess);

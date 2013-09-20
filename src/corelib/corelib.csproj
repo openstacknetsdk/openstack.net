@@ -139,7 +139,6 @@
     <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionFailedObject.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
-    <Compile Include="Providers\Rackspace\Objects\CloudInstance.cs" />
     <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
@@ -252,7 +251,6 @@
     <Compile Include="Providers\Rackspace\ProviderBase`1.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
-    <Compile Include="Providers\Rackspace\Exceptions\UnknownGeographyException.cs" />
     <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
     <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
   </ItemGroup>
