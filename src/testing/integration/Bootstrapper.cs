@@ -55,8 +55,7 @@ namespace Net.OpenStack.Testing.Integration
 
         public ExtendedCloudIdentity TestDomainIdentity { get; set; }
 
-        public string RackspaceExtendedIdentityUSUrl { get; set; }
-        public string RackspaceExtendedIdentityUKUrl { get; set; }
+        public string RackspaceExtendedIdentityUrl { get; set; }
     }
 
     public class ExtendedCloudIdentity : CloudIdentity
