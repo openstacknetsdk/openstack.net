@@ -701,8 +701,28 @@ namespace net.openstack.Providers.Rackspace
             return userAccess;
         }
 
+        /// <summary>
+        /// Gets the authentication token for the specified impersonation identity. If necessary, the
+        /// identity is authenticated on the server to obtain a token.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="forceCacheRefresh"/> is <c>false</c> and a cached <see cref="IdentityToken"/>
+        /// is available for the specified <paramref name="identity"/>, this method may return the cached
+        /// value without performing an authentication against the server. If <paramref name="forceCacheRefresh"/>
+        /// is <c>true</c>, this method always authenticates the identity with the server.
+        /// </remarks>
+        /// <param name="identity">The identity of the user to authenticate. If this value is <c>null</c>, the authentication is performed with the <see cref="DefaultIdentity"/>.</param>
+        /// <param name="forceCacheRefresh">If <c>true</c>, the user is always authenticated against the server; otherwise a cached <see cref="IdentityToken"/> may be returned.</param>
+        /// <returns>The user's authentication token.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed.</exception>
         public UserAccess Authenticate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
         {
+            if (identity == null)
+                throw new ArgumentNullException("identity");
+
             var impToken = _userAccessCache.Get(string.Format("imp/{0}", identity.UserToImpersonate.Username), () => {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
