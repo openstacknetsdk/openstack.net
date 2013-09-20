@@ -39,6 +39,11 @@
             if (raxIdentity != null)
                 credentials.Domain = raxIdentity.Domain;
 
+            if (!String.IsNullOrEmpty(identity.ProjectName))
+            {
+                credentials.TenantName = identity.ProjectName;
+            }
+
             Credentials = credentials;
         }
     }

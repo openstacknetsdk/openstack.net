@@ -13,5 +13,8 @@ namespace net.openstack.Providers.Rackspace.Objects
 
         [JsonProperty("RAX-AUTH:domain", DefaultValueHandling = DefaultValueHandling.Include)]
         public Domain Domain { get; set; }
+
+        [JsonProperty("tenantName", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string TenantName { get; set; }
     }
 }

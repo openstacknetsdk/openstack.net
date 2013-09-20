@@ -48,5 +48,14 @@ namespace net.openstack.Core.Domain
         /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/Sample_Request_Response-d1e64.html">Sample Authentication Request and Response (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
         [JsonProperty("RAX-AUTH:defaultRegion")]
         public string DefaultRegion { get; private set; }
+
+        /// <summary>
+        /// Override the DefaultRegion retrieved from the server.
+        /// </summary>
+        /// <param name="newDefaultRegion">The new default region.</param>
+        public void OverrideDefaultRegion(string newDefaultRegion)
+        {
+            DefaultRegion = newDefaultRegion;
+        }
     }
 }
