@@ -68,7 +68,7 @@ namespace net.openstack.Providers.Rackspace
         protected ProviderBase(CloudIdentity defaultIdentity,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
             DefaultIdentity = defaultIdentity;
-            IdentityProvider = identityProvider ?? new CloudIdentityProvider(defaultIdentity);
+            IdentityProvider = identityProvider ?? this as IIdentityProvider ?? new CloudIdentityProvider(defaultIdentity);
             RestService = restService ?? new JsonRestServices();
             ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
         }
@@ -103,6 +103,7 @@ namespace net.openstack.Providers.Rackspace
         /// request.
         /// </param>
         /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
+        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
         /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
@@ -122,13 +123,13 @@ namespace net.openstack.Providers.Rackspace
         /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings settings = null)
+        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
         {
             if (absoluteUri == null)
                 throw new ArgumentNullException("absoluteUri");
             CheckIdentity(identity);
 
-            return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings, RestService.Execute<T>);
+            return ExecuteRESTRequest<Response<T>>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, isTokenRequest, settings, RestService.Execute<T>);
         }
 
         /// <summary>
@@ -160,6 +161,7 @@ namespace net.openstack.Providers.Rackspace
         /// request.
         /// </param>
         /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
+        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
         /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
@@ -179,13 +181,13 @@ namespace net.openstack.Providers.Rackspace
         /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings settings = null)
+        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
         {
             if (absoluteUri == null)
                 throw new ArgumentNullException("absoluteUri");
             CheckIdentity(identity);
 
-            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings, RestService.Execute);
+            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, isTokenRequest, settings, RestService.Execute);
         }
 
         /// <summary>
@@ -208,7 +210,7 @@ namespace net.openstack.Providers.Rackspace
         /// object from the <see cref="HttpWebResponse"/> and a Boolean value specifying
         /// whether or not a <see cref="WebException"/> was thrown during the request. If
         /// this value is <c>null</c>, this method is equivalent to calling
-        /// <see cref="ExecuteRESTRequest(CloudIdentity, Uri, HttpMethod, object, Dictionary{string, string}, Dictionary{string, string}, bool, RequestSettings)"/>.
+        /// <see cref="ExecuteRESTRequest(CloudIdentity, Uri, HttpMethod, object, Dictionary{string, string}, Dictionary{string, string}, bool, bool, RequestSettings)"/>.
         /// </param>
         /// <param name="body">
         /// The body of the request. This parameter is optional. If the value is <c>null</c>,
@@ -225,6 +227,7 @@ namespace net.openstack.Providers.Rackspace
         /// request.
         /// </param>
         /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
+        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
         /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
@@ -241,13 +244,13 @@ namespace net.openstack.Providers.Rackspace
         /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings settings = null)
+        protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
         {
             if (absoluteUri == null)
                 throw new ArgumentNullException("absoluteUri");
             CheckIdentity(identity);
 
-            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, settings,
+            return ExecuteRESTRequest<Response>(identity, absoluteUri, method, body, queryStringParameter, headers, isRetry, isTokenRequest, settings,
                 (uri, requestMethod, requestBody, requestHeaders, requestQueryParams, requestSettings) => RestService.Execute(uri, requestMethod, buildResponseCallback, requestBody, requestHeaders, requestQueryParams, requestSettings));
         }
 
@@ -279,6 +282,7 @@ namespace net.openstack.Providers.Rackspace
         /// request.
         /// </param>
         /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
+        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="requestSettings">
         /// The settings to use for the request. This parameter is optional. If the value
         /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
@@ -296,7 +300,7 @@ namespace net.openstack.Providers.Rackspace
         /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        private T ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, Dictionary<string, string> headers, bool isRetry, RequestSettings requestSettings,
+        private T ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, Dictionary<string, string> headers, bool isRetry, bool isTokenRequest, RequestSettings requestSettings,
             Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, RequestSettings, T> callback) where T : Response
         {
             if (absoluteUri == null)
@@ -311,7 +315,8 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry).Id;
+            if (!isTokenRequest)
+                headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry).Id;
 
             string bodyStr = null;
             if (body != null)
@@ -330,12 +335,9 @@ namespace net.openstack.Providers.Rackspace
             var response = callback(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
             // on errors try again 1 time.
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && !isTokenRequest)
             {
-                if (!isRetry)
-                {
-                    return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, true, requestSettings, callback);
-                }
+                return ExecuteRESTRequest<T>(identity, absoluteUri, method, body, queryStringParameter, headers, true, isTokenRequest, requestSettings, callback);
             }
 
             CheckResponse(response);

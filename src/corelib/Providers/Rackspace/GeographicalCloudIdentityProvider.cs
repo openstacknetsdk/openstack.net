@@ -7,6 +7,7 @@ using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Request;
@@ -16,21 +17,16 @@ using Newtonsoft.Json.Linq;
 
 namespace net.openstack.Providers.Rackspace
 {
-    internal class GeographicalCloudIdentityProvider : IExtendedCloudIdentityProvider
+    internal class GeographicalCloudIdentityProvider : ProviderBase<IIdentityProvider>, IExtendedCloudIdentityProvider
     {
-        private readonly IRestService _restService;
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
-        private readonly CloudIdentity _defaultIdentity;
-        private readonly IHttpResponseCodeValidator _responseCodeValidator;
 
         public GeographicalCloudIdentityProvider(Uri urlBase, CloudIdentity identity, IRestService restService, ICache<UserAccess> userAccessCache, IHttpResponseCodeValidator responseCodeValidator)
+            : base(identity, null, restService)
         {
-            _defaultIdentity = identity;
             _urlBase = urlBase;
             _userAccessCache = userAccessCache;
-            _restService = restService;
-            _responseCodeValidator = responseCodeValidator;
         }
 
         #region Roles
@@ -49,7 +45,7 @@ namespace net.openstack.Providers.Rackspace
                     {"limit", !limit.HasValue ? null : limit.Value.ToString()},
                 });
 
-            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET, queryStringParameter: parameters);
+            var response = ExecuteRESTRequest<RolesResponse>(identity, new Uri(_urlBase, "/v2.0/OS-KSADM/roles"), HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -66,7 +62,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("name cannot be empty");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<RoleResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.POST, new AddRoleRequest(new Role(name, description)));
+            var response = ExecuteRESTRequest<RoleResponse>(identity, new Uri(_urlBase, "/v2.0/OS-KSADM/roles"), HttpMethod.POST, new AddRoleRequest(new Role(name, description)));
 
             if (response == null || response.Data == null)
                 return null;
@@ -84,7 +80,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}", roleId);
-            var response = ExecuteRESTRequest<RoleResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<RoleResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -102,7 +98,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/users/{0}/roles", userId);
-            var response = ExecuteRESTRequest<RolesResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<RolesResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -124,7 +120,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
+            var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.PUT);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
             if (response == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
@@ -147,7 +143,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/users/{0}/roles/OS-KSADM/{1}", userId, roleId);
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+            var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.DELETE);
 
             if (response != null && response.StatusCode == HttpStatusCode.NoContent)
                 return true;
@@ -171,7 +167,7 @@ namespace net.openstack.Providers.Rackspace
                 });
 
             var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}/RAX-AUTH/users", roleId);
-            var response = ExecuteRESTRequest<UsersResponse>(identity, urlPath, HttpMethod.GET, queryStringParameter: parameters);
+            var response = ExecuteRESTRequest<UsersResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.GET, queryStringParameter: parameters);
 
             if (response == null || response.Data == null)
                 return null;
@@ -249,7 +245,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var request = new SetPasswordRequest(username, password);
-            var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
+            var response = ExecuteRESTRequest<PasswordCredentialResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.POST, request);
 
             if (response == null || response.StatusCode != HttpStatusCode.Created || response.Data == null)
                 return false;
@@ -267,7 +263,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
             if (response == null || string.IsNullOrWhiteSpace(response.RawBody))
                 return null;
@@ -310,7 +306,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public CloudIdentity DefaultIdentity { get { return _defaultIdentity;  } }
+        public new CloudIdentity DefaultIdentity { get { return base.DefaultIdentity;  } }
 
         /// <inheritdoc/>
         public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
@@ -367,7 +363,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
             var request = new UpdateUserCredentialRequest(username, apiKey);
-            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, urlPath, HttpMethod.POST, request);
+            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.POST, request);
 
             if (response == null || response.Data == null)
                 return null;
@@ -385,7 +381,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials", userId);
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+            var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.DELETE);
 
             if (response == null || response.StatusCode != HttpStatusCode.OK)
                 return false;
@@ -402,7 +398,7 @@ namespace net.openstack.Providers.Rackspace
         {
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<UsersResponse>(identity, "/v2.0/users", HttpMethod.GET);
+            var response = ExecuteRESTRequest<UsersResponse>(identity, new Uri(_urlBase, "/v2.0/users"), HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -432,7 +428,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/users/?name={0}", name);
-            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<UserResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -451,7 +447,7 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = string.Format("v2.0/users/{0}", userId);
 
-            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.GET);
+            var response = ExecuteRESTRequest<UserResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
             return response.Data.User;
         }
@@ -467,7 +463,7 @@ namespace net.openstack.Providers.Rackspace
                 throw new InvalidOperationException("newUser.Id must be null");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<NewUserResponse>(identity, "/v2.0/users", HttpMethod.POST, new AddUserRequest(newUser));
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, new Uri(_urlBase, "/v2.0/users"), HttpMethod.POST, new AddUserRequest(newUser));
 
             if (response == null || response.Data == null)
                 return null;
@@ -491,7 +487,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("v2.0/users/{0}", user.Id);
 
             var updateUserRequest = new UpdateUserRequest(user);
-            var response = ExecuteRESTRequest<UserResponse>(identity, urlPath, HttpMethod.POST, updateUserRequest);
+            var response = ExecuteRESTRequest<UserResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.POST, updateUserRequest);
 
             // If the response status code is 409, that mean the user is already apart of the role, so we want to return true;
             if (response == null || response.Data == null || (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Conflict))
@@ -510,7 +506,7 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var urlPath = string.Format("/v2.0/users/{0}", userId);
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+            var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.DELETE);
 
             if (response != null && response.StatusCode == HttpStatusCode.NoContent)
                 return true;
@@ -527,7 +523,7 @@ namespace net.openstack.Providers.Rackspace
         {
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<TenantsResponse>(identity, "v2.0/tenants", HttpMethod.GET);
+            var response = ExecuteRESTRequest<TenantsResponse>(identity, new Uri(_urlBase, "v2.0/tenants"), HttpMethod.GET);
 
             if (response == null || response.Data == null)
                 return null;
@@ -576,7 +572,7 @@ namespace net.openstack.Providers.Rackspace
             var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
                             {
                                 var auth = new AuthRequest(identity);
-                                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
+                                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(_urlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
 
 
                                 if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
@@ -593,7 +589,7 @@ namespace net.openstack.Providers.Rackspace
             var impToken = _userAccessCache.Get(string.Format("imp/{0}/{1}", identity.UserToImpersonate.CloudInstance, identity.UserToImpersonate.Username), () => {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(urlPath, identity.UserToImpersonate.Username, 600);
-                var response = ExecuteRESTRequest<UserImpersonationResponse>(identity, urlPath, HttpMethod.POST, request);
+                var response = ExecuteRESTRequest<UserImpersonationResponse>(identity, new Uri(_urlBase, urlPath), HttpMethod.POST, request);
 
                 if (response == null || response.Data == null || response.Data.UserAccess == null)
                     return null;
@@ -617,77 +613,5 @@ namespace net.openstack.Providers.Rackspace
         }
 
         #endregion
-
-        protected virtual Response ExecuteRESTRequest(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null)
-        {
-            return ExecuteRESTRequest<Response>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute);
-        }
-
-        protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null,  bool isRetry = false, bool isTokenRequest = false, string token = null, int retryCount = 2, TimeSpan? retryDelay = null) where T : new()
-        {
-            return ExecuteRESTRequest<Response<T>>(identity, urlPath, method, body, queryStringParameter, false, isTokenRequest, token, retryCount, retryDelay ?? TimeSpan.FromMilliseconds(200), _restService.Execute<T>);
-        }
-
-        protected T ExecuteRESTRequest<T>(CloudIdentity identity, string urlPath, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, bool isRetry, bool isTokenRequest, string token, int retryCount, TimeSpan retryDelay, 
-            Func<Uri, HttpMethod, string, Dictionary<string, string>, Dictionary<string, string>, JsonRequestSettings, T> callback) where T : Response
-        {
-            if (identity == null)
-                identity = DefaultIdentity;
-
-            var url = new Uri(_urlBase, urlPath);
-
-            var headers = new Dictionary<string, string>();
-
-            if (!isTokenRequest)
-                headers["X-Auth-Token"] = string.IsNullOrEmpty(token) ? GetToken(identity).Id : token;
-
-            string bodyStr = null;
-            if (body != null)
-            {
-                if (body is JObject)
-                    bodyStr = body.ToString();
-                else
-                    bodyStr = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-
-            var settings = new JsonRequestSettings()
-                               {
-                                   RetryCount = retryCount,
-                                   RetryDelay = retryDelay,
-                                   Non200SuccessCodes = new[] {HttpStatusCode.Unauthorized, HttpStatusCode.Conflict},
-                                   UserAgent = UserAgentGenerator.UserAgent
-                               };
-
-            var response = callback(url, method, bodyStr, headers, queryStringParameter, settings);
-
-            // on errors try again 1 time.
-            if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && !isTokenRequest)
-            {
-                return ExecuteRESTRequest<T>(identity, urlPath, method, body, queryStringParameter, true, isTokenRequest, GetToken(identity).Id, retryCount, retryDelay, callback);
-            }
-
-            _responseCodeValidator.Validate(response);
-
-            return response;
-        }
-
-        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
-        {
-            if (optionalParameters == null)
-                return null;
-
-            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrEmpty(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value);
-
-            if (!paramList.Any())
-                return null;
-
-            return paramList;
-        }
-
-        protected virtual void CheckIdentity(CloudIdentity identity)
-        {
-            if (identity == null && DefaultIdentity == null)
-                throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
-        }
     }
 }
