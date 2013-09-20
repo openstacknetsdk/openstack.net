@@ -20,6 +20,7 @@
     /// </remarks>
     /// <seealso cref="Server.TaskState"/>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#task_state">OS-EXT-STS:task_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(TaskState.Converter))]
     public sealed class TaskState : IEquatable<TaskState>
     {
@@ -447,6 +448,7 @@
         /// Provides support for serializing and deserializing <see cref="TaskState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<TaskState>
         {
             /// <remarks>

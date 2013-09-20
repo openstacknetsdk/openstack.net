@@ -20,6 +20,7 @@
     /// </remarks>
     /// <seealso cref="Server.PowerState"/>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#power_state">OS-EXT-STS:power_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(PowerState.Converter))]
     public sealed class PowerState : IEquatable<PowerState>
     {
@@ -123,6 +124,7 @@
         /// Provides support for serializing and deserializing <see cref="PowerState"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<PowerState>
         {
             /// <remarks>

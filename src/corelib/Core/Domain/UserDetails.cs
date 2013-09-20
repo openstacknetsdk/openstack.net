@@ -8,6 +8,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <seealso cref="UserAccess.User"/>
     /// <seealso cref="IIdentityProvider.Authenticate"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class UserDetails
     {

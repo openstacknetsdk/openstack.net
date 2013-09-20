@@ -15,6 +15,7 @@
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#diskconfig_attribute">Disk Configuration Extension (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(DiskConfiguration.Converter))]
     public sealed class DiskConfiguration : IEquatable<DiskConfiguration>
     {
@@ -119,6 +120,7 @@
         /// Provides support for serializing and deserializing <see cref="DiskConfiguration"/>
         /// objects to JSON string values.
         /// </summary>
+        /// <threadsafety static="true" instance="false"/>
         private sealed class Converter : SimpleStringJsonConverter<DiskConfiguration>
         {
             /// <remarks>

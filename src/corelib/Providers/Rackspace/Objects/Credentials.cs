@@ -9,6 +9,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// </summary>
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_authenticate_v2.0_tokens_.html">Authenticate (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/Sample_Request_Response-d1e64.html">Sample Authentication Request and Response (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class Credentials
     {

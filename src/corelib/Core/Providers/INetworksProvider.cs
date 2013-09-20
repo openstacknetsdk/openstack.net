@@ -9,7 +9,7 @@ namespace net.openstack.Core.Providers
     /// <summary>
     /// Represents a provider for the OpenStack Networking service.
     /// </summary>
-    /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/">Networking API v2.0 Reference</seealso>
+    /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/">OpenStack Networking API v2.0 Reference</seealso>
     public interface INetworksProvider
     {
         /// <summary>
@@ -68,7 +68,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Retrieve details for the specified network.
         /// </summary>
-        /// <param name="networkId">ID of the network to retrieve. The behavior is unspecified if this is not obtained from <see cref="CloudNetwork.Id"/>.</param>
+        /// <param name="networkId">ID of the network to retrieve. This is obtained from <see cref="CloudNetwork.Id"/>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="CloudNetwork"/> instance containing the network details.</returns>
@@ -91,7 +91,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Deletes the specified network. <remarks>You cannot delete an isolated network unless the network is not attached to any server.</remarks>
         /// </summary>
-        /// <param name="networkId">ID of the network to delete. The behavior is unspecified if this is not obtained from <see cref="CloudNetwork.Id"/>.</param>
+        /// <param name="networkId">ID of the network to delete. This is obtained from <see cref="CloudNetwork.Id"/>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the network was successfully deleted; otherwise, <c>false</c>.</returns>

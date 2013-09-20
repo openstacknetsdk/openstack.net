@@ -7,6 +7,7 @@
     /// This models the JSON request used for the Create Network request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/Create_Network.html">Create Network (OpenStack Networking API v2.0 Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateCloudNetworkRequest
     {

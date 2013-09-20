@@ -7,6 +7,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception that is thrown when a service endpoint could not be obtained because
     /// no region was specified and no default region is available for the provider.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class NoDefaultRegionSetException : InvalidOperationException
     {

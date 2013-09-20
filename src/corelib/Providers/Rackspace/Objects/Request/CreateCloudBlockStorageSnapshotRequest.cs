@@ -7,6 +7,7 @@
     /// This models the JSON request used for the Create Snapshot request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Create_Snapshot.html">Create Snapshot (OpenStack Block Storage Service API Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class CreateCloudBlockStorageSnapshotRequest
     {

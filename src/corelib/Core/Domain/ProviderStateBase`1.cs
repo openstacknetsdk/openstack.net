@@ -5,6 +5,7 @@
     /// provider which created them.
     /// </summary>
     /// <typeparam name="T">The provider type.</typeparam>
+    /// <threadsafety static="true" instance="false"/>
     public abstract class ProviderStateBase<T>
     {
         /// <summary>

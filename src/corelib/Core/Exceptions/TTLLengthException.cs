@@ -7,6 +7,7 @@ namespace net.openstack.Core.Exceptions
     /// The exception that is thrown when the TTL argument to a method is outside
     /// the range supported by the provider.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class TTLLengthException : ArgumentException
     {

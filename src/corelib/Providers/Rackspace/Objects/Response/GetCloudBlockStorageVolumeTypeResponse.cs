@@ -7,6 +7,7 @@
     /// This models the JSON response used for the Show Volume Type request.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Volume_Show_Type.html">Show Volume Type (OpenStack Block Storage Service API Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class GetCloudBlockStorageVolumeTypeResponse
     {

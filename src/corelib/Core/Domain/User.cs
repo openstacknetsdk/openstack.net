@@ -7,6 +7,7 @@ namespace net.openstack.Core.Domain
     /// Represents a user account.
     /// </summary>
     /// <seealso cref="IIdentityProvider.ListUsers"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class User
     {

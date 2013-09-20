@@ -9,6 +9,7 @@ namespace net.openstack.Core
     /// <summary>
     /// A status parser for HTTP status codes.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class HttpStatusCodeParser : IStatusParser
     {
         /// <summary>

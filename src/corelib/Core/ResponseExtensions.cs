@@ -9,6 +9,7 @@
     /// <summary>
     /// Contains extension methods to the <see cref="Response"/> class.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     internal static class ResponseExtensions
     {
         /// <summary>

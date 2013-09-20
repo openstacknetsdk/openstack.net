@@ -8,6 +8,7 @@ namespace net.openstack.Core.Domain
     /// This models the basic JSON description of a server.
     /// </summary>
     /// <seealso cref="IComputeProvider.ListServers"/>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class SimpleServer : ServerBase
     {

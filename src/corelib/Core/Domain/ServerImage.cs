@@ -11,6 +11,7 @@ namespace net.openstack.Core.Domain
     /// <seealso cref="IComputeProvider.ListImagesWithDetails"/>
     /// <seealso cref="IComputeProvider.GetImage"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Get_Image_Details-d1e4848.html">Get Image Details (OpenStack Compute API v2 and Extensions Reference)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class ServerImage : SimpleServerImage
     {

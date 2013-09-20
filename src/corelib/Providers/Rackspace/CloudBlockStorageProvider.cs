@@ -17,88 +17,129 @@ using net.openstack.Providers.Rackspace.Validators;
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
+    /// Provides an implementation of <see cref="IBlockStorageProvider"/>
+    /// for operating with Rackspace's Cloud Block Storage product.
+    /// </summary>
+    /// <remarks>
     /// <para>The Cloud Block Storage Provider enables simple access to the Rackspace Cloud Block Storage Volumes as well as Cloud Block Storage Volume Snapshot services.
     /// Rackspace Cloud Block Storage is a block level storage solution that allows customers to mount drives or volumes to their Rackspace Next Generation Cloud Servers.
     /// The two primary use cases are (1) to allow customers to scale their storage independently from their compute resources,
     /// and (2) to allow customers to utilize high performance storage to serve database or I/O-intensive applications.</para>
-    /// <para />
+    ///
     /// <para>Highlights of Rackspace Cloud Block Storage include:</para>
-    /// <para>- Mount a drive to a Cloud Server to scale storage without paying for more compute capability.</para>
-    /// <para>- A high performance option for databases and high performance applications, leveraging solid state drives for speed.</para>
-    /// <para>- A standard speed option for customers who just need additional storage on their Cloud Server.</para>
-    /// <para />
-    /// <para>Notes:</para>
-    /// <para>- Cloud Block Storage is an add-on feature to Next Generation Cloud Servers.  Customers may not attach Cloud Block Storage volumes to other instances, like first generation Cloud Servers.</para>
-    /// <para>- Cloud Block Storage is multi-tenant rather than dedicated.</para>
-    /// <para>- When volumes are destroyed, Rackspace keeps that disk space unavailable until zeros have been written to the space to ensure that data is not accessible by any other customers.</para>
-    /// <para>- Cloud Block Storage allows you to create snapshots that you can save, list, and restore.</para>
-    /// <para />
-    /// <para>Documentation URL: http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/overview.html</para>
-    /// </summary>
+    /// <list type="bullet">
+    /// <item>Mount a drive to a Cloud Server to scale storage without paying for more compute capability.</item>
+    /// <item>A high performance option for databases and high performance applications, leveraging solid state drives for speed.</item>
+    /// <item>A standard speed option for customers who just need additional storage on their Cloud Server.</item>
+    /// </list>
+    ///
+    /// <note>
+    /// <list type="bullet">
+    /// <item>Cloud Block Storage is an add-on feature to Next Generation Cloud Servers.  Customers may not attach Cloud Block Storage volumes to other instances, like first generation Cloud Servers.</item>
+    /// <item>Cloud Block Storage is multi-tenant rather than dedicated.</item>
+    /// <item>When volumes are destroyed, Rackspace keeps that disk space unavailable until zeros have been written to the space to ensure that data is not accessible by any other customers.</item>
+    /// <item>Cloud Block Storage allows you to create snapshots that you can save, list, and restore.</item>
+    /// </list>
+    /// </note>
+    /// </remarks>
     /// <see cref="IBlockStorageProvider"/>
     /// <inheritdoc />
+    /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/">OpenStack Block Storage Service API v2 Reference</seealso>
+    /// <seealso href="http://docs.rackspace.com/cbs/api/v1.0/cbs-devguide/content/overview.html">Rackspace Cloud Block Storage Developer Guide - API v1.0</seealso>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudBlockStorageProvider : ProviderBase<IBlockStorageProvider>, IBlockStorageProvider
     {
-
+        /// <summary>
+        /// The HTTP response codes indicating a successful result from an API call.
+        /// </summary>
         private readonly HttpStatusCode[] _validResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.Accepted };
+
+        /// <summary>
+        /// The <see cref="IBlockStorageValidator"/> to use for validating requests to
+        /// this service. The default value is <see cref="CloudBlockStorageValidator.Default"/>.
+        /// </summary>
         private readonly IBlockStorageValidator _cloudBlockStorageValidator;
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, and the default identity provider and REST service implementation.
         /// </summary>
         public CloudBlockStorageProvider()
             : this(null, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, and the default identity provider and REST service
+        /// implementation.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object.<remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudBlockStorageProvider(CloudIdentity identity)
             : this(identity, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, the default identity provider, and the specified REST service
+        /// implementation.
         /// </summary>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(IRestService restService)
             : this(null, restService) { }
-    
+
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, the specified identity provider, and the default REST service
+        /// implementation.
         /// </summary>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudBlockStorageProvider(IIdentityProvider identityProvider)
             : this(null, identityProvider, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity and identity provider, and the default REST service
+        /// implementation.
         /// </summary>
-        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider)
             : this(identity, identityProvider, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity and REST service implementation, and the default
+        /// identity provider.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IRestService restService)
             : this(identity, null, restService) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudBlockStorageProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, identity provider, and REST service implementation.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
             : this(identity, identityProvider, restService, CloudBlockStorageValidator.Default) { }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, and the default identity provider, REST service implementation,
+        /// and block storage validator.
+        /// </summary>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="cloudBlockStorageValidator">The <see cref="IBlockStorageValidator"/> to use for validating requests to this service.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="cloudBlockStorageValidator"/> is <c>null</c>.</exception>
         internal CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IBlockStorageValidator cloudBlockStorageValidator)
             : base(identity, identityProvider, restService)
         {
+            if (cloudBlockStorageValidator == null)
+                throw new ArgumentNullException("cloudBlockStorageValidator");
+
             _cloudBlockStorageValidator = cloudBlockStorageValidator;
         }
 
@@ -263,29 +304,6 @@ namespace net.openstack.Providers.Rackspace
             return volumeInfo;
         }
 
-        /// <summary>
-        /// Represents errors that occur when a volume enters an error state while waiting
-        /// on it to enter a particular state.
-        /// </summary>
-        public class VolumeEnteredErrorStateException : Exception
-        {
-            /// <summary>
-            /// Gets the error state the volume entered.
-            /// </summary>
-            public VolumeState Status { get; private set; }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="VolumeEnteredErrorStateException"/> with the
-            /// specified volume state.
-            /// </summary>
-            /// <param name="status">The erroneous volume state.</param>
-            public VolumeEnteredErrorStateException(VolumeState status)
-                : base(string.Format("The volume entered an error state: '{0}'", status))
-            {
-                Status = status;
-            }
-        }
-
         #endregion
 
         #region Snapshots
@@ -418,29 +436,6 @@ namespace net.openstack.Providers.Rackspace
                 throw new SnapshotEnteredErrorStateException(snapshotInfo.Status);
 
             return snapshotInfo;
-        }
-
-        /// <summary>
-        /// Represents errors that occur when a snapshot enters an error state while waiting
-        /// on it to enter a particular state.
-        /// </summary>
-        public class SnapshotEnteredErrorStateException : Exception
-        {
-            /// <summary>
-            /// Gets the error state the snapshot entered.
-            /// </summary>
-            public SnapshotState Status { get; private set; }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="SnapshotEnteredErrorStateException"/> with the
-            /// specified snapshot state.
-            /// </summary>
-            /// <param name="status">The erroneous snapshot state.</param>
-            public SnapshotEnteredErrorStateException(SnapshotState status)
-                : base(string.Format("The snapshot entered an error state: '{0}'", status))
-            {
-                Status = status;
-            }
         }
 
         #endregion

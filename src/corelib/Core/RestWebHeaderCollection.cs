@@ -13,6 +13,7 @@
     /// This collection does restrict headers which are exposed through properties,
     /// allowing users to explicitly construct a complete set of headers.
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class RestWebHeaderCollection : WebHeaderCollection
     {

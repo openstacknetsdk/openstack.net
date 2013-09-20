@@ -9,6 +9,7 @@ namespace net.openstack.Core.Exceptions.Response
     /// Represents errors with status code <see cref="HttpStatusCode.ServiceUnavailable"/> resulting
     /// from a call to a REST API.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ServiceUnavailableException : ResponseException
     {

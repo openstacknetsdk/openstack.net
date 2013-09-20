@@ -50,7 +50,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Lists global roles for a specified user. Excludes tenant roles.
         /// </summary>
-        /// <param name="userId">The user's ID. The behavior is unspecified if this value is not obtained from <see cref="User.Id"/>.</param>
+        /// <param name="userId">The user's ID. This is obtained from <see cref="User.Id">User.Id</see>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
         /// <returns>A collection of <see cref="Role"/> objects describing the roles for the specified user.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <c>null</c>.</exception>
@@ -163,7 +163,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Deletes the specified user from the account.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
         /// <returns><c>true</c> if the user was successfully deleted; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <c>null</c>.</exception>
@@ -181,7 +181,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Lists the credentials for the specified user.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
         /// <returns>List of <see cref="UserCredential"/> objects describing the credentials of the specified user.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <c>null</c>.</exception>
@@ -228,7 +228,7 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Gets the specified user credential.
         /// </summary>
-        /// <param name="userId">The user ID. The behavior is unspecified if this is not obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
+        /// <param name="userId">The user ID. This is obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
         /// <param name="credentialKey">The credential key.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
         /// <returns>The <see cref="UserCredential"/> details for the specified credentials type.</returns>

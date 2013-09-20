@@ -10,6 +10,7 @@ namespace net.openstack.Providers.Rackspace.Validators
     /// Provides an implementation of <see cref="IObjectStorageValidator"/> for
     /// operation with Rackspace's Cloud Files product.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class CloudFilesValidator : IObjectStorageValidator
     {
         /// <summary>

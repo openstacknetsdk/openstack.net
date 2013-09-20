@@ -11,6 +11,7 @@ namespace net.openstack.Core.Exceptions
     /// obtained for a particular provider because it was not present in the user's
     /// <see cref="UserAccess.ServiceCatalog"/>.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class UserAuthorizationException : InvalidOperationException
     {

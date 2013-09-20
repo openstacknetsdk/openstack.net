@@ -9,6 +9,7 @@
     /// <seealso cref="IIdentityProvider.AddUser"/>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_addUser_v2.0_users_.html">Add User (OpenStack Identity Service API v2.0 Reference)</seealso>
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_addUser_v2.0_users_.html">Add User (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
+    /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     public class NewUser
     {

@@ -8,6 +8,7 @@ namespace net.openstack.Providers.Rackspace.Exceptions
     /// Represents errors which occur during a bulk delete operation.
     /// </summary>
     /// <seealso cref="CloudFilesProvider.BulkDelete"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class BulkDeletionException : Exception
     {

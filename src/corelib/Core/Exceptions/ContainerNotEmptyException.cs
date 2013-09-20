@@ -8,6 +8,7 @@ namespace net.openstack.Core.Exceptions
     /// Thrown when an Object Storage container operation fails because the specified container was not empty.
     /// </summary>
     /// <seealso cref="IObjectStorageProvider.DeleteContainer"/>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class ContainerNotEmptyException : InvalidOperationException
     {
