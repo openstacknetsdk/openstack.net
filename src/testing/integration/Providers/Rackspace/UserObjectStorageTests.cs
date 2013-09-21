@@ -780,6 +780,17 @@
             return FilterMetadataPrefix(metadata, prefix);
         }
 
+        private static string GetObjectContentType(IObjectStorageProvider provider, string containerName, string objectName)
+        {
+            Dictionary<string, string> headers = provider.GetObjectHeaders(containerName, objectName);
+
+            string contentType;
+            if (!headers.TryGetValue("Content-Type", out contentType))
+                return null;
+
+            return contentType.ToLowerInvariant();
+        }
+
         #endregion
 
         #region Objects
@@ -1311,13 +1322,14 @@
             string copiedName = Path.GetRandomFileName();
             // another random name counts as random content
             string fileData = Path.GetRandomFileName();
+            string contentType = "text/plain-jane";
 
             ObjectStore containerResult = provider.CreateContainer(containerName);
             Assert.AreEqual(ObjectStore.ContainerCreated, containerResult);
 
             using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
             {
-                provider.CreateObject(containerName, uploadStream, objectName);
+                provider.CreateObject(containerName, uploadStream, objectName, contentType);
             }
 
             using (MemoryStream downloadStream = new MemoryStream())
@@ -1355,9 +1367,8 @@
             }
 
             // make sure the content type was not changed by the copy operation
-            Dictionary<string, string> originalHeaders = provider.GetObjectHeaders(containerName, objectName);
-            Dictionary<string, string> copiedHeaders = provider.GetObjectHeaders(containerName, objectName);
-            Assert.AreEqual(originalHeaders["Content-Type"], copiedHeaders["Content-Type"]);
+            Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, objectName));
+            Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, copiedName));
 
             /* Cleanup
              */
