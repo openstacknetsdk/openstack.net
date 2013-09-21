@@ -864,12 +864,15 @@
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string objectData = "";
+            string contentType = "text/plain-jane";
 
             ObjectStore result = provider.CreateContainer(containerName);
             Assert.AreEqual(ObjectStore.ContainerCreated, result);
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(objectData));
-            provider.CreateObject(containerName, stream, objectName);
+            provider.CreateObject(containerName, stream, objectName, contentType);
+            Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, objectName));
+
             Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "Key1", "Value 1" },
@@ -877,6 +880,7 @@
             };
 
             provider.UpdateObjectMetadata(containerName, objectName, new Dictionary<string, string>(metadata, StringComparer.OrdinalIgnoreCase));
+            Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, objectName));
 
             Dictionary<string, string> actualMetadata = provider.GetObjectMetaData(containerName, objectName);
             Console.WriteLine("Object Metadata");
@@ -891,6 +895,7 @@
                 { "Key2", "Value 2" }
             };
             provider.UpdateObjectMetadata(containerName, objectName, new Dictionary<string, string>(updatedMetadata, StringComparer.OrdinalIgnoreCase));
+            Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, objectName));
 
             actualMetadata = provider.GetObjectMetaData(containerName, objectName);
             Console.WriteLine("Object Metadata");
