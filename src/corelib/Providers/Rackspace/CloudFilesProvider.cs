@@ -808,7 +808,11 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
+            RequestSettings settings = BuildDefaultRequestSettings();
+            // make sure the content type is not changed by the metadata operation
+            settings.ContentType = null;
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers, settings: settings);
         }
 
         /// <inheritdoc />
@@ -1095,10 +1099,7 @@ namespace net.openstack.Providers.Rackspace
             else
             {
                 // make sure to preserve the content type during the copy operation
-                Dictionary<string, string> sourceHeaders = GetObjectHeaders(sourceContainer, sourceObjectName, region, useInternalUrl, identity);
-                string contentType;
-                if (sourceHeaders.TryGetValue("Content-Type", out contentType))
-                    settings.ContentType = contentType;
+                settings.ContentType = null;
             }
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.COPY, headers: headers, settings: settings);
