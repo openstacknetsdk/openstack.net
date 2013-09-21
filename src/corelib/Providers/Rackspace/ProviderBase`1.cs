@@ -47,6 +47,11 @@ namespace net.openstack.Providers.Rackspace
         protected readonly IHttpResponseCodeValidator ResponseCodeValidator;
 
         /// <summary>
+        /// This is the backing field for <see cref="ConnectionLimit"/>.
+        /// </summary>
+        private int? _connectionLimit;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class using
         /// the specified default identity, identity provider, and REST service implementation,
         /// and the default HTTP response code validator.
@@ -71,6 +76,28 @@ namespace net.openstack.Providers.Rackspace
             IdentityProvider = identityProvider ?? this as IIdentityProvider ?? new CloudIdentityProvider(defaultIdentity);
             RestService = restService ?? new JsonRestServices();
             ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum number of connections allowed on the <see cref="ServicePoint"/>
+        /// objects used for requests. If the value is <c>null</c>, the connection limit value for the
+        /// <see cref="ServicePoint"/> object is not altered.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="value"/> is less than or equal to 0.</exception>
+        public int? ConnectionLimit
+        {
+            get
+            {
+                return _connectionLimit;
+            }
+
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+
+                _connectionLimit = value;
+            }
         }
 
         /// <summary>
@@ -469,7 +496,14 @@ namespace net.openstack.Providers.Rackspace
             if(non200SuccessCodes != null)
                 non200SuccessCodesAggregate.AddRange(non200SuccessCodes);
 
-            return new JsonRequestSettings { RetryCount = 2, RetryDelay = TimeSpan.FromMilliseconds(200), Non200SuccessCodes = non200SuccessCodesAggregate, UserAgent = UserAgentGenerator.UserAgent };
+            return new JsonRequestSettings
+            {
+                RetryCount = 2,
+                RetryDelay = TimeSpan.FromMilliseconds(200),
+                Non200SuccessCodes = non200SuccessCodesAggregate,
+                UserAgent = UserAgentGenerator.UserAgent,
+                ConnectionLimit = ConnectionLimit,
+            };
         }
 
         /// <summary>
