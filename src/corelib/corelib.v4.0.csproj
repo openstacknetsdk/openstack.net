@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>net.openstack</RootNamespace>
+    <AssemblyName>openstacknet</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseIntermediateOutputPath>obj\v4.0\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\v4.0\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\v4.0\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\v4.0\Release\openstacknet.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleRESTServices, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SimpleRESTServices.1.2.0.0\lib\net40\SimpleRESTServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Caching\ICache`1.cs" />
+    <Compile Include="Core\Caching\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\Converters\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\Converters\PhysicalAddressSimpleConverter.cs" />
+    <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
+    <Compile Include="Core\Domain\DiskConfiguration.cs" />
+    <Compile Include="Core\Domain\ImageState.cs" />
+    <Compile Include="Core\Domain\IPAddressList.cs" />
+    <Compile Include="Core\Domain\PowerState.cs" />
+    <Compile Include="Core\Domain\SnapshotState.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressDetailsConverter.cs" />
+    <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\ProviderStateBase`1.cs" />
+    <Compile Include="Core\Domain\ServerBase.cs" />
+    <Compile Include="Core\Domain\ServerImage.cs" />
+    <Compile Include="Core\Domain\SimpleServer.cs" />
+    <Compile Include="Core\Domain\SimpleServerImage.cs" />
+    <Compile Include="Core\Domain\Snapshot.cs" />
+    <Compile Include="Core\Domain\TaskState.cs" />
+    <Compile Include="Core\Domain\VirtualInterface.cs" />
+    <Compile Include="Core\Domain\VirtualInterfaceAddress.cs" />
+    <Compile Include="Core\Domain\VirtualMachineState.cs" />
+    <Compile Include="Core\Domain\Volume.cs" />
+    <Compile Include="Core\Domain\VolumeState.cs" />
+    <Compile Include="Core\Domain\VolumeType.cs" />
+    <Compile Include="Core\Domain\CloudIdentity.cs" />
+    <Compile Include="Core\Domain\CloudNetwork.cs" />
+    <Compile Include="Core\Domain\Container.cs" />
+    <Compile Include="Core\Domain\ContainerCDN.cs" />
+    <Compile Include="Core\Domain\ContainerObject.cs" />
+    <Compile Include="Core\Domain\Flavor.cs" />
+    <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\Exceptions\ContainerNotEmptyException.cs" />
+    <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
+    <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\Providers\NamespaceDoc.cs" />
+    <Compile Include="Core\ResponseExtensions.cs" />
+    <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Validators\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\BulkDeletionException.cs" />
+    <Compile Include="Core\HttpStatusCodeParser.cs" />
+    <Compile Include="Core\IStatusParser.cs" />
+    <Compile Include="Core\Providers\IBlockStorageProvider.cs" />
+    <Compile Include="Core\Domain\Status.cs" />
+    <Compile Include="Core\Validators\IBlockStorageValidator.cs" />
+    <Compile Include="Core\Domain\ImageType.cs" />
+    <Compile Include="Core\Domain\Link.cs" />
+    <Compile Include="Core\Domain\Mapping\IJsonObjectMapper`1.cs" />
+    <Compile Include="Core\Domain\Mapping\IObjectMapper`2.cs" />
+    <Compile Include="Core\Domain\NewUser.cs" />
+    <Compile Include="Core\Domain\ObjectStore.cs" />
+    <Compile Include="Core\Domain\Personality.cs" />
+    <Compile Include="Core\Domain\RebootType.cs" />
+    <Compile Include="Core\Domain\ServerAddresses.cs" />
+    <Compile Include="Core\Domain\ServerState.cs" />
+    <Compile Include="Core\Domain\ServerVolume.cs" />
+    <Compile Include="Core\Domain\Tenant.cs" />
+    <Compile Include="Core\Domain\UserCredential.cs" />
+    <Compile Include="Core\Exceptions\CidrFormatException.cs" />
+    <Compile Include="Core\Exceptions\CDNNotEnabledException.cs" />
+    <Compile Include="Core\Exceptions\ContainerNameException.cs" />
+    <Compile Include="Core\Exceptions\ObjectNameException.cs" />
+    <Compile Include="Core\Exceptions\Response\BadServiceRequestException.cs" />
+    <Compile Include="Core\Exceptions\Response\ItemNotFoundException.cs" />
+    <Compile Include="Core\Exceptions\Response\MethodNotImplementedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceConflictException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceFaultException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
+    <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Core\Providers\INetworksProvider.cs" />
+    <Compile Include="Core\Validators\INetworksValidator.cs" />
+    <Compile Include="Core\UserAgentGenerator.cs" />
+    <Compile Include="Core\Validators\IHttpResponseCodeValidator.cs" />
+    <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
+    <Compile Include="Core\Exceptions\TTLLengthException.cs" />
+    <Compile Include="Core\Providers\IObjectStorageProvider.cs" />
+    <Compile Include="Core\IObjectStorageMetadataProcessor.cs" />
+    <Compile Include="Core\IEncodeDecodeProvider.cs" />
+    <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
+    <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\BulkDeletionFailedObject.cs" />
+    <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RoleResponse.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
+    <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
+    <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidVolumeSizeException.cs" />
+    <Compile Include="Providers\Rackspace\CloudNetworksProvider.cs" />
+    <Compile Include="Providers\Rackspace\IExtendedCloudIdentityProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidETagException.cs" />
+    <Compile Include="Providers\Rackspace\CloudFilesProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudServersProvider.cs" />
+    <Compile Include="Core\Exceptions\InvalidCloudIdentityException.cs" />
+    <Compile Include="Providers\Rackspace\CloudFilesMetadataProcessor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworkRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworksDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\CloudNetworkResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListCloudNetworksResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeListResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\SetPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataItemRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredentialRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeTypeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\IProviderFactory`2.cs" />
+    <Compile Include="Core\Domain\NewServer.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListAddressesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListImagesDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListImagesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListServersResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeTypeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredentialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
+    <Compile Include="Providers\Rackspace\RackspaceImpersonationIdentity.cs" />
+    <Compile Include="Core\Domain\Metadata.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\MetaDataResponse.cs" />
+    <Compile Include="Core\Domain\Server.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerDetailsResponse.cs" />
+    <Compile Include="Core\Domain\User.cs" />
+    <Compile Include="Core\Providers\IComputeProvider.cs" />
+    <Compile Include="Core\Domain\IdentityToken.cs" />
+    <Compile Include="Providers\Rackspace\Objects\RackspaceCloudIdentity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\RescueServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RescueServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\RevertServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UnrescueServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebootDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebootRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebuildDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebuildRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeRequest.cs" />
+    <Compile Include="Core\Exceptions\Response\ResponseException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudNetworksValidator.cs" />
+    <Compile Include="Core\Caching\UserAccessCache.cs" />
+    <Compile Include="Core\Providers\IIdentityProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Domain\UserAccess.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AuthRequest.cs" />
+    <Compile Include="Core\Domain\Role.cs" />
+    <Compile Include="Core\Domain\Endpoint.cs" />
+    <Compile Include="Core\Domain\ServiceCatalog.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\AuthenticationResponse.cs" />
+    <Compile Include="Providers\Rackspace\CloudIdentityProvider.cs" />
+    <Compile Include="Core\Domain\UserDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RolesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\ProviderBase`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
+    <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\openstack_net_logo.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corelib", "corelib\corelib.csproj", "{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corelib.v4.0", "corelib\corelib.v4.0.csproj", "{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integration", "testing\integration\integration.csproj", "{C1D0D0D8-9EF2-4557-B85F-34FDB0F466C4}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{1C279666-B88A-4765-8A51-B352C85EFC28}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentation\Documentation.shfbproj", "{EA57BD15-3742-45B8-BDE2-263F7236BAFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corelib.v3.5", "corelib\corelib.v3.5.csproj", "{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -80,6 +82,16 @@ Global
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|x86.ActiveCfg = Release|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
