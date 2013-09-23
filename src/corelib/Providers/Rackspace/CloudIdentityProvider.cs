@@ -737,6 +737,28 @@ namespace net.openstack.Providers.Rackspace
             return impToken;
         }
 
+        /// <inheritdoc/>
+        public UserAccess ValidateToken(string token, string tenantId = null, CloudIdentity identity = null)
+        {
+            if (token == null)
+                throw new ArgumentNullException("token");
+            if (string.IsNullOrEmpty(token))
+                throw new ArgumentException("token cannot be empty");
+
+            var queryStringParameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"belongsTo", tenantId}
+                });
+            
+            var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(_urlBase, string.Format("/v2.0/tokens/{0}", token)), HttpMethod.GET, queryStringParameter: queryStringParameters);
+
+
+            if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                return null;
+
+            return response.Data.UserAccess;
+        }
+
         private JObject BuildImpersonationRequestJson(string path, string userName, int expirationInSeconds)
         {
             var request = new JObject();
