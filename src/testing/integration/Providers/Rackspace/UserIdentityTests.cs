@@ -68,6 +68,33 @@
             Console.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
         }
 
+        /// <summary>
+        /// This method tests the basic functionality of the <see cref="IIdentityProvider.ValidateToken"/>
+        /// method for a validated token.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
+        public void TestValidateToken()
+        {
+            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            UserAccess userAccess = provider.Authenticate();
+
+            Assert.IsNotNull(userAccess);
+            Assert.IsNotNull(userAccess.Token);
+            Assert.IsNotNull(userAccess.Token.Id);
+
+            UserAccess validated = provider.ValidateToken(userAccess.Token.Id);
+            Assert.IsNotNull(validated);
+            Assert.IsNotNull(validated.Token);
+            Assert.AreEqual(userAccess.Token.Id, validated.Token.Id);
+
+            Assert.IsNotNull(validated.User);
+            Assert.AreEqual(userAccess.User.Id, validated.User.Id);
+            Assert.AreEqual(userAccess.User.Name, validated.User.Name);
+            Assert.AreEqual(userAccess.User.DefaultRegion, validated.User.DefaultRegion);
+        }
+
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
