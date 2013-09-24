@@ -354,14 +354,16 @@ namespace net.openstack.Providers.Rackspace
         /// Validates a given token.
         /// </summary>
         /// <param name="token">The token to be authenticated.</param>
-        /// <param name="tenantId">The Id of the Tenant to vaidate in scope.</param>
+        /// <param name="tenantId">If specified, the validation ensures that the specified tenant is in scope. This is obtained from <see cref="Tenant.Id"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns>A <see cref="UserAccess"/> object containing the authentication token and user data.</returns>
+        /// <returns>A <see cref="UserAccess"/> object containing the authentication token and user data. The <see cref="UserAccess.ServiceCatalog"/> property of the result may be <c>null</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="token"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="token"/> is empty.</exception>
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="ItemNotFoundException">If <paramref name="tenantId"/> is specified and the token is not valid within the specified tenant.</exception>
         /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_validateToken_v2.0_tokens__tokenId__Token_Operations.html">Validate Token (OpenStack Identity Service API v2.0 Reference)</seealso>
         UserAccess ValidateToken(string token, string tenantId = null, CloudIdentity identity = null);
     }
 }
