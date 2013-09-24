@@ -7,20 +7,20 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ea57bd15-3742-45b8-bde2-263f7236bafd}</ProjectGuid>
+    <ProjectGuid>{60b1668c-4331-4e3d-86f6-954ffce0cd36}</ProjectGuid>
     <SHFBSchemaVersion>1.9.5.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
     <RootNamespace>Documentation</RootNamespace>
-    <Name>Documentation</Name>
+    <Name>Documentation.v3.5</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
-    <OutputPath>..\..\docs\html\</OutputPath>
+    <OutputPath>..\..\docs\html\v3.5</OutputPath>
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\corelib\corelib.v4.0.csproj" xmlns="" subFolders="true" />
+      <DocumentationSource sourceFile="..\corelib\corelib.v3.5.csproj" xmlns="" subFolders="true" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, MSHelpViewer, Website</HelpFileFormat>
@@ -59,7 +59,7 @@
     <ComponentConfigurations>
       <ComponentConfig id="IntelliSense Component" enabled="True" xmlns="">
         <component id="IntelliSense Component" type="Microsoft.Ddue.Tools.IntelliSenseComponent" assembly="{@SandcastlePath}ProductionTools\BuildComponents.dll">
-          <output includeNamespaces="false" namespacesFile="Namespaces" folder="{@OutputFolder}\..\Api" />
+          <output includeNamespaces="false" namespacesFile="Namespaces" folder="{@OutputFolder}\..\..\Api\v3.5" />
         </component>
       </ComponentConfig>
     </ComponentConfigurations>
@@ -94,9 +94,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\corelib\corelib.v4.0.csproj">
-      <Name>corelib.v4.0</Name>
-      <Project>{7dba11eb-dba7-4d3a-8d42-b5312e74b9c0}</Project>
+    <ProjectReference Include="..\corelib\corelib.v3.5.csproj">
+      <Name>corelib.v3.5</Name>
+      <Project>{e49d9dc3-79d5-4c5e-8c38-fd5060b4e318}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
