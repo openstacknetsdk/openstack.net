@@ -349,19 +349,5 @@ namespace net.openstack.Providers.Rackspace
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUserCredential_v2.0_users__userId__OS-KSADM_credentials__credential-type__.html">Update User Credentials (OpenStack Identity Service API v2.0 Reference)</seealso>
         UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity = null);
-
-        /// <summary>
-        /// Validates a given token.
-        /// </summary>
-        /// <param name="token">The token to be authenticated.</param>
-        /// <param name="tenantId">The Id of the Tenant to vaidate in scope.</param>
-        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns>A <see cref="UserAccess"/> object containing the authentication token and user data.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="token"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="token"/> is empty.</exception>
-        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
-        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
-        UserAccess ValidateToken(string token, string tenantId = null, CloudIdentity identity = null);
     }
 }
