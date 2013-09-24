@@ -40,7 +40,9 @@
                 throw new ArgumentNullException("status");
 
             _state.Status = status.Name;
+#if !NET35
             SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
+#endif
         }
 
         [Serializable]

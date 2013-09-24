@@ -51,7 +51,9 @@ namespace net.openstack.Providers.Rackspace.Exceptions
                 throw new ArgumentException("status cannot be empty");
 
             _state.Results = results;
+#if !NET35
             SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
+#endif
         }
 
         [Serializable]

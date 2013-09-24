@@ -35,7 +35,9 @@ namespace net.openstack.Providers.Rackspace.Exceptions
             : base(string.Format("The volume size value must be between 100 and 1000. The size requested was: {0}", size))
         {
             _state.Size = size;
+#if !NET35
             SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
+#endif
         }
 
         [Serializable]

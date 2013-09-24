@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>openstack.net</id>
-    <version>$version$</version>
+    <version>0.0.0</version>
     <title>openstack.net</title>
-    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc</authors>
+    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc, sharwell</authors>
     <owners>alanquillin</owners>
     <licenseUrl>https://github.com/openstacknetsdk/openstack.net/wiki/Copyright</licenseUrl>
     <projectUrl>https://github.com/openstacknetsdk/openstack.net</projectUrl>
@@ -13,8 +13,31 @@
     <releaseNotes>https://github.com/openstacknetsdk/openstack.net/releases/v$version$</releaseNotes>
     <copyright></copyright>
     <tags>openstack</tags>
+    <dependencies>
+      <group targetFramework="4.0">
+        <dependency id="SimpleRESTServices" version="1.2.0.0" />
+        <dependency id="Newtonsoft.Json" version="5.0.6" />
+      </group>
+      <group targetFramework="3.5">
+        <dependency id="SimpleRESTServices" version="1.2.0.0" />
+        <dependency id="Newtonsoft.Json" version="5.0.6" />
+        <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
-    <file src="..\..\docs\Api\openstacknet.xml" target="lib\net40"/>
+
+    <!-- Runtime libraries -->
+    <file src="bin\v3.5\$Configuration$\openstacknet.dll" target="lib\net35"/>
+    <file src="bin\v3.5\$Configuration$\openstacknet.pdb" target="lib\net35"/>
+    <file src="..\..\docs\Api\v3.5\openstacknet.xml" target="lib\net35"/>
+
+    <file src="bin\v4.0\$Configuration$\openstacknet.dll" target="lib\net40"/>
+    <file src="bin\v4.0\$Configuration$\openstacknet.pdb" target="lib\net40"/>
+    <file src="..\..\docs\Api\v4.0\openstacknet.xml" target="lib\net40"/>
+
+    <!-- Source code -->
+    <file src="**\*.cs" target="src" />
+
   </files>
 </package>
