@@ -253,6 +253,7 @@
     <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="corelib.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
