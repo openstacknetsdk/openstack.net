@@ -234,11 +234,10 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return response.Data;
-
         }
 
         /// <inheritdoc />
-        public ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public ObjectStore CreateContainer(string container, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
@@ -249,7 +248,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateContainerName(container);
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
-            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT);
+            var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: headers);
 
             switch (response.StatusCode)
             {

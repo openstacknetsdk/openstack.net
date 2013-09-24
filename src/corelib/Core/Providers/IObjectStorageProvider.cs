@@ -48,6 +48,7 @@ namespace net.openstack.Core.Providers
         /// Creates a container if it does not already exist.
         /// </summary>
         /// <param name="container">The container name.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the container (see <see cref="GetContainerHeader"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -60,7 +61,11 @@ namespace net.openstack.Core.Providers
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -76,7 +81,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
-        ObjectStore CreateContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        ObjectStore CreateContainer(string container, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Deletes a container, and optionally all objects stored in the container.
