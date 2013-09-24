@@ -250,6 +250,71 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        public void TestVersionedContainer()
+        {
+            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string versionsContainerName = TestContainerPrefix + Path.GetRandomFileName();
+
+            ObjectStore result = provider.CreateContainer(versionsContainerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            result = provider.CreateContainer(containerName, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { { CloudFilesProvider.VersionsLocation, versionsContainerName } });
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Dictionary<string, string> headers = provider.GetContainerHeader(containerName);
+            string location;
+            Assert.IsTrue(headers.TryGetValue(CloudFilesProvider.VersionsLocation, out location));
+            Assert.AreEqual(versionsContainerName, location);
+
+            string objectName = Path.GetRandomFileName();
+            string fileData1 = "first-content";
+            string fileData2 = "second-content";
+
+            /*
+             * Create the object
+             */
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData1)))
+            {
+                provider.CreateObject(containerName, uploadStream, objectName);
+            }
+
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData1, actualData);
+
+            /*
+             * Overwrite the object
+             */
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData2)))
+            {
+                provider.CreateObject(containerName, uploadStream, objectName);
+            }
+
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData2, actualData);
+
+            /*
+             * Delete the object once
+             */
+
+            provider.DeleteObject(containerName, objectName);
+
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData1, actualData);
+
+            /*
+             * Cleanup
+             */
+
+            provider.DeleteContainer(versionsContainerName, deleteObjects: true);
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteContainer()
         {
             IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
@@ -1083,15 +1148,8 @@
                 File.Delete(tempFilePath);
             }
 
-            using (MemoryStream testStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, Path.GetFileName(tempFilePath), testStream);
-
-                testStream.Position = 0;
-                StreamReader reader = new StreamReader(testStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, Path.GetFileName(tempFilePath), Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
              */
@@ -1128,15 +1186,8 @@
                 File.Delete(tempFilePath);
             }
 
-            using (MemoryStream testStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, testStream);
-
-                testStream.Position = 0;
-                StreamReader reader = new StreamReader(testStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
              */
@@ -1168,15 +1219,8 @@
                 Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
             }
 
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
              */
@@ -1337,39 +1381,18 @@
                 provider.CreateObject(containerName, uploadStream, objectName, contentType);
             }
 
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             provider.CopyObject(containerName, objectName, containerName, copiedName);
 
             // make sure the item is available at the copied location
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, copiedName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            actualData = ReadAllObjectText(provider, containerName, copiedName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             // make sure the original object still exists
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             // make sure the content type was not changed by the copy operation
             Assert.AreEqual(contentType, GetObjectContentType(provider, containerName, objectName));
@@ -1400,15 +1423,8 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             provider.MoveObject(containerName, objectName, containerName, movedName);
 
@@ -1425,15 +1441,8 @@
             {
             }
 
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, movedName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            actualData = ReadAllObjectText(provider, containerName, movedName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
              */
@@ -1459,15 +1468,8 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            using (MemoryStream downloadStream = new MemoryStream())
-            {
-                provider.GetObject(containerName, objectName, downloadStream);
-
-                downloadStream.Position = 0;
-                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
-                string actualData = reader.ReadToEnd();
-                Assert.AreEqual(fileData, actualData);
-            }
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            Assert.AreEqual(fileData, actualData);
 
             provider.DeleteObject(containerName, objectName);
 
@@ -1761,6 +1763,18 @@
         {
             foreach (var pair in expected)
                 Assert.IsTrue(actual.Contains(pair), "Expected metadata item {{ {0} : {1} }} not found.", pair.Key, pair.Value);
+        }
+
+        private static string ReadAllObjectText(IObjectStorageProvider provider, string containerName, string objectName, Encoding encoding, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, objectName, downloadStream, chunkSize, headers, region, verifyEtag, progressUpdated, useInternalUrl, identity);
+
+                downloadStream.Position = 0;
+                StreamReader reader = new StreamReader(downloadStream, encoding);
+                return reader.ReadToEnd();
+            }
         }
     }
 }
