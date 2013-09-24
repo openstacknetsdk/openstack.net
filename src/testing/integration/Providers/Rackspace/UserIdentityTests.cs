@@ -69,7 +69,7 @@
         }
 
         /// <summary>
-        /// This method tests the basic functionality of the <see cref="IExtendedCloudIdentityProvider.ValidateToken"/>
+        /// This method tests the basic functionality of the <see cref="IIdentityProvider.ValidateToken"/>
         /// method for a validated token.
         /// </summary>
         [TestMethod]
@@ -77,7 +77,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestValidateToken()
         {
-            IExtendedCloudIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
             UserAccess userAccess = provider.Authenticate();
 
             Assert.IsNotNull(userAccess);
