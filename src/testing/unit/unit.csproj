@@ -41,9 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SimpleRESTServices, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SimpleRESTServices.1.1.3.0\lib\net40\SimpleRESTServices.dll</HintPath>
+      <HintPath>..\..\packages\SimpleRESTServices.1.2.0.0\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -71,9 +71,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\corelib\corelib.csproj">
+    <ProjectReference Include="..\..\corelib\corelib.v4.0.csproj">
       <Project>{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}</Project>
-      <Name>corelib</Name>
+      <Name>corelib.v4.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
