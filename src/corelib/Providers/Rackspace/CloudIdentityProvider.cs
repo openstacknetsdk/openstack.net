@@ -364,7 +364,7 @@ namespace net.openstack.Providers.Rackspace
             var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials", userId);
             var response = ExecuteRESTRequest(identity, new Uri(_urlBase, urlPath), HttpMethod.GET);
 
-            if (response == null || string.IsNullOrWhiteSpace(response.RawBody))
+            if (response == null || string.IsNullOrEmpty(response.RawBody))
                 return null;
 
             var jObject = JObject.Parse(response.RawBody);

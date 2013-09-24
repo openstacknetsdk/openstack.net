@@ -40,7 +40,9 @@ namespace net.openstack.Core.Exceptions.Response
             : base(message)
         {
             _state.Response = response;
+#if !NET35
             SerializeObjectState += (ex, args) => args.AddSerializedState(_state);
+#endif
         }
 
         /// <inheritdoc/>

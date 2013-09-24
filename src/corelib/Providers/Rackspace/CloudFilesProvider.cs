@@ -1247,7 +1247,7 @@ namespace net.openstack.Providers.Rackspace
 
                     return string.Format("/{0}/{1}", _encodeDecodeProvider.UrlEncode(pair.Key), _encodeDecodeProvider.UrlEncode(pair.Value));
                 });
-            var body = string.Join("\n", encoded);
+            var body = string.Join("\n", encoded.ToArray());
 
             var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
@@ -1287,7 +1287,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateObjectName(objectName);
             VerifyContainerIsCDNEnabled(container, region, identity);
 
-            string email = emails != null ? string.Join(",", emails) : null;
+            string email = emails != null ? string.Join(",", emails.ToArray()) : null;
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (!string.IsNullOrEmpty(email))
             {
