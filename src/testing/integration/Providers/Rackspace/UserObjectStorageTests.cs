@@ -250,6 +250,76 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        public void TestVersionedContainer()
+        {
+            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string versionsContainerName = TestContainerPrefix + Path.GetRandomFileName();
+
+            ObjectStore result = provider.CreateContainer(versionsContainerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            result = provider.CreateContainer(containerName, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { { CloudFilesProvider.VersionsLocation, versionsContainerName } });
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Dictionary<string, string> headers = provider.GetContainerHeader(containerName);
+            string location;
+            Assert.IsTrue(headers.TryGetValue(CloudFilesProvider.VersionsLocation, out location));
+            Assert.AreEqual(versionsContainerName, location);
+
+            string objectName = Path.GetRandomFileName();
+            string fileData1 = "first-content";
+            string fileData2 = "second-content";
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData1)))
+            {
+                provider.CreateObject(containerName, uploadStream, objectName);
+            }
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, objectName, downloadStream);
+
+                downloadStream.Position = 0;
+                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
+                string actualData = reader.ReadToEnd();
+                Assert.AreEqual(fileData1, actualData);
+            }
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData2)))
+            {
+                provider.CreateObject(containerName, uploadStream, objectName);
+            }
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, objectName, downloadStream);
+
+                downloadStream.Position = 0;
+                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
+                string actualData = reader.ReadToEnd();
+                Assert.AreEqual(fileData2, actualData);
+            }
+
+            provider.DeleteObject(containerName, objectName);
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, objectName, downloadStream);
+
+                downloadStream.Position = 0;
+                StreamReader reader = new StreamReader(downloadStream, Encoding.UTF8);
+                string actualData = reader.ReadToEnd();
+                Assert.AreEqual(fileData1, actualData);
+            }
+
+            provider.DeleteContainer(versionsContainerName, deleteObjects: true);
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteContainer()
         {
             IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
