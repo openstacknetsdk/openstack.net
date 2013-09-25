@@ -11,19 +11,24 @@ namespace net.openstack.Core.Domain
     public class UserAccess
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class
-        /// with the default token, user, and service catalog.
+        /// Initializes a new instance of the <see cref="UserAccess"/> class.
         /// </summary>
-        public UserAccess(){}
+        /// <remarks>
+        /// This constructor is used by the JSON deserializer.
+        /// </remarks>
+        [JsonConstructor]
+        protected UserAccess()
+        {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class
+        /// Initializes a new instance of the <see cref="UserAccess"/> class
         /// with the specified token, user, and service catalog.
         /// </summary>
         /// <param name="token">The <see cref="IdentityToken "/>.</param>
         /// <param name="user">The <see cref="UserDetails"/>.</param>
         /// <param name="serviceCatalog">List of <see cref="ServiceCatalog"/>s.</param>
-        internal UserAccess(IdentityToken token, UserDetails user, ServiceCatalog[] serviceCatalog)
+        public UserAccess(IdentityToken token, UserDetails user, ServiceCatalog[] serviceCatalog)
         {
             Token = token;
             User = user;

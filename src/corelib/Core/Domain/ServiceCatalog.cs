@@ -15,19 +15,24 @@ namespace net.openstack.Core.Domain
     public class ServiceCatalog
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class
-        /// with the default name, username, and endpoints.
+        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class.
         /// </summary>
-        public ServiceCatalog() {}
+        /// <remarks>
+        /// This constructor is used by the JSON deserializer.
+        /// </remarks>
+        [JsonConstructor]
+        protected ServiceCatalog()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCatalog"/> class
         /// with the specified name, username, and endpoints.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="type">The username.</param>
-        /// <param name="endpoints">List of <see cref="Endpoint"/>s.</param>
-        internal ServiceCatalog(string name, string type, Endpoint[] endpoints)
+        /// <param name="name">The display name of the service.</param>
+        /// <param name="type">The canonical name of the service.</param>
+        /// <param name="endpoints">A collection of <see cref="Endpoint"/> objects describing the service endpoints.</param>
+        public ServiceCatalog(string name, string type, Endpoint[] endpoints)
         {
             Name = name;
             Type = type;
