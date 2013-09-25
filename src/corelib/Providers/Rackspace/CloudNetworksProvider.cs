@@ -30,56 +30,82 @@ namespace net.openstack.Providers.Rackspace
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity or region, and the default identity provider and REST
+        /// service implementation.
         /// </summary>
         public CloudNetworksProvider()
-            : this(null, null, null) { }
+            : this(null, null, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// the specified default identity, no default region, and the default identity
+        /// provider and REST service implementation.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudNetworksProvider(CloudIdentity identity)
-            : this(identity, null, null) { }
+            : this(identity, null, null, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// no default identity or region, the default identity provider, and the specified
+        /// REST service implementation.
         /// </summary>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudNetworksProvider(IRestService restService)
-            : this(null, null, restService) { }
+            : this(null, null, null, restService) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// no default identity or region, the specified identity provider, and the default
+        /// REST service implementation.
         /// </summary>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudNetworksProvider(IIdentityProvider identityProvider)
-            : this(null, identityProvider, null) { }
+            : this(null, null, identityProvider, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// the specified default identity and identity provider, no default region, and
+        /// the default REST service implementation.
         /// </summary>
-        /// /<param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
         public CloudNetworksProvider(CloudIdentity identity, IIdentityProvider identityProvider)
-            : this(identity, identityProvider, null) { }
+            : this(identity, null, identityProvider, null) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// the specified default identity and REST service implementation, no default region,
+        /// and the default identity provider.
         /// </summary>
-        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudNetworksProvider(CloudIdentity identity, IRestService restService)
-            : this(identity, null, restService) { }
+            : this(identity, null, null, restService) { }
 
         /// <summary>
-        /// Creates a new instance of the Rackspace <see cref="net.openstack.Providers.Rackspace.CloudNetworksProvider"/> class.
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// the specified default identity, no default region, and the specified identity
+        /// provider and REST service implementation.
         /// </summary>
         /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
         /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
         /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
         public  CloudNetworksProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : base(identity, identityProvider, restService) { }
+            : this(identity, null, identityProvider, restService) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
+        /// the specified default identity, default region, identity provider, and REST
+        /// service implementation.
+        /// </summary>
+        /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
+        /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
+        public CloudNetworksProvider(CloudIdentity identity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
+            : base(identity, defaultRegion, identityProvider, restService) { }
 
         #endregion
 

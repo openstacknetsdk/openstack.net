@@ -66,76 +66,93 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, and the default identity provider and REST service implementation.
+        /// no default identity or region, and the default identity provider and REST service
+        /// implementation.
         /// </summary>
         public CloudFilesProvider()
-            : this(null, null, null) { }
+            : this(null, null, null, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity, and the default identity provider and REST service
-        /// implementation.
+        /// the specified default identity, no default region, and the default identity provider
+        /// and REST service implementation.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, null, null) { }
+            : this(defaultIdentity, null, null, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, the default identity provider, and the specified REST service
-        /// implementation.
+        /// no default identity or region, the default identity provider, and the specified
+        /// REST service implementation.
         /// </summary>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(IRestService restService)
-            : this(null, null, restService) { }
+            : this(null, null, null, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, the specified identity provider, and the default REST service
-        /// implementation.
+        /// no default identity or region, the specified identity provider, and the default
+        /// REST service implementation.
         /// </summary>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudFilesProvider(IIdentityProvider identityProvider)
-            : this(null, identityProvider, null) { }
+            : this(null, null, identityProvider, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity and identity provider, and the default REST service
-        /// implementation.
+        /// the specified default identity and identity provider, no default region, and
+        /// the default REST service implementation.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider)
-            : this(defaultIdentity, identityProvider, null) { }
+            : this(defaultIdentity, null, identityProvider, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity and REST service implementation, and the default
-        /// identity provider.
+        /// the specified default identity and REST service implementation, no default region,
+        /// and the default identity provider.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IRestService restService)
-            : this(defaultIdentity, null, restService) { }
+            : this(defaultIdentity, null, null, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity, identity provider, and REST service implementation,
-        /// and the default Rackspace-Cloud-Files-specific implementations of the object storage
-        /// validator, metadata processor, encoder, status parser, and bulk delete results mapper.
+        /// the specified default identity, no default region, the specified identity
+        /// provider and REST service implementation, and the default
+        /// Rackspace-Cloud-Files-specific implementations of the object storage validator,
+        /// metadata processor, encoder, status parser, and bulk delete results mapper.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
-            : this(defaultIdentity, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
+            : this(defaultIdentity, null, identityProvider, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, and the default identity provider, REST service implementation,
-        /// validator, metadata processor, encoder, status parser, and bulk delete results
-        /// mapper.
+        /// the specified default identity, default region, identity provider, and REST service
+        /// implementation, and the default Rackspace-Cloud-Files-specific implementations of
+        /// the object storage validator, metadata processor, encoder, status parser, and bulk
+        /// delete results mapper.
         /// </summary>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        public CloudFilesProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
+            : this(defaultIdentity, defaultRegion, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// no default identity, the specified default region, and the default identity
+        /// provider, REST service implementation, validator, metadata processor, encoder,
+        /// status parser, and bulk delete results mapper.
+        /// </summary>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
@@ -154,16 +171,17 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>If <paramref name="mapper"/> is <c>null</c>.</para>
         /// </exception>
-        internal CloudFilesProvider(IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
-            : this(null, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
+        internal CloudFilesProvider(string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
+            : this(null, defaultRegion, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity, identity provider, REST service implementation,
-        /// validator, metadata processor, encoder, status parser, and bulk delete results
-        /// mapper.
+        /// the specified default identity, default region, identity provider, REST service
+        /// implementation, validator, metadata processor, encoder, status parser, and bulk
+        /// delete results mapper.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
@@ -182,8 +200,8 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>If <paramref name="bulkDeletionResultMapper"/> is <c>null</c>.</para>
         /// </exception>
-        internal CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> bulkDeletionResultMapper)
-            : base(defaultIdentity, identityProvider, restService)
+        internal CloudFilesProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> bulkDeletionResultMapper)
+            : base(defaultIdentity, defaultRegion, identityProvider, restService)
         {
             if (cloudFilesValidator == null)
                 throw new ArgumentNullException("cloudFilesValidator");
