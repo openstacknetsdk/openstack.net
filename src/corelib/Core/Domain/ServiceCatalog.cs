@@ -15,6 +15,31 @@ namespace net.openstack.Core.Domain
     public class ServiceCatalog
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class.
+        /// </summary>
+        /// <remarks>
+        /// This constructor is used by the JSON deserializer.
+        /// </remarks>
+        [JsonConstructor]
+        protected ServiceCatalog()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceCatalog"/> class
+        /// with the specified name, username, and endpoints.
+        /// </summary>
+        /// <param name="name">The display name of the service.</param>
+        /// <param name="type">The canonical name of the service.</param>
+        /// <param name="endpoints">A collection of <see cref="Endpoint"/> objects describing the service endpoints.</param>
+        public ServiceCatalog(string name, string type, Endpoint[] endpoints)
+        {
+            Name = name;
+            Type = type;
+            Endpoints = endpoints;
+        }
+
+        /// <summary>
         /// Gets the endpoints for the service.
         /// </summary>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_authenticate_v2.0_tokens_.html">Authenticate (OpenStack Identity Service API v2.0 Reference)</seealso>
