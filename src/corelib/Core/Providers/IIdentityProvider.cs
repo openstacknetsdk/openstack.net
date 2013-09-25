@@ -273,7 +273,7 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="token">The authentication token Id. This is obtained from <see cref="IdentityToken.Id"/></param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns>List of <see cref="ExtendedEndpoint"/> objects containing endpoint details.</returns>
+        /// <returns>A collection of <see cref="ExtendedEndpoint"/> objects containing endpoint details.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="token"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="token"/> is empty.</exception>
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
