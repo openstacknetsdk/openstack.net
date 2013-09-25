@@ -55,6 +55,7 @@
     <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
+    <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
     <Compile Include="Core\Domain\IPAddressList.cs" />
     <Compile Include="Core\Domain\PowerState.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListEndpointsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />

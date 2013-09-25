@@ -6,7 +6,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     [JsonObject(MemberSerialization.OptIn)]
     internal class UserImpersonationResponse
     {
-        [JsonProperty("userAccess")]
+        [JsonProperty("access")]
         public UserAccess UserAccess { get; private set; }
     }
 }
