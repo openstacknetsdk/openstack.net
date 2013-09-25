@@ -9,6 +9,7 @@
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
+    using HttpStatusCode = System.Net.HttpStatusCode;
     using Path = System.IO.Path;
 
     /// <summary>
@@ -84,15 +85,25 @@
             Assert.IsNotNull(userAccess.Token);
             Assert.IsNotNull(userAccess.Token.Id);
 
-            UserAccess validated = provider.ValidateToken(userAccess.Token.Id);
-            Assert.IsNotNull(validated);
-            Assert.IsNotNull(validated.Token);
-            Assert.AreEqual(userAccess.Token.Id, validated.Token.Id);
+            try
+            {
+                UserAccess validated = provider.ValidateToken(userAccess.Token.Id);
+                Assert.IsNotNull(validated);
+                Assert.IsNotNull(validated.Token);
+                Assert.AreEqual(userAccess.Token.Id, validated.Token.Id);
 
-            Assert.IsNotNull(validated.User);
-            Assert.AreEqual(userAccess.User.Id, validated.User.Id);
-            Assert.AreEqual(userAccess.User.Name, validated.User.Name);
-            Assert.AreEqual(userAccess.User.DefaultRegion, validated.User.DefaultRegion);
+                Assert.IsNotNull(validated.User);
+                Assert.AreEqual(userAccess.User.Id, validated.User.Id);
+                Assert.AreEqual(userAccess.User.Name, validated.User.Name);
+                Assert.AreEqual(userAccess.User.DefaultRegion, validated.User.DefaultRegion);
+            }
+            catch (UserNotAuthorizedException ex)
+            {
+                if (ex.Response.StatusCode != HttpStatusCode.Forbidden)
+                    throw;
+
+                Assert.Inconclusive("The service does not allow this user to access the Validate Token API.");
+            }
         }
 
         /// <summary>
@@ -110,9 +121,18 @@
             Assert.IsNotNull(userAccess.Token);
             Assert.IsNotNull(userAccess.Token.Id);
 
-            IEnumerable<ExtendedEndpoint> endpoints = provider.ListEndpoints(userAccess.Token.Id);
+            try
+            {
+                IEnumerable<ExtendedEndpoint> endpoints = provider.ListEndpoints(userAccess.Token.Id);
+                Console.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
+            }
+            catch (UserNotAuthorizedException ex)
+            {
+                if (ex.Response.StatusCode != HttpStatusCode.Forbidden)
+                    throw;
 
-            Console.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
+                Assert.Inconclusive("The service does not allow this user to access the List Endpoints API.");
+            }
         }
 
         [TestMethod]
