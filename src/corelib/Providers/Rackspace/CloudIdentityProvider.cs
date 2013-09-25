@@ -751,15 +751,17 @@ namespace net.openstack.Providers.Rackspace
             return impToken;
         }
 
-        private ServiceCatalog[] BuildServiceCatalog(IEnumerable<ExtendedEndpoint> endpoints)
+        private static ServiceCatalog[] BuildServiceCatalog(IEnumerable<ExtendedEndpoint> endpoints)
         {
             var serviceCatalog = new List<ServiceCatalog>();
-            var services = endpoints.Select(e => e.Type).Distinct();
+            var services = endpoints.Select(e => Tuple.Create(e.Type, e.Name)).Distinct();
 
             foreach (var service in services)
             {
-                var name = serviceCatalog.First(s => s.Type.Equals(service, StringComparison.OrdinalIgnoreCase)).Name;
-                serviceCatalog.Add(new ServiceCatalog(name, service, endpoints.Where(e => e.Type.Equals(service, StringComparison.OrdinalIgnoreCase)).Select(e2 => (Endpoint)e2).ToArray()));
+                string type = service.Item1;
+                string name = service.Item2;
+                IEnumerable<ExtendedEndpoint> serviceEndpoints = endpoints.Where(endpoint => string.Equals(type, endpoint.Type, StringComparison.OrdinalIgnoreCase) && string.Equals(name, endpoint.Name, StringComparison.OrdinalIgnoreCase));
+                serviceCatalog.Add(new ServiceCatalog(name, type, serviceEndpoints.ToArray()));
             }
 
             return serviceCatalog.ToArray();
