@@ -269,6 +269,20 @@ namespace net.openstack.Core.Providers
         UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity = null);
 
         /// <summary>
+        /// Lists the endpoints associated to a given authentication token.
+        /// </summary>
+        /// <param name="token">The authentication token Id. This is obtained from <see cref="IdentityToken.Id"/></param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="ExtendedEndpoint"/> objects containing endpoint details.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="token"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="token"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_listEndpointsForToken_v2.0_tokens__tokenId__endpoints_Token_Operations.html">List Token Endpoints (OpenStack Identity Service API v2.0 Reference)</seealso>
+        IEnumerable<ExtendedEndpoint> ListEndpoints(string token, CloudIdentity identity = null);
+
+        /// <summary>
         /// Gets the default <see cref="CloudIdentity"/> to use for requests from this provider.
         /// If no default identity is available, the value is <c>null</c>.
         /// </summary>
