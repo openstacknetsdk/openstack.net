@@ -95,6 +95,26 @@
             Assert.AreEqual(userAccess.User.DefaultRegion, validated.User.DefaultRegion);
         }
 
+        /// <summary>
+        /// This method tests the basic functionality of the <see cref="IIdentityProvider.ListEndpoints"/>
+        /// method for an authenticated user.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
+        public void TestListEndpoints()
+        {
+            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            UserAccess userAccess = provider.Authenticate();
+            Assert.IsNotNull(userAccess);
+            Assert.IsNotNull(userAccess.Token);
+            Assert.IsNotNull(userAccess.Token.Id);
+
+            IEnumerable<ExtendedEndpoint> endpoints = provider.ListEndpoints(userAccess.Token.Id);
+
+            Console.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
+        }
+
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
