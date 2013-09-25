@@ -340,7 +340,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
         public class MockProvider : ProviderBase<IIdentityProvider>
         {
-            internal MockProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService) : base(defaultIdentity, identityProvider, restService)
+            internal MockProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService) : base(defaultIdentity, null, identityProvider, restService)
             {
             }
 

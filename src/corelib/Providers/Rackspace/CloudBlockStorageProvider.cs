@@ -62,80 +62,94 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, and the default identity provider and REST service implementation.
+        /// no default identity or region, and the default identity provider and REST
+        /// service implementation.
         /// </summary>
         public CloudBlockStorageProvider()
-            : this(null, null, null) { }
+            : this(null, null, null, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity, and the default identity provider and REST service
-        /// implementation.
+        /// the specified default identity, no default region, and the default identity
+        /// provider and REST service implementation.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudBlockStorageProvider(CloudIdentity identity)
-            : this(identity, null, null) { }
+            : this(identity, null, null, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, the default identity provider, and the specified REST service
-        /// implementation.
+        /// no default identity or region, the default identity provider, and the specified
+        /// REST service implementation.
         /// </summary>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(IRestService restService)
-            : this(null, restService) { }
+            : this(null, null, null, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, the specified identity provider, and the default REST service
-        /// implementation.
+        /// no default identity or region, the specified identity provider, and the default
+        /// REST service implementation.
         /// </summary>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudBlockStorageProvider(IIdentityProvider identityProvider)
-            : this(null, identityProvider, null) { }
+            : this(null, null, identityProvider, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity and identity provider, and the default REST service
-        /// implementation.
+        /// the specified default identity and identity provider, no default region, and
+        /// the default REST service implementation.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider)
-            : this(identity, identityProvider, null) { }
+            : this(identity, null, identityProvider, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity and REST service implementation, and the default
-        /// identity provider.
+        /// the specified default identity and REST service implementation, no default region,
+        /// and the default identity provider.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IRestService restService)
-            : this(identity, null, restService) { }
+            : this(identity, null, null, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// the specified default identity, identity provider, and REST service implementation.
+        /// the specified default identity, no default region, and the specified identity
+        /// provider and REST service implementation.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService)
-            : this(identity, identityProvider, restService, CloudBlockStorageValidator.Default) { }
+            : this(identity, null, identityProvider, restService) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
-        /// no default identity, and the default identity provider, REST service implementation,
-        /// and block storage validator.
+        /// the specified default identity, default region, identity provider, and REST service implementation.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        public CloudBlockStorageProvider(CloudIdentity identity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
+            : this(identity, defaultRegion, identityProvider, restService, CloudBlockStorageValidator.Default) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// the specified default identity, default region, identity provider, REST service
+        /// implementation, and block storage validator.
+        /// </summary>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="cloudBlockStorageValidator">The <see cref="IBlockStorageValidator"/> to use for validating requests to this service.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="cloudBlockStorageValidator"/> is <c>null</c>.</exception>
-        internal CloudBlockStorageProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IBlockStorageValidator cloudBlockStorageValidator)
-            : base(identity, identityProvider, restService)
+        internal CloudBlockStorageProvider(CloudIdentity identity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IBlockStorageValidator cloudBlockStorageValidator)
+            : base(identity, defaultRegion, identityProvider, restService)
         {
             if (cloudBlockStorageValidator == null)
                 throw new ArgumentNullException("cloudBlockStorageValidator");
