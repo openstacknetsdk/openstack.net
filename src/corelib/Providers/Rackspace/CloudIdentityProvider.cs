@@ -732,16 +732,18 @@ namespace net.openstack.Providers.Rackspace
                 var request = BuildImpersonationRequestJson(identity.UserToImpersonate.Username, 600);
                 var parentIdentity = new RackspaceCloudIdentity(identity);
                 var response = ExecuteRESTRequest<UserImpersonationResponse>(parentIdentity, new Uri(_urlBase, urlPath), HttpMethod.POST, request);
-
-                if (response == null || response.Data == null || response.Data.UserAccess.Token == null)
+                if (response == null || response.Data == null || response.Data.UserAccess == null)
                     return null;
 
-                var userAccess = ValidateToken(response.Data.UserAccess.Token.Id, identity: parentIdentity);
+                IdentityToken impersonationToken = response.Data.UserAccess.Token;
+                if (impersonationToken == null)
+                    return null;
 
+                var userAccess = ValidateToken(impersonationToken.Id, identity: parentIdentity);
                 if (userAccess == null)
                     return null;
 
-                var endpoints = ListEndpoints(response.Data.UserAccess.Token.Id, parentIdentity);
+                var endpoints = ListEndpoints(impersonationToken.Id, parentIdentity);
 
                 var serviceCatalog = BuildServiceCatalog(endpoints);
 
