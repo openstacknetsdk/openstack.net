@@ -52,27 +52,35 @@ namespace net.openstack.Providers.Rackspace
         private int? _connectionLimit;
 
         /// <summary>
+        /// This is the backing field for <see cref="DefaultRegion"/>.
+        /// </summary>
+        private string _defaultRegion;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class using
-        /// the specified default identity, identity provider, and REST service implementation,
-        /// and the default HTTP response code validator.
+        /// the specified default identity, default region, identity provider, and REST service
+        /// implementation, and the default HTTP response code validator.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        protected ProviderBase(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
-            : this(defaultIdentity, identityProvider, restService, null) { }
+        protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
+            : this(defaultIdentity, defaultRegion, identityProvider, restService, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class
         /// using the specified values.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="httpStatusCodeValidator">The HTTP status code validator to use. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
-        protected ProviderBase(CloudIdentity defaultIdentity,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
+        protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
             DefaultIdentity = defaultIdentity;
+            _defaultRegion = defaultRegion;
             IdentityProvider = identityProvider ?? this as IIdentityProvider ?? new CloudIdentityProvider(defaultIdentity);
             RestService = restService ?? new JsonRestServices();
             ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
@@ -97,6 +105,21 @@ namespace net.openstack.Providers.Rackspace
                     throw new ArgumentOutOfRangeException("value");
 
                 _connectionLimit = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the default region for this provider instance, if one was specified.
+        /// </summary>
+        /// <value>
+        /// The default region to use for API calls where an explicit region is not specified in the call;
+        /// or <c>null</c> to use the default region associated with the identity making the call.
+        /// </value>
+        public string DefaultRegion
+        {
+            get
+            {
+                return _defaultRegion;
             }
         }
 

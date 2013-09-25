@@ -122,7 +122,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         /// <param name="urlBase">The base URL for the cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, Uri urlBase)
-            : base(defaultIdentity, null, restService)
+            : base(defaultIdentity, null, null, restService)
         {
             _userAccessCache = tokenCache ?? UserAccessCache.Instance;
             _urlBase = urlBase ?? new Uri("https://identity.api.rackspacecloud.com");
