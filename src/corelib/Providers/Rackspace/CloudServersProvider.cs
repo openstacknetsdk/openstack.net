@@ -173,7 +173,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null)
+        public NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<string> networks = null, string region = null, CloudIdentity identity = null)
         {
             if (cloudServerName == null)
                 throw new ArgumentNullException("cloudServerName");
@@ -187,6 +187,8 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("imageName cannot be empty");
             if (string.IsNullOrEmpty(flavor))
                 throw new ArgumentException("flavor cannot be empty");
+            if (networks != null && networks.Any(string.IsNullOrEmpty))
+                throw new ArgumentException("networks cannot contain any null or empty values");
             if (diskConfig != null && diskConfig != DiskConfiguration.Auto && diskConfig != DiskConfiguration.Manual)
                 throw new NotSupportedException("The specified disk configuration is not supported.");
             CheckIdentity(identity);
@@ -202,6 +204,9 @@ namespace net.openstack.Providers.Rackspace
                 if(attachToServiceNetwork)
                     networksToAttach.Add("11111111-1111-1111-1111-111111111111");
             }
+
+            if (networks != null)
+                networksToAttach.AddRange(networks);
 
             const string accessIPv4 = null;
             const string accessIPv6 = null;

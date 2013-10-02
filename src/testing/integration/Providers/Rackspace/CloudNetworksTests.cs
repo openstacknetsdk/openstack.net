@@ -125,7 +125,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         public void Should_Create_A_Server_With_New_Network_And_Wait_For_Active()
         {
             var provider = new CloudServersProvider(_testIdentity);
-            var networks = new List<Guid>() { new Guid(_created_network_id2) };
+            var networks = new List<string>() { _created_network_id2 };
             var testServer = provider.CreateServer("net-sdk-test-server", "d531a2dd-7ae9-4407-bb5a-e5ea03303d98", "2", networks: networks);
 
             Assert.IsNotNull(testServer.Id);
