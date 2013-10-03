@@ -1,13 +1,14 @@
-namespace net.openstack.Providers.Rackspace.Objects.Request
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Sockets;
-    using net.openstack.Core.Domain;
-    using net.openstack.Core.Domain.Converters;
-    using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using net.openstack.Core.Domain;
+using net.openstack.Core.Domain.Converters;
+using Newtonsoft.Json;
+using net.openstack.Providers.Rackspace.Objects.Request;
 
+namespace net.openstack.Providers.Rackspace.Objects
+{
     /// <summary>
     /// This models the JSON body containing details for the Rebuild Server request.
     /// </summary>
