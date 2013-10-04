@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
-namespace net.openstack.Core.Domain
+namespace net.openstack.Core.Domain.Rackspace
 {
     [DataContract]
     public class Record

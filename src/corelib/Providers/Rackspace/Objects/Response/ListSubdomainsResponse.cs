@@ -11,7 +11,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
     internal class ListSubdomainsResponse
     {
         [DataMember(Name = "subdomains")]
-        public Core.Domain.Domain[] Domains { get; set; }
+        public Core.Domain.Rackspace.Domain[] Domains { get; set; }
 
         [DataMember(Name = "totalEntries")]
         public int TotalEntries { get; set; }

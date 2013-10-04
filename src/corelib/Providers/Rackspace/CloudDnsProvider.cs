@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
-using net.openstack.Core;
 using net.openstack.Core.Domain;
-using net.openstack.Core.Domain.Mapping;
+using net.openstack.Core.Domain.Rackspace;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Providers;
+using net.openstack.Core.Providers.Rackspace;
 using net.openstack.Core.Validators;
-using net.openstack.Providers.Rackspace.Exceptions;
-using net.openstack.Providers.Rackspace.Objects;
-using net.openstack.Providers.Rackspace.Objects.Mapping;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using net.openstack.Providers.Rackspace.Validators;
+using Domain = net.openstack.Core.Domain.Rackspace.Domain;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -86,7 +80,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, identityProvider, restService, CloudDnsValidator.Default) { }
 
         internal CloudDnsProvider(CloudIdentity identity, IIdentityProvider identityProvider, IRestService restService, IDnsValidator cloudDnsValidator)
-            : base(identity, identityProvider, restService) 
+            : base(identity, null, identityProvider, restService) 
         {
             _cloudDnsValidator = cloudDnsValidator;
         }
@@ -96,7 +90,7 @@ namespace net.openstack.Providers.Rackspace
         #region Domains
 
         /// <inheritdoc />
-        public IEnumerable<Core.Domain.Domain> ListDomains(int? limit = null, int? offset = null, string name = null, CloudIdentity identity = null)
+        public IEnumerable<Domain> ListDomains(int? limit = null, int? offset = null, string name = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/domains", GetServiceEndpointCloudDns(identity)));
 
@@ -108,7 +102,7 @@ namespace net.openstack.Providers.Rackspace
             if (offset != null)
                 queryStringParameter.Add("offset", offset.ToString());
 
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrEmpty(name))
                 queryStringParameter.Add("name", name);
 
             var response = ExecuteRESTRequest<ListDomainsResponse>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
@@ -120,7 +114,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public Core.Domain.Domain ListDomainDetails(int domainId, int? limit = null, int? offset = null, bool showRecords = true, bool showSubdomains = true, CloudIdentity identity = null)
+        public Domain ListDomainDetails(int domainId, int? limit = null, int? offset = null, bool showRecords = true, bool showSubdomains = true, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/domains/{1}", GetServiceEndpointCloudDns(identity), domainId));
 
@@ -138,7 +132,7 @@ namespace net.openstack.Providers.Rackspace
             if (showSubdomains)
                 queryStringParameter.Add("showSubdomains", showRecords.ToString());
 
-            var response = ExecuteRESTRequest<Core.Domain.Domain>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
+            var response = ExecuteRESTRequest<Domain>(identity, urlPath, HttpMethod.GET, null, queryStringParameter);
 
             if (response == null || response.Data == null)
                 return null;
@@ -147,7 +141,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void CreateDomains(IEnumerable<Core.Domain.Domain> domains, CloudIdentity identity = null)
+        public void CreateDomains(IEnumerable<Domain> domains, CloudIdentity identity = null)
         {
             foreach (var domain in domains)
             {
@@ -167,7 +161,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void ModifyDomains(IEnumerable<Core.Domain.Domain> domains, CloudIdentity identity = null)
+        public void ModifyDomains(IEnumerable<Domain> domains, CloudIdentity identity = null)
         {
             foreach (var domain in domains)
                 _cloudDnsValidator.ValidateTTL(domain.Ttl);
@@ -179,16 +173,17 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void RemoveDomains(IEnumerable<int> domainIds, bool deleteSubdomains = false, CloudIdentity identity = null)
         {
-            if (domainIds == null || domainIds.Count() <= 0)
+            if (domainIds == null || !domainIds.Any())
                 throw new InvalidArgumentException("ERROR: At least 1 domainId is required.");
-            var urlPath = new Uri(string.Format("{0}/domains/?id={1}", GetServiceEndpointCloudDns(identity), string.Join("&id=", domainIds)));
 
-            var queryStringParameter = new Dictionary<string, string>();
+            var queryStringParameter = domainIds.ToDictionary(id => "id", id => id.ToString());
+
+            var urlPath = new Uri(string.Format("{0}/domains", GetServiceEndpointCloudDns(identity)));
 
             if (deleteSubdomains)
                 queryStringParameter.Add("deleteSubdomains", deleteSubdomains.ToString());
 
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, null, queryStringParameter, null, false, null);
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, queryStringParameter: queryStringParameter);
         }
 
         #endregion
@@ -196,7 +191,7 @@ namespace net.openstack.Providers.Rackspace
         #region Subdomains
 
         /// <inheritdoc />
-        public IEnumerable<Core.Domain.Domain> ListSubdomains(int domainId, int? limit = null, int? offset = null, CloudIdentity identity = null)
+        public IEnumerable<Domain> ListSubdomains(int domainId, int? limit = null, int? offset = null, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/domains/{1}/subdomains", GetServiceEndpointCloudDns(identity), domainId));
 
@@ -282,11 +277,13 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void RemoveRecords(int domainId, IEnumerable<string> recordIds, CloudIdentity identity = null)
         {
-            if (recordIds == null || recordIds.Count() <= 0)
+            if (recordIds == null || !recordIds.Any())
                 throw new InvalidArgumentException("ERROR: At least 1 recordId is required.");
-            var urlPath = new Uri(string.Format("{0}/domains/{1}/records?id={2}", GetServiceEndpointCloudDns(identity), domainId, string.Join("&id=", recordIds)));
 
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE);
+            var queryParameters = recordIds.ToDictionary(id => "id", id => id);
+            var urlPath = new Uri(string.Format("{0}/domains/{1}/records", GetServiceEndpointCloudDns(identity), domainId));
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.DELETE, queryStringParameter: queryParameters);
         }
 
         #endregion
@@ -296,13 +293,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         protected string GetServiceEndpointCloudDns(CloudIdentity identity)
         {
-            return base.GetPublicServiceEndpoint(identity, "cloudDNS", null);
-        }
-
-        /// <inheritdoc />
-        protected override IDnsProvider BuildProvider(CloudIdentity identity)
-        {
-            return new CloudDnsProvider(identity, IdentityProvider, RestService);
+            return base.GetPublicServiceEndpoint(identity, "rax:dns", "cloudDNS", null);
         }
 
         #endregion
