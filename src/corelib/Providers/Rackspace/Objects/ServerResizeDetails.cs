@@ -1,9 +1,10 @@
-namespace net.openstack.Providers.Rackspace.Objects.Request
-{
-    using System;
-    using net.openstack.Core.Domain;
-    using Newtonsoft.Json;
+using System;
+using net.openstack.Core.Domain;
+using Newtonsoft.Json;
+using net.openstack.Providers.Rackspace.Objects.Request;
 
+namespace net.openstack.Providers.Rackspace.Objects
+{
     /// <summary>
     /// This models the JSON body containing details for the Resize Server request.
     /// </summary>
