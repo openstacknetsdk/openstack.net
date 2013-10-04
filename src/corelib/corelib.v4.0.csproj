@@ -280,6 +280,18 @@
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
     <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\Rackspace\Subdomains.cs" />
+    <Compile Include="Core\Domain\Rackspace\Record.cs" />
+    <Compile Include="Core\Domain\Rackspace\Domain.cs" />
+    <Compile Include="Core\Domain\Rackspace\Nameserver.cs" />
+    <Compile Include="Core\Domain\Rackspace\RecordsList.cs" />
+    <Compile Include="Core\Exceptions\InvalidArgumentException.cs" />
+    <Compile Include="Core\Providers\Rackspace\IDnsProvider.cs" />
+    <Compile Include="Core\Validators\IDnsValidator.cs" />
+    <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListSubdomainsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListDomainsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudDnsValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="corelib.nuspec" />
