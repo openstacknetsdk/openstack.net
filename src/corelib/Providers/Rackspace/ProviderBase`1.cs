@@ -542,6 +542,7 @@ namespace net.openstack.Providers.Rackspace
         /// <item>This method only considers services which match the specified <paramref name="serviceType"/>.</item>
         /// <item>This method attempts to filter the remaining items to those matching <paramref name="serviceName"/>. If <paramref name="serviceName"/> is <c>null</c>, or if no services match the specified name, <em>this argument is ignored</em>.</item>
         /// <item>This method attempts to filter the remaining items to those matching <paramref name="region"/>. If <paramref name="region"/> is <c>null</c>, the user's default region is used. If no services match the specified region, <em>this argument is ignored</em>.</item>
+        /// <item>If the <paramref name="region"/> argument is ignored as a result of the previous rule, this method filters the remaining items to only include region-independent endpoints, i.e. endpoints where <see cref="Endpoint.Region"/> is <c>null</c> or empty.</item>
         /// </list>
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -604,8 +605,10 @@ namespace net.openstack.Providers.Rackspace
 
             if (regionEndpoints.Any())
                 endpoints = regionEndpoints;
+            else
+                endpoints = endpoints.Where(i => string.IsNullOrEmpty(i.Item2.Region));
 
-            if (effectiveRegion == null && endpoints.Any())
+            if (effectiveRegion == null && !endpoints.Any())
                 throw new NoDefaultRegionSetException("No region was provided, the service does not provide a region-independent endpoint, and there is no default region set for the user's account.");
 
             Tuple<ServiceCatalog, Endpoint> serviceEndpoint = endpoints.FirstOrDefault();
