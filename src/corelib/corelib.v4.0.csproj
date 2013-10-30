@@ -108,6 +108,7 @@
     <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_ContinueWhenAllAny.cs" />
     <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_Delayed.cs" />
     <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_From.cs" />
+    <Compile Include="Core\Providers\IIdentityService.cs" />
     <Compile Include="Core\Providers\NamespaceDoc.cs" />
     <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
