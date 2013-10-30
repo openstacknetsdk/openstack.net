@@ -113,6 +113,7 @@
     <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Synchronous\DnsServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
