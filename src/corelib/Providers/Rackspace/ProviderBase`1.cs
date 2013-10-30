@@ -994,7 +994,12 @@ namespace net.openstack.Providers.Rackspace
         /// <preliminary/>
         protected virtual Task<Tuple<IdentityToken, Uri>> AuthenticateServiceAsync(CancellationToken cancellationToken)
         {
-            Task<IdentityToken> authenticate = Task.Factory.StartNew(() => IdentityProvider.GetToken(GetDefaultIdentity(null)));
+            Task<IdentityToken> authenticate;
+            IIdentityService identityService = IdentityProvider as IIdentityService;
+            if (identityService != null)
+                authenticate = identityService.GetTokenAsync(GetDefaultIdentity(null), cancellationToken);
+            else
+                authenticate = Task.Factory.StartNew(() => IdentityProvider.GetToken(GetDefaultIdentity(null)));
 
             Func<Task<IdentityToken>, Task<Tuple<IdentityToken, Uri>>> getBaseUri =
                 task =>
