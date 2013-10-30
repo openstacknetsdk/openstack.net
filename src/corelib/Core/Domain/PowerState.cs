@@ -22,7 +22,7 @@
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#power_state">OS-EXT-STS:power_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(PowerState.Converter))]
-    public sealed class PowerState : IEquatable<PowerState>
+    public sealed class PowerState : ExtensibleEnum<PowerState>
     {
         private static readonly ConcurrentDictionary<string, PowerState> _states =
             new ConcurrentDictionary<string, PowerState>(StringComparer.OrdinalIgnoreCase);
@@ -30,22 +30,13 @@
         private static readonly PowerState _poweredUp = FromName("1");
         private static readonly PowerState _shutOff = FromName("4");
 
-        private readonly string _name;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PowerState"/> class with the specified name.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
+        /// <inheritdoc/>
         private PowerState(string name)
+            : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name cannot be empty");
-
-            _name = name;
         }
 
         /// <summary>
@@ -98,55 +89,16 @@
         }
 
         /// <summary>
-        /// Gets the canonical name of this power state.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
-
-        /// <inheritdoc/>
-        public bool Equals(PowerState other)
-        {
-            return this == other;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        /// <summary>
         /// Provides support for serializing and deserializing <see cref="PowerState"/>
         /// objects to JSON string values.
         /// </summary>
         /// <threadsafety static="true" instance="false"/>
-        private sealed class Converter : SimpleStringJsonConverter<PowerState>
+        private sealed class Converter : ConverterBase
         {
-            /// <remarks>
-            /// This method uses <see cref="Name"/> for serialization.
-            /// </remarks>
             /// <inheritdoc/>
-            protected override string ConvertToString(PowerState obj)
+            protected override PowerState FromName(string name)
             {
-                return obj.Name;
-            }
-
-            /// <remarks>
-            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
-            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
-            /// </remarks>
-            /// <inheritdoc/>
-            protected override PowerState ConvertToObject(string str)
-            {
-                if (string.IsNullOrEmpty(str))
-                    return null;
-
-                return FromName(str);
+                return PowerState.FromName(name);
             }
         }
     }

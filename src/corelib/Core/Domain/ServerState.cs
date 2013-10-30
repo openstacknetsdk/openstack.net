@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using net.openstack.Core.Domain.Converters;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
 
@@ -15,7 +14,7 @@
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(ServerState.Converter))]
-    public sealed class ServerState : IEquatable<ServerState>
+    public sealed class ServerState : ExtensibleEnum<ServerState>
     {
         private static readonly ConcurrentDictionary<string, ServerState> _states =
             new ConcurrentDictionary<string, ServerState>(StringComparer.OrdinalIgnoreCase);
@@ -37,22 +36,13 @@
         private static readonly ServerState _prepRescue = FromName("PREP_RESCUE");
         private static readonly ServerState _prepUnrescue = FromName("PREP_UNRESCUE");
 
-        private readonly string _name;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerState"/> class with the specified name.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
+        /// <inheritdoc/>
         private ServerState(string name)
+            : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name cannot be empty");
-
-            _name = name;
         }
 
         /// <summary>
@@ -302,55 +292,16 @@
         }
 
         /// <summary>
-        /// Gets the canonical name of this server state.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
-
-        /// <inheritdoc/>
-        public bool Equals(ServerState other)
-        {
-            return this == other;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        /// <summary>
         /// Provides support for serializing and deserializing <see cref="ServerState"/>
         /// objects to JSON string values.
         /// </summary>
         /// <threadsafety static="true" instance="false"/>
-        private sealed class Converter : SimpleStringJsonConverter<ServerState>
+        private sealed class Converter : ConverterBase
         {
-            /// <remarks>
-            /// This method uses <see cref="Name"/> for serialization.
-            /// </remarks>
             /// <inheritdoc/>
-            protected override string ConvertToString(ServerState obj)
+            protected override ServerState FromName(string name)
             {
-                return obj.Name;
-            }
-
-            /// <remarks>
-            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
-            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
-            /// </remarks>
-            /// <inheritdoc/>
-            protected override ServerState ConvertToObject(string str)
-            {
-                if (string.IsNullOrEmpty(str))
-                    return null;
-
-                return FromName(str);
+                return ServerState.FromName(name);
             }
         }
     }

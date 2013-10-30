@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -14,7 +13,7 @@
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(SnapshotState.Converter))]
-    public sealed class SnapshotState : IEquatable<SnapshotState>
+    public sealed class SnapshotState : ExtensibleEnum<SnapshotState>
     {
         private static readonly ConcurrentDictionary<string, SnapshotState> _states =
             new ConcurrentDictionary<string, SnapshotState>(StringComparer.OrdinalIgnoreCase);
@@ -24,22 +23,13 @@
         private static readonly SnapshotState _error = FromName("ERROR");
         private static readonly SnapshotState _errorDeleting = FromName("ERROR_DELETING");
 
-        private readonly string _name;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SnapshotState"/> class with the specified name.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
+        /// <inheritdoc/>
         private SnapshotState(string name)
+            : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name cannot be empty");
-
-            _name = name;
         }
 
         /// <summary>
@@ -114,55 +104,16 @@
         }
 
         /// <summary>
-        /// Gets the canonical name of this snapshot state.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
-
-        /// <inheritdoc/>
-        public bool Equals(SnapshotState other)
-        {
-            return this == other;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        /// <summary>
         /// Provides support for serializing and deserializing <see cref="SnapshotState"/>
         /// objects to JSON string values.
         /// </summary>
         /// <threadsafety static="true" instance="false"/>
-        private sealed class Converter : SimpleStringJsonConverter<SnapshotState>
+        private sealed class Converter : ConverterBase
         {
-            /// <remarks>
-            /// This method uses <see cref="Name"/> for serialization.
-            /// </remarks>
             /// <inheritdoc/>
-            protected override string ConvertToString(SnapshotState obj)
+            protected override SnapshotState FromName(string name)
             {
-                return obj.Name;
-            }
-
-            /// <remarks>
-            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
-            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
-            /// </remarks>
-            /// <inheritdoc/>
-            protected override SnapshotState ConvertToObject(string str)
-            {
-                if (string.IsNullOrEmpty(str))
-                    return null;
-
-                return FromName(str);
+                return SnapshotState.FromName(name);
             }
         }
     }
