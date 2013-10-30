@@ -44,6 +44,12 @@
         public const string Dns = "DNS";
 
         /// <summary>
+        /// Queueing service tests.
+        /// </summary>
+        /// <seealso cref="IQueueingService"/>
+        public const string Queues = "Queues";
+
+        /// <summary>
         /// Unit tests designed to remove resources from an account which were created
         /// by previous unit test runs which were cancelled, failed, or designed in such
         /// a way that resources were not deleted automatically at the end of the test.
