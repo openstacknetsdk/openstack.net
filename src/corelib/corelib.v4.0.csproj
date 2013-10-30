@@ -97,6 +97,7 @@
     <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
     <Compile Include="Core\ExtensibleEnum`1.cs" />
+    <Compile Include="Core\InternalTaskExtensions.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\ParallelExtensionsExtras\TaskCompletionSourceExtensions.cs" />
     <Compile Include="Core\ParallelExtensionsExtras\TaskExtrasExtensions.cs" />
