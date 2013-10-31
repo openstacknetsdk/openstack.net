@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -22,7 +21,7 @@
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#task_state">OS-EXT-STS:task_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(TaskState.Converter))]
-    public sealed class TaskState : IEquatable<TaskState>
+    public sealed class TaskState : ExtensibleEnum<TaskState>
     {
         private static readonly ConcurrentDictionary<string, TaskState> _states =
             new ConcurrentDictionary<string, TaskState>(StringComparer.OrdinalIgnoreCase);
@@ -57,22 +56,13 @@
         private static readonly TaskState _unrescuing = FromName("unrescuing");
         private static readonly TaskState _updatingPassword = FromName("updating_password");
 
-        private readonly string _name;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskState"/> class with the specified name.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
+        /// <inheritdoc/>
         private TaskState(string name)
+            : base(name)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name cannot be empty");
-
-            _name = name;
         }
 
         /// <summary>
@@ -422,55 +412,16 @@
         }
 
         /// <summary>
-        /// Gets the canonical name of this task state.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
-
-        /// <inheritdoc/>
-        public bool Equals(TaskState other)
-        {
-            return this == other;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        /// <summary>
         /// Provides support for serializing and deserializing <see cref="TaskState"/>
         /// objects to JSON string values.
         /// </summary>
         /// <threadsafety static="true" instance="false"/>
-        private sealed class Converter : SimpleStringJsonConverter<TaskState>
+        private sealed class Converter : ConverterBase
         {
-            /// <remarks>
-            /// This method uses <see cref="Name"/> for serialization.
-            /// </remarks>
             /// <inheritdoc/>
-            protected override string ConvertToString(TaskState obj)
+            protected override TaskState FromName(string name)
             {
-                return obj.Name;
-            }
-
-            /// <remarks>
-            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
-            /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
-            /// </remarks>
-            /// <inheritdoc/>
-            protected override TaskState ConvertToObject(string str)
-            {
-                if (string.IsNullOrEmpty(str))
-                    return null;
-
-                return FromName(str);
+                return TaskState.FromName(name);
             }
         }
     }
