@@ -42,8 +42,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             }
             catch (Exception ex)
             {
-
-                Assert.AreEqual("ERROR: Container Name cannot be Null.\r\nParameter name: ContainerName", ex.Message);
+                Assert.AreEqual("ERROR: Container Name cannot be empty." + Environment.NewLine + "Parameter name: containerName", ex.Message);
             }
         }
 
@@ -63,8 +62,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
             }
             catch (Exception ex)
             {
-
-                Assert.AreEqual("ERROR: Container Name cannot be Null.\r\nParameter name: ContainerName", ex.Message);
+                Assert.AreEqual("Value cannot be null." + Environment.NewLine + "Parameter name: containerName", ex.Message);
             }
         }
 
