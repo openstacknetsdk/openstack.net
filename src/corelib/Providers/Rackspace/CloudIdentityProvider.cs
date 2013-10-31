@@ -808,15 +808,29 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.Endpoints;
         }
 
-        private JObject BuildImpersonationRequestJson(string userName, int expirationInSeconds)
+        /// <summary>
+        /// Constructs the JSON representation used for an impersonation request.
+        /// </summary>
+        /// <param name="userName">The username of the user to impersonate.</param>
+        /// <param name="expirationInSeconds">The time until the impersonation token will expire.</param>
+        /// <returns>A <see cref="JObject"/> representing the JSON body of the impersonation request.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="userName"/> is empty.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="expirationInSeconds"/> is less than or equal to 0.</exception>
+        protected virtual JObject BuildImpersonationRequestJson(string userName, int expirationInSeconds)
         {
-            var request = new JObject();
-            var impInfo = new JObject();
-            var user = new JObject { { "username", userName }, { "expire-in-seconds", expirationInSeconds } };
-            impInfo.Add("user", user);
-            request.Add("RAX-AUTH:impersonation", impInfo);
+            if (userName == null)
+                throw new ArgumentNullException("userName");
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentException("userName cannot be empty");
+            if (expirationInSeconds <= 0)
+                throw new ArgumentOutOfRangeException("expirationInSeconds");
 
-            return request;
+            return new JObject(
+                new JProperty("RAX-AUTH:impersonation", new JObject(
+                    new JProperty("user", new JObject(
+                        new JProperty("username", userName),
+                        new JProperty("expire-in-seconds", expirationInSeconds))))));
         }
 
         #endregion
