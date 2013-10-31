@@ -1145,38 +1145,6 @@
       <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
       <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
     </member>
-    <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute``1(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
-      <summary>
-            Executes a REST request with a string <paramref name="body" /> and strongly-typed result.
-            </summary>
-      <param name="url">The base URI.</param>
-      <param name="method">The HTTP method to use for the request.</param>
-      <param name="body">
-            The body of the request. This parameter is optional. If the value is <c>null</c>,
-            the request is sent without a body.
-            </param>
-      <param name="headers">
-            A collection of custom HTTP headers to include with the request. This parameter is
-            optional. If the value is <c>null</c>, no custom headers are added to the HTTP request.
-            </param>
-      <param name="queryStringParameters">
-            A collection of parameters to add to the query string portion of the request URI.
-            This parameter is optional. If the value is <c>null</c>, no parameters are added
-            to the query string.
-            </param>
-      <param name="settings">
-            The settings to use for the request. This parameters is optional. If the value is
-            <c>null</c>, an implementation-specific set of default settings will be used for the request.
-            </param>
-      <typeparam name="T">The type of the data returned in the REST response.</typeparam>
-      <returns>Returns a <see cref="T:JSIStudios.SimpleRESTServices.Client.Response`1" /> object containing the HTTP status code, headers, body,
-            and strongly-typed data from the REST response.</returns>
-      <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
-      <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
-      <exception cref="T:JSIStudios.SimpleRESTServices.Client.Json.StringSerializationException">
-            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
-            </exception>
-    </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
         <markup>
@@ -1248,6 +1216,38 @@
           </include>
         </markup>
       </returns>
+    </member>
+    <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute``1(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
+      <summary>
+            Executes a REST request with a string <paramref name="body" /> and strongly-typed result.
+            </summary>
+      <param name="url">The base URI.</param>
+      <param name="method">The HTTP method to use for the request.</param>
+      <param name="body">
+            The body of the request. This parameter is optional. If the value is <c>null</c>,
+            the request is sent without a body.
+            </param>
+      <param name="headers">
+            A collection of custom HTTP headers to include with the request. This parameter is
+            optional. If the value is <c>null</c>, no custom headers are added to the HTTP request.
+            </param>
+      <param name="queryStringParameters">
+            A collection of parameters to add to the query string portion of the request URI.
+            This parameter is optional. If the value is <c>null</c>, no parameters are added
+            to the query string.
+            </param>
+      <param name="settings">
+            The settings to use for the request. This parameters is optional. If the value is
+            <c>null</c>, an implementation-specific set of default settings will be used for the request.
+            </param>
+      <typeparam name="T">The type of the data returned in the REST response.</typeparam>
+      <returns>Returns a <see cref="T:JSIStudios.SimpleRESTServices.Client.Response`1" /> object containing the HTTP status code, headers, body,
+            and strongly-typed data from the REST response.</returns>
+      <exception cref="T:System.ArgumentNullException">If <paramref name="url" /> is <c>null</c>.</exception>
+      <exception cref="T:System.NotSupportedException">If <paramref name="method" /> is not supported by the service.</exception>
+      <exception cref="T:JSIStudios.SimpleRESTServices.Client.Json.StringSerializationException">
+            If the body of the response could not be deserialized to an object of type <typeparamref name="T" />.
+            </exception>
     </member>
     <member name="M:JSIStudios.SimpleRESTServices.Client.RestServiceBase.Execute``2(System.Uri,JSIStudios.SimpleRESTServices.Client.HttpMethod,``1,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},JSIStudios.SimpleRESTServices.Client.RequestSettings)">
       <summary>
