@@ -9,6 +9,7 @@
     /// for strongly-typed values in JSON object models.
     /// </summary>
     /// <typeparam name="T">The enumeration type.</typeparam>
+    /// <threadsafety static="true" instance="false"/>
     public abstract class ExtensibleEnum<T> : IEquatable<T>
         where T : ExtensibleEnum<T>
     {
