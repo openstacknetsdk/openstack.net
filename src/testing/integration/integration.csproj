@@ -50,6 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Security.Cryptography">
+      <HintPath>..\..\lib\Security.Cryptography\Security.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="SimpleRESTServices, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8965cea5c205d3a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\SimpleRESTServices.1.3.0.1\lib\net40\SimpleRESTServices.dll</HintPath>
@@ -81,6 +84,7 @@
     <Compile Include="Providers\Rackspace\UserComputeTests.cs" />
     <Compile Include="Providers\Rackspace\UserDnsTests.cs" />
     <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
+    <Compile Include="Providers\Rackspace\UserLoadBalancerTests.cs" />
     <Compile Include="Providers\Rackspace\UserNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
     <Compile Include="Providers\Rackspace\UserQueuesTests.cs" />
