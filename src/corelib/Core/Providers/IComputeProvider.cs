@@ -143,6 +143,8 @@ namespace net.openstack.Core.Providers
         /// <para><paramref name="flavor"/> is empty.</para>
         /// <para>-or-</para>
         /// <para><paramref name="metadata"/> contains a value with a null or empty key.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="networks"/> contains a null or empty value.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="diskConfig"/>.
@@ -158,7 +160,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/CreateServers.html">Create Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
-        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<Guid> networks = null, string region = null, CloudIdentity identity = null);
+        NewServer CreateServer(string cloudServerName, string imageName, string flavor, DiskConfiguration diskConfig = null, Metadata metadata = null, Personality[] personality = null, bool attachToServiceNetwork = false, bool attachToPublicNetwork = false, IEnumerable<string> networks = null, string region = null, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets the detailed information for a specific server.
