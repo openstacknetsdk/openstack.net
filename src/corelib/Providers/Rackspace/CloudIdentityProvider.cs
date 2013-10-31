@@ -27,6 +27,9 @@ namespace net.openstack.Providers.Rackspace
     /// <threadsafety static="true" instance="false"/>
     public class CloudIdentityProvider : ProviderBase<IIdentityProvider>, IExtendedCloudIdentityProvider, IIdentityProvider
     {
+        /// <summary>
+        /// This is the backing field for the <see cref="TokenCache"/> property.
+        /// </summary>
         private readonly ICache<UserAccess> _userAccessCache;
         private readonly Uri _urlBase;
 
@@ -126,6 +129,17 @@ namespace net.openstack.Providers.Rackspace
         {
             _userAccessCache = tokenCache ?? UserAccessCache.Instance;
             _urlBase = urlBase ?? new Uri("https://identity.api.rackspacecloud.com");
+        }
+
+        /// <summary>
+        /// Gets the cache to use for caching user access tokens.
+        /// </summary>
+        protected ICache<UserAccess> TokenCache
+        {
+            get
+            {
+                return _userAccessCache;
+            }
         }
 
         #region Roles
@@ -689,7 +703,7 @@ namespace net.openstack.Providers.Rackspace
             if (rackspaceCloudIdentity == null)
                 rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.Domain, rackspaceCloudIdentity.Username), () =>
+            var userAccess = TokenCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.Domain, rackspaceCloudIdentity.Username), () =>
                             {
                                 var auth = new AuthRequest(identity);
                                 var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(_urlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
@@ -726,7 +740,7 @@ namespace net.openstack.Providers.Rackspace
             if (identity == null)
                 throw new ArgumentNullException("identity");
 
-            var impToken = _userAccessCache.Get(string.Format("{0}/imp/{1}/{2}", identity.Username, identity.UserToImpersonate.Domain == null ? "none" : identity.UserToImpersonate.Domain.Name, identity.UserToImpersonate.Username), () =>
+            var impToken = TokenCache.Get(string.Format("{0}/imp/{1}/{2}", identity.Username, identity.UserToImpersonate.Domain == null ? "none" : identity.UserToImpersonate.Domain.Name, identity.UserToImpersonate.Username), () =>
             {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(identity.UserToImpersonate.Username, 600);
