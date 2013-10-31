@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>SimpleRESTServices</id>
-    <version>1.2.0.0</version>
+    <version>1.3.0.1</version>
     <title>SimpleRESTServices</title>
     <authors>Alan Quillin,  Sam Harwell</authors>
     <owners>Alan Quillin,  Sam Harwell</owners>
@@ -10,8 +10,11 @@
     <projectUrl>https://github.com/JSIStudios/SimpleRestServices</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A simple set of client side and server side REST helpers</description>
-    <releaseNotes>https://github.com/JSIStudios/SimpleRestServices/wiki/v1.2.0.0</releaseNotes>
+    <releaseNotes>https://github.com/JSIStudios/SimpleRestServices/releases/tag/v1.3.0.1</releaseNotes>
     <copyright>Copyright © JSI Studios 2013</copyright>
     <tags>REST REST_client</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="5.0.6" />
+    </dependencies>
   </metadata>
 </package>
