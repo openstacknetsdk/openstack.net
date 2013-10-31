@@ -11,7 +11,6 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
     public class CloudBlockStorageTests
     {
         private static RackspaceCloudIdentity _testIdentity;
-        private static RackspaceCloudIdentity _testAdminIdentity;
         private TestContext testContextInstance;
 
         private const string volumeDisplayName = "Integration Test Volume";
