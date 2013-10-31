@@ -60,6 +60,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AsyncCompletionOption.cs" />
     <Compile Include="Core\Caching\ICache`1.cs" />
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Compat\Funcs.cs" />
