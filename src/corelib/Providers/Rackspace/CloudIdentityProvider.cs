@@ -718,7 +718,7 @@ namespace net.openstack.Providers.Rackspace
             if (rackspaceCloudIdentity == null)
                 rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
-            var userAccess = TokenCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.Domain, rackspaceCloudIdentity.Username), () =>
+            var userAccess = TokenCache.Get(string.Format("{0}:{1}/{2}", UrlBase, rackspaceCloudIdentity.Domain, rackspaceCloudIdentity.Username), () =>
                             {
                                 var auth = new AuthRequest(identity);
                                 var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(UrlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
@@ -755,7 +755,7 @@ namespace net.openstack.Providers.Rackspace
             if (identity == null)
                 throw new ArgumentNullException("identity");
 
-            var impToken = TokenCache.Get(string.Format("{0}/imp/{1}/{2}", identity.Username, identity.UserToImpersonate.Domain == null ? "none" : identity.UserToImpersonate.Domain.Name, identity.UserToImpersonate.Username), () =>
+            var impToken = TokenCache.Get(string.Format("{0}:{1}/imp/{2}/{3}", UrlBase, identity.Username, identity.UserToImpersonate.Domain == null ? "none" : identity.UserToImpersonate.Domain.Name, identity.UserToImpersonate.Username), () =>
             {
                 const string urlPath = "/v2.0/RAX-AUTH/impersonation-tokens";
                 var request = BuildImpersonationRequestJson(identity.UserToImpersonate.Username, 600);
