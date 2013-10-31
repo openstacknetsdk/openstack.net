@@ -48,8 +48,16 @@
         /// </note>
         /// </remarks>
         [JsonProperty("contents")]
-        [JsonConverter(typeof(BinaryConverter))]
         public byte[] Content { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Personality"/> class during
+        /// JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        private Personality()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Personality"/> class with the specified
