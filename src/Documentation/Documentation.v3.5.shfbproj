@@ -33,7 +33,7 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <PresentationStyle>VS2010</PresentationStyle>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>openstack.net API Reference Documentation</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
@@ -103,6 +103,7 @@
   <ItemGroup>
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
+    <None Include="Content\PreliminaryFeatures.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
   <ItemGroup>

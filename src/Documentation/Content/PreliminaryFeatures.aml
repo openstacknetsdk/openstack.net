@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9c4a6074-9d84-4488-9565-50ecb5049ffe" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        Certain sections of this documentation may be marked as <quoteInline>preliminary documentation</quoteInline>.
+        This page describes the role of classes and methods marked as preliminary in a release of this SDK.
+      </para>
+    </introduction>
+
+    <section address="AddingFeatures">
+      <title>Adding Features</title>
+      <content>
+        <para>New features SHOULD be added with the preliminary marking.</para>
+        <list class="bullet">
+          <listItem>
+            <para>Breaking changes to features marked as preliminary are allowed in releases that do not change the assembly's strong name, provided they are listed in the release notes.</para>
+          </listItem>
+          <listItem>
+            <para>If any binary breaking changes were made to a feature while it was marked preliminary, the assembly strong name MUST be updated when the preliminary marking is removed. If no binary breaking changes were made to a feature while it was marked preliminary, the preliminary marking MAY be removed without changing the strong name of the assembly.</para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="BreakingChanges">
+      <title>Breaking Changes</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            <para>Breaking changes to binary compatibility MUST NOT be made to features without updating the assembly's strong name unless they are marked preliminary.</para>
+          </listItem>
+          <listItem>
+            <para>Breaking changes to source compatibility SHOULD NOT be made to features without updating the assembly's strong name, unless they are marked preliminary.</para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
