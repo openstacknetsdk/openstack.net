@@ -160,7 +160,7 @@ namespace net.openstack.Providers.Rackspace
         #region Roles
 
         /// <inheritdoc/>
-        public IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
+        public virtual IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -182,7 +182,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public Role AddRole(string name, string description, CloudIdentity identity)
+        public virtual Role AddRole(string name, string description, CloudIdentity identity)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -199,7 +199,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public Role GetRole(string roleId, CloudIdentity identity)
+        public virtual Role GetRole(string roleId, CloudIdentity identity)
         {
             if (roleId == null)
                 throw new ArgumentNullException("roleId");
@@ -217,7 +217,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
+        public virtual IEnumerable<Role> GetRolesByUser(string userId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -235,7 +235,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
+        public virtual bool AddRoleToUser(string userId, string roleId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -258,7 +258,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
+        public virtual bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -280,7 +280,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
+        public virtual IEnumerable<User> ListUsersByRole(string roleId, bool? enabled = null, int? marker = null, int? limit = null, CloudIdentity identity = null)
         {
             if (limit < 0 || limit > 1000)
                 throw new ArgumentOutOfRangeException("limit");
@@ -319,7 +319,7 @@ namespace net.openstack.Providers.Rackspace
         #region Credentials
 
         /// <inheritdoc/>
-        public bool SetUserPassword(string userId, string password, CloudIdentity identity)
+        public virtual bool SetUserPassword(string userId, string password, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -337,7 +337,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool SetUserPassword(User user, string password, CloudIdentity identity)
+        public virtual bool SetUserPassword(User user, string password, CloudIdentity identity)
         {
             if (user == null)
                 throw new ArgumentNullException("user");
@@ -355,7 +355,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool SetUserPassword(string userId, string username, string password, CloudIdentity identity)
+        public virtual bool SetUserPassword(string userId, string username, string password, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -382,7 +382,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
+        public virtual IEnumerable<UserCredential> ListUserCredentials(string userId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -414,7 +414,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
+        public virtual UserCredential GetUserCredential(string userId, string credentialKey, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -434,10 +434,10 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public new CloudIdentity DefaultIdentity { get { return base.DefaultIdentity; } }
+        public new virtual CloudIdentity DefaultIdentity { get { return base.DefaultIdentity; } }
 
         /// <inheritdoc/>
-        public UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
+        public virtual UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -455,7 +455,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserCredential UpdateUserCredentials(User user, string apiKey, CloudIdentity identity)
+        public virtual UserCredential UpdateUserCredentials(User user, string apiKey, CloudIdentity identity)
         {
             if (user == null)
                 throw new ArgumentNullException("user");
@@ -473,7 +473,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity)
+        public virtual UserCredential UpdateUserCredentials(string userId, string username, string apiKey, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -500,7 +500,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool DeleteUserCredentials(string userId, CloudIdentity identity)
+        public virtual bool DeleteUserCredentials(string userId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -522,7 +522,7 @@ namespace net.openstack.Providers.Rackspace
         #region Users
 
         /// <inheritdoc/>
-        public IEnumerable<User> ListUsers(CloudIdentity identity)
+        public virtual IEnumerable<User> ListUsers(CloudIdentity identity)
         {
             CheckIdentity(identity);
 
@@ -547,7 +547,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public User GetUserByName(string name, CloudIdentity identity)
+        public virtual User GetUserByName(string name, CloudIdentity identity)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -565,7 +565,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<User> GetUsersByEmail(string email, CloudIdentity identity)
+        public virtual IEnumerable<User> GetUsersByEmail(string email, CloudIdentity identity)
         {
             if (email == null)
                 throw new ArgumentNullException("email");
@@ -583,7 +583,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public User GetUser(string userId, CloudIdentity identity)
+        public virtual User GetUser(string userId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -599,7 +599,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public NewUser AddUser(NewUser newUser, CloudIdentity identity)
+        public virtual NewUser AddUser(NewUser newUser, CloudIdentity identity)
         {
             if (newUser == null)
                 throw new ArgumentNullException("newUser");
@@ -622,7 +622,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public User UpdateUser(User user, CloudIdentity identity)
+        public virtual User UpdateUser(User user, CloudIdentity identity)
         {
             if (user == null)
                 throw new ArgumentNullException("user");
@@ -643,7 +643,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public bool DeleteUser(string userId, CloudIdentity identity)
+        public virtual bool DeleteUser(string userId, CloudIdentity identity)
         {
             if (userId == null)
                 throw new ArgumentNullException("userId");
@@ -665,7 +665,7 @@ namespace net.openstack.Providers.Rackspace
         #region Tenants
 
         /// <inheritdoc/>
-        public IEnumerable<Tenant> ListTenants(CloudIdentity identity)
+        public virtual IEnumerable<Tenant> ListTenants(CloudIdentity identity)
         {
             CheckIdentity(identity);
 
@@ -682,7 +682,7 @@ namespace net.openstack.Providers.Rackspace
         #region Token and Authentication
 
         /// <inheritdoc/>
-        public IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
+        public virtual IdentityToken GetToken(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             CheckIdentity(identity);
 
@@ -695,7 +695,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserAccess Authenticate(CloudIdentity identity)
+        public virtual UserAccess Authenticate(CloudIdentity identity)
         {
             CheckIdentity(identity);
 
@@ -703,7 +703,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
+        public virtual UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
             CheckIdentity(identity);
 
@@ -750,7 +750,7 @@ namespace net.openstack.Providers.Rackspace
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the authentication request failed.</exception>
-        private UserAccess Impersonate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh = false)
+        protected virtual UserAccess Impersonate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh)
         {
             if (identity == null)
                 throw new ArgumentNullException("identity");
@@ -782,8 +782,22 @@ namespace net.openstack.Providers.Rackspace
             return impToken;
         }
 
-        private static ServiceCatalog[] BuildServiceCatalog(IEnumerable<ExtendedEndpoint> endpoints)
+        /// <summary>
+        /// Converts a collection of <see cref="ExtendedEndpoint"/> objects describing service endpoints
+        /// for an impersonated identity to a collection of <see cref="ServiceCatalog"/> objects used by
+        /// the provider implementations for endpoint resolution.
+        /// </summary>
+        /// <param name="endpoints">A collection of <see cref="ExtendedEndpoint"/> objects describing the available endpoints.</param>
+        /// <returns>A collection of <see cref="ServiceCatalog"/> objects describing the same endpoints as <paramref name="endpoints"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="endpoints"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="endpoints"/> contains any <c>null</c> values.</exception>
+        protected virtual ServiceCatalog[] BuildServiceCatalog(IEnumerable<ExtendedEndpoint> endpoints)
         {
+            if (endpoints == null)
+                throw new ArgumentNullException("endpoints");
+            if (endpoints.Contains(null))
+                throw new ArgumentException("endpoints cannot contain any null values", "endpoints");
+
             var serviceCatalog = new List<ServiceCatalog>();
             var services = endpoints.Select(e => Tuple.Create(e.Type, e.Name)).Distinct();
 
@@ -799,7 +813,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public UserAccess ValidateToken(string token, string tenantId = null, CloudIdentity identity = null)
+        public virtual UserAccess ValidateToken(string token, string tenantId = null, CloudIdentity identity = null)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
@@ -821,7 +835,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public IEnumerable<ExtendedEndpoint> ListEndpoints(string token, CloudIdentity identity = null)
+        public virtual IEnumerable<ExtendedEndpoint> ListEndpoints(string token, CloudIdentity identity = null)
         {
             if (token == null)
                 throw new ArgumentNullException("token");
