@@ -45,6 +45,13 @@
         public const string Dns = "DNS";
 
         /// <summary>
+        /// Load balancer service tests.
+        /// </summary>
+        /// <seealso cref="ILoadBalancerProvider"/>
+        /// <preliminary/>
+        public const string LoadBalancers = "LoadBalancers";
+
+        /// <summary>
         /// Queueing service tests.
         /// </summary>
         /// <seealso cref="IQueueingService"/>
