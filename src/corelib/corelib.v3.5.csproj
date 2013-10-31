@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\v3.5\Release\openstacknet.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\keys\openstacknetsdk.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -266,6 +272,9 @@
     <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\keys\openstacknetsdk.snk">
+      <Link>openstacknetsdk.snk</Link>
+    </None>
     <None Include="corelib.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -615,12 +615,16 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Successfully_To_And_Login_With_Old_Password()
         {
+            Assert.Inconclusive("SshClient cannot be used from assemblies with strong names.");
+
+#if false
             using (var client = new Renci.SshNet.SshClient(_testServer.AccessIPv4, "root", _newTestServer.AdminPassword))
             {
                 client.Connect();
 
                 Assert.IsTrue(client.IsConnected);
             }
+#endif
         }
 
         [TestMethod]
@@ -635,6 +639,9 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         [TestMethod]
         public void Should_Successfully_To_And_Login_With_New_Password()
         {
+            Assert.Inconclusive("SshClient cannot be used from assemblies with strong names.");
+
+#if false
             bool sucess = false;
             for (int i = 0; i < 10; i++)
             {
@@ -651,6 +658,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
             }
 
             Assert.IsTrue(sucess);
+#endif
         }
 
         [TestMethod]
