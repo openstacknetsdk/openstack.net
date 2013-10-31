@@ -8,6 +8,8 @@
     using net.openstack.Providers.Rackspace.Objects.Request;
     using net.openstack.Providers.Rackspace.Objects.Response;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Encoding = System.Text.Encoding;
 
     [TestClass]
     public class JsonModelTests
@@ -85,6 +87,28 @@
 
             json = JsonConvert.SerializeObject(IPAddress.Parse("::babe:4317:0A83"), converter);
             Assert.AreEqual(@"""::babe:4317:a83""", json);
+        }
+
+        [TestMethod]
+        public void TestPersonalityJsonModel()
+        {
+            string expectedPath = "/usr/lib/stuff";
+            string expectedText = "Example text";
+            Personality personality = new Personality(expectedPath, expectedText, Encoding.UTF8);
+            Assert.AreEqual(expectedPath, personality.Path);
+            Assert.AreEqual(expectedText, Encoding.UTF8.GetString(personality.Content));
+
+            string json = JsonConvert.SerializeObject(personality);
+            Personality personality2 = JsonConvert.DeserializeObject<Personality>(json);
+            Assert.AreEqual(expectedPath, personality.Path);
+            Assert.AreEqual(expectedText, Encoding.UTF8.GetString(personality.Content));
+
+            // make sure the JSON was Base-64 encoded
+            JObject personalityObject = JsonConvert.DeserializeObject<JObject>(json);
+            Assert.IsInstanceOfType(personalityObject["contents"], typeof(JValue));
+            byte[] encodedText = Convert.FromBase64String((string)((JValue)personalityObject["contents"]).Value);
+            Assert.AreEqual(expectedText, Encoding.UTF8.GetString(encodedText));
+            Assert.AreEqual(personality.Content.Length, encodedText.Length);
         }
 
         [TestMethod]
