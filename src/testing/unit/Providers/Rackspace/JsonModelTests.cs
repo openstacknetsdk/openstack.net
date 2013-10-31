@@ -5,6 +5,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Domain.Converters;
+    using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Request;
     using net.openstack.Providers.Rackspace.Objects.Response;
     using Newtonsoft.Json;
@@ -109,6 +110,22 @@
             byte[] encodedText = Convert.FromBase64String((string)((JValue)personalityObject["contents"]).Value);
             Assert.AreEqual(expectedText, Encoding.UTF8.GetString(encodedText));
             Assert.AreEqual(personality.Content.Length, encodedText.Length);
+        }
+
+        [TestMethod]
+        public void TestImpersonationRequest()
+        {
+            CloudIdentityProviderWrapper provider = new CloudIdentityProviderWrapper();
+            JObject requestBody = provider.BuildImpersonationRequestJsonAccessor("myUser", 27);
+            Assert.AreEqual(@"{""RAX-AUTH:impersonation"":{""user"":{""username"":""myUser"",""expire-in-seconds"":27}}}", requestBody.ToString(Formatting.None));
+        }
+
+        protected class CloudIdentityProviderWrapper : CloudIdentityProvider
+        {
+            public JObject BuildImpersonationRequestJsonAccessor(string userName, int expirationInSeconds)
+            {
+                return BuildImpersonationRequestJson(userName, expirationInSeconds);
+            }
         }
 
         [TestMethod]
