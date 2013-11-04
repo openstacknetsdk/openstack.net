@@ -185,8 +185,6 @@
         /// This method can be used to clean up users created during integration testing.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Identity)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupUsers()
         {

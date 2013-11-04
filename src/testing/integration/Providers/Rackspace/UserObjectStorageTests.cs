@@ -83,8 +83,6 @@
         /// <see cref="IgnoreAttribute"/>.
         /// </remarks>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         [Ignore]
         public void CleanupAllContainerMetadata()
@@ -103,8 +101,6 @@
         /// created by the unit tests in this class.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestContainerMetadata()
         {
@@ -122,8 +118,6 @@
         /// objects within those containers.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestContainers()
         {
@@ -1500,8 +1494,6 @@
         /// <see cref="IgnoreAttribute"/>.
         /// </remarks>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         [Ignore]
         public void CleanupAllAccountMetadata()
@@ -1517,8 +1509,6 @@
         /// created by the unit tests in this class.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestAccountMetadata()
         {

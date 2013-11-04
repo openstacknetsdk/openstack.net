@@ -158,8 +158,6 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestServers()
         {
@@ -181,8 +179,6 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestImages()
         {
@@ -204,8 +200,6 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestVirtualInterfaces()
         {

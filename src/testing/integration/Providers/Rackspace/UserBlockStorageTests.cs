@@ -41,8 +41,6 @@
         #region Volume
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.BlockStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestVolumes()
         {
@@ -199,8 +197,6 @@
         #region Snapshot
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.BlockStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestSnapshots()
         {
