@@ -25,6 +25,8 @@
         private static Server _server;
         private static string _password;
 
+        private static readonly string TestImageNameSubstring = "CentOS 6.4";
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -36,9 +38,9 @@
                 Assert.Inconclusive("Couldn't find a flavor to use for the test server.");
 
             SimpleServerImage[] images = UserComputeTests.ListAllImages(provider).ToArray();
-            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf("CentOS 6.0", StringComparison.OrdinalIgnoreCase) >= 0);
+            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf(TestImageNameSubstring, StringComparison.OrdinalIgnoreCase) >= 0);
             if (image == null)
-                Assert.Inconclusive("Couldn't find the CentOS 6.0 image to use for the test server.");
+                Assert.Inconclusive(string.Format("Couldn't find the {0} image to use for the test server.", TestImageNameSubstring));
 
             Stopwatch timer = Stopwatch.StartNew();
             Console.Write("Creating server for image {0}...", image.Name);
@@ -299,9 +301,9 @@
                 Assert.Inconclusive("Couldn't find a flavor to use for the test server.");
 
             SimpleServerImage[] images = UserComputeTests.ListAllImages(provider).ToArray();
-            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf("CentOS 6.0", StringComparison.OrdinalIgnoreCase) >= 0);
+            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf(TestImageNameSubstring, StringComparison.OrdinalIgnoreCase) >= 0);
             if (image == null)
-                Assert.Inconclusive("Couldn't find the CentOS 6.0 image to use for the test server.");
+                Assert.Inconclusive(string.Format("Couldn't find the {0} image to use for the test server.", TestImageNameSubstring));
 
             Server rebuilt = provider.RebuildServer(_server.Id, null, image.Id, flavor.Id, _password);
             Assert.IsNotNull(rebuilt);
