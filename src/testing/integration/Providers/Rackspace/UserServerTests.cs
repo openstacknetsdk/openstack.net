@@ -44,7 +44,7 @@
 
             Stopwatch timer = Stopwatch.StartNew();
             Console.Write("Creating server for image {0}...", image.Name);
-            NewServer server = provider.CreateServer(serverName, image.Id, flavor.Id);
+            NewServer server = provider.CreateServer(serverName, image.Id, flavor.Id, attachToServiceNetwork: true);
             Assert.IsNotNull(server);
             Assert.IsFalse(string.IsNullOrEmpty(server.Id));
 
@@ -488,28 +488,18 @@
             IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             INetworksProvider networksProvider = Bootstrapper.CreateNetworksProvider();
             CloudNetwork publicNetwork = networksProvider.ListNetworks().Single(i => i.Label.Equals("public", StringComparison.OrdinalIgnoreCase));
-            CloudNetwork privateNetwork = networksProvider.ListNetworks().Single(i => i.Label.Equals("private", StringComparison.OrdinalIgnoreCase));
 
             VirtualInterface publicVirtualInterface = provider.CreateVirtualInterface(_server.Id, publicNetwork.Id);
             Assert.IsNotNull(publicVirtualInterface);
             Assert.IsFalse(string.IsNullOrEmpty(publicVirtualInterface.Id));
             Assert.IsNotNull(publicVirtualInterface.MACAddress);
 
-            VirtualInterface privateVirtualInterface = provider.CreateVirtualInterface(_server.Id, privateNetwork.Id);
-            Assert.IsNotNull(privateVirtualInterface);
-            Assert.IsFalse(string.IsNullOrEmpty(privateVirtualInterface.Id));
-            Assert.IsNotNull(privateVirtualInterface.MACAddress);
-
             IEnumerable<VirtualInterface> virtualInterfaces = provider.ListVirtualInterfaces(_server.Id);
             Assert.IsNotNull(virtualInterfaces);
             Assert.IsTrue(virtualInterfaces.Where(i => i.Id.Equals(publicVirtualInterface.Id, StringComparison.OrdinalIgnoreCase)).Any());
-            Assert.IsTrue(virtualInterfaces.Where(i => i.Id.Equals(privateVirtualInterface.Id, StringComparison.OrdinalIgnoreCase)).Any());
 
             bool deleted;
             deleted = provider.DeleteVirtualInterface(_server.Id, publicVirtualInterface.Id);
-            Assert.IsTrue(deleted);
-
-            deleted = provider.DeleteVirtualInterface(_server.Id, privateVirtualInterface.Id);
             Assert.IsTrue(deleted);
         }
 
