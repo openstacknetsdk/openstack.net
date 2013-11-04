@@ -331,7 +331,7 @@ namespace net.openstack.Providers.Rackspace
 
             int count = 0;
             int currentProgress = -1;
-            while (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status) && count < refreshCount)
+            while ((serverDetails.TaskState != null || (!expectedStates.Contains(serverDetails.Status) && !errorStates.Contains(serverDetails.Status))) && count < refreshCount)
             {
                 if (progressUpdatedCallback != null)
                 {
