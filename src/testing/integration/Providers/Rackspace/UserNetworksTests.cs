@@ -31,7 +31,7 @@
         [TestCategory(TestCategories.Networks)]
         public void TestListNetworks()
         {
-            INetworksProvider provider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            INetworksProvider provider = Bootstrapper.CreateNetworksProvider();
             IEnumerable<CloudNetwork> networks = provider.ListNetworks();
             Assert.IsNotNull(networks);
             if (!networks.Any())
@@ -62,7 +62,7 @@
         [TestCategory(TestCategories.Networks)]
         public void TestBasicFunctionality()
         {
-            INetworksProvider provider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            INetworksProvider provider = Bootstrapper.CreateNetworksProvider();
             string networkName = UnitTestNetworkPrefix + Path.GetRandomFileName();
             string cidr = "192.0.2.0/24";
 
@@ -93,12 +93,10 @@
         /// These are identified by the prefix <see cref="UnitTestNetworkPrefix"/>.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Networks)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestNetworks()
         {
-            INetworksProvider provider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            INetworksProvider provider = Bootstrapper.CreateNetworksProvider();
             IEnumerable<CloudNetwork> networks = provider.ListNetworks();
             Assert.IsNotNull(networks);
 
