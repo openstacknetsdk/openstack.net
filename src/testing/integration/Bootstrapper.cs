@@ -60,22 +60,22 @@ namespace Net.OpenStack.Testing.Integration
 
         public static IComputeProvider CreateComputeProvider()
         {
-            return new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            return new CloudServersProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
         }
 
         public static INetworksProvider CreateNetworksProvider()
         {
-            return new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            return new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
         }
 
         public static IBlockStorageProvider CreateBlockStorageProvider()
         {
-            return new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            return new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
         }
 
         public static IObjectStorageProvider CreateObjectStorageProvider()
         {
-            return new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            return new CloudFilesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
         }
     }
 
@@ -88,6 +88,12 @@ namespace Net.OpenStack.Testing.Integration
         public ExtendedCloudIdentity TestDomainIdentity { get; set; }
 
         public string RackspaceExtendedIdentityUrl { get; set; }
+
+        public string DefaultRegion
+        {
+            get;
+            set;
+        }
     }
 
     public class ExtendedCloudIdentity : CloudIdentity
