@@ -416,7 +416,6 @@
             Assert.IsTrue(provider.UpdateImageMetadata(image.Id, metadata));
             Metadata actual = provider.ListImageMetadata(image.Id);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(2, actual.Count);
             Assert.AreEqual("Value ²", actual["Item 2"]);
             Assert.AreEqual("Variables", actual["Different"]);
 
