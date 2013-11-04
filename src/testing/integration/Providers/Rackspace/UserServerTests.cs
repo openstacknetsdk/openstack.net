@@ -479,6 +479,7 @@
 
             bool detach = provider.DetachServerVolume(_server.Id, volume.Id);
             Assert.IsTrue(detach);
+            provider.WaitForServerActive(_server.Id);
             ServerVolume[] remainingVolumes = provider.ListServerVolumes(_server.Id).ToArray();
             Assert.AreEqual(0, remainingVolumes.Length);
 
