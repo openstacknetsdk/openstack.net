@@ -162,7 +162,7 @@
         public void CleanupTestServers()
         {
             IComputeProvider provider = Bootstrapper.CreateComputeProvider();
-            IEnumerable<SimpleServer> servers = ListAllServers(provider);
+            IEnumerable<SimpleServer> servers = ListAllServers(provider).ToArray();
             foreach (SimpleServer server in servers)
             {
                 if (string.IsNullOrEmpty(server.Name))
@@ -183,7 +183,7 @@
         public void CleanupTestImages()
         {
             IComputeProvider provider = Bootstrapper.CreateComputeProvider();
-            IEnumerable<SimpleServerImage> images = ListAllImages(provider);
+            IEnumerable<SimpleServerImage> images = ListAllImages(provider).ToArray();
             foreach (SimpleServerImage image in images)
             {
                 if (string.IsNullOrEmpty(image.Name))
