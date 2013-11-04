@@ -7,6 +7,7 @@
     using System.Net;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core.Domain;
+    using net.openstack.Core.Exceptions.Response;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
@@ -277,11 +278,18 @@
             foreach (CloudNetwork network in networks)
             {
                 Console.WriteLine("Network: {0}", network.Label);
-                IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
-                foreach (IPAddress address in addresses)
+                try
                 {
-                    foundAddress = true;
-                    Console.WriteLine("  {0}", address);
+                    IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
+                    foreach (IPAddress address in addresses)
+                    {
+                        foundAddress = true;
+                        Console.WriteLine("  {0}", address);
+                    }
+                }
+                catch (ItemNotFoundException)
+                {
+                    Console.WriteLine("  Server is not attached to this network.");
                 }
             }
 
