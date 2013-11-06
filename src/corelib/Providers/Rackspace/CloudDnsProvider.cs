@@ -1033,27 +1033,40 @@
             if (job == null)
                 throw new ArgumentNullException("job");
 
-            Func<DnsJob> func =
-                () =>
+            TaskCompletionSource<DnsJob> taskCompletionSource = new TaskCompletionSource<DnsJob>();
+            Func<Task<DnsJob>> pollJob = () => PollJobStateAsync(job, showDetails, cancellationToken, progress);
+
+            Task<DnsJob> currentTask = pollJob();
+            Action<Task<DnsJob>> continuation = null;
+            continuation =
+                previousTask =>
                 {
-                    while (true)
+                    if (previousTask.Status != TaskStatus.RanToCompletion)
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        DnsJob updatedJob = GetJobStatusAsync(job, showDetails, cancellationToken).Result;
-                        if (updatedJob == null || updatedJob.Id != job.Id)
-                            throw new InvalidOperationException("Could not obtain status for job.");
-
-                        if (progress != null)
-                            progress.Report(updatedJob);
-
-                        if (updatedJob.Status == DnsJobStatus.Completed || updatedJob.Status == DnsJobStatus.Error)
-                            return updatedJob;
-
-                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                        taskCompletionSource.SetFromTask(previousTask);
+                        return;
                     }
-                };
 
-            return Task.Factory.StartNew(func);
+                    DnsJob result = previousTask.Result;
+                    if (result == null || result.Status == DnsJobStatus.Completed || result.Status == DnsJobStatus.Error)
+                    {
+                        // finished waiting
+                        taskCompletionSource.SetResult(result);
+                        return;
+                    }
+
+                    // reschedule
+                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
+                        task =>
+                        {
+                            task.PropagateExceptions();
+                            return pollJob();
+                        }).Unwrap();
+                    currentTask.ContinueWith(continuation);
+                };
+            currentTask.ContinueWith(continuation);
+
+            return taskCompletionSource.Task;
         }
 
         /// <summary>
@@ -1086,27 +1099,40 @@
             if (job == null)
                 throw new ArgumentNullException("job");
 
-            Func<DnsJob<TResult>> func =
-                () =>
+            TaskCompletionSource<DnsJob<TResult>> taskCompletionSource = new TaskCompletionSource<DnsJob<TResult>>();
+            Func<Task<DnsJob<TResult>>> pollJob = () => PollJobStateAsync(job, showDetails, cancellationToken, progress);
+
+            Task<DnsJob<TResult>> currentTask = pollJob();
+            Action<Task<DnsJob<TResult>>> continuation = null;
+            continuation =
+                previousTask =>
                 {
-                    while (true)
+                    if (previousTask.Status != TaskStatus.RanToCompletion)
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        DnsJob<TResult> updatedJob = GetJobStatusAsync(job, showDetails, cancellationToken).Result;
-                        if (updatedJob == null || updatedJob.Id != job.Id)
-                            throw new InvalidOperationException("Could not obtain status for job.");
-
-                        if (progress != null)
-                            progress.Report(updatedJob);
-
-                        if (updatedJob.Status == DnsJobStatus.Completed || updatedJob.Status == DnsJobStatus.Error)
-                            return updatedJob;
-
-                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                        taskCompletionSource.SetFromTask(previousTask);
+                        return;
                     }
-                };
 
-            return Task.Factory.StartNew(func);
+                    DnsJob<TResult> result = previousTask.Result;
+                    if (result == null || result.Status == DnsJobStatus.Completed || result.Status == DnsJobStatus.Error)
+                    {
+                        // finished waiting
+                        taskCompletionSource.SetResult(result);
+                        return;
+                    }
+
+                    // reschedule
+                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
+                        task =>
+                        {
+                            task.PropagateExceptions();
+                            return pollJob();
+                        }).Unwrap();
+                    currentTask.ContinueWith(continuation);
+                };
+            currentTask.ContinueWith(continuation);
+
+            return taskCompletionSource.Task;
         }
 
         /// <inheritdoc/>
@@ -1130,6 +1156,92 @@
                     _baseUri = baseUri;
                     return baseUri;
                 });
+        }
+
+        /// <summary>
+        /// Asynchronously poll the current state of a DNS job.
+        /// </summary>
+        /// <param name="job">The job in the DNS service.</param>
+        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When
+        /// the task completes successfully, the <see cref="Task{TResult}.Result"/>
+        /// property will contain a <see cref="DnsJob"/> object containing the
+        /// updated state information for the job in the DNS service.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        private Task<DnsJob> PollJobStateAsync(DnsJob job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob> progress)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+
+            Task<DnsJob> chain = GetJobStatusAsync(job, showDetails, cancellationToken);
+            chain = chain.ContinueWith(
+                task =>
+                {
+                    if (task.Result == null || task.Result.Id != job.Id)
+                        throw new InvalidOperationException("Could not obtain status for job");
+
+                    return task.Result;
+                }, TaskContinuationOptions.ExecuteSynchronously);
+
+            if (progress != null)
+            {
+                chain = chain.ContinueWith(
+                    task =>
+                    {
+                        progress.Report(task.Result);
+                        return task.Result;
+                    }, TaskContinuationOptions.ExecuteSynchronously);
+            }
+
+            return chain;
+        }
+
+        /// <summary>
+        /// Asynchronously poll the current state of a DNS job.
+        /// </summary>
+        /// <param name="job">The job in the DNS service.</param>
+        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When
+        /// the task completes successfully, the <see cref="Task{TResult}.Result"/>
+        /// property will contain a <see cref="DnsJob"/> object containing the
+        /// updated state information for the job in the DNS service.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        private Task<DnsJob<TResponse>> PollJobStateAsync<TResponse>(DnsJob<TResponse> job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob<TResponse>> progress)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+
+            Task<DnsJob<TResponse>> chain = GetJobStatusAsync(job, showDetails, cancellationToken);
+            chain = chain.ContinueWith(
+                task =>
+                {
+                    if (task.Result == null || task.Result.Id != job.Id)
+                        throw new InvalidOperationException("Could not obtain status for job");
+
+                    return task.Result;
+                }, TaskContinuationOptions.ExecuteSynchronously);
+
+            if (progress != null)
+            {
+                chain = chain.ContinueWith(
+                    task =>
+                    {
+                        progress.Report(task.Result);
+                        return task.Result;
+                    }, TaskContinuationOptions.ExecuteSynchronously);
+            }
+
+            return chain;
         }
     }
 }
