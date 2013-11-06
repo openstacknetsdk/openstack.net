@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using net.openstack.Providers.Rackspace;
+using Net.OpenStack.Testing.Integration;
 
 namespace net.openstack.console
 {
@@ -9,6 +7,7 @@ namespace net.openstack.console
     {
         static void Main(string[] args)
         {
+            Bootstrapper.Initialize();
         }
     }
 }

@@ -26,10 +26,20 @@ namespace net.openstack.Providers.Rackspace
         }
 
         #region Roles
-        
-        public Role[] ListRoles(CloudIdentity identity)
+
+        public Role[] ListRoles(CloudIdentity identity, string serviceId = null, int? marker = null, int? limit = 10000)
         {
-            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET);
+            if (limit < 0)
+                throw new ArgumentOutOfRangeException("limit");
+
+            var parameters = BuildOptionalParameterList(new Dictionary<string, string>
+                {
+                    {"serviceId", serviceId},
+                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
+                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+                });
+
+            var response = ExecuteRESTRequest<RolesResponse>(identity, "/v2.0/OS-KSADM/roles", HttpMethod.GET, queryStringParameter: parameters);
             if (response == null || response.Data == null)
                 return null;
 
@@ -342,22 +352,22 @@ namespace net.openstack.Providers.Rackspace
 
         public UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
+            var cloudInstance = CloudInstance.Default;
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
-            if (rackspaceCloudIdentity == null)
-                throw new InvalidCloudIdentityException(string.Format("Invalid Identity object.  Rackspace Identity service requires an instance of type: {0}", typeof(RackspaceCloudIdentity)));
+            if (rackspaceCloudIdentity != null)
+                cloudInstance = rackspaceCloudIdentity.CloudInstance;
+            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", cloudInstance, identity.Username), () =>
+                                                    {
+                                                        var auth = AuthRequest.FromCloudIdentity(identity);
+                                                        var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
-            var userAccess = _userAccessCache.Get(string.Format("{0}/{1}", rackspaceCloudIdentity.CloudInstance, rackspaceCloudIdentity.Username), () =>
-                                                                                                                                                       {
-                                                                                                                                                           var auth = AuthRequest.FromCloudIdentity(identity);
-                                                                                                                                                           var response = ExecuteRESTRequest<AuthenticationResponse>(identity, "/v2.0/tokens", HttpMethod.POST, auth, isTokenRequest: true);
 
+                                                        if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                                                            return null;
 
-                                                                                                                                                           if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
-                                                                                                                                                               return null;
-
-                                                                                                                                                           return response.Data.UserAccess;
-                                                                                                                                                       }, forceCacheRefresh);
+                                                        return response.Data.UserAccess;
+                                                    }, forceCacheRefresh);
 
             return userAccess;
         }
@@ -426,6 +436,18 @@ namespace net.openstack.Providers.Rackspace
             ProviderBase.CheckResponse(response);
 
             return response;
+        }
+
+        protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
+        {
+            if (optionalParameters == null)
+                return null;
+
+            var paramList = optionalParameters.Where(optionalParameter => !string.IsNullOrEmpty(optionalParameter.Value)).ToDictionary(optionalParameter => optionalParameter.Key, optionalParameter => optionalParameter.Value, optionalParameters.Comparer);
+            if (!paramList.Any())
+                return null;
+
+            return paramList;
         }
     }
 }

@@ -13,10 +13,10 @@ namespace net.openstack.Providers.Rackspace
             _factory = new IdentityProviderFactory(restService, tokenCache, usInstanceUrlBase, ukInstanceUrlBase);
         }
 
-        public Role[] ListRoles(CloudIdentity identity)
+        public Role[] ListRoles(CloudIdentity identity, string serviceId = null, int? marker = null, int? limit = 10000)
         {
             var provider = GetProvider(identity);
-            return provider.ListRoles(identity);
+            return provider.ListRoles(identity, serviceId, marker, limit);
         }
 
         public Role AddRole(CloudIdentity identity, Role role)
@@ -174,7 +174,7 @@ namespace net.openstack.Providers.Rackspace
             var rackspaceCloudIdentity = identity as RackspaceCloudIdentity;
 
             if (rackspaceCloudIdentity == null)
-                _factory.Get(CloudInstance.Default);
+                return _factory.Get(CloudInstance.Default);
 
             return _factory.Get(rackspaceCloudIdentity.CloudInstance);
         }
