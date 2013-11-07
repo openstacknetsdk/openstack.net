@@ -7,6 +7,7 @@
     using System.Net;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core.Domain;
+    using net.openstack.Core.Exceptions.Response;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
@@ -25,10 +26,12 @@
         private static Server _server;
         private static string _password;
 
+        private static readonly string TestImageNameSubstring = "CentOS 6.4";
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             string serverName = UserComputeTests.UnitTestServerPrefix + Path.GetRandomFileName();
 
             Flavor flavor = UserComputeTests.ListAllFlavorsWithDetails(provider).OrderBy(i => i.RAMInMB).ThenBy(i => i.DiskSizeInGB).FirstOrDefault();
@@ -36,13 +39,13 @@
                 Assert.Inconclusive("Couldn't find a flavor to use for the test server.");
 
             SimpleServerImage[] images = UserComputeTests.ListAllImages(provider).ToArray();
-            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf("CentOS 6.0", StringComparison.OrdinalIgnoreCase) >= 0);
+            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf(TestImageNameSubstring, StringComparison.OrdinalIgnoreCase) >= 0);
             if (image == null)
-                Assert.Inconclusive("Couldn't find the CentOS 6.0 image to use for the test server.");
+                Assert.Inconclusive(string.Format("Couldn't find the {0} image to use for the test server.", TestImageNameSubstring));
 
             Stopwatch timer = Stopwatch.StartNew();
             Console.Write("Creating server for image {0}...", image.Name);
-            NewServer server = provider.CreateServer(serverName, image.Id, flavor.Id);
+            NewServer server = provider.CreateServer(serverName, image.Id, flavor.Id, attachToServiceNetwork: true);
             Assert.IsNotNull(server);
             Assert.IsFalse(string.IsNullOrEmpty(server.Id));
 
@@ -59,7 +62,7 @@
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             Stopwatch timer = Stopwatch.StartNew();
             Console.Write("  Deleting...");
@@ -73,7 +76,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             Server server = provider.GetDetails(_server.Id);
             if (server.Status != ServerState.Active)
                 Assert.Inconclusive("Could not run test because the server is in the '{0}' state (expected '{1}').", server.Status, ServerState.Active);
@@ -84,7 +87,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListServers()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<SimpleServer> servers = UserComputeTests.ListAllServers(provider);
             Assert.IsNotNull(servers);
             if (!servers.Any())
@@ -107,7 +110,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListServersWithDetails()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<Server> servers = UserComputeTests.ListAllServersWithDetails(provider);
             Assert.IsNotNull(servers);
             if (!servers.Any())
@@ -131,7 +134,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestGetDetails()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<Server> servers = UserComputeTests.ListAllServersWithDetails(provider);
             Assert.IsNotNull(servers);
             if (!servers.Any())
@@ -168,7 +171,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestChangeAdministratorPassword()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             string password = Path.GetTempPath();
             bool changePasswordResult = provider.ChangeAdministratorPassword(_server.Id, password);
@@ -183,7 +186,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestHardRebootServer()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             bool rebootResult = provider.RebootServer(_server.Id, RebootType.Hard);
             Assert.IsTrue(rebootResult);
             Server rebootServer = provider.WaitForServerActive(_server.Id);
@@ -195,7 +198,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestSoftRebootServer()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             bool rebootResult = provider.RebootServer(_server.Id, RebootType.Soft);
             Assert.IsTrue(rebootResult);
             Server rebootServer = provider.WaitForServerActive(_server.Id);
@@ -207,7 +210,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestRescueServer()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             string rescueResult = provider.RescueServer(_server.Id);
             Assert.IsFalse(string.IsNullOrEmpty(rescueResult));
@@ -225,7 +228,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestUpdateServer()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             string newName = UserComputeTests.UnitTestServerPrefix + Path.GetRandomFileName() + "²";
             bool updated = provider.UpdateServer(_server.Id, name: newName);
@@ -242,7 +245,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListAddresses()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             ServerAddresses serverAddresses = provider.ListAddresses(_server.Id);
             if (serverAddresses.Count == 0)
                 Assert.Inconclusive("Couldn't find any addresses listed for the server.");
@@ -267,19 +270,26 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListAddressesByNetwork()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
-            INetworksProvider networksProvider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
+            INetworksProvider networksProvider = Bootstrapper.CreateNetworksProvider();
             IEnumerable<CloudNetwork> networks = networksProvider.ListNetworks();
 
             bool foundAddress = false;
             foreach (CloudNetwork network in networks)
             {
                 Console.WriteLine("Network: {0}", network.Label);
-                IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
-                foreach (IPAddress address in addresses)
+                try
                 {
-                    foundAddress = true;
-                    Console.WriteLine("  {0}", address);
+                    IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
+                    foreach (IPAddress address in addresses)
+                    {
+                        foundAddress = true;
+                        Console.WriteLine("  {0}", address);
+                    }
+                }
+                catch (ItemNotFoundException)
+                {
+                    Console.WriteLine("  Server is not attached to this network.");
                 }
             }
 
@@ -292,16 +302,16 @@
         [TestCategory(TestCategories.Compute)]
         public void TestRebuildServer()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             Flavor flavor = UserComputeTests.ListAllFlavorsWithDetails(provider).OrderBy(i => i.RAMInMB).ThenBy(i => i.DiskSizeInGB).FirstOrDefault();
             if (flavor == null)
                 Assert.Inconclusive("Couldn't find a flavor to use for the test server.");
 
             SimpleServerImage[] images = UserComputeTests.ListAllImages(provider).ToArray();
-            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf("CentOS 6.0", StringComparison.OrdinalIgnoreCase) >= 0);
+            SimpleServerImage image = images.FirstOrDefault(i => i.Name.IndexOf(TestImageNameSubstring, StringComparison.OrdinalIgnoreCase) >= 0);
             if (image == null)
-                Assert.Inconclusive("Couldn't find the CentOS 6.0 image to use for the test server.");
+                Assert.Inconclusive(string.Format("Couldn't find the {0} image to use for the test server.", TestImageNameSubstring));
 
             Server rebuilt = provider.RebuildServer(_server.Id, null, image.Id, flavor.Id, _password);
             Assert.IsNotNull(rebuilt);
@@ -315,7 +325,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestConfirmServerResize()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             string serverName = UserComputeTests.UnitTestServerPrefix + Path.GetRandomFileName();
 
@@ -341,7 +351,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestRevertServerResize()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             string serverName = UserComputeTests.UnitTestServerPrefix + Path.GetRandomFileName();
 
@@ -367,7 +377,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestCreateImage()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             /* Create the image
              */
@@ -406,7 +416,6 @@
             Assert.IsTrue(provider.UpdateImageMetadata(image.Id, metadata));
             Metadata actual = provider.ListImageMetadata(image.Id);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(2, actual.Count);
             Assert.AreEqual("Value ²", actual["Item 2"]);
             Assert.AreEqual("Variables", actual["Different"]);
 
@@ -433,9 +442,9 @@
         [TestCategory(TestCategories.Compute)]
         public void TestAttachServerVolume()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
-            IBlockStorageProvider blockStorageProvider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider blockStorageProvider = Bootstrapper.CreateBlockStorageProvider();
             VolumeType volumeType = UserBlockStorageTests.GetSsdVolumeTypeOrDefault(blockStorageProvider);
             string volumeName = UserBlockStorageTests.UnitTestVolumePrefix + Path.GetRandomFileName();
             Volume volume = blockStorageProvider.CreateVolume(UserBlockStorageTests.MinimumVolumeSize, displayName: volumeName, volumeType: volumeType != null ? volumeType.Id : null);
@@ -470,6 +479,7 @@
 
             bool detach = provider.DetachServerVolume(_server.Id, volume.Id);
             Assert.IsTrue(detach);
+            provider.WaitForServerActive(_server.Id);
             ServerVolume[] remainingVolumes = provider.ListServerVolumes(_server.Id).ToArray();
             Assert.AreEqual(0, remainingVolumes.Length);
 
@@ -483,31 +493,21 @@
         [TestCategory(TestCategories.Compute)]
         public void TestVirtualInterfaces()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
-            INetworksProvider networksProvider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
+            INetworksProvider networksProvider = Bootstrapper.CreateNetworksProvider();
             CloudNetwork publicNetwork = networksProvider.ListNetworks().Single(i => i.Label.Equals("public", StringComparison.OrdinalIgnoreCase));
-            CloudNetwork privateNetwork = networksProvider.ListNetworks().Single(i => i.Label.Equals("private", StringComparison.OrdinalIgnoreCase));
 
             VirtualInterface publicVirtualInterface = provider.CreateVirtualInterface(_server.Id, publicNetwork.Id);
             Assert.IsNotNull(publicVirtualInterface);
             Assert.IsFalse(string.IsNullOrEmpty(publicVirtualInterface.Id));
             Assert.IsNotNull(publicVirtualInterface.MACAddress);
 
-            VirtualInterface privateVirtualInterface = provider.CreateVirtualInterface(_server.Id, privateNetwork.Id);
-            Assert.IsNotNull(privateVirtualInterface);
-            Assert.IsFalse(string.IsNullOrEmpty(privateVirtualInterface.Id));
-            Assert.IsNotNull(privateVirtualInterface.MACAddress);
-
             IEnumerable<VirtualInterface> virtualInterfaces = provider.ListVirtualInterfaces(_server.Id);
             Assert.IsNotNull(virtualInterfaces);
             Assert.IsTrue(virtualInterfaces.Where(i => i.Id.Equals(publicVirtualInterface.Id, StringComparison.OrdinalIgnoreCase)).Any());
-            Assert.IsTrue(virtualInterfaces.Where(i => i.Id.Equals(privateVirtualInterface.Id, StringComparison.OrdinalIgnoreCase)).Any());
 
             bool deleted;
             deleted = provider.DeleteVirtualInterface(_server.Id, publicVirtualInterface.Id);
-            Assert.IsTrue(deleted);
-
-            deleted = provider.DeleteVirtualInterface(_server.Id, privateVirtualInterface.Id);
             Assert.IsTrue(deleted);
         }
 
@@ -516,7 +516,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestServerMetadata()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
 
             Metadata initialMetadata = provider.ListServerMetadata(_server.Id);
             if (initialMetadata.Count > 0)

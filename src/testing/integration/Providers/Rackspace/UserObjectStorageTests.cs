@@ -83,13 +83,11 @@
         /// <see cref="IgnoreAttribute"/>.
         /// </remarks>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         [Ignore]
         public void CleanupAllContainerMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<Container> containers = ListAllContainers(provider);
             foreach (Container container in containers)
             {
@@ -103,12 +101,10 @@
         /// created by the unit tests in this class.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestContainerMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<Container> containers = ListAllContainers(provider);
             foreach (Container container in containers)
             {
@@ -122,12 +118,10 @@
         /// objects within those containers.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestContainers()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<Container> containers = ListAllContainers(provider);
             foreach (Container container in containers)
             {
@@ -163,7 +157,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestListContainers()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<Container> containers = ListAllContainers(provider);
             if (!containers.Any())
                 Assert.Inconclusive("The account does not have any containers in the region.");
@@ -182,7 +176,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestContainerProperties()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<Container> containers = ListAllContainers(provider);
             if (!containers.Any())
                 Assert.Inconclusive("The account does not have any containers in the region.");
@@ -235,7 +229,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateContainer()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -252,7 +246,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestVersionedContainer()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string versionsContainerName = TestContainerPrefix + Path.GetRandomFileName();
 
@@ -317,7 +311,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteContainer()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string fileContents = "File contents!";
@@ -345,7 +339,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetContainerHeader()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -364,7 +358,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetContainerMetaData()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -393,7 +387,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestContainerHeaderKeyCharacters()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -442,7 +436,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestContainerInvalidHeaderKeyCharacters()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -491,7 +485,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestUpdateContainerMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -534,7 +528,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteContainerMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
 
             ObjectStore result = provider.CreateContainer(containerName);
@@ -606,7 +600,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestListCDNContainers()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             IEnumerable<ContainerCDN> containers = ListAllCDNContainers(provider);
 
             Console.WriteLine("Containers");
@@ -624,7 +618,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCDNOnContainer()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string fileContents = "File contents!";
@@ -752,7 +746,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestStaticWebOnContainer()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string fileContents = "File contents!";
@@ -865,7 +859,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetObjectHeaders()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string objectData = "";
@@ -892,7 +886,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetObjectMetaData()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string objectData = "";
@@ -925,7 +919,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestUpdateObjectMetaData()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string objectData = "";
@@ -977,7 +971,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteObjectMetaData()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string objectData = "";
@@ -1053,7 +1047,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestListObjects()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string[] objectNames = { Path.GetRandomFileName(), Path.GetRandomFileName() };
             // another random name counts as random content
@@ -1086,7 +1080,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestSpecialCharacters()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string[] specialNames = { "#", " ", " lead", "trail ", "%", "x//x" };
             // another random name counts as random content
             string fileData = Path.GetRandomFileName();
@@ -1123,7 +1117,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateObjectFromFile_UseFileName()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             // another random name counts as random content
@@ -1161,7 +1155,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateObjectFromFile_UseCustomObjectName()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             // another random name counts as random content
@@ -1199,7 +1193,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateObject()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             // another random name counts as random content
@@ -1233,11 +1227,8 @@
         [DeploymentItem("DarkKnightRises.jpg")]
         public void TestCreateLargeObject()
         {
-            IObjectStorageProvider provider =
-                new CloudFilesProvider(Bootstrapper.Settings.TestIdentity)
-                {
-                    LargeFileBatchThreshold = 81920
-                };
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            ((CloudFilesProvider)provider).LargeFileBatchThreshold = 81920;
 
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string sourceFileName = "DarkKnightRises.jpg";
@@ -1310,7 +1301,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetObjectSaveToFile()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             // another random name counts as random content
@@ -1365,7 +1356,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestCopyObject()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string copiedName = Path.GetRandomFileName();
@@ -1408,7 +1399,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestMoveObject()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             string movedName = Path.GetRandomFileName();
@@ -1454,7 +1445,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestDeleteObject()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = Path.GetRandomFileName();
             // another random name counts as random content
@@ -1503,13 +1494,11 @@
         /// <see cref="IgnoreAttribute"/>.
         /// </remarks>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         [Ignore]
         public void CleanupAllAccountMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             Dictionary<string, string> metadata = provider.GetAccountMetaData();
             Dictionary<string, string> removedMetadata = metadata.ToDictionary(i => i.Key, i => string.Empty);
             provider.UpdateAccountMetadata(removedMetadata);
@@ -1520,12 +1509,10 @@
         /// created by the unit tests in this class.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.ObjectStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestAccountMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             Dictionary<string, string> metadata = GetAccountMetadataWithPrefix(provider, TestKeyPrefix);
             Dictionary<string, string> removedMetadata = metadata.ToDictionary(i => i.Key, i => string.Empty);
             provider.UpdateAccountMetadata(removedMetadata);
@@ -1536,7 +1523,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetAccountHeaders()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             Dictionary<string, string> headers = provider.GetAccountHeaders();
             Assert.IsNotNull(headers);
 
@@ -1578,7 +1565,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestGetAccountMetaData()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             Dictionary<string, string> metadata = provider.GetAccountMetaData();
             Assert.IsNotNull(metadata);
             Assert.AreEqual(StringComparer.OrdinalIgnoreCase, metadata.Comparer);
@@ -1598,7 +1585,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestAccountHeaderKeyCharacters()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
 
             List<char> keyCharList = new List<char>();
             for (char i = MinHeaderKeyCharacter; i <= MaxHeaderKeyCharacter; i++)
@@ -1639,7 +1626,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestAccountInvalidHeaderKeyCharacters()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
 
             List<char> validKeyCharList = new List<char>();
             for (char i = MinHeaderKeyCharacter; i <= MaxHeaderKeyCharacter; i++)
@@ -1681,7 +1668,7 @@
         [TestCategory(TestCategories.ObjectStorage)]
         public void TestUpdateAccountMetadata()
         {
-            IObjectStorageProvider provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity);
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
             Dictionary<string, string> metadata = provider.GetAccountMetaData();
             if (metadata.Any(i => i.Key.StartsWith(TestKeyPrefix, StringComparison.OrdinalIgnoreCase)))
             {

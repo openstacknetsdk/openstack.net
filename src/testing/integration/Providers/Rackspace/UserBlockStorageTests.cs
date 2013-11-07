@@ -41,12 +41,10 @@
         #region Volume
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.BlockStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestVolumes()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Volume> volumes = provider.ListVolumes();
             foreach (Volume volume in volumes)
             {
@@ -66,7 +64,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestListVolumes()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Volume> volumes = provider.ListVolumes();
             Assert.IsNotNull(volumes);
             if (!volumes.Any())
@@ -86,7 +84,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestBasicVolumeFeatures()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             string displayName = UnitTestVolumePrefix + Path.GetRandomFileName();
             Volume result = provider.CreateVolume(MinimumVolumeSize, displayName: displayName);
             Assert.IsNotNull(result);
@@ -129,7 +127,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestShowVolume()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Volume> volumes = provider.ListVolumes();
             Assert.IsNotNull(volumes);
             if (!volumes.Any())
@@ -158,7 +156,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestListVolumeTypes()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<VolumeType> volumeTypes = provider.ListVolumeTypes();
             Assert.IsNotNull(volumeTypes);
             if (!volumeTypes.Any())
@@ -177,7 +175,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestDescribeVolumeType()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<VolumeType> volumeTypes = provider.ListVolumeTypes();
             Assert.IsNotNull(volumeTypes);
             if (!volumeTypes.Any())
@@ -199,12 +197,10 @@
         #region Snapshot
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.BlockStorage)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestSnapshots()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Snapshot> snapshots = provider.ListSnapshots();
             foreach (Snapshot snapshot in snapshots)
             {
@@ -224,7 +220,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestListSnapshots()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Snapshot> snapshots = provider.ListSnapshots();
             Assert.IsNotNull(snapshots);
             if (!snapshots.Any())
@@ -244,7 +240,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestBasicSnapshotFeatures()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
 
             //
             // Volume setup...
@@ -336,7 +332,7 @@
         [TestCategory(TestCategories.BlockStorage)]
         public void TestShowSnapshot()
         {
-            IBlockStorageProvider provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity);
+            IBlockStorageProvider provider = Bootstrapper.CreateBlockStorageProvider();
             IEnumerable<Snapshot> snapshots = provider.ListSnapshots();
             Assert.IsNotNull(snapshots);
             if (!snapshots.Any())

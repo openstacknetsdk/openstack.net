@@ -158,13 +158,11 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestServers()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
-            IEnumerable<SimpleServer> servers = ListAllServers(provider);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
+            IEnumerable<SimpleServer> servers = ListAllServers(provider).ToArray();
             foreach (SimpleServer server in servers)
             {
                 if (string.IsNullOrEmpty(server.Name))
@@ -181,13 +179,11 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestImages()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
-            IEnumerable<SimpleServerImage> images = ListAllImages(provider);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
+            IEnumerable<SimpleServerImage> images = ListAllImages(provider).ToArray();
             foreach (SimpleServerImage image in images)
             {
                 if (string.IsNullOrEmpty(image.Name))
@@ -204,8 +200,6 @@
         }
 
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Compute)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupTestVirtualInterfaces()
         {
@@ -218,7 +212,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListFlavors()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<Flavor> flavors = ListAllFlavors(provider);
             Assert.IsNotNull(flavors);
             if (!flavors.Any())
@@ -241,7 +235,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListFlavorsWithDetails()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<FlavorDetails> flavors = ListAllFlavorsWithDetails(provider);
             Assert.IsNotNull(flavors);
             if (!flavors.Any())
@@ -265,7 +259,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestGetFlavor()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<FlavorDetails> flavors = ListAllFlavorsWithDetails(provider);
             Assert.IsNotNull(flavors);
             if (!flavors.Any())
@@ -290,7 +284,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListImages()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<SimpleServerImage> images = ListAllImages(provider);
             Assert.IsNotNull(images);
             if (!images.Any())
@@ -313,7 +307,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListImagesWithDetails()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<ServerImage> images = ListAllImagesWithDetails(provider);
             Assert.IsNotNull(images);
             if (!images.Any())
@@ -337,7 +331,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestGetImage()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<ServerImage> images = ListAllImagesWithDetails(provider);
             Assert.IsNotNull(images);
             if (!images.Any())
@@ -383,7 +377,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestListImageMetadata()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<ServerImage> images = ListAllImagesWithDetails(provider);
             Assert.IsNotNull(images);
             if (!images.Any())
@@ -415,7 +409,7 @@
         [TestCategory(TestCategories.Compute)]
         public void TestGetImageMetadataItem()
         {
-            IComputeProvider provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity);
+            IComputeProvider provider = Bootstrapper.CreateComputeProvider();
             IEnumerable<ServerImage> images = ListAllImagesWithDetails(provider);
             Assert.IsNotNull(images);
             if (!images.Any())

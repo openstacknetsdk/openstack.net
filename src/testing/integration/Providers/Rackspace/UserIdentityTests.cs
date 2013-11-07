@@ -51,7 +51,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestAuthenticate()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             UserAccess userAccess = provider.Authenticate();
 
             Assert.IsNotNull(userAccess);
@@ -78,7 +78,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestValidateToken()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             UserAccess userAccess = provider.Authenticate();
 
             Assert.IsNotNull(userAccess);
@@ -115,7 +115,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestListEndpoints()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             UserAccess userAccess = provider.Authenticate();
             Assert.IsNotNull(userAccess);
             Assert.IsNotNull(userAccess.Token);
@@ -140,7 +140,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetToken()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
 
             IdentityToken token = provider.GetToken();
             Assert.IsNotNull(token);
@@ -163,7 +163,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetRolesByUser()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
 
             UserAccess userAccess = provider.GetUserAccess();
             Assert.IsNotNull(userAccess);
@@ -185,12 +185,10 @@
         /// This method can be used to clean up users created during integration testing.
         /// </summary>
         [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.Identity)]
         [TestCategory(TestCategories.Cleanup)]
         public void CleanupUsers()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             IEnumerable<User> users = provider.ListUsers();
             foreach (User user in users)
             {
@@ -210,7 +208,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestListUsers()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             IEnumerable<User> users = provider.ListUsers();
             Assert.IsNotNull(users);
             Assert.IsTrue(users.Any());
@@ -232,7 +230,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetUserByName()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             User user = provider.GetUserByName(Bootstrapper.Settings.TestIdentity.Username);
             Assert.IsNotNull(user);
             Assert.AreEqual(Bootstrapper.Settings.TestIdentity.Username, user.Username);
@@ -252,7 +250,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetUser()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             User userByName = provider.GetUserByName(Bootstrapper.Settings.TestIdentity.Username);
             Assert.IsNotNull(userByName);
             Assert.AreEqual(Bootstrapper.Settings.TestIdentity.Username, userByName.Username);
@@ -280,7 +278,7 @@
             string username = GenerateUsername();
             NewUser newUser = new NewUser(username, username + "@example.com");
 
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             NewUser user = provider.AddUser(newUser);
 
             Assert.IsNotNull(user);
@@ -379,7 +377,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestListUserCredentials()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             User user = provider.GetUserByName(Bootstrapper.Settings.TestIdentity.Username);
             IEnumerable<UserCredential> credentials = provider.ListUserCredentials(user.Id);
             Assert.IsNotNull(credentials);
@@ -398,7 +396,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestListTenants()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             IEnumerable<Tenant> tenants = provider.ListTenants();
             Assert.IsNotNull(tenants);
             Assert.IsTrue(tenants.Any());
@@ -414,7 +412,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetUserAccess()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
 
             UserAccess userAccess = provider.GetUserAccess();
             Assert.IsNotNull(userAccess);
@@ -438,7 +436,7 @@
         [TestCategory(TestCategories.Identity)]
         public void TestGetUserCredential()
         {
-            IIdentityProvider provider = new CloudIdentityProvider(Bootstrapper.Settings.TestIdentity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
             User user = provider.GetUserByName(Bootstrapper.Settings.TestIdentity.Username);
             IEnumerable<UserCredential> credentials = provider.ListUserCredentials(user.Id);
             Assert.IsNotNull(credentials);
@@ -462,10 +460,10 @@
         {
             CloudIdentity identity = Bootstrapper.Settings.TestIdentity;
 
-            CloudIdentityProvider provider = new CloudIdentityProvider(identity);
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider(identity);
             Assert.AreEqual(identity, provider.DefaultIdentity);
 
-            CloudIdentityProvider defaultProvider = new CloudIdentityProvider();
+            IIdentityProvider defaultProvider = Bootstrapper.CreateIdentityProvider();
             Assert.IsNull(defaultProvider.DefaultIdentity);
         }
     }

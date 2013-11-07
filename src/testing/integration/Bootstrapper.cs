@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using net.openstack.Core.Domain;
+using net.openstack.Core.Providers;
+using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Objects;
 
 namespace Net.OpenStack.Testing.Integration
@@ -45,6 +47,36 @@ namespace Net.OpenStack.Testing.Integration
 
             _settings = appCredentials;
         }
+
+        public static IIdentityProvider CreateIdentityProvider()
+        {
+            return CreateIdentityProvider(Bootstrapper.Settings.TestIdentity);
+        }
+
+        public static IIdentityProvider CreateIdentityProvider(CloudIdentity identity)
+        {
+            return new CloudIdentityProvider(identity);
+        }
+
+        public static IComputeProvider CreateComputeProvider()
+        {
+            return new CloudServersProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+        }
+
+        public static INetworksProvider CreateNetworksProvider()
+        {
+            return new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+        }
+
+        public static IBlockStorageProvider CreateBlockStorageProvider()
+        {
+            return new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+        }
+
+        public static IObjectStorageProvider CreateObjectStorageProvider()
+        {
+            return new CloudFilesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+        }
     }
 
     public class OpenstackNetSetings
@@ -56,6 +88,12 @@ namespace Net.OpenStack.Testing.Integration
         public ExtendedCloudIdentity TestDomainIdentity { get; set; }
 
         public string RackspaceExtendedIdentityUrl { get; set; }
+
+        public string DefaultRegion
+        {
+            get;
+            set;
+        }
     }
 
     public class ExtendedCloudIdentity : CloudIdentity
