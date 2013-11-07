@@ -101,6 +101,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\AsynchronousServices.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
     <None Include="Content\PreliminaryFeatures.aml" />

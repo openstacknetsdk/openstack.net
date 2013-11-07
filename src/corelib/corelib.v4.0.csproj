@@ -51,9 +51,12 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AsyncCompletionOption.cs" />
     <Compile Include="Core\Caching\ICache`1.cs" />
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\Converters\NamespaceDoc.cs" />
@@ -96,11 +99,20 @@
     <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
     <Compile Include="Core\ExtensibleEnum`1.cs" />
+    <Compile Include="Core\InternalTaskExtensions.cs" />
+    <Compile Include="Core\IProgress`1.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskCompletionSourceExtensions.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskExtrasExtensions.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_Common.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_ContinueWhenAllAny.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_Delayed.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_From.cs" />
     <Compile Include="Core\Providers\NamespaceDoc.cs" />
     <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\BulkDeletionException.cs" />
     <Compile Include="Core\HttpStatusCodeParser.cs" />
@@ -137,6 +149,7 @@
     <Compile Include="Core\Validators\INetworksValidator.cs" />
     <Compile Include="Core\UserAgentGenerator.cs" />
     <Compile Include="Core\Validators\IHttpResponseCodeValidator.cs" />
+    <Compile Include="Core\WebRequestExtensions.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
     <Compile Include="Core\Exceptions\TTLLengthException.cs" />
     <Compile Include="Core\Providers\IObjectStorageProvider.cs" />
@@ -261,6 +274,8 @@
     <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
     <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
     <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\WebRequestEventArgs.cs" />
+    <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\keys\openstacknetsdk.snk">

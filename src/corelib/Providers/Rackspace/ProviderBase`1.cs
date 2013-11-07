@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
+using System.Threading.Tasks;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
@@ -11,10 +13,11 @@ using net.openstack.Core.Exceptions;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Core.Providers;
 using net.openstack.Core.Validators;
-using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Validators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CancellationToken = System.Threading.CancellationToken;
+using Encoding = System.Text.Encoding;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -85,6 +88,18 @@ namespace net.openstack.Providers.Rackspace
             RestService = restService ?? new JsonRestServices();
             ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
         }
+
+        /// <summary>
+        /// This event is fired immediately before sending an asynchronous web request.
+        /// </summary>
+        /// <preliminary/>
+        public event EventHandler<WebRequestEventArgs> BeforeAsyncWebRequest;
+
+        /// <summary>
+        /// This event is fired when the result of an asynchronous web request is received.
+        /// </summary>
+        /// <preliminary/>
+        public event EventHandler<WebResponseEventArgs> AfterAsyncWebResponse;
 
         /// <summary>
         /// Gets or sets the maximum number of connections allowed on the <see cref="ServicePoint"/>
@@ -794,6 +809,404 @@ namespace net.openstack.Providers.Rackspace
         {
             if (GetDefaultIdentity(identity) == null)
                 throw new InvalidOperationException("No identity was specified for the request, and no default is available for the provider.");
+        }
+
+        /// <summary>
+        /// Creates a task continuation function responsible for creating an <see cref="HttpWebRequest"/> for use
+        /// in asynchronous REST API calls. The input to the continuation function is a completed task which
+        /// computes an <see cref="IdentityToken"/> for an authenticated user and a base URI for use in binding
+        /// the URI templates for REST API calls. The continuation function calls <see cref="PrepareRequestImpl"/>
+        /// to create and prepare the resulting <see cref="HttpWebRequest"/>.
+        /// </summary>
+        /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
+        /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
+        /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <returns>A task continuation delegate which can be used to create an <see cref="HttpWebRequest"/> following the completion of a task that obtains an <see cref="IdentityToken"/> and the base URI for a service.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="template"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <preliminary/>
+        protected Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> PrepareRequestAsyncFunc(HttpMethod method, UriTemplate template, IDictionary<string, string> parameters, Func<Uri, Uri> uriTransform = null)
+        {
+            if (template == null)
+                throw new ArgumentNullException("template");
+            if (parameters == null)
+                throw new ArgumentNullException("parameters");
+
+            return
+                task =>
+                {
+                    Uri baseUri = task.Result.Item2;
+                    return PrepareRequestImpl(method, task.Result.Item1, template, baseUri, parameters, uriTransform);
+                };
+        }
+
+        /// <summary>
+        /// Creates a task continuation function responsible for creating an <see cref="HttpWebRequest"/> for use
+        /// in asynchronous REST API calls. The input to the continuation function is a completed task which
+        /// computes an <see cref="IdentityToken"/> for an authenticated user and a base URI for use in binding
+        /// the URI templates for REST API calls. The continuation function calls <see cref="PrepareRequestImpl"/>
+        /// to create and prepare the resulting <see cref="HttpWebRequest"/>, and then asynchronously obtains
+        /// the request stream for the request and writes the specified <paramref name="body"/> in JSON notation.
+        /// </summary>
+        /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
+        /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
+        /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
+        /// <param name="body">A object modeling the body of the web request. The object is serialized in JSON notation for inclusion in the request.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <returns>A task continuation delegate which can be used to create an <see cref="HttpWebRequest"/> following the completion of a task that obtains an <see cref="IdentityToken"/> and the base URI for a service.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="template"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <preliminary/>
+        protected Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> PrepareRequestAsyncFunc<TBody>(HttpMethod method, UriTemplate template, IDictionary<string, string> parameters, TBody body, Func<Uri, Uri> uriTransform = null)
+        {
+            return
+                task =>
+                {
+                    Uri baseUri = task.Result.Item2;
+                    HttpWebRequest request = PrepareRequestImpl(method, task.Result.Item1, template, baseUri, parameters, uriTransform);
+
+                    string bodyText = JsonConvert.SerializeObject(body);
+                    byte[] encodedBody = Encoding.UTF8.GetBytes(bodyText);
+                    request.ContentType = new ContentType() { MediaType = JsonRequestSettings.JsonContentType, CharSet = "UTF-8" }.ToString();
+                    request.ContentLength = encodedBody.Length;
+
+                    Task<Stream> streamTask = Task.Factory.FromAsync<Stream>(request.BeginGetRequestStream(null, null), request.EndGetRequestStream);
+                    return
+                        streamTask.ContinueWith(subTask =>
+                        {
+                            using (Stream stream = subTask.Result)
+                            {
+                                stream.Write(encodedBody, 0, encodedBody.Length);
+                            }
+
+                            return request;
+                        });
+                };
+        }
+
+        /// <summary>
+        /// Creates and prepares an <see cref="HttpWebRequest"/> for an asynchronous REST API call.
+        /// </summary>
+        /// <remarks>
+        /// The base implementation sets the following properties of the web request.
+        ///
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Property</term>
+        /// <term>Value</term>
+        /// </listheader>
+        /// <item>
+        /// <description><see cref="WebRequest.Method"/></description>
+        /// <description><paramref name="method"/></description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="HttpWebRequest.Accept"/></description>
+        /// <description><see cref="JsonRequestSettings.JsonContentType"/></description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="WebRequest.Headers"/><literal>["X-Auth-Token"]</literal></description>
+        /// <description><see name="IdentityToken.Id"/></description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="HttpWebRequest.UserAgent"/></description>
+        /// <description><see cref="UserAgentGenerator.UserAgent"/></description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="WebRequest.Timeout"/></description>
+        /// <description>14400 seconds (4 hours)</description>
+        /// </item>
+        /// <item>
+        /// <description><see cref="ServicePoint.ConnectionLimit"/></description>
+        /// <description><see cref="ConnectionLimit"/></description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
+        /// <param name="identityToken">The <see cref="IdentityToken"/> to use for making an authenticated REST API call.</param>
+        /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
+        /// <param name="baseUri">The base URI to use for binding the URI template.</param>
+        /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <returns>An <see cref="HttpWebRequest"/> to use for making the asynchronous REST API call.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="identityToken"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="template"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="baseUri"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">If <paramref name="baseUri"/> is not an absolute URI.</exception>
+        /// <preliminary/>
+        protected virtual HttpWebRequest PrepareRequestImpl(HttpMethod method, IdentityToken identityToken, UriTemplate template, Uri baseUri, IDictionary<string, string> parameters, Func<Uri, Uri> uriTransform)
+        {
+            Uri boundUri = template.BindByName(baseUri, parameters);
+            if (uriTransform != null)
+                boundUri = uriTransform(boundUri);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(boundUri);
+            request.Method = method.ToString().ToUpperInvariant();
+            request.Accept = JsonRequestSettings.JsonContentType;
+            request.Headers["X-Auth-Token"] = identityToken.Id;
+            request.UserAgent = UserAgentGenerator.UserAgent;
+            request.Timeout = (int)TimeSpan.FromSeconds(14400).TotalMilliseconds;
+            if (ConnectionLimit.HasValue)
+                request.ServicePoint.ConnectionLimit = ConnectionLimit.Value;
+
+            return request;
+        }
+
+        /// <summary>
+        /// Gets the base absolute URI to use for making asynchronous REST API calls to this service.
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain
+        /// a <see cref="Uri"/> representing the base absolute URI for the service.
+        /// </returns>
+        /// <preliminary/>
+        protected virtual Task<Uri> GetBaseUriAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Authenticate with the identity service prior to making an asynchronous REST API call.
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain
+        /// a tuple containing the authentication information. The first element of the tuple is
+        /// an <see cref="IdentityToken"/> for the authenticated user, and the second element is
+        /// a base absolute <see cref="Uri"/> the service should use for making authenticated
+        /// asynchronous web requests.
+        /// </returns>
+        /// <preliminary/>
+        protected virtual Task<Tuple<IdentityToken, Uri>> AuthenticateServiceAsync(CancellationToken cancellationToken)
+        {
+            Task<IdentityToken> authenticate = Task.Factory.StartNew(() => IdentityProvider.GetToken(GetDefaultIdentity(null)));
+
+            Func<Task<IdentityToken>, Task<Tuple<IdentityToken, Uri>>> getBaseUri =
+                task =>
+                {
+                    Task[] tasks = { task, GetBaseUriAsync(cancellationToken) };
+                    return Task.Factory.ContinueWhenAll(tasks,
+                        ts =>
+                        {
+                            Task<IdentityToken> first = (Task<IdentityToken>)ts[0];
+                            Task<Uri> second = (Task<Uri>)ts[1];
+                            return Tuple.Create(first.Result, second.Result);
+                        });
+                };
+
+            return authenticate.ContinueWith(getBaseUri).Unwrap();
+        }
+
+        /// <summary>
+        /// Invokes the <see cref="BeforeAsyncWebRequest"/> event for the specified <paramref name="request"/>.
+        /// </summary>
+        /// <param name="request">The web request.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual void OnBeforeAsyncWebRequest(HttpWebRequest request)
+        {
+            var handler = BeforeAsyncWebRequest;
+            if (handler != null)
+                handler(this, new WebRequestEventArgs(request));
+        }
+
+        /// <summary>
+        /// Invokes the <see cref="AfterAsyncWebResponse"/> event for the specified <paramref name="response"/>.
+        /// </summary>
+        /// <param name="response">The web response.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual void OnAfterAsyncWebResponse(HttpWebResponse response)
+        {
+            if (response == null)
+                throw new ArgumentNullException("response");
+
+            var handler = AfterAsyncWebResponse;
+            if (handler != null)
+                handler(this, new WebResponseEventArgs(response));
+        }
+
+        /// <summary>
+        /// Gets the response from an asynchronous web request, with the body of the response (if any) returned as a string.
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>
+        /// A continuation function delegate which takes an asynchronously prepared <see cref="HttpWebRequest"/>
+        /// and returns the resulting body of the operation, if any, as a string.
+        /// </returns>
+        /// <preliminary/>
+        protected virtual Func<Task<HttpWebRequest>, Task<string>> GetResponseAsyncFunc(CancellationToken cancellationToken)
+        {
+            Func<Task<HttpWebRequest>, Task<WebResponse>> requestResource =
+                task => RequestResourceImplAsync(task, cancellationToken);
+
+            Func<Task<WebResponse>, Tuple<HttpWebResponse, string>> readResult =
+                task => ReadResultImpl(task, cancellationToken);
+
+            Func<Task<Tuple<HttpWebResponse, string>>, string> parseResult =
+                task => task.Result.Item2;
+
+            Func<Task<HttpWebRequest>, Task<string>> result =
+                task =>
+                {
+                    return task.ContinueWith(requestResource).Unwrap()
+                        .ContinueWith(readResult)
+                        .ContinueWith(parseResult);
+                };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the response from an asynchronous web request, with the body of the response (if any) returned as an object of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type for the response object.</typeparam>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="parseResult">
+        /// A continuation function delegate which parses the body of the <see cref="HttpWebResponse"/>
+        /// and returns an object of type <typeparamref name="T"/>, as an asynchronous operation. If
+        /// this value is <c>null</c>, the conversion will be performed by calling <see cref="ParseJsonResultImplAsync{T}"/>.
+        /// </param>
+        /// <returns>
+        /// A continuation function delegate which takes an asynchronously prepared <see cref="HttpWebRequest"/>
+        /// and returns the resulting body of the operation, if any, as an instance of type <typeparamref name="T"/>.
+        /// </returns>
+        /// <preliminary/>
+        protected virtual Func<Task<HttpWebRequest>, Task<T>> GetResponseAsyncFunc<T>(CancellationToken cancellationToken, Func<Task<Tuple<HttpWebResponse, string>>, Task<T>> parseResult = null)
+        {
+            Func<Task<HttpWebRequest>, Task<WebResponse>> requestResource =
+                task => RequestResourceImplAsync(task, cancellationToken);
+
+            Func<Task<WebResponse>, Tuple<HttpWebResponse, string>> readResult =
+                task => ReadResultImpl(task, cancellationToken);
+
+            if (parseResult == null)
+            {
+                parseResult = task => ParseJsonResultImplAsync<T>(task, cancellationToken);
+            }
+
+            Func<Task<HttpWebRequest>, Task<T>> result =
+                task =>
+                {
+                    return task.ContinueWith(requestResource).Unwrap()
+                        .ContinueWith(readResult)
+                        .ContinueWith(parseResult).Unwrap();
+                };
+
+            return result;
+        }
+
+        /// <summary>
+        /// This method calls <see cref="OnBeforeAsyncWebRequest"/> and then asynchronously gets the response
+        /// to the web request.
+        /// </summary>
+        /// <remarks>
+        /// This method is the first step of implementing <see cref="GetResponseAsyncFunc"/> and <see cref="GetResponseAsyncFunc{T}"/>.
+        /// </remarks>
+        /// <param name="task">A task which created and prepared the <see cref="HttpWebRequest"/>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual Task<WebResponse> RequestResourceImplAsync(Task<HttpWebRequest> task, CancellationToken cancellationToken)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            OnBeforeAsyncWebRequest(task.Result);
+            return task.Result.GetResponseAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// This method reads the complete body of an asynchronous <see cref="WebResponse"/> as a string.
+        /// </summary>
+        /// <param name="task">A <see cref="Task"/> object representing the asynchronous operation to get the <see cref="WebResponse"/>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>A <see cref="Tuple{T1, T2}"/> object. The first element of the tuple contains the
+        /// <see cref="WebResponse"/> provided by <paramref name="task"/> as an <see cref="HttpWebResponse"/>.
+        /// The second element of the tuple contains the complete body of the response as a string.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual Tuple<HttpWebResponse, string> ReadResultImpl(Task<WebResponse> task, CancellationToken cancellationToken)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            HttpWebResponse response;
+            WebException webException = null;
+            if (task.IsFaulted)
+            {
+                webException = task.Exception.Flatten().InnerException as WebException;
+                if (webException == null)
+                    task.PropagateExceptions();
+
+                response = webException.Response as HttpWebResponse;
+                if (response == null)
+                    task.PropagateExceptions();
+            }
+            else
+            {
+                response = (HttpWebResponse)task.Result;
+            }
+
+            OnAfterAsyncWebResponse(response);
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                string body = reader.ReadToEnd();
+                if (task.IsFaulted)
+                {
+                    if (!string.IsNullOrEmpty(body))
+                    {
+                        WebExceptionStatus webExceptionStatus = webException != null ? webException.Status : WebExceptionStatus.UnknownError;
+                        WebResponse webResponse = webException != null ? webException.Response : null;
+                        throw new WebException(body, task.Exception, webExceptionStatus, webResponse);
+                    }
+
+                    task.PropagateExceptions();
+                }
+
+                return Tuple.Create(response, body);
+            }
+        }
+
+        /// <summary>
+        /// Provides a default object parser for <see cref="GetResponseAsyncFunc{T}"/> which converts the
+        /// body of an <see cref="HttpWebResponse"/> to an object of type <typeparamref name="T"/> by calling
+        /// <see cref="JsonConvert.DeserializeObject{T}(String)"/>
+        /// </summary>
+        /// <typeparam name="T">The type for the response object.</typeparam>
+        /// <param name="task">A <see cref="Task"/> object representing the asynchronous operation to get the <see cref="WebResponse"/>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain an
+        /// object of type <typeparamref name="T"/> representing the serialized body of the response.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual Task<T> ParseJsonResultImplAsync<T>(Task<Tuple<HttpWebResponse, string>> task, CancellationToken cancellationToken)
+        {
+#if NET35
+            return Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(task.Result.Item2));
+#else
+            return JsonConvert.DeserializeObjectAsync<T>(task.Result.Item2);
+#endif
         }
     }
 }

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="32cc6156-3b31-4450-b209-b55fcfc0a210" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        The openstack.net SDK is migrating to an asynchronous service model for ongoing feature support.
+        This page contains information about several aspects of the asynchronous interfaces which could
+        result in some confusion during development. It also describes the inclusion of extension methods
+        that allow new product features to be used in code that is not allowed to make asynchronous API
+        calls.
+      </para>
+    </introduction>
+
+    <section address="Exceptions">
+      <title>Exceptions Thrown by Asynchronous Methods</title>
+      <content>
+        <para>
+          Asynchronous methods are capable of throwing exceptions before creating a
+          <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> or during the asynchronous
+          execution of the task itself. The asynchronous service interfaces do not distinguish between these
+          two cases, allowing for any of the specified exceptions to be thrown in either manner.
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              Exceptions thrown prior to the creation of the
+              <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> object representing the
+              asynchronous operation must be caught directly by the calling code. For example, if the code
+              throws an <codeEntityReference>T:System.ArgumentNullException</codeEntityReference> in this
+              manner, the calling code would need to contain a
+              <codeInline>catch(ArgumentNullException)</codeInline> or
+              <codeInline>catch(ArgumentException)</codeInline> handler to handle the exception.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              Exceptions thrown during the asynchronous exceution of the task are wrapped in an
+              <codeEntityReference>T:System.AggregateException</codeEntityReference> object and returned by the
+              <codeEntityReference>P:System.Threading.Tasks.Task.Exception</codeEntityReference> property.
+              Exceptions thrown in this manner must be handled either by a task continuation that checks the
+              <codeEntityReference>P:System.Threading.Tasks.Task.Exception</codeEntityReference> property, or
+              by calling <codeEntityReference autoUpgrade="true">M:System.Threading.Tasks.Task.Wait</codeEntityReference>
+              or checking the <codeEntityReference>P:System.Threading.Tasks.Task`1.Result</codeEntityReference>
+              property within an exception handling block that includes a
+              <codeInline>catch(AggregateException)</codeInline> handler.
+            </para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="SynchronousExtensions">
+      <title>Synchronous Extensions</title>
+      <content>
+        <para>
+          The namespace <codeEntityReference>N:net.openstack.Core.Synchronous</codeEntityReference> contains extension
+          methods that allow methods in an asynchronous service interface to be invoked synchronously. These extension
+          methods are not recommended for use in new development, but are provided as a compatibility aid for projects
+          where external restrictions preclude the direct use of the asynchronous APIs. These extension methods perform
+          the following functions:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              Invoke the asynchronous method, wait for the resulting
+              <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> to complete, and (where
+              applicable) return the task result.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              If an exception is thrown during the asynchronous execution of the method and wrapped in an
+              <codeEntityReference>T:System.AggregateException</codeEntityReference>, the extension method unwraps the inner exception and throws
+              it directly, just as would occur if the underlying method were executed synchronously.
+            </para>
+          </listItem>
+        </list>
+        <para>
+          The extensions for synchronous API calls do not expose all features of the underlying asynchronous API. In
+          particular, the following limitations apply.
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              For asynchronous methods taking an <codeEntityReference>T:net.openstack.Core.AsyncCompletionOption</codeEntityReference> parameter to control
+              the behavior of the task created for asynchronous server-side operations, the synchronous extension
+              always passes <codeEntityReference>F:net.openstack.Core.AsyncCompletionOption.RequestSubmitted</codeEntityReference> for the argument.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The synchronous extensions always pass <codeEntityReference>P:System.Threading.CancellationToken.None</codeEntityReference> for the
+              <codeEntityReference>T:System.Threading.CancellationToken</codeEntityReference> argument, and do not support asynchronous cancellation of
+              the call.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The synchronous extensions do not support progress callbacks, and pass <codeInline>null</codeInline>
+              to APIs with an <codeEntityReference>T:net.openstack.Core.IProgress`1</codeEntityReference> parameter.
+            </para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
