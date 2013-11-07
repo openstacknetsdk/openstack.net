@@ -216,6 +216,7 @@
     <Compile Include="Providers\Rackspace\Objects\Dns\ExportedDomain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\JobId.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\LimitType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\RecordId.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\SerializedDomain.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\SerializedDomainFormat.cs" />
