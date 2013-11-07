@@ -214,7 +214,7 @@
 
             string rescueResult = provider.RescueServer(_server.Id);
             Assert.IsFalse(string.IsNullOrEmpty(rescueResult));
-            Server rescueServer = provider.WaitForServerState(_server.Id, ServerState.Rescue, new[] { ServerState.Error });
+            Server rescueServer = provider.WaitForServerState(_server.Id, ServerState.Rescue, new[] { ServerState.Active, ServerState.Error, ServerState.Unknown, ServerState.Suspended });
             Assert.AreEqual(ServerState.Rescue, rescueServer.Status);
 
             bool unrescueResult = provider.UnRescueServer(_server.Id);
@@ -335,7 +335,7 @@
 
             bool resized = provider.ResizeServer(_server.Id, serverName, flavor.Id);
             Assert.IsTrue(resized);
-            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
+            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Active, ServerState.Error, ServerState.Unknown, ServerState.Suspended });
             Assert.AreEqual(ServerState.VerifyResize, resizedServer.Status);
             _server = resizedServer;
 
@@ -361,7 +361,7 @@
 
             bool resized = provider.ResizeServer(_server.Id, serverName, flavor.Id);
             Assert.IsTrue(resized);
-            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Error, ServerState.Unknown, ServerState.Suspended });
+            Server resizedServer = provider.WaitForServerState(_server.Id, ServerState.VerifyResize, new[] { ServerState.Active, ServerState.Error, ServerState.Unknown, ServerState.Suspended });
             Assert.AreEqual(ServerState.VerifyResize, resizedServer.Status);
             _server = resizedServer;
 
