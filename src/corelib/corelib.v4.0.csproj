@@ -98,6 +98,7 @@
     <Compile Include="Core\ExtensibleEnum`1.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\Providers\NamespaceDoc.cs" />
+    <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
