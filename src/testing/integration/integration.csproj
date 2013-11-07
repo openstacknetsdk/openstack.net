@@ -72,6 +72,7 @@
     <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\CloudServersTests.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />
+    <Compile Include="Providers\Rackspace\UserQueuesTestsSynchronous.cs" />
     <Compile Include="Providers\Rackspace\IdentityTests.cs" />
     <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
     <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
     <Compile Include="Providers\Rackspace\UserNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
+    <Compile Include="Providers\Rackspace\UserQueuesTests.cs" />
     <Compile Include="Providers\Rackspace\UserServerTests.cs" />
   </ItemGroup>
   <ItemGroup>
