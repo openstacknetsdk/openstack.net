@@ -4,12 +4,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using ICSharpCode.SharpZipLib.BZip2;
+    using ICSharpCode.SharpZipLib.GZip;
+    using ICSharpCode.SharpZipLib.Tar;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Exceptions;
     using net.openstack.Core.Exceptions.Response;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
+    using net.openstack.Providers.Rackspace.Objects;
+    using net.openstack.Providers.Rackspace.Objects.Response;
     using Newtonsoft.Json;
     using Container = net.openstack.Core.Domain.Container;
     using File = System.IO.File;
@@ -1240,6 +1245,230 @@
             ProgressMonitor progressMonitor = new ProgressMonitor(content.Length);
             provider.CreateObjectFromFile(containerName, sourceFileName, progressUpdated: progressMonitor.Updated);
             Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, sourceFileName, downloadStream);
+                Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
+
+                downloadStream.Position = 0;
+                byte[] actualData = new byte[downloadStream.Length];
+                downloadStream.Read(actualData, 0, actualData.Length);
+                Assert.AreEqual(content.Length, actualData.Length);
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] contentMd5 = md5.ComputeHash(content);
+                    byte[] actualMd5 = md5.ComputeHash(actualData);
+                    Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                }
+            }
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public void TestExtractArchiveTar()
+        {
+            CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string sourceFileName = "DarkKnightRises.jpg";
+            byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (TarArchive archive = TarArchive.CreateOutputTarArchive(outputStream))
+                {
+                    archive.IsStreamOwner = false;
+                    archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName)).Replace('\\', '/');
+                    TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName);
+                    archive.WriteEntry(entry, true);
+                    archive.Close();
+                }
+
+                outputStream.Flush();
+                outputStream.Position = 0;
+                ExtractArchiveResponse response = provider.ExtractArchive(outputStream, containerName, ArchiveFormat.Tar);
+                Assert.IsNotNull(response);
+                Assert.AreEqual(1, response.CreatedFiles);
+                Assert.IsNotNull(response.Errors);
+                Assert.AreEqual(0, response.Errors.Count);
+            }
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, sourceFileName, downloadStream);
+                Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
+
+                downloadStream.Position = 0;
+                byte[] actualData = new byte[downloadStream.Length];
+                downloadStream.Read(actualData, 0, actualData.Length);
+                Assert.AreEqual(content.Length, actualData.Length);
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] contentMd5 = md5.ComputeHash(content);
+                    byte[] actualMd5 = md5.ComputeHash(actualData);
+                    Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                }
+            }
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public void TestExtractArchiveTarGz()
+        {
+            CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string sourceFileName = "DarkKnightRises.jpg";
+            byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (GZipOutputStream gzoStream = new GZipOutputStream(outputStream))
+                {
+                    gzoStream.IsStreamOwner = false;
+                    gzoStream.SetLevel(9);
+                    using (TarArchive archive = TarArchive.CreateOutputTarArchive(gzoStream))
+                    {
+                        archive.IsStreamOwner = false;
+                        archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName)).Replace('\\', '/');
+                        TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName);
+                        archive.WriteEntry(entry, true);
+                        archive.Close();
+                    }
+                }
+
+                outputStream.Flush();
+                outputStream.Position = 0;
+                ExtractArchiveResponse response = provider.ExtractArchive(outputStream, containerName, ArchiveFormat.TarGz);
+                Assert.IsNotNull(response);
+                Assert.AreEqual(1, response.CreatedFiles);
+                Assert.IsNotNull(response.Errors);
+                Assert.AreEqual(0, response.Errors.Count);
+            }
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, sourceFileName, downloadStream);
+                Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
+
+                downloadStream.Position = 0;
+                byte[] actualData = new byte[downloadStream.Length];
+                downloadStream.Read(actualData, 0, actualData.Length);
+                Assert.AreEqual(content.Length, actualData.Length);
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] contentMd5 = md5.ComputeHash(content);
+                    byte[] actualMd5 = md5.ComputeHash(actualData);
+                    Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                }
+            }
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public void TestExtractArchiveTarBz2()
+        {
+            CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string sourceFileName = "DarkKnightRises.jpg";
+            byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (BZip2OutputStream bz2Stream = new BZip2OutputStream(outputStream))
+                {
+                    bz2Stream.IsStreamOwner = false;
+                    using (TarArchive archive = TarArchive.CreateOutputTarArchive(bz2Stream))
+                    {
+                        archive.IsStreamOwner = false;
+                        archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName)).Replace('\\', '/');
+                        TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName);
+                        archive.WriteEntry(entry, true);
+                        archive.Close();
+                    }
+                }
+
+                outputStream.Flush();
+                outputStream.Position = 0;
+                ExtractArchiveResponse response = provider.ExtractArchive(outputStream, containerName, ArchiveFormat.TarBz2);
+                Assert.IsNotNull(response);
+                Assert.AreEqual(1, response.CreatedFiles);
+                Assert.IsNotNull(response.Errors);
+                Assert.AreEqual(0, response.Errors.Count);
+            }
+
+            using (MemoryStream downloadStream = new MemoryStream())
+            {
+                provider.GetObject(containerName, sourceFileName, downloadStream);
+                Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
+
+                downloadStream.Position = 0;
+                byte[] actualData = new byte[downloadStream.Length];
+                downloadStream.Read(actualData, 0, actualData.Length);
+                Assert.AreEqual(content.Length, actualData.Length);
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] contentMd5 = md5.ComputeHash(content);
+                    byte[] actualMd5 = md5.ComputeHash(actualData);
+                    Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                }
+            }
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public void TestExtractArchiveTarGzCreateContainer()
+        {
+            CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string sourceFileName = "DarkKnightRises.jpg";
+            byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (GZipOutputStream gzoStream = new GZipOutputStream(outputStream))
+                {
+                    gzoStream.IsStreamOwner = false;
+                    gzoStream.SetLevel(9);
+                    using (TarOutputStream tarOutputStream = new TarOutputStream(gzoStream))
+                    {
+                        tarOutputStream.IsStreamOwner = false;
+                        TarEntry entry = TarEntry.CreateTarEntry(containerName + '/' + sourceFileName);
+                        entry.Size = content.Length;
+                        tarOutputStream.PutNextEntry(entry);
+                        tarOutputStream.Write(content, 0, content.Length);
+                        tarOutputStream.CloseEntry();
+                        tarOutputStream.Close();
+                    }
+                }
+
+                outputStream.Flush();
+                outputStream.Position = 0;
+                ExtractArchiveResponse response = provider.ExtractArchive(outputStream, "", ArchiveFormat.TarGz);
+                Assert.IsNotNull(response);
+                Assert.AreEqual(1, response.CreatedFiles);
+                Assert.IsNotNull(response.Errors);
+                Assert.AreEqual(0, response.Errors.Count);
+            }
 
             using (MemoryStream downloadStream = new MemoryStream())
             {
