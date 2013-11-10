@@ -730,25 +730,115 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListAccountLevelUsage()
+        public async Task TestListAccountLevelUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListAccountLevelUsageAsync(DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No account level usage was reported.");
+
+                Console.WriteLine("Account Level Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListHistoricalUsage()
+        public async Task TestListHistoricalUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListHistoricalUsageAsync(tempLoadBalancer.Id, DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No historical usage was reported for load balancer: {0}", tempLoadBalancer.Id);
+
+                Console.WriteLine("Historical Load Balancer Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListCurrentUsage()
+        public async Task TestListCurrentUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListCurrentUsageAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No current usage was reported for load balancer: {0}", tempLoadBalancer.Id);
+
+                Console.WriteLine("Current Load Balancer Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]

@@ -981,19 +981,83 @@
         /// <inheritdoc/>
         public Task<IEnumerable<LoadBalancerUsage>> ListAccountLevelUsageAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (endTime < startTime)
+                throw new ArgumentOutOfRangeException("endTime");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/usage?startTime={startTime}&endTime={endTime}");
+            var parameters = new Dictionary<string, string>();
+            if (startTime != null)
+                parameters.Add("startTime", startTime.Value.ToString("yyyy-MM-dd"));
+            if (endTime != null)
+                parameters.Add("endTime", endTime.Value.ToString("yyyy-MM-dd"));
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
+                GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
+
+            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector);
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerUsage>> ListHistoricalUsageAsync(LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken1)
+        public Task<IEnumerable<LoadBalancerUsage>> ListHistoricalUsageAsync(LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (loadBalancerId == null)
+                throw new ArgumentNullException("loadBalancerId");
+            if (endTime < startTime)
+                throw new ArgumentOutOfRangeException("endTime");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/usage?startTime={startTime}&endTime={endTime}");
+            var parameters = new Dictionary<string, string> { { "loadBalancerId", loadBalancerId.Value } };
+            if (startTime != null)
+                parameters.Add("startTime", startTime.Value.ToString("yyyy-MM-dd"));
+            if (endTime != null)
+                parameters.Add("endTime", endTime.Value.ToString("yyyy-MM-dd"));
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
+                GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
+
+            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector);
         }
 
         /// <inheritdoc/>
         public Task<IEnumerable<LoadBalancerUsage>> ListCurrentUsageAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (loadBalancerId == null)
+                throw new ArgumentNullException("loadBalancerId");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/usage/current");
+            var parameters = new Dictionary<string, string> { { "loadBalancerId", loadBalancerId.Value } };
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
+                GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
+
+            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector);
         }
 
         /// <inheritdoc/>
