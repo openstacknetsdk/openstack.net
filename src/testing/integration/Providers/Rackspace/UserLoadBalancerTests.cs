@@ -692,9 +692,39 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListBillableLoadBalancers()
+        public async Task TestListBillableLoadBalancers()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancer> billable = await provider.ListBillableLoadBalancersAsync(DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), null, null, cancellationTokenSource.Token);
+                Assert.IsNotNull(billable);
+                LoadBalancer[] loadBalancers = billable.ToArray();
+                if (loadBalancers.Length == 0)
+                    Assert.Inconclusive("No billable load balancers were reported.");
+
+                Console.WriteLine("Billable Load Balancers:");
+                foreach (LoadBalancer loadBalancer in loadBalancers)
+                    Console.WriteLine("  {0}", loadBalancer.Id);
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]

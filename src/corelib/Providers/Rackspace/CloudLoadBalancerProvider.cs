@@ -945,7 +945,37 @@
         /// <inheritdoc/>
         public Task<IEnumerable<LoadBalancer>> ListBillableLoadBalancersAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (endTime < startTime)
+                throw new ArgumentOutOfRangeException("endTime");
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset");
+            if (limit <= 0)
+                throw new ArgumentOutOfRangeException("limit");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/billable?startTime={startTime}&endTime={endTime}&offset={offset}&limit={limit}");
+            var parameters = new Dictionary<string, string>();
+            if (startTime != null)
+                parameters.Add("startTime", startTime.Value.ToString("yyyy-MM-dd"));
+            if (endTime != null)
+                parameters.Add("endTime", endTime.Value.ToString("yyyy-MM-dd"));
+            if (offset != null)
+                parameters.Add("offset", offset.ToString());
+            if (limit != null)
+                parameters.Add("limit", limit.ToString());
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<ListLoadBalancersResponse>> requestResource =
+                GetResponseAsyncFunc<ListLoadBalancersResponse>(cancellationToken);
+
+            Func<Task<ListLoadBalancersResponse>, IEnumerable<LoadBalancer>> resultSelector =
+                task => (task.Result != null ? task.Result.LoadBalancers : null) ?? Enumerable.Empty<LoadBalancer>();
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector);
         }
 
         /// <inheritdoc/>
