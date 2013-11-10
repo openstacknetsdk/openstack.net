@@ -14,6 +14,7 @@
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers.Request;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers.Response;
     using net.openstack.Providers.Rackspace.Validators;
+    using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
     using JsonRestServices = JSIStudios.SimpleRESTServices.Client.Json.JsonRestServices;
 
@@ -1337,19 +1338,108 @@
         /// <inheritdoc/>
         public Task<HealthMonitor> GetHealthMonitorAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (loadBalancerId == null)
+                throw new ArgumentNullException("loadBalancerId");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/healthmonitor");
+            var parameters = new Dictionary<string, string>()
+            {
+                { "loadBalancerId", loadBalancerId.Value }
+            };
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
+                GetResponseAsyncFunc<JObject>(cancellationToken);
+
+            Func<Task<JObject>, HealthMonitor> resultSelector =
+                task =>
+                {
+                    if (task.Result == null)
+                        return null;
+
+                    JObject healthMonitorObject = task.Result["healthMonitor"] as JObject;
+                    if (healthMonitorObject == null)
+                        return null;
+
+                    return HealthMonitor.FromJObject(healthMonitorObject);
+                };
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector);
         }
 
         /// <inheritdoc/>
         public Task SetHealthMonitorAsync(LoadBalancerId loadBalancerId, HealthMonitor monitor, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
-            throw new NotImplementedException();
+            if (loadBalancerId == null)
+                throw new ArgumentNullException("loadBalancerId");
+            if (monitor == null)
+                throw new ArgumentNullException("monitor");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/healthmonitor");
+            var parameters = new Dictionary<string, string>()
+            {
+                { "loadBalancerId", loadBalancerId.Value }
+            };
+
+            Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.PUT, template, parameters, monitor);
+
+            Func<Task<HttpWebRequest>, Task<string>> requestResource =
+                GetResponseAsyncFunc(cancellationToken);
+
+            Func<Task<string>, Task<LoadBalancer>> resultSelector =
+                task =>
+                {
+                    task.PropagateExceptions();
+                    if (completionOption == AsyncCompletionOption.RequestCompleted)
+                        return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
+
+                    return InternalTaskExtensions.CompletedTask(default(LoadBalancer));
+                };
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest).Unwrap()
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector).Unwrap();
         }
 
         /// <inheritdoc/>
         public Task RemoveHealthMonitorAsync(LoadBalancerId loadBalancerId, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
-            throw new NotImplementedException();
+            if (loadBalancerId == null)
+                throw new ArgumentNullException("loadBalancerId");
+
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/healthmonitor");
+            var parameters = new Dictionary<string, string>()
+            {
+                { "loadBalancerId", loadBalancerId.Value },
+            };
+
+            Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
+                PrepareRequestAsyncFunc(HttpMethod.DELETE, template, parameters);
+
+            Func<Task<HttpWebRequest>, Task<string>> requestResource =
+                GetResponseAsyncFunc(cancellationToken);
+
+            Func<Task<string>, Task<LoadBalancer>> resultSelector =
+                task =>
+                {
+                    task.PropagateExceptions();
+                    if (completionOption == AsyncCompletionOption.RequestCompleted)
+                        return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
+
+                    return InternalTaskExtensions.CompletedTask(default(LoadBalancer));
+                };
+
+            return AuthenticateServiceAsync(cancellationToken)
+                .ContinueWith(prepareRequest)
+                .ContinueWith(requestResource).Unwrap()
+                .ContinueWith(resultSelector).Unwrap();
         }
 
         /// <inheritdoc/>

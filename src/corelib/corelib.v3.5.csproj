@@ -236,6 +236,7 @@
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\AccessType.cs" />
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\ConnectionHealthMonitor.cs" />
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\ConnectionThrottles.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\CustomHealthMonitor.cs" />
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\HealthMonitor.cs" />
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\HealthMonitorType.cs" />
     <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancer.cs" />

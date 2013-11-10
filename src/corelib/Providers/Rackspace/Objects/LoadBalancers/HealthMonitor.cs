@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// This is the base class for load balancer health monitoring configurations.
@@ -13,7 +14,6 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    [JsonConverter(typeof(HealthMonitor.Converter))]
     public abstract class HealthMonitor
     {
         /// <summary>
@@ -131,26 +131,28 @@
             }
         }
 
-        /// <inheritdoc/>
-        protected class Converter : JsonConverter
+        /// <summary>
+        /// Deserializes a JSON object to a <see cref="HealthMonitor"/> instance of the proper type.
+        /// </summary>
+        /// <param name="jsonObject">The JSON object representing the health monitor.</param>
+        /// <returns>A <see cref="HealthMonitor"/> object corresponding to the JSON object.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="jsonObject"/> is <c>null</c>.</exception>
+        public static HealthMonitor FromJObject(JObject jsonObject)
         {
-            /// <inheritdoc/>
-            public override bool CanConvert(Type objectType)
-            {
-                throw new NotImplementedException();
-            }
+            if (jsonObject == null)
+                throw new ArgumentNullException("jsonObject");
 
-            /// <inheritdoc/>
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                throw new NotImplementedException();
-            }
+            JValue typeValue = jsonObject["type"] as JValue;
+            if (typeValue == null)
+                return null;
 
-            /// <inheritdoc/>
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                throw new NotImplementedException();
-            }
+            HealthMonitorType type = typeValue.ToObject<HealthMonitorType>();
+            if (type == HealthMonitorType.Connect)
+                return jsonObject.ToObject<ConnectionHealthMonitor>();
+            else if (type == HealthMonitorType.Http || type == HealthMonitorType.Https)
+                return jsonObject.ToObject<WebServerHealthMonitor>();
+            else
+                return jsonObject.ToObject<CustomHealthMonitor>();
         }
     }
 }
