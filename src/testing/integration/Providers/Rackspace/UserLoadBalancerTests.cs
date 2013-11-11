@@ -692,33 +692,153 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListBillableLoadBalancers()
+        public async Task TestListBillableLoadBalancers()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancer> billable = await provider.ListBillableLoadBalancersAsync(DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), null, null, cancellationTokenSource.Token);
+                Assert.IsNotNull(billable);
+                LoadBalancer[] loadBalancers = billable.ToArray();
+                if (loadBalancers.Length == 0)
+                    Assert.Inconclusive("No billable load balancers were reported.");
+
+                Console.WriteLine("Billable Load Balancers:");
+                foreach (LoadBalancer loadBalancer in loadBalancers)
+                    Console.WriteLine("  {0}", loadBalancer.Id);
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListAccountLevelUsage()
+        public async Task TestListAccountLevelUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListAccountLevelUsageAsync(DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No account level usage was reported.");
+
+                Console.WriteLine("Account Level Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListHistoricalUsage()
+        public async Task TestListHistoricalUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListHistoricalUsageAsync(tempLoadBalancer.Id, DateTimeOffset.Now.Date.AddDays(-60), DateTimeOffset.Now.Date.AddDays(1), cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No historical usage was reported for load balancer: {0}", tempLoadBalancer.Id);
+
+                Console.WriteLine("Historical Load Balancer Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListCurrentUsage()
+        public async Task TestListCurrentUsage()
         {
-            Assert.Inconclusive("Not yet implemented.");
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                IEnumerable<LoadBalancerUsage> usage = await provider.ListCurrentUsageAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(usage);
+                LoadBalancerUsage[] usageRecords = usage.ToArray();
+                if (usageRecords.Length == 0)
+                    Assert.Inconclusive("No current usage was reported for load balancer: {0}", tempLoadBalancer.Id);
+
+                Console.WriteLine("Current Load Balancer Usage ({0} records)", usageRecords.Length);
+                foreach (LoadBalancerUsage usageRecord in usageRecords)
+                    Console.WriteLine(JsonConvert.SerializeObject(usageRecord, Formatting.Indented));
+
+                /* Cleanup
+                 */
+
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
         }
 
         [TestMethod]
@@ -853,6 +973,202 @@
                                 return false;
 
                             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+                            return true;
+                        });
+                }
+
+                /* Cleanup
+                 */
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.LoadBalancers)]
+        public async Task TestHealthMonitorConnection()
+        {
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("LDAP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.ServiceNet) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // verify initially null
+                Assert.IsNull(tempLoadBalancer.HealthMonitor);
+                Assert.IsNull(await provider.GetHealthMonitorAsync(tempLoadBalancer.Id, cancellationTokenSource.Token));
+
+                // configure the health monitor
+                int attemptsBeforeDeactivation = 3;
+                TimeSpan timeout = TimeSpan.FromSeconds(30);
+                TimeSpan delay = TimeSpan.FromSeconds(30);
+                HealthMonitor monitor = new ConnectionHealthMonitor(attemptsBeforeDeactivation, timeout, delay);
+                await provider.SetHealthMonitorAsync(tempLoadBalancer.Id, monitor, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // set the health monitor again
+                await provider.SetHealthMonitorAsync(tempLoadBalancer.Id, monitor, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // verify the health monitor
+                HealthMonitor healthMonitor = await provider.GetHealthMonitorAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.IsInstanceOfType(healthMonitor, typeof(ConnectionHealthMonitor));
+                Assert.AreEqual(HealthMonitorType.Connect, healthMonitor.Type);
+                Assert.AreEqual(attemptsBeforeDeactivation, healthMonitor.AttemptsBeforeDeactivation);
+                Assert.AreEqual(timeout, healthMonitor.Timeout);
+                Assert.AreEqual(delay, healthMonitor.Delay);
+
+                // verify the information in the load balancer details
+                LoadBalancer loadBalancer = await provider.GetLoadBalancerAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.AreEqual(tempLoadBalancer.Id, loadBalancer.Id);
+
+                Assert.IsInstanceOfType(loadBalancer.HealthMonitor, typeof(ConnectionHealthMonitor));
+                Assert.AreEqual(HealthMonitorType.Connect, loadBalancer.HealthMonitor.Type);
+                Assert.AreEqual(attemptsBeforeDeactivation, loadBalancer.HealthMonitor.AttemptsBeforeDeactivation);
+                Assert.AreEqual(timeout, loadBalancer.HealthMonitor.Timeout);
+                Assert.AreEqual(delay, loadBalancer.HealthMonitor.Delay);
+
+                // remove the health monitor
+                await provider.RemoveHealthMonitorAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // remove the health monitor again
+                try
+                {
+                    try
+                    {
+                        await provider.RemoveHealthMonitorAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                    }
+                    catch (WebException ex)
+                    {
+                        throw new AggregateException(ex);
+                    }
+                }
+                catch (AggregateException aggregate)
+                {
+                    aggregate.Flatten().Handle(
+                        ex =>
+                        {
+                            WebException webException = ex as WebException;
+                            if (webException == null)
+                                return false;
+
+                            HttpWebResponse response = webException.Response as HttpWebResponse;
+                            if (response == null)
+                                return false;
+
+                            Assert.AreEqual((HttpStatusCode)422, response.StatusCode);
+                            return true;
+                        });
+                }
+
+                /* Cleanup
+                 */
+                await provider.RemoveLoadBalancerAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.LoadBalancers)]
+        public async Task TestHealthMonitorHttp()
+        {
+            ILoadBalancerService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await provider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                string loadBalancerName = CreateRandomLoadBalancerName();
+
+                LoadBalancerConfiguration configuration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.ServiceNet) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // verify initially null
+                Assert.IsNull(tempLoadBalancer.HealthMonitor);
+                Assert.IsNull(await provider.GetHealthMonitorAsync(tempLoadBalancer.Id, cancellationTokenSource.Token));
+
+                // configure the health monitor
+                bool https = false;
+                int attemptsBeforeDeactivation = 3;
+                TimeSpan timeout = TimeSpan.FromSeconds(30);
+                TimeSpan delay = TimeSpan.FromSeconds(30);
+                string bodyRegex = ".*";
+                string path = "/";
+                string statusRegex = ".*";
+                HealthMonitor monitor = new WebServerHealthMonitor(https, attemptsBeforeDeactivation, timeout, delay, bodyRegex, path, statusRegex);
+                await provider.SetHealthMonitorAsync(tempLoadBalancer.Id, monitor, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // set the health monitor again
+                await provider.SetHealthMonitorAsync(tempLoadBalancer.Id, monitor, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // verify the health monitor
+                HealthMonitor healthMonitor = await provider.GetHealthMonitorAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.IsInstanceOfType(healthMonitor, typeof(WebServerHealthMonitor));
+                WebServerHealthMonitor webServerHealthMonitor = (WebServerHealthMonitor)healthMonitor;
+                Assert.AreEqual(monitor.Type, healthMonitor.Type);
+                Assert.AreEqual(attemptsBeforeDeactivation, healthMonitor.AttemptsBeforeDeactivation);
+                Assert.AreEqual(timeout, healthMonitor.Timeout);
+                Assert.AreEqual(delay, healthMonitor.Delay);
+                Assert.AreEqual(bodyRegex, webServerHealthMonitor.BodyRegex);
+                Assert.AreEqual(path, webServerHealthMonitor.Path);
+                Assert.AreEqual(statusRegex, webServerHealthMonitor.StatusRegex);
+
+                // verify the information in the load balancer details
+                LoadBalancer loadBalancer = await provider.GetLoadBalancerAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
+                Assert.AreEqual(tempLoadBalancer.Id, loadBalancer.Id);
+
+                Assert.IsInstanceOfType(loadBalancer.HealthMonitor, typeof(WebServerHealthMonitor));
+                webServerHealthMonitor = (WebServerHealthMonitor)loadBalancer.HealthMonitor;
+                Assert.AreEqual(monitor.Type, loadBalancer.HealthMonitor.Type);
+                Assert.AreEqual(attemptsBeforeDeactivation, loadBalancer.HealthMonitor.AttemptsBeforeDeactivation);
+                Assert.AreEqual(timeout, loadBalancer.HealthMonitor.Timeout);
+                Assert.AreEqual(delay, loadBalancer.HealthMonitor.Delay);
+                Assert.AreEqual(bodyRegex, webServerHealthMonitor.BodyRegex);
+                Assert.AreEqual(path, webServerHealthMonitor.Path);
+                Assert.AreEqual(statusRegex, webServerHealthMonitor.StatusRegex);
+
+                // remove the health monitor
+                await provider.RemoveHealthMonitorAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                // remove the health monitor again
+                try
+                {
+                    try
+                    {
+                        await provider.RemoveHealthMonitorAsync(tempLoadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                    }
+                    catch (WebException ex)
+                    {
+                        throw new AggregateException(ex);
+                    }
+                }
+                catch (AggregateException aggregate)
+                {
+                    aggregate.Flatten().Handle(
+                        ex =>
+                        {
+                            WebException webException = ex as WebException;
+                            if (webException == null)
+                                return false;
+
+                            HttpWebResponse response = webException.Response as HttpWebResponse;
+                            if (response == null)
+                                return false;
+
+                            Assert.AreEqual((HttpStatusCode)422, response.StatusCode);
                             return true;
                         });
                 }

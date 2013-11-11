@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Represents a load balancer configuration.
@@ -86,7 +87,7 @@
         /// This is the backing field for the <see cref="HealthMonitor"/> property.
         /// </summary>
         [JsonProperty("healthMonitor", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private HealthMonitor _healthMonitor;
+        private JObject _healthMonitor;
 
         /// <summary>
         /// This is the backing field for the <see cref="Metadata"/> property.
@@ -190,7 +191,7 @@
             if (contentCaching.HasValue)
                 _contentCaching = contentCaching.Value ? LoadBalancerEnabledFlag.True : LoadBalancerEnabledFlag.False;
             _connectionThrottle = connectionThrottle;
-            _healthMonitor = healthMonitor;
+            _healthMonitor = healthMonitor != null ? JObject.FromObject(healthMonitor) : null;
             _metadata = metadata != null ? metadata.ToArray() : null;
             _timeout = timeout != null ? (int?)timeout.Value.TotalSeconds : null;
             _sessionPersistence = sessionPersistence;
@@ -340,7 +341,10 @@
         {
             get
             {
-                return _healthMonitor;
+                if (_healthMonitor == null)
+                    return null;
+
+                return HealthMonitor.FromJObject(_healthMonitor);
             }
         }
 
