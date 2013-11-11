@@ -713,7 +713,7 @@
         /// <returns>An instance of <see cref="IQueueingService"/> for integration testing.</returns>
         private IQueueingService CreateProvider()
         {
-            var provider = new CloudQueuesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, Guid.NewGuid(), false, null, null);
+            var provider = new CloudQueuesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, Guid.NewGuid(), false, null);
             provider.BeforeAsyncWebRequest +=
                 (sender, e) =>
                 {

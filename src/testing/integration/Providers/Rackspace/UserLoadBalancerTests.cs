@@ -21,7 +21,6 @@
     using CloudIdentity = net.openstack.Core.Domain.CloudIdentity;
     using IIdentityProvider = net.openstack.Core.Providers.IIdentityProvider;
     using Interlocked = System.Threading.Interlocked;
-    using IRestService = JSIStudios.SimpleRESTServices.Client.IRestService;
     using Path = System.IO.Path;
     using StringBuilder = System.Text.StringBuilder;
 
@@ -2060,7 +2059,7 @@
         /// <returns>An instance of <see cref="ILoadBalancerService"/> for integration testing.</returns>
         internal static ILoadBalancerService CreateProvider()
         {
-            var provider = new TestCloudLoadBalancerProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new TestCloudLoadBalancerProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null);
             provider.BeforeAsyncWebRequest +=
                 (sender, e) =>
                 {
@@ -2079,8 +2078,8 @@
 
         internal class TestCloudLoadBalancerProvider : CloudLoadBalancerProvider
         {
-            public TestCloudLoadBalancerProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
-                : base(defaultIdentity, defaultRegion, identityProvider, restService)
+            public TestCloudLoadBalancerProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider)
+                : base(defaultIdentity, defaultRegion, identityProvider)
             {
             }
 

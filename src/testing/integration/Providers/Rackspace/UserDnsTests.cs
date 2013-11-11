@@ -5,11 +5,9 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
-    using System.Net.Sockets;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using JSIStudios.SimpleRESTServices.Client;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core;
     using net.openstack.Core.Domain;
@@ -863,7 +861,7 @@
 
         internal static IDnsService CreateProvider()
         {
-            CloudDnsProvider provider = new TestCloudDnsProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, false, null, null);
+            CloudDnsProvider provider = new TestCloudDnsProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, false, null);
             provider.BeforeAsyncWebRequest +=
                 (sender, e) =>
                 {
@@ -880,8 +878,8 @@
 
         private class TestCloudDnsProvider : CloudDnsProvider
         {
-            public TestCloudDnsProvider(CloudIdentity defaultIdentity, string defaultRegion, bool internalUrl, IIdentityProvider identityProvider, IRestService restService)
-                : base(defaultIdentity, defaultRegion, internalUrl, identityProvider, restService)
+            public TestCloudDnsProvider(CloudIdentity defaultIdentity, string defaultRegion, bool internalUrl, IIdentityProvider identityProvider)
+                : base(defaultIdentity, defaultRegion, internalUrl, identityProvider)
             {
             }
 
