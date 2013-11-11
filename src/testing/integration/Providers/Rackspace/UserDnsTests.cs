@@ -567,22 +567,35 @@
                     Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
                 }
 
+                string originalData = "127.0.0.1";
+                string updatedData = "192.168.0.1";
+                string originalCommentValue = "Integration test record";
+                string updatedCommentValue = "Integration test record 2";
+                TimeSpan? originalTimeToLive;
+                TimeSpan? updatedTimeToLive = TimeSpan.FromMinutes(12);
+
                 DomainId domainId = createResponse.Response.Domains[0].Id;
                 DnsDomainRecordConfiguration[] recordConfigurations =
                     {
                         new DnsDomainRecordConfiguration(
                             type: DnsRecordType.A,
                             name: string.Format("www.{0}", domainName),
-                            data: "127.0.0.1",
+                            data: originalData,
                             timeToLive: null,
-                            comment: "Integration test record",
+                            comment: originalCommentValue,
                             priority: null)
-
                     };
                 DnsJob<DnsRecordsList> recordsResponse = await provider.AddRecordsAsync(domainId, recordConfigurations, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 Assert.IsNotNull(recordsResponse.Response);
                 Assert.IsNotNull(recordsResponse.Response.Records);
                 DnsRecord[] records = recordsResponse.Response.Records.ToArray();
+                Assert.AreEqual(recordConfigurations.Length, records.Length);
+                originalTimeToLive = records[0].TimeToLive;
+                Assert.AreNotEqual(originalTimeToLive, updatedTimeToLive);
+
+                Assert.AreEqual(originalData, records[0].Data);
+                Assert.AreEqual(originalTimeToLive, records[0].TimeToLive);
+                Assert.AreEqual(originalCommentValue, records[0].Comment);
 
                 foreach (var record in records)
                 {
@@ -592,7 +605,29 @@
                     Console.WriteLine(await JsonConvert.SerializeObjectAsync(record, Formatting.Indented));
                 }
 
-                await provider.UpdateRecordsAsync(domainId, new[] { new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, comment: "Integration test record 2") }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                DnsDomainRecordUpdateConfiguration recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, comment: updatedCommentValue);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                DnsRecord updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(originalTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, timeToLive: updatedTimeToLive);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, data: updatedData);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(updatedData, updatedRecord.Data);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
 
                 DnsJob deleteResponse = await provider.RemoveDomainsAsync(createdDomains.Select(i => i.Id), false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 if (deleteResponse.Status == DnsJobStatus.Error)
