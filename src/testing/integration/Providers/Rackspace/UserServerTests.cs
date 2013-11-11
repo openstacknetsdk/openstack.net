@@ -278,19 +278,17 @@
             foreach (CloudNetwork network in networks)
             {
                 Console.WriteLine("Network: {0}", network.Label);
-                try
+                IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
+                bool foundAddressOnNetwork = false;
+                foreach (IPAddress address in addresses)
                 {
-                    IEnumerable<IPAddress> addresses = provider.ListAddressesByNetwork(_server.Id, network.Label);
-                    foreach (IPAddress address in addresses)
-                    {
-                        foundAddress = true;
-                        Console.WriteLine("  {0}", address);
-                    }
+                    foundAddress = true;
+                    foundAddressOnNetwork = true;
+                    Console.WriteLine("  {0}", address);
                 }
-                catch (ItemNotFoundException)
-                {
+
+                if (!foundAddressOnNetwork)
                     Console.WriteLine("  Server is not attached to this network.");
-                }
             }
 
             if (!foundAddress)

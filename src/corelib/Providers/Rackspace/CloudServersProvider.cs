@@ -445,11 +445,49 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/ips/{2}", GetServiceEndpoint(identity, region), serverId, network));
 
-            var response = ExecuteRESTRequest<ServerAddresses>(identity, urlPath, HttpMethod.GET);
-            if (response == null || response.Data == null)
-                return null;
+            try
+            {
+                var response = ExecuteRESTRequest<ServerAddresses>(identity, urlPath, HttpMethod.GET);
+                if (response == null || response.Data == null)
+                    return null;
 
-            return response.Data[network];
+                return response.Data[network];
+            }
+            catch (ItemNotFoundException)
+            {
+                // if the specified server and network exist separately, then the 404 was only caused by server
+                // not being connected to the particular network
+                // https://github.com/openstacknetsdk/openstack.net/issues/176
+                bool foundServer = false;
+                try
+                {
+                    Server details = GetDetails(serverId);
+                    foundServer = details != null;
+                }
+                catch (ResponseException)
+                {
+                }
+
+                if (!foundServer)
+                    throw;
+
+                bool foundNetwork = false;
+                try
+                {
+                    INetworksProvider networksProvider = new CloudNetworksProvider(DefaultIdentity, DefaultRegion, IdentityProvider, RestService);
+                    IEnumerable<CloudNetwork> networks = networksProvider.ListNetworks(region, identity);
+                    if (networks != null && networks.Any(i => network.Equals(i.Label, StringComparison.OrdinalIgnoreCase)))
+                        foundNetwork = true;
+                }
+                catch (ResponseException)
+                {
+                }
+
+                if (!foundNetwork)
+                    throw;
+
+                return Enumerable.Empty<IPAddress>();
+            }
         }
 
         #endregion
