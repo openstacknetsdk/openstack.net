@@ -54,7 +54,18 @@
             IDnsService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
             {
-                DnsDomain[] allDomains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).Where(i => i.Name.StartsWith(TestDomainPrefix, StringComparison.OrdinalIgnoreCase)).ToArray();
+                Func<DnsDomain, bool> domainFilter =
+                    domain =>
+                    {
+                        if (domain.Name.StartsWith(TestDomainPrefix, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                        else if (domain.Name.IndexOf('.' + TestDomainPrefix, StringComparison.OrdinalIgnoreCase) >= 0)
+                            return true;
+
+                        return false;
+                    };
+
+                DnsDomain[] allDomains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).Where(domainFilter).ToArray();
 
                 List<Task> deleteTasks = new List<Task>();
                 for (int i = 0; i < allDomains.Length; i += BatchSize)
