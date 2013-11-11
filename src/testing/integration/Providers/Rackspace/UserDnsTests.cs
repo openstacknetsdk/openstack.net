@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
+    using System.Net.Sockets;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -15,6 +16,7 @@
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Dns;
+    using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
     using Newtonsoft.Json;
     using Path = System.IO.Path;
 
@@ -54,7 +56,18 @@
             IDnsService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
             {
-                DnsDomain[] allDomains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).Where(i => i.Name.StartsWith(TestDomainPrefix, StringComparison.OrdinalIgnoreCase)).ToArray();
+                Func<DnsDomain, bool> domainFilter =
+                    domain =>
+                    {
+                        if (domain.Name.StartsWith(TestDomainPrefix, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                        else if (domain.Name.IndexOf('.' + TestDomainPrefix, StringComparison.OrdinalIgnoreCase) >= 0)
+                            return true;
+
+                        return false;
+                    };
+
+                DnsDomain[] allDomains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).Where(domainFilter).ToArray();
 
                 List<Task> deleteTasks = new List<Task>();
                 for (int i = 0; i < allDomains.Length; i += BatchSize)
@@ -556,22 +569,35 @@
                     Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
                 }
 
+                string originalData = "127.0.0.1";
+                string updatedData = "192.168.0.1";
+                string originalCommentValue = "Integration test record";
+                string updatedCommentValue = "Integration test record 2";
+                TimeSpan? originalTimeToLive;
+                TimeSpan? updatedTimeToLive = TimeSpan.FromMinutes(12);
+
                 DomainId domainId = createResponse.Response.Domains[0].Id;
                 DnsDomainRecordConfiguration[] recordConfigurations =
                     {
                         new DnsDomainRecordConfiguration(
                             type: DnsRecordType.A,
                             name: string.Format("www.{0}", domainName),
-                            data: "127.0.0.1",
+                            data: originalData,
                             timeToLive: null,
-                            comment: "Integration test record",
+                            comment: originalCommentValue,
                             priority: null)
-
                     };
                 DnsJob<DnsRecordsList> recordsResponse = await provider.AddRecordsAsync(domainId, recordConfigurations, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 Assert.IsNotNull(recordsResponse.Response);
                 Assert.IsNotNull(recordsResponse.Response.Records);
                 DnsRecord[] records = recordsResponse.Response.Records.ToArray();
+                Assert.AreEqual(recordConfigurations.Length, records.Length);
+                originalTimeToLive = records[0].TimeToLive;
+                Assert.AreNotEqual(originalTimeToLive, updatedTimeToLive);
+
+                Assert.AreEqual(originalData, records[0].Data);
+                Assert.AreEqual(originalTimeToLive, records[0].TimeToLive);
+                Assert.AreEqual(originalCommentValue, records[0].Comment);
 
                 foreach (var record in records)
                 {
@@ -581,7 +607,31 @@
                     Console.WriteLine(await JsonConvert.SerializeObjectAsync(record, Formatting.Indented));
                 }
 
-                await provider.UpdateRecordsAsync(domainId, new[] { new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, comment: "Integration test record 2") }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                DnsDomainRecordUpdateConfiguration recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, comment: updatedCommentValue);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                DnsRecord updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(originalTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, timeToLive: updatedTimeToLive);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, data: updatedData);
+                await provider.UpdateRecordsAsync(domainId, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListRecordDetailsAsync(domainId, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(updatedData, updatedRecord.Data);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                await provider.RemoveRecordsAsync(domainId, new[] { records[0].Id }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
 
                 DnsJob deleteResponse = await provider.RemoveDomainsAsync(createdDomains.Select(i => i.Id), false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 if (deleteResponse.Status == DnsJobStatus.Error)
@@ -589,6 +639,111 @@
                     Console.WriteLine(deleteResponse.Error.ToString(Formatting.Indented));
                     Assert.Fail("Failed to delete temporary domain created during the integration test.");
                 }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Dns)]
+        public async Task TestCreatePtrRecords()
+        {
+            string domainName = CreateRandomDomainName();
+            string loadBalancerName = UserLoadBalancerTests.CreateRandomLoadBalancerName();
+
+            IDnsService provider = CreateProvider();
+            ILoadBalancerService loadBalancerProvider = UserLoadBalancerTests.CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
+            {
+                IEnumerable<LoadBalancingProtocol> protocols = await loadBalancerProvider.ListProtocolsAsync(cancellationTokenSource.Token);
+                LoadBalancingProtocol httpProtocol = protocols.First(i => i.Name.Equals("HTTP", StringComparison.OrdinalIgnoreCase));
+
+                LoadBalancerConfiguration loadBalancerConfiguration = new LoadBalancerConfiguration(
+                    name: loadBalancerName,
+                    nodes: null,
+                    protocol: httpProtocol,
+                    virtualAddresses: new[] { new LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType.Public) },
+                    algorithm: LoadBalancingAlgorithm.RoundRobin);
+                LoadBalancer loadBalancer = await loadBalancerProvider.CreateLoadBalancerAsync(loadBalancerConfiguration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(loadBalancer.VirtualAddresses);
+                Assert.IsTrue(loadBalancer.VirtualAddresses.Count > 0);
+
+                string originalData = loadBalancer.VirtualAddresses[0].Address.ToString();
+                string originalName = string.Format("www.{0}", domainName);
+                string updatedName = string.Format("www2.{0}", domainName);
+                string originalCommentValue = "Integration test record";
+                string updatedCommentValue = "Integration test record 2";
+                TimeSpan? originalTimeToLive;
+                TimeSpan? updatedTimeToLive = TimeSpan.FromMinutes(12);
+
+                DnsDomainRecordConfiguration[] recordConfigurations =
+                    {
+                        new DnsDomainRecordConfiguration(
+                            type: DnsRecordType.Ptr,
+                            name: string.Format("www.{0}", domainName),
+                            data: originalData,
+                            timeToLive: null,
+                            comment: originalCommentValue,
+                            priority: null)
+                    };
+                string serviceName = "cloudLoadBalancers";
+                Uri deviceResourceUri = await ((UserLoadBalancerTests.TestCloudLoadBalancerProvider)loadBalancerProvider).GetDeviceResourceUri(loadBalancer, cancellationTokenSource.Token);
+                DnsJob<DnsRecordsList> recordsResponse = await provider.AddPtrRecordsAsync(serviceName, deviceResourceUri, recordConfigurations, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(recordsResponse.Response);
+                Assert.IsNotNull(recordsResponse.Response.Records);
+                DnsRecord[] records = recordsResponse.Response.Records.ToArray();
+                Assert.AreEqual(recordConfigurations.Length, records.Length);
+                originalTimeToLive = records[0].TimeToLive;
+                Assert.AreNotEqual(originalTimeToLive, updatedTimeToLive);
+
+                Assert.AreEqual(originalData, records[0].Data);
+                Assert.AreEqual(originalTimeToLive, records[0].TimeToLive);
+                Assert.AreEqual(originalCommentValue, records[0].Comment);
+
+                foreach (var record in records)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Record: {0} ({1})", record.Name, record.Id);
+                    Console.WriteLine();
+                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(record, Formatting.Indented));
+                }
+
+                // update the comment and verify nothing else changed
+                DnsDomainRecordUpdateConfiguration recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], originalName, originalData, comment: updatedCommentValue);
+                await provider.UpdatePtrRecordsAsync(serviceName, deviceResourceUri, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                DnsRecord updatedRecord = await provider.ListPtrRecordDetailsAsync(serviceName, deviceResourceUri, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(originalName, updatedRecord.Name);
+                Assert.AreEqual(originalTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                // update the TTL and verify nothing else changed
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], originalName, originalData, timeToLive: updatedTimeToLive);
+                await provider.UpdatePtrRecordsAsync(serviceName, deviceResourceUri, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListPtrRecordDetailsAsync(serviceName, deviceResourceUri, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(originalName, updatedRecord.Name);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                // update the name and verify nothing else changed
+                recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], updatedName, originalData);
+                await provider.UpdatePtrRecordsAsync(serviceName, deviceResourceUri, new[] { recordUpdateConfiguration }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+                updatedRecord = await provider.ListPtrRecordDetailsAsync(serviceName, deviceResourceUri, records[0].Id, cancellationTokenSource.Token);
+                Assert.IsNotNull(updatedRecord);
+                Assert.AreEqual(originalData, updatedRecord.Data);
+                Assert.AreEqual(updatedName, updatedRecord.Name);
+                Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
+                Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
+
+                // remove the PTR record
+                // TODO: verify result?
+                await provider.RemovePtrRecordsAsync(serviceName, deviceResourceUri, loadBalancer.VirtualAddresses[0].Address, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
+                /* Cleanup
+                 */
+                await loadBalancerProvider.RemoveLoadBalancerAsync(loadBalancer.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
             }
         }
 
@@ -701,12 +856,12 @@
             return timeout;
         }
 
-        private string CreateRandomDomainName()
+        internal static string CreateRandomDomainName()
         {
             return TestDomainPrefix + Path.GetRandomFileName().Replace('.', '-') + ".com";
         }
 
-        private IDnsService CreateProvider()
+        internal static IDnsService CreateProvider()
         {
             CloudDnsProvider provider = new TestCloudDnsProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, false, null, null);
             provider.BeforeAsyncWebRequest +=

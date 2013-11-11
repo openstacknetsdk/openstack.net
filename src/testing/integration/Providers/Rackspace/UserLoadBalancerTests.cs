@@ -18,7 +18,10 @@
     using Security.Cryptography.X509Certificates;
     using CancellationToken = System.Threading.CancellationToken;
     using CancellationTokenSource = System.Threading.CancellationTokenSource;
+    using CloudIdentity = net.openstack.Core.Domain.CloudIdentity;
+    using IIdentityProvider = net.openstack.Core.Providers.IIdentityProvider;
     using Interlocked = System.Threading.Interlocked;
+    using IRestService = JSIStudios.SimpleRESTServices.Client.IRestService;
     using Path = System.IO.Path;
     using StringBuilder = System.Text.StringBuilder;
 
@@ -2045,7 +2048,7 @@
         /// Creates a random load balancer name with the proper prefix for integration testing.
         /// </summary>
         /// <returns>A unique, randomly-generated load balancer name.</returns>
-        private string CreateRandomLoadBalancerName()
+        internal static string CreateRandomLoadBalancerName()
         {
             return TestLoadBalancerPrefix + Path.GetRandomFileName();
         }
@@ -2055,9 +2058,9 @@
         /// the <see cref="OpenstackNetSetings.TestIdentity"/>.
         /// </summary>
         /// <returns>An instance of <see cref="ILoadBalancerService"/> for integration testing.</returns>
-        private ILoadBalancerService CreateProvider()
+        internal static ILoadBalancerService CreateProvider()
         {
-            var provider = new CloudLoadBalancerProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new TestCloudLoadBalancerProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
             provider.BeforeAsyncWebRequest +=
                 (sender, e) =>
                 {
@@ -2072,6 +2075,21 @@
             provider.ConnectionLimit = 3;
 
             return provider;
+        }
+
+        internal class TestCloudLoadBalancerProvider : CloudLoadBalancerProvider
+        {
+            public TestCloudLoadBalancerProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
+                : base(defaultIdentity, defaultRegion, identityProvider, restService)
+            {
+            }
+
+            public async Task<Uri> GetDeviceResourceUri(LoadBalancer loadBalancer, CancellationToken cancellationToken)
+            {
+                UriTemplate template = new UriTemplate("loadbalancers/{loadBalancerId}");
+                Uri baseAddress = await GetBaseUriAsync(cancellationToken);
+                return template.BindByName(baseAddress, new Dictionary<string, string> { { "loadBalancerId", loadBalancer.Id.Value } });
+            }
         }
     }
 }
