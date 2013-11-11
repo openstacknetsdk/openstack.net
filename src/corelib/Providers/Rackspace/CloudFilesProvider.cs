@@ -20,6 +20,7 @@ using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Mapping;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using net.openstack.Providers.Rackspace.Validators;
+using Newtonsoft.Json;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -1277,6 +1278,146 @@ namespace net.openstack.Providers.Rackspace
                     throw new BulkDeletionException(response.Data.Status, _bulkDeletionResultMapper.Map(response.Data));
                 }
             }
+        }
+
+        /// <summary>
+        /// Upload and automatically extract an archive of files.
+        /// </summary>
+        /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\archive_name.tar.gz</localUri></param>
+        /// <param name="uploadPath">The target path for the extracted files. For details about this value, see the Extract Archive reference link in the documentation for this method.</param>
+        /// <param name="archiveFormat">The archive format.</param>
+        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <c>null</c> or empty, the content type of the extracted files is unspecified.</param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>An <see cref="ExtractArchiveResponse"/> object containing the detailed result of the extract archive operation.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="filePath"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="uploadPath"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="archiveFormat"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="filePath"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="FileNotFoundException">If the file <paramref name="filePath"/> could not be found.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="archiveFormat"/> is not supported by the provider.</para>
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extract Archive (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <preliminary/>
+        public ExtractArchiveResponse ExtractArchiveFromFile(string filePath, string uploadPath, ArchiveFormat archiveFormat, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (filePath == null)
+                throw new ArgumentNullException("filePath");
+            if (uploadPath == null)
+                throw new ArgumentNullException("uploadPath");
+            if (archiveFormat == null)
+                throw new ArgumentNullException("archiveFormat");
+            if (string.IsNullOrEmpty(filePath))
+                throw new ArgumentException("filePath cannot be empty");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
+            using (var stream = File.OpenRead(filePath))
+            {
+                return ExtractArchive(stream, uploadPath, archiveFormat, contentType, chunkSize, headers, region, progressUpdated, useInternalUrl, identity);
+            }
+        }
+
+        /// <summary>
+        /// Upload and automatically extract an archive of files.
+        /// </summary>
+        /// <param name="stream">A <see cref="Stream"/> providing the data for the archive.</param>
+        /// <param name="uploadPath">The target path for the extracted files. For details about this value, see the Extract Archive reference link in the documentation for this method.</param>
+        /// <param name="archiveFormat">The archive format.</param>
+        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <c>null</c> or empty, the content type of the extracted files is unspecified.</param>
+        /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
+        /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>An <see cref="ExtractArchiveResponse"/> object containing the detailed result of the extract archive operation.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="stream"/> is <c>null</c>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="uploadPath"/> is <c>null</c>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="archiveFormat"/> is <c>null</c>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="chunkSize"/> is less than 0.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="archiveFormat"/> is not supported by the provider.</para>
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extract Archive (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <preliminary/>
+        public ExtractArchiveResponse ExtractArchive(Stream stream, string uploadPath, ArchiveFormat archiveFormat, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+            if (uploadPath == null)
+                throw new ArgumentNullException("uploadPath");
+            if (archiveFormat == null)
+                throw new ArgumentNullException("archiveFormat");
+            if (chunkSize < 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
+            CheckIdentity(identity);
+
+            UriTemplate template;
+            if (!string.IsNullOrEmpty(uploadPath))
+                template = new UriTemplate("{uploadPath}?extract-archive={archiveFormat}");
+            else
+                template = new UriTemplate("?extract-archive={archiveFormat}");
+
+            Uri baseAddress = new Uri(GetServiceEndpointCloudFiles(identity, region, useInternalUrl));
+            Dictionary<string, string> parameters = new Dictionary<string, string> { { "archiveFormat", archiveFormat.ToString() } };
+            if (!string.IsNullOrEmpty(uploadPath))
+                parameters.Add("uploadPath", uploadPath);
+
+            Uri urlPath = template.BindByName(baseAddress, parameters);
+
+            RequestSettings settings = BuildDefaultRequestSettings();
+            settings.ChunkRequest = true;
+            settings.ContentType = contentType;
+
+            Response response = StreamRESTRequest(identity, urlPath, HttpMethod.PUT, stream, chunkSize, headers: headers, progressUpdated: progressUpdated, requestSettings: settings);
+            return JsonConvert.DeserializeObject<ExtractArchiveResponse>(response.RawBody);
         }
 
         /// <inheritdoc />
