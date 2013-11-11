@@ -893,7 +893,8 @@
                     new JProperty("href", new JValue(deviceResourceUri.AbsoluteUri)),
                     new JProperty("rel", new JValue(serviceName)),
                     new JProperty("content", new JValue(string.Empty)))),
-                new JProperty("records", JArray.FromObject(recordConfigurations)));
+                new JProperty("recordsList", new JObject(
+                    new JProperty("records", JArray.FromObject(recordConfigurations)))));
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, request);
 
@@ -938,8 +939,8 @@
                     new JProperty("href", new JValue(deviceResourceUri.AbsoluteUri)),
                     new JProperty("rel", new JValue(serviceName)),
                     new JProperty("content", new JValue(string.Empty)))),
-                new JProperty("recordsList",
-                    new JProperty("records", JArray.FromObject(recordConfigurations))));
+                new JProperty("recordsList", new JObject(
+                    new JProperty("records", JArray.FromObject(recordConfigurations)))));
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.PUT, template, parameters, request);
 
