@@ -629,6 +629,8 @@
                 Assert.AreEqual(updatedTimeToLive, updatedRecord.TimeToLive);
                 Assert.AreEqual(updatedCommentValue, updatedRecord.Comment);
 
+                await provider.RemoveRecordsAsync(domainId, new[] { records[0].Id }, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
+
                 DnsJob deleteResponse = await provider.RemoveDomainsAsync(createdDomains.Select(i => i.Id), false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 if (deleteResponse.Status == DnsJobStatus.Error)
                 {
