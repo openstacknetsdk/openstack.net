@@ -464,7 +464,7 @@
             Assert.AreEqual(identity, provider.DefaultIdentity);
 
             IIdentityProvider defaultProvider = Bootstrapper.CreateIdentityProvider();
-            Assert.IsNull(defaultProvider.DefaultIdentity);
+            Assert.IsNotNull(defaultProvider.DefaultIdentity);
         }
     }
 }

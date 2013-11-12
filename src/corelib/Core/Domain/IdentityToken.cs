@@ -3,6 +3,7 @@
     using System;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Represents the authentication token used for making authenticated calls to
@@ -51,5 +52,13 @@
                 return expiration <= DateTimeOffset.Now;
             }
         }
+
+        /// <summary>
+        /// Gets a Collection of <see cref="AuthenticationType"/> objects representing the ways the 
+        /// user has authenticated.
+        /// </summary>
+        /// <preliminary/>
+        [JsonProperty("RAX-AUTH:authenticatedBy", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public IEnumerable<AuthenticationType> AuthenticationTypes { get; private set; } 
     }
 }

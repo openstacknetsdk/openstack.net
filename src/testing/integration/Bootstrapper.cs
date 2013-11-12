@@ -85,7 +85,7 @@ namespace Net.OpenStack.Testing.Integration
 
         public ExtendedCloudIdentity TestAdminIdentity { get; set; }
 
-        public ExtendedCloudIdentity TestDomainIdentity { get; set; }
+        public ExtendedRackspaceCloudIdentity TestDomainIdentity { get; set; }
 
         public string RackspaceExtendedIdentityUrl { get; set; }
 
@@ -106,6 +106,11 @@ namespace Net.OpenStack.Testing.Integration
     public class ExtendedRackspaceCloudIdentity : RackspaceCloudIdentity
     {
         public string TenantId { get; set; }
+
+        public ExtendedRackspaceCloudIdentity()
+        {
+            
+        }
 
         public ExtendedRackspaceCloudIdentity(ExtendedCloudIdentity cloudIdentity)
         {
