@@ -197,6 +197,7 @@
     <Compile Include="Providers\Rackspace\ILoadBalancerService.cs" />
     <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\ArchiveFormat.cs" />
+    <Compile Include="Core\Domain\AuthenticationType.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionFailedObject.cs" />
     <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
     <Compile Include="Providers\Rackspace\Objects\Dns\DnsChange.cs" />

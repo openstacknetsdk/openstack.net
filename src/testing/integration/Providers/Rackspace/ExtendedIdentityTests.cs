@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using net.openstack.Core.Caching;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
-using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
 using net.openstack.Providers.Rackspace.Objects;
 
@@ -16,7 +15,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         private TestContext testContextInstance;
         private static RackspaceCloudIdentity _testIdentity;
         private static RackspaceCloudIdentity _testAdminIdentity;
-        private static ExtendedRackspaceCloudIdentity _testDomainIdentity;
+        private static RackspaceCloudIdentity _testDomainIdentity;
         private static User _userDetails;
         private static User _adminUserDetails;
         private const string NewPassword = "My_n3w_p@$$w0rd";
@@ -42,7 +41,7 @@ namespace Net.OpenStack.Testing.Integration.Providers.Rackspace
         {
             _testIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestIdentity);
             _testAdminIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestAdminIdentity);
-            _testDomainIdentity = new ExtendedRackspaceCloudIdentity(Bootstrapper.Settings.TestDomainIdentity);
+            _testDomainIdentity = new RackspaceCloudIdentity(Bootstrapper.Settings.TestDomainIdentity);
 
             var provider = BuildProvider();
 
