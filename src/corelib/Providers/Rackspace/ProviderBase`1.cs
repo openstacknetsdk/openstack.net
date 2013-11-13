@@ -60,6 +60,11 @@ namespace net.openstack.Providers.Rackspace
         private string _defaultRegion;
 
         /// <summary>
+        /// This is the backing field for the <see cref="BackoffPolicy"/> property.
+        /// </summary>
+        private IBackoffPolicy _backoffPolicy;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class using
         /// the specified default identity, default region, identity provider, and REST service
         /// implementation, and the default HTTP response code validator.
@@ -135,6 +140,43 @@ namespace net.openstack.Providers.Rackspace
             get
             {
                 return _defaultRegion;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the back-off policy to use for polling operations.
+        /// </summary>
+        /// <remarks>
+        /// If this value is set to <c>null</c>, the default back-off policy for the current
+        /// provider will be used.
+        /// </remarks>
+        /// <preliminary/>
+        public IBackoffPolicy BackoffPolicy
+        {
+            get
+            {
+                return _backoffPolicy ?? DefaultBackoffPolicy;
+            }
+
+            set
+            {
+                _backoffPolicy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the default back-off policy for the current provider.
+        /// </summary>
+        /// <remarks>
+        /// The default implementation returns <see cref="net.openstack.Core.BackoffPolicy.Default"/>.
+        /// Providers may override this property to change the default back-off policy.
+        /// </remarks>
+        /// <preliminary/>
+        protected virtual IBackoffPolicy DefaultBackoffPolicy
+        {
+            get
+            {
+                return net.openstack.Core.BackoffPolicy.Default;
             }
         }
 

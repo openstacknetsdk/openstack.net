@@ -2373,7 +2373,29 @@
             TaskCompletionSource<LoadBalancer> taskCompletionSource = new TaskCompletionSource<LoadBalancer>();
             Func<Task<LoadBalancer>> pollLoadBalancer = () => PollLoadBalancerStateAsync(loadBalancerId, cancellationToken, progress);
 
-            Task<LoadBalancer> currentTask = pollLoadBalancer();
+            IEnumerator<TimeSpan> backoffPolicy = BackoffPolicy.GetBackoffIntervals().GetEnumerator();
+            Func<Task<LoadBalancer>> moveNext =
+                () =>
+                {
+                    if (!backoffPolicy.MoveNext())
+                        throw new OperationCanceledException();
+
+                    if (backoffPolicy.Current == TimeSpan.Zero)
+                    {
+                        return pollLoadBalancer();
+                    }
+                    else
+                    {
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
+                           task =>
+                           {
+                               task.PropagateExceptions();
+                               return pollLoadBalancer();
+                           }).Unwrap();
+                    }
+                };
+
+            Task<LoadBalancer> currentTask = moveNext();
             Action<Task<LoadBalancer>> continuation = null;
             continuation =
                 previousTask =>
@@ -2393,12 +2415,7 @@
                     }
 
                     // reschedule
-                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
-                        task =>
-                        {
-                            task.PropagateExceptions();
-                            return pollLoadBalancer();
-                        }).Unwrap();
+                    currentTask = moveNext();
                     currentTask.ContinueWith(continuation);
                 };
             currentTask.ContinueWith(continuation);
@@ -2502,7 +2519,29 @@
                         });
                 };
 
-            Task<LoadBalancer[]> currentTask = pollLoadBalancers();
+            IEnumerator<TimeSpan> backoffPolicy = BackoffPolicy.GetBackoffIntervals().GetEnumerator();
+            Func<Task<LoadBalancer[]>> moveNext =
+                () =>
+                {
+                    if (!backoffPolicy.MoveNext())
+                        throw new OperationCanceledException();
+
+                    if (backoffPolicy.Current == TimeSpan.Zero)
+                    {
+                        return pollLoadBalancers();
+                    }
+                    else
+                    {
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
+                           task =>
+                           {
+                               task.PropagateExceptions();
+                               return pollLoadBalancers();
+                           }).Unwrap();
+                    }
+                };
+
+            Task<LoadBalancer[]> currentTask = moveNext();
             Action<Task<LoadBalancer[]>> continuation = null;
             continuation =
                 previousTask =>
@@ -2522,12 +2561,7 @@
                     }
 
                     // reschedule
-                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
-                        task =>
-                        {
-                            task.PropagateExceptions();
-                            return pollLoadBalancers();
-                        }).Unwrap();
+                    currentTask = moveNext();
                     currentTask.ContinueWith(continuation);
                 };
             currentTask.ContinueWith(continuation);

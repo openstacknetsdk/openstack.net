@@ -69,6 +69,7 @@
     <Compile Include="Core\Compat\IStructuralEquatable.cs" />
     <Compile Include="Core\Compat\Tuple.cs" />
     <Compile Include="Core\Compat\Tuples.cs" />
+    <Compile Include="Core\DefaultBackoffPolicy.cs" />
     <Compile Include="Core\Domain\AuthenticationRequirement.cs" />
     <Compile Include="Core\Domain\Converters\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\Converters\PhysicalAddressSimpleConverter.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
     <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
     <Compile Include="Core\ExtensibleEnum`1.cs" />
+    <Compile Include="Core\IBackoffPolicy.cs" />
     <Compile Include="Core\InternalTaskExtensions.cs" />
     <Compile Include="Core\IProgress`1.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
