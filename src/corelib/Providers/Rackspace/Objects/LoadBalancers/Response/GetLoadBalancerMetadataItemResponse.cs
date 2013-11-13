@@ -15,6 +15,15 @@
         private LoadBalancerMetadataItem _metadataItem;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerMetadataItemResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected GetLoadBalancerMetadataItemResponse()
+        {
+        }
+
         public LoadBalancerMetadataItem MetadataItem
         {
             get

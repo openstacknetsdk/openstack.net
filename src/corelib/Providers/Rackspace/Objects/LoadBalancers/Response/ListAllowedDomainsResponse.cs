@@ -14,6 +14,15 @@
         private AllowedDomain[] _allowedDomains;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListAllowedDomainsResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected ListAllowedDomainsResponse()
+        {
+        }
+
         public IEnumerable<string> AllowedDomains
         {
             get
@@ -33,6 +42,15 @@
             private AllowedDomainDescriptor _allowedDomain;
 #pragma warning restore 649 // Field 'fieldName' is never assigned to, and will always have its default value
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AllowedDomain"/> class
+            /// during JSON deserialization.
+            /// </summary>
+            [JsonConstructor]
+            protected AllowedDomain()
+            {
+            }
+
             public string Name
             {
                 get
@@ -51,6 +69,15 @@
                 [JsonProperty("name")]
                 private string _name;
 #pragma warning restore 649
+
+                /// <summary>
+                /// Initializes a new instance of the <see cref="AllowedDomainDescriptor"/> class
+                /// during JSON deserialization.
+                /// </summary>
+                [JsonConstructor]
+                protected AllowedDomainDescriptor()
+                {
+                }
 
                 public string Name
                 {

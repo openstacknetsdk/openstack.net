@@ -22,6 +22,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsNameserver"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsNameserver()
+        {
+        }
+
+        /// <summary>
         /// Gets the fully-qualified domain name of the nameserver.
         /// </summary>
         /// <value>

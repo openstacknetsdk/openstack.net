@@ -30,6 +30,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsServiceLimits"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsServiceLimits()
+        {
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="DnsRateLimitPattern"/> objects describing the rate limits
         /// associated with resources in the DNS service.
         /// </summary>

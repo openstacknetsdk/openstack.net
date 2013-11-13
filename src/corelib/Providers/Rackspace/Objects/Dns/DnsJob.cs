@@ -63,6 +63,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsJob"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsJob()
+        {
+        }
+
+        /// <summary>
         /// Gets the unique ID for this job.
         /// </summary>
         /// <value>

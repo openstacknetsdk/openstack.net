@@ -44,6 +44,7 @@
         /// Initializes a new instance of the <see cref="HealthMonitor"/> class
         /// during JSON deserialization.
         /// </summary>
+        [JsonConstructor]
         protected HealthMonitor()
         {
         }

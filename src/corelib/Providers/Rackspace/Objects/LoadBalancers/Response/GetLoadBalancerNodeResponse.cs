@@ -12,6 +12,15 @@
         private Node _node;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerNodeResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected GetLoadBalancerNodeResponse()
+        {
+        }
+
         public Node Node
         {
             get

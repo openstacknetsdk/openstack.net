@@ -10,6 +10,10 @@
         [JsonProperty("contentCaching")]
         private LoadBalancerEnabledFlag _body;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerContentCachingResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
         [JsonConstructor]
         protected GetLoadBalancerContentCachingResponse()
         {

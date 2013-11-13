@@ -114,7 +114,7 @@
         private SessionPersistence _sessionPersistence;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBalancerConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="LoadBalancerConfiguration{TNodeConfiguration}"/> class.
         /// </summary>
         /// <remarks>
         /// This constructor is used during JSON deserialization of derived types.

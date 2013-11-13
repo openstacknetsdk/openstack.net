@@ -36,6 +36,7 @@
         /// Initializes a new instance of the <see cref="QueuedMessageList"/> class during
         /// JSON deserialization.
         /// </summary>
+        [JsonConstructor]
         protected QueuedMessageList()
         {
         }

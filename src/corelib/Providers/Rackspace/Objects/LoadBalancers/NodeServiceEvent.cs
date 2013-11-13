@@ -94,6 +94,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="NodeServiceEvent"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected NodeServiceEvent()
+        {
+        }
+
+        /// <summary>
         /// Gets the unique ID for this node service event record.
         /// </summary>
         public NodeServiceEventId Id
