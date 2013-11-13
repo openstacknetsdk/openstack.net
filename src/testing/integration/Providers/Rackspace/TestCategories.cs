@@ -45,6 +45,12 @@
         public const string Dns = "DNS";
 
         /// <summary>
+        /// Database service tests.
+        /// </summary>
+        /// <seealso cref="IDatabaseService"/>
+        public const string Database = "Database";
+
+        /// <summary>
         /// Load balancer service tests.
         /// </summary>
         /// <seealso cref="ILoadBalancerProvider"/>

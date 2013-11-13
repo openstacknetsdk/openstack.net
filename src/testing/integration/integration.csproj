@@ -81,6 +81,8 @@
     <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\CloudServersTests.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />
+    <Compile Include="Providers\Rackspace\UserDatabaseTests.cs" />
+    <Compile Include="Providers\Rackspace\UserDatabaseUserTests.cs" />
     <Compile Include="Providers\Rackspace\UserQueuesTestsSynchronous.cs" />
     <Compile Include="Providers\Rackspace\IdentityTests.cs" />
     <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
