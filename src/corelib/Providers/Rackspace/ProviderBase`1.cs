@@ -50,12 +50,12 @@ namespace net.openstack.Providers.Rackspace
         protected readonly IHttpResponseCodeValidator ResponseCodeValidator;
 
         /// <summary>
-        /// This is the backing field for <see cref="ConnectionLimit"/>.
+        /// This is the backing field for the <see cref="ConnectionLimit"/> property.
         /// </summary>
         private int? _connectionLimit;
 
         /// <summary>
-        /// This is the backing field for <see cref="DefaultRegion"/>.
+        /// This is the backing field for the <see cref="DefaultRegion"/> property.
         /// </summary>
         private string _defaultRegion;
 
