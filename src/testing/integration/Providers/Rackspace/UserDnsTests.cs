@@ -22,7 +22,7 @@
     public class UserDnsTests
     {
         /// <summary>
-        /// Users created by these unit tests have a username with this prefix, allowing
+        /// Domains created by these unit tests have this prefix in the name, allowing
         /// them to be identified and cleaned up following a failed test.
         /// </summary>
         private static readonly string TestDomainPrefix = "UnitTestDomain-";

@@ -1051,7 +1051,29 @@
             TaskCompletionSource<DnsJob> taskCompletionSource = new TaskCompletionSource<DnsJob>();
             Func<Task<DnsJob>> pollJob = () => PollJobStateAsync(job, showDetails, cancellationToken, progress);
 
-            Task<DnsJob> currentTask = pollJob();
+            IEnumerator<TimeSpan> backoffPolicy = BackoffPolicy.GetBackoffIntervals().GetEnumerator();
+            Func<Task<DnsJob>> moveNext =
+                () =>
+                {
+                    if (!backoffPolicy.MoveNext())
+                        throw new OperationCanceledException();
+
+                    if (backoffPolicy.Current == TimeSpan.Zero)
+                    {
+                        return pollJob();
+                    }
+                    else
+                    {
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
+                           task =>
+                           {
+                               task.PropagateExceptions();
+                               return pollJob();
+                           }).Unwrap();
+                    }
+                };
+
+            Task<DnsJob> currentTask = moveNext();
             Action<Task<DnsJob>> continuation = null;
             continuation =
                 previousTask =>
@@ -1071,12 +1093,7 @@
                     }
 
                     // reschedule
-                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
-                        task =>
-                        {
-                            task.PropagateExceptions();
-                            return pollJob();
-                        }).Unwrap();
+                    currentTask = moveNext();
                     currentTask.ContinueWith(continuation);
                 };
             currentTask.ContinueWith(continuation);
@@ -1117,7 +1134,29 @@
             TaskCompletionSource<DnsJob<TResult>> taskCompletionSource = new TaskCompletionSource<DnsJob<TResult>>();
             Func<Task<DnsJob<TResult>>> pollJob = () => PollJobStateAsync(job, showDetails, cancellationToken, progress);
 
-            Task<DnsJob<TResult>> currentTask = pollJob();
+            IEnumerator<TimeSpan> backoffPolicy = BackoffPolicy.GetBackoffIntervals().GetEnumerator();
+            Func<Task<DnsJob<TResult>>> moveNext =
+                () =>
+                {
+                    if (!backoffPolicy.MoveNext())
+                        throw new OperationCanceledException();
+
+                    if (backoffPolicy.Current == TimeSpan.Zero)
+                    {
+                        return pollJob();
+                    }
+                    else
+                    {
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
+                           task =>
+                           {
+                               task.PropagateExceptions();
+                               return pollJob();
+                           }).Unwrap();
+                    }
+                };
+
+            Task<DnsJob<TResult>> currentTask = moveNext();
             Action<Task<DnsJob<TResult>>> continuation = null;
             continuation =
                 previousTask =>
@@ -1137,12 +1176,7 @@
                     }
 
                     // reschedule
-                    currentTask = Task.Factory.StartNewDelayed((int)TimeSpan.FromSeconds(1).TotalMilliseconds, cancellationToken).ContinueWith(
-                        task =>
-                        {
-                            task.PropagateExceptions();
-                            return pollJob();
-                        }).Unwrap();
+                    currentTask = moveNext();
                     currentTask.ContinueWith(continuation);
                 };
             currentTask.ContinueWith(continuation);
