@@ -33,6 +33,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MessageStatistics"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected MessageStatistics()
+        {
+        }
+
+        /// <summary>
         /// Gets the absolute path of the URI to this message.
         /// </summary>
         public string Href

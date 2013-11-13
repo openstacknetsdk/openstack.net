@@ -52,6 +52,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsSubdomain"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsSubdomain()
+        {
+        }
+
+        /// <summary>
         /// Gets the unique ID representing this subdomain within the DNS service.
         /// </summary>
         /// <value>

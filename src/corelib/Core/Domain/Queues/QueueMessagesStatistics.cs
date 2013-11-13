@@ -44,6 +44,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="QueueMessagesStatistics"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected QueueMessagesStatistics()
+        {
+        }
+
+        /// <summary>
         /// Gets the number of unclaimed messages in the queue.
         /// </summary>
         public long Free

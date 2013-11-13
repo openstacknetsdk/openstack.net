@@ -13,6 +13,15 @@
         private LoadBalancerVirtualAddress[] _virtualAddresses;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListVirtualAddressesResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected ListVirtualAddressesResponse()
+        {
+        }
+
         public ReadOnlyCollection<LoadBalancerVirtualAddress> VirtualAddresses
         {
             get

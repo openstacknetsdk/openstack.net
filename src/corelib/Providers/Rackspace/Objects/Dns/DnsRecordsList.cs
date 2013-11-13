@@ -21,6 +21,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsRecordsList"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsRecordsList()
+        {
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="DnsRecord"/> objects describing the DNS records
         /// associated with a <see cref="DnsDomain"/>.
         /// </summary>

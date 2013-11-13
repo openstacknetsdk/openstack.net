@@ -20,6 +20,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LoadBalancerCluster"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected LoadBalancerCluster()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the cluster a load balancer is located within.
         /// </summary>
         public string Name

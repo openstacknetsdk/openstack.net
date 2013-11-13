@@ -21,6 +21,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsSubdomainsList"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsSubdomainsList()
+        {
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="DnsSubdomain"/> objects describing the subdomains
         /// associated with a <see cref="DnsDomain"/>.
         /// </summary>

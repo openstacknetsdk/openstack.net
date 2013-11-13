@@ -12,6 +12,15 @@
         private LoadBalancerSslConfiguration _sslConfiguration;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerSslConfigurationResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected GetLoadBalancerSslConfigurationResponse()
+        {
+        }
+
         public LoadBalancerSslConfiguration SslConfiguration
         {
             get

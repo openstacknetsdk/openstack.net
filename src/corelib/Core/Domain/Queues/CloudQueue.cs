@@ -35,6 +35,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="CloudQueue"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected CloudQueue()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the queue.
         /// </summary>
         public QueueName Name

@@ -21,6 +21,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="QueueStatistics"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected QueueStatistics()
+        {
+        }
+
+        /// <summary>
         /// Gets statistics about messages contained in the queue.
         /// </summary>
         public QueueMessagesStatistics MessageStatistics

@@ -12,6 +12,15 @@
         private LoadBalancer _loadBalancer;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected GetLoadBalancerResponse()
+        {
+        }
+
         public LoadBalancer LoadBalancer
         {
             get

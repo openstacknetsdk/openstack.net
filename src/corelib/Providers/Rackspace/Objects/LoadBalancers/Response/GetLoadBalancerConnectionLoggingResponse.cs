@@ -10,6 +10,10 @@
         [JsonProperty("connectionLogging")]
         private LoadBalancerEnabledFlag _body;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerConnectionLoggingResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
         [JsonConstructor]
         protected GetLoadBalancerConnectionLoggingResponse()
         {

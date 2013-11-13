@@ -11,6 +11,10 @@
         [JsonProperty("errorpage")]
         private ErrorPageBody _body;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetLoadBalancerErrorPageResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
         [JsonConstructor]
         protected GetLoadBalancerErrorPageResponse()
         {

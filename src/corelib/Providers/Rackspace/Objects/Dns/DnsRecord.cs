@@ -70,6 +70,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsRecord"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsRecord()
+        {
+        }
+
+        /// <summary>
         /// Gets the unique ID representing this record within the DNS service.
         /// </summary>
         /// <value>

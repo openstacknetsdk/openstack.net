@@ -57,6 +57,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LoadBalancer"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected LoadBalancer()
+        {
+        }
+
+        /// <summary>
         /// Gets unique ID representing this load balancer within the load balancers service.
         /// </summary>
         /// <value>

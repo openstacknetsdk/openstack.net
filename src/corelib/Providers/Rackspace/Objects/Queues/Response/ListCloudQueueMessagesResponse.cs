@@ -18,6 +18,15 @@
         private QueuedMessage[] _messages;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListCloudQueueMessagesResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected ListCloudQueueMessagesResponse()
+        {
+        }
+
         public ReadOnlyCollection<Link> Links
         {
             get

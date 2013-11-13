@@ -13,6 +13,15 @@
         private NetworkItem[] _accessList;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAccessListResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected GetAccessListResponse()
+        {
+        }
+
         public ReadOnlyCollection<NetworkItem> AccessList
         {
             get

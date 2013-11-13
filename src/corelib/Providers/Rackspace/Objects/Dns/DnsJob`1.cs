@@ -23,6 +23,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsJob{TResponse}"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsJob()
+        {
+        }
+
+        /// <summary>
         /// Gets the strongly-typed response from this job.
         /// </summary>
         /// <value>

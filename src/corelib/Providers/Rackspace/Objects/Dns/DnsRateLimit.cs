@@ -51,6 +51,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsRateLimit"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsRateLimit()
+        {
+        }
+
+        /// <summary>
         /// Gets the HTTP method associated with the rate limit.
         /// </summary>
         /// <value>

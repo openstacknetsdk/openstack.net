@@ -102,6 +102,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LoadBalancerUsage"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected LoadBalancerUsage()
+        {
+        }
+
+        /// <summary>
         /// Gets the unique ID for this usage record.
         /// </summary>
         public LoadBalancerUsageId Id

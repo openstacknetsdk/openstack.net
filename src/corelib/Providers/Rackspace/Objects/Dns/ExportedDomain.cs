@@ -28,6 +28,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ExportedDomain"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected ExportedDomain()
+        {
+        }
+
+        /// <summary>
         /// Gets the ID of the exported domain.
         /// </summary>
         /// <value>

@@ -42,6 +42,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsDomainChanges"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsDomainChanges()
+        {
+        }
+
+        /// <summary>
         /// Gets the total number of <see cref="DnsDomainChange"/> objects in the time interval
         /// described by <see cref="From"/> and <see cref="To"/>.
         /// </summary>

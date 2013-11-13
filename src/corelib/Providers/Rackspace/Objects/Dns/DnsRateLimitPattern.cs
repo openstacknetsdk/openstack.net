@@ -36,6 +36,15 @@
 #pragma warning restore 649
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DnsRateLimitPattern"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected DnsRateLimitPattern()
+        {
+        }
+
+        /// <summary>
         /// Gets a display representation of the URIs which are limited by this pattern.
         /// </summary>
         /// <value>

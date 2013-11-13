@@ -17,6 +17,15 @@
         private CloudQueue[] _queues;
 #pragma warning restore 649
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListCloudQueuesResponse"/> class
+        /// during JSON deserialization.
+        /// </summary>
+        [JsonConstructor]
+        protected ListCloudQueuesResponse()
+        {
+        }
+
         public Link[] Links
         {
             get
