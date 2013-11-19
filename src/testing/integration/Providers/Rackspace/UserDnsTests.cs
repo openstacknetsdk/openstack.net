@@ -398,7 +398,7 @@
                 Console.WriteLine(exportedDomain.Response.Contents);
 
                 Assert.IsNotNull(exportedDomain.Response.Id);
-                Assert.IsFalse(string.IsNullOrEmpty(exportedDomain.Response.AccountId));
+                Assert.IsNotNull(exportedDomain.Response.AccountId);
                 Assert.IsFalse(string.IsNullOrEmpty(exportedDomain.Response.Contents));
                 Assert.IsNotNull(exportedDomain.Response.ContentType);
 

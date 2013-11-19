@@ -81,6 +81,7 @@
     <Compile Include="Core\Domain\ImageState.cs" />
     <Compile Include="Core\Domain\IPAddressList.cs" />
     <Compile Include="Core\Domain\PowerState.cs" />
+    <Compile Include="Core\Domain\ProjectId.cs" />
     <Compile Include="Core\Domain\Queues\Claim.cs" />
     <Compile Include="Core\Domain\Queues\ClaimId.cs" />
     <Compile Include="Core\Domain\Queues\CloudQueue.cs" />

@@ -2,6 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
+    using ProjectId = net.openstack.Core.Domain.ProjectId;
     using Tenant = net.openstack.Core.Domain.Tenant;
 
     /// <summary>
@@ -44,7 +45,7 @@
         /// This the backing field for the <see cref="AccountId"/> property.
         /// </summary>
         [JsonProperty("accountId")]
-        private string _accountId;
+        private ProjectId _accountId;
 
         /// <summary>
         /// This the backing field for the <see cref="DomainName"/> property.
@@ -133,7 +134,7 @@
         /// The account ID under which this change was made, or <c>null</c> if the JSON response from the server
         /// did not include this property.
         /// </value>
-        public string AccountId
+        public ProjectId AccountId
         {
             get
             {
