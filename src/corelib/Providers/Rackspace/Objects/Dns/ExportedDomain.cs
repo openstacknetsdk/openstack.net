@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Dns
 {
     using Newtonsoft.Json;
+    using ProjectId = net.openstack.Core.Domain.ProjectId;
     using Tenant = net.openstack.Core.Domain.Tenant;
 
     /// <summary>
@@ -18,7 +19,7 @@
         /// This is the backing field for the <see cref="AccountId"/> property.
         /// </summary>
         [JsonProperty("accountId")]
-        private string _accountId;
+        private ProjectId _accountId;
 
         /// <summary>
         /// This is the backing field for the <see cref="Id"/> property.
@@ -60,7 +61,7 @@
         /// The account ID for the domain, or <c>null</c> if the JSON response from the server
         /// did not include this property.
         /// </value>
-        public string AccountId
+        public ProjectId AccountId
         {
             get
             {
