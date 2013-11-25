@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using net.openstack.Core;
 using net.openstack.Core.Exceptions;
 using net.openstack.Core.Validators;
@@ -38,7 +37,7 @@ namespace net.openstack.Providers.Rackspace.Validators
             var containerNameString = string.Format("Container Name:[{0}]", containerName);
             if (string.IsNullOrEmpty(containerName))
                 throw new ArgumentNullException("containerName", "ERROR: Container Name cannot be empty.");
-            if (HttpUtility.UrlEncode(containerName).Length > 256)
+            if (UriUtility.UriEncode(containerName, UriPart.AnyUrl).Length > 256)
                 throw new ContainerNameException(string.Format("ERROR: encoded URL Length greater than 256 char's. {0}", containerNameString));
             if (containerName.Contains("/"))
                 throw new ContainerNameException(string.Format("ERROR: Container Name contains a /. {0}", containerNameString));
@@ -52,7 +51,7 @@ namespace net.openstack.Providers.Rackspace.Validators
 
             if (string.IsNullOrEmpty(objectName))
                 throw new ArgumentNullException();
-            if (HttpUtility.UrlEncode(objectName).Length > 1024)
+            if (UriUtility.UriEncode(objectName, UriPart.AnyUrl).Length > 1024)
                 throw new ObjectNameException("ERROR: Url Encoded Object Name exceeds 1024 char's");
         }
     }

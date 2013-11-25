@@ -140,6 +140,8 @@
     <Compile Include="Core\Synchronous\LoadBalancerServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
+    <Compile Include="Core\UriPart.cs" />
+    <Compile Include="Core\UriUtility.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudLoadBalancerProvider.cs" />

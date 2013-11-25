@@ -1,14 +1,12 @@
-﻿using System.Web;
-using net.openstack.Core;
-
-namespace net.openstack.Providers.Rackspace
+﻿namespace net.openstack.Providers.Rackspace
 {
+    using net.openstack.Core;
+
     /// <summary>
     /// Provides a default implementation of <see cref="IEncodeDecodeProvider"/> for
-    /// use with Rackspace services. This implementation uses <see cref="HttpUtility.UrlEncode(string)"/>
-    /// and <see cref="HttpUtility.UrlDecode(string)"/>, with an additional string transformation that
-    /// encodes the <c>+</c> character to <c>%20</c>, effectively rendering it to a space
-    /// character.
+    /// use with Rackspace services. This implementation encodes text using
+    /// <see cref="UriUtility.UriEncode(string, UriPart)"/> with <see cref="UriPart.AnyUrl"/>,
+    /// and decodes text with <see cref="UriUtility.UriDecode(string)"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     internal class EncodeDecodeProvider : IEncodeDecodeProvider
@@ -35,7 +33,7 @@ namespace net.openstack.Providers.Rackspace
             if (stringToEncode == null)
                 return null;
 
-            return HttpUtility.UrlEncode(stringToEncode).Replace("+","%20");
+            return UriUtility.UriEncode(stringToEncode, UriPart.AnyUrl);
         }
 
         /// <inheritdoc/>
@@ -44,7 +42,7 @@ namespace net.openstack.Providers.Rackspace
             if (stringToDecode == null)
                 return null;
 
-            return HttpUtility.UrlDecode(stringToDecode);
+            return UriUtility.UriDecode(stringToDecode);
         }
     }
 }

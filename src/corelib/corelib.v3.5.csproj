@@ -148,6 +148,8 @@
     <Compile Include="Core\Synchronous\ClaimExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
+    <Compile Include="Core\UriPart.cs" />
+    <Compile Include="Core\UriUtility.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Core\WebRequestExtensions.cs" />
     <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
