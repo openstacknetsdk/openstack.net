@@ -222,6 +222,8 @@
                     Console.WriteLine("    Email: {0}", user.Email);
                 if (!string.IsNullOrEmpty(user.DefaultRegion))
                     Console.WriteLine("    Default region: {0}", user.DefaultRegion);
+                if (user.DomainId != null)
+                    Console.WriteLine("    Domain ID: {0}", user.DomainId);
             }
         }
 
@@ -243,6 +245,8 @@
                 Console.WriteLine("    Email: {0}", user.Email);
             if (!string.IsNullOrEmpty(user.DefaultRegion))
                 Console.WriteLine("    Default region: {0}", user.DefaultRegion);
+            if (user.DomainId != null)
+                Console.WriteLine("    Domain ID: {0}", user.DomainId);
         }
 
         [TestMethod]
@@ -268,6 +272,8 @@
                 Console.WriteLine("    Email: {0}", user.Email);
             if (!string.IsNullOrEmpty(user.DefaultRegion))
                 Console.WriteLine("    Default region: {0}", user.DefaultRegion);
+            if (user.DomainId != null)
+                Console.WriteLine("    Domain ID: {0}", user.DomainId);
         }
 
         [TestMethod]
