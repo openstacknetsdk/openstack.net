@@ -16,6 +16,7 @@
     using net.openstack.Providers.Rackspace.Objects.Dns;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
     using Newtonsoft.Json;
+    using Encoding = System.Text.Encoding;
     using Path = System.IO.Path;
 
     [TestClass]
@@ -865,12 +866,12 @@
             provider.BeforeAsyncWebRequest +=
                 (sender, e) =>
                 {
-                    Console.WriteLine("{0} (Request) {1} {2}", DateTime.Now, e.Request.Method, e.Request.RequestUri);
+                    Console.Error.WriteLine("{0} (Request) {1} {2}", DateTime.Now, e.Request.Method, e.Request.RequestUri);
                 };
             provider.AfterAsyncWebResponse +=
                 (sender, e) =>
                 {
-                    Console.WriteLine("{0} (Result {1}) {2}", DateTime.Now, e.Response.StatusCode, e.Response.ResponseUri);
+                    Console.Error.WriteLine("{0} (Result {1}) {2}", DateTime.Now, e.Response.StatusCode, e.Response.ResponseUri);
                 };
 
             return provider;
@@ -883,21 +884,50 @@
             {
             }
 
+            protected override byte[] EncodeRequestBodyImpl<TBody>(HttpWebRequest request, TBody body)
+            {
+                byte[] encoded = base.EncodeRequestBodyImpl<TBody>(request, body);
+                Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(encoded));
+                return encoded;
+            }
+
             protected override Tuple<HttpWebResponse, string> ReadResultImpl(Task<WebResponse> task, CancellationToken cancellationToken)
             {
-                Tuple<HttpWebResponse, string> result = base.ReadResultImpl(task, cancellationToken);
-                foreach (string header in result.Item1.Headers)
+                try
                 {
-                    Console.WriteLine(string.Format("{0}: {1}", header, result.Item1.Headers[header]));
+                    Tuple<HttpWebResponse, string> result = base.ReadResultImpl(task, cancellationToken);
+                    LogResult(result.Item1, result.Item2, true);
+                    return result;
+                }
+                catch (WebException ex)
+                {
+                    HttpWebResponse response = ex.Response as HttpWebResponse;
+                    if (response != null && response.ContentLength != 0)
+                        LogResult(response, ex.Message, true);
+
+                    throw;
+                }
+            }
+
+            private void LogResult(HttpWebResponse response, string rawBody, bool reformat)
+            {
+                foreach (string header in response.Headers)
+                {
+                    Console.Error.WriteLine(string.Format("{0}: {1}", header, response.Headers[header]));
                 }
 
-                if (!string.IsNullOrEmpty(result.Item2))
+                if (!string.IsNullOrEmpty(rawBody))
                 {
-                    object parsed = JsonConvert.DeserializeObject(result.Item2);
-                    Console.WriteLine(JsonConvert.SerializeObject(parsed, Formatting.Indented));
+                    if (reformat)
+                    {
+                        object parsed = JsonConvert.DeserializeObject(rawBody);
+                        Console.Error.WriteLine("==> " + JsonConvert.SerializeObject(parsed, Formatting.Indented));
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("==> " + rawBody);
+                    }
                 }
-
-                return result;
             }
         }
     }

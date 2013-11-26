@@ -913,11 +913,7 @@ namespace net.openstack.Providers.Rackspace
                 {
                     Uri baseUri = task.Result.Item2;
                     HttpWebRequest request = PrepareRequestImpl(method, task.Result.Item1, template, baseUri, parameters, uriTransform);
-
-                    string bodyText = JsonConvert.SerializeObject(body);
-                    byte[] encodedBody = Encoding.UTF8.GetBytes(bodyText);
-                    request.ContentType = new ContentType() { MediaType = JsonRequestSettings.JsonContentType, CharSet = "UTF-8" }.ToString();
-                    request.ContentLength = encodedBody.Length;
+                    byte[] encodedBody = EncodeRequestBodyImpl(request, body);
 
                     Task<Stream> streamTask = Task.Factory.FromAsync<Stream>(request.BeginGetRequestStream(null, null), request.EndGetRequestStream);
                     return
@@ -931,6 +927,35 @@ namespace net.openstack.Providers.Rackspace
                             return request;
                         });
                 };
+        }
+
+        /// <summary>
+        /// Encode the body of a request, and update the <see cref="HttpWebRequest"/> properties
+        /// as necessary to support the encoded body.
+        /// </summary>
+        /// <remarks>
+        /// The default implementation uses <see cref="JsonConvert"/> to convert <paramref name="body"/>
+        /// to JSON notation, and then uses <see cref="Encoding.UTF8"/> to encode the text. The
+        /// <see cref="HttpWebRequest.ContentType"/> and <see cref="HttpWebRequest.ContentLength"/>
+        /// properties are updated to reflect the JSON content.
+        /// </remarks>
+        /// <typeparam name="TBody">The object modeling the body of the request.</typeparam>
+        /// <param name="request">The <see cref="HttpWebRequest"/> object for the request.</param>
+        /// <param name="body"></param>
+        /// <returns>The encoded content to send with the <see cref="HttpWebRequest"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <preliminary/>
+        protected virtual byte[] EncodeRequestBodyImpl<TBody>(HttpWebRequest request, TBody body)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            string bodyText = JsonConvert.SerializeObject(body);
+            byte[] encodedBody = Encoding.UTF8.GetBytes(bodyText);
+            request.ContentType = new ContentType() { MediaType = JsonRequestSettings.JsonContentType, CharSet = "UTF-8" }.ToString();
+            request.ContentLength = encodedBody.Length;
+
+            return encodedBody;
         }
 
         /// <summary>
