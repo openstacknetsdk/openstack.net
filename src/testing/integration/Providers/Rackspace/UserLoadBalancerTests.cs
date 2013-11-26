@@ -366,8 +366,12 @@
                     Console.WriteLine("    Keep Alive Timed Out: {0}", statistics.KeepAliveTimedOut);
                     Console.WriteLine("    Max Connections: {0}", statistics.MaxConnections);
                     Console.WriteLine("  Generic Statistics");
-                    foreach (var pair in statistics)
-                        Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
+                    Console.WriteLine("    connectTimeOut: {0}", statistics.ConnectionTimedOut);
+                    Console.WriteLine("    connectError: {0}", statistics.ConnectionError);
+                    Console.WriteLine("    connectFailure: {0}", statistics.ConnectionFailure);
+                    Console.WriteLine("    dataTimedOut: {0}", statistics.DataTimedOut);
+                    Console.WriteLine("    keepAliveTimedOut: {0}", statistics.KeepAliveTimedOut);
+                    Console.WriteLine("    maxConn: {0}", statistics.MaxConnections);
                 }
             }
         }

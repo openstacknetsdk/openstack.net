@@ -1,21 +1,43 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.LoadBalancers
 {
-    using System;
-    using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// This class represents the load balancer statistics returned from a
     /// call to <see cref="ILoadBalancerService.GetStatisticsAsync"/>.
     /// </summary>
+    /// <seealso cref="ILoadBalancerService.GetStatisticsAsync"/>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    public class LoadBalancerStatistics : Dictionary<string, long>
+    [JsonObject(MemberSerialization.OptIn)]
+    public class LoadBalancerStatistics
     {
+#pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
+        [JsonProperty("connectTimeOut", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _connectTimeOut;
+
+        [JsonProperty("connectError", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _connectError;
+
+        [JsonProperty("connectFailure", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _connectFailure;
+
+        [JsonProperty("dataTimedOut", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _dataTimedOut;
+
+        [JsonProperty("keepAliveTimedOut", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _keepAliveTimedOut;
+
+        [JsonProperty("maxConn", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private long? _maxConn;
+#pragma warning restore 649
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBalancerStatistics"/> class.
+        /// Initializes a new instance of the <see cref="LoadBalancerStatistics"/> class
+        /// during JSON deserialization.
         /// </summary>
-        public LoadBalancerStatistics()
-            : base(StringComparer.OrdinalIgnoreCase)
+        [JsonConstructor]
+        protected LoadBalancerStatistics()
         {
         }
 
@@ -26,11 +48,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("connectTimeOut", out value))
-                    return null;
-
-                return value;
+                return _connectTimeOut;
             }
         }
 
@@ -41,11 +59,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("connectError", out value))
-                    return null;
-
-                return value;
+                return _connectError;
             }
         }
 
@@ -56,11 +70,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("connectFailure", out value))
-                    return null;
-
-                return value;
+                return _connectFailure;
             }
         }
 
@@ -71,11 +81,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("dataTimedOut", out value))
-                    return null;
-
-                return value;
+                return _dataTimedOut;
             }
         }
 
@@ -86,11 +92,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("keepAliveTimedOut", out value))
-                    return null;
-
-                return value;
+                return _keepAliveTimedOut;
             }
         }
 
@@ -101,11 +103,7 @@
         {
             get
             {
-                long value;
-                if (!TryGetValue("maxConn", out value))
-                    return null;
-
-                return value;
+                return _maxConn;
             }
         }
     }
