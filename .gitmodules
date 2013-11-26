@@ -13,6 +13,9 @@
 [submodule "Reference/OpenStack/compute-api"]
 	path = Reference/OpenStack/compute-api
 	url = git@github.com:openstack/compute-api.git
+[submodule "Reference/OpenStack/trove-integration"]
+	path = Reference/OpenStack/trove-integration
+	url = git@github.com:openstack/trove-integration.git
 [submodule "Reference/Rackspace/auth-2.0"]
 	path = Reference/Rackspace/auth-2.0
 	url = git@github.rackspace.com:IX/auth-2.0.git
@@ -28,3 +31,6 @@
 [submodule "Reference/Rackspace/cloud-servers"]
 	path = Reference/Rackspace/cloud-servers
 	url = git@github.rackspace.com:IX/cloud-servers.git
+[submodule "Reference/Rackspace/reddwarf_lite-integration"]
+	path = Reference/Rackspace/reddwarf_lite-integration
+	url = git@github.com:masthalter/reddwarf_lite-integration.git
