@@ -8,6 +8,7 @@
     using ICSharpCode.SharpZipLib.GZip;
     using ICSharpCode.SharpZipLib.Tar;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Exceptions;
     using net.openstack.Core.Exceptions.Response;
@@ -258,12 +259,13 @@
             ObjectStore result = provider.CreateContainer(versionsContainerName);
             Assert.AreEqual(ObjectStore.ContainerCreated, result);
 
-            result = provider.CreateContainer(containerName, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { { CloudFilesProvider.VersionsLocation, versionsContainerName } });
+            result = provider.CreateContainer(containerName, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { { CloudFilesProvider.VersionsLocation, UriUtility.UriEncode(versionsContainerName, UriPart.Any, Encoding.UTF8) } });
             Assert.AreEqual(ObjectStore.ContainerCreated, result);
 
             Dictionary<string, string> headers = provider.GetContainerHeader(containerName);
             string location;
             Assert.IsTrue(headers.TryGetValue(CloudFilesProvider.VersionsLocation, out location));
+            location = UriUtility.UriDecode(location);
             Assert.AreEqual(versionsContainerName, location);
 
             string objectName = Path.GetRandomFileName();

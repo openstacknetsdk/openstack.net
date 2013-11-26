@@ -629,9 +629,9 @@ namespace net.openstack.Providers.Rackspace
 
             var metadata = new Dictionary<string, string>
                                 {
-                                    {WebIndex, index},
-                                    {WebError, error},
-                                    {WebListingsCSS, css},
+                                    {WebIndex, UriUtility.UriEncode(index, UriPart.AnyUrl, Encoding.UTF8)},
+                                    {WebError, UriUtility.UriEncode(error, UriPart.AnyUrl, Encoding.UTF8)},
+                                    {WebListingsCSS, UriUtility.UriEncode(css, UriPart.AnyUrl, Encoding.UTF8)},
                                     {WebListings, listing.ToString()}
                                 };
             UpdateContainerMetadata(container, metadata, region, useInternalUrl, identity);
@@ -661,8 +661,8 @@ namespace net.openstack.Providers.Rackspace
 
             var headers = new Dictionary<string, string>
                                   {
-                                      {WebIndex, index},
-                                      {WebError, error},
+                                      {WebIndex, UriUtility.UriEncode(index, UriPart.AnyUrl, Encoding.UTF8)},
+                                      {WebError, UriUtility.UriEncode(error, UriPart.AnyUrl, Encoding.UTF8)},
                                       {WebListings, listing.ToString()}
                                   };
             UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
@@ -687,7 +687,7 @@ namespace net.openstack.Providers.Rackspace
 
             var headers = new Dictionary<string, string>
                                 {
-                                    {WebListingsCSS, css},
+                                    {WebListingsCSS, UriUtility.UriEncode(css, UriPart.AnyUrl, Encoding.UTF8)},
                                     {WebListings, listing.ToString()}
                                 };
             UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
@@ -717,8 +717,8 @@ namespace net.openstack.Providers.Rackspace
 
             var headers = new Dictionary<string, string>
                                   {
-                                      {WebIndex, index},
-                                      {WebError, error}
+                                      {WebIndex, UriUtility.UriEncode(index, UriPart.AnyUrl, Encoding.UTF8)},
+                                      {WebError, UriUtility.UriEncode(error, UriPart.AnyUrl, Encoding.UTF8)}
                                   };
             UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
@@ -1107,7 +1107,7 @@ namespace net.openstack.Providers.Rackspace
             if (headers == null)
                 headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            headers.Add(Destination, string.Format("{0}/{1}", destinationContainer, destinationObjectName));
+            headers.Add(Destination, string.Format("{0}/{1}", UriUtility.UriEncode(destinationContainer, UriPart.AnyUrl, Encoding.UTF8), UriUtility.UriEncode(destinationObjectName, UriPart.AnyUrl, Encoding.UTF8)));
 
             RequestSettings settings = BuildDefaultRequestSettings();
             if (destinationContentType != null)
@@ -1408,7 +1408,7 @@ namespace net.openstack.Providers.Rackspace
             Uri baseAddress = new Uri(GetServiceEndpointCloudFiles(identity, region, useInternalUrl));
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "archiveFormat", archiveFormat.ToString() } };
             if (!string.IsNullOrEmpty(uploadPath))
-                parameters.Add("uploadPath", uploadPath);
+                parameters.Add("uploadPath", UriUtility.UriEncode(uploadPath, UriPart.AnyUrl, Encoding.UTF8));
 
             Uri urlPath = template.BindByName(baseAddress, parameters);
 
@@ -1701,7 +1701,7 @@ namespace net.openstack.Providers.Rackspace
                 // the size of the current segment
                 long length = Math.Min(remaining, LargeFileBatchThreshold);
 
-                Uri urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName, i.ToString("0000")));
+                Uri urlPath = new Uri(string.Format("{0}/{1}/{2}.seg{3}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriUtility.UriEncode(container, UriPart.AnyUrl, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.AnyUrl, Encoding.UTF8), i.ToString("0000")));
                 long segmentBytesWritten = 0;
 
                 RequestSettings settings = BuildDefaultRequestSettings();
@@ -1722,12 +1722,12 @@ namespace net.openstack.Providers.Rackspace
             }
 
             // upload the manifest file
-            Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), container, objectName));
+            Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriUtility.UriEncode(container, UriPart.AnyUrl, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.AnyUrl, Encoding.UTF8)));
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add(ObjectManifest, string.Format("{0}/{1}", container, objectName));
+            headers.Add(ObjectManifest, string.Format("{0}/{1}", UriUtility.UriEncode(container, UriPart.Any, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.Any, Encoding.UTF8)));
 
             RequestSettings requestSettings = BuildDefaultRequestSettings();
             requestSettings.ChunkRequest = true;

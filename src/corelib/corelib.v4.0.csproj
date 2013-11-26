@@ -54,7 +54,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web">
+      <Aliases>web</Aliases>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +144,8 @@
     <Compile Include="Core\Synchronous\LoadBalancerServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
+    <Compile Include="Core\UriPart.cs" />
+    <Compile Include="Core\UriUtility.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudLoadBalancerProvider.cs" />
