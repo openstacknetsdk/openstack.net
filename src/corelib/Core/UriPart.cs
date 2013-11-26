@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Core
 {
-    using HttpUtility = System.Web.HttpUtility;
+    extern alias web;
+    using HttpUtility = web.System.Web.HttpUtility;
 
     /// <summary>
     /// Represents a specific part of a URI.
