@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using net.openstack.Core.Collections;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -177,11 +178,14 @@
         /// A dictionary mapping network names to source addresses for the load balancer,
         /// or <c>null</c> if the JSON response from the server did not include this property.
         /// </value>
-        public Dictionary<string, string> SourceAddresses
+        public ReadOnlyDictionary<string, string> SourceAddresses
         {
             get
             {
-                return _sourceAddresses;
+                if (_sourceAddresses == null)
+                    return null;
+
+                return new ReadOnlyDictionary<string, string>(_sourceAddresses);
             }
         }
     }

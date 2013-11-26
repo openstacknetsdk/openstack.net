@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using net.openstack.Core.Collections;
     using Newtonsoft.Json;
     using CancellationToken = System.Threading.CancellationToken;
 
@@ -58,14 +59,14 @@
         /// canonical names describing the limited DNS resource, and the values are the actual limits
         /// in effect for the service.
         /// </summary>
-        public Dictionary<string, long> AbsoluteLimits
+        public ReadOnlyDictionary<string, long> AbsoluteLimits
         {
             get
             {
                 if (_absolute == null)
                     return null;
 
-                return _absolute;
+                return new ReadOnlyDictionary<string, long>(_absolute);
             }
         }
     }
