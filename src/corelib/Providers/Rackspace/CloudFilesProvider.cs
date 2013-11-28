@@ -1723,7 +1723,7 @@ namespace net.openstack.Providers.Rackspace
 
             // upload the manifest file
             Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriUtility.UriEncode(container, UriPart.AnyUrl, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.AnyUrl, Encoding.UTF8)));
-            string objectManifestValue = string.Format("{1}.seg", objectName);
+            string objectManifestValue = string.Format("{0}.seg", objectName);
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
