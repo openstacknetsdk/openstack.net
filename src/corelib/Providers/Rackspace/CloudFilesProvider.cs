@@ -1032,6 +1032,11 @@ namespace net.openstack.Providers.Rackspace
                     }
                 }
 
+                bool weakETag = etag.StartsWith("W/", StringComparison.Ordinal);
+                if (weakETag)
+                    etag = etag.Substring("W/".Length);
+
+                etag = etag.Trim('"');
                 using (var md5 = MD5.Create())
                 {
                     md5.ComputeHash(outputStream);
