@@ -40,7 +40,7 @@
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
             [JsonProperty("allowedDomain")]
             private AllowedDomainDescriptor _allowedDomain;
-#pragma warning restore 649 // Field 'fieldName' is never assigned to, and will always have its default value
+#pragma warning restore 649
 
             /// <summary>
             /// Initializes a new instance of the <see cref="AllowedDomain"/> class
