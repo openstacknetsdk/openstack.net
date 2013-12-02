@@ -1165,6 +1165,8 @@ namespace net.openstack.Core.Providers
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
+        /// <para><paramref name="verifyEtag"/> is <c>true</c>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
+        /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
         /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
@@ -1216,6 +1218,8 @@ namespace net.openstack.Core.Providers
         /// <exception cref="IOException">If an error occurs while writing to the destination file.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para><paramref name="verifyEtag"/> is <c>true</c>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
