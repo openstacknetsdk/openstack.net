@@ -1723,11 +1723,12 @@ namespace net.openstack.Providers.Rackspace
 
             // upload the manifest file
             Uri segmentUrlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriUtility.UriEncode(container, UriPart.AnyUrl, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.AnyUrl, Encoding.UTF8)));
+            string objectManifestValue = string.Format("{0}.seg", objectName);
 
             if (headers == null)
                 headers = new Dictionary<string, string>();
 
-            headers.Add(ObjectManifest, string.Format("{0}/{1}", UriUtility.UriEncode(container, UriPart.Any, Encoding.UTF8), UriUtility.UriEncode(objectName, UriPart.Any, Encoding.UTF8)));
+            headers.Add(ObjectManifest, string.Format("{0}/{1}", UriUtility.UriEncode(container, UriPart.Any, Encoding.UTF8), UriUtility.UriEncode(objectManifestValue, UriPart.Any, Encoding.UTF8)));
 
             RequestSettings requestSettings = BuildDefaultRequestSettings();
             requestSettings.ChunkRequest = true;
