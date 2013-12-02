@@ -73,6 +73,16 @@
     <MSHelpViewerSdkLinkType>Id</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
+    <PlugInConfigurations>
+      <PlugInConfig id="Version Builder" enabled="True" xmlns="">
+        <configuration>
+          <currentProject label=".NET Framework" version="4.0" ripOldApis="False" />
+          <versions>
+            <version label=".NET Framework" version="3.5" helpFileProject="Documentation.v3.5.shfbproj" />
+          </versions>
+        </configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
