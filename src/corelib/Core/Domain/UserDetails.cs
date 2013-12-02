@@ -12,6 +12,14 @@ namespace net.openstack.Core.Domain
     [JsonObject(MemberSerialization.OptIn)]
     public class UserDetails
     {
+#pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
+        /// <summary>
+        /// This is the backing field for the <see cref="DomainId"/> property.
+        /// </summary>
+        [JsonProperty("RAX-AUTH:domainId", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private ProjectId _domainId;
+#pragma warning restore 649
+
         /// <summary>
         /// Gets the unique identifier for the user.
         /// <note type="warning">The value of this property is not defined. Do not use.</note>
@@ -49,5 +57,22 @@ namespace net.openstack.Core.Domain
         /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/Sample_Request_Response-d1e64.html">Sample Authentication Request and Response (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
         [JsonProperty("RAX-AUTH:defaultRegion")]
         public string DefaultRegion { get; private set; }
+
+        /// <summary>
+        /// Gets the domain ID of the user.
+        /// </summary>
+        /// <remarks>
+        /// <note>
+        /// This property is a Rackspace-specific extension to the OpenStack Identity Service.
+        /// </note>
+        /// </remarks>
+        /// <preliminary/>
+        public ProjectId DomainId
+        {
+            get
+            {
+                return _domainId;
+            }
+        }
     }
 }

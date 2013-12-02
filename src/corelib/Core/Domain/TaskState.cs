@@ -29,6 +29,8 @@
         private static readonly TaskState _deleting = FromName("deleting");
         private static readonly TaskState _imageSnapshot = FromName("image_snapshot");
         private static readonly TaskState _imageBackup = FromName("image_backup");
+        private static readonly TaskState _imagePendingUpload = FromName("image_pending_upload");
+        private static readonly TaskState _imageUploading = FromName("image_uploading");
         private static readonly TaskState _migrating = FromName("migrating");
         private static readonly TaskState _networking = FromName("networking");
         private static readonly TaskState _pausing = FromName("pausing");
@@ -104,7 +106,9 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="TaskState"/> instance representing <placeholder>description</placeholder>.
+        /// Gets a <see cref="TaskState"/> instance indicating that a create image action has been
+        /// initiated and that the hypervisor is creating the snapshot. Any operations that would modify
+        /// data on the server's virtual hard disk should be avoided during this time.
         /// </summary>
         public static TaskState ImageSnapshot
         {
@@ -122,6 +126,33 @@
             get
             {
                 return _imageBackup;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="TaskState"/> instance indicating that the hypervisor has completed taking a
+        /// snapshot of the server. At this point, the hypervisor is packaging the snapshot and preparing
+        /// it for upload to the image store.
+        /// </summary>
+        /// <preliminary/>
+        public static TaskState ImagePendingUpload
+        {
+            get
+            {
+                return _imagePendingUpload;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="TaskState"/> instance indicating that the hypervisor is currently uploading
+        /// a packaged snapshot of the server to the image store.
+        /// </summary>
+        /// <preliminary/>
+        public static TaskState ImageUploading
+        {
+            get
+            {
+                return _imageUploading;
             }
         }
 

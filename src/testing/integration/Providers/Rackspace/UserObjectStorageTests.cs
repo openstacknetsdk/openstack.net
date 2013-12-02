@@ -1094,6 +1094,9 @@
 
             foreach (string containerSuffix in specialNames)
             {
+                if (containerSuffix.IndexOf('/') >= 0)
+                    continue;
+
                 string containerName = TestContainerPrefix + Path.GetRandomFileName() + containerSuffix;
 
                 ObjectStore containerResult = provider.CreateContainer(containerName);
