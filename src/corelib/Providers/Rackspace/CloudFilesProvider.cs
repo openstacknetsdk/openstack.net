@@ -1040,7 +1040,7 @@ namespace net.openstack.Providers.Rackspace
                     var hash = md5.Hash;
                     foreach (var b in hash)
                     {
-                        sbuilder.Append(b.ToString("x2").ToLower());
+                        sbuilder.Append(b.ToString("x2"));
                     }
                     var convertedMd5 = sbuilder.ToString();
                     if (!string.Equals(convertedMd5, etag, StringComparison.OrdinalIgnoreCase))
