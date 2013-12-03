@@ -1712,7 +1712,7 @@
 
                 Assert.Fail("Expected an exception (object should not exist)");
             }
-            catch (ResponseException)
+            catch (ItemNotFoundException)
             {
             }
 
@@ -1757,7 +1757,7 @@
 
                 Assert.Fail("Expected an exception (object should not exist)");
             }
-            catch (ResponseException)
+            catch (ItemNotFoundException)
             {
             }
 
