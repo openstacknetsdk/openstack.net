@@ -1018,6 +1018,25 @@ namespace net.openstack.Providers.Rackspace
                 outputStream.Flush(); // flush the contents of the stream to the output device
                 outputStream.Position = 0;  // reset the head of the stream to the beginning
 
+                string objectManifest;
+                if (response.TryGetHeader(ObjectManifest, out objectManifest) && !string.IsNullOrEmpty(objectManifest))
+                {
+                    throw new NotSupportedException("ETag validation for dynamic large objects is not yet supported.");
+                }
+                else
+                {
+                    string staticLargeObject;
+                    if (response.TryGetHeader(StaticLargeObject, out staticLargeObject) && string.Equals(bool.TrueString, staticLargeObject, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new NotSupportedException("ETag validation for static large objects is not yet supported.");
+                    }
+                }
+
+                bool weakETag = etag.StartsWith("W/", StringComparison.Ordinal);
+                if (weakETag)
+                    etag = etag.Substring("W/".Length);
+
+                etag = etag.Trim('"');
                 using (var md5 = MD5.Create())
                 {
                     md5.ComputeHash(outputStream);
@@ -1026,7 +1045,7 @@ namespace net.openstack.Providers.Rackspace
                     var hash = md5.Hash;
                     foreach (var b in hash)
                     {
-                        sbuilder.Append(b.ToString("x2").ToLower());
+                        sbuilder.Append(b.ToString("x2"));
                     }
                     var convertedMd5 = sbuilder.ToString();
                     if (!string.Equals(convertedMd5, etag, StringComparison.OrdinalIgnoreCase))
@@ -2097,10 +2116,18 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// The X-Object-Manifest header, which specifies the container and prefix for the segments of a
+        /// dynamic large object.
+        /// </summary>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/dynamic-large-object-creation.html">Dynamic Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        public const string ObjectManifest = "x-object-manifest";
+
+        /// <summary>
+        /// The X-Static-Large-Object header, which specifies whether an object is a manifest for a static
         /// large object.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
-        public const string ObjectManifest = "x-object-manifest";
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-large-objects.html">Static Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <preliminary/>
+        public const string StaticLargeObject = "x-static-large-object";
 
         #endregion
 

@@ -281,7 +281,7 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData1, actualData);
 
             /*
@@ -293,7 +293,7 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData2, actualData);
 
             /*
@@ -302,7 +302,7 @@
 
             provider.DeleteObject(containerName, objectName);
 
-            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData1, actualData);
 
             /*
@@ -1152,7 +1152,7 @@
                 File.Delete(tempFilePath);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, Path.GetFileName(tempFilePath), Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, Path.GetFileName(tempFilePath), Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
@@ -1190,7 +1190,7 @@
                 File.Delete(tempFilePath);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
@@ -1223,7 +1223,7 @@
                 Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
@@ -1277,6 +1277,56 @@
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
         [DeploymentItem("DarkKnightRises.jpg")]
+        public void TestVerifyLargeObjectETag()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            ((CloudFilesProvider)provider).LargeFileBatchThreshold = 81920;
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string sourceFileName = "DarkKnightRises.jpg";
+            byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+
+            ObjectStore containerResult = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, containerResult);
+
+            ProgressMonitor progressMonitor = new ProgressMonitor(content.Length);
+            provider.CreateObjectFromFile(containerName, sourceFileName, progressUpdated: progressMonitor.Updated);
+            Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
+
+            try
+            {
+                using (MemoryStream downloadStream = new MemoryStream())
+                {
+                    provider.GetObject(containerName, sourceFileName, downloadStream, verifyEtag: true);
+
+                    Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
+
+                    downloadStream.Position = 0;
+                    byte[] actualData = new byte[downloadStream.Length];
+                    downloadStream.Read(actualData, 0, actualData.Length);
+                    Assert.AreEqual(content.Length, actualData.Length);
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] contentMd5 = md5.ComputeHash(content);
+                        byte[] actualMd5 = md5.ComputeHash(actualData);
+                        Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                    }
+                }
+
+                /* Cleanup
+                 */
+                provider.DeleteContainer(containerName, deleteObjects: true);
+            }
+            catch (NotSupportedException ex)
+            {
+                Assert.Inconclusive("The provider does not support verifying ETags for large objects.");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
         public void TestExtractArchiveTar()
         {
             CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
@@ -1305,7 +1355,7 @@
 
             using (MemoryStream downloadStream = new MemoryStream())
             {
-                provider.GetObject(containerName, sourceFileName, downloadStream);
+                provider.GetObject(containerName, sourceFileName, downloadStream, verifyEtag: true);
                 Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
 
                 downloadStream.Position = 0;
@@ -1362,7 +1412,7 @@
 
             using (MemoryStream downloadStream = new MemoryStream())
             {
-                provider.GetObject(containerName, sourceFileName, downloadStream);
+                provider.GetObject(containerName, sourceFileName, downloadStream, verifyEtag: true);
                 Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
 
                 downloadStream.Position = 0;
@@ -1418,7 +1468,7 @@
 
             using (MemoryStream downloadStream = new MemoryStream())
             {
-                provider.GetObject(containerName, sourceFileName, downloadStream);
+                provider.GetObject(containerName, sourceFileName, downloadStream, verifyEtag: true);
                 Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
 
                 downloadStream.Position = 0;
@@ -1477,7 +1527,7 @@
 
             using (MemoryStream downloadStream = new MemoryStream())
             {
-                provider.GetObject(containerName, sourceFileName, downloadStream);
+                provider.GetObject(containerName, sourceFileName, downloadStream, verifyEtag: true);
                 Assert.AreEqual(content.Length, GetContainerObjectSize(provider, containerName, sourceFileName));
 
                 downloadStream.Position = 0;
@@ -1551,12 +1601,12 @@
 
             try
             {
-                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName);
+                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, verifyEtag: true);
                 Assert.AreEqual(fileData, File.ReadAllText(Path.Combine(Path.GetTempPath(), objectName), Encoding.UTF8));
 
                 // it's ok to download the same file twice
                 ProgressMonitor progressMonitor = new ProgressMonitor(GetContainerObjectSize(provider, containerName, objectName));
-                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, progressUpdated: progressMonitor.Updated);
+                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, progressUpdated: progressMonitor.Updated, verifyEtag: true);
                 Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
             }
             finally
@@ -1567,12 +1617,12 @@
             string tempFileName = Path.GetRandomFileName();
             try
             {
-                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, tempFileName);
+                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, tempFileName, verifyEtag: true);
                 Assert.AreEqual(fileData, File.ReadAllText(Path.Combine(Path.GetTempPath(), tempFileName), Encoding.UTF8));
 
                 // it's ok to download the same file twice
                 ProgressMonitor progressMonitor = new ProgressMonitor(GetContainerObjectSize(provider, containerName, objectName));
-                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, progressUpdated: progressMonitor.Updated);
+                provider.GetObjectSaveToFile(containerName, Path.GetTempPath(), objectName, progressUpdated: progressMonitor.Updated, verifyEtag: true);
                 Assert.IsTrue(progressMonitor.IsComplete, "Failed to notify progress monitor callback of status update.");
             }
             finally
@@ -1606,17 +1656,17 @@
                 provider.CreateObject(containerName, uploadStream, objectName, contentType);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             provider.CopyObject(containerName, objectName, containerName, copiedName);
 
             // make sure the item is available at the copied location
-            actualData = ReadAllObjectText(provider, containerName, copiedName, Encoding.UTF8);
+            actualData = ReadAllObjectText(provider, containerName, copiedName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             // make sure the original object still exists
-            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             // make sure the content type was not changed by the copy operation
@@ -1648,7 +1698,7 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             provider.MoveObject(containerName, objectName, containerName, movedName);
@@ -1657,16 +1707,16 @@
             {
                 using (MemoryStream downloadStream = new MemoryStream())
                 {
-                    provider.GetObject(containerName, objectName, downloadStream);
+                    provider.GetObject(containerName, objectName, downloadStream, verifyEtag: true);
                 }
 
                 Assert.Fail("Expected an exception (object should not exist)");
             }
-            catch (ResponseException)
+            catch (ItemNotFoundException)
             {
             }
 
-            actualData = ReadAllObjectText(provider, containerName, movedName, Encoding.UTF8);
+            actualData = ReadAllObjectText(provider, containerName, movedName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             /* Cleanup
@@ -1693,7 +1743,7 @@
                 provider.CreateObject(containerName, uploadStream, objectName);
             }
 
-            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8);
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
             Assert.AreEqual(fileData, actualData);
 
             provider.DeleteObject(containerName, objectName);
@@ -1702,12 +1752,12 @@
             {
                 using (MemoryStream downloadStream = new MemoryStream())
                 {
-                    provider.GetObject(containerName, objectName, downloadStream);
+                    provider.GetObject(containerName, objectName, downloadStream, verifyEtag: true);
                 }
 
                 Assert.Fail("Expected an exception (object should not exist)");
             }
-            catch (ResponseException)
+            catch (ItemNotFoundException)
             {
             }
 
