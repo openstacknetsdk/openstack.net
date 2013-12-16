@@ -58,6 +58,13 @@
         public const string LoadBalancers = "LoadBalancers";
 
         /// <summary>
+        /// Monitoring service tests.
+        /// </summary>
+        /// <seealso cref="IMonitoringProvider"/>
+        /// <preliminary/>
+        public const string Monitoring = "Monitoring";
+
+        /// <summary>
         /// Queueing service tests.
         /// </summary>
         /// <seealso cref="IQueueingService"/>

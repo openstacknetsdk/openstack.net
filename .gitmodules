@@ -31,6 +31,9 @@
 [submodule "Reference/Rackspace/cloud-servers"]
 	path = Reference/Rackspace/cloud-servers
 	url = git@github.rackspace.com:IX/cloud-servers.git
+[submodule "Reference/Rackspace/ele"]
+	path = Reference/Rackspace/ele
+	url = git@github.com:racker/ele.git
 [submodule "Reference/Rackspace/reddwarf_lite-integration"]
 	path = Reference/Rackspace/reddwarf_lite-integration
 	url = git@github.com:masthalter/reddwarf_lite-integration.git
