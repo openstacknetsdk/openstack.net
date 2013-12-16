@@ -152,6 +152,7 @@
     <Compile Include="Core\Synchronous\DatabaseServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\DnsServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\ClaimExtensions.cs" />
+    <Compile Include="Core\Synchronous\LoadBalancerServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\MonitoringServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
