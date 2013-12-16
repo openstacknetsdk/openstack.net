@@ -1077,7 +1077,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ArgumentException">
         /// If <paramref name="serverId"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains any values with null or empty keys.</para>
+        /// <para>If <paramref name="metadata"/> contains any values with empty keys.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1112,7 +1112,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ArgumentException">
         /// If <paramref name="serverId"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains any values with null or empty keys.</para>
+        /// <para>If <paramref name="metadata"/> contains any values with empty keys.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1266,7 +1266,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ArgumentException">
         /// If <paramref name="imageId"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains any values with null or empty keys.</para>
+        /// <para>If <paramref name="metadata"/> contains any values with empty keys.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1301,7 +1301,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ArgumentException">
         /// If <paramref name="imageId"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains any values with null or empty keys.</para>
+        /// <para>If <paramref name="metadata"/> contains any values with empty keys.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.

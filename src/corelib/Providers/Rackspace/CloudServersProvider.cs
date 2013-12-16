@@ -1184,7 +1184,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(serverId))
                 throw new ArgumentException("serverId cannot be empty");
             if (metadata.Any(i => string.IsNullOrEmpty(i.Key)))
-                throw new ArgumentException("metadata cannot contain any values with null or empty keys");
+                throw new ArgumentException("metadata cannot contain any values with empty keys");
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
@@ -1207,7 +1207,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(serverId))
                 throw new ArgumentException("serverId cannot be empty");
             if (metadata.Any(i => string.IsNullOrEmpty(i.Key)))
-                throw new ArgumentException("metadata cannot contain any values with null or empty keys");
+                throw new ArgumentException("metadata cannot contain any values with empty keys");
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/servers/{1}/metadata", GetServiceEndpoint(identity, region), serverId));
@@ -1324,7 +1324,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(imageId))
                 throw new ArgumentException("imageId cannot be empty");
             if (metadata.Any(i => string.IsNullOrEmpty(i.Key)))
-                throw new ArgumentException("metadata cannot contain any values with null or empty keys");
+                throw new ArgumentException("metadata cannot contain any values with empty keys");
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));
@@ -1347,7 +1347,7 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(imageId))
                 throw new ArgumentException("imageId cannot be empty");
             if (metadata.Any(i => string.IsNullOrEmpty(i.Key)))
-                throw new ArgumentException("metadata cannot contain any values with null or empty keys");
+                throw new ArgumentException("metadata cannot contain any values with empty keys");
             CheckIdentity(identity);
 
             var urlPath = new Uri(string.Format("{0}/images/{1}/metadata", GetServiceEndpoint(identity, region), imageId));

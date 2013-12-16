@@ -148,7 +148,7 @@ namespace net.openstack.Core.Domain
         /// <param name="metadata">The metadata to associate with the image.</param>
         /// <returns><c>true</c> if the metadata for the image was successfully updated; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with null or empty keys.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.SetImageMetadata"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Create_or_Replace_Metadata-d1e5358.html">Set Metadata (OpenStack Compute API v2 and Extensions Reference)</seealso>
@@ -169,7 +169,7 @@ namespace net.openstack.Core.Domain
         /// <param name="metadata">The image metadata to update.</param>
         /// <returns><c>true</c> if the metadata for the image was successfully updated; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with null or empty keys.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.UpdateImageMetadata"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Update_Metadata-d1e5208.html">Update Metadata (OpenStack Compute API v2 and Extensions Reference)</seealso>
@@ -217,7 +217,7 @@ namespace net.openstack.Core.Domain
         /// <param name="metadata">The image metadata to update.</param>
         /// <returns><c>true</c> if the metadata for the image was successfully updated; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with null or empty keys.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.UpdateImageMetadata"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Update_Metadata-d1e5208.html">Update Metadata (OpenStack Compute API v2 and Extensions Reference)</seealso>
@@ -254,7 +254,7 @@ namespace net.openstack.Core.Domain
             foreach (var item in metadata)
             {
                 if (string.IsNullOrEmpty(item.Key))
-                    throw new ArgumentException("metadata cannot contain any null or empty keys");
+                    throw new ArgumentException("metadata cannot contain any empty keys");
 
                 success &= DeleteMetadataItem(item.Key);
             }

@@ -819,7 +819,7 @@ namespace net.openstack.Providers.Rackspace
             foreach (KeyValuePair<string, string> m in metadata)
             {
                 if (string.IsNullOrEmpty(m.Key))
-                    throw new ArgumentException("metadata cannot contain any null or empty keys");
+                    throw new ArgumentException("metadata cannot contain any empty keys");
 
                 headers.Add(ObjectMetaDataPrefix + m.Key, EncodeUnicodeValue(m.Value));
             }
@@ -1248,7 +1248,7 @@ namespace net.openstack.Providers.Rackspace
         /// If <paramref name="items"/> is <c>null</c>.
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="items"/> contains any values with null or empty keys or values.
+        /// If <paramref name="items"/> contains any values with empty keys or values.
         /// <para>-or-</para>
         /// <para>If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.</para>
         /// </exception>
