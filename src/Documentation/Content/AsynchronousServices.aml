@@ -37,7 +37,7 @@
           </listItem>
           <listItem>
             <para>
-              Exceptions thrown during the asynchronous exceution of the task are wrapped in an
+              Exceptions thrown during the asynchronous execution of the task are wrapped in an
               <codeEntityReference>T:System.AggregateException</codeEntityReference> object and returned by the
               <codeEntityReference>P:System.Threading.Tasks.Task.Exception</codeEntityReference> property.
               Exceptions thrown in this manner must be handled either by a task continuation that checks the
