@@ -17,7 +17,7 @@
         /// Gets the generated password for the new user.
         /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
         /// </summary>
-        /// <value>The generated password for the new user, or <c>null</c> if the Add User request included a password.</value>
+        /// <value>The generated password for the new user, or <see langword="null"/> if the Add User request included a password.</value>
         [JsonProperty("OS-KSADM:password")]
         public string Password { get; internal set; }
 
@@ -57,7 +57,7 @@
         /// <param name="username">The username of the new user (see <see cref="Username"/>).</param>
         /// <param name="email">The email address of the new user (see <see cref="Email"/>).</param>
         /// <param name="password">The password for the new user (see <see cref="Password"/>).</param>
-        /// <param name="enabled"><c>true</c> if the user is initially enabled; otherwise, <c>false</c> (see <see cref="Enabled"/>).</param>
+        /// <param name="enabled"><see langword="true"/> if the user is initially enabled; otherwise, <see langword="false"/> (see <see cref="Enabled"/>).</param>
         public NewUser(string username, string email, string password = null, bool enabled = true)
         {
             Username = username;

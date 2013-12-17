@@ -23,7 +23,7 @@
         /// specified <paramref name="role"/>.
         /// </summary>
         /// <param name="role">The role.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="role"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="role"/> is <see langword="null"/>.</exception>
         public AddRoleRequest(Role role)
         {
             if (role == null)

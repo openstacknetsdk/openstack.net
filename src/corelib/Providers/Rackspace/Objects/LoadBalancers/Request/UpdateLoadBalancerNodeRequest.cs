@@ -19,7 +19,7 @@
         /// with the specified configuration.
         /// </summary>
         /// <param name="nodeUpdate">The updated configuration for the load balancer node.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="nodeUpdate"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="nodeUpdate"/> is <see langword="null"/>.</exception>
         public UpdateLoadBalancerNodeRequest(NodeUpdate nodeUpdate)
         {
             if (nodeUpdate == null)

@@ -38,11 +38,11 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <param name="username">The username to use for authentication.</param>
         /// <param name="password">The password to use for authentication.</param>
         /// <param name="apiKey">The API key to use for authentication.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="username"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="username"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="username"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="password"/> and <paramref name="apiKey"/> are both <c>null</c> or empty.</para>
+        /// <para>If <paramref name="password"/> and <paramref name="apiKey"/> are both <see langword="null"/> or empty.</para>
         /// </exception>
         public Credentials(string username, string password, string apiKey)
         {

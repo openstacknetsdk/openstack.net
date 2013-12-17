@@ -28,25 +28,25 @@ namespace net.openstack.Core.Caching
         /// 
         /// <list type="bullet">
         /// <item>The cache does not contain any value associated with <paramref name="key"/>.</item>
-        /// <item><paramref name="forceCacheRefresh"/> is <c>true</c>.</item>
+        /// <item><paramref name="forceCacheRefresh"/> is <see langword="true"/>.</item>
         /// <item>The previously cached <see cref="UserAccess"/> for <paramref name="key"/> has expired
         /// (see <see cref="IdentityToken.IsExpired"/>).</item>
         /// </list>
         ///
-        /// <para>If any of the above conditions is met and <paramref name="refreshCallback"/> is <c>null</c>,
+        /// <para>If any of the above conditions is met and <paramref name="refreshCallback"/> is <see langword="null"/>,
         /// the previously cached value for <paramref name="key"/>, if any, is removed from the cache
-        /// and the method returns <c>null</c>.</para>
+        /// and the method returns <see langword="null"/>.</para>
         /// </remarks>
         /// <param name="key">The key.</param>
         /// <param name="refreshCallback">A function which returns a new value for the specified <paramref name="key"/>,
-        /// or <c>null</c> if no update function available (see remarks). This function may perform a synchronous
+        /// or <see langword="null"/> if no update function available (see remarks). This function may perform a synchronous
         /// authentication to an <see cref="IIdentityProvider"/>.</param>
-        /// <param name="forceCacheRefresh">If <c>true</c>, the value associated with <paramref name="key"/> will be always be refreshed by calling <paramref name="refreshCallback"/>, even if a value is already cached.</param>
+        /// <param name="forceCacheRefresh">If <see langword="true"/>, the value associated with <paramref name="key"/> will be always be refreshed by calling <paramref name="refreshCallback"/>, even if a value is already cached.</param>
         /// <returns>
         /// The cached <see cref="UserAccess"/> associated with the specified <paramref name="key"/>.
-        /// If no cached value is available (see remarks), the method returns <c>null</c>.
+        /// If no cached value is available (see remarks), the method returns <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
         public UserAccess Get(string key, Func<UserAccess> refreshCallback, bool forceCacheRefresh = false)
         {
             UserAccess userAccess;

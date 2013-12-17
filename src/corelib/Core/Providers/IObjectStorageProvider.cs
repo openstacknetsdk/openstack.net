@@ -20,11 +20,11 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Gets a list of containers stored in the account.
         /// </summary>
-        /// <param name="limit">The maximum number of containers to return. If the value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="marker">When specified, only containers with names greater than <paramref name="marker"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
+        /// <param name="limit">The maximum number of containers to return. If the value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="marker">When specified, only containers with names greater than <paramref name="marker"/> are returned. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <see langword="null"/>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of <see cref="Container"/> objects containing the details of the specified containers.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
@@ -33,12 +33,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_listcontainers.html">List Containers (OpenStack Object Storage API v1 Reference)</seealso>
@@ -50,7 +50,7 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the container (see <see cref="GetContainerHeader"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>
         /// This method returns one of the following <see cref="ObjectStore"/> values.
@@ -60,7 +60,7 @@ namespace net.openstack.Core.Providers
         /// <item><see cref="ObjectStore.ContainerExists"/> - if the container was not created because it already exists.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
         /// <para>-or-</para>
@@ -72,12 +72,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
@@ -91,11 +91,11 @@ namespace net.openstack.Core.Providers
         /// a mechanism to combine the deletion of container objects with the deletion of the container itself.
         /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="deleteObjects">When <c>true</c>, all objects in the specified container are deleted before deleting the container.</param>
+        /// <param name="deleteObjects">When <see langword="true"/>, all objects in the specified container are deleted before deleting the container.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -103,14 +103,14 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="ContainerNotEmptyException">If the container could not be deleted because it was not empty and <paramref name="deleteObjects"/> was <c>false</c>.</exception>
+        /// <exception cref="ContainerNotEmptyException">If the container could not be deleted because it was not empty and <paramref name="deleteObjects"/> was <see langword="false"/>.</exception>
         /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container.html">Delete Container (OpenStack Object Storage API v1 Reference)</seealso>
@@ -128,10 +128,10 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of non-metadata HTTP headers returned with the container.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -139,12 +139,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -165,10 +165,10 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of metadata associated with the container.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -176,12 +176,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -199,7 +199,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="ContainerCDN"/> object describing the CDN properties of the container.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -208,9 +208,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Details-d1e2566.html">View CDN Container Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -224,10 +224,10 @@ namespace net.openstack.Core.Providers
         /// This method is a Rackspace-specific extension to the OpenStack Object Storage Service.
         /// </note>
         /// </remarks>
-        /// <param name="limit">The maximum number of containers to return. If the value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="markerId">When specified, only containers with names greater than <paramref name="markerId"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
-        /// <param name="cdnEnabled">If set to <c>true</c>, the result is filtered to only include CDN-enabled containers.</param>
+        /// <param name="limit">The maximum number of containers to return. If the value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="markerId">When specified, only containers with names greater than <paramref name="markerId"/> are returned. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only containers with names less than <paramref name="markerEnd"/> are returned. If the value is <see langword="null"/>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
+        /// <param name="cdnEnabled">If set to <see langword="true"/>, the result is filtered to only include CDN-enabled containers.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of <see cref="ContainerCDN"/> objects describing the CDN properties of the specified containers.</returns>
@@ -238,9 +238,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Containers-d1e2414.html">List CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -282,7 +282,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is less than 0.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
@@ -293,9 +293,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -316,12 +316,12 @@ namespace net.openstack.Core.Providers
         /// </note>
         /// </remarks>
         /// <param name="container">The container name.</param>
-        /// <param name="logRetention"><c>true</c> to enable log retention on the container; otherwise, <c>false</c>.</param>
+        /// <param name="logRetention"><see langword="true"/> to enable log retention on the container; otherwise, <see langword="false"/>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -330,9 +330,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -353,11 +353,11 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="container">The container.</param>
         /// <param name="timeToLive">The time (in seconds) to cache objects in the CDN. Each time the object is accessed after the TTL expires, the CDN re-fetches and caches the object for the TTL period.</param>
-        /// <param name="logRetention"><c>true</c> to enable log retention on the container; otherwise, <c>false</c>.</param>
+        /// <param name="logRetention"><see langword="true"/> to enable log retention on the container; otherwise, <see langword="false"/>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is less than 0.</exception>
@@ -368,9 +368,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -393,7 +393,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of HTTP headers included in the response to the REST request.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -402,9 +402,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -416,19 +416,19 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <remarks>
         /// Each key/value pair in <paramref name="metadata"/> represents an updated metadata item.
-        /// If the value is <c>null</c> or empty, then the metadata item represented by the key is
+        /// If the value is <see langword="null"/> or empty, then the metadata item represented by the key is
         /// removed if it exists. If a metadata item already exists for the key, its value is updated.
         /// Otherwise, a new metadata item is added for the key/value pair.
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="metadata">The account metadata to update.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -437,7 +437,7 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> contains a key or value with invalid characters.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains a key that is <c>null</c> or empty.</para>
+        /// <para>If <paramref name="metadata"/> contains a key that is <see langword="null"/> or empty.</para>
         /// </exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -447,12 +447,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">Create or Update Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -464,17 +464,17 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="keys">The metadata items to delete.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="keys"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="keys"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="keys"/> contains any <c>null</c> or empty values.</para>
+        /// <para>If <paramref name="keys"/> contains any <see langword="null"/> or empty values.</para>
         /// </exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -484,12 +484,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -501,12 +501,12 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="key">The metadata item to delete.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="key"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="key"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -521,12 +521,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -561,9 +561,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -577,18 +577,18 @@ namespace net.openstack.Core.Providers
         /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
         /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
         /// <param name="css">The style sheet to use for file listings, such as <fictionalUri>lists.css</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebListingsCSS"/> header.</param>
-        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="listing"><see langword="true"/> to allow users to browse a list of files in the container when no index file is available; otherwise <see langword="false"/>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="index"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="error"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="css"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="css"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -612,12 +612,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -630,16 +630,16 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
         /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
-        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="listing"><see langword="true"/> to allow users to browse a list of files in the container when no index file is available; otherwise <see langword="false"/>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="index"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="error"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -659,12 +659,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -676,14 +676,14 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="css">The style sheet to use for file listings, such as <fictionalUri>lists.css</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebListingsCSS"/> header.</param>
-        /// <param name="listing"><c>true</c> to allow users to browse a list of files in the container when no index file is available; otherwise <c>false</c>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
+        /// <param name="listing"><see langword="true"/> to allow users to browse a list of files in the container when no index file is available; otherwise <see langword="false"/>. This is the value for the <see cref="CloudFilesProvider.WebListings"/> header.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="css"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="css"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -697,12 +697,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -716,14 +716,14 @@ namespace net.openstack.Core.Providers
         /// <param name="index">The index file to serve when users browse the container, such as <fictionalUri>index.html</fictionalUri>. This is the value for the <see cref="CloudFilesProvider.WebIndex"/> header.</param>
         /// <param name="error">The suffix for the file to serve when an error occurs. If the value is <fictionalUri>error.html</fictionalUri> and a 404 (not found) error occurs, the file <fictionalUri>400error.html</fictionalUri> will be served to the user. This is the value for the <see cref="CloudFilesProvider.WebError"/> header.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="index"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="index"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="error"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="error"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -743,12 +743,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -760,9 +760,9 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -770,12 +770,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -799,13 +799,13 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of non-metadata headers associated with the specified object.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -819,12 +819,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -846,13 +846,13 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of metadata associated with the object.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -866,12 +866,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -893,14 +893,14 @@ namespace net.openstack.Core.Providers
         /// <param name="objectName">The object name.</param>
         /// <param name="metadata">The complete metadata to associate with the object.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -916,12 +916,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -934,21 +934,21 @@ namespace net.openstack.Core.Providers
         /// <param name="objectName">The object name.</param>
         /// <param name="keys">The metadata items to delete.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="keys"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="keys"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
         /// <para>-or-</para>
         /// <para>If <paramref name="objectName"/> is empty.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="keys"/> contains any <c>null</c> or empty values.</para>
+        /// <para>If <paramref name="keys"/> contains any <see langword="null"/> or empty values.</para>
         /// </exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
@@ -957,12 +957,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -975,14 +975,14 @@ namespace net.openstack.Core.Providers
         /// <param name="objectName">The object name.</param>
         /// <param name="key">The metadata item to delete.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="key"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="key"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -998,12 +998,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1013,15 +1013,15 @@ namespace net.openstack.Core.Providers
         /// Lists the objects in a container.
         /// </summary>
         /// <param name="container">The container name.</param>
-        /// <param name="limit">The maximum number of objects to return. If the value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="marker">When specified, only objects with names greater than <paramref name="marker"/> are returned. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="markerEnd">When specified, only objects with names less than <paramref name="markerEnd"/> are returned. If the value is <c>null</c>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
+        /// <param name="limit">The maximum number of objects to return. If the value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="marker">When specified, only objects with names greater than <paramref name="marker"/> are returned. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="markerEnd">When specified, only objects with names less than <paramref name="markerEnd"/> are returned. If the value is <see langword="null"/>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
         /// <param name="prefix">Prefix of object names to include</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of <see cref="ContainerObject"/> objects containing the details of the specified objects.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
@@ -1030,12 +1030,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/list-objects.html">List Objects (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1046,18 +1046,18 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\image_name.jpeg</localUri></param>
-        /// <param name="objectName">The destination object name. If <c>null</c>, the filename portion of <paramref name="filePath"/> will be used.</param>
-        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="objectName">The destination object name. If <see langword="null"/>, the filename portion of <paramref name="filePath"/> will be used.</param>
+        /// <param name="contentType">The content type of the created object. If the value is <see langword="null"/> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="filePath"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="filePath"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1075,12 +1075,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1092,19 +1092,19 @@ namespace net.openstack.Core.Providers
         /// <param name="container">The container name.</param>
         /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
         /// <param name="objectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="contentType">The content type of the created object. If the value is <see langword="null"/> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="stream"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="stream"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1121,12 +1121,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1141,16 +1141,16 @@ namespace net.openstack.Core.Providers
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="verifyEtag">If <c>true</c> and the object includes an ETag, the retrieved data will be verified before returning.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="verifyEtag">If <see langword="true"/> and the object includes an ETag, the retrieved data will be verified before returning.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="outputStream"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="outputStream"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1165,18 +1165,18 @@ namespace net.openstack.Core.Providers
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
-        /// <para><paramref name="verifyEtag"/> is <c>true</c>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
+        /// <para><paramref name="verifyEtag"/> is <see langword="true"/>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <c>true</c>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
+        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
@@ -1191,16 +1191,16 @@ namespace net.openstack.Core.Providers
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="verifyEtag">If <c>true</c> and the object includes an ETag, the retrieved data will be verified before returning.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="verifyEtag">If <see langword="true"/> and the object includes an ETag, the retrieved data will be verified before returning.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="saveDirectory"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="saveDirectory"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1219,18 +1219,18 @@ namespace net.openstack.Core.Providers
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
-        /// <para><paramref name="verifyEtag"/> is <c>true</c>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
+        /// <para><paramref name="verifyEtag"/> is <see langword="true"/>, the object is a static or dynamic large object, and the provider implementation does not support verifying ETags for large objects.</para>
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <c>true</c>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
+        /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
@@ -1242,19 +1242,19 @@ namespace net.openstack.Core.Providers
         /// <param name="sourceObjectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="destinationContentType">The content type of the destination object. If the value is <see langword="null"/> or empty, the content type of the created object is unspecified.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the created object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="sourceContainer"/> is <c>null</c>.
+        /// If <paramref name="sourceContainer"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="sourceObjectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="sourceObjectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="destinationContainer"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="destinationContainer"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="destinationObjectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="destinationObjectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="sourceContainer"/> is empty.
@@ -1282,12 +1282,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1310,19 +1310,19 @@ namespace net.openstack.Core.Providers
         /// <param name="sourceObjectName">Name of the source object.<remarks>Example image_name.jpeg</remarks></param>
         /// <param name="destinationContainer">The destination container name.</param>
         /// <param name="destinationObjectName">Name of the destination object.<remarks>Example image_name.jpeg</remarks></param>
-        /// <param name="destinationContentType">The content type of the destination object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="destinationContentType">The content type of the destination object. If the value is <see langword="null"/> or empty, the content type of the created object is unspecified.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="sourceContainer"/> is <c>null</c>.
+        /// If <paramref name="sourceContainer"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="sourceObjectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="sourceObjectName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="destinationContainer"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="destinationContainer"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="destinationObjectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="destinationObjectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="sourceContainer"/> is empty.
@@ -1350,12 +1350,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1378,12 +1378,12 @@ namespace net.openstack.Core.Providers
         /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="deleteSegments">Indicates whether the file's segments should be deleted if any exist.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1399,12 +1399,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1416,13 +1416,13 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="emails">The email addresses to notify once the object has been purged. If this value is <c>null</c>, no email notifications are sent.</param>
+        /// <param name="emails">The email addresses to notify once the object has been purged. If this value is <see langword="null"/>, no email notifications are sent.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1439,9 +1439,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -1463,7 +1463,7 @@ namespace net.openstack.Core.Providers
         /// </note>
         /// </remarks>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of non-metadata headers associated with the account.</returns>
         /// <exception cref="NotSupportedException">
@@ -1471,12 +1471,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1496,7 +1496,7 @@ namespace net.openstack.Core.Providers
         /// </note>
         /// </remarks>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of metadata associated with the account.</returns>
         /// <exception cref="NotSupportedException">
@@ -1504,12 +1504,12 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1521,21 +1521,21 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <remarks>
         /// Each key/value pair in <paramref name="metadata"/> represents an updated metadata item.
-        /// If the value is <c>null</c> or empty, then the metadata item represented by the key is
+        /// If the value is <see langword="null"/> or empty, then the metadata item represented by the key is
         /// removed if it exists. If a metadata item already exists for the key, its value is updated.
         /// Otherwise, a new metadata item is added for the key/value pair.
         /// </remarks>
         /// <param name="metadata">The account metadata to update.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="metadata"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> contains a key or value with invalid characters.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> contains a key that is <c>null</c> or empty.</para>
+        /// <para>If <paramref name="metadata"/> contains a key that is <see langword="null"/> or empty.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1545,9 +1545,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>

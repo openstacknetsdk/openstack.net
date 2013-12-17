@@ -84,7 +84,7 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <value>
-        /// The size of the data disks for the flavor, in GB. This property returns <c>null</c>
+        /// The size of the data disks for the flavor, in GB. This property returns <see langword="null"/>
         /// if the JSON response from the server does not include the underlying property.
         /// </value>
         /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-gettingstarted/content/nova_list_flavors.html">List Flavors with the nova Client (Rackspace Next Generation Cloud Servers Getting Started - API v2)</seealso>

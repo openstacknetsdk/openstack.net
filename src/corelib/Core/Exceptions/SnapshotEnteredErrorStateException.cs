@@ -32,7 +32,7 @@
         /// specified snapshot state.
         /// </summary>
         /// <param name="status">The erroneous snapshot state.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <see langword="null"/>.</exception>
         public SnapshotEnteredErrorStateException(SnapshotState status)
             : base(string.Format("The snapshot entered an error state: '{0}'", status))
         {

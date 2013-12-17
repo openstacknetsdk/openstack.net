@@ -26,7 +26,7 @@
         /// </summary>
         /// <param name="code">The status code.</param>
         /// <param name="description">The description of the status.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="description"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="description"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="description"/> is empty.</exception>
         public Status(int code, string description)
         {

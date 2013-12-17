@@ -42,7 +42,7 @@ namespace net.openstack.Core
 		/// </summary>
 		/// <param name="other">The object to compare with the current instance.</param>
 		/// <param name="comparer">An object that determines whether the current instance and <paramref name="other"/> are equal.</param>
-		/// <returns><c>true</c> if the two objects are equal; otherwise, <c>false</c>.</returns>
+		/// <returns><see langword="true"/> if the two objects are equal; otherwise, <see langword="false"/>.</returns>
 		bool Equals (object other, IEqualityComparer comparer);
 
 		/// <summary>

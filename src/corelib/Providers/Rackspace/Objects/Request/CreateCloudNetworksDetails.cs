@@ -31,9 +31,9 @@
         /// <param name="cidr">The IP block from which to allocate the network. For example, <c>172.16.0.0/24</c> or <c>2001:DB8::/64</c>.</param>
         /// <param name="label">The name of the new network. For example, <c>my_new_network</c>.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="cidr"/> is <c>null</c>.
+        /// If <paramref name="cidr"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="label"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="label"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="cidr"/> is empty.

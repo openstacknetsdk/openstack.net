@@ -54,7 +54,7 @@
         /// Gets the number of files created by the Extract Archive operation.
         /// </summary>
         /// <value>
-        /// The number of files created by the Extract Archive operation, or <c>null</c> if
+        /// The number of files created by the Extract Archive operation, or <see langword="null"/> if
         /// the JSON response from the server did not include the underlying property.
         /// </value>
         public int? CreatedFiles
@@ -69,7 +69,7 @@
         /// Gets the response status for the Extract Archive operation.
         /// </summary>
         /// <value>
-        /// The response status for the Extract Archive operation, or <c>null</c> if
+        /// The response status for the Extract Archive operation, or <see langword="null"/> if
         /// the JSON response from the server did not include the underlying property.
         /// </value>
         public string ResponseStatus
@@ -84,7 +84,7 @@
         /// Gets the response body for the Extract Archive operation.
         /// </summary>
         /// <value>
-        /// The response body for the Extract Archive operation, or <c>null</c> if
+        /// The response body for the Extract Archive operation, or <see langword="null"/> if
         /// the JSON response from the server did not include the underlying property.
         /// </value>
         public string ResponseBody
@@ -101,7 +101,7 @@
         /// </summary>
         /// <value>
         /// A collection of errors, if any, which occurred for specific files during the
-        /// Extract Archive operation, or <c>null</c> if the JSON response from the server
+        /// Extract Archive operation, or <see langword="null"/> if the JSON response from the server
         /// did not include the underlying property.
         /// </value>
         public ReadOnlyCollection<ExtractArchiveError> Errors

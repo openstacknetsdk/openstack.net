@@ -24,10 +24,10 @@
         /// </summary>
         /// <param name="device">
         /// The name of the device, such as <localUri>/dev/xvdb</localUri>. If the value
-        /// is <c>null</c>, an automatically generated device name will be used.
+        /// is <see langword="null"/>, an automatically generated device name will be used.
         /// </param>
         /// <param name="volumeId">The volume ID. This is obtained from <see cref="Volume.Id"/>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         public AttachServerVolumeRequest(string device, string volumeId)
         {
@@ -48,7 +48,7 @@
         {
             /// <summary>
             /// Gets the name of the device, such as <localUri>/dev/xvdb</localUri>.
-            /// If the value is <c>null</c>, the server automatically assigns a device
+            /// If the value is <see langword="null"/>, the server automatically assigns a device
             /// name.
             /// </summary>
             [JsonProperty("device")]
@@ -66,10 +66,10 @@
             /// </summary>
             /// <param name="device">
             /// The name of the device, such as <localUri>/dev/xvdb</localUri>. If the value
-            /// is <c>null</c>, an automatically generated device name will be used.
+            /// is <see langword="null"/>, an automatically generated device name will be used.
             /// </param>
             /// <param name="volumeId">The volume ID. This is obtained from <see cref="Volume.Id"/>.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
             /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
             public AttachServerVolumeData(string device, string volumeId)
             {

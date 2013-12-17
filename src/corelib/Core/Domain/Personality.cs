@@ -66,9 +66,9 @@
         /// <param name="path">The path of the file to create on the target file system.</param>
         /// <param name="content">The contents of the file to create on the target file system.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="path"/> is <c>null</c>.
+        /// If <paramref name="path"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="content"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="content"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="path"/> is empty.</exception>
         public Personality(string path, byte[] content)
@@ -91,9 +91,9 @@
         /// <param name="path">The path of the text file to create on the target file system.</param>
         /// <param name="content">The contents of the text file to create on the target file system.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="path"/> is <c>null</c>.
+        /// If <paramref name="path"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="content"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="content"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="path"/> is empty.</exception>
         public Personality(string path, string content)
@@ -109,11 +109,11 @@
         /// <param name="content">The contents of the text file to create on the target file system.</param>
         /// <param name="encoding">The encoding to use for the text file.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="path"/> is <c>null</c>.
+        /// If <paramref name="path"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="content"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="content"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="encoding"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="encoding"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="path"/> is empty.</exception>
         public Personality(string path, string content, Encoding encoding)

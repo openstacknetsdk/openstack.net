@@ -24,9 +24,9 @@ namespace net.openstack.Core
         /// </remarks>
         /// <param name="httpHeaders">The collection of HTTP headers.</param>
         /// <returns>The metadata.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="httpHeaders"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="httpHeaders"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="httpHeaders"/> contains any <c>null</c> values.
+        /// If <paramref name="httpHeaders"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="httpHeaders"/> contains any values with a null or empty <see cref="HttpHeader.Key"/>.</para>
         /// <para>-or-</para>

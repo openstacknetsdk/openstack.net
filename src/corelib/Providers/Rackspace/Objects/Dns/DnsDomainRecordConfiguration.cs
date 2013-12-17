@@ -61,11 +61,11 @@
         /// <param name="comment">An optional comment to associate with the DNS record.</param>
         /// <param name="priority">The priority of the DNS record. This is only specified for <see cref="DnsRecordType.Mx"/> and <see cref="DnsRecordType.Srv"/> records.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="type"/> is <c>null</c>.
+        /// If <paramref name="type"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="name"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="name"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="data"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="data"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
@@ -181,7 +181,7 @@
         /// </summary>
         /// <remarks>
         /// The priority only applies to <see cref="DnsRecordType.Mx"/> and <see cref="DnsRecordType.Srv"/>
-        /// records. For other record types, this property is <c>null</c>.
+        /// records. For other record types, this property is <see langword="null"/>.
         /// </remarks>
         public int? Priority
         {

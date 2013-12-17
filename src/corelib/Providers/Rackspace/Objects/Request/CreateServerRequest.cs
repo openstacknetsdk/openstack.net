@@ -29,9 +29,9 @@
         /// specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The flavor to use for the new server instance. This
         /// is specified as a flavor ID (see <see cref="Flavor.Id"/>) or a full URL.</param>
-        /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
+        /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
         /// <param name="metadata">The metadata to associate with the server.</param>
-        /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <c>null</c>, no files are injected.</param>
+        /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <see langword="null"/>, no files are injected.</param>
         /// <param name="accessIPv4">The behavior of this value is unspecified. Do not use.</param>
         /// <param name="accessIPv6">The behavior of this value is unspecified. Do not use.</param>
         /// <param name="networks">A collection of identifiers for networks to initially connect to the server. These are obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see></param>
@@ -68,7 +68,7 @@
             public string Flavor { get; private set; }
 
             /// <summary>
-            /// Gets the disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.
+            /// Gets the disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.
             /// </summary>
             [JsonProperty("OS-DCF:diskConfig")]
             public DiskConfiguration DiskConfig { get; private set; }
@@ -100,7 +100,7 @@
             /// <summary>
             /// Gets a collection of <see cref="Personality"/> objects describing the paths and
             /// contents of files to inject in the target file system during the creation process.
-            /// If the value is <c>null</c>, no files are injected.
+            /// If the value is <see langword="null"/>, no files are injected.
             /// </summary>
             [JsonProperty("personality", DefaultValueHandling = DefaultValueHandling.Include)]
             public Personality[] Personality { get; private set; }
@@ -114,9 +114,9 @@
             /// specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
             /// <param name="flavor">The flavor to use for the new server instance. This
             /// is specified as a flavor ID (see <see cref="net.openstack.Core.Domain.Flavor.Id"/>) or a full URL.</param>
-            /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
+            /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
             /// <param name="metadata">The metadata to associate with the server.</param>
-            /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <c>null</c>, no files are injected.</param>
+            /// <param name="personality">A collection of <see cref="Personality"/> objects describing the paths and contents of files to inject in the target file system during the creation process. If the value is <see langword="null"/>, no files are injected.</param>
             /// <param name="accessIPv4">The behavior of this value is unspecified. Do not use.</param>
             /// <param name="accessIPv6">The behavior of this value is unspecified. Do not use.</param>
             /// <param name="networks">A collection of identifiers for networks to initially connect to the server. These are obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see></param>

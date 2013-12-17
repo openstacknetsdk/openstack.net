@@ -58,7 +58,7 @@
         /// </summary>
         /// <value>
         /// An <see cref="EntityId"/> object containing the unique identifier of the entity,
-        /// or <c>null</c> if the JSON response from the server did not contain the underlying
+        /// or <see langword="null"/> if the JSON response from the server did not contain the underlying
         /// property.
         /// </value>
         public EntityId Id

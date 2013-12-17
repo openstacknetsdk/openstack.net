@@ -13,11 +13,11 @@ namespace net.openstack.Core
         /// </summary>
         /// <param name="value">A string containing a status to convert.</param>
         /// <param name="status">When this method returns, contains a <see cref="Status"/> instance
-        /// equivalent to <paramref name="value"/>, if the conversion succeeded, or <c>null</c> if
+        /// equivalent to <paramref name="value"/>, if the conversion succeeded, or <see langword="null"/> if
         /// the conversion failed. The conversion fails if the <paramref name="value"/> parameter is
-        /// <c>null</c> or is not of the correct format.
+        /// <see langword="null"/> or is not of the correct format.
         /// </param>
-        /// <returns><c>true</c> if <paramref name="value"/> was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <paramref name="value"/> was converted successfully; otherwise, <see langword="false"/>.</returns>
         bool TryParse(string value, out Status status);
     }
 }

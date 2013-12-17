@@ -33,9 +33,9 @@ namespace net.openstack.Providers.Rackspace.Exceptions
         /// <param name="status">A description of the status of the operation.</param>
         /// <param name="results">The results of the bulk delete operation.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="status"/> is <c>null</c>.
+        /// If <paramref name="status"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="results"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="results"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="status"/> is empty.

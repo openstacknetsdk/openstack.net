@@ -31,7 +31,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// </summary>
         /// <param name="imageName">Name of the new image.</param>
         /// <param name="metadata">The metadata to associate to the new image.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="imageName"/> is empty.</exception>
         public CreateServerImageDetails(string imageName, Metadata metadata)
         {

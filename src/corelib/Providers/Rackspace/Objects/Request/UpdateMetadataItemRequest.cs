@@ -16,7 +16,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// Gets the metadata item to associate with the server or image.
         /// </summary>
         /// <remarks>
-        /// The value is never <c>null</c> and always contains exactly one entry.
+        /// The value is never <see langword="null"/> and always contains exactly one entry.
         /// </remarks>
         [JsonProperty("meta")]
         public Metadata Metadata { get; private set; }
@@ -28,9 +28,9 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <param name="key">The metadata key.</param>
         /// <param name="value">The new value for the metadata item.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="key"/> is <c>null</c>.
+        /// If <paramref name="key"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="key"/> is empty.</exception>
         public UpdateMetadataItemRequest(string key, string value)

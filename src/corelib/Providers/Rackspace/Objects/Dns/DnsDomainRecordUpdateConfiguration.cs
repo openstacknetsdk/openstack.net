@@ -55,14 +55,14 @@
         /// </summary>
         /// <param name="record">The DNS record to update.</param>
         /// <param name="name">The DNS record name.</param>
-        /// <param name="data">The data to associate with the DNS record. If this value is <c>null</c>, the existing value for the record is not changed.</param>
-        /// <param name="timeToLive">The time-to-live for the DNS record. If this value is <c>null</c>, the existing value for the record is not changed.</param>
-        /// <param name="comment">An optional comment to associate with the DNS record. If this value is <c>null</c>, the existing value for the record is not changed.</param>
-        /// <param name="priority">The priority of the DNS record. This is only specified for <see cref="DnsRecordType.Mx"/> and <see cref="DnsRecordType.Srv"/> records. If this value is <c>null</c>, the existing value for the record is not changed.</param>
+        /// <param name="data">The data to associate with the DNS record. If this value is <see langword="null"/>, the existing value for the record is not changed.</param>
+        /// <param name="timeToLive">The time-to-live for the DNS record. If this value is <see langword="null"/>, the existing value for the record is not changed.</param>
+        /// <param name="comment">An optional comment to associate with the DNS record. If this value is <see langword="null"/>, the existing value for the record is not changed.</param>
+        /// <param name="priority">The priority of the DNS record. This is only specified for <see cref="DnsRecordType.Mx"/> and <see cref="DnsRecordType.Srv"/> records. If this value is <see langword="null"/>, the existing value for the record is not changed.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="record"/> is <c>null</c>.
+        /// If <paramref name="record"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="name"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="name"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
@@ -172,7 +172,7 @@
         /// </summary>
         /// <remarks>
         /// The priority only applies to <see cref="DnsRecordType.Mx"/> and <see cref="DnsRecordType.Srv"/>
-        /// records. For other record types, this property is <c>null</c>.
+        /// records. For other record types, this property is <see langword="null"/>.
         /// </remarks>
         public int? Priority
         {

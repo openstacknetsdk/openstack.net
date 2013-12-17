@@ -50,7 +50,7 @@
             return ConvertToObject(value);
         }
 
-        /// <returns><c>true</c> if <paramref name="objectType"/> equals <typeparamref name="T"/>; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <paramref name="objectType"/> equals <typeparamref name="T"/>; otherwise, <see langword="false"/>.</returns>
         /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {

@@ -26,9 +26,9 @@
         /// <param name="username">The new username.</param>
         /// <param name="apiKey">The new API key.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="username"/> is <c>null</c>.
+        /// If <paramref name="username"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="apiKey"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="apiKey"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="username"/> is empty.

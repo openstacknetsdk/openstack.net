@@ -33,8 +33,8 @@
         /// specified domains.
         /// </summary>
         /// <param name="domainConfigurations">A collection of <see cref="DnsDomainUpdateConfiguration"/> objects describing the domains.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainConfigurations"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="domainConfigurations"/> contains a <c>null</c> value.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainConfigurations"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="domainConfigurations"/> contains a <see langword="null"/> value.</exception>
         public DnsUpdateConfiguration(params DnsDomainUpdateConfiguration[] domainConfigurations)
             : this(domainConfigurations.AsEnumerable())
         {
@@ -45,8 +45,8 @@
         /// specified domains.
         /// </summary>
         /// <param name="domainConfigurations">A collection of <see cref="DnsDomainUpdateConfiguration"/> objects describing the domains.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainConfigurations"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="domainConfigurations"/> contains a <c>null</c> value.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainConfigurations"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="domainConfigurations"/> contains a <see langword="null"/> value.</exception>
         public DnsUpdateConfiguration(IEnumerable<DnsDomainUpdateConfiguration> domainConfigurations)
         {
             if (domainConfigurations == null)

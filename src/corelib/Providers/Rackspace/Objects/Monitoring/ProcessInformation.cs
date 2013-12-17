@@ -342,7 +342,7 @@
         /// Higher numbers indicate lower priority.
         /// </remarks>
         /// <value>
-        /// The nice value set on the process, or <c>null</c> if nice is not set on the process.
+        /// The nice value set on the process, or <see langword="null"/> if nice is not set on the process.
         /// </value>
         public int? Nice
         {

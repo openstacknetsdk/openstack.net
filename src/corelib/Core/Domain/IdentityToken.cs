@@ -40,7 +40,7 @@
         /// If the <see cref="Expires"/> value is missing or not in a recognized
         /// format, the token is assumed to have expired.
         /// </summary>
-        /// <value><c>true</c> if the token has expired; otherwise, <c>false</c>.</value>
+        /// <value><see langword="true"/> if the token has expired; otherwise, <see langword="false"/>.</value>
         public bool IsExpired
         {
             get

@@ -42,7 +42,7 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity, no default region, and the default identity
         /// provider and REST service implementation.
         /// </summary>
-        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudNetworksProvider(CloudIdentity identity)
             : this(identity, null, null, null) { }
 
@@ -51,7 +51,7 @@ namespace net.openstack.Providers.Rackspace
         /// no default identity or region, the default identity provider, and the specified
         /// REST service implementation.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudNetworksProvider(IRestService restService)
             : this(null, null, null, restService) { }
 
@@ -60,7 +60,7 @@ namespace net.openstack.Providers.Rackspace
         /// no default identity or region, the specified identity provider, and the default
         /// REST service implementation.
         /// </summary>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudNetworksProvider(IIdentityProvider identityProvider)
             : this(null, null, identityProvider, null) { }
 
@@ -69,8 +69,8 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity and identity provider, no default region, and
         /// the default REST service implementation.
         /// </summary>
-        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="identity"/> as the default identity.</param>
         public CloudNetworksProvider(CloudIdentity identity, IIdentityProvider identityProvider)
             : this(identity, null, identityProvider, null) { }
 
@@ -79,8 +79,8 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity and REST service implementation, no default region,
         /// and the default identity provider.
         /// </summary>
-        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudNetworksProvider(CloudIdentity identity, IRestService restService)
             : this(identity, null, null, restService) { }
 
@@ -101,7 +101,7 @@ namespace net.openstack.Providers.Rackspace
         /// service implementation.
         /// </summary>
         /// <param name="identity">An instance of a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object. <remarks>If not provided, the user will be required to pass a <see cref="net.openstack.Core.Domain.CloudIdentity"/> object to each method individually.</remarks></param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">An instance of an <see cref="IIdentityProvider"/> to override the default <see cref="CloudIdentity"/></param>
         /// <param name="restService">An instance of an <see cref="IRestService"/> to override the default <see cref="JsonRestServices"/></param>
         public CloudNetworksProvider(CloudIdentity identity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
@@ -205,7 +205,7 @@ namespace net.openstack.Providers.Rackspace
         /// This method uses <c>compute</c> for the service type, and <c>cloudServersOpenStack</c> for the preferred service name.
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
         /// <returns>The public URL for the requested Cloud Networks endpoint.</returns>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -213,9 +213,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/> and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>

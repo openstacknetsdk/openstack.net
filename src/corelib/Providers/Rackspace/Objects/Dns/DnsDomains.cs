@@ -40,7 +40,7 @@
         /// </summary>
         /// <value>
         /// A collection of <see cref="DnsDomain"/> objects describing domains in the DNS service, or
-        /// <c>null</c> if the JSON response from the server did not include this property.
+        /// <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public ReadOnlyCollection<DnsDomain> Domains
         {

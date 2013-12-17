@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="key">The key of the element to get.</param>
         /// <returns>The element that has the specified key.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
         /// <exception cref="KeyNotFoundException">If property is retrieved and <paramref name="key"/> is not found.</exception>
         public TValue this[TKey key]
         {
@@ -233,7 +233,7 @@
         /// Determines whether the dictionary contains an element that has the specified key.
         /// </summary>
         /// <param name="key">The key to locate in the dictionary.</param>
-        /// <returns><c>true</c> if the dictionary contains an element that has the specified key; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the dictionary contains an element that has the specified key; otherwise, <see langword="false"/>.</returns>
         public bool ContainsKey(TKey key)
         {
             return _dictionary.ContainsKey(key);
@@ -280,7 +280,7 @@
         /// </summary>
         /// <param name="key">The key whose value will be retrieved.</param>
         /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param>
-        /// <returns><c>true</c> if the object that implements <see cref="ReadOnlyDictionary{TKey, TValue}"/> contains an element with the specified key; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the object that implements <see cref="ReadOnlyDictionary{TKey, TValue}"/> contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
             return _dictionary.TryGetValue(key, out value);
@@ -356,7 +356,7 @@
             /// as a wrapper around the specified collection of keys.
             /// </summary>
             /// <param name="keys">The collection of keys to wrap.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="keys"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="keys"/> is <see langword="null"/>.</exception>
             internal KeyCollection(ICollection<TKey> keys)
             {
                 if (keys == null)
@@ -408,7 +408,7 @@
             /// </summary>
             /// <param name="array">The one-dimensional array that is the destination of the elements copied from the collection. The array must have zero-based indexing.</param>
             /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <see langword="null"/>.</exception>
             /// <exception cref="ArgumentOutOfRangeException">If <paramref name="arrayIndex"/> is less than 0.</exception>
             /// <exception cref="ArgumentException">
             /// If <paramref name="array"/> is multidimensional.
@@ -478,7 +478,7 @@
             /// as a wrapper around the specified collection of values.
             /// </summary>
             /// <param name="values">The collection of values to wrap.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="values"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="values"/> is <see langword="null"/>.</exception>
             internal ValueCollection(ICollection<TValue> values)
             {
                 if (values == null)
@@ -530,7 +530,7 @@
             /// </summary>
             /// <param name="array">The one-dimensional array that is the destination of the elements copied from the collection. The array must have zero-based indexing.</param>
             /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <see langword="null"/>.</exception>
             /// <exception cref="ArgumentOutOfRangeException">If <paramref name="arrayIndex"/> is less than 0.</exception>
             /// <exception cref="ArgumentException">
             /// If <paramref name="array"/> is multidimensional.

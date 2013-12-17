@@ -21,7 +21,7 @@
         /// with the specified web request.
         /// </summary>
         /// <param name="request">The HTTP web request.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         public WebRequestEventArgs(HttpWebRequest request)
         {
             if (request == null)

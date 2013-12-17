@@ -60,7 +60,7 @@
         /// method returns a subset of the complete paginated collection.
         /// </remarks>
         /// <value>
-        /// The total number of changes in this time interval, or <c>null</c> if the JSON response
+        /// The total number of changes in this time interval, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public int? TotalEntries
@@ -75,7 +75,7 @@
         /// Gets the starting timestamp of this collection of changes to DNS resources.
         /// </summary>
         /// <value>
-        /// The starting timestamp of this collection of changes to DNS resources, or <c>null</c>
+        /// The starting timestamp of this collection of changes to DNS resources, or <see langword="null"/>
         /// if the JSON response from the server did not include this property.
         /// </value>
         public DateTimeOffset? From
@@ -90,7 +90,7 @@
         /// Gets the ending timestamp of this collection of changes to DNS resources.
         /// </summary>
         /// <value>
-        /// The ending timestamp of this collection of changes to DNS resources, or <c>null</c>
+        /// The ending timestamp of this collection of changes to DNS resources, or <see langword="null"/>
         /// if the JSON response from the server did not include this property.
         /// </value>
         public DateTimeOffset? To
@@ -107,7 +107,7 @@
         /// </summary>
         /// <value>
         /// A collection of <see cref="DnsDomainChange"/> objects describing changes made to
-        /// DNS resources, or <c>null</c> if the JSON response from the server did not include
+        /// DNS resources, or <see langword="null"/> if the JSON response from the server did not include
         /// this property.
         /// </value>
         public ReadOnlyCollection<DnsDomainChange> Changes

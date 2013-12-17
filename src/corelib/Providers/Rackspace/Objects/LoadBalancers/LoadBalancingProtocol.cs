@@ -40,7 +40,7 @@
         /// </summary>
         /// <param name="name">The protocol name.</param>
         /// <param name="port">The default port number for the protocol, or 0 if no default port is defined for the protocol.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than 0 or greated than 65535.</exception>
         public LoadBalancingProtocol(string name, int port)
@@ -71,7 +71,7 @@
         /// Gets the port for the load balancing protocol.
         /// </summary>
         /// <value>
-        /// The default port number used for the protocol, or <c>null</c> if the JSON response from
+        /// The default port number used for the protocol, or <see langword="null"/> if the JSON response from
         /// the server did not include the underlying property. If the value is 0, no default port
         /// is defined for the protocol.
         /// </value>

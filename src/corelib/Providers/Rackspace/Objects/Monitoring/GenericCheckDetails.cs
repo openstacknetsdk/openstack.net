@@ -35,8 +35,8 @@
         /// with the specified properties.
         /// </summary>
         /// <param name="properties">A collection of configuration properties for the check.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="properties"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="properties"/> contains a <c>null</c> or empty key.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="properties"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="properties"/> contains a <see langword="null"/> or empty key.</exception>
         public GenericCheckDetails(IDictionary<string, JToken> properties)
         {
             if (properties == null)

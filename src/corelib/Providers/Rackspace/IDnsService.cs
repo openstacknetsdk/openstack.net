@@ -43,7 +43,7 @@
         /// <param name="type">The limit type.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsServiceLimits"/> object containing detailed information about the limits of the specified <paramref name="type"/> for the service provider.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Specific_Limit.html">List Specific Limit (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         Task<DnsServiceLimits> ListLimitsAsync(LimitType type, CancellationToken cancellationToken);
@@ -56,10 +56,10 @@
         /// Gets information about an asynchronous task being executed by the DNS service.
         /// </summary>
         /// <param name="job">The <see cref="DnsJob"/> to query.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob"/> object containing the updated job information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         Task<DnsJob> GetJobStatusAsync(DnsJob job, bool showDetails, CancellationToken cancellationToken);
@@ -69,10 +69,10 @@
         /// </summary>
         /// <typeparam name="TResponse">The class modeling the JSON result of the asynchronous operation.</typeparam>
         /// <param name="job">The <see cref="DnsJob{TResponse}"/> to query.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResult}"/> object containing the updated job information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="JsonSerializationException">If an error occurs while deserializing the response object.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -93,7 +93,7 @@
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a tuple of the resulting collection of
         /// <see cref="DnsDomain"/> objects and the total number of domains in the list. If the total number of domains
-        /// in the list is not available, the second element of the tuple will be <c>null</c>.
+        /// in the list is not available, the second element of the tuple will be <see langword="null"/>.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
@@ -109,11 +109,11 @@
         /// Gets detailed information about a specific domain.
         /// </summary>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="showRecords"><c>true</c> to populate the <see cref="DnsDomain.Records"/> property of the result; otherwise, <c>false</c>.</param>
-        /// <param name="showSubdomains"><c>true</c> to populate the <see cref="DnsDomain.Subdomains"/> property of the result; otherwise, <c>false</c>.</param>
+        /// <param name="showRecords"><see langword="true"/> to populate the <see cref="DnsDomain.Records"/> property of the result; otherwise, <see langword="false"/>.</param>
+        /// <param name="showSubdomains"><see langword="true"/> to populate the <see cref="DnsDomain.Subdomains"/> property of the result; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsDomain"/> object containing the DNS information for the requested domain.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domain_details.html">List Domain Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         Task<DnsDomain> ListDomainDetailsAsync(DomainId domainId, bool showRecords, bool showSubdomains, CancellationToken cancellationToken);
@@ -122,10 +122,10 @@
         /// Gets information about all changes made to a domain since a specified time.
         /// </summary>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="since">The timestamp of the earliest changes to consider. If this is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="since">The timestamp of the earliest changes to consider. If this is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsDomainChanges"/> object describing the changes made to a domain registered in the DNS service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Domain_Changes.html">List Domain Changes (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         Task<DnsDomainChanges> ListDomainChangesAsync(DomainId domainId, DateTimeOffset? since, CancellationToken cancellationToken);
@@ -145,7 +145,7 @@
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -160,7 +160,7 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.
         /// </exception>
@@ -174,7 +174,7 @@
         /// <param name="configuration">A <see cref="DnsConfiguration"/> object describing the domains to register in the DNS service.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -189,7 +189,7 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/create_domains.html">Create Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -201,7 +201,7 @@
         /// <param name="configuration">A <see cref="DnsUpdateConfiguration"/> object describing updates to apply to the domains.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the job will additionally be in one of the following
@@ -213,7 +213,7 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Modify_Domain_s_-d1e3848.html">Modify Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -224,13 +224,13 @@
         /// </summary>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="cloneName">The name of the new (cloned) domain.</param>
-        /// <param name="cloneSubdomains"><c>true</c> to recursively clone subdomains; otherwise, <c>false</c> to only clone the top-level domain and its records. Cloned subdomain configurations are modified the same way that cloned top-level domain configurations are modified. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyRecordData"><c>true</c> to replace occurrences of the reference domain name with the new domain name in comments on the cloned (new) domain. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyEmailAddress"><c>true</c> to replace occurrences of the reference domain name with the new domain name in email addresses on the cloned (new) domain. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyComment"><true>true</true> to replace occurrences of the reference domain name with the new domain name in data fields (of records) on the cloned (new) domain. Does not affect NS records. If this is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="cloneSubdomains"><see langword="true"/> to recursively clone subdomains; otherwise, <see langword="false"/> to only clone the top-level domain and its records. Cloned subdomain configurations are modified the same way that cloned top-level domain configurations are modified. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyRecordData"><see langword="true"/> to replace occurrences of the reference domain name with the new domain name in comments on the cloned (new) domain. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyEmailAddress"><see langword="true"/> to replace occurrences of the reference domain name with the new domain name in email addresses on the cloned (new) domain. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyComment"><true>true</true> to replace occurrences of the reference domain name with the new domain name in data fields (of records) on the cloned (new) domain. Does not affect NS records. If this is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -246,9 +246,9 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="cloneName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="cloneName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="cloneName"/> is empty.
@@ -265,7 +265,7 @@
         /// <param name="serializedDomains">A collection of <see cref="SerializedDomain"/> objects containing the serialized domain information to import.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -280,9 +280,9 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="serializedDomains"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serializedDomains"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="serializedDomains"/> is contains any <c>null</c> values.
+        /// If <paramref name="serializedDomains"/> is contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -294,10 +294,10 @@
         /// Removes one or more domains from the DNS service.
         /// </summary>
         /// <param name="domainIds">A collection of IDs for the domains to remove. These are obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="deleteSubdomains"><c>true</c> to delete any subdomains associated with the specified domains; otherwise, <c>false</c> to promote any subdomains to top-level domains.</param>
+        /// <param name="deleteSubdomains"><see langword="true"/> to delete any subdomains associated with the specified domains; otherwise, <see langword="false"/> to promote any subdomains to top-level domains.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob"/> object
@@ -311,9 +311,9 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainIds"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainIds"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="domainIds"/> contains any <c>null</c> values.
+        /// If <paramref name="domainIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -336,9 +336,9 @@
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a tuple of the resulting collection of
         /// <see cref="DnsSubdomain"/> objects and the total number of domains in the list. If the total number of
-        /// subdomains in the list is not available, the second element of the tuple will be <c>null</c>.
+        /// subdomains in the list is not available, the second element of the tuple will be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
         /// <para>-or-</para>
@@ -357,9 +357,9 @@
         /// to include only records of a specific type, name, and/or data.
         /// </summary>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="recordType">The specific record type to consider, or <c>null</c> to consider all record types.</param>
-        /// <param name="recordName">The record name, which is matched to the <see cref="DnsRecord.Name"/> property, or <c>null</c> to consider all records.</param>
-        /// <param name="recordData">The record data, which is matched to the <see cref="DnsRecord.Data"/> property, or <c>null</c> to consider all records.</param>
+        /// <param name="recordType">The specific record type to consider, or <see langword="null"/> to consider all record types.</param>
+        /// <param name="recordName">The record name, which is matched to the <see cref="DnsRecord.Name"/> property, or <see langword="null"/> to consider all records.</param>
+        /// <param name="recordData">The record data, which is matched to the <see cref="DnsRecord.Data"/> property, or <see langword="null"/> to consider all records.</param>
         /// <param name="offset">The index of the last item in the previous page of results. If not specified, the list starts at the beginning.</param>
         /// <param name="limit">The maximum number of records to return in a single page.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
@@ -367,9 +367,9 @@
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a tuple of the resulting collection of
         /// <see cref="DnsRecord"/> objects and the total number of records in the list. If the total number of
-        /// records in the list is not available, the second element of the tuple will be <c>null</c>.
+        /// records in the list is not available, the second element of the tuple will be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
         /// <para>-or-</para>
@@ -388,9 +388,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsRecord"/> object containing the details of the specified DNS record.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Record_Details-d1e4770.html">List Record Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -403,7 +403,7 @@
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the records to add.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -419,12 +419,12 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -439,7 +439,7 @@
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordUpdateConfiguration"/> objects describing the updates to apply to domain records.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the job will additionally be in one of the following
@@ -452,12 +452,12 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -472,7 +472,7 @@
         /// <param name="recordId">A collection of IDs for the records to remove. These are obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob"/> object
@@ -487,12 +487,12 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordId"/> contains any <c>null</c> values.
+        /// If <paramref name="recordId"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -516,12 +516,12 @@
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a tuple of the resulting collection of
         /// <see cref="DnsRecord"/> objects and the total number of domains in the list. If the total number of
-        /// subdomains in the list is not available, the second element of the tuple will be <c>null</c>.
+        /// subdomains in the list is not available, the second element of the tuple will be <see langword="null"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceName"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -542,11 +542,11 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsRecord"/> object containing the details of the specified reverse DNS record.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
@@ -565,7 +565,7 @@
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the records to add.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -581,16 +581,16 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -606,7 +606,7 @@
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordUpdateConfiguration"/> objects describing the updates to apply to domain records.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the job will additionally be in one of the following
@@ -619,16 +619,16 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -641,10 +641,10 @@
         /// </summary>
         /// <param name="serviceName">The name of the service which owns the cloud resource. This is obtained from <see cref="ServiceCatalog.Name"/>.</param>
         /// <param name="deviceResourceUri">The absolute URI of the cloud resource.</param>
-        /// <param name="ipAddress">The specific record to remove. If this is <c>null</c>, all reverse DNS records associated with the specified device are removed.</param>
+        /// <param name="ipAddress">The specific record to remove. If this is <see langword="null"/>, all reverse DNS records associated with the specified device are removed.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob"/> object
@@ -659,9 +659,9 @@
         /// </list>
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.

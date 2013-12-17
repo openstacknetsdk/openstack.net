@@ -23,8 +23,8 @@
         /// <param name="response">The REST response.</param>
         /// <param name="header">The header to retrieve.</param>
         /// <param name="value">Returns the value for <paramref name="header"/>.</param>
-        /// <returns><c>true</c> if the specified header is contained in <paramref name="response"/>, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="response"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the specified header is contained in <paramref name="response"/>, otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="response"/> is <see langword="null"/>.</exception>
         public static bool TryGetHeader(this Response response, HttpResponseHeader header, out string value)
         {
             if (response == null)
@@ -47,8 +47,8 @@
         /// <param name="response">The REST response.</param>
         /// <param name="header">The header to retrieve.</param>
         /// <param name="value">Returns the value for <paramref name="header"/>.</param>
-        /// <returns><c>true</c> if the specified header is contained in <paramref name="response"/>, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="response"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the specified header is contained in <paramref name="response"/>, otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="response"/> is <see langword="null"/>.</exception>
         public static bool TryGetHeader(this Response response, string header, out string value)
         {
             HttpHeader httpHeader = response.Headers.FirstOrDefault(i => string.Equals(i.Key, header, StringComparison.OrdinalIgnoreCase));
@@ -62,7 +62,7 @@
         /// and the body is not empty.
         /// </summary>
         /// <param name="response">The REST response.</param>
-        /// <returns><c>true</c> if <paramref name="response"/> contains a JSON response body, otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <paramref name="response"/> contains a JSON response body, otherwise <see langword="false"/>.</returns>
         public static bool HasJsonBody(this Response response)
         {
             if (response == null)

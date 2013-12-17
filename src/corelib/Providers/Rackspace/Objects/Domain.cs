@@ -26,7 +26,7 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// Initializes a new instance of the <see cref="Domain"/> class with the specified domain.
         /// </summary>
         /// <param name="name">The domain name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         public Domain(string name)
         {

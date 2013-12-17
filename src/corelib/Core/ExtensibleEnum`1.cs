@@ -22,7 +22,7 @@
         /// Initializes a new instance of the <see cref="ExtensibleEnum{T}"/> class with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         protected ExtensibleEnum(string name)
         {
@@ -74,7 +74,7 @@
             }
 
             /// <remarks>
-            /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+            /// If <paramref name="str"/> is an empty string, this method returns <see langword="null"/>.
             /// Otherwise, this method uses <see cref="FromName"/> for deserialization.
             /// </remarks>
             /// <inheritdoc/>
@@ -89,7 +89,7 @@
             /// <summary>
             /// Gets or creates the enumeration member with the given name.
             /// </summary>
-            /// <param name="name">The name of the member. This value is never <c>null</c> or empty.</param>
+            /// <param name="name">The name of the member. This value is never <see langword="null"/> or empty.</param>
             /// <returns>The instance of <typeparamref name="T"/> corresponding to the specified <paramref name="name"/>.</returns>
             protected abstract T FromName(string name);
         }

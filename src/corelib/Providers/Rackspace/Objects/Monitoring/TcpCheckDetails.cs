@@ -45,7 +45,7 @@
         /// with the values.
         /// </summary>
         /// <param name="port">The port to use for connecting to the remote service.</param>
-        /// <param name="enableSsl"><c>true</c> to enable SSL for connecting to the service; otherwise, <c>false</c>. If this value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="enableSsl"><see langword="true"/> to enable SSL for connecting to the service; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="bannerMatch">A regular expression to match against the TCP banner returned by the service.</param>
         /// <param name="bodyMatch">A regular expression to match against the TCP body returned by the service.</param>
         /// <param name="sendBody">The body to send to the service after the banner is verified.</param>

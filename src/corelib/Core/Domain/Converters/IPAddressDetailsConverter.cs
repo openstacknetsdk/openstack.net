@@ -58,7 +58,7 @@
             return IPAddress.Parse(details.Address);
         }
 
-        /// <returns><c>true</c> if <paramref name="objectType"/> equals <see cref="IPAddress"/>; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <paramref name="objectType"/> equals <see cref="IPAddress"/>; otherwise, <see langword="false"/>.</returns>
         /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {
@@ -111,7 +111,7 @@
             /// using the given IP address.
             /// </summary>
             /// <param name="address">The IP address.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="address"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="address"/> is <see langword="null"/>.</exception>
             public AddressDetails(IPAddress address)
             {
                 if (address == null)

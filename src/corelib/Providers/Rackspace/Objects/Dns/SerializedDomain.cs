@@ -44,9 +44,9 @@
         /// <param name="contents">The contents of the serialized domain.</param>
         /// <param name="contentType">The content type of the serialized domain.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="contents"/> is <c>null</c>.
+        /// If <paramref name="contents"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="contentType"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="contentType"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="contents"/> is empty.</exception>
         public SerializedDomain(string contents, SerializedDomainFormat contentType)

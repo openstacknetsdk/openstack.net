@@ -32,7 +32,7 @@
         /// with the specified email address.
         /// </summary>
         /// <param name="address">The email address that should be notified.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="address"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="address"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="address"/> is empty.</exception>
         public EmailNotificationDetails(string address)
         {

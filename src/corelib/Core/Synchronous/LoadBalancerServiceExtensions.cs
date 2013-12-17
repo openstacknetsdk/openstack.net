@@ -22,12 +22,12 @@
         /// Gets a collection of current load balancers.
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
-        /// <param name="markerId">The <see cref="LoadBalancer.Id"/> of the last item in the previous list. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">Indicates the maximum number of items to return. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="markerId">The <see cref="LoadBalancer.Id"/> of the last item in the previous list. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">Indicates the maximum number of items to return. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A collection of <see cref="LoadBalancer"/> objects describing the current load balancers.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancers-d1e1367.html">List Load Balancers (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -58,8 +58,8 @@
         /// <returns>
         /// A <see cref="LoadBalancer"/> object containing detailed information about the specified load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Details-d1e1522.html">List Load Balancer Details (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static LoadBalancer GetLoadBalancer(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -89,8 +89,8 @@
         /// <returns>
         /// A <see cref="LoadBalancer"/> object describing the new load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Details-d1e1522.html">List Load Balancer Details (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static LoadBalancer CreateLoadBalancer(this ILoadBalancerService service, LoadBalancerConfiguration configuration)
@@ -118,11 +118,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="configuration">The updated configuration for the load balancer.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Update_Load_Balancer_Attributes-d1e1812.html">Update Load Balancer Attributes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -150,8 +150,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Load_Balancer-d1e2093.html">Remove Load Balancer (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveLoadBalancer(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -178,10 +178,10 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerIds">The IDs of load balancers to remove. These is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerIds"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerIds"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="loadBalancerIds"/> contains any <c>null</c> values.
+        /// If <paramref name="loadBalancerIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Load_Balancer-d1e2093.html">Remove Load Balancer (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -217,8 +217,8 @@
         /// The HTML content of the error page which is shown to an end user who is attempting to access a load balancer
         /// node that is offline or unavailable.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Errorpage-d1e2218.html">Error Page Operations (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static string GetErrorPage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -246,11 +246,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="content">The HTML content of the error page which is shown to an end user who is attempting to access a load balancer node that is offline or unavailable.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="content"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="content"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="content"/> is empty.
@@ -281,8 +281,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Errorpage-d1e2218.html">Error Page Operations (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveErrorPage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -317,8 +317,8 @@
         /// A <see cref="LoadBalancerStatistics"/> object containing the detailed statistics for the
         /// load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Stats-d1e1524.html">List Load Balancer Stats (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static LoadBalancerStatistics GetStatistics(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -353,8 +353,8 @@
         /// A collection of <see cref="Node"/> objects describing the load balancer nodes associated with the specified
         /// load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Nodes-d1e2218.html">List Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<Node> ListNodes(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -385,11 +385,11 @@
         /// <returns>
         /// A <see cref="Node"/> object describing the specified load balancer node.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Nodes-d1e2218.html">List Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -421,11 +421,11 @@
         /// <returns>
         /// A <see cref="Node"/> object describing the new load balancer node.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeConfiguration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeConfiguration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -457,14 +457,14 @@
         /// <returns>
         /// A collection of <see cref="Node"/> objects describing the new load balancer nodes.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="nodeConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="nodeConfigurations"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -494,13 +494,13 @@
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="nodeId">The load balancer node IDs. This is obtained from <see cref="Node.Id">Node.Id</see>.</param>
         /// <param name="configuration">The updated configuration for the load balancer node.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Nodes-d1e2503.html">Modify Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -529,11 +529,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="nodeId">The load balancer node IDs. This is obtained from <see cref="Node.Id">Node.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Nodes-d1e2675.html">Remove Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -562,14 +562,14 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="nodeIds">The load balancer node IDs of nodes to remove. These are obtained from <see cref="Node.Id">Node.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="nodeIds"/> contains any <c>null</c> values.
+        /// If <paramref name="nodeIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Nodes-d1e2675.html">Remove Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -597,13 +597,13 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <param name="markerId">The <see cref="NodeServiceEvent.Id"/> of the last item in the previous list. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">Indicates the maximum number of items to return. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="markerId">The <see cref="NodeServiceEvent.Id"/> of the last item in the previous list. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">Indicates the maximum number of items to return. Used for <see href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Paginated_Collections-d1e786.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A collection of <see cref="NodeServiceEvent"/> objects describing the service events for the load balancer node.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -639,8 +639,8 @@
         /// A collection of <see cref="LoadBalancerVirtualAddress"/> objects describing the virtual addresses
         /// associated with the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Virtual_IPs-d1e2809.html">List Virtual IPs (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LoadBalancerVirtualAddress> ListVirtualAddresses(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -672,11 +672,11 @@
         /// <returns>
         /// A <see cref="LoadBalancerVirtualAddress"/> object describing the added virtual address.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="type"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="type"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the specified <paramref name="addressFamily"/> is not supported by this provider.
@@ -708,11 +708,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="virtualAddressId">The virtual address ID. This is obtained from <see cref="LoadBalancerVirtualAddress.Id">LoadBalancerVirtualAddress.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="virtualAddressId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="virtualAddressId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Virtual_IP-d1e2919.html">Remove Virtual IP (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -741,14 +741,14 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="virtualAddressIds">The virtual address IDs. These are obtained from <see cref="LoadBalancerVirtualAddress.Id">LoadBalancerVirtualAddress.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="virtualAddressIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="virtualAddressIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="virtualAddressIds"/> contains any <c>null</c> values.
+        /// If <paramref name="virtualAddressIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Virtual_IP-d1e2919.html">Remove Virtual IP (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -782,7 +782,7 @@
         /// <returns>
         /// A collection of strings containing the allowed domain names used for adding load balancer nodes.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<string> ListAllowedDomains(this ILoadBalancerService service)
@@ -812,15 +812,15 @@
         /// List billable load balancers for a given date range.
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
-        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
-        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
-        /// <param name="offset">The index of the last item in the previous page of results. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">Gets the maximum number of load balancers to return in a single page of results. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
+        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
+        /// <param name="offset">The index of the last item in the previous page of results. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">Gets the maximum number of load balancers to return in a single page of results. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A collection of <see cref="LoadBalancer"/> objects describing the load balancers active in the specified
         /// date range.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="endTime"/> occurs before <paramref name="startTime"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
@@ -852,13 +852,13 @@
         /// List all usage for an account during a specified date range.
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
-        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
-        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
+        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
+        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
         /// <returns>
         /// A collection of <see cref="LoadBalancerUsage"/> objects describing the load balancer usage for an account
         /// in the specified date range.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="endTime"/> occurs before <paramref name="startTime"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -886,14 +886,14 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
-        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <c>null</c>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
+        /// <param name="startTime">The start date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage prior to the specified <paramref name="endTime"/>.</param>
+        /// <param name="endTime">The end date to consider. The time component, if any, is ignored. If the value is <see langword="null"/>, the result includes all usage following the specified <paramref name="startTime"/>.</param>
         /// <returns>
         /// A collection of <see cref="LoadBalancerUsage"/> objects describing the usage for the load balancer in
         /// the specified date range.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="endTime"/> occurs before <paramref name="startTime"/>.
         /// </exception>
@@ -927,8 +927,8 @@
         /// A collection of <see cref="LoadBalancerUsage"/> objects describing the usage for the load balancer in
         /// the preceding 24 hours.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LoadBalancerUsage> ListCurrentUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -963,8 +963,8 @@
         /// A collection of <see cref="NetworkItem"/> objects describing the access list configuration for the load
         /// balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<NetworkItem> ListAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -992,11 +992,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="networkItem">A <see cref="NetworkItem"/> object describing the network item to add to the load balancer's access list.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItem"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItem"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1025,14 +1025,14 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="networkItems">A collection of <see cref="NetworkItem"/> objects describing the network items to add to the load balancer's access list.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItems"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItems"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="networkItems"/> contains any <c>null</c> values.
+        /// If <paramref name="networkItems"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1061,11 +1061,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="networkItemId">The network item ID. This is obtained from <see cref="NetworkItem.Id"/>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItemId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItemId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1094,14 +1094,14 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="networkItemIds">The network item IDs. These are obtained from <see cref="NetworkItem.Id"/>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItemIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItemIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="networkItemIds"/> contains any <c>null</c> values.
+        /// If <paramref name="networkItemIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1129,8 +1129,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void ClearAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1165,8 +1165,8 @@
         /// A <see cref="HealthMonitor"/> object describing the health monitor configured for the
         /// load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static HealthMonitor GetHealthMonitor(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1194,11 +1194,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="monitor">The updated health monitor configuration.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="monitor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="monitor"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1226,8 +1226,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveHealthMonitor(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1261,8 +1261,8 @@
         /// <returns>
         /// A <see cref="SessionPersistence"/> object describing the session persistence configuration for the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static SessionPersistence GetSessionPersistence(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1311,11 +1311,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="sessionPersistence">The session persistence configuration.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="sessionPersistence"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="sessionPersistence"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1343,8 +1343,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveSessionPersistence(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1376,10 +1376,10 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <returns>
-        /// <c>true</c> if content caching is enabled for the load balancer; otherwise, <c>false</c>.
+        /// <see langword="true"/> if content caching is enabled for the load balancer; otherwise, <see langword="false"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Log_Connections-d1e3924.html">Log Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static bool GetConnectionLogging(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1406,9 +1406,9 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <param name="enabled"><c>true</c> to enable connection logging on the load balancer; otherwise, <c>false</c>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <param name="enabled"><see langword="true"/> to enable connection logging on the load balancer; otherwise, <see langword="false"/>.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Log_Connections-d1e3924.html">Log Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void SetConnectionLogging(this ILoadBalancerService service, LoadBalancerId loadBalancerId, bool enabled)
@@ -1438,8 +1438,8 @@
         /// <returns>
         /// A <see cref="ConnectionThrottles"/> object describing the connection throttling configuration in effect on the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static ConnectionThrottles ListThrottles(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1467,11 +1467,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="throttleConfiguration">A <see cref="ConnectionThrottles"/> object describing the throttling configuration to apply for the load balancer.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="throttleConfiguration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="throttleConfiguration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1499,8 +1499,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveThrottles(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1546,10 +1546,10 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <returns>
-        /// <c>true</c> if content caching is enabled for the load balancer; otherwise, <c>false</c>.
+        /// <see langword="true"/> if content caching is enabled for the load balancer; otherwise, <see langword="false"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/ContentCaching-d1e3358.html">Content Caching (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static bool GetContentCaching(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1590,9 +1590,9 @@
         /// </remarks>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <param name="enabled"><c>true</c> to enable content caching on the load balancer; otherwise, <c>false</c>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <param name="enabled"><see langword="true"/> to enable content caching on the load balancer; otherwise, <see langword="false"/>.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/ContentCaching-d1e3358.html">Content Caching (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void SetContentCaching(this ILoadBalancerService service, LoadBalancerId loadBalancerId, bool enabled)
@@ -1626,7 +1626,7 @@
         /// A collection of <see cref="LoadBalancingProtocol"/> objects describing the load balancing
         /// protocols supported by this service.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Protocols-d1e4269.html">List Load Balancing Protocols (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LoadBalancingProtocol> ListProtocols(this ILoadBalancerService service)
@@ -1660,7 +1660,7 @@
         /// A collection of <see cref="LoadBalancingAlgorithm"/> objects describing the load balancing
         /// algorithms supported by this service.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Algorithms-d1e4459.html">List Load Balancing Algorithms (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LoadBalancingAlgorithm> ListAlgorithms(this ILoadBalancerService service)
@@ -1695,8 +1695,8 @@
         /// A <see cref="LoadBalancerSslConfiguration"/> object describing the SSL termination
         /// configuration for the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static LoadBalancerSslConfiguration GetSslConfiguration(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1724,11 +1724,11 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="configuration">The updated SSL termination configuration.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1756,8 +1756,8 @@
         /// </summary>
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static void RemoveSslConfiguration(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1792,8 +1792,8 @@
         /// A collection of <see cref="LoadBalancerMetadataItem"/> objects describing the metadata
         /// associated with a load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LoadBalancerMetadataItem> ListLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
@@ -1824,11 +1824,11 @@
         /// <returns>
         /// A <see cref="LoadBalancerMetadataItem"/> object describing the metadata item.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1861,11 +1861,11 @@
         /// A collection of <see cref="LoadBalancerMetadataItem"/> objects describing the metadata
         /// associated with the load balancer node.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1898,13 +1898,13 @@
         /// <returns>
         /// A <see cref="LoadBalancerMetadataItem"/> object describing the metadata item.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1942,14 +1942,14 @@
         /// A collection of <see cref="LoadBalancerMetadataItem"/> objects describing the updated
         /// metadata associated with the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadata"/> contains a pair whose <see cref="KeyValuePair{TKey, TValue}.Key"/> is <c>null</c> or empty, or whose <see cref="KeyValuePair{TKey, TValue}.Value"/> is is <c>null</c>.
+        /// If <paramref name="metadata"/> contains a pair whose <see cref="KeyValuePair{TKey, TValue}.Key"/> is <see langword="null"/> or empty, or whose <see cref="KeyValuePair{TKey, TValue}.Value"/> is is <see langword="null"/>.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -1988,16 +1988,16 @@
         /// A collection of <see cref="LoadBalancerMetadataItem"/> objects describing the updated
         /// metadata associated with the load balancer node.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadata"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadata"/> contains a pair whose <see cref="KeyValuePair{TKey, TValue}.Key"/> is <c>null</c> or empty, or whose <see cref="KeyValuePair{TKey, TValue}.Value"/> is is <c>null</c>.
+        /// If <paramref name="metadata"/> contains a pair whose <see cref="KeyValuePair{TKey, TValue}.Key"/> is <see langword="null"/> or empty, or whose <see cref="KeyValuePair{TKey, TValue}.Value"/> is is <see langword="null"/>.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2027,13 +2027,13 @@
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="metadataId">The metadata item ID. This is obtained from <see cref="LoadBalancerMetadataItem.Id">LoadBalancerMetadataItem.Id</see>.</param>
         /// <param name="value">The new value for the metadata item.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Metadata-d1e2503.html">Modify Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2064,15 +2064,15 @@
         /// <param name="nodeId">The load balancer node ID. This is obtained from <see cref="Node.Id">Node.Id</see>.</param>
         /// <param name="metadataId">The metadata item ID. This is obtained from <see cref="LoadBalancerMetadataItem.Id">LoadBalancerMetadataItem.Id</see>.</param>
         /// <param name="value">The new value for the metadata item.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Metadata-d1e2503.html">Modify Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2101,14 +2101,14 @@
         /// <param name="service">The load balancer service instance.</param>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="metadataIds">The metadata item IDs. These are obtained from <see cref="LoadBalancerMetadataItem.Id">LoadBalancerMetadataItem.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadataIds"/> contains any <c>null</c> values.
+        /// If <paramref name="metadataIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2138,16 +2138,16 @@
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="nodeId">The load balancer node ID. This is obtained from <see cref="Node.Id">Node.Id</see>.</param>
         /// <param name="metadataIds">The metadata item IDs. These are obtained from <see cref="LoadBalancerMetadataItem.Id">LoadBalancerMetadataItem.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadataIds"/> contains any <c>null</c> values.
+        /// If <paramref name="metadataIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>

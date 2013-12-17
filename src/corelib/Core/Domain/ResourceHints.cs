@@ -173,7 +173,7 @@
         /// Gets the PUT request formats accepted by the resource for this client.
         /// </summary>
         /// <remarks>
-        /// If this value is <c>null</c>, a client may assume that any format indicated by
+        /// If this value is <see langword="null"/>, a client may assume that any format indicated by
         /// the <see cref="Formats"/> hint is acceptable in a PUT.
         /// </remarks>
         public ReadOnlyCollection<string> AcceptPut

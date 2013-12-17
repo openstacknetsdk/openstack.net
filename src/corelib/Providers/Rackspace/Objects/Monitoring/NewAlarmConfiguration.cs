@@ -30,13 +30,13 @@
         /// <param name="checkId">The ID of the check to alert on. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
         /// <param name="notificationPlanId">The ID of the notification plan to execute when the state changes. This is obtained from <see cref="NotificationPlan.Id">NotificationPlan.Id</see>.</param>
         /// <param name="criteria">The <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/alerts-language.html">alarm DSL</see> for describing alerting conditions and their output states.</param>
-        /// <param name="enabled"><c>true</c> to enable processing and alerts on this alarm; otherwise, <c>false</c>. If this value is <c>null</c>, <placeholder/>.</param>
+        /// <param name="enabled"><see langword="true"/> to enable processing and alerts on this alarm; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, <placeholder/>.</param>
         /// <param name="label">A friendly label for the alarm.</param>
         /// <param name="metadata">A collection of metadata to associate with the alarm.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="checkId"/> is <c>null</c>.
+        /// If <paramref name="checkId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="notificationPlanId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="notificationPlanId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="metadata"/> contains any values with empty keys.

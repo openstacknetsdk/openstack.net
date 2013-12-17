@@ -38,9 +38,9 @@
         /// Initializes a new instance of the <see cref="CloudLoadBalancerProvider"/> class with
         /// the specified values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         public CloudLoadBalancerProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider)
             : base(defaultIdentity, defaultRegion, identityProvider, null, null)
         {
@@ -50,11 +50,11 @@
         /// Initializes a new instance of the <see cref="CloudLoadBalancerProvider"/> class with
         /// the specified values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing synchronous REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use for synchronous REST requests. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing synchronous REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use for synchronous REST requests. If this value is <see langword="null"/>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
         protected CloudLoadBalancerProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
             : base(defaultIdentity, defaultRegion, identityProvider, restService, httpStatusCodeValidator)
         {
@@ -224,7 +224,7 @@
         /// <param name="loadBalancerIds">The IDs of load balancers to remove. These is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If
@@ -232,9 +232,9 @@
         /// the task will not be considered complete until all of the load balancers
         /// transition out of the <see cref="LoadBalancerStatus.PendingDelete"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerIds"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerIds"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="loadBalancerIds"/> contains any <c>null</c> values.
+        /// If <paramref name="loadBalancerIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -497,19 +497,19 @@
         /// <param name="nodeConfigurations">A collection of <see cref="NodeConfiguration"/> objects describing the load balancer nodes to add.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
         /// completes, the <see cref="Task{TResult}.Result"/> property will contain a collection of
         /// <see cref="Node"/> objects describing the new load balancer nodes.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="nodeConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="nodeConfigurations"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -651,15 +651,15 @@
         /// <param name="nodeIds">The load balancer node IDs of nodes to remove. These are obtained from <see cref="Node.Id">Node.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="nodeIds"/> contains any <c>null</c> values.
+        /// If <paramref name="nodeIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -862,19 +862,19 @@
         /// <param name="virtualAddressIds">The virtual address IDs. These are obtained from <see cref="LoadBalancerVirtualAddress.Id">LoadBalancerVirtualAddress.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the load balancer transitions out of the <see cref="LoadBalancerStatus.PendingUpdate"/> state.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="virtualAddressIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="virtualAddressIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="virtualAddressIds"/> contains any <c>null</c> values.
+        /// If <paramref name="virtualAddressIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -1127,7 +1127,7 @@
         /// <param name="networkItems">A collection of <see cref="NetworkItem"/> objects describing the network items to add to the load balancer's access list.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
         /// completes, the <see cref="Task{TResult}.Result"/> property will contain a collection of
@@ -1135,12 +1135,12 @@
         /// for the load balancer.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItems"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItems"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="networkItems"/> contains any <c>null</c> values.
+        /// If <paramref name="networkItems"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -1244,15 +1244,15 @@
         /// <param name="networkItemIds">The network item IDs. These are obtained from <see cref="NetworkItem.Id"/>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="networkItemIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="networkItemIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="networkItemIds"/> contains any <c>null</c> values.
+        /// If <paramref name="networkItemIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
@@ -2173,12 +2173,12 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadataIds"/> contains any <c>null</c> values.
+        /// If <paramref name="metadataIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2261,14 +2261,14 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="nodeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="nodeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metadataIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metadataIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="metadataIds"/> contains any <c>null</c> values.
+        /// If <paramref name="metadataIds"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
@@ -2350,7 +2350,7 @@
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="state">A <see cref="LoadBalancerStatus"/> representing the state the load balancer should <em>not</em> be in at the end of the wait operation.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
         /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a
@@ -2359,9 +2359,9 @@
         /// equal to <paramref name="state"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerId"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="state"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="state"/> is <see langword="null"/>.</para>
         /// </exception>
         protected Task<LoadBalancer> WaitForLoadBalancerToLeaveStateAsync(LoadBalancerId loadBalancerId, LoadBalancerStatus state, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
@@ -2428,14 +2428,14 @@
         /// </summary>
         /// <param name="loadBalancerId">The load balancer ID. This is obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When
         /// the task completes successfully, the <see cref="Task{TResult}.Result"/>
         /// property will contain a <see cref="LoadBalancer"/> object containing the
         /// updated state information for the load balancer.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         private Task<LoadBalancer> PollLoadBalancerStateAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
@@ -2473,7 +2473,7 @@
         /// <param name="loadBalancerIds">The load balancer IDs. These are obtained from <see cref="LoadBalancer.Id">LoadBalancer.Id</see>.</param>
         /// <param name="state">A <see cref="LoadBalancerStatus"/> representing the state the load balancers should <em>not</em> be in at the end of the wait operation.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
         /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a
@@ -2483,11 +2483,11 @@
         /// instances.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="loadBalancerIds"/> is <c>null</c>.
+        /// If <paramref name="loadBalancerIds"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="state"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="state"/> is <see langword="null"/>.</para>
         /// </exception>
-        /// <exception cref="ArgumentException">If <paramref name="loadBalancerIds"/> contains any <c>null</c> values.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="loadBalancerIds"/> contains any <see langword="null"/> values.</exception>
         protected Task<LoadBalancer[]> WaitForLoadBalancersToLeaveStateAsync(LoadBalancerId[] loadBalancerIds, LoadBalancerStatus state, CancellationToken cancellationToken, IProgress<LoadBalancer[]> progress)
         {
             if (loadBalancerIds == null)
@@ -2609,7 +2609,7 @@
             /// values are wrapped in a single-element array.
             /// </summary>
             /// <param name="delegate">The delegate to dispatch progress reports to.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="delegate"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="delegate"/> is <see langword="null"/>.</exception>
             public ArrayElementProgressWrapper(IProgress<T[]> @delegate)
             {
                 if (@delegate == null)

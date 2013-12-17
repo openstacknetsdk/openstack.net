@@ -95,7 +95,7 @@
         /// </remarks>
         /// <param name="text">The encoded URI.</param>
         /// <returns>The decoded URI text.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         public static string UriDecode(string text)
         {
             return UriDecode(text, Encoding.UTF8);
@@ -106,9 +106,9 @@
         /// then evaluating the result using the specified encoding.
         /// </summary>
         /// <param name="text">The encoded URI.</param>
-        /// <param name="encoding">The encoding to use for Unicode characters in the URI. If this value is <c>null</c>, the <see cref="Encoding.UTF8"/> encoding will be used.</param>
+        /// <param name="encoding">The encoding to use for Unicode characters in the URI. If this value is <see langword="null"/>, the <see cref="Encoding.UTF8"/> encoding will be used.</param>
         /// <returns>The decoded URI text.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         public static string UriDecode(string text, Encoding encoding)
         {
             if (text == null)
@@ -136,7 +136,7 @@
         /// <param name="text">The text to encode for inclusion in a URI.</param>
         /// <param name="uriPart">A <see cref="UriPart"/> value indicating where in the URI the specified text will be included.</param>
         /// <returns>The URI-encoded text, suitable for the specified URI part.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="uriPart"/> is not a valid <see cref="UriPart"/>.</exception>
         public static string UriEncode(string text, UriPart uriPart)
         {
@@ -148,9 +148,9 @@
         /// </summary>
         /// <param name="text">The text to encode for inclusion in a URI.</param>
         /// <param name="uriPart">A <see cref="UriPart"/> value indicating where in the URI the specified text will be included.</param>
-        /// <param name="encoding">The encoding to use for Unicode characters in the URI. If this value is <c>null</c>, the <see cref="Encoding.UTF8"/> encoding will be used.</param>
+        /// <param name="encoding">The encoding to use for Unicode characters in the URI. If this value is <see langword="null"/>, the <see cref="Encoding.UTF8"/> encoding will be used.</param>
         /// <returns>The URI-encoded text, suitable for the specified URI part.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="uriPart"/> is not a valid <see cref="UriPart"/>.</exception>
         public static string UriEncode(string text, UriPart uriPart, Encoding encoding)
         {

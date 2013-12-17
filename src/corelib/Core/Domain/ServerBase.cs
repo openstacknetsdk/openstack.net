@@ -42,7 +42,7 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="server">The updated information for the current server.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="server"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="server"/> is <see langword="null"/>.</exception>
         protected virtual void UpdateThis(ServerBase server)
         {
             if (server == null)
@@ -64,8 +64,8 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="refreshCount">Number of times to poll the server's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
         /// <para>-or-</para>
@@ -92,8 +92,8 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="refreshCount">Number of times to poll the server's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
         /// <para>-or-</para>
@@ -124,12 +124,12 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedState">The expected state.</param>
         /// <param name="errorStates">The error state(s) in which to throw an exception if the server enters.</param>
         /// <param name="refreshCount">Number of times to poll the server's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="expectedState"/> is <c>null</c>.
+        /// If <paramref name="expectedState"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -167,12 +167,12 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedStates">The expected state(s).</param>
         /// <param name="errorStates">The error state(s) in which to throw an exception if the server enters.</param>
         /// <param name="refreshCount">Number of times to poll the server's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the server status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="Server.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="expectedStates"/> is <c>null</c>.
+        /// If <paramref name="expectedStates"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="expectedStates"/> is empty.
@@ -204,7 +204,7 @@ namespace net.openstack.Core.Domain
         /// <summary>
         /// Initiates an asynchronous soft reboot operation on the specified server.
         /// </summary>
-        /// <returns><c>true</c> if the reboot operation was successfully initiated; otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the reboot operation was successfully initiated; otherwise <see langword="false"/>.</returns>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support soft reboot operations.
         /// </exception>
@@ -218,7 +218,7 @@ namespace net.openstack.Core.Domain
         /// <summary>
         /// Initiates an asynchronous hard reboot operation on the specified server.
         /// </summary>
-        /// <returns><c>true</c> if the reboot operation was successfully initiated; otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the reboot operation was successfully initiated; otherwise <see langword="false"/>.</returns>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support hard reboot operations.
         /// </exception>
@@ -236,22 +236,22 @@ namespace net.openstack.Core.Domain
         /// When the method returns, the current instance is updated to reflect the state
         /// of the server at the end of the operation.
         /// </remarks>
-        /// <param name="name">The new name for the server. If the value is <c>null</c>, the server name is not changed.</param>
+        /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>
         /// <param name="imageId">The image to rebuild the server from. This is specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The new flavor for server. This is obtained from <see cref="Flavor.Id"/>.</param>
         /// <param name="adminPassword">The new admin password for the server.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <c>null</c>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <c>null</c>, the server's IP v6 address is not updated.</param>
-        /// <param name="metadata">The list of metadata to associate with the server. If the value is <c>null</c>, the metadata associated with the server is not changed during the rebuild operation.</param>
-        /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
-        /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <c>null</c>, no file is injected.</param>
-        /// <returns><c>true</c> if the rebuild operation was successfully initiated; otherwise <c>false</c>.</returns>
+        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="metadata">The list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.</param>
+        /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
+        /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.</param>
+        /// <returns><see langword="true"/> if the rebuild operation was successfully initiated; otherwise <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="imageId"/> is <c>null</c>.
+        /// If <paramref name="imageId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="flavor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="flavor"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="adminPassword"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="adminPassword"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
@@ -307,12 +307,12 @@ namespace net.openstack.Core.Domain
         /// </remarks>
         /// <param name="name">The new name for the resized server.</param>
         /// <param name="flavor">The new flavor. This is obtained from <see cref="Flavor.Id">Flavor.Id</see>.</param>
-        /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
-        /// <returns><c>true</c> if the resize operation is successfully started; otherwise, <c>false</c>.</returns>
+        /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
+        /// <returns><see langword="true"/> if the resize operation is successfully started; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="flavor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="flavor"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
@@ -346,7 +346,7 @@ namespace net.openstack.Core.Domain
         /// If a server resize operation is not manually confirmed or reverted within 24 hours,
         /// the operation is automatically confirmed.
         /// </remarks>
-        /// <returns><c>true</c> if the resize operation was confirmed; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the resize operation was confirmed; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public bool ConfirmResize()
         {
@@ -360,7 +360,7 @@ namespace net.openstack.Core.Domain
         /// If a server resize operation is not manually confirmed or reverted within 24 hours,
         /// the operation is automatically confirmed.
         /// </remarks>
-        /// <returns><c>true</c> if the resize operation was reverted; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the resize operation was reverted; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public bool RevertResize()
         {
@@ -400,7 +400,7 @@ namespace net.openstack.Core.Domain
         /// calling <see cref="UnRescue"/>.
         /// </note>
         /// </remarks>
-        /// <returns><c>true</c> if the server exited rescue mode; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the server exited rescue mode; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public bool UnRescue()
         {
@@ -416,8 +416,8 @@ namespace net.openstack.Core.Domain
         /// </remarks>
         /// <param name="imageName">Name of the new image.</param>
         /// <param name="metadata">The metadata to associate to the new image.</param>
-        /// <returns><c>true</c> if the image creation process was successfully started; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the image creation process was successfully started; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="imageName"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public bool CreateSnapshot(string imageName, Metadata metadata = null)
@@ -449,9 +449,9 @@ namespace net.openstack.Core.Domain
         /// Attaches a volume to the server.
         /// </summary>
         /// <param name="volumeId">The volume ID. This is obtained from <see cref="Volume.Id"/>.</param>
-        /// <param name="storageDevice">The name of the device, such as <localUri>/dev/xvdb</localUri>. If the value is <c>null</c>, an automatically generated device name will be used.</param>
+        /// <param name="storageDevice">The name of the device, such as <localUri>/dev/xvdb</localUri>. If the value is <see langword="null"/>, an automatically generated device name will be used.</param>
         /// <returns>A <see cref="ServerVolume"/> object containing the details about the volume.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public ServerVolume AttachVolume(string volumeId, string storageDevice)
@@ -463,8 +463,8 @@ namespace net.openstack.Core.Domain
         /// Detaches the specified volume from the server.
         /// </summary>
         /// <param name="volumeId">The volume attachment ID. This is obtained from <see cref="ServerVolume.Id">ServerVolume.Id</see>.</param>
-        /// <returns><c>true</c> if the volume was successfully detached; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the volume was successfully detached; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         public bool DetachVolume(string volumeId)

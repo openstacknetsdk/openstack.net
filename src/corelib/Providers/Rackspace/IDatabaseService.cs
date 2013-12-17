@@ -22,7 +22,7 @@
         /// <param name="configuration">A <see cref="DatabaseInstanceConfiguration"/> object describing the configuration of the new database instance.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DatabaseInstance"/> object
@@ -30,7 +30,7 @@
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Build"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createInstance__version___accountId__instances_.html">Create Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -44,8 +44,8 @@
         /// This is a <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">paginated collection</see>.
         /// </note>
         /// </remarks>
-        /// <param name="marker">The database instance ID of the last <see cref="DatabaseInstance"/> in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of <see cref="DatabaseInstance"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">The database instance ID of the last <see cref="DatabaseInstance"/> in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of <see cref="DatabaseInstance"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
@@ -68,7 +68,7 @@
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DatabaseInstance"/> object
         /// describing the database instance.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getInstanceById__version___accountId__instances__instanceId__.html">List Database Instance Status and Details (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<DatabaseInstance> GetDatabaseInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);
@@ -79,13 +79,13 @@
         /// <param name="instanceId">The database instance ID. This is obtained from <see cref="DatabaseInstance.Id">DatabaseInstance.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Shutdown"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteInstance__version___accountId__instances__instanceId__.html">Delete Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -112,7 +112,7 @@
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="RootUser"/> object
         /// containing the username and password of the root database user.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createRoot__version___accountId__instances__instanceId__root_.html">Enable Root User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<RootUser> EnableRootUserAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);
@@ -124,10 +124,10 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
-        /// the <see cref="Task{TResult}.Result"/> property will return <c>true</c> if root access is enabled for
-        /// the database instance; otherwise, <c>false</c>.
+        /// the <see cref="Task{TResult}.Result"/> property will return <see langword="true"/> if root access is enabled for
+        /// the database instance; otherwise, <see langword="false"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_isRootEnabled__version___accountId__instances__instanceId__root_.html">List Root-Enabled Status (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<bool?> CheckRootEnabledStatusAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);
@@ -142,13 +142,13 @@
         /// <param name="instanceId">The database instance ID. This is obtained from <see cref="DatabaseInstance.Id">DatabaseInstance.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Reboot"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_restartInstance__version___accountId__instances__instanceId__action_.html">Restart Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -161,16 +161,16 @@
         /// <param name="flavorRef">The new flavor to use for the database instance. This is obtained from <see cref="DatabaseFlavor.Href">DatabaseFlavor.Href</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Resize"/> state.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="flavorRef"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="flavorRef"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -187,13 +187,13 @@
         /// <param name="volumeSize">The new volume size for the database instance.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. If <paramref name="completionOption"/> is
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Resize"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="volumeSize"/> is less than or equal to 0.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -212,9 +212,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createDatabase__version___accountId__instances__instanceId__databases_.html">Create Database (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -229,15 +229,15 @@
         /// </note>
         /// </remarks>
         /// <param name="instanceId">The database instance ID. This is obtained from <see cref="DatabaseInstance.Id">DatabaseInstance.Id</see>.</param>
-        /// <param name="marker">The <see cref="Database.Name"/> of the last <see cref="Database"/> in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of <see cref="Database"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">The <see cref="Database.Name"/> of the last <see cref="Database"/> in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of <see cref="Database"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return an collection of <see cref="Database"/>
         /// objects describing the databases.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getDatabases__version___accountId__instances__instanceId__databases_.html">List Databases for Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -252,9 +252,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="databaseName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="databaseName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteDatabase__version___accountId__instances__instanceId__databases__databaseName__.html">Delete Database (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -272,9 +272,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createUser__version___accountId__instances__instanceId__users_.html">Create User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -289,15 +289,15 @@
         /// </note>
         /// </remarks>
         /// <param name="instanceId">The database instance ID. This is obtained from <see cref="DatabaseInstance.Id">DatabaseInstance.Id</see>.</param>
-        /// <param name="marker">The <see cref="UserConfiguration.UserName"/> of the last user in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of <see cref="Database"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">The <see cref="UserConfiguration.UserName"/> of the last user in the previous page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of <see cref="Database"/> objects to return in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return an collection of <see cref="DatabaseUser"/>
         /// objects describing the database instance users.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUsers__version___accountId__instances__instanceId__users_.html">List Users in Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -313,11 +313,11 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="password"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="password"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="password"/> is empty.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -333,11 +333,11 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/PUT_modifyUser__version___accountId__instances__instanceId__users__name__.html">Modify User Attributes (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -355,9 +355,9 @@
         /// object describing the user.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_listUser__version___accountId__instances__instanceId__users__name__.html">List User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -371,9 +371,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteUser__version___accountId__instances__instanceId__users__name__.html">Delete User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -391,9 +391,9 @@
         /// objects identifying the databases the user can access.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">List User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -408,11 +408,11 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="databaseName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="databaseName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/PUT_grantUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">Grant User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -427,11 +427,11 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="databaseName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="databaseName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="userName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="userName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_revokeUserAccess__version___accountId__instances__instanceId__users__name__databases__databaseName__.html">Revoke User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -464,7 +464,7 @@
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DatabaseFlavor"/> object
         /// describing the flavor.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="flavorId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="flavorId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getFlavorById__version___accountId__flavors__flavorId__.html">List Flavor By ID (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<DatabaseFlavor> GetFlavorAsync(FlavorId flavorId, CancellationToken cancellationToken);
@@ -479,7 +479,7 @@
         /// <param name="configuration">A <see cref="BackupConfiguration"/> object containing the backup parameters.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="Backup"/> object
@@ -487,7 +487,7 @@
         /// <see cref="AsyncCompletionOption.RequestCompleted"/>, the task will not be considered complete until
         /// the database instance transitions out of the <see cref="DatabaseInstanceStatus.Backup"/> state.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createBackup__version___accountId__backups_.html">Create Backup (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
@@ -516,7 +516,7 @@
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="Backup"/> object
         /// describing the backup.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackupById__version___accountId__backups__backupId__.html">List Backup by ID (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<Backup> GetBackupAsync(BackupId backupId, CancellationToken cancellationToken);
@@ -527,7 +527,7 @@
         /// <param name="backupId">The backup ID. This is obtained from <see cref="Backup.Id">Backup.Id</see></param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteBackup__version___accountId__backups__backupId__.html">Delete Backup (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task RemoveBackupAsync(BackupId backupId, CancellationToken cancellationToken);
@@ -542,7 +542,7 @@
         /// the <see cref="Task{TResult}.Result"/> property will return a collection of <see cref="Backup"/> objects
         /// describing the backups for the database instance identified by <paramref name="instanceId"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         Task<Backup[]> ListBackupsForInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);

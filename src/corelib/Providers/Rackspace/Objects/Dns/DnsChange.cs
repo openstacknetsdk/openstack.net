@@ -46,7 +46,7 @@
         /// Gets the name of the field which changed.
         /// </summary>
         /// <value>
-        /// The name of the field which changed, or <c>null</c> if the JSON response from the
+        /// The name of the field which changed, or <see langword="null"/> if the JSON response from the
         /// server did not include this property.
         /// </value>
         public string Field
@@ -61,7 +61,7 @@
         /// Gets the value of the field before the change was made.
         /// </summary>
         /// <value>
-        /// The original value of the field which changed, or <c>null</c> if the JSON response
+        /// The original value of the field which changed, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public string OriginalValue
@@ -76,7 +76,7 @@
         /// Gets the value of the field after the change was made.
         /// </summary>
         /// <value>
-        /// The new value of the field which changed, or <c>null</c> if the JSON response
+        /// The new value of the field which changed, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public string NewValue

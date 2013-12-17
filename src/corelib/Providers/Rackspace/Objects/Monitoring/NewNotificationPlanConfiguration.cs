@@ -28,19 +28,19 @@
         /// with the specified properties.
         /// </summary>
         /// <param name="label">The label for the notification plan.</param>
-        /// <param name="criticalState">The notification list to send to when the state is <see cref="AlarmState.Critical"/>. If this value is <c>null</c>, notifications are not sent for this state.</param>
-        /// <param name="warningState">The notification list to send to when the state is <see cref="AlarmState.Warning"/>. If this value is <c>null</c>, notifications are not sent for this state.</param>
-        /// <param name="okState">The notification list to send to when the state is <see cref="AlarmState.OK"/>. If this value is <c>null</c>, notifications are not sent for this state.</param>
-        /// <param name="metadata">The metadata to associate with the notification plan. If this value is <c>null</c>, no custom metadata is associated with the notification plan.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="label"/> is <c>null</c>.</exception>
+        /// <param name="criticalState">The notification list to send to when the state is <see cref="AlarmState.Critical"/>. If this value is <see langword="null"/>, notifications are not sent for this state.</param>
+        /// <param name="warningState">The notification list to send to when the state is <see cref="AlarmState.Warning"/>. If this value is <see langword="null"/>, notifications are not sent for this state.</param>
+        /// <param name="okState">The notification list to send to when the state is <see cref="AlarmState.OK"/>. If this value is <see langword="null"/>, notifications are not sent for this state.</param>
+        /// <param name="metadata">The metadata to associate with the notification plan. If this value is <see langword="null"/>, no custom metadata is associated with the notification plan.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="label"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="label"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="criticalState"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="criticalState"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="warningState"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="warningState"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="okState"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="okState"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> contains any empty keys.</para>
         /// </exception>

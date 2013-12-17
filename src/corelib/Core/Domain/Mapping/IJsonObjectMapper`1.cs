@@ -16,7 +16,7 @@ namespace net.openstack.Core.Domain.Mapping
         /// </summary>
         /// <param name="rawJson">The JSON string representation.</param>
         /// <returns>An instance of <typeparamref name="T"/> represented by <paramref name="rawJson"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="rawJson"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="rawJson"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">If the conversion cannot be performed.</exception>
         T Map(string rawJson);
     }

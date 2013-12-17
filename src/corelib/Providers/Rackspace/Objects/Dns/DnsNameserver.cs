@@ -34,7 +34,7 @@
         /// Gets the fully-qualified domain name of the nameserver.
         /// </summary>
         /// <value>
-        /// The fully-qualified domain name of the nameserver, or <c>null</c> if the JSON
+        /// The fully-qualified domain name of the nameserver, or <see langword="null"/> if the JSON
         /// response from the server did not include this property.
         /// </value>
         public string Name

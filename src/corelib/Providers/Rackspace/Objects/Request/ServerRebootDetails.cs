@@ -28,7 +28,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// class with the specified reboot type.
         /// </summary>
         /// <param name="type">The type of reboot to perform. See <see cref="RebootType"/> for predefined values.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
         public ServerRebootDetails(RebootType type)
         {
             if (type == null)

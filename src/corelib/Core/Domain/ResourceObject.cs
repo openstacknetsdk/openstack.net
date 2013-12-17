@@ -45,7 +45,7 @@
         /// may be a relative URI whose base URI is that of the JSON Home Document itself.
         /// </summary>
         /// <value>
-        /// The direct URI of the resource, or <c>null</c> if this resource is
+        /// The direct URI of the resource, or <see langword="null"/> if this resource is
         /// a templated link.
         /// </value>
         /// <seealso href="http://tools.ietf.org/html/rfc3986">RFC3986 (Uniform Resource Identifier (URI): Generic Syntax)</seealso>
@@ -65,7 +65,7 @@
         /// whose base URI is that of the JSON Home Document itself.
         /// </summary>
         /// <value>
-        /// The URI Template of the resource, or <c>null</c> if this resource is
+        /// The URI Template of the resource, or <see langword="null"/> if this resource is
         /// a direct link.
         /// </value>
         /// <seealso href="http://tools.ietf.org/html/rfc6570">RFC6570 (URI Template)</seealso>
@@ -87,7 +87,7 @@
         /// syntax of those variables.
         /// </remarks>
         /// <value>
-        /// The template variable mapping, or <c>null</c> if this is a direct link.
+        /// The template variable mapping, or <see langword="null"/> if this is a direct link.
         /// </value>
         public IDictionary<string, Uri> HrefVars
         {

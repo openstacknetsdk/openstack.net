@@ -36,7 +36,7 @@
         /// </summary>
         /// <value>
         /// A <typeparamref name="TResponse"/> object representing the JSON-formatted
-        /// response from the asynchronous operation, or <c>null</c> if the JSON
+        /// response from the asynchronous operation, or <see langword="null"/> if the JSON
         /// response from the server did not include this property.
         /// </value>
         public TResponse Response

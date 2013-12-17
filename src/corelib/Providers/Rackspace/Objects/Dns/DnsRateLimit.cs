@@ -63,7 +63,7 @@
         /// Gets the HTTP method associated with the rate limit.
         /// </summary>
         /// <value>
-        /// The specific HTTP method which is rate limited, or <c>null</c> if the JSON
+        /// The specific HTTP method which is rate limited, or <see langword="null"/> if the JSON
         /// response from the server did not include this property.
         /// </value>
         public HttpMethod? Verb
@@ -78,7 +78,7 @@
         /// Gets the time unit this rate limit is measured in.
         /// </summary>
         /// <value>
-        /// The time unit used for measuring this rate limit, or <c>null</c> if the JSON
+        /// The time unit used for measuring this rate limit, or <see langword="null"/> if the JSON
         /// response from the server did not include this property.
         /// </value>
         public DnsRateLimitUnit Unit
@@ -94,7 +94,7 @@
         /// <see cref="Verb"/> HTTP method in the measuring time <see cref="Unit"/>.
         /// </summary>
         /// <value>
-        /// The rate limit value, or <c>null</c> if the JSON response from the server
+        /// The rate limit value, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public long? Value
@@ -110,7 +110,7 @@
         /// </summary>
         /// <value>
         /// The number of calls remaining within the current rate limit time unit, or
-        /// <c>null</c> if the JSON response from the server did not include this property.
+        /// <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public long? Remaining
         {
@@ -124,7 +124,7 @@
         /// Gets a timestamp indicating when the rate limit next resets.
         /// </summary>
         /// <value>
-        /// The timestamp for when the rate limit next resets, or <c>null</c> if the
+        /// The timestamp for when the rate limit next resets, or <see langword="null"/> if the
         /// JSON response from the server did not include this property.
         /// </value>
         public DateTimeOffset? NextAvailable

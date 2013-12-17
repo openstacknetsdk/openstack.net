@@ -24,7 +24,7 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// from the given <see cref="CloudIdentity"/> instance.
         /// </summary>
         /// <param name="cloudIdentity">The generic cloud identity.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="cloudIdentity"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="cloudIdentity"/> is <see langword="null"/>.</exception>
         public RackspaceCloudIdentity(CloudIdentity cloudIdentity) : this()
         {
             if (cloudIdentity == null)

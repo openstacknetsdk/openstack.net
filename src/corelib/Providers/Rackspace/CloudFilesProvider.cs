@@ -78,7 +78,7 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity, no default region, and the default identity provider
         /// and REST service implementation.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null) { }
 
@@ -87,7 +87,7 @@ namespace net.openstack.Providers.Rackspace
         /// no default identity or region, the default identity provider, and the specified
         /// REST service implementation.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(IRestService restService)
             : this(null, null, null, restService) { }
 
@@ -96,7 +96,7 @@ namespace net.openstack.Providers.Rackspace
         /// no default identity or region, the specified identity provider, and the default
         /// REST service implementation.
         /// </summary>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudFilesProvider(IIdentityProvider identityProvider)
             : this(null, null, identityProvider, null) { }
 
@@ -105,8 +105,8 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity and identity provider, no default region, and
         /// the default REST service implementation.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider)
             : this(defaultIdentity, null, identityProvider, null) { }
 
@@ -115,8 +115,8 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity and REST service implementation, no default region,
         /// and the default identity provider.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IRestService restService)
             : this(defaultIdentity, null, null, restService) { }
 
@@ -127,9 +127,9 @@ namespace net.openstack.Providers.Rackspace
         /// Rackspace-Cloud-Files-specific implementations of the object storage validator,
         /// metadata processor, encoder, status parser, and bulk delete results mapper.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
             : this(defaultIdentity, null, identityProvider, restService) { }
 
@@ -140,10 +140,10 @@ namespace net.openstack.Providers.Rackspace
         /// the object storage validator, metadata processor, encoder, status parser, and bulk
         /// delete results mapper.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
             : this(defaultIdentity, defaultRegion, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
 
@@ -153,24 +153,24 @@ namespace net.openstack.Providers.Rackspace
         /// provider, REST service implementation, validator, metadata processor, encoder,
         /// status parser, and bulk delete results mapper.
         /// </summary>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
         /// <param name="cloudFilesMetadataProcessor">The <see cref="IObjectStorageMetadataProcessor"/> to use for processing metadata returned in HTTP headers.</param>
         /// <param name="encodeDecodeProvider">The <see cref="IEncodeDecodeProvider"/> to use for encoding data in URI query strings.</param>
         /// <param name="statusParser">The <see cref="IStatusParser"/> to use for parsing HTTP status codes.</param>
         /// <param name="mapper">The object mapper to use for mapping <see cref="BulkDeleteResponse"/> objects to <see cref="BulkDeletionResults"/> objects.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="cloudFilesValidator"/> is <c>null</c>.
+        /// If <paramref name="cloudFilesValidator"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="encodeDecodeProvider"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="encodeDecodeProvider"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="statusParser"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="statusParser"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="mapper"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="mapper"/> is <see langword="null"/>.</para>
         /// </exception>
         internal CloudFilesProvider(string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
             : this(null, defaultRegion, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
@@ -181,25 +181,25 @@ namespace net.openstack.Providers.Rackspace
         /// implementation, validator, metadata processor, encoder, status parser, and bulk
         /// delete results mapper.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         /// <param name="cloudFilesValidator">The <see cref="IObjectStorageValidator"/> to use for validating requests to this service.</param>
         /// <param name="cloudFilesMetadataProcessor">The <see cref="IObjectStorageMetadataProcessor"/> to use for processing metadata returned in HTTP headers.</param>
         /// <param name="encodeDecodeProvider">The <see cref="IEncodeDecodeProvider"/> to use for encoding data in URI query strings.</param>
         /// <param name="statusParser">The <see cref="IStatusParser"/> to use for parsing HTTP status codes.</param>
         /// <param name="bulkDeletionResultMapper">The object mapper to use for mapping <see cref="BulkDeleteResponse"/> objects to <see cref="BulkDeletionResults"/> objects.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="cloudFilesValidator"/> is <c>null</c>.
+        /// If <paramref name="cloudFilesValidator"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="cloudFilesMetadataProcessor"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="encodeDecodeProvider"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="encodeDecodeProvider"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="statusParser"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="statusParser"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="bulkDeletionResultMapper"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="bulkDeletionResultMapper"/> is <see langword="null"/>.</para>
         /// </exception>
         internal CloudFilesProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> bulkDeletionResultMapper)
             : base(defaultIdentity, defaultRegion, identityProvider, restService)
@@ -1194,12 +1194,12 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="objects">A names of objects to delete.</param>
         /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="objects"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objects"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1215,12 +1215,12 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -1242,10 +1242,10 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="items">The collection of items to delete. The keys of each pair specifies the container name, and the value specifies the object name.</param>
         /// <param name="headers">A collection of custom HTTP headers to include with the request.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="items"/> is <c>null</c>.
+        /// If <paramref name="items"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="items"/> contains any values with empty keys or values.
@@ -1259,12 +1259,12 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -1305,20 +1305,20 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\archive_name.tar.gz</localUri></param>
         /// <param name="uploadPath">The target path for the extracted files. For details about this value, see the Extract Archive reference link in the documentation for this method.</param>
         /// <param name="archiveFormat">The archive format.</param>
-        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <c>null</c> or empty, the content type of the extracted files is unspecified.</param>
+        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <see langword="null"/> or empty, the content type of the extracted files is unspecified.</param>
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>An <see cref="ExtractArchiveResponse"/> object containing the detailed result of the extract archive operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="filePath"/> is <c>null</c>.
+        /// If <paramref name="filePath"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="uploadPath"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="uploadPath"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="archiveFormat"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="archiveFormat"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="filePath"/> is empty.
@@ -1334,12 +1334,12 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extract Archive (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -1370,20 +1370,20 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="stream">A <see cref="Stream"/> providing the data for the archive.</param>
         /// <param name="uploadPath">The target path for the extracted files. For details about this value, see the Extract Archive reference link in the documentation for this method.</param>
         /// <param name="archiveFormat">The archive format.</param>
-        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <c>null</c> or empty, the content type of the extracted files is unspecified.</param>
+        /// <param name="contentType">The content type of the files extracted from the archive. If the value is <see langword="null"/> or empty, the content type of the extracted files is unspecified.</param>
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>An <see cref="ExtractArchiveResponse"/> object containing the detailed result of the extract archive operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="stream"/> is <c>null</c>.
+        /// If <paramref name="stream"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="uploadPath"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="uploadPath"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="archiveFormat"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="archiveFormat"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="headers"/> contains two equivalent keys when compared using <see cref="StringComparer.OrdinalIgnoreCase"/>.
@@ -1396,12 +1396,12 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extract Archive (Rackspace Cloud Files Developer Guide - API v1)</seealso>
@@ -1551,8 +1551,8 @@ namespace net.openstack.Providers.Rackspace
         /// This method uses <c>object-store</c> for the service type, and <c>cloudFiles</c> for the preferred service name.
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the internal service endpoint; otherwise <c>false</c> to use the public service endpoint.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the internal service endpoint; otherwise <see langword="false"/> to use the public service endpoint.</param>
         /// <returns>The URL for the requested Cloud Files endpoint.</returns>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1560,9 +1560,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/> and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -1578,7 +1578,7 @@ namespace net.openstack.Providers.Rackspace
         /// This method uses <c>rax:object-cdn</c> for the service type, and <c>cloudFilesCDN</c> for the preferred service name.
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
         /// <returns>The public URL for the requested Cloud Files CDN endpoint.</returns>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -1586,9 +1586,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/> and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -1608,11 +1608,11 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="input">The input stream.</param>
         /// <param name="output">The output stream.</param>
         /// <param name="bufferSize">The size of the buffer to use for copying data.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="input"/> is <c>null</c>.
+        /// If <paramref name="input"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="output"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="output"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="bufferSize"/> is less than or equal to 0.</exception>
         public static void CopyStream(Stream input, Stream output, int bufferSize, Action<long> progressUpdated)
@@ -1651,19 +1651,19 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
         /// <param name="objectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
-        /// <param name="contentType">The content type of the created object. If the value is <c>null</c> or empty, the content type of the created object is unspecified.</param>
+        /// <param name="contentType">The content type of the created object. If the value is <see langword="null"/> or empty, the content type of the created object is unspecified.</param>
         /// <param name="chunkSize">The buffer size to use for copying streaming data.</param>
         /// <param name="headers">A collection of custom HTTP headers to associate with the object (see <see cref="GetObjectHeaders"/>).</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
-        /// <param name="progressUpdated">A callback for progress updates. If the value is <c>null</c>, no progress updates are reported.</param>
-        /// <param name="useInternalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="progressUpdated">A callback for progress updates. If the value is <see langword="null"/>, no progress updates are reported.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="container"/> is <c>null</c>.
+        /// If <paramref name="container"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="stream"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="stream"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="objectName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="container"/> is empty.
@@ -1680,12 +1680,12 @@ namespace net.openstack.Providers.Rackspace
         /// <para>-or-</para>
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// <para>-or-</para>
-        /// <para><paramref name="useInternalUrl"/> is <c>true</c> and the provider does not support internal URLs.</para>
+        /// <para><paramref name="useInternalUrl"/> is <see langword="true"/> and the provider does not support internal URLs.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
@@ -1777,7 +1777,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="container">The container name.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="container"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="container"/> is empty.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
         /// <exception cref="NotSupportedException">
@@ -1786,11 +1786,11 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
-        /// <exception cref="CDNNotEnabledException">If the container does not have a CDN header, or if the <see cref="ContainerCDN.CDNEnabled"/> property is <c>false</c>.</exception>
+        /// <exception cref="CDNNotEnabledException">If the container does not have a CDN header, or if the <see cref="ContainerCDN.CDNEnabled"/> property is <see langword="false"/>.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected void VerifyContainerIsCDNEnabled(string container, string region, CloudIdentity identity)
         {
@@ -1965,7 +1965,7 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// The Web-Listings-CSS metadata key, which specifies the stylesheet to use for file listings
-        /// when <see cref="WebListings"/> is <c>true</c> and a pseudo-directory does not contain an
+        /// when <see cref="WebListings"/> is <see langword="true"/> and a pseudo-directory does not contain an
         /// index file.
         /// </summary>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference - API v1)</seealso>

@@ -41,7 +41,7 @@
         /// with the specified metadata.
         /// </summary>
         /// <param name="metadata">The metadata to associate with the monitoring account.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any empty keys.</exception>
         public AccountConfiguration(IDictionary<string, string> metadata)
         {
@@ -58,7 +58,7 @@
         /// with the specified webhook token.
         /// </summary>
         /// <param name="webhookToken">The webhook token to associate with the account.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="webhookToken"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="webhookToken"/> is <see langword="null"/>.</exception>
         public AccountConfiguration(WebhookToken webhookToken)
         {
             if (webhookToken == null)
@@ -71,8 +71,8 @@
         /// Initializes a new instance of the <see cref="AccountConfiguration"/> class
         /// with the specified metadata and webhook token.
         /// </summary>
-        /// <param name="metadata">The metadata to associate with the monitoring account. If this value is <c>null</c>, the metadata associated with the account is not changed.</param>
-        /// <param name="webhookToken">The webhook token to associate with the account. If this value is <c>null</c>, the webhook token associated with the account is not changed.</param>
+        /// <param name="metadata">The metadata to associate with the monitoring account. If this value is <see langword="null"/>, the metadata associated with the account is not changed.</param>
+        /// <param name="webhookToken">The webhook token to associate with the account. If this value is <see langword="null"/>, the webhook token associated with the account is not changed.</param>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any empty keys.</exception>
         public AccountConfiguration(IDictionary<string, string> metadata, WebhookToken webhookToken)
         {

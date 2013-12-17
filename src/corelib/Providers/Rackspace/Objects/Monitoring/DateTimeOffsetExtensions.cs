@@ -46,8 +46,8 @@
         /// <summary>
         /// Converts a Unix timestamp (number of milliseconds since the <see cref="Epoch"/>) to a <see cref="DateTimeOffset"/>.
         /// </summary>
-        /// <param name="timestamp">The Unix timestamp, or <c>null</c>.</param>
-        /// <returns>A <see cref="DateTimeOffset"/> representation of the timestamp, or <c>null</c> if <paramref name="timestamp"/> is <c>null</c>.</returns>
+        /// <param name="timestamp">The Unix timestamp, or <see langword="null"/>.</param>
+        /// <returns>A <see cref="DateTimeOffset"/> representation of the timestamp, or <see langword="null"/> if <paramref name="timestamp"/> is <see langword="null"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timestamp"/> is less than 0.</exception>
         public static DateTimeOffset? ToDateTimeOffset(long? timestamp)
         {
@@ -60,8 +60,8 @@
         /// <summary>
         /// Converts a <see cref="DateTimeOffset"/> value to a Unix-style timestamp (number of milliseconds since the <see cref="Epoch"/>).
         /// </summary>
-        /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> to convert, or <c>null</c>.</param>
-        /// <returns>The number of milliseconds since the <see cref="Epoch"/> until the time indicated by <paramref name="dateTimeOffset"/>, or <c>null</c> if <paramref name="dateTimeOffset"/> is <c>null</c>.</returns>
+        /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> to convert, or <see langword="null"/>.</param>
+        /// <returns>The number of milliseconds since the <see cref="Epoch"/> until the time indicated by <paramref name="dateTimeOffset"/>, or <see langword="null"/> if <paramref name="dateTimeOffset"/> is <see langword="null"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="dateTimeOffset"/> occurs before <see cref="Epoch"/>.</exception>
         public static long? ToTimestamp(this DateTimeOffset? dateTimeOffset)
         {

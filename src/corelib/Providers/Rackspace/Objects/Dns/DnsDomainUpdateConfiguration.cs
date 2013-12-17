@@ -49,10 +49,10 @@
         /// the specified values.
         /// </summary>
         /// <param name="domain">The domain to update.</param>
-        /// <param name="timeToLive">The time-to-live for the domain. If this value is <c>null</c>, the existing value for the domain is not updated.</param>
-        /// <param name="emailAddress">The email address associated with the domain. If this value is <c>null</c>, the existing value for the domain is not updated.</param>
-        /// <param name="comment">An optional comment associated with the domain. If this value is <c>null</c>, the existing value for the domain is not updated.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="domain"/> is <c>null</c>.</exception>
+        /// <param name="timeToLive">The time-to-live for the domain. If this value is <see langword="null"/>, the existing value for the domain is not updated.</param>
+        /// <param name="emailAddress">The email address associated with the domain. If this value is <see langword="null"/>, the existing value for the domain is not updated.</param>
+        /// <param name="comment">An optional comment associated with the domain. If this value is <see langword="null"/>, the existing value for the domain is not updated.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="domain"/> is <see langword="null"/>.</exception>
         public DnsDomainUpdateConfiguration(DnsDomain domain, string emailAddress = null, string comment = null, TimeSpan? timeToLive = null)
         {
             if (domain == null)
@@ -82,7 +82,7 @@
         /// Gets the comment associated with this domain.
         /// </summary>
         /// <value>
-        /// The comment for the domain, or <c>null</c> if
+        /// The comment for the domain, or <see langword="null"/> if
         /// the current comment for the domain should not be changed.
         /// </value>
         public string Comment
@@ -97,7 +97,7 @@
         /// Gets the email address associated with this domain.
         /// </summary>
         /// <value>
-        /// The email address for the domain, or <c>null</c> if the current email address for the
+        /// The email address for the domain, or <see langword="null"/> if the current email address for the
         /// domain should not be changed.
         /// </value>
         public string EmailAddress
@@ -112,7 +112,7 @@
         /// Gets the time-to-live for the domain.
         /// </summary>
         /// <value>
-        /// A <see cref="TimeSpan"/> object containing the time-to-live for the domain, or <c>null</c> if
+        /// A <see cref="TimeSpan"/> object containing the time-to-live for the domain, or <see langword="null"/> if
         /// the current time-to-live for the domain should not be changed.
         /// </value>
         public TimeSpan? TimeToLive

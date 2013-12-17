@@ -231,7 +231,7 @@
         /// referenced by other services.
         /// </summary>
         /// <value>
-        /// The account ID for the audit record, or <c>null</c> if the JSON response from
+        /// The account ID for the audit record, or <see langword="null"/> if the JSON response from
         /// the server did not include the underlying property.
         /// </value>
         public ProjectId AccountId

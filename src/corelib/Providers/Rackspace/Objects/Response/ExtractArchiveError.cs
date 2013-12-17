@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="path">The path of the file affected by this error.</param>
         /// <param name="status">The specific status for the error affecting the file.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="path"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="path"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="path"/> is empty.</exception>
         public ExtractArchiveError(string path, string status)
         {

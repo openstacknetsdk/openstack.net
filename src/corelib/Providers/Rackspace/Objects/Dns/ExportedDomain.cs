@@ -41,7 +41,7 @@
         /// Gets the ID of the exported domain.
         /// </summary>
         /// <value>
-        /// The ID for the exported domain, or <c>null</c> if the JSON response from the server
+        /// The ID for the exported domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         /// <seealso cref="DnsDomain.Id"/>
@@ -58,7 +58,7 @@
         /// is equivalent to the <see cref="Tenant.Id">Tenant.Id</see> referenced by other services.
         /// </summary>
         /// <value>
-        /// The account ID for the domain, or <c>null</c> if the JSON response from the server
+        /// The account ID for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public ProjectId AccountId

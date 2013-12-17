@@ -14,7 +14,7 @@
         /// Validates a container name for an object storage provider.
         /// </summary>
         /// <param name="containerName">The container name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="containerName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="containerName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ContainerNameException">If <paramref name="containerName"/> is not a valid container name.</exception>
         void ValidateContainerName(string containerName);
 
@@ -22,7 +22,7 @@
         /// Validates an object name for an object storage provider.
         /// </summary>
         /// <param name="objectName">The object name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="objectName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="objectName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
         void ValidateObjectName(string objectName);
     }

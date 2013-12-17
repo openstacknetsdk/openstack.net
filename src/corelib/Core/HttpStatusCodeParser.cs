@@ -46,7 +46,7 @@ namespace net.openstack.Core
         ///
         /// <para><paramref name="pattern"/> should contain the named capturing grounds <c>StatusCode</c> and <c>status</c>.</para>
         /// </param>
-        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="pattern"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="pattern"/> does not contain a capturing group named <c>StatusCode</c>.
         /// <para>-or-</para>

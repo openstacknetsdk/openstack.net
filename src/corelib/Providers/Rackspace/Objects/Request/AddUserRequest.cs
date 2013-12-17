@@ -23,7 +23,7 @@
         /// specified <paramref name="user"/>.
         /// </summary>
         /// <param name="user">The user.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="user"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="user"/> is <see langword="null"/>.</exception>
         public AddUserRequest(NewUser user)
         {
             if (user == null)

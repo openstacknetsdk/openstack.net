@@ -44,7 +44,7 @@
         /// the specified name and the default MySQL character set and collation configuration.
         /// </summary>
         /// <param name="name">The name of the database.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         public DatabaseConfiguration(DatabaseName name)
             : this(name, null, null)
         {
@@ -55,9 +55,9 @@
         /// the specified name, character set, and collation configuration.
         /// </summary>
         /// <param name="name">The name of the database.</param>
-        /// <param name="characterSet">The MySQL character set. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="collate">The MySQL collation configuration. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+        /// <param name="characterSet">The MySQL character set. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="collate">The MySQL collation configuration. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         public DatabaseConfiguration(DatabaseName name, string characterSet, string collate)
         {
             if (name == null)

@@ -21,7 +21,7 @@
         /// with the specified web response.
         /// </summary>
         /// <param name="response">The HTTP web response.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <see langword="null"/>.</exception>
         public WebResponseEventArgs(HttpWebResponse response)
         {
             if (response == null)

@@ -47,9 +47,9 @@
         /// <param name="messages">A collection of <see cref="QueuedMessage"/> objects describing the messages in a queue.</param>
         /// <param name="links">A collection of <see cref="Link"/> objects describing resources related to the list of messages.</param>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains any <c>null</c> values.
+        /// If <paramref name="messages"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
-        /// <para>If <paramref name="links"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="links"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         public QueuedMessageList(IEnumerable<QueuedMessage> messages, IEnumerable<Link> links)
         {

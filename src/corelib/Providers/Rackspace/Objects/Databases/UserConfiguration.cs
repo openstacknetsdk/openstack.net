@@ -63,14 +63,14 @@
         /// <param name="password">The password for the new user.</param>
         /// <param name="databases">A collection of <see cref="DatabaseName"/> objects identifying the databases to initially grant access to for the new user.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="password"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="password"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="password"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="databases"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="databases"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         public UserConfiguration(UserName name, string password, IEnumerable<DatabaseName> databases)
             : this(name, password, databases != null ? databases.ToArray() : null)
@@ -86,14 +86,14 @@
         /// <param name="password">The password for the new user.</param>
         /// <param name="databases">A collection of <see cref="DatabaseName"/> objects identifying the databases to initially grant access to for the new user.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="password"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="password"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="password"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="databases"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="databases"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         public UserConfiguration(UserName name, string password, params DatabaseName[] databases)
         {
@@ -182,7 +182,7 @@
             /// with the specified name.
             /// </summary>
             /// <param name="name">The database name.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
             public WrappedDatabaseName(DatabaseName name)
             {
                 if (name == null)

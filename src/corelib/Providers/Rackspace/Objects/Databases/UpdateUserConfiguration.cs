@@ -43,8 +43,8 @@
         /// Initializes a new instance of the <see cref="UpdateUserConfiguration"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="name">A <see cref="UserName"/> object providing the new name and host for the user. If this value is <c>null</c>, the name and host address for the database user is not changed.</param>
-        /// <param name="password">The new password for the user. If this value is <c>null</c>, the existing password for the database user is not changed.</param>
+        /// <param name="name">A <see cref="UserName"/> object providing the new name and host for the user. If this value is <see langword="null"/>, the name and host address for the database user is not changed.</param>
+        /// <param name="password">The new password for the user. If this value is <see langword="null"/>, the existing password for the database user is not changed.</param>
         public UpdateUserConfiguration(UserName name, string password)
         {
             if (name != null)
@@ -60,7 +60,7 @@
         /// Gets a <see cref="UserName"/> object containing the updated username and host address for the database user.
         /// </summary>
         /// <value>
-        /// A <see cref="UserName"/> object containing the new username and host address for the existing database user, or <c>null</c> if the username and password for the existing database user should not be changed.
+        /// A <see cref="UserName"/> object containing the new username and host address for the existing database user, or <see langword="null"/> if the username and password for the existing database user should not be changed.
         /// </value>
         public UserName UserName
         {
@@ -82,7 +82,7 @@
         /// Gets the updated password for the database user.
         /// </summary>
         /// <value>
-        /// The new password for the database user, or <c>null</c> if the password for the user should not be changed.
+        /// The new password for the database user, or <see langword="null"/> if the password for the user should not be changed.
         /// </value>
         public string Password
         {

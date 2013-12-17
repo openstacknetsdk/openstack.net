@@ -27,7 +27,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public string Flavor { get; private set; }
 
         /// <summary>
-        /// The disk configuration. If the value is <c>null</c>, the default configuration for the image is used.
+        /// The disk configuration. If the value is <see langword="null"/>, the default configuration for the image is used.
         /// </summary>
         [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Include)]
         public DiskConfiguration DiskConfig { get; private set; }
@@ -37,11 +37,11 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// </summary>
         /// <param name="name">The new name for the resized server.</param>
         /// <param name="flavor">The new flavor. This is obtained from <see cref="net.openstack.Core.Domain.Flavor.Id">Flavor.Id</see>.</param>
-        /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
+        /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="flavor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="flavor"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.

@@ -96,7 +96,7 @@
         /// Gets the domain name.
         /// </summary>
         /// <value>
-        /// The name of the domain, or <c>null</c> if the JSON response from the server
+        /// The name of the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public string Name
@@ -111,7 +111,7 @@
         /// Gets the unique ID representing this domain within the DNS service.
         /// </summary>
         /// <value>
-        /// The unique ID for the domain, or <c>null</c> if the JSON response from the server
+        /// The unique ID for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DomainId Id
@@ -126,7 +126,7 @@
         /// Gets the comment associated with this domain.
         /// </summary>
         /// <value>
-        /// The comment for the domain, or <c>null</c> if the JSON response from the server
+        /// The comment for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public string Comment
@@ -142,7 +142,7 @@
         /// is equivalent to the <see cref="Tenant.Id">Tenant.Id</see> referenced by other services.
         /// </summary>
         /// <value>
-        /// The account ID for the domain, or <c>null</c> if the JSON response from the server
+        /// The account ID for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public ProjectId AccountId
@@ -157,7 +157,7 @@
         /// Gets the email address associated with this domain.
         /// </summary>
         /// <value>
-        /// The email address for the domain, or <c>null</c> if the JSON response from the server
+        /// The email address for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public string EmailAddress
@@ -172,7 +172,7 @@
         /// Gets the timestamp when this domain was first added to the DNS service.
         /// </summary>
         /// <value>
-        /// The creation timestamp for the domain, or <c>null</c> if the JSON response from the server
+        /// The creation timestamp for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Created
@@ -187,7 +187,7 @@
         /// Gets the timestamp when this domain was last updated within the DNS service.
         /// </summary>
         /// <value>
-        /// The last-updated timestamp for the domain, or <c>null</c> if the JSON response from the server
+        /// The last-updated timestamp for the domain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Updated
@@ -202,7 +202,7 @@
         /// Gets a collection of <see cref="DnsRecord"/> objects describing the DNS records for the domain.
         /// </summary>
         /// <value>
-        /// A collection of <see cref="DnsRecord"/> objects, or <c>null</c> if the JSON response from the
+        /// A collection of <see cref="DnsRecord"/> objects, or <see langword="null"/> if the JSON response from the
         /// server did not include the associated property.
         /// </value>
         public ReadOnlyCollection<DnsRecord> Records
@@ -220,7 +220,7 @@
         /// Gets a collection of <see cref="DnsSubdomain"/> objects describing the DNS subdomains for the domain.
         /// </summary>
         /// <value>
-        /// A collection of <see cref="DnsSubdomain"/> objects, or <c>null</c> if the JSON response from the
+        /// A collection of <see cref="DnsSubdomain"/> objects, or <see langword="null"/> if the JSON response from the
         /// server did not include the associated property.
         /// </value>
         public ReadOnlyCollection<DnsSubdomain> Subdomains
@@ -238,7 +238,7 @@
         /// Gets a collection of <see cref="DnsNameserver"/> objects describing the DNS nameservers for the domain.
         /// </summary>
         /// <value>
-        /// A collection of <see cref="DnsNameserver"/> objects, or <c>null</c> if the JSON response from the
+        /// A collection of <see cref="DnsNameserver"/> objects, or <see langword="null"/> if the JSON response from the
         /// server did not include the associated property.
         /// </value>
         public ReadOnlyCollection<DnsNameserver> Nameservers
@@ -256,7 +256,7 @@
         /// Gets the time-to-live for the domain.
         /// </summary>
         /// <value>
-        /// A <see cref="TimeSpan"/> object containing the time-to-live for the domain, or <c>null</c> if the
+        /// A <see cref="TimeSpan"/> object containing the time-to-live for the domain, or <see langword="null"/> if the
         /// JSON response from the server did not include the associated property.
         /// </value>
         public TimeSpan? TimeToLive

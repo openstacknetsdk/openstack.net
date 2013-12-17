@@ -18,8 +18,8 @@
         /// with the specified metadata.
         /// </summary>
         /// <param name="metadata">The metadata to add.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains a pair whose key is <c>null</c> or empty, or whose value is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains a pair whose key is <see langword="null"/> or empty, or whose value is <see langword="null"/>.</exception>
         public AddLoadBalancerMetadataRequest(IEnumerable<KeyValuePair<string, string>> metadata)
         {
             if (metadata == null)

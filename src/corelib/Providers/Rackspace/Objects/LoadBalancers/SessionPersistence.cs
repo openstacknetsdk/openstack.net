@@ -32,7 +32,7 @@
         /// the specified persistence type.
         /// </summary>
         /// <param name="persistenceType">The session persistence mode to use.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="persistenceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="persistenceType"/> is <see langword="null"/>.</exception>
         public SessionPersistence(SessionPersistenceType persistenceType)
         {
             if (persistenceType == null)
@@ -82,7 +82,7 @@
             /// using the specified persistence type.
             /// </summary>
             /// <param name="persistenceType">The session persistence mode to use.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="persistenceType"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="persistenceType"/> is <see langword="null"/>.</exception>
             protected internal SessionPersistenceBody(SessionPersistenceType persistenceType)
             {
                 if (persistenceType == null)

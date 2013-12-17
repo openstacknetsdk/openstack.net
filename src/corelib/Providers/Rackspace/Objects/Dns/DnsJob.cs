@@ -75,7 +75,7 @@
         /// Gets the unique ID for this job.
         /// </summary>
         /// <value>
-        /// The unique ID for the job, or <c>null</c> if the JSON response from the server
+        /// The unique ID for the job, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public JobId Id
@@ -90,7 +90,7 @@
         /// Gets the status for this job.
         /// </summary>
         /// <value>
-        /// The current status of the job, or <c>null</c> if the JSON response from the server
+        /// The current status of the job, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DnsJobStatus Status
@@ -105,7 +105,7 @@
         /// Gets the <see cref="Uri"/> representing the job resource itself.
         /// </summary>
         /// <value>
-        /// The URI for the current job resource, or <c>null</c> if the JSON response
+        /// The URI for the current job resource, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public Uri CallbackUri
@@ -124,7 +124,7 @@
         /// created.
         /// </summary>
         /// <value>
-        /// The URI for for which this job resource was created, or <c>null</c>
+        /// The URI for for which this job resource was created, or <see langword="null"/>
         /// if the JSON response from the server did not include this property.
         /// </value>
         public Uri RequestUri
@@ -143,7 +143,7 @@
         /// </summary>
         /// <value>
         /// The HTTP method used for the API call for which this job resource was
-        /// created, or <c>null</c> if the JSON response from the server did not
+        /// created, or <see langword="null"/> if the JSON response from the server did not
         /// include this property.
         /// </value>
         public HttpMethod? Verb
@@ -160,7 +160,7 @@
         /// </summary>
         /// <value>
         /// The body of the original HTTP request for which this job resource was
-        /// created, or <c>null</c> if the JSON response from the server did not
+        /// created, or <see langword="null"/> if the JSON response from the server did not
         /// include this property.
         /// </value>
         public string Request
@@ -178,7 +178,7 @@
         /// </summary>
         /// <value>
         /// A <see cref="JObject"/> object representing the JSON-formatted information
-        /// about the error that occurred while this task was running, or <c>null</c>
+        /// about the error that occurred while this task was running, or <see langword="null"/>
         /// if the JSON response from the server did not include this property.
         /// </value>
         public JObject Error

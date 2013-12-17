@@ -90,11 +90,11 @@
         /// <param name="authPassword">The password of the user to authenticate over HTTP.</param>
         /// <param name="body">The regular expression to match against the body of the reply.</param>
         /// <param name="bodyMatches">A collection of named regular expressions to match against the body of the reply.</param>
-        /// <param name="followRedirects"><c>true</c> to follow redirects; otherwise, <c>false</c>.</param>
+        /// <param name="followRedirects"><see langword="true"/> to follow redirects; otherwise, <see langword="false"/>.</param>
         /// <param name="headers">A collection of additional HTTP headers which are sent with the request.</param>
         /// <param name="method">The HTTP method to use for the request.</param>
         /// <param name="payload">The body to include with the HTTP request.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="bodyMatches"/> contains any empty keys.
         /// <para>-or-</para>
@@ -186,7 +186,7 @@
         /// Gets a value indicating whether redirects should be followed.
         /// </summary>
         /// <value>
-        /// <c>true</c> to follow redirects; otherwise, <c>false</c>.
+        /// <see langword="true"/> to follow redirects; otherwise, <see langword="false"/>.
         /// </value>
         public bool? FollowRedirects
         {

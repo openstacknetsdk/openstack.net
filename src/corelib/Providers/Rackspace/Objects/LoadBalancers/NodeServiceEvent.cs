@@ -212,7 +212,7 @@
         /// referenced by other services.
         /// </summary>
         /// <value>
-        /// The account ID for the node service event, or <c>null</c> if the JSON response from the server
+        /// The account ID for the node service event, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public ProjectId AccountId

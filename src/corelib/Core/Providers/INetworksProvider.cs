@@ -24,9 +24,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/List_Networks.html">List Networks (OpenStack Networking API v2.0 Reference)</seealso>
@@ -41,9 +41,9 @@ namespace net.openstack.Core.Providers
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="CloudNetwork"/> instance containing details for the newly created network.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="cidr"/> is <c>null</c>.
+        /// If <paramref name="cidr"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="label"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="label"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="cidr"/> is empty.
@@ -57,9 +57,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/Create_Network.html">Create Network (OpenStack Networking API v2.0 Reference)</seealso>
@@ -72,7 +72,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="CloudNetwork"/> instance containing the network details.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="networkId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -80,9 +80,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/List_Networks_Detail.html">Show Network (OpenStack Networking API v2.0 Reference)</seealso>
@@ -94,8 +94,8 @@ namespace net.openstack.Core.Providers
         /// <param name="networkId">ID of the network to delete. This is obtained from <see cref="CloudNetwork.Id"/>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the network was successfully deleted; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the network was successfully deleted; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="networkId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -103,9 +103,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/Delete_Network.html">Delete Network (OpenStack Networking API v2.0 Reference)</seealso>

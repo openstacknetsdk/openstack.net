@@ -49,7 +49,7 @@
         /// Initializes a new instance of the <see cref="WebServerHealthMonitor"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="https"><c>true</c> to monitor HTTPS connections; otherwise, <c>false</c> to monitor HTTP connections.</param>
+        /// <param name="https"><see langword="true"/> to monitor HTTPS connections; otherwise, <see langword="false"/> to monitor HTTP connections.</param>
         /// <param name="attemptsBeforeDeactivation">The number of permissible monitor failures before removing a node from rotation.</param>
         /// <param name="timeout">The maximum number of seconds to wait for a connection to be established before timing out.</param>
         /// <param name="delay">The minimum time to wait before executing the health monitor.</param>
@@ -57,11 +57,11 @@
         /// <param name="path">The HTTP path that will be used in the sample request.</param>
         /// <param name="statusRegex">A regular expression that will be used to evaluate the HTTP status code returned in the response.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="bodyRegex"/> is <c>null</c>.
+        /// If <paramref name="bodyRegex"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="path"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="path"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="statusRegex"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="statusRegex"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="bodyRegex"/> is empty.
@@ -86,20 +86,20 @@
         /// Initializes a new instance of the <see cref="WebServerHealthMonitor"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="https"><c>true</c> to monitor HTTPS connections; otherwise, <c>false</c> to monitor HTTP connections.</param>
+        /// <param name="https"><see langword="true"/> to monitor HTTPS connections; otherwise, <see langword="false"/> to monitor HTTP connections.</param>
         /// <param name="attemptsBeforeDeactivation">The number of permissible monitor failures before removing a node from rotation.</param>
         /// <param name="timeout">The maximum number of seconds to wait for a connection to be established before timing out.</param>
         /// <param name="delay">The minimum time to wait before executing the health monitor.</param>
         /// <param name="bodyRegex">A regular expression that will be used to evaluate the contents of the body of the response.</param>
         /// <param name="path">The HTTP path that will be used in the sample request.</param>
         /// <param name="statusRegex">A regular expression that will be used to evaluate the HTTP status code returned in the response.</param>
-        /// <param name="hostHeader">The name of a host for which the health monitors will check, or <c>null</c> <placeholder>when?</placeholder>.</param>
+        /// <param name="hostHeader">The name of a host for which the health monitors will check, or <see langword="null"/> <placeholder>when?</placeholder>.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="bodyRegex"/> is <c>null</c>.
+        /// If <paramref name="bodyRegex"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="path"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="path"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="statusRegex"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="statusRegex"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="bodyRegex"/> is empty.

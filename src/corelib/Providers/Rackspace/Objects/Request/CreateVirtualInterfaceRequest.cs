@@ -23,7 +23,7 @@
         /// class with the specified network ID.
         /// </summary>
         /// <param name="networkId">The network ID. This is obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="networkId"/> is empty.</exception>
         public CreateVirtualInterfaceRequest(string networkId)
         {
@@ -54,7 +54,7 @@
             /// class with the specified network ID.
             /// </summary>
             /// <param name="networkId">The network ID. This is obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see>.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <see langword="null"/>.</exception>
             /// <exception cref="ArgumentException">If <paramref name="networkId"/> is empty.</exception>
             public CreateVirtualInterface(string networkId)
             {

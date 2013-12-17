@@ -57,7 +57,7 @@
         /// with the specified virtual address type.
         /// </summary>
         /// <param name="type">The virtual address type.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
         public LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType type)
             : this(type, null)
         {
@@ -69,7 +69,7 @@
         /// </summary>
         /// <param name="type">The virtual address type.</param>
         /// <param name="version"></param>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
         public LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType type, AddressFamily? version)
         {
             if (type == null)
@@ -98,7 +98,7 @@
         /// Gets the unique ID representing this virtual address within the load balancers service.
         /// </summary>
         /// <value>
-        /// The unique ID for the virtual address, or <c>null</c> if the virtual address has not been
+        /// The unique ID for the virtual address, or <see langword="null"/> if the virtual address has not been
         /// created or the JSON response from the server did not include this property.
         /// </value>
         public VirtualAddressId Id
@@ -113,7 +113,7 @@
         /// Gets the IP address for this virtual address within the load balancers service.
         /// </summary>
         /// <value>
-        /// The IP address for the virtual address, or <c>null</c> if the virtual address has not been
+        /// The IP address for the virtual address, or <see langword="null"/> if the virtual address has not been
         /// created or the JSON response from the server did not include this property.
         /// </value>
         public IPAddress Address
@@ -129,7 +129,7 @@
         /// </summary>
         /// <value>
         /// A <see cref="LoadBalancerVirtualAddressType"/> object describing the virtual address type,
-        /// or <c>null</c> if the JSON response from the server did not include this property.
+        /// or <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public LoadBalancerVirtualAddressType Type
         {
@@ -144,7 +144,7 @@
         /// </summary>
         /// <value>
         /// An <see cref="AddressFamily"/> describing the address family for this virtual address,
-        /// or <c>null</c> if the JSON response from the server did not include this property or
+        /// or <see langword="null"/> if the JSON response from the server did not include this property or
         /// the value was unrecognized.
         /// </value>
         public AddressFamily? IPVersion

@@ -49,8 +49,8 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="refreshCount">Number of times to poll the image's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
         /// <para>-or-</para>
@@ -79,8 +79,8 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="refreshCount">Number of times to poll the image's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
         /// <para>-or-</para>
@@ -112,12 +112,12 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedState">The expected state.</param>
         /// <param name="errorStates">The error state(s) in which to throw an exception if the image enters.</param>
         /// <param name="refreshCount">Number of times to poll the image's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="expectedState"/> is <c>null</c>.
+        /// If <paramref name="expectedState"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -156,12 +156,12 @@ namespace net.openstack.Core.Domain
         /// <param name="expectedStates">The expected state(s).</param>
         /// <param name="errorStates">The error state(s) in which to throw an exception if the image enters.</param>
         /// <param name="refreshCount">Number of times to poll the image's status.</param>
-        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <c>null</c>, the default is 2.4 seconds.</param>
-        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <c>null</c>, progress updates are not reported.</param>
+        /// <param name="refreshDelay">The time to wait between polling requests for the image status. If this value is <see langword="null"/>, the default is 2.4 seconds.</param>
+        /// <param name="progressUpdatedCallback">A callback delegate to execute each time the <see cref="ServerImage.Progress"/> value increases. If this value is <see langword="null"/>, progress updates are not reported.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="expectedStates"/> is <c>null</c>.
+        /// If <paramref name="expectedStates"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="expectedStates"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -199,7 +199,7 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="serverImage">The updated information for the current image.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="serverImage"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serverImage"/> is <see langword="null"/>.</exception>
         protected virtual void UpdateThis(SimpleServerImage serverImage)
         {
             if (serverImage == null)
@@ -213,7 +213,7 @@ namespace net.openstack.Core.Domain
         /// <summary>
         /// Deletes the specified image.
         /// </summary>
-        /// <returns><c>true</c> if the image was successfully deleted; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the image was successfully deleted; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.DeleteImage"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Delete_Image-d1e4957.html">Delete Image (OpenStack Compute API v2 and Extensions Reference)</seealso>

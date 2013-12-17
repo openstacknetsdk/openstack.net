@@ -32,7 +32,7 @@
         /// with the specified target URI.
         /// </summary>
         /// <param name="url">The URI of the webhook to notify.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public WebhookNotificationDetails(Uri url)
         {
             if (url == null)

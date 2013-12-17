@@ -663,8 +663,8 @@
         /// </para>
         /// </remarks>
         /// <param name="provider">The queueing service.</param>
-        /// <param name="limit">The maximum number of <see cref="CloudQueue"/> to return from a single task. If this value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="detailed"><c>true</c> to return detailed information for each queue; otherwise, <c>false</c>.</param>
+        /// <param name="limit">The maximum number of <see cref="CloudQueue"/> to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="detailed"><see langword="true"/> to return detailed information for each queue; otherwise, <see langword="false"/>.</param>
         /// <returns>
         /// A collections of <see cref="Task{TResult}"/> objects, each of which
         /// represents an asynchronous operation to gather a subset of the available

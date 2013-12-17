@@ -63,12 +63,12 @@
         /// <param name="address">The IP address of the node.</param>
         /// <param name="port">The port number for the load balanced service.</param>
         /// <param name="condition">The condition for the node, which determines its role within the load balancer.</param>
-        /// <param name="type">The node type. If this value is <c>null</c>, a provider-specific default value will be used.</param>
+        /// <param name="type">The node type. If this value is <see langword="null"/>, a provider-specific default value will be used.</param>
         /// <param name="weight">The weight of the node.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="address"/> is <c>null</c>.
+        /// If <paramref name="address"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="condition"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="condition"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="port"/> is less than 0 or greater than 65535.
@@ -99,12 +99,12 @@
         /// <param name="hostDomain">The domain name of the node.</param>
         /// <param name="port">The port number for the load balanced service.</param>
         /// <param name="condition">The condition for the node, which determines its role within the load balancer.</param>
-        /// <param name="type">The node type. If this value is <c>null</c>, a provider-specific default value will be used.</param>
+        /// <param name="type">The node type. If this value is <see langword="null"/>, a provider-specific default value will be used.</param>
         /// <param name="weight">The weight of the node.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="hostDomain"/> is <c>null</c>.
+        /// If <paramref name="hostDomain"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="condition"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="condition"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="hostDomain"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">

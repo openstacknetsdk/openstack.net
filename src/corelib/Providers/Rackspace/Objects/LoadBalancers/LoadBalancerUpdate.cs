@@ -61,11 +61,11 @@
         /// Initializes a new instance of the <see cref="LoadBalancerUpdate"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="name">The name of the load balancer. If this value is <c>null</c>, the existing value for the load balancer is not changed.</param>
-        /// <param name="protocol">The load balancing protocol to use for this load balancer. If this value is <c>null</c>, the existing value for the load balancer is not changed.</param>
-        /// <param name="halfClosed"><c>true</c> to enable half-closed support for the load balancer; otherwise, <c>false</c>. Half-Closed support provides the ability for one end of the connection to terminate its output, while still receiving data from the other end. Only applies to TCP/TCP_CLIENT_FIRST protocols. If this value is <c>null</c>, the existing value for the load balancer is not changed.</param>
-        /// <param name="algorithm">The load balancing algorithm that defines how traffic should be directed between back-end nodes. If this value is <c>null</c>, the existing value for the load balancer is not changed.</param>
-        /// <param name="timeout">The timeout value for the load balancer and communications with its nodes. If this value is <c>null</c>, the existing value for the load balancer is not changed.</param>
+        /// <param name="name">The name of the load balancer. If this value is <see langword="null"/>, the existing value for the load balancer is not changed.</param>
+        /// <param name="protocol">The load balancing protocol to use for this load balancer. If this value is <see langword="null"/>, the existing value for the load balancer is not changed.</param>
+        /// <param name="halfClosed"><see langword="true"/> to enable half-closed support for the load balancer; otherwise, <see langword="false"/>. Half-Closed support provides the ability for one end of the connection to terminate its output, while still receiving data from the other end. Only applies to TCP/TCP_CLIENT_FIRST protocols. If this value is <see langword="null"/>, the existing value for the load balancer is not changed.</param>
+        /// <param name="algorithm">The load balancing algorithm that defines how traffic should be directed between back-end nodes. If this value is <see langword="null"/>, the existing value for the load balancer is not changed.</param>
+        /// <param name="timeout">The timeout value for the load balancer and communications with its nodes. If this value is <see langword="null"/>, the existing value for the load balancer is not changed.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="timeout"/> is negative or <see cref="TimeSpan.Zero"/>.
