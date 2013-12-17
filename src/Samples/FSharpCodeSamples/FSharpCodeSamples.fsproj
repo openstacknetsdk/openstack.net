@@ -42,9 +42,6 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Script.fsx" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.v4.0.csproj">
       <Name>corelib.v4.0</Name>
       <Project>{7dba11eb-dba7-4d3a-8d42-b5312e74b9c0}</Project>
@@ -54,6 +51,9 @@
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="QueueingServiceExamples.fs" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '11.0'">
       <PropertyGroup Condition="Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')">
