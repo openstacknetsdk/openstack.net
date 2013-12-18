@@ -468,7 +468,7 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\Pop3CheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\PostgresqlBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\ProcessInformation.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Monitoring\ReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ReadOnlyCollectionPage`2.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SecureConnectionCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpCheckDetails.cs" />
