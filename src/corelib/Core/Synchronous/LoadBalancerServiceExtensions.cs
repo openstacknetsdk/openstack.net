@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Net;
     using System.Net.Sockets;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
     using CancellationToken = System.Threading.CancellationToken;
@@ -31,7 +32,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancers-d1e1367.html">List Load Balancers (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancer> ListLoadBalancers(this ILoadBalancerService service, LoadBalancerId markerId, int? limit)
+        public static ReadOnlyCollectionPage<LoadBalancer> ListLoadBalancers(this ILoadBalancerService service, LoadBalancerId markerId, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -607,7 +608,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<NodeServiceEvent> ListNodeServiceEvents(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit)
+        public static ReadOnlyCollectionPage<NodeServiceEvent> ListNodeServiceEvents(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -829,7 +830,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancer> ListBillableLoadBalancers(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit)
+        public static ReadOnlyCollectionPage<LoadBalancer> ListBillableLoadBalancers(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

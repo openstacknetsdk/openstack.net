@@ -7,6 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
 
     /// <summary>
@@ -32,7 +33,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancers-d1e1367.html">List Load Balancers (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        Task<IEnumerable<LoadBalancer>> ListLoadBalancersAsync(LoadBalancerId markerId, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<LoadBalancer>> ListLoadBalancersAsync(LoadBalancerId markerId, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets detailed information about a specific load balancer.
@@ -417,7 +418,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        Task<IEnumerable<NodeServiceEvent>> ListNodeServiceEventsAsync(LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<NodeServiceEvent>> ListNodeServiceEventsAsync(LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit, CancellationToken cancellationToken);
 
         #endregion Nodes
 
@@ -563,7 +564,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        Task<IEnumerable<LoadBalancer>> ListBillableLoadBalancersAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<LoadBalancer>> ListBillableLoadBalancersAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// List all usage for an account during a specified date range.

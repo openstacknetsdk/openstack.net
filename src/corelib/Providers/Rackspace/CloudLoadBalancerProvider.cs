@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using JSIStudios.SimpleRESTServices.Client;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
@@ -63,7 +64,7 @@
         #region ILoadBalancerService Members
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancer>> ListLoadBalancersAsync(LoadBalancerId markerId, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<LoadBalancer>> ListLoadBalancersAsync(LoadBalancerId markerId, int? limit, CancellationToken cancellationToken)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -81,8 +82,21 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancersResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancersResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancersResponse>, IEnumerable<LoadBalancer>> resultSelector =
-                task => (task.Result != null ? task.Result.LoadBalancers : null) ?? Enumerable.Empty<LoadBalancer>();
+            Func<Task<ListLoadBalancersResponse>, ReadOnlyCollectionPage<LoadBalancer>> resultSelector =
+                task =>
+                {
+                    ReadOnlyCollectionPage<LoadBalancer> page = null;
+                    if (task.Result != null && task.Result.LoadBalancers != null && task.Result.LoadBalancers.Count > 0)
+                    {
+                        LoadBalancer last = task.Result.LoadBalancers.Last();
+                        LoadBalancerId nextMarker = last != null ? last.Id : markerId;
+                        Func<CancellationToken, Task<ReadOnlyCollectionPage<LoadBalancer>>> getNextPageAsync =
+                            nextCancellationToken => ListLoadBalancersAsync(nextMarker, limit, nextCancellationToken);
+                        page = new BasicReadOnlyCollectionPage<LoadBalancer>(task.Result.LoadBalancers, getNextPageAsync);
+                    }
+
+                    return page ?? ReadOnlyCollectionPage<LoadBalancer>.Empty;
+                };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -719,7 +733,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<NodeServiceEvent>> ListNodeServiceEventsAsync(LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<NodeServiceEvent>> ListNodeServiceEventsAsync(LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -735,8 +749,21 @@
             Func<Task<HttpWebRequest>, Task<ListNodeServiceEventsResponse>> requestResource =
                 GetResponseAsyncFunc<ListNodeServiceEventsResponse>(cancellationToken);
 
-            Func<Task<ListNodeServiceEventsResponse>, IEnumerable<NodeServiceEvent>> resultSelector =
-                task => (task.Result != null ? task.Result.NodeServiceEvents : null) ?? Enumerable.Empty<NodeServiceEvent>();
+            Func<Task<ListNodeServiceEventsResponse>, ReadOnlyCollectionPage<NodeServiceEvent>> resultSelector =
+                task =>
+                {
+                    ReadOnlyCollectionPage<NodeServiceEvent> page = null;
+                    if (task.Result != null && task.Result.NodeServiceEvents != null && task.Result.NodeServiceEvents.Count > 0)
+                    {
+                        NodeServiceEvent last = task.Result.NodeServiceEvents.Last();
+                        NodeServiceEventId nextMarker = last != null ? last.Id : markerId;
+                        Func<CancellationToken, Task<ReadOnlyCollectionPage<NodeServiceEvent>>> getNextPageAsync =
+                            nextCancellationToken => ListNodeServiceEventsAsync(loadBalancerId, nextMarker, limit, nextCancellationToken);
+                        page = new BasicReadOnlyCollectionPage<NodeServiceEvent>(task.Result.NodeServiceEvents, getNextPageAsync);
+                    }
+
+                    return page ?? ReadOnlyCollectionPage<NodeServiceEvent>.Empty;
+                };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -958,7 +985,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancer>> ListBillableLoadBalancersAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<LoadBalancer>> ListBillableLoadBalancersAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit, CancellationToken cancellationToken)
         {
             if (endTime < startTime)
                 throw new ArgumentOutOfRangeException("endTime");
@@ -984,8 +1011,20 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancersResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancersResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancersResponse>, IEnumerable<LoadBalancer>> resultSelector =
-                task => (task.Result != null ? task.Result.LoadBalancers : null) ?? Enumerable.Empty<LoadBalancer>();
+            Func<Task<ListLoadBalancersResponse>, ReadOnlyCollectionPage<LoadBalancer>> resultSelector =
+                task =>
+                {
+                    ReadOnlyCollectionPage<LoadBalancer> page = null;
+                    if (task.Result != null && task.Result.LoadBalancers != null && task.Result.LoadBalancers.Count > 0)
+                    {
+                        int nextOffset = (offset ?? 0) + task.Result.LoadBalancers.Count;
+                        Func<CancellationToken, Task<ReadOnlyCollectionPage<LoadBalancer>>> getNextPageAsync =
+                            nextCancellationToken => ListBillableLoadBalancersAsync(startTime, endTime, nextOffset, limit, nextCancellationToken);
+                        page = new BasicReadOnlyCollectionPage<LoadBalancer>(task.Result.LoadBalancers, getNextPageAsync);
+                    }
+
+                    return page ?? ReadOnlyCollectionPage<LoadBalancer>.Empty;
+                };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)

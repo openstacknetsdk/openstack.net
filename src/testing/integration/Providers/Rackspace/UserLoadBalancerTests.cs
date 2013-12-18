@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
@@ -11,6 +12,7 @@
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.LoadBalancers;
     using Newtonsoft.Json;
@@ -60,7 +62,9 @@
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60)));
             string queueName = CreateRandomLoadBalancerName();
 
-            LoadBalancer[] allLoadBalancers = ListAllLoadBalancers(provider, null, cancellationTokenSource.Token).Where(loadBalancer => loadBalancer.Name.StartsWith(TestLoadBalancerPrefix, StringComparison.OrdinalIgnoreCase)).ToArray();
+            LoadBalancer[] allLoadBalancers = (await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token))
+                .Where(loadBalancer => loadBalancer.Name.StartsWith(TestLoadBalancerPrefix, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
             int blockSize = 10;
             for (int i = 0; i < allLoadBalancers.Length; i += blockSize)
             {
@@ -83,12 +87,12 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.LoadBalancers)]
-        public void TestListLoadBalancers()
+        public async Task TestListLoadBalancers()
         {
             ILoadBalancerService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
             {
-                LoadBalancer[] loadBalancers = ListAllLoadBalancers(provider, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<LoadBalancer> loadBalancers = await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token);
                 if (!loadBalancers.Any())
                     Assert.Inconclusive("The account does not appear to contain any load balancers");
 
@@ -105,7 +109,7 @@
             ILoadBalancerService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
             {
-                foreach (LoadBalancer loadBalancer in ListAllLoadBalancers(provider, null, cancellationTokenSource.Token))
+                foreach (LoadBalancer loadBalancer in await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token))
                 {
                     Console.WriteLine("Basic information:");
                     Console.WriteLine(JsonConvert.SerializeObject(loadBalancer, Formatting.Indented));
@@ -147,7 +151,7 @@
                     sessionPersistence: null);
                 LoadBalancer tempLoadBalancer = await provider.CreateLoadBalancerAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
 
-                foreach (LoadBalancer loadBalancer in ListAllLoadBalancers(provider, null, cancellationTokenSource.Token))
+                foreach (LoadBalancer loadBalancer in await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token))
                 {
                     Console.WriteLine("{0}: {1}", loadBalancer.Id, loadBalancer.Name);
                 }
@@ -268,7 +272,7 @@
             ILoadBalancerService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
             {
-                LoadBalancer[] loadBalancers = ListAllLoadBalancers(provider, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<LoadBalancer> loadBalancers = await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token);
                 if (!loadBalancers.Any())
                     Assert.Inconclusive("The account does not appear to contain any load balancers");
 
@@ -350,7 +354,7 @@
             ILoadBalancerService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
             {
-                LoadBalancer[] loadBalancers = ListAllLoadBalancers(provider, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<LoadBalancer> loadBalancers = await ListAllLoadBalancersAsync(provider, null, cancellationTokenSource.Token);
                 if (!loadBalancers.Any())
                     Assert.Inconclusive("The account does not appear to contain any load balancers");
 
@@ -410,9 +414,9 @@
                 Assert.IsNotNull(loadBalancer.Nodes);
                 Assert.AreEqual(1, loadBalancer.Nodes.Count);
 
-                Node[] listNodes = ListAllLoadBalancerNodes(provider, tempLoadBalancer.Id, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<Node> listNodes = (await provider.ListNodesAsync(tempLoadBalancer.Id, cancellationTokenSource.Token)).ToList().AsReadOnly();
                 Assert.IsNotNull(listNodes);
-                Assert.AreEqual(1, listNodes.Length);
+                Assert.AreEqual(1, listNodes.Count);
 
                 Node getNode = await provider.GetNodeAsync(tempLoadBalancer.Id, listNodes[0].Id, cancellationTokenSource.Token);
                 Assert.IsNotNull(getNode);
@@ -479,9 +483,9 @@
                 Assert.IsNotNull(loadBalancer.Nodes);
                 Assert.AreEqual(2, loadBalancer.Nodes.Count);
 
-                Node[] listNodes = ListAllLoadBalancerNodes(provider, tempLoadBalancer.Id, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<Node> listNodes = (await provider.ListNodesAsync(tempLoadBalancer.Id, cancellationTokenSource.Token)).ToList().AsReadOnly();
                 Assert.IsNotNull(listNodes);
-                Assert.AreEqual(2, listNodes.Length);
+                Assert.AreEqual(2, listNodes.Count);
 
                 await provider.RemoveNodeRangeAsync(tempLoadBalancer.Id, nodesArray.Select(i => i.Id), AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
                 loadBalancer = await provider.GetLoadBalancerAsync(tempLoadBalancer.Id, cancellationTokenSource.Token);
@@ -558,7 +562,7 @@
                 NodeUpdate updatedNodeConfiguration = new NodeUpdate(condition: NodeCondition.Draining);
                 await provider.UpdateNodeAsync(tempLoadBalancer.Id, node.Id, updatedNodeConfiguration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
 
-                NodeServiceEvent[] serviceEvents = ListAllNodeServiceEvents(provider, tempLoadBalancer.Id, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<NodeServiceEvent> serviceEvents = await ListAllNodeServiceEventsAsync(provider, tempLoadBalancer.Id, null, cancellationTokenSource.Token);
                 if (!serviceEvents.Any())
                     Assert.Inconclusive("The load balancer did not report any node service events.");
 
@@ -1960,81 +1964,33 @@
         /// </summary>
         /// <param name="provider">The load balancer service.</param>
         /// <param name="limit">The maximum number of <see cref="LoadBalancer"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
-        /// A collection of <see cref="LoadBalancer"/> objects describing the available load
-        /// balancers.
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
+        /// completes, the <see cref="Task{TResult}.Result"/> property will contain a collection of
+        /// <see cref="LoadBalancer"/> objects describing the current load balancers.
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static IEnumerable<LoadBalancer> ListAllLoadBalancers(ILoadBalancerService provider, int? limit, CancellationToken cancellationToken)
-        {
-            if (limit <= 0)
-                throw new ArgumentOutOfRangeException("limit");
-
-            LoadBalancer lastLoadBalancer = null;
-
-            do
-            {
-                LoadBalancerId marker = lastLoadBalancer != null ? lastLoadBalancer.Id : null;
-                IEnumerable<LoadBalancer> loadBalancers = provider.ListLoadBalancersAsync(marker, limit, cancellationToken).Result;
-                lastLoadBalancer = null;
-                foreach (LoadBalancer loadBalancer in loadBalancers)
-                {
-                    yield return loadBalancer;
-                    lastLoadBalancer = loadBalancer;
-                }
-
-                // pagination for this call does not match the documentation.
-            } while (false && lastLoadBalancer != null);
-        }
-
-        private static IEnumerable<NodeServiceEvent> ListAllNodeServiceEvents(ILoadBalancerService provider, LoadBalancerId loadBalancerId, int? limit, CancellationToken cancellationToken)
-        {
-            if (limit <= 0)
-                throw new ArgumentOutOfRangeException("limit");
-
-            NodeServiceEvent lastServiceEvent = null;
-
-            do
-            {
-                NodeServiceEventId marker = lastServiceEvent != null ? lastServiceEvent.Id : null;
-                IEnumerable<NodeServiceEvent> serviceEvents = provider.ListNodeServiceEventsAsync(loadBalancerId, marker, limit, cancellationToken).Result;
-                lastServiceEvent = null;
-                foreach (NodeServiceEvent serviceEvent in serviceEvents)
-                {
-                    yield return serviceEvent;
-                    lastServiceEvent = serviceEvent;
-                }
-            } while (lastServiceEvent != null);
-        }
-
-        /// <summary>
-        /// Gets all existing load balancer nodes through a series of asynchronous operations,
-        /// each of which requests a subset of the available nodes.
-        /// </summary>
-        /// <param name="provider">The load balancer service.</param>
-        /// <param name="limit">The maximum number of <see cref="Node"/> to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
-        /// <returns>
-        /// A collection of <see cref="Node"/> objects, each of which represents a subset
-        /// of the available load balancer nodes.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="provider"/> is <see langword="null"/>.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="loadBalancerId"/> is <see langword="null"/>.</para>
-        /// </exception>
-        /// <exception cref="ArgumentException">If <paramref name="loadBalancerId"/> is empty.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static IEnumerable<Node> ListAllLoadBalancerNodes(ILoadBalancerService provider, LoadBalancerId loadBalancerId, int? limit, CancellationToken cancellationToken)
+        private static async Task<ReadOnlyCollection<LoadBalancer>> ListAllLoadBalancersAsync(ILoadBalancerService provider, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<LoadBalancer>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            // this API call is not currently paginated
-            IEnumerable<Node> loadBalancers = provider.ListNodesAsync(loadBalancerId, cancellationToken).Result;
-            return loadBalancers;
+            return await (await provider.ListLoadBalancersAsync(null, limit, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
+        }
+
+        private static async Task<ReadOnlyCollection<NodeServiceEvent>> ListAllNodeServiceEventsAsync(ILoadBalancerService provider, LoadBalancerId loadBalancerId, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NodeServiceEvent>> progress = null)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (limit <= 0)
+                throw new ArgumentOutOfRangeException("limit");
+
+            return await (await provider.ListNodeServiceEventsAsync(loadBalancerId, null, limit, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)
