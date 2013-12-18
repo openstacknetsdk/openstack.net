@@ -1317,7 +1317,7 @@
                  */
                 provider.DeleteContainer(containerName, deleteObjects: true);
             }
-            catch (NotSupportedException ex)
+            catch (NotSupportedException)
             {
                 Assert.Inconclusive("The provider does not support verifying ETags for large objects.");
             }
