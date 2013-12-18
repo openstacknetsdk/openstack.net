@@ -358,7 +358,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Nodes-d1e2218.html">List Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<Node> ListNodes(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
+        public static ReadOnlyCollection<Node> ListNodes(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -469,7 +469,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<Node> AddNodeRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NodeConfiguration> nodeConfigurations)
+        public static ReadOnlyCollection<Node> AddNodeRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NodeConfiguration> nodeConfigurations)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -644,7 +644,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Virtual_IPs-d1e2809.html">List Virtual IPs (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerVirtualAddress> ListVirtualAddresses(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
+        public static ReadOnlyCollection<LoadBalancerVirtualAddress> ListVirtualAddresses(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -786,7 +786,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<string> ListAllowedDomains(this ILoadBalancerService service)
+        public static ReadOnlyCollection<string> ListAllowedDomains(this ILoadBalancerService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -863,7 +863,7 @@
         /// <exception cref="ArgumentException">If <paramref name="endTime"/> occurs before <paramref name="startTime"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerUsage> ListAccountLevelUsage(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime)
+        public static ReadOnlyCollection<LoadBalancerUsage> ListAccountLevelUsage(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -900,7 +900,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerUsage> ListHistoricalUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime)
+        public static ReadOnlyCollection<LoadBalancerUsage> ListHistoricalUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -932,7 +932,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerUsage> ListCurrentUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
+        public static ReadOnlyCollection<LoadBalancerUsage> ListCurrentUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -968,7 +968,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<NetworkItem> ListAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
+        public static ReadOnlyCollection<NetworkItem> ListAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1630,7 +1630,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Protocols-d1e4269.html">List Load Balancing Protocols (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancingProtocol> ListProtocols(this ILoadBalancerService service)
+        public static ReadOnlyCollection<LoadBalancingProtocol> ListProtocols(this ILoadBalancerService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1664,7 +1664,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Algorithms-d1e4459.html">List Load Balancing Algorithms (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancingAlgorithm> ListAlgorithms(this ILoadBalancerService service)
+        public static ReadOnlyCollection<LoadBalancingAlgorithm> ListAlgorithms(this ILoadBalancerService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1797,7 +1797,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerMetadataItem> ListLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
+        public static ReadOnlyCollection<LoadBalancerMetadataItem> ListLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1870,7 +1870,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerMetadataItem> ListNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId)
+        public static ReadOnlyCollection<LoadBalancerMetadataItem> ListNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1954,7 +1954,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerMetadataItem> AddLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<KeyValuePair<string, string>> metadata)
+        public static ReadOnlyCollection<LoadBalancerMetadataItem> AddLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<KeyValuePair<string, string>> metadata)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2002,7 +2002,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LoadBalancerMetadataItem> AddNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<KeyValuePair<string, string>> metadata)
+        public static ReadOnlyCollection<LoadBalancerMetadataItem> AddNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<KeyValuePair<string, string>> metadata)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

@@ -360,7 +360,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test">Test Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-debug">Test Check and Include Debug Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        public static CheckData[] TestCheck(this IMonitoringService service, EntityId entityId, NewCheckConfiguration configuration, bool? debug)
+        public static ReadOnlyCollection<CheckData> TestCheck(this IMonitoringService service, EntityId entityId, NewCheckConfiguration configuration, bool? debug)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -394,7 +394,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-existing">Test Existing Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        public static CheckData[] TestExistingCheck(this IMonitoringService service, EntityId entityId, CheckId checkId)
+        public static ReadOnlyCollection<CheckData> TestExistingCheck(this IMonitoringService service, EntityId entityId, CheckId checkId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -702,7 +702,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/metrics-api.html#fetch-data-points">Fetch Data Points (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        public static DataPoint[] GetDataPoints(this IMonitoringService service, EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to)
+        public static ReadOnlyCollection<DataPoint> GetDataPoints(this IMonitoringService service, EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -774,7 +774,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-test">Test Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        public static AlarmData[] TestAlarm(this IMonitoringService service, EntityId entityId, TestAlarmConfiguration configuration)
+        public static ReadOnlyCollection<AlarmData> TestAlarm(this IMonitoringService service, EntityId entityId, TestAlarmConfiguration configuration)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -1214,7 +1214,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-discover">Discover Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        public static CheckId[] DiscoverAlarmNotificationHistory(this IMonitoringService service, EntityId entityId, AlarmId alarmId)
+        public static ReadOnlyCollection<CheckId> DiscoverAlarmNotificationHistory(this IMonitoringService service, EntityId entityId, AlarmId alarmId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

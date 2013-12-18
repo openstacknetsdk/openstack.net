@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Net;
     using System.Threading;
@@ -447,7 +448,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<QueuedMessage>> GetMessagesAsync(QueueName queueName, IEnumerable<MessageId> messageIds, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<QueuedMessage>> GetMessagesAsync(QueueName queueName, IEnumerable<MessageId> messageIds, CancellationToken cancellationToken)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -471,8 +472,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters, uriTransform);
 
-            Func<Task<HttpWebRequest>, Task<IEnumerable<QueuedMessage>>> requestResource =
-                GetResponseAsyncFunc<IEnumerable<QueuedMessage>>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<QueuedMessage>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<QueuedMessage>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)

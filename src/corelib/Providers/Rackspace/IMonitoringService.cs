@@ -210,7 +210,7 @@
         /// </returns>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test">Test Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-debug">Test Check and Include Debug Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        Task<CheckData[]> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<CheckData>> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken);
 
         /// <summary>
         /// Test an existing check by ID.
@@ -231,7 +231,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-existing">Test Existing Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        Task<CheckData[]> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<CheckData>> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a collection of monitoring checks.
@@ -414,7 +414,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/metrics-api.html#fetch-data-points">Fetch Data Points (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        Task<DataPoint[]> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<DataPoint>> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken);
 
         #endregion Metrics
 
@@ -459,7 +459,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-test">Test Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        Task<AlarmData[]> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<AlarmData>> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a collection of monitoring entities.
@@ -701,7 +701,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-discover">Discover Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
-        Task<CheckId[]> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<CheckId>> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a collection of monitoring alarm notification history items.

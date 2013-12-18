@@ -662,7 +662,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">List User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static DatabaseName[] ListUserAccess(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName)
+        public static ReadOnlyCollection<DatabaseName> ListUserAccess(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -767,7 +767,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getFlavors__version___accountId__flavors_.html">List Flavors (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static DatabaseFlavor[] ListFlavors(this IDatabaseService service)
+        public static ReadOnlyCollection<DatabaseFlavor> ListFlavors(this IDatabaseService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -862,7 +862,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static Backup[] ListBackups(this IDatabaseService service)
+        public static ReadOnlyCollection<Backup> ListBackups(this IDatabaseService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -953,7 +953,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static Backup[] ListBackupsForInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
+        public static ReadOnlyCollection<Backup> ListBackupsForInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

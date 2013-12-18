@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
@@ -102,7 +103,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LimitType>> ListLimitTypesAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LimitType>> ListLimitTypesAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/limits/types");
             var parameters = new Dictionary<string, string>();
@@ -113,7 +114,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, IEnumerable<LimitType>> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<LimitType>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -124,7 +125,7 @@
                     if (limitTypes == null)
                         return null;
 
-                    return limitTypes.ToObject<LimitType[]>();
+                    return limitTypes.ToObject<ReadOnlyCollection<LimitType>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)

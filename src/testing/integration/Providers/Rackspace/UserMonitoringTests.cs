@@ -438,9 +438,9 @@
                 IDictionary<string, string> metadata = null;
                 NewCheckConfiguration checkConfiguration = new NewCheckConfiguration(checkLabel, checkTypeId, details, monitoringZonesPoll, timeout, period, targetAlias, targetHostname, resolverType, metadata);
 
-                CheckData[] checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
                 foreach (CheckData data in checkData)
                 {
                     Assert.AreEqual(true, data.Available);
@@ -501,9 +501,9 @@
                 CheckId checkId = await provider.CreateCheckAsync(entityId, checkConfiguration, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkId);
 
-                CheckData[] checkData = await provider.TestExistingCheckAsync(entityId, checkId, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestExistingCheckAsync(entityId, checkId, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
                 foreach (CheckData data in checkData)
                 {
                     Assert.AreEqual(true, data.Available);
@@ -762,7 +762,7 @@
                             IEnumerable<DataPointStatistic> select = new[] { DataPointStatistic.NumPoints, DataPointStatistic.Average, DataPointStatistic.Variance, DataPointStatistic.Max };
                             DateTimeOffset from = DateTimeOffset.Now - TimeSpan.FromDays(1);
                             DateTimeOffset to = DateTimeOffset.Now;
-                            DataPoint[] dataPoints = await provider.GetDataPointsAsync(entity.Id, check.Id, metric.Name, points, resolution, select, from, to, cancellationTokenSource.Token);
+                            ReadOnlyCollection<DataPoint> dataPoints = await provider.GetDataPointsAsync(entity.Id, check.Id, metric.Name, points, resolution, select, from, to, cancellationTokenSource.Token);
                             foundData |= dataPoints.Any();
                         }
 
@@ -886,13 +886,13 @@
                 IDictionary<string, string> metadata = null;
                 NewCheckConfiguration checkConfiguration = new NewCheckConfiguration(checkLabel, checkTypeId, details, monitoringZonesPoll, timeout, period, targetAlias, targetHostname, resolverType, metadata);
 
-                CheckData[] checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
 
                 string criteria = "if (metric[\"code\"] == \"404\") { return new AlarmStatus(CRITICAL, \"not found\"); } return new AlarmStatus(OK);";
                 TestAlarmConfiguration testAlarmConfiguration = new TestAlarmConfiguration(criteria, checkData);
-                AlarmData[] alarmData = await provider.TestAlarmAsync(entityId, testAlarmConfiguration, cancellationTokenSource.Token);
+                ReadOnlyCollection<AlarmData> alarmData = await provider.TestAlarmAsync(entityId, testAlarmConfiguration, cancellationTokenSource.Token);
 
                 foreach (AlarmData data in alarmData)
                 {

@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Threading.Tasks;
     using net.openstack.Core;
     using net.openstack.Core.Collections;
@@ -398,7 +399,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">List User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<DatabaseName[]> ListUserAccessAsync(DatabaseInstanceId instanceId, UserName userName, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<DatabaseName>> ListUserAccessAsync(DatabaseInstanceId instanceId, UserName userName, CancellationToken cancellationToken);
 
         /// <summary>
         /// Grant access to a database for a particular user.
@@ -453,7 +454,7 @@
         /// </returns>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getFlavors__version___accountId__flavors_.html">List Flavors (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<DatabaseFlavor[]> ListFlavorsAsync(CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<DatabaseFlavor>> ListFlavorsAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a database instance flavor by ID.
@@ -505,7 +506,7 @@
         /// </returns>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<Backup[]> ListBackupsAsync(CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<Backup>> ListBackupsAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Get information about a database instance backup by ID.
@@ -546,7 +547,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<Backup[]> ListBackupsForInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<Backup>> ListBackupsForInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken);
 
         #endregion
     }

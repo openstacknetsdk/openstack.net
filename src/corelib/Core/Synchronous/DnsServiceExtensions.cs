@@ -54,7 +54,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Limit_Types.html">List Limit Types (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        public static IEnumerable<LimitType> ListLimitTypes(this IDnsService service)
+        public static ReadOnlyCollection<LimitType> ListLimitTypes(this IDnsService service)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

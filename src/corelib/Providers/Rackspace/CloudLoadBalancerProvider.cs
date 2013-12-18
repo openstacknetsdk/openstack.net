@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -433,7 +434,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<Node>> ListNodesAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<Node>> ListNodesAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -447,8 +448,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerNodesResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerNodesResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerNodesResponse>, IEnumerable<Node>> resultSelector =
-                task => (task.Result != null ? task.Result.Nodes : null) ?? Enumerable.Empty<Node>();
+            Func<Task<ListLoadBalancerNodesResponse>, ReadOnlyCollection<Node>> resultSelector =
+                task => (task.Result != null ? task.Result.Nodes : null) ?? new ReadOnlyCollection<Node>(new Node[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -487,7 +488,7 @@
             if (nodeConfiguration == null)
                 throw new ArgumentNullException("nodeConfiguration");
 
-            Func<Task<IEnumerable<Node>>, Node> resultSelector =
+            Func<Task<ReadOnlyCollection<Node>>, Node> resultSelector =
                 task => task.Result.Single();
 
             return
@@ -496,7 +497,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<Node>> AddNodeRangeAsync(LoadBalancerId loadBalancerId, IEnumerable<NodeConfiguration> nodeConfigurations, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
+        public Task<ReadOnlyCollection<Node>> AddNodeRangeAsync(LoadBalancerId loadBalancerId, IEnumerable<NodeConfiguration> nodeConfigurations, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
             if (nodeConfigurations == null)
                 throw new ArgumentNullException("nodeConfigurations");
@@ -529,7 +530,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
-        public Task<IEnumerable<Node>> AddNodeRangeAsync(LoadBalancerId loadBalancerId, NodeConfiguration[] nodeConfigurations, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
+        public Task<ReadOnlyCollection<Node>> AddNodeRangeAsync(LoadBalancerId loadBalancerId, NodeConfiguration[] nodeConfigurations, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -540,7 +541,7 @@
 
             if (nodeConfigurations.Length == 0)
             {
-                return InternalTaskExtensions.CompletedTask(Enumerable.Empty<Node>());
+                return InternalTaskExtensions.CompletedTask(new ReadOnlyCollection<Node>(new Node[0]));
             }
             else
             {
@@ -557,7 +558,7 @@
                 Func<Task<HttpWebRequest>, Task<ListLoadBalancerNodesResponse>> requestResource =
                     GetResponseAsyncFunc<ListLoadBalancerNodesResponse>(cancellationToken);
 
-                Func<Task<ListLoadBalancerNodesResponse>, Task<IEnumerable<Node>>> resultSelector =
+                Func<Task<ListLoadBalancerNodesResponse>, Task<ReadOnlyCollection<Node>>> resultSelector =
                     task =>
                     {
                         task.PropagateExceptions();
@@ -567,11 +568,11 @@
                                 t =>
                                 {
                                     t.PropagateExceptions();
-                                    return task.Result.Nodes.AsEnumerable();
+                                    return task.Result.Nodes;
                                 });
                         }
 
-                        return InternalTaskExtensions.CompletedTask(task.Result.Nodes.AsEnumerable());
+                        return InternalTaskExtensions.CompletedTask(task.Result.Nodes);
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
@@ -772,7 +773,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerVirtualAddress>> ListVirtualAddressesAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerVirtualAddress>> ListVirtualAddressesAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -786,8 +787,8 @@
             Func<Task<HttpWebRequest>, Task<ListVirtualAddressesResponse>> requestResource =
                 GetResponseAsyncFunc<ListVirtualAddressesResponse>(cancellationToken);
 
-            Func<Task<ListVirtualAddressesResponse>, IEnumerable<LoadBalancerVirtualAddress>> resultSelector =
-                task => (task.Result != null ? task.Result.VirtualAddresses : null) ?? Enumerable.Empty<LoadBalancerVirtualAddress>();
+            Func<Task<ListVirtualAddressesResponse>, ReadOnlyCollection<LoadBalancerVirtualAddress>> resultSelector =
+                task => (task.Result != null ? task.Result.VirtualAddresses : null) ?? new ReadOnlyCollection<LoadBalancerVirtualAddress>(new LoadBalancerVirtualAddress[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -965,7 +966,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<string>> ListAllowedDomainsAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<string>> ListAllowedDomainsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/loadbalancers/alloweddomains");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -975,8 +976,8 @@
             Func<Task<HttpWebRequest>, Task<ListAllowedDomainsResponse>> requestResource =
                 GetResponseAsyncFunc<ListAllowedDomainsResponse>(cancellationToken);
 
-            Func<Task<ListAllowedDomainsResponse>, IEnumerable<string>> resultSelector =
-                task => task.Result.AllowedDomains;
+            Func<Task<ListAllowedDomainsResponse>, ReadOnlyCollection<string>> resultSelector =
+                task => new ReadOnlyCollection<string>(task.Result.AllowedDomains.ToArray());
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -1033,7 +1034,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerUsage>> ListAccountLevelUsageAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerUsage>> ListAccountLevelUsageAsync(DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
         {
             if (endTime < startTime)
                 throw new ArgumentOutOfRangeException("endTime");
@@ -1051,8 +1052,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
-                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+            Func<Task<ListLoadBalancerUsageResponse>, ReadOnlyCollection<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -1061,7 +1062,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerUsage>> ListHistoricalUsageAsync(LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerUsage>> ListHistoricalUsageAsync(LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -1081,8 +1082,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
-                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+            Func<Task<ListLoadBalancerUsageResponse>, ReadOnlyCollection<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -1091,7 +1092,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerUsage>> ListCurrentUsageAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerUsage>> ListCurrentUsageAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -1105,8 +1106,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerUsageResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerUsageResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerUsageResponse>, IEnumerable<LoadBalancerUsage>> resultSelector =
-                task => (task.Result != null ? task.Result.UsageRecords : null) ?? Enumerable.Empty<LoadBalancerUsage>();
+            Func<Task<ListLoadBalancerUsageResponse>, ReadOnlyCollection<LoadBalancerUsage>> resultSelector =
+                task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -1115,7 +1116,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<NetworkItem>> ListAccessListAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<NetworkItem>> ListAccessListAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -1132,7 +1133,7 @@
             Func<Task<HttpWebRequest>, Task<GetAccessListResponse>> requestResource =
                 GetResponseAsyncFunc<GetAccessListResponse>(cancellationToken);
 
-            Func<Task<GetAccessListResponse>, IEnumerable<NetworkItem>> resultSelector =
+            Func<Task<GetAccessListResponse>, ReadOnlyCollection<NetworkItem>> resultSelector =
                 task => task.Result.AccessList;
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1810,7 +1811,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancingProtocol>> ListProtocolsAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancingProtocol>> ListProtocolsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/loadbalancers/protocols");
             var parameters = new Dictionary<string, string>();
@@ -1821,8 +1822,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancingProtocolsResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancingProtocolsResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancingProtocolsResponse>, IEnumerable<LoadBalancingProtocol>> resultSelector =
-                task => (task.Result != null ? task.Result.Protocols : null) ?? Enumerable.Empty<LoadBalancingProtocol>();
+            Func<Task<ListLoadBalancingProtocolsResponse>, ReadOnlyCollection<LoadBalancingProtocol>> resultSelector =
+                task => (task.Result != null ? task.Result.Protocols : null) ?? new ReadOnlyCollection<LoadBalancingProtocol>(new LoadBalancingProtocol[0]);
 
             // authenticate -> request resource -> check result -> parse result -> cache result -> return
             return AuthenticateServiceAsync(cancellationToken)
@@ -1832,7 +1833,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancingAlgorithm>> ListAlgorithmsAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancingAlgorithm>> ListAlgorithmsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/loadbalancers/algorithms");
             var parameters = new Dictionary<string, string>();
@@ -1843,8 +1844,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancingAlgorithmsResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancingAlgorithmsResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancingAlgorithmsResponse>, IEnumerable<LoadBalancingAlgorithm>> resultSelector =
-                task => (task.Result != null ? task.Result.Algorithms : null) ?? Enumerable.Empty<LoadBalancingAlgorithm>();
+            Func<Task<ListLoadBalancingAlgorithmsResponse>, ReadOnlyCollection<LoadBalancingAlgorithm>> resultSelector =
+                task => (task.Result != null ? new ReadOnlyCollection<LoadBalancingAlgorithm>(task.Result.Algorithms.ToArray()) : null) ?? new ReadOnlyCollection<LoadBalancingAlgorithm>(new LoadBalancingAlgorithm[0]);
 
             // authenticate -> request resource -> check result -> parse result -> cache result -> return
             return AuthenticateServiceAsync(cancellationToken)
@@ -1952,7 +1953,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerMetadataItem>> ListLoadBalancerMetadataAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerMetadataItem>> ListLoadBalancerMetadataAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -1969,8 +1970,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerMetadataResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerMetadataResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerMetadataResponse>, IEnumerable<LoadBalancerMetadataItem>> resultSelector =
-                task => (task.Result != null ? task.Result.Metadata : null) ?? Enumerable.Empty<LoadBalancerMetadataItem>();
+            Func<Task<ListLoadBalancerMetadataResponse>, ReadOnlyCollection<LoadBalancerMetadataItem>> resultSelector =
+                task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -2009,7 +2010,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerMetadataItem>> ListNodeMetadataAsync(LoadBalancerId loadBalancerId, NodeId nodeId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerMetadataItem>> ListNodeMetadataAsync(LoadBalancerId loadBalancerId, NodeId nodeId, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -2029,8 +2030,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerMetadataResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerMetadataResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerMetadataResponse>, IEnumerable<LoadBalancerMetadataItem>> resultSelector =
-                task => (task.Result != null ? task.Result.Metadata : null) ?? Enumerable.Empty<LoadBalancerMetadataItem>();
+            Func<Task<ListLoadBalancerMetadataResponse>, ReadOnlyCollection<LoadBalancerMetadataItem>> resultSelector =
+                task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -2072,7 +2073,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerMetadataItem>> AddLoadBalancerMetadataAsync(LoadBalancerId loadBalancerId, IEnumerable<KeyValuePair<string, string>> metadata, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerMetadataItem>> AddLoadBalancerMetadataAsync(LoadBalancerId loadBalancerId, IEnumerable<KeyValuePair<string, string>> metadata, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -2092,8 +2093,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerMetadataResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerMetadataResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerMetadataResponse>, IEnumerable<LoadBalancerMetadataItem>> resultSelector =
-                task => (task.Result != null ? task.Result.Metadata : null) ?? Enumerable.Empty<LoadBalancerMetadataItem>();
+            Func<Task<ListLoadBalancerMetadataResponse>, ReadOnlyCollection<LoadBalancerMetadataItem>> resultSelector =
+                task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()
@@ -2102,7 +2103,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<LoadBalancerMetadataItem>> AddNodeMetadataAsync(LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<KeyValuePair<string, string>> metadata, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<LoadBalancerMetadataItem>> AddNodeMetadataAsync(LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<KeyValuePair<string, string>> metadata, CancellationToken cancellationToken)
         {
             if (loadBalancerId == null)
                 throw new ArgumentNullException("loadBalancerId");
@@ -2125,8 +2126,8 @@
             Func<Task<HttpWebRequest>, Task<ListLoadBalancerMetadataResponse>> requestResource =
                 GetResponseAsyncFunc<ListLoadBalancerMetadataResponse>(cancellationToken);
 
-            Func<Task<ListLoadBalancerMetadataResponse>, IEnumerable<LoadBalancerMetadataItem>> resultSelector =
-                task => (task.Result != null ? task.Result.Metadata : null) ?? Enumerable.Empty<LoadBalancerMetadataItem>();
+            Func<Task<ListLoadBalancerMetadataResponse>, ReadOnlyCollection<LoadBalancerMetadataItem>> resultSelector =
+                task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
@@ -36,7 +37,7 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will return a collection of <see cref="LimitType"/> objects containing the limit types supported by the service.</returns>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Limit_Types.html">List Limit Types (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<IEnumerable<LimitType>> ListLimitTypesAsync(CancellationToken cancellationToken);
+        Task<ReadOnlyCollection<LimitType>> ListLimitTypesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Get information about the provider-specific limits of this service for a particular <see cref="LimitType"/>.

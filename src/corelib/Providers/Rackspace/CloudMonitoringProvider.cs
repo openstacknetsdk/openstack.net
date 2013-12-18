@@ -334,7 +334,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckData[]> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckData>> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -349,8 +349,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, configuration);
 
-            Func<Task<HttpWebRequest>, Task<CheckData[]>> requestResource =
-                GetResponseAsyncFunc<CheckData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<CheckData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<CheckData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()
@@ -358,7 +358,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckData[]> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckData>> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -371,8 +371,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters);
 
-            Func<Task<HttpWebRequest>, Task<CheckData[]>> requestResource =
-                GetResponseAsyncFunc<CheckData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<CheckData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<CheckData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -609,7 +609,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DataPoint[]> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<DataPoint>> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -649,7 +649,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DataPoint[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<DataPoint>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -660,7 +660,7 @@
                     if (valuesToken == null)
                         return null;
 
-                    return valuesToken.ToObject<DataPoint[]>();
+                    return valuesToken.ToObject<ReadOnlyCollection<DataPoint>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -701,7 +701,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<AlarmData[]> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<AlarmData>> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -714,8 +714,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, configuration);
 
-            Func<Task<HttpWebRequest>, Task<AlarmData[]>> requestResource =
-                GetResponseAsyncFunc<AlarmData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<AlarmData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<AlarmData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()
@@ -1061,7 +1061,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckId[]> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckId>> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -1077,7 +1077,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, CheckId[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<CheckId>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -1088,7 +1088,7 @@
                     if (checkIdsToken == null)
                         return null;
 
-                    return checkIdsToken.ToObject<CheckId[]>();
+                    return checkIdsToken.ToObject<ReadOnlyCollection<CheckId>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
