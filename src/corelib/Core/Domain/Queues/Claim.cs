@@ -64,7 +64,7 @@
         /// <summary>
         /// The <see cref="Task"/> object representing the asynchronous release of this claim.
         /// Prior to calling <see cref="Dispose()"/> or <see cref="DisposeAsync"/>, the value of
-        /// this field is <c>null</c>.
+        /// this field is <see langword="null"/>.
         /// </summary>
         private Task _releaseTask;
 
@@ -73,17 +73,17 @@
         /// </summary>
         /// <param name="service">The queueing service.</param>
         /// <param name="queueName">The name of the queue.</param>
-        /// <param name="location">The absolute URI of the claim resource. If no claim was allocated by the server, this value is <c>null</c>.</param>
+        /// <param name="location">The absolute URI of the claim resource. If no claim was allocated by the server, this value is <see langword="null"/>.</param>
         /// <param name="timeToLive">The time to live of the claim.</param>
         /// <param name="age">The age of the claim.</param>
-        /// <param name="owner"><c>true</c> if the current instance owns the claim (and is responsible for releasing it); otherwise, <c>false</c>.</param>
+        /// <param name="owner"><see langword="true"/> if the current instance owns the claim (and is responsible for releasing it); otherwise, <see langword="false"/>.</param>
         /// <param name="messages">A collection of messages belonging to the claim.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="service"/> is <c>null</c>.
+        /// If <paramref name="service"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="queueName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="queueName"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
         /// </exception>
         public Claim(IQueueingService service, QueueName queueName, Uri location, TimeSpan timeToLive, TimeSpan age, bool owner, IEnumerable<QueuedMessage> messages)
         {
@@ -115,7 +115,7 @@
         /// URI template documented in the <see href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1">OpenStack Marconi API v1 Blueprint</see>.
         /// </remarks>
         /// <value>
-        /// The ID of this claim. If the claim is empty (i.e. the queue did not have any unclaimed messages), this value is <c>null</c>.
+        /// The ID of this claim. If the claim is empty (i.e. the queue did not have any unclaimed messages), this value is <see langword="null"/>.
         /// </value>
         public ClaimId Id
         {
@@ -133,7 +133,7 @@
         /// Gets the absolute URI for this claim.
         /// </summary>
         /// <value>
-        /// The absolute URI of this claim. If the claim is empty (i.e. the queue did not have any unclaimed messages), this value is <c>null</c>.
+        /// The absolute URI of this claim. If the claim is empty (i.e. the queue did not have any unclaimed messages), this value is <see langword="null"/>.
         /// </value>
         public Uri Location
         {
@@ -274,7 +274,7 @@
         /// <summary>
         /// Releases resources owned by this <see cref="Claim"/>.
         /// </summary>
-        /// <param name="disposing"><c>true</c> if this method was called from <see cref="Dispose()"/>; otherwise, <c>false</c> if this method was called from a finalizer.</param>
+        /// <param name="disposing"><see langword="true"/> if this method was called from <see cref="Dispose()"/>; otherwise, <see langword="false"/> if this method was called from a finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -287,7 +287,7 @@
         /// Refresh the current claim to match the updated information in <paramref name="claim"/>.
         /// </summary>
         /// <param name="claim">A <see cref="Claim"/> object containing updated claim information.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If the specified <paramref name="claim"/> does not represent the same claim as the current instance.</exception>
         protected virtual void RefreshImpl(Claim claim)
         {

@@ -47,9 +47,9 @@
         /// <param name="key">The metadata key.</param>
         /// <param name="value">The metadata value.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="key"/> is <c>null</c>.
+        /// If <paramref name="key"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="key"/> is empty.</exception>
         public LoadBalancerMetadataItem(string key, string value)

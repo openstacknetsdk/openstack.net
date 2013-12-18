@@ -239,8 +239,8 @@ namespace net.openstack.Core.Domain
         /// Sets the metadata associated with the server, replacing any existing metadata.
         /// </summary>
         /// <param name="metadata">The metadata to associate with the server.</param>
-        /// <returns><c>true</c> if the metadata for the server was successfully updated; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the metadata for the server was successfully updated; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.SetServerMetadata"/>
@@ -257,8 +257,8 @@ namespace net.openstack.Core.Domain
         /// For each item in <paramref name="metadata"/>, if the key exists, the value is updated; otherwise, the item is added.
         /// </remarks>
         /// <param name="metadata">The server metadata to update.</param>
-        /// <returns><c>true</c> if the metadata for the server was successfully updated; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the metadata for the server was successfully updated; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.UpdateServerMetadata"/>
@@ -273,11 +273,11 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="key">The metadata key.</param>
         /// <param name="value">The new value for the metadata item.</param>
-        /// <returns><c>true</c> if the metadata for the server was successfully updated; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the metadata for the server was successfully updated; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="key"/> is <c>null</c>.
+        /// If <paramref name="key"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="key"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -295,8 +295,8 @@ namespace net.openstack.Core.Domain
         /// For each item in <paramref name="metadata"/>, if the key exists, the value is updated; otherwise, the item is added.
         /// </remarks>
         /// <param name="metadata">The server metadata to update.</param>
-        /// <returns><c>true</c> if the metadata for the server was successfully updated; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the metadata for the server was successfully updated; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains any values with empty keys.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.UpdateServerMetadata"/>
@@ -316,8 +316,8 @@ namespace net.openstack.Core.Domain
         /// </note>
         /// </remarks>
         /// <param name="metadata">A collection of metadata items to delete.</param>
-        /// <returns><c>true</c> if all of the metadata item were removed; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if all of the metadata item were removed; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="metadata"/> contains a null or empty key.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.DeleteServerMetadataItem"/>
@@ -343,8 +343,8 @@ namespace net.openstack.Core.Domain
         /// Deletes the specified metadata item from the server.
         /// </summary>
         /// <param name="key">The metadata key.</param>
-        /// <returns><c>true</c> if the metadata item was removed; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the metadata item was removed; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="key"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.DeleteServerMetadataItem"/>
@@ -359,11 +359,11 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="key">The metadata key.</param>
         /// <param name="value">The new value for the metadata item.</param>
-        /// <returns><c>true</c> if the metadata for the server was successfully updated; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the metadata for the server was successfully updated; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="key"/> is <c>null</c>.
+        /// If <paramref name="key"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="value"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="value"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="key"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -391,7 +391,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="networkLabel">The network label. This is obtained from <see cref="CloudNetwork.Label">CloudNetwork.Label</see>.</param>
         /// <returns>A collection of <see cref="IPAddress"/> containing the network addresses associated with the server on the specified network.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="networkLabel"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="networkLabel"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="networkLabel"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.ListAddressesByNetwork"/>
@@ -416,8 +416,8 @@ namespace net.openstack.Core.Domain
         /// </remarks>
         /// <param name="imageName">Name of the new image.</param>
         /// <param name="metadata">The metadata to associate to the new image.</param>
-        /// <returns>A <see cref="ServerImage"/> object containing the details of the new image if the image creation process was successfully started; otherwise, <c>null</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <c>null</c>.</exception>
+        /// <returns>A <see cref="ServerImage"/> object containing the details of the new image if the image creation process was successfully started; otherwise, <see langword="null"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="imageName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="imageName"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Create_Image-d1e4655.html">Create Image (OpenStack Compute API v2 and Extensions Reference)</seealso>
@@ -438,7 +438,7 @@ namespace net.openstack.Core.Domain
         /// The server deletion operation is completed asynchronously. The <see cref="ServerBase.WaitForDeleted"/>
         /// method may be used to block execution until the server is finally deleted.
         /// </remarks>
-        /// <returns><c>true</c> if the server was successfully marked for deletion; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the server was successfully marked for deletion; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.DeleteServer"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Delete_Server-d1e2883.html">Delete Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
@@ -464,7 +464,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <param name="networkId">The network ID. This is obtained from <see cref="CloudNetwork.Id">CloudNetwork.Id</see>.</param>
         /// <returns>A <see cref="VirtualInterface"/> object containing the details of the newly-created virtual network.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="networkId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="networkId"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.CreateVirtualInterface"/>
@@ -478,8 +478,8 @@ namespace net.openstack.Core.Domain
         /// Deletes the specified virtual interface from the server.
         /// </summary>
         /// <param name="virtualInterfaceId">The virtual interface ID. This is obtained from <see cref="VirtualInterface.Id">VirtualInterface.Id</see>.</param>
-        /// <returns><c>true</c> if the virtual interface was successfully removed from the server; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="virtualInterfaceId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the virtual interface was successfully removed from the server; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="virtualInterfaceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="virtualInterfaceId"/> is empty.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso cref="IComputeProvider.DeleteVirtualInterface"/>

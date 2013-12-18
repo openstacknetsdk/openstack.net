@@ -43,9 +43,9 @@
         /// but not just <fictitiousUri>www</fictitiousUri>.</param>
         /// <param name="comment">An optional comment to associate with the subdomain.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="emailAddress"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="emailAddress"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
@@ -94,7 +94,7 @@
         /// Gets the comment associated with the subdomain.
         /// </summary>
         /// <value>
-        /// The comment associated with the subdomain, or <c>null</c> if no comment
+        /// The comment associated with the subdomain, or <see langword="null"/> if no comment
         /// was provided for this subdomain.
         /// </value>
         public string Comment

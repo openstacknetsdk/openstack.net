@@ -32,7 +32,7 @@ namespace net.openstack.Core.Exceptions
         /// with the specified error state.
         /// </summary>
         /// <param name="status">The error state entered by the image.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <see langword="null"/>.</exception>
         public ImageEnteredErrorStateException(ImageState status)
             : base(string.Format("The image entered an error state: '{0}'", status))
         {

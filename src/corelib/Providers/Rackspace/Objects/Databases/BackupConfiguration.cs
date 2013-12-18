@@ -47,9 +47,9 @@
         /// <param name="name">The name of the backup.</param>
         /// <param name="description">The optional description of the backup.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="instanceId"/> is <c>null</c>.
+        /// If <paramref name="instanceId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="name"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="name"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         public BackupConfiguration(DatabaseInstanceId instanceId, string name, string description)

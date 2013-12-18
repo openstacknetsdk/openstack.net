@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <returns>A <see cref="DnsServiceLimits"/> object containing detailed information about the limits for the service provider.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_All_Limits.html">List All Limits (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsServiceLimits ListLimits(this IDnsService service)
@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <returns>A collection of <see cref="LimitType"/> objects containing the limit types supported by the service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Limit_Types.html">List Limit Types (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static IEnumerable<LimitType> ListLimitTypes(this IDnsService service)
@@ -79,9 +79,9 @@
         /// <param name="type">The limit type.</param>
         /// <returns>A <see cref="DnsServiceLimits"/> object containing detailed information about the limits of the specified <paramref name="type"/> for the service provider.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="service"/> is <c>null</c>.
+        /// If <paramref name="service"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="type"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="type"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Specific_Limit.html">List Specific Limit (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -113,12 +113,12 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="job">The <see cref="DnsJob"/> to query.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <returns>A <see cref="DnsJob"/> object containing the updated job information.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="service"/> is <c>null</c>.
+        /// If <paramref name="service"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="job"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="job"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -146,13 +146,13 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="job">The <see cref="DnsJob{TResponse}"/> to query.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <returns>A <see cref="DnsJob{TResult}"/> object containing the updated job information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="service"/> is <c>null</c>.
+        /// If <paramref name="service"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="job"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="job"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="JsonSerializationException">If an error occurs while deserializing the response object.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -190,9 +190,9 @@
         /// <returns>
         /// A tuple of the resulting collection of <see cref="DnsDomain"/> objects and the total number of domains in
         /// the list. If the total number of domains in the list is not available, the second element of the tuple will
-        /// be <c>null</c>.
+        /// be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
         /// <para>-or-</para>
@@ -225,11 +225,11 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="showRecords"><c>true</c> to populate the <see cref="DnsDomain.Records"/> property of the result; otherwise, <c>false</c>.</param>
-        /// <param name="showSubdomains"><c>true</c> to populate the <see cref="DnsDomain.Subdomains"/> property of the result; otherwise, <c>false</c>.</param>
+        /// <param name="showRecords"><see langword="true"/> to populate the <see cref="DnsDomain.Records"/> property of the result; otherwise, <see langword="false"/>.</param>
+        /// <param name="showSubdomains"><see langword="true"/> to populate the <see cref="DnsDomain.Subdomains"/> property of the result; otherwise, <see langword="false"/>.</param>
         /// <returns>A <see cref="DnsDomain"/> object containing the DNS information for the requested domain.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domain_details.html">List Domain Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsDomain ListDomainDetails(this IDnsService service, DomainId domainId, bool showRecords, bool showSubdomains)
@@ -256,10 +256,10 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="since">The timestamp of the earliest changes to consider. If this is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="since">The timestamp of the earliest changes to consider. If this is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>A <see cref="DnsDomainChanges"/> object describing the changes made to a domain registered in the DNS service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Domain_Changes.html">List Domain Changes (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsDomainChanges ListDomainChanges(this IDnsService service, DomainId domainId, DateTimeOffset? since)
@@ -296,8 +296,8 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <returns>A <see cref="DnsJob{TResponse}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/export_domain.html">Export Domain (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsJob<ExportedDomain> ExportDomain(this IDnsService service, DomainId domainId)
@@ -325,8 +325,8 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="configuration">A <see cref="DnsConfiguration"/> object describing the domains to register in the DNS service.</param>
         /// <returns>A <see cref="DnsJob{TResponse}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/create_domains.html">Create Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsJob<DnsDomains> CreateDomains(this IDnsService service, DnsConfiguration configuration)
@@ -354,8 +354,8 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="configuration">A <see cref="DnsUpdateConfiguration"/> object describing updates to apply to the domains.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Modify_Domain_s_-d1e3848.html">Modify Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsJob UpdateDomains(this IDnsService service, DnsUpdateConfiguration configuration)
@@ -383,16 +383,16 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="cloneName">The name of the new (cloned) domain.</param>
-        /// <param name="cloneSubdomains"><c>true</c> to recursively clone subdomains; otherwise, <c>false</c> to only clone the top-level domain and its records. Cloned subdomain configurations are modified the same way that cloned top-level domain configurations are modified. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyRecordData"><c>true</c> to replace occurrences of the reference domain name with the new domain name in comments on the cloned (new) domain. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyEmailAddress"><c>true</c> to replace occurrences of the reference domain name with the new domain name in email addresses on the cloned (new) domain. If this is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="modifyComment"><true>true</true> to replace occurrences of the reference domain name with the new domain name in data fields (of records) on the cloned (new) domain. Does not affect NS records. If this is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="cloneSubdomains"><see langword="true"/> to recursively clone subdomains; otherwise, <see langword="false"/> to only clone the top-level domain and its records. Cloned subdomain configurations are modified the same way that cloned top-level domain configurations are modified. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyRecordData"><see langword="true"/> to replace occurrences of the reference domain name with the new domain name in comments on the cloned (new) domain. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyEmailAddress"><see langword="true"/> to replace occurrences of the reference domain name with the new domain name in email addresses on the cloned (new) domain. If this is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="modifyComment"><true>true</true> to replace occurrences of the reference domain name with the new domain name in data fields (of records) on the cloned (new) domain. Does not affect NS records. If this is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>A <see cref="DnsJob{TResponse}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="cloneName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="cloneName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="cloneName"/> is empty.
@@ -424,9 +424,9 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="serializedDomains">A collection of <see cref="SerializedDomain"/> objects containing the serialized domain information to import.</param>
         /// <returns>A <see cref="DnsJob{TResponse}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="serializedDomains"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="serializedDomains"/> is contains any <c>null</c> values.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serializedDomains"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="serializedDomains"/> is contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/import_domain.html">Import Domain (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsJob<DnsDomains> ImportDomain(this IDnsService service, IEnumerable<SerializedDomain> serializedDomains)
@@ -453,11 +453,11 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainIds">A collection of IDs for the domains to remove. These are obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="deleteSubdomains"><c>true</c> to delete any subdomains associated with the specified domains; otherwise, <c>false</c> to promote any subdomains to top-level domains.</param>
+        /// <param name="deleteSubdomains"><see langword="true"/> to delete any subdomains associated with the specified domains; otherwise, <see langword="false"/> to promote any subdomains to top-level domains.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainIds"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="domainIds"/> contains any <c>null</c> values.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainIds"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="domainIds"/> contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Remove_Domain_s_-d1e4022.html">Remove Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         public static DnsJob RemoveDomains(this IDnsService service, IEnumerable<DomainId> domainIds, bool deleteSubdomains)
@@ -493,10 +493,10 @@
         /// <returns>
         /// A tuple of the resulting collection of <see cref="DnsSubdomain"/> objects and the total number
         /// of domains in the list. If the total number of subdomains in the list is not available, the second
-        /// element of the tuple will be <c>null</c>.
+        /// element of the tuple will be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
         /// <para>-or-</para>
@@ -533,18 +533,18 @@
         /// </summary>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="recordType">The specific record type to consider, or <c>null</c> to consider all record types.</param>
-        /// <param name="recordName">The record name, which is matched to the <see cref="DnsRecord.Name"/> property, or <c>null</c> to consider all records.</param>
-        /// <param name="recordData">The record data, which is matched to the <see cref="DnsRecord.Data"/> property, or <c>null</c> to consider all records.</param>
+        /// <param name="recordType">The specific record type to consider, or <see langword="null"/> to consider all record types.</param>
+        /// <param name="recordName">The record name, which is matched to the <see cref="DnsRecord.Name"/> property, or <see langword="null"/> to consider all records.</param>
+        /// <param name="recordData">The record data, which is matched to the <see cref="DnsRecord.Data"/> property, or <see langword="null"/> to consider all records.</param>
         /// <param name="offset">The index of the last item in the previous page of results. If not specified, the list starts at the beginning.</param>
         /// <param name="limit">The maximum number of records to return in a single page.</param>
         /// <returns>
         /// A tuple of the resulting collection of <see cref="DnsRecord"/> objects and the total number of records
         /// in the list. If the total number of records in the list is not available, the second element of the
-        /// tuple will be <c>null</c>.
+        /// tuple will be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="offset"/> is less than 0.
         /// <para>-or-</para>
@@ -579,11 +579,11 @@
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="recordId">The record ID. This is obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
         /// <returns>A <see cref="DnsRecord"/> object containing the details of the specified DNS record.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Record_Details-d1e4770.html">List Record Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -613,14 +613,14 @@
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the records to add.</param>
         /// <returns>A <see cref="DnsJob{TResponse}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Add_Records-d1e4895.html">Add Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -650,14 +650,14 @@
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordUpdateConfiguration"/> objects describing the updates to apply to domain records.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordConfigurations"/> contains any <c>null</c> values.
+        /// If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Modify_Records-d1e5033.html">Modify Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -687,14 +687,14 @@
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
         /// <param name="recordId">A collection of IDs for the records to remove. These are obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="domainId"/> is <c>null</c>.
+        /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordId"/> contains any <c>null</c> values.
+        /// If <paramref name="recordId"/> contains any <see langword="null"/> values.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Remove_Records-d1e5188.html">Remove Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -732,13 +732,13 @@
         /// <returns>
         /// A tuple of the resulting collection of <see cref="DnsRecord"/> objects and the total number of domains
         /// in the list. If the total number of subdomains in the list is not available, the second element of the
-        /// tuple will be <c>null</c>.
+        /// tuple will be <see langword="null"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceName"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -775,13 +775,13 @@
         /// <param name="deviceResourceUri">The absolute URI of the cloud resource.</param>
         /// <param name="recordId">The record ID. This is obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
         /// <returns>A <see cref="DnsRecord"/> object containing the details of the specified reverse DNS record.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
@@ -817,18 +817,18 @@
         /// <param name="deviceResourceUri">The absolute URI of the cloud resource.</param>
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the records to add.</param>
         /// <returns>A <see cref="DnsJob{DnsRecordsList}"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457003.html">Add PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -859,18 +859,18 @@
         /// <param name="deviceResourceUri">The absolute URI of the cloud resource.</param>
         /// <param name="recordConfigurations">A collection of <see cref="DnsDomainRecordUpdateConfiguration"/> objects describing the updates to apply to domain records.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordConfigurations"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordConfigurations"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="recordConfigurations"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457004.html">Modify PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
@@ -899,13 +899,13 @@
         /// <param name="service">The DNS service instance.</param>
         /// <param name="serviceName">The name of the service which owns the cloud resource. This is obtained from <see cref="ServiceCatalog.Name"/>.</param>
         /// <param name="deviceResourceUri">The absolute URI of the cloud resource.</param>
-        /// <param name="ipAddress">The specific record to remove. If this is <c>null</c>, all reverse DNS records associated with the specified device are removed.</param>
+        /// <param name="ipAddress">The specific record to remove. If this is <see langword="null"/>, all reverse DNS records associated with the specified device are removed.</param>
         /// <returns>A <see cref="DnsJob"/> object describing the asynchronous server operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="serviceName"/> is <c>null</c>.
+        /// If <paramref name="serviceName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="deviceResourceUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="deviceResourceUri"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="serviceName"/> is empty.

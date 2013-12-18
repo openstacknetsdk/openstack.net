@@ -41,7 +41,7 @@
         /// with the specified target address.
         /// </summary>
         /// <param name="target">The IP address to target for the traceroute operation.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">If the <see cref="IPAddress.AddressFamily"/> of <paramref name="target"/> is not <see cref="AddressFamily.InterNetwork"/> or <see cref="AddressFamily.InterNetworkV6"/>.</exception>
         public TraceRouteConfiguration(IPAddress target)
         {
@@ -59,7 +59,7 @@
         /// </summary>
         /// <param name="target">The target for the traceroute operation.</param>
         /// <param name="resolverType">The type of resolver to use for resolving the target to an IP address.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="target"/> is empty.</exception>
         public TraceRouteConfiguration(string target, TargetResolverType resolverType)
         {

@@ -24,7 +24,7 @@
         /// with the given metadata.
         /// </summary>
         /// <param name="metadata">The metadata.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="metadata"/> is <see langword="null"/>.</exception>
         public UpdateMetadataRequest(Metadata metadata)
         {
             if (metadata == null)

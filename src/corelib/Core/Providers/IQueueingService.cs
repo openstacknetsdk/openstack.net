@@ -12,7 +12,7 @@
     using WebException = System.Net.WebException;
 
     /// <summary>
-    /// Represents a provider for asynchronous operations on the OpenStack Marconi (Cloud QUeues) Service.
+    /// Represents a provider for asynchronous operations on the OpenStack Marconi (Cloud Queues) Service.
     /// </summary>
     /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1&amp;oldid=30943">OpenStack Marconi API v1 Blueprint</seealso>
     /// <preliminary/>
@@ -52,8 +52,8 @@
         /// </summary>
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <c>true</c> if the queue was created by the call, or <c>false</c> if the queue already existed.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <see langword="true"/> if the queue was created by the call, or <see langword="false"/> if the queue already existed.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Create_Queue">Create Queue (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<bool> CreateQueueAsync(QueueName queueName, CancellationToken cancellationToken);
@@ -61,9 +61,9 @@
         /// <summary>
         /// Gets a list of queues.
         /// </summary>
-        /// <param name="marker">The name of the last queue in the previous list. The resulting collection of queues will start with the first queue <em>after</em> this value, when sorted using <see cref="StringComparer.Ordinal"/>. If this value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of queues to return. If this value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="detailed"><c>true</c> to return detailed information about each queue; otherwise, <c>false</c>.</param>
+        /// <param name="marker">The name of the last queue in the previous list. The resulting collection of queues will start with the first queue <em>after</em> this value, when sorted using <see cref="StringComparer.Ordinal"/>. If this value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of queues to return. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="detailed"><see langword="true"/> to return detailed information about each queue; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <placeholder>placeholder</placeholder>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
@@ -76,8 +76,8 @@
         /// </summary>
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <c>true</c> if queue with the specified name exists; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <see langword="true"/> if queue with the specified name exists; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Checking_Queue_Existence">Checking Queue Existence (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<bool> QueueExistsAsync(QueueName queueName, CancellationToken cancellationToken);
@@ -91,7 +91,7 @@
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Delete_Queue">Delete Queue (OpenStack Marconi API v1 Blueprint)</seealso>
         Task DeleteQueueAsync(QueueName queueName, CancellationToken cancellationToken);
@@ -108,7 +108,7 @@
         /// <param name="metadata">The metadata to associate with the queue.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Set_Queue_Metadata">Set Queue Metadata (OpenStack Marconi API v1 Blueprint)</seealso>
         Task SetQueueMetadataAsync<T>(QueueName queueName, T metadata, CancellationToken cancellationToken)
@@ -120,7 +120,7 @@
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a <see cref="JObject"/> object containing the metadata associated with the queue.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_Queue_Metadata">Get Queue Metadata (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<JObject> GetQueueMetadataAsync(QueueName queueName, CancellationToken cancellationToken);
@@ -132,7 +132,7 @@
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a deserialized object of type <typeparamref name="T"/> representing the metadata associated with the queue.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="JsonSerializationException">If an error occurs while deserializing the metadata.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_Queue_Metadata">Get Queue Metadata (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -145,7 +145,7 @@
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a <see cref="QueueStatistics"/> object containing statistics for the queue.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_Queue_Stats">Get Queue Stats (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<QueueStatistics> GetQueueStatisticsAsync(QueueName queueName, CancellationToken cancellationToken);
@@ -158,13 +158,13 @@
         /// Gets a list of messages currently in a queue.
         /// </summary>
         /// <param name="queueName">The queue name.</param>
-        /// <param name="marker">The <see cref="QueuedMessageList"/> object returned by a previous call to <see cref="ListMessagesAsync"/>. If this value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of messages to return. If this value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="echo"><c>true</c> to include messages created by the current client; otherwise, <c>false</c>.</param>
-        /// <param name="includeClaimed"><c>true</c> to include claimed messages; otherwise <c>false</c> to return only unclaimed messages.</param>
+        /// <param name="marker">The <see cref="QueuedMessageList"/> object returned by a previous call to <see cref="ListMessagesAsync"/>. If this value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of messages to return. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="echo"><see langword="true"/> to include messages created by the current client; otherwise, <see langword="false"/>.</param>
+        /// <param name="includeClaimed"><see langword="true"/> to include claimed messages; otherwise <see langword="false"/> to return only unclaimed messages.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a collection of <see cref="QueuedMessage"/> objects describing the messages in the queue.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#List_Messages">List Messages (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -182,9 +182,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a <see cref="QueuedMessage"/> object containing detailed information about the specified message.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messageId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messageId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_a_Specific_Message">Get a Specific Message (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -202,12 +202,12 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a collection of <see cref="QueuedMessage"/> objects containing detailed information about the specified messages.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messageIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messageIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messageIds"/> contains a <c>null</c> value.
+        /// If <paramref name="messageIds"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_a_Set_of_Messages_by_ID">Get a Set of Messages by ID (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -221,12 +221,12 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains a <c>null</c> value.
+        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -240,12 +240,12 @@
         /// <param name="messages">The messages to post.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains a <c>null</c> value.
+        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -259,12 +259,12 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains a <c>null</c> value.
+        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -278,12 +278,12 @@
         /// <param name="messages">The messages to post.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains a <c>null</c> value.
+        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -294,13 +294,13 @@
         /// </summary>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messageId">The ID of the message to delete. This is obtained from <see cref="QueuedMessage.Id">QueuedMessage.Id</see>.</param>
-        /// <param name="claim">The claim for the message. If this value is <c>null</c>, the delete operation will fail if the message is claimed. If this value is non-<c>null</c>, the delete operation will fail if the message is not claimed by the specified claim.</param>
+        /// <param name="claim">The claim for the message. If this value is <see langword="null"/>, the delete operation will fail if the message is claimed. If this value is non-<see langword="null"/>, the delete operation will fail if the message is not claimed by the specified claim.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messageId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messageId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Delete_Message">Delete Message (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -319,12 +319,12 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="messageIds"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="messageIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="messageIds"/> contains a <c>null</c> value.
+        /// If <paramref name="messageIds"/> contains a <see langword="null"/> value.
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Delete_a_Set_of_Messages_by_ID">Delete a Set of Messages by ID (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -349,12 +349,12 @@
         /// reclaiming by another process.</para>
         /// </remarks>
         /// <param name="queueName">The queue name.</param>
-        /// <param name="limit">The maximum number of messages to claim. If this value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="limit">The maximum number of messages to claim. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="timeToLive">The time to wait before the server automatically releases the claim.</param>
         /// <param name="gracePeriod">The time to wait, after the time-to-live for the claim expires, before the server allows the claimed messages to be deleted due to the individual message's time-to-live expiring.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <see cref="Claim"/> object representing the claim.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="limit"/> is less than or equal to 0.
         /// <para>-or-</para>
@@ -377,9 +377,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a <see cref="Claim"/> object representing the claim.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="claim"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="claim"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Query_Claim">Query Claim (OpenStack Marconi API v1 Blueprint)</seealso>
@@ -398,9 +398,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="claim"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="claim"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is negative.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -420,9 +420,9 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <c>null</c>.
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="claim"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="claim"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Release_Claim">Release Claim (OpenStack Marconi API v1 Blueprint)</seealso>

@@ -32,7 +32,7 @@
         /// Gets the evaluated alarm example criteria.
         /// </summary>
         /// <value>
-        /// The evaluated alarm example criteria, or <c>null</c> if the JSON
+        /// The evaluated alarm example criteria, or <see langword="null"/> if the JSON
         /// response from the server did not include the underlying property.
         /// </value>
         public string BoundCriteria

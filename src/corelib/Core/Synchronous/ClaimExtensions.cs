@@ -24,7 +24,7 @@
         /// to update the current instance to match the results.
         /// </remarks>
         /// <param name="claim">The claim.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         public static void Refresh(this Claim claim)
         {
@@ -57,7 +57,7 @@
         /// <param name="timeToLive">
         /// The new Time-To-Live value for the claim. This value may differ from the original TTL of the claim.
         /// </param>
-        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is negative or <see cref="TimeSpan.Zero"/>.</exception>
         /// <exception cref="InvalidOperationException">If the claim is empty (i.e. <see cref="Claim.Messages"/> is empty).</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>

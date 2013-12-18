@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="list">The list to wrap.</param>
         /// <param name="metadata">The metadata associated with the list.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="list"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="list"/> is <see langword="null"/>.</exception>
         public ReadOnlyCollectionPage(IList<T> list, IDictionary<string, object> metadata)
             : base(list)
         {

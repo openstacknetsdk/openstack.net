@@ -32,7 +32,7 @@
         /// with the specified service key.
         /// </summary>
         /// <param name="serviceKey">The PagerDuty service key to use for sending notifications.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceKey"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceKey"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceKey"/> is empty.</exception>
         public PagerDutyNotificationDetails(string serviceKey)
         {

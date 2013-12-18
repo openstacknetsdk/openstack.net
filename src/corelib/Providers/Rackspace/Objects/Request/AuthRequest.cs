@@ -23,7 +23,7 @@
         /// given identity.
         /// </summary>
         /// <param name="identity">The identity of the user to authenticate.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">If given <paramref name="identity"/> type is not supported.</exception>
         public AuthRequest(CloudIdentity identity)
         {

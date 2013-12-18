@@ -49,10 +49,10 @@
         /// Initializes a new instance of the <see cref="ConnectionThrottles"/> class with
         /// the specified configuration.
         /// </summary>
-        /// <param name="maxConnectionRate">The maximum number of connections per rate interval to allow from a single IP address, or <c>0</c> to not limit the connection rate. If this value is <c>null</c>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
-        /// <param name="maxConnections">The maximum number of connections to allow from a single IP address, or <c>0</c> to not limit the number connections. If this value is <c>null</c>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
-        /// <param name="minConnections">The minimum number of connections to allow from an IP address before applying throttling restrictions. If this value is <c>null</c>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
-        /// <param name="rateInterval">The time period for which the connection rate limit is evaluated. If this value is <c>null</c>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
+        /// <param name="maxConnectionRate">The maximum number of connections per rate interval to allow from a single IP address, or <c>0</c> to not limit the connection rate. If this value is <see langword="null"/>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
+        /// <param name="maxConnections">The maximum number of connections to allow from a single IP address, or <c>0</c> to not limit the number connections. If this value is <see langword="null"/>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
+        /// <param name="minConnections">The minimum number of connections to allow from an IP address before applying throttling restrictions. If this value is <see langword="null"/>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
+        /// <param name="rateInterval">The time period for which the connection rate limit is evaluated. If this value is <see langword="null"/>, the value for this throttle will not be changed during a call to <see cref="ILoadBalancerService.UpdateThrottlesAsync"/>.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="maxConnectionRate"/> is less than 0.
         /// <para>-or-</para>
@@ -81,7 +81,7 @@
 
         /// <summary>
         /// Gets the maximum number of connections allowed from a single IP address in the defined <see cref="RateInterval"/>.
-        /// A value of 0 indicates an unlimited connection rate. A value of <c>null</c> indicates this connection limit is
+        /// A value of 0 indicates an unlimited connection rate. A value of <see langword="null"/> indicates this connection limit is
         /// not configured.
         /// </summary>
         /// <value>
@@ -90,7 +90,7 @@
         ///
         /// <list type="bullet">
         /// <item>0, if the connection rate is configured but unlimited.</item>
-        /// <item><c>null</c>, if the connection rate limit is not configured.</item>
+        /// <item><see langword="null"/>, if the connection rate limit is not configured.</item>
         /// </list>
         /// </value>
         public int? MaxConnectionRate
@@ -103,7 +103,7 @@
 
         /// <summary>
         /// Gets the maximum number of connections allowed for a single IP address. A value of 0 indicates
-        /// an unlimited number of connections. A value of <c>null</c> indicates this connection limit is
+        /// an unlimited number of connections. A value of <see langword="null"/> indicates this connection limit is
         /// not configured.
         /// </summary>
         public int? MaxConnections
@@ -116,7 +116,7 @@
 
         /// <summary>
         /// Gets the minimum number of connections to allow from an IP address before applying throttling restrictions.
-        /// A value of <c>null</c> indicates this connection limit is not configured.
+        /// A value of <see langword="null"/> indicates this connection limit is not configured.
         /// </summary>
         public int? MinConnections
         {
@@ -129,7 +129,7 @@
         /// <summary>
         /// Gets the time period for which <see cref="MaxConnectionRate"/> is evaluated. For example, a <see cref="MaxConnectionRate"/>
         /// of 30 with a <see cref="RateInterval"/> of 60 seconds would allow a maximum of 30 connections per minute from a single IP
-        /// address. A value of <c>null</c> indicates this connection limit is not configured.
+        /// address. A value of <see langword="null"/> indicates this connection limit is not configured.
         /// </summary>
         public TimeSpan? RateInterval
         {

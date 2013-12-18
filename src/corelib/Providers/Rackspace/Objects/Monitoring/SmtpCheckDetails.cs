@@ -56,12 +56,12 @@
         /// Initializes a new instance of the <see cref="SmtpCheckDetails"/> class
         /// with the specified parameters.
         /// </summary>
-        /// <param name="port">The port to use for connecting to the remote service. If this value is <c>null</c>, the default port (25) for the associated service should be used.</param>
+        /// <param name="port">The port to use for connecting to the remote service. If this value is <see langword="null"/>, the default port (25) for the associated service should be used.</param>
         /// <param name="ehlo">The <strong>EHLO</strong> parameter of the SMTP message to send.</param>
         /// <param name="from">The <strong>From</strong> parameter of the SMTP message to send.</param>
-        /// <param name="to">The <strong>To</strong> parameter of the SMTP message to send. If the value is <c>null</c>, a <strong>quit</strong> is issued before sending a <strong>To</strong> line, and the connection is terminated.</param>
+        /// <param name="to">The <strong>To</strong> parameter of the SMTP message to send. If the value is <see langword="null"/>, a <strong>quit</strong> is issued before sending a <strong>To</strong> line, and the connection is terminated.</param>
         /// <param name="payload">The body of the message to send.</param>
-        /// <param name="startTls"><c>true</c> to use a TLS/SSL connection when connecting to the service; otherwise, <c>false</c>.</param>
+        /// <param name="startTls"><see langword="true"/> to use a TLS/SSL connection when connecting to the service; otherwise, <see langword="false"/>.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than or equal to 0, or if <paramref name="port"/> is greater than 65535.</exception>
         public SmtpCheckDetails(int? port, string ehlo, string from, string to, string payload, bool? startTls)
             : base(port)

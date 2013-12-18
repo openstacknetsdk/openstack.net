@@ -67,7 +67,7 @@
         /// Gets the name of the action which made this change.
         /// </summary>
         /// <value>
-        /// The name of the action which made this change, or <c>null</c> if the JSON response from the
+        /// The name of the action which made this change, or <see langword="null"/> if the JSON response from the
         /// server did not include this property.
         /// </value>
         public string Action
@@ -82,7 +82,7 @@
         /// Gets the resource type which was changed.
         /// </summary>
         /// <value>
-        /// The type of resource which was changed, or <c>null</c> if the JSON response from the
+        /// The type of resource which was changed, or <see langword="null"/> if the JSON response from the
         /// server did not include this property.
         /// </value>
         public string TargetType
@@ -97,7 +97,7 @@
         /// Gets the unique identifier of the resource which was changed.
         /// </summary>
         /// <value>
-        /// The unique identifier of the resource which was changed, or <c>null</c> if the JSON
+        /// The unique identifier of the resource which was changed, or <see langword="null"/> if the JSON
         /// response from the server did not include this property.
         /// </value>
         public string TargetId
@@ -113,7 +113,7 @@
         /// </summary>
         /// <value>
         /// A collection of <see cref="DnsChange"/> objects describing the changes made to the resource,
-        /// or <c>null</c> if the JSON response from the server did not include this property.
+        /// or <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public ReadOnlyCollection<DnsChange> Details
         {
@@ -131,7 +131,7 @@
         /// is equivalent to the <see cref="Tenant.Id">Tenant.Id</see> referenced by other services.
         /// </summary>
         /// <value>
-        /// The account ID under which this change was made, or <c>null</c> if the JSON response from the server
+        /// The account ID under which this change was made, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public ProjectId AccountId
@@ -146,7 +146,7 @@
         /// Gets the name of the domain this resource belongs to.
         /// </summary>
         /// <value>
-        /// The name of the domain the changed resource belongs to, or <c>null</c> if the JSON response from
+        /// The name of the domain the changed resource belongs to, or <see langword="null"/> if the JSON response from
         /// the server did not include this property.
         /// </value>
         public string DomainName

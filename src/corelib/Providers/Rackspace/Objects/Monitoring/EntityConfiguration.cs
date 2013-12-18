@@ -58,10 +58,10 @@
         /// Initializes a new instance of the <see cref="EntityConfiguration"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="label">The name for the entity. If this value is <c>null</c>, the underlying property will be omitted from the JSON representation of the object.</param>
-        /// <param name="agentId">The agent which this entity is bound to. If this value is <c>null</c>, the underlying property will be omitted from the JSON representation of the object.</param>
-        /// <param name="ipAddresses">The IP addresses which can be referenced by checks on this entity. If this value is <c>null</c>, the underlying property will be omitted from the JSON representation of the object.</param>
-        /// <param name="metadata">A collection of metadata to associate with the entity. If this value is <c>null</c>, the underlying property will be omitted from the JSON representation of the object.</param>
+        /// <param name="label">The name for the entity. If this value is <see langword="null"/>, the underlying property will be omitted from the JSON representation of the object.</param>
+        /// <param name="agentId">The agent which this entity is bound to. If this value is <see langword="null"/>, the underlying property will be omitted from the JSON representation of the object.</param>
+        /// <param name="ipAddresses">The IP addresses which can be referenced by checks on this entity. If this value is <see langword="null"/>, the underlying property will be omitted from the JSON representation of the object.</param>
+        /// <param name="metadata">A collection of metadata to associate with the entity. If this value is <see langword="null"/>, the underlying property will be omitted from the JSON representation of the object.</param>
         /// <exception cref="ArgumentException">
         /// If <paramref name="label"/> is empty.
         /// <para>-or-</para>

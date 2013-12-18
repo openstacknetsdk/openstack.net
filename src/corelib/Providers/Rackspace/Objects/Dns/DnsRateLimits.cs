@@ -37,7 +37,7 @@
         /// </summary>
         /// <value>
         /// A collection of <see cref="DnsRateLimitPattern"/> objects describing DNS rate
-        /// limits, or <c>null</c> if the JSON response from the server did not include
+        /// limits, or <see langword="null"/> if the JSON response from the server did not include
         /// this property.
         /// </value>
         public ReadOnlyCollection<DnsRateLimitPattern> Rate

@@ -82,7 +82,7 @@
         /// Gets the unique ID representing this record within the DNS service.
         /// </summary>
         /// <value>
-        /// The unique ID for the record, or <c>null</c> if the JSON response from the server
+        /// The unique ID for the record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public RecordId Id
@@ -97,7 +97,7 @@
         /// Gets the DNS record type.
         /// </summary>
         /// <value>
-        /// The DNS record type, or <c>null</c> if the JSON response from the server
+        /// The DNS record type, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DnsRecordType Type
@@ -112,7 +112,7 @@
         /// Gets the name of the DNS record.
         /// </summary>
         /// <value>
-        /// The DNS record name, or <c>null</c> if the JSON response from the server
+        /// The DNS record name, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public string Name
@@ -127,7 +127,7 @@
         /// Gets the data associated with the DNS record.
         /// </summary>
         /// <value>
-        /// The DNS record data, or <c>null</c> if the JSON response from the server
+        /// The DNS record data, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public string Data
@@ -142,7 +142,7 @@
         /// Gets the time-to-live for the DNS record.
         /// </summary>
         /// <value>
-        /// The time-to-live of the DNS record, or <c>null</c> if the JSON response from the server
+        /// The time-to-live of the DNS record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public TimeSpan? TimeToLive
@@ -160,7 +160,7 @@
         /// Gets the timestamp when this DNS record was initially created.
         /// </summary>
         /// <value>
-        /// The creation timestamp of the DNS record, or <c>null</c> if the JSON response from the server
+        /// The creation timestamp of the DNS record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Created
@@ -175,7 +175,7 @@
         /// Gets the timestamp when this DNS record was last updated.
         /// </summary>
         /// <value>
-        /// The last-updated timestamp of the DNS record, or <c>null</c> if the JSON response from the server
+        /// The last-updated timestamp of the DNS record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Updated
@@ -190,7 +190,7 @@
         /// Gets the priority of this DNS record.
         /// </summary>
         /// <value>
-        /// The priority of the DNS record, or <c>null</c> if the JSON response from the server
+        /// The priority of the DNS record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public int? Priority
@@ -205,7 +205,7 @@
         /// Gets the optional comment associated with the DNS record.
         /// </summary>
         /// <value>
-        /// The comment associated with the DNS record, or <c>null</c> if the JSON response from the server
+        /// The comment associated with the DNS record, or <see langword="null"/> if the JSON response from the server
         /// did not include this property or if the record does not have an associated comment.
         /// </value>
         public string Comment

@@ -25,7 +25,7 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <returns>A <see cref="MonitoringAccount"/> object describing the account.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-root">Get Account (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static MonitoringAccount GetAccount(this IMonitoringService service)
@@ -53,11 +53,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="accountId">The account ID. This is obtained from <see cref="MonitoringAccount.Id">MonitoringAccount.Id</see>.</param>
         /// <param name="configuration">An <see cref="AccountConfiguration"/> object describing the changes to apply to the account.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="accountId"/> is <c>null</c>.
+        /// If <paramref name="accountId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-put-account">Update Account (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -88,7 +88,7 @@
         /// A <see cref="MonitoringLimits"/> object describing the resource and rate
         /// limits of the monitoring service.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-get-limits">Get Limits (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static MonitoringLimits GetLimits(this IMonitoringService service)
@@ -114,15 +114,15 @@
         /// Gets a collection of monitoring audits.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, the current time is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, the current time is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="to"/> occurs before <paramref name="from"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="limit"/> is less than or equal to 0.
@@ -164,8 +164,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="configuration">A <see cref="NewEntityConfiguration"/> object describing the new entity.</param>
         /// <returns>The <see cref="EntityId"/> identifying the new entity.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-create">Create Entities (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static EntityId CreateEntity(this IMonitoringService service, NewEntityConfiguration configuration)
@@ -191,13 +191,13 @@
         /// Gets a collection of monitoring entities.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-list">List Entities (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -227,8 +227,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <returns>An <see cref="Entity"/> object describing the entity.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-get">Get Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static Entity GetEntity(this IMonitoringService service, EntityId entityId)
@@ -256,11 +256,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="configuration">An <see cref="UpdateEntityConfiguration"/> object describing the changes to apply to the entity.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-update">Update Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -288,8 +288,8 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-delete">Delete Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static void RemoveEntity(this IMonitoringService service, EntityId entityId)
@@ -322,11 +322,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="configuration">A <see cref="NewCheckConfiguration"/> object describing the new check.</param>
         /// <returns>The <see cref="CheckId"/> identifying the new check.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-create">Create Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -355,9 +355,9 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="configuration">A <see cref="NewCheckConfiguration"/> object describing the check to test.</param>
-        /// <param name="debug"><c>true</c> to include debug information in the result; otherwise, <c>false</c>. If the value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="debug"><see langword="true"/> to include debug information in the result; otherwise, <see langword="false"/>. If the value is <see langword="null"/>, a provider-specific default is used.</param>
         /// <returns>A collection <see cref="CheckData"/> objects describing the test results.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test">Test Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-debug">Test Check and Include Debug Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static CheckData[] TestCheck(this IMonitoringService service, EntityId entityId, NewCheckConfiguration configuration, bool? debug)
@@ -386,11 +386,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
         /// <returns>A collection <see cref="CheckData"/> objects describing the test results.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-existing">Test Existing Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -418,14 +418,14 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-list">List Checks (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -456,11 +456,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
         /// <returns>A <see cref="Check"/> object describing the check.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-get">Get Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -490,13 +490,13 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
         /// <param name="configuration">An <see cref="UpdateCheckConfiguration"/> object describing the changes to apply to the check.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-update">Update Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -525,11 +525,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-delete">Delete Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -560,13 +560,13 @@
         /// Gets a collection of monitoring check types.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-check-types.html#service-check-types-list">List Check Types (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -596,8 +596,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="checkTypeId">The check type ID. This is obtained from <see cref="CheckType.Id">CheckType.Id</see>, or from the predefined values in <see cref="CheckTypeId"/>.</param>
         /// <returns>A <see cref="CheckType"/> object describing the check type.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="checkTypeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="checkTypeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-check-types.html#service-check-types-get">Get Check Type (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static CheckType GetCheckType(this IMonitoringService service, CheckTypeId checkTypeId)
@@ -629,17 +629,17 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -680,16 +680,16 @@
         /// A collection of <see cref="DataPoint"/> objects describing the data points
         /// collected for the metric.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="metricName"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="metricName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If both <paramref name="points"/> and <paramref name="resolution"/> are <c>null</c>.
+        /// If both <paramref name="points"/> and <paramref name="resolution"/> are <see langword="null"/>.
         /// <para>-or-</para>
         /// <para>If <paramref name="to"/> occurs before <paramref name="from"/>.</para>
         /// </exception>
@@ -732,11 +732,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="configuration">A <see cref="NewAlarmConfiguration"/> object describing the new alarm.</param>
         /// <returns>The <see cref="AlarmId"/> identifying the new alarm.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-create">Create Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -766,11 +766,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="configuration">A <see cref="TestAlarmConfiguration"/> object describing the alarm test configuration.</param>
         /// <returns>A collection <see cref="AlarmData"/> objects describing the test results.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-test">Test Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -798,14 +798,14 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-list">List Alarms (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -836,11 +836,11 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="alarmId">The alarm ID. This is obtained from <see cref="Alarm.Id">Alarm.Id</see>.</param>
         /// <returns>An <see cref="Alarm"/> object describing the alarm.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-get">Get Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -870,13 +870,13 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="alarmId">The alarm ID. This is obtained from <see cref="Alarm.Id">Alarm.Id</see>.</param>
         /// <param name="configuration">An <see cref="UpdateAlarmConfiguration"/> object describing the changes to apply to the alarm.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-update">Update Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -905,11 +905,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="alarmId">The alarm ID. This is obtained from <see cref="Alarm.Id">Alarm.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-delete">Remove Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -942,8 +942,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="configuration">A <see cref="NewNotificationPlanConfiguration"/> object describing the new notification plan.</param>
         /// <returns>The <see cref="NotificationPlanId"/> identifying the new notification plan.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-create">Create Notification Plan (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationPlanId CreateNotificationPlan(this IMonitoringService service, NewNotificationPlanConfiguration configuration)
@@ -969,13 +969,13 @@
         /// Gets a collection of monitoring notification plans.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-list">List Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1005,8 +1005,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationPlanId">The notification plan ID. This is obtained from <see cref="NotificationPlan.Id">NotificationPlan.Id</see>.</param>
         /// <returns>A <see cref="NotificationPlan"/> object describing the notification plan.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-get">Get Notification Plan (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationPlan GetNotificationPlan(this IMonitoringService service, NotificationPlanId notificationPlanId)
@@ -1034,11 +1034,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationPlanId">The notification plan ID. This is obtained from <see cref="NotificationPlan.Id">NotificationPlan.Id</see>.</param>
         /// <param name="configuration">An <see cref="UpdateNotificationPlanConfiguration"/> object describing the changes to apply to the notification plan.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="notificationPlanId"/> is <c>null</c>.
+        /// If <paramref name="notificationPlanId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-update">Update Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1066,8 +1066,8 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationPlanId">The notification plan ID. This is obtained from <see cref="NotificationPlan.Id">NotificationPlan.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-delete">Delete Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static void RemoveNotificationPlan(this IMonitoringService service, NotificationPlanId notificationPlanId)
@@ -1097,13 +1097,13 @@
         /// Gets a collection of monitoring zones.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-list">List Monitoring Zones (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1133,8 +1133,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="monitoringZoneId">The monitoring zone ID. This is obtained from <see cref="MonitoringZone.Id">MonitoringZone.Id</see>.</param>
         /// <returns>A <see cref="MonitoringZone"/> object describing the monitoring zone.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="monitoringZoneId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="monitoringZoneId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-get">Get Monitoring Zone (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static MonitoringZone GetMonitoringZone(this IMonitoringService service, MonitoringZoneId monitoringZoneId)
@@ -1163,11 +1163,11 @@
         /// <param name="monitoringZoneId">The monitoring zone ID. This is obtained from <see cref="MonitoringZone.Id">MonitoringZone.Id</see>.</param>
         /// <param name="configuration">A <see cref="TraceRouteConfiguration"/> object containing the traceroute parameters.</param>
         /// <returns>A <see cref="TraceRoute"/> object describing the results of the traceroute operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="monitoringZoneId"/> is <c>null</c>.
+        /// If <paramref name="monitoringZoneId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-traceroute">Perform a "traceroute" from a Monitoring Zone (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1206,11 +1206,11 @@
         /// A collection of <see cref="CheckId"/> objects identifying the checks for which
         /// an alarm notification history is present.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-discover">Discover Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1240,21 +1240,21 @@
         /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="alarmId">The alarm ID. This is obtained from <see cref="Alarm.Id">Alarm.Id</see>.</param>
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, the current time is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, the current time is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="to"/> occurs before <paramref name="from"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -1296,15 +1296,15 @@
         /// <param name="checkId">The check ID. This is obtained from <see cref="Check.Id">Check.Id</see>.</param>
         /// <param name="alarmNotificationHistoryItemId">The alarm notification history item ID. This is obtained from <see cref="AlarmNotificationHistoryItem.Id">AlarmNotificationHistoryItem.Id</see>.</param>
         /// <returns>An <see cref="AlarmNotificationHistoryItem"/> object describing the alarm notification history item.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="alarmNotificationHistoryItemId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="alarmNotificationHistoryItemId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-get">Get Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1337,8 +1337,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="configuration">A <see cref="NewNotificationConfiguration"/> object describing the new notification.</param>
         /// <returns>The <see cref="NotificationId"/> identifying the new notification.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-create">Create Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationId CreateNotification(this IMonitoringService service, NewNotificationConfiguration configuration)
@@ -1366,8 +1366,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="configuration">A <see cref="NewNotificationConfiguration"/> object describing the notification to test.</param>
         /// <returns>A <see cref="NotificationData"/> object describing the test results.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-test-new">Test Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationData TestNotification(this IMonitoringService service, NewNotificationConfiguration configuration)
@@ -1395,8 +1395,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationId">The notification ID. This is obtained from <see cref="Notification.Id">Notification.Id</see>.</param>
         /// <returns>A <see cref="NotificationData"/> object describing the test results.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-test-existing">Test Existing Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationData TestExistingNotification(this IMonitoringService service, NotificationId notificationId)
@@ -1422,13 +1422,13 @@
         /// Gets a collection of monitoring notifications.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-list">List Notifications (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1458,8 +1458,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationId">The notification ID. This is obtained from <see cref="Notification.Id">Notification.Id</see>.</param>
         /// <returns>A <see cref="Notification"/> object describing the notification.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-get">Get Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static Notification GetNotification(this IMonitoringService service, NotificationId notificationId)
@@ -1487,11 +1487,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationId">The notification ID. This is obtained from <see cref="Notification.Id">Notification.Id</see>.</param>
         /// <param name="configuration">An <see cref="UpdateNotificationConfiguration"/> object describing the changes to apply to the notification.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="notificationId"/> is <c>null</c>.
+        /// If <paramref name="notificationId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-update">Update Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1519,8 +1519,8 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationId">The notification ID. This is obtained from <see cref="Notification.Id">Notification.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-delete">Delete Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static void RemoveNotification(this IMonitoringService service, NotificationId notificationId)
@@ -1550,13 +1550,13 @@
         /// Gets a collection of monitoring notification types.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-types-crud.html#Service-Notification-Types-List">List Notification Types (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1586,8 +1586,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="notificationTypeId">The notification type ID. This is obtained from <see cref="NotificationType.Id">NotificationType.Id</see>, or from the predefined values in <see cref="NotificationTypeId"/>.</param>
         /// <returns>A <see cref="NotificationType"/> object describing the notification type.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="notificationTypeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="notificationTypeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-types-crud.html#Service-Notification-Types-get">Get Notification Type (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static NotificationType GetNotificationType(this IMonitoringService service, NotificationTypeId notificationTypeId)
@@ -1617,15 +1617,15 @@
         /// Gets a collection of monitoring alarm changelogs.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, the current time is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, the current time is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="to"/> occurs before <paramref name="from"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="limit"/> is less than or equal to 0.
@@ -1661,16 +1661,16 @@
         /// Gets a collection of monitoring alarm changelogs.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="entityId">The entity ID to filter alarm changelogs. This is obtained from <see cref="Entity.Id">Entity.Id</see>. If the value is <c>null</c>, changelogs for all entities are returned.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <c>null</c>, the current time is used.</param>
+        /// <param name="entityId">The entity ID to filter alarm changelogs. This is obtained from <see cref="Entity.Id">Entity.Id</see>. If the value is <see langword="null"/>, changelogs for all entities are returned.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="from">The beginning timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="to">The ending timestamp of the items to include in the collection. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">time series collections</see>. If the value is <see langword="null"/>, the current time is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="to"/> occurs before <paramref name="from"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="limit"/> is less than or equal to 0.
@@ -1710,13 +1710,13 @@
         /// Gets a collection of monitoring entity overviews.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-views.html#service-views-overview">Get Overview (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1744,15 +1744,15 @@
         /// Gets a collection of monitoring entity overviews, filtered by entity ID.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="entityIdFilter">A collection of entity IDs for filter the results. If the value is <c>null</c>, overviews for all entities are returned.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="entityIdFilter">A collection of entity IDs for filter the results. If the value is <see langword="null"/>, overviews for all entities are returned.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="entityIdFilter"/> is non-<c>null</c> and contains any <c>null</c> values.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="entityIdFilter"/> is non-<see langword="null"/> and contains any <see langword="null"/> values.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-views.html#service-views-overview">Get Overview (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1784,13 +1784,13 @@
         /// Gets a collection of monitoring alarm examples.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-examples.html#service-alarm-examples-list">List Alarm Examples (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1820,8 +1820,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="alarmExampleId">The alarm example ID. This is obtained from <see cref="AlarmExample.Id">AlarmExample.Id</see>.</param>
         /// <returns>An <see cref="AlarmExample"/> object describing the alarm example.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="alarmExampleId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="alarmExampleId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-examples.html#service-alarm-examples-get">Get Alarm Example (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static AlarmExample GetAlarmExample(this IMonitoringService service, AlarmExampleId alarmExampleId)
@@ -1850,11 +1850,11 @@
         /// <param name="alarmExampleId">The alarm example ID. This is obtained from <see cref="AlarmExample.Id">AlarmExample.Id</see>.</param>
         /// <param name="exampleParameters">A dictionary containing the values to insert in the alarm example. The dictionary should contain a key/value pair for each field described in <see cref="AlarmExample.Fields"/> for the alarm example.</param>
         /// <returns>A <see cref="BoundAlarmExample"/> object containing the evaluated alarm example.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="alarmExampleId"/> is <c>null</c>.
+        /// If <paramref name="alarmExampleId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="exampleParameters"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="exampleParameters"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="exampleParameters"/> contains any empty keys.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
@@ -1890,13 +1890,13 @@
         /// Gets a collection of monitoring agents.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agents">List Agents (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1926,8 +1926,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>An <see cref="Agent"/> object describing the agent.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent">Get Agent (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static Agent GetAgent(this IMonitoringService service, AgentId agentId)
@@ -1954,14 +1954,14 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent-connections">List Agent Connections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -1992,11 +1992,11 @@
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <param name="agentConnectionId">The agent connection ID. This is obtained from <see cref="AgentConnection.Id">AgentConnection.Id</see>.</param>
         /// <returns>An <see cref="AgentConnection"/> object describing the agent connection.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="agentId"/> is <c>null</c>.
+        /// If <paramref name="agentId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="agentConnectionId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="agentConnectionId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent-connection">Get Agent Connection (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -2029,8 +2029,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="configuration">An <see cref="AgentTokenConfiguration"/> object describing the new agent token.</param>
         /// <returns>The <see cref="AgentTokenId"/> identifying the new agent token.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-create-token">Create Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static AgentTokenId CreateAgentToken(this IMonitoringService service, AgentTokenConfiguration configuration)
@@ -2056,13 +2056,13 @@
         /// Gets a collection of monitoring agent tokens.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-list">List Agent Tokens (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -2092,8 +2092,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentTokenId">The agent token ID. This is obtained from <see cref="AgentToken.Id">AgentToken.Id</see>.</param>
         /// <returns>An <see cref="AgentToken"/> object describing the agent token.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-get">Get Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static AgentToken GetAgentToken(this IMonitoringService service, AgentTokenId agentTokenId)
@@ -2121,11 +2121,11 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentTokenId">The agent token ID. This is obtained from <see cref="AgentToken.Id">AgentToken.Id</see>.</param>
         /// <param name="configuration">An <see cref="AgentTokenConfiguration"/> object describing the changes to apply to the agent token.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="agentTokenId"/> is <c>null</c>.
+        /// If <paramref name="agentTokenId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="configuration"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-update">Update Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -2153,8 +2153,8 @@
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentTokenId">The agent token ID. This is obtained from <see cref="AgentToken.Id">AgentToken.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-delete">Delete Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static void RemoveAgentToken(this IMonitoringService service, AgentTokenId agentTokenId)
@@ -2187,11 +2187,11 @@
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <param name="hostInformation">The host information type.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="agentId"/> is <c>null</c>.
+        /// If <paramref name="agentId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="hostInformation"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="hostInformation"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html">Agent Host Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
@@ -2220,8 +2220,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-cpus">Get CPUs Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<CpuInformation>> GetCpuInformation(this IMonitoringService service, AgentId agentId)
@@ -2249,8 +2249,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-disks">Get Disks Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<DiskInformation>> GetDiskInformation(this IMonitoringService service, AgentId agentId)
@@ -2278,8 +2278,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-filesystems">Get Filesystems Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<FilesystemInformation>> GetFilesystemInformation(this IMonitoringService service, AgentId agentId)
@@ -2307,8 +2307,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-memory">Get Memory Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<MemoryInformation> GetMemoryInformation(this IMonitoringService service, AgentId agentId)
@@ -2336,8 +2336,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-network_interfaces">Get Network Interfaces Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<NetworkInterfaceInformation>> GetNetworkInterfaceInformation(this IMonitoringService service, AgentId agentId)
@@ -2365,8 +2365,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-processes">Get Processes Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<ProcessInformation>> GetProcessInformation(this IMonitoringService service, AgentId agentId)
@@ -2394,8 +2394,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-system">Get System Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<SystemInformation> GetSystemInformation(this IMonitoringService service, AgentId agentId)
@@ -2423,8 +2423,8 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="agentId">The agent ID. This is obtained from <see cref="Agent.Id">Agent.Id</see>.</param>
         /// <returns>A <see cref="HostInformation{T}"/> object containing the host information.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-who">Get Logged-in User Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         public static HostInformation<ReadOnlyCollection<LoginInformation>> GetLoginInformation(this IMonitoringService service, AgentId agentId)
@@ -2456,19 +2456,19 @@
         /// <param name="service">The monitoring service instance.</param>
         /// <param name="entityId"></param>
         /// <param name="agentCheckType">The agent check type ID. This is obtained from <see cref="CheckType.Id">CheckType.Id</see>, or from the predefined values in <see cref="CheckTypeId"/>.</param>
-        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <c>null</c>, the list starts at the beginning.</param>
-        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
+        /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <returns>
         /// A <see cref="ReadOnlyCollectionPage{T, TMarker}"/> object containing the page
         /// of results and its associated pagination metadata.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="entityId"/> is <c>null</c>.
+        /// If <paramref name="entityId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="agentCheckType"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="agentCheckType"/> is <see langword="null"/>.</para>
         /// </exception>
-        /// <exception cref="ArgumentException">If <paramref name="agentCheckType"/> is not an agent check type (i.e. the <see cref="CheckTypeId.IsAgent"/> property is <c>false</c>).</exception>
+        /// <exception cref="ArgumentException">If <paramref name="agentCheckType"/> is not an agent check type (i.e. the <see cref="CheckTypeId.IsAgent"/> property is <see langword="false"/>).</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-targets.html#service-agent-list-check-targets">List Agent Check Targets (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>

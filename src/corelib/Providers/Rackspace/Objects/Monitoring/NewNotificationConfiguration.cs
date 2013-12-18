@@ -31,16 +31,16 @@
         /// <param name="label">The friendly name of the notification.</param>
         /// <param name="notificationTypeId">The notification type ID. This is obtained from <see cref="NotificationType.Id">NotificationType.Id</see>, or from the predefined values in <see cref="NotificationTypeId"/>.</param>
         /// <param name="details">A <see cref="NotificationDetails"/> object containing the detailed configuration properties for the specified notification type.</param>
-        /// <param name="metadata">A collection of metadata to associate with the notification. If the value is <c>null</c>, no custom metadata is associated with the notification.</param>
+        /// <param name="metadata">A collection of metadata to associate with the notification. If the value is <see langword="null"/>, no custom metadata is associated with the notification.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="label"/> is <c>null</c>.
+        /// If <paramref name="label"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="details"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="details"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="label"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="details"/> is non-<c>null</c> and <paramref name="notificationTypeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="details"/> is non-<see langword="null"/> and <paramref name="notificationTypeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="details"/> does not support notifications of type <paramref name="notificationTypeId"/>.</para>
         /// <para>-or-</para>

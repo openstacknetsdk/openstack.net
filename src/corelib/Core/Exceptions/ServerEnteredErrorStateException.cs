@@ -32,7 +32,7 @@ namespace net.openstack.Core.Exceptions
         /// with the specified error state.
         /// </summary>
         /// <param name="status">The error state entered by the server.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <see langword="null"/>.</exception>
         public ServerEnteredErrorStateException(ServerState status)
             : base(string.Format("The server entered an error state: '{0}'", status))
         {

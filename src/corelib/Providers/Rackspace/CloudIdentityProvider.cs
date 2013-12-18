@@ -51,7 +51,7 @@ namespace net.openstack.Providers.Rackspace
         /// with the specified default identity, and the default base URL, REST service
         /// implementation, and token cache.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null)
         { }
@@ -61,7 +61,7 @@ namespace net.openstack.Providers.Rackspace
         /// with no default identity, the specified base URL, and the default REST service
         /// implementation and token cache.
         /// </summary>
-        /// <param name="urlBase">The base URL for the cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(Uri urlBase)
             : this(null, null, null, urlBase)
         { }
@@ -71,8 +71,8 @@ namespace net.openstack.Providers.Rackspace
         /// with the specified default identity and base URL, and the default REST service
         /// implementation and token cache.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="urlBase">The base URL for the cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, Uri urlBase)
             : this(defaultIdentity, null, null, urlBase)
         { }
@@ -82,9 +82,9 @@ namespace net.openstack.Providers.Rackspace
         /// with no default identity, and the specified base URL, REST service
         /// implementation, and token cache.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
-        /// <param name="urlBase">The base URL for the cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, Uri urlBase)
             : this(null, restService, tokenCache, urlBase)
         {}
@@ -94,7 +94,7 @@ namespace net.openstack.Providers.Rackspace
         /// with no default identity, the default base URL, the default REST service
         /// implementation, and the specified token cache.
         /// </summary>
-        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(ICache<UserAccess> tokenCache)
             : this( null, tokenCache)
         { }
@@ -105,7 +105,7 @@ namespace net.openstack.Providers.Rackspace
         /// implementation, and the <see cref="UserAccessCache.Instance"/>
         /// token cache.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudIdentityProvider(IRestService restService)
             : this(restService, null)
         { }
@@ -115,8 +115,8 @@ namespace net.openstack.Providers.Rackspace
         /// with no default identity, the default base URL, and the specified REST service
         /// implementation and token cache.
         /// </summary>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null)
         { }
@@ -125,10 +125,10 @@ namespace net.openstack.Providers.Rackspace
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
         /// using the provided values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <c>null</c>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
-        /// <param name="urlBase">The base URL for the cloud instance. If this value is <c>null</c>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
+        /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, IRestService restService, ICache<UserAccess> tokenCache, Uri urlBase)
             : base(defaultIdentity, null, null, restService)
         {
@@ -759,17 +759,17 @@ namespace net.openstack.Providers.Rackspace
         /// identity is authenticated on the server to obtain a token.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="forceCacheRefresh"/> is <c>false</c> and a cached <see cref="IdentityToken"/>
+        /// If <paramref name="forceCacheRefresh"/> is <see langword="false"/> and a cached <see cref="IdentityToken"/>
         /// is available for the specified <paramref name="identity"/>, this method may return the cached
         /// value without performing an authentication against the server. If <paramref name="forceCacheRefresh"/>
-        /// is <c>true</c>, this method always authenticates the identity with the server.
+        /// is <see langword="true"/>, this method always authenticates the identity with the server.
         /// </remarks>
-        /// <param name="identity">The identity of the user to authenticate. If this value is <c>null</c>, the authentication is performed with the <see cref="DefaultIdentity"/>.</param>
-        /// <param name="forceCacheRefresh">If <c>true</c>, the user is always authenticated against the server; otherwise a cached <see cref="IdentityToken"/> may be returned.</param>
+        /// <param name="identity">The identity of the user to authenticate. If this value is <see langword="null"/>, the authentication is performed with the <see cref="DefaultIdentity"/>.</param>
+        /// <param name="forceCacheRefresh">If <see langword="true"/>, the user is always authenticated against the server; otherwise a cached <see cref="IdentityToken"/> may be returned.</param>
         /// <returns>The user's authentication token.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="identity"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the authentication request failed.</exception>
         protected virtual UserAccess Impersonate(RackspaceImpersonationIdentity identity, bool forceCacheRefresh)
         {
@@ -810,8 +810,8 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="endpoints">A collection of <see cref="ExtendedEndpoint"/> objects describing the available endpoints.</param>
         /// <returns>A collection of <see cref="ServiceCatalog"/> objects describing the same endpoints as <paramref name="endpoints"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="endpoints"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="endpoints"/> contains any <c>null</c> values.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="endpoints"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="endpoints"/> contains any <see langword="null"/> values.</exception>
         protected virtual ServiceCatalog[] BuildServiceCatalog(IEnumerable<ExtendedEndpoint> endpoints)
         {
             if (endpoints == null)
@@ -878,7 +878,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="userName">The username of the user to impersonate.</param>
         /// <param name="expirationInSeconds">The time until the impersonation token will expire.</param>
         /// <returns>A <see cref="JObject"/> representing the JSON body of the impersonation request.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="userName"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="userName"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="userName"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="expirationInSeconds"/> is less than or equal to 0.</exception>
         protected virtual JObject BuildImpersonationRequestJson(string userName, int expirationInSeconds)

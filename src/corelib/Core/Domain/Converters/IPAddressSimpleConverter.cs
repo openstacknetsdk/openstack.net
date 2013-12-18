@@ -15,7 +15,7 @@
     public class IPAddressSimpleConverter : SimpleStringJsonConverter<IPAddress>
     {
         /// <remarks>
-        /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+        /// If <paramref name="str"/> is an empty string, this method returns <see langword="null"/>.
         /// Otherwise, this method uses <see cref="IPAddress.Parse"/> for deserialization.
         /// </remarks>
         /// <inheritdoc/>

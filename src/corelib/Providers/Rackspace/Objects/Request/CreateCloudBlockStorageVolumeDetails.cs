@@ -34,7 +34,7 @@
         /// <summary>
         /// Gets the ID of the snapshot to create the volume from, if any.
         /// </summary>
-        /// <value>The ID of the snapshot to create the volume from, or <c>null</c> if the volume is not created from a snapshot.</value>
+        /// <value>The ID of the snapshot to create the volume from, or <see langword="null"/> if the volume is not created from a snapshot.</value>
         /// <seealso cref="Snapshot.Id"/>
         [JsonProperty("snapshot_id")]
         public string SnapshotId { get; private set; }
@@ -52,8 +52,8 @@
         /// <param name="size">The size of the volume in GB.</param>
         /// <param name="displayDescription">A description of the volume.</param>
         /// <param name="displayName">The name of the volume.</param>
-        /// <param name="snapshotId">The snapshot from which to create a volume. The value should be <c>null</c> or obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
-        /// <param name="volumeType">The type of volume to create. If not defined, then the default is used. The value should be <c>null</c> or obtained from <see cref="net.openstack.Core.Domain.VolumeType.Id">VolumeType.Id</see>.</param>
+        /// <param name="snapshotId">The snapshot from which to create a volume. The value should be <see langword="null"/> or obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
+        /// <param name="volumeType">The type of volume to create. If not defined, then the default is used. The value should be <see langword="null"/> or obtained from <see cref="net.openstack.Core.Domain.VolumeType.Id">VolumeType.Id</see>.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="size"/> is less than or equal to zero.</exception>
         public CreateCloudBlockStorageVolumeDetails(int size, string displayDescription, string displayName, string snapshotId, string volumeType)
         {

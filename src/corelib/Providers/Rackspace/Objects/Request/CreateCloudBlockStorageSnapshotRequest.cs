@@ -22,7 +22,7 @@
         /// class with the specified details.
         /// </summary>
         /// <param name="details">The details of the request.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="details"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="details"/> is <see langword="null"/>.</exception>
         public CreateCloudBlockStorageSnapshotRequest(CreateCloudBlockStorageSnapshotDetails details)
         {
             if (details == null)

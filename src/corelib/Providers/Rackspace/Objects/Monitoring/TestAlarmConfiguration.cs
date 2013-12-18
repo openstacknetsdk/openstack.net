@@ -44,14 +44,14 @@
         /// <param name="criteria">The <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/alerts-language.html">alarm DSL</see> for describing alerting conditions and their output states.</param>
         /// <param name="checkData">A collection of <see cref="CheckData"/> objects describing the result of running a check.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="criteria"/> is <c>null</c>.
+        /// If <paramref name="criteria"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkData"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="checkData"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="criteria"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="checkData"/> is contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="checkData"/> is contains any <see langword="null"/> values.</para>
         /// </exception>
         public TestAlarmConfiguration(string criteria, IEnumerable<CheckData> checkData)
         {

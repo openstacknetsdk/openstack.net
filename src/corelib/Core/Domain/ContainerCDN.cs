@@ -23,14 +23,14 @@
         public string Name { get; private set; }
 
         /// <summary>
-        /// Gets a streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <c>null</c>.
+        /// Gets a streaming URL suitable for use in links to content you want to stream, such as video. If streaming is not available, the value is <see langword="null"/>.
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Streaming-CDN-Enabled_Containers-d1f3721.html">Streaming CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_streaming_uri")]
         public string CDNStreamingUri { get; private set; }
 
         /// <summary>
-        /// Gets a URL SSL URL for accessing the container on the CDN. If SSL is not available, the value is <c>null</c>.
+        /// Gets a URL SSL URL for accessing the container on the CDN. If SSL is not available, the value is <see langword="null"/>.
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enabled_Containers_Served_via_SSL-d1e2821.html">CDN-Enabled Containers Served through SSL (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_ssl_uri")]
@@ -40,7 +40,7 @@
         /// Gets a value indicating whether or not the container is CDN-Enabled.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the container is CDN-Enabled; otherwise, <c>false</c>.
+        /// <see langword="true"/> if the container is CDN-Enabled; otherwise, <see langword="false"/>.
         /// </value>
         /// <seealso cref="O:IObjectStorageProvider.EnableCDNOnContainer"/>
         /// <seealso cref="IObjectStorageProvider.DisableCDNOnContainer"/>
@@ -62,7 +62,7 @@
         /// This setting specifies whether the CDN access logs should be collected and stored in the Cloud Files storage system.
         /// </remarks>
         /// <value>
-        /// <c>true</c> if log retention is enabled for the container; otherwise, <c>false</c>.
+        /// <see langword="true"/> if log retention is enabled for the container; otherwise, <see langword="false"/>.
         /// </value>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Container_Metadata-d1e2711.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("log_retention")]
@@ -76,7 +76,7 @@
         public string CDNUri { get; private set; }
 
         /// <summary>
-        /// Gets a publicly accessible URL for the container for use in streaming content to iOS devices. If iOS streaming is not available for the container, the value is <c>null</c>.
+        /// Gets a publicly accessible URL for the container for use in streaming content to iOS devices. If iOS streaming is not available for the container, the value is <see langword="null"/>.
         /// </summary>
         /// <remarks>
         /// The <see cref="CDNIosUri"/> may be combined with any object name within the container to form the publicly accessible URL for streaming that object to iOS devices.

@@ -23,7 +23,7 @@
         /// with the specified name.
         /// </summary>
         /// <param name="id">The database name.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         public UserName(string id)
             : base(id)
@@ -46,8 +46,8 @@
         /// with the specified name and host address.
         /// </summary>
         /// <param name="id">The database name.</param>
-        /// <param name="hostAddress">The host address which the user must connect from, or <c>null</c> to allow this user to connect from any host.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <param name="hostAddress">The host address which the user must connect from, or <see langword="null"/> to allow this user to connect from any host.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         public UserName(string id, IPAddress hostAddress)
             : base(string.Format("{0}@{1}", id, hostAddress != null ? hostAddress.ToString() : "%"))
@@ -66,8 +66,8 @@
         /// with the specified name and host.
         /// </summary>
         /// <param name="id">The database user name.</param>
-        /// <param name="host">The name of the host from which this user can connect, or <c>null</c> to allow this user to connect from any host.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <param name="host">The name of the host from which this user can connect, or <see langword="null"/> to allow this user to connect from any host.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="id"/> is empty.
         /// <para>-or-</para>

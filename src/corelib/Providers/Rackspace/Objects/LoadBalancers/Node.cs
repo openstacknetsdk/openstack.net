@@ -37,7 +37,7 @@
         /// Gets unique ID representing this node within the load balancers service.
         /// </summary>
         /// <value>
-        /// The unique ID for the load balancer node, or <c>null</c> if the JSON response
+        /// The unique ID for the load balancer node, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public NodeId Id
@@ -52,7 +52,7 @@
         /// Gets the status of the load balancer node.
         /// </summary>
         /// <value>
-        /// The status of the load balancer node, or <c>null</c> if the JSON response
+        /// The status of the load balancer node, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public NodeStatus Status

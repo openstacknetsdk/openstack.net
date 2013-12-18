@@ -30,7 +30,7 @@
         /// with the specified backup ID.
         /// </summary>
         /// <param name="backupId">The backup ID. This is obtained from <see cref="Backup.Id">Backup.Id</see>.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <see langword="null"/>.</exception>
         public RestorePoint(BackupId backupId)
         {
             if (backupId == null)

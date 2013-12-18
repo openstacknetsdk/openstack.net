@@ -34,7 +34,7 @@
         /// associated with a <see cref="DnsDomain"/>.
         /// </summary>
         /// <value>
-        /// A collection of <see cref="DnsSubdomain"/> objects, or <c>null</c> if the JSON response
+        /// A collection of <see cref="DnsSubdomain"/> objects, or <see langword="null"/> if the JSON response
         /// from the server did not include the associated property.
         /// </value>
         public ReadOnlyCollection<DnsSubdomain> Subdomains

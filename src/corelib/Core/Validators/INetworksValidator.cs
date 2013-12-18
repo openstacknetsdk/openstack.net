@@ -14,7 +14,7 @@
         /// Validates an IP address range (CIDR) formatted as a string.
         /// </summary>
         /// <param name="cidr">The IP address range.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="cidr"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="cidr"/> is <see langword="null"/>.</exception>
         /// <exception cref="CidrFormatException">If <paramref name="cidr"/> is not in the correct format.</exception>
         void ValidateCidr(string cidr);
     }

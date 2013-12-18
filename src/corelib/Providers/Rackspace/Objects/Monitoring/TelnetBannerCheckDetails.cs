@@ -33,8 +33,8 @@
         /// with the values.
         /// </summary>
         /// <param name="port">The port to use for connecting to the remote service.</param>
-        /// <param name="enableSsl"><c>true</c> to enable SSL for connecting to the service; otherwise, <c>false</c>. If this value is <c>null</c>, a provider-specific default value is used.</param>
-        /// <param name="bannerMatch">A regular expression to match against the telnet banner returned by the service. If this value is <c>null</c>, the behavior of the service is unspecified.</param>
+        /// <param name="enableSsl"><see langword="true"/> to enable SSL for connecting to the service; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
+        /// <param name="bannerMatch">A regular expression to match against the telnet banner returned by the service. If this value is <see langword="null"/>, the behavior of the service is unspecified.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than or equal to 0, or if <paramref name="port"/> is greater than 65535.</exception>
         public TelnetBannerCheckDetails(int port, bool? enableSsl = null, string bannerMatch = null)
             : base(port, enableSsl)

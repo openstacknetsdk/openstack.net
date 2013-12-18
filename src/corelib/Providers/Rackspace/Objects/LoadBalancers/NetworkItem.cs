@@ -48,9 +48,9 @@
         /// <param name="address">The IP address to which this network item applies.</param>
         /// <param name="accessType">The access type for this network item.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="address"/> is <c>null</c>.
+        /// If <paramref name="address"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="accessType"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="accessType"/> is <see langword="null"/>.</para>
         /// </exception>
         public NetworkItem(IPAddress address, AccessType accessType)
         {
@@ -70,9 +70,9 @@
         /// <param name="address">The IP address, or address range in CIDR notation, to which this network item applies.</param>
         /// <param name="accessType">The access type for this network item.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="address"/> is <c>null</c>.
+        /// If <paramref name="address"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="accessType"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="accessType"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="address"/> is empty.</exception>
         public NetworkItem(string address, AccessType accessType)

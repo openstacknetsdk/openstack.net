@@ -16,7 +16,7 @@
         /// with the specified metadata value.
         /// </summary>
         /// <param name="value">The updated metadata value.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
         public UpdateLoadBalancerMetadataItemRequest(string value)
         {
             if (value == null)
@@ -36,7 +36,7 @@
             /// with the specified metadata value.
             /// </summary>
             /// <param name="value">The updated metadata value.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
             public UpdateMetadataItemRequestBody(string value)
             {
                 if (value == null)

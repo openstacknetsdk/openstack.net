@@ -32,7 +32,7 @@
         /// Initializes a new instance of the <see cref="PingCheckDetails"/> class
         /// with the specified count.
         /// </summary>
-        /// <param name="count">The number of pings to send within a single check. If this value is <c>null</c>, a provider-specific default value is used.</param>
+        /// <param name="count">The number of pings to send within a single check. If this value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than or equal to 0.</exception>
         public PingCheckDetails(int? count = null)
         {

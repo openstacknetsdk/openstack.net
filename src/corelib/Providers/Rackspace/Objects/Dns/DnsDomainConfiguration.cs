@@ -63,20 +63,20 @@
         /// <param name="records">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the initial DNS records to associate with the domain.</param>
         /// <param name="subdomains">A collection of <see cref="DnsSubdomainConfiguration"/> objects containing the initial subdomains to create with the domain.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="emailAddress"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="emailAddress"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="records"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="records"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="subdomains"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="subdomains"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="name"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="records"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="records"/> contains any <see langword="null"/> values.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="subdomains"/> contains any <c>null</c> values.</para>
+        /// <para>If <paramref name="subdomains"/> contains any <see langword="null"/> values.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is negative or <see cref="TimeSpan.Zero"/>.</exception>
         public DnsDomainConfiguration(string name, TimeSpan? timeToLive, string emailAddress, string comment, IEnumerable<DnsDomainRecordConfiguration> records, IEnumerable<DnsSubdomainConfiguration> subdomains)
@@ -102,13 +102,13 @@
         /// <param name="records">A <see cref="RecordsList"/> object containing the initial DNS records to associate with the domain.</param>
         /// <param name="subdomains">A <see cref="SubdomainsList"/> object containing the initial subdomains to create with the domain.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="name"/> is <c>null</c>.
+        /// If <paramref name="name"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="emailAddress"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="emailAddress"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="records"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="records"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="subdomains"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="subdomains"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is negative or <see cref="TimeSpan.Zero"/>.</exception>
@@ -165,7 +165,7 @@
         /// Gets the optional comment associated with the domain.
         /// </summary>
         /// <value>
-        /// The comment to associate with the domain, or <c>null</c> if no comment should be
+        /// The comment to associate with the domain, or <see langword="null"/> if no comment should be
         /// associated with the domain.
         /// </value>
         public string Comment
@@ -180,7 +180,7 @@
         /// Gets the time-to-live for the domain.
         /// </summary>
         /// <value>
-        /// The time-to-live for the domain, or <c>null</c> if the time-to-live should be automatically
+        /// The time-to-live for the domain, or <see langword="null"/> if the time-to-live should be automatically
         /// assigned by the server when the domain is created.
         /// </value>
         public TimeSpan? TimeToLive
@@ -246,8 +246,8 @@
             /// specified DNS record configurations.
             /// </summary>
             /// <param name="records">A collection of <see cref="DnsDomainRecordConfiguration"/> objects describing the DNS records to associate with a domain.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="records"/> is <c>null</c>.</exception>
-            /// <exception cref="ArgumentException">If <paramref name="records"/> contains any <c>null</c> values.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="records"/> is <see langword="null"/>.</exception>
+            /// <exception cref="ArgumentException">If <paramref name="records"/> contains any <see langword="null"/> values.</exception>
             protected internal RecordsList(IEnumerable<DnsDomainRecordConfiguration> records)
             {
                 if (records == null)
@@ -298,8 +298,8 @@
             /// specified subdomain configurations.
             /// </summary>
             /// <param name="subdomains">A collection of <see cref="DnsSubdomainConfiguration"/> objects describing the subdomains to associate with a domain.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="subdomains"/> is <c>null</c>.</exception>
-            /// <exception cref="ArgumentException">If <paramref name="subdomains"/> contains any <c>null</c> values.</exception>
+            /// <exception cref="ArgumentNullException">If <paramref name="subdomains"/> is <see langword="null"/>.</exception>
+            /// <exception cref="ArgumentException">If <paramref name="subdomains"/> contains any <see langword="null"/> values.</exception>
             protected internal SubdomainsList(IEnumerable<DnsSubdomainConfiguration> subdomains)
             {
                 if (subdomains == null)

@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="headers">The headers to initially add to this collection.</param>
         /// <exception cref="ArgumentException">
-        /// A header name is <c>null</c>, <see cref="string.Empty"/>, or contains invalid characters.
+        /// A header name is <see langword="null"/>, <see cref="string.Empty"/>, or contains invalid characters.
         /// <para>-or-</para>
         /// <para>A header value contains invalid characters.</para>
         /// </exception>
@@ -70,7 +70,7 @@
         /// <param name="name">The header to add to the collection.</param>
         /// <param name="value">The content of the header.</param>
         /// <exception cref="ArgumentException">
-        /// A <paramref name="name"/> is <c>null</c>, <see cref="string.Empty"/>, or contains invalid characters.
+        /// A <paramref name="name"/> is <see langword="null"/>, <see cref="string.Empty"/>, or contains invalid characters.
         /// <para>-or-</para>
         /// <para>A <paramref name="value"/> contains invalid characters.</para>
         /// </exception>

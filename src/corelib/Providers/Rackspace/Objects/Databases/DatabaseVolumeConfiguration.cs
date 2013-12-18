@@ -54,7 +54,7 @@
         /// Gets the size of the database instance volume in GB.
         /// </summary>
         /// <value>
-        /// The size of the database instance volume in GB, or <c>null</c> if the size is not available.
+        /// The size of the database instance volume in GB, or <see langword="null"/> if the size is not available.
         /// </value>
         public int? Size
         {
@@ -69,7 +69,7 @@
         /// </summary>
         /// <value>
         /// A value between 0 and 1 indicating the approximate fraction of disk space currently
-        /// in use on the database volume, or <c>null</c> if the current usage is not available.
+        /// in use on the database volume, or <see langword="null"/> if the current usage is not available.
         /// </value>
         public double? Used
         {

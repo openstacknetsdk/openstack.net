@@ -18,7 +18,7 @@
             new Regex(@"^[a-fA-F0-9]{2}(?:[\-\:][a-fA-F0-9]{2}){5}$", RegexOptions.Compiled);
 
         /// <remarks>
-        /// If <paramref name="str"/> is an empty string, this method returns <c>null</c>.
+        /// If <paramref name="str"/> is an empty string, this method returns <see langword="null"/>.
         /// Otherwise, this method converts IEEE 802 addresses containing hyphens or colons
         /// to a bare representation, and then uses <see cref="PhysicalAddress.Parse"/> for
         /// deserialization. As a result, this converter can handle physical addresses in

@@ -18,7 +18,7 @@
         /// with the specified identifier value.
         /// </summary>
         /// <param name="id">The alarm notification history item identifier value.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         public AlarmNotificationHistoryItemId(string id)
             : base(id)

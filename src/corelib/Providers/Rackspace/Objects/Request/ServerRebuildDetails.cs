@@ -36,7 +36,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public string Flavor { get; private set; }
 
         /// <summary>
-        /// The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.
+        /// The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.
         /// </summary>
         [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Include)]
         public DiskConfiguration DiskConfig { get; private set; }
@@ -48,26 +48,26 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         public string AdminPassword { get; private set; }
 
         /// <summary>
-        /// Gets the list of metadata to associate with the server. If the value is <c>null</c>, the metadata associated with the server is not changed during the rebuild operation.
+        /// Gets the list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.
         /// </summary>
         [JsonProperty("metadata", DefaultValueHandling = DefaultValueHandling.Include)]
         public Dictionary<string, string> Metadata { get; private set; }
 
         /// <summary>
-        /// The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <c>null</c>, no file is injected.
+        /// The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.
         /// </summary>
         [JsonProperty("personality", DefaultValueHandling = DefaultValueHandling.Include)]
         public Personality Personality { get; private set; }
 
         /// <summary>
-        /// The new IP v4 address for the server. If the value is <c>null</c>, the server's IP v4 address is not updated.
+        /// The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.
         /// </summary>
         [JsonProperty("accessIPv4", DefaultValueHandling = DefaultValueHandling.Include)]
         [JsonConverter(typeof(IPAddressSimpleConverter))]
         public IPAddress AccessIPv4 { get; private set; }
 
         /// <summary>
-        /// The new IP v6 address for the server. If the value is <c>null</c>, the server's IP v6 address is not updated.
+        /// The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.
         /// </summary>
         [JsonProperty("accessIPv6", DefaultValueHandling = DefaultValueHandling.Include)]
         [JsonConverter(typeof(IPAddressSimpleConverter))]
@@ -76,21 +76,21 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerRebuildDetails"/> class with the specified details.
         /// </summary>
-        /// <param name="name">The new name for the server. If the value is <c>null</c>, the server name is not changed.</param>
+        /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>
         /// <param name="imageName">The image to rebuild the server from. This is specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The new flavor for server. This is obtained from <see cref="net.openstack.Core.Domain.Flavor.Id"/>.</param>
         /// <param name="adminPassword">The new admin password for the server.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <c>null</c>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <c>null</c>, the server's IP v6 address is not updated.</param>
-        /// <param name="metadata">The list of metadata to associate with the server. If the value is <c>null</c>, the metadata associated with the server is not changed during the rebuild operation.</param>
-        /// <param name="diskConfig">The disk configuration. If the value is <c>null</c>, the default configuration for the specified image is used.</param>
-        /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <c>null</c>, no file is injected.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="metadata">The list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.</param>
+        /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
+        /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="imageName"/> is <c>null</c>.
+        /// If <paramref name="imageName"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="flavor"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="flavor"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="adminPassword"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="adminPassword"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="imageName"/> is empty.

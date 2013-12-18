@@ -39,7 +39,7 @@
         /// and has sufficient capacity to accommodate the number of elements copied.
         /// </summary>
         /// <param name="collection">The collection whose elements are copied to the new list.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="collection"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="collection"/> is <see langword="null"/>.</exception>
         public IPAddressList(IEnumerable<IPAddress> collection)
             : base(collection)
         {

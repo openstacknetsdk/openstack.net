@@ -38,7 +38,7 @@ namespace net.openstack.Core.Exceptions
         /// <param name="message">The message that describes the error.</param>
         /// <param name="innerException">
         /// The exception that is the cause of the current exception. If the <paramref name="innerException"/>
-        /// parameter is not <c>null</c>, the current exception is raised in a catch block that handles the
+        /// parameter is not <see langword="null"/>, the current exception is raised in a catch block that handles the
         /// inner exception.
         /// </param>
         public ContainerNotEmptyException(string message, Exception innerException)
@@ -52,7 +52,7 @@ namespace net.openstack.Core.Exceptions
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="info"/> is <see langword="null"/>.</exception>
         protected ContainerNotEmptyException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

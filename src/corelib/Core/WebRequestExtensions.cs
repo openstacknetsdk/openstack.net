@@ -22,7 +22,7 @@
         /// </remarks>
         /// <param name="request">The request.</param>
         /// <returns>A <see cref="Task"/> object which represents the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         public static Task<WebResponse> GetResponseAsync(this WebRequest request)
         {
             if (request == null)
@@ -41,7 +41,7 @@
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that will be assigned to the new <see cref="Task"/>.</param>
         /// <returns>A <see cref="Task"/> object which represents the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">
         /// If <see cref="WebRequest.Abort"/> was previously called.
         /// <para>-or-</para>

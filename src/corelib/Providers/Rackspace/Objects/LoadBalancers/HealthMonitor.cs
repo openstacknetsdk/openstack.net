@@ -57,7 +57,7 @@
         /// <param name="attemptsBeforeDeactivation">The number of permissible monitor failures before removing a node from rotation.</param>
         /// <param name="timeout">The maximum number of seconds to wait for a connection to be established before timing out.</param>
         /// <param name="delay">The minimum time to wait before executing the health monitor.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="attemptsBeforeDeactivation"/> is less than or equal to 0.
         /// <para>-or-</para>
@@ -137,7 +137,7 @@
         /// </summary>
         /// <param name="jsonObject">The JSON object representing the health monitor.</param>
         /// <returns>A <see cref="HealthMonitor"/> object corresponding to the JSON object.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="jsonObject"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="jsonObject"/> is <see langword="null"/>.</exception>
         public static HealthMonitor FromJObject(JObject jsonObject)
         {
             if (jsonObject == null)

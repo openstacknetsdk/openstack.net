@@ -69,10 +69,10 @@ namespace net.openstack.Providers.Rackspace
         /// the specified default identity, default region, identity provider, and REST service
         /// implementation, and the default HTTP response code validator.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
             : this(defaultIdentity, defaultRegion, identityProvider, restService, null) { }
 
@@ -80,11 +80,11 @@ namespace net.openstack.Providers.Rackspace
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class
         /// using the specified values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use. If this value is <see langword="null"/>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
         protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
             DefaultIdentity = defaultIdentity;
@@ -108,7 +108,7 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// Gets or sets the maximum number of connections allowed on the <see cref="ServicePoint"/>
-        /// objects used for requests. If the value is <c>null</c>, the connection limit value for the
+        /// objects used for requests. If the value is <see langword="null"/>, the connection limit value for the
         /// <see cref="ServicePoint"/> object is not altered.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="value"/> is less than or equal to 0.</exception>
@@ -133,7 +133,7 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <value>
         /// The default region to use for API calls where an explicit region is not specified in the call;
-        /// or <c>null</c> to use the default region associated with the identity making the call.
+        /// or <see langword="null"/> to use the default region associated with the identity making the call.
         /// </value>
         public string DefaultRegion
         {
@@ -147,7 +147,7 @@ namespace net.openstack.Providers.Rackspace
         /// Gets or sets the back-off policy to use for polling operations.
         /// </summary>
         /// <remarks>
-        /// If this value is set to <c>null</c>, the default back-off policy for the current
+        /// If this value is set to <see langword="null"/>, the default back-off policy for the current
         /// provider will be used.
         /// </remarks>
         /// <preliminary/>
@@ -196,38 +196,38 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="absoluteUri">The absolute URI for the request.</param>
         /// <param name="method">The HTTP method to use for the request.</param>
         /// <param name="body">
-        /// The body of the request. This parameter is optional. If the value is <c>null</c>,
+        /// The body of the request. This parameter is optional. If the value is <see langword="null"/>,
         /// the request is sent without a body.
         /// </param>
         /// <param name="queryStringParameter">
         /// A collection of parameters to add to the query string portion of the request
-        /// URI. This parameter is optional. If the value is <c>null</c>, no parameters are
+        /// URI. This parameter is optional. If the value is <see langword="null"/>, no parameters are
         /// added to the query string.
         /// </param>
         /// <param name="headers">
         /// A collection of custom HTTP headers to include with the request. This parameter
-        /// is optional. If the value is <c>null</c>, no custom headers are added to the HTTP
+        /// is optional. If the value is <see langword="null"/>, no custom headers are added to the HTTP
         /// request.
         /// </param>
-        /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
-        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
+        /// <param name="isRetry"><see langword="true"/> if this request is retrying a previously failed operation; otherwise, <see langword="false"/>.</param>
+        /// <param name="isTokenRequest"><see langword="true"/> if this is an authentication request; otherwise, <see langword="false"/>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
-        /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
+        /// is <see langword="null"/>, <see cref="BuildDefaultRequestSettings"/> will be called to
         /// provide the settings.
         /// </param>
         /// <returns>
         /// Returns a <see cref="Response{T}"/> object containing the HTTP status code,
         /// headers, body, and strongly-typed data from the REST response.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
         /// <para>The specified <paramref name="method"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected Response<T> ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
@@ -254,38 +254,38 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="absoluteUri">The absolute URI for the request.</param>
         /// <param name="method">The HTTP method to use for the request.</param>
         /// <param name="body">
-        /// The body of the request. This parameter is optional. If the value is <c>null</c>,
+        /// The body of the request. This parameter is optional. If the value is <see langword="null"/>,
         /// the request is sent without a body.
         /// </param>
         /// <param name="queryStringParameter">
         /// A collection of parameters to add to the query string portion of the request
-        /// URI. This parameter is optional. If the value is <c>null</c>, no parameters are
+        /// URI. This parameter is optional. If the value is <see langword="null"/>, no parameters are
         /// added to the query string.
         /// </param>
         /// <param name="headers">
         /// A collection of custom HTTP headers to include with the request. This parameter
-        /// is optional. If the value is <c>null</c>, no custom headers are added to the HTTP
+        /// is optional. If the value is <see langword="null"/>, no custom headers are added to the HTTP
         /// request.
         /// </param>
-        /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
-        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
+        /// <param name="isRetry"><see langword="true"/> if this request is retrying a previously failed operation; otherwise, <see langword="false"/>.</param>
+        /// <param name="isTokenRequest"><see langword="true"/> if this is an authentication request; otherwise, <see langword="false"/>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
-        /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
+        /// is <see langword="null"/>, <see cref="BuildDefaultRequestSettings"/> will be called to
         /// provide the settings.
         /// </param>
         /// <returns>
         /// Returns a <see cref="Response"/> object containing the HTTP status code,
         /// headers, and body from the REST response.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
         /// <para>The specified <paramref name="method"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
@@ -316,39 +316,39 @@ namespace net.openstack.Providers.Rackspace
         /// A user-specified function used to construct the resulting <see cref="Response"/>
         /// object from the <see cref="HttpWebResponse"/> and a Boolean value specifying
         /// whether or not a <see cref="WebException"/> was thrown during the request. If
-        /// this value is <c>null</c>, this method is equivalent to calling
+        /// this value is <see langword="null"/>, this method is equivalent to calling
         /// <see cref="ExecuteRESTRequest(CloudIdentity, Uri, HttpMethod, object, Dictionary{string, string}, Dictionary{string, string}, bool, bool, RequestSettings)"/>.
         /// </param>
         /// <param name="body">
-        /// The body of the request. This parameter is optional. If the value is <c>null</c>,
+        /// The body of the request. This parameter is optional. If the value is <see langword="null"/>,
         /// the request is sent without a body.
         /// </param>
         /// <param name="queryStringParameter">
         /// A collection of parameters to add to the query string portion of the request
-        /// URI. This parameter is optional. If the value is <c>null</c>, no parameters are
+        /// URI. This parameter is optional. If the value is <see langword="null"/>, no parameters are
         /// added to the query string.
         /// </param>
         /// <param name="headers">
         /// A collection of custom HTTP headers to include with the request. This parameter
-        /// is optional. If the value is <c>null</c>, no custom headers are added to the HTTP
+        /// is optional. If the value is <see langword="null"/>, no custom headers are added to the HTTP
         /// request.
         /// </param>
-        /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
-        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
+        /// <param name="isRetry"><see langword="true"/> if this request is retrying a previously failed operation; otherwise, <see langword="false"/>.</param>
+        /// <param name="isTokenRequest"><see langword="true"/> if this is an authentication request; otherwise, <see langword="false"/>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="settings">
         /// The settings to use for the request. This parameter is optional. If the value
-        /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
+        /// is <see langword="null"/>, <see cref="BuildDefaultRequestSettings"/> will be called to
         /// provide the settings.
         /// </param>
         /// <returns>A <see cref="Response"/> object containing the result of the REST call.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
         /// <para>The specified <paramref name="method"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected Response ExecuteRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Func<HttpWebResponse, bool, Response> buildResponseCallback, object body = null, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, bool isTokenRequest = false, RequestSettings settings = null)
@@ -375,36 +375,36 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="absoluteUri">The absolute URI for the request.</param>
         /// <param name="method">The HTTP method to use for the request.</param>
         /// <param name="body">
-        /// The body of the request. This parameter is optional. If the value is <c>null</c>,
+        /// The body of the request. This parameter is optional. If the value is <see langword="null"/>,
         /// the request is sent without a body.
         /// </param>
         /// <param name="queryStringParameter">
         /// A collection of parameters to add to the query string portion of the request
-        /// URI. This parameter is optional. If the value is <c>null</c>, no parameters are
+        /// URI. This parameter is optional. If the value is <see langword="null"/>, no parameters are
         /// added to the query string.
         /// </param>
         /// <param name="headers">
         /// A collection of custom HTTP headers to include with the request. This parameter
-        /// is optional. If the value is <c>null</c>, no custom headers are added to the HTTP
+        /// is optional. If the value is <see langword="null"/>, no custom headers are added to the HTTP
         /// request.
         /// </param>
-        /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
-        /// <param name="isTokenRequest"><c>true</c> if this is an authentication request; otherwise, <c>false</c>. Authentication requests do not perform separate authentication prior to the call.</param>
+        /// <param name="isRetry"><see langword="true"/> if this request is retrying a previously failed operation; otherwise, <see langword="false"/>.</param>
+        /// <param name="isTokenRequest"><see langword="true"/> if this is an authentication request; otherwise, <see langword="false"/>. Authentication requests do not perform separate authentication prior to the call.</param>
         /// <param name="requestSettings">
         /// The settings to use for the request. This parameter is optional. If the value
-        /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
+        /// is <see langword="null"/>, <see cref="BuildDefaultRequestSettings"/> will be called to
         /// provide the settings.
         /// </param>
         /// <param name="callback">A callback function that prepares and executes the HTTP request, and returns the deserialized result as an object of type <typeparamref name="T"/>.</param>
         /// <returns>A response object of type <typeparamref name="T"/> containing the result of the REST call.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="absoluteUri"/> is <see langword="null"/>.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>
         /// <para>The specified <paramref name="method"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         private T ExecuteRESTRequest<T>(CloudIdentity identity, Uri absoluteUri, HttpMethod method, object body, Dictionary<string, string> queryStringParameter, Dictionary<string, string> headers, bool isRetry, bool isTokenRequest, RequestSettings requestSettings,
@@ -471,29 +471,29 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="maxReadLength">The maximum number of bytes to send with the request. This parameter is optional. If the value is 0, the request will include all data from <paramref name="stream"/>.</param>
         /// <param name="queryStringParameter">
         /// A collection of parameters to add to the query string portion of the request
-        /// URI. This parameter is optional. If the value is <c>null</c>, no parameters are
+        /// URI. This parameter is optional. If the value is <see langword="null"/>, no parameters are
         /// added to the query string.
         /// </param>
         /// <param name="headers">
         /// A collection of custom HTTP headers to include with the request. This parameter
-        /// is optional. If the value is <c>null</c>, no custom headers are added to the HTTP
+        /// is optional. If the value is <see langword="null"/>, no custom headers are added to the HTTP
         /// request.
         /// </param>
-        /// <param name="isRetry"><c>true</c> if this request is retrying a previously failed operation; otherwise, <c>false</c>.</param>
+        /// <param name="isRetry"><see langword="true"/> if this request is retrying a previously failed operation; otherwise, <see langword="false"/>.</param>
         /// <param name="requestSettings">
         /// The settings to use for the request. This parameter is optional. If the value
-        /// is <c>null</c>, <see cref="BuildDefaultRequestSettings"/> will be called to
+        /// is <see langword="null"/>, <see cref="BuildDefaultRequestSettings"/> will be called to
         /// provide the settings.
         /// </param>
-        /// <param name="progressUpdated">A user-defined callback function for reporting progress of the send operation. This parameter is optional. If the value is <c>null</c>, the method does not report progress updates to the caller.</param>
+        /// <param name="progressUpdated">A user-defined callback function for reporting progress of the send operation. This parameter is optional. If the value is <see langword="null"/>, the method does not report progress updates to the caller.</param>
         /// <returns>
         /// Returns a <see cref="Response"/> object containing the HTTP status code,
         /// headers, and body from the REST response.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="absoluteUri"/> is <c>null</c>.
+        /// If <paramref name="absoluteUri"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="stream"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="stream"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="chunkSize"/> is less than or equal to 0.
@@ -506,7 +506,7 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="method"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         protected Response StreamRESTRequest(CloudIdentity identity, Uri absoluteUri, HttpMethod method, Stream stream, int chunkSize, long maxReadLength = 0, Dictionary<string, string> queryStringParameter = null, Dictionary<string, string> headers = null, bool isRetry = false, RequestSettings requestSettings = null, Action<long> progressUpdated = null)
@@ -568,7 +568,7 @@ namespace net.openstack.Providers.Rackspace
         ///
         /// <note type="implement">The caller may directly modify the object returned by this call, so a new object should be returned each time this method is called.</note>
         /// </remarks>
-        /// <param name="non200SuccessCodes">A collection of non-200 HTTP status codes to consider as "success" codes for the request. This value may be <c>null</c> or an empty collection to use the default value.</param>
+        /// <param name="non200SuccessCodes">A collection of non-200 HTTP status codes to consider as "success" codes for the request. This value may be <see langword="null"/> or an empty collection to use the default value.</param>
         /// <returns>A <see cref="RequestSettings"/> object containing the default settings to use for a REST request sent by this provider.</returns>
         protected virtual RequestSettings BuildDefaultRequestSettings(IEnumerable<HttpStatusCode> non200SuccessCodes = null)
         {
@@ -597,17 +597,17 @@ namespace net.openstack.Providers.Rackspace
         ///
         /// <list type="number">
         /// <item>This method only considers services which match the specified <paramref name="serviceType"/>.</item>
-        /// <item>This method attempts to filter the remaining items to those matching <paramref name="serviceName"/>. If <paramref name="serviceName"/> is <c>null</c>, or if no services match the specified name, <em>this argument is ignored</em>.</item>
-        /// <item>This method attempts to filter the remaining items to those matching <paramref name="region"/>. If <paramref name="region"/> is <c>null</c>, the user's default region is used. If no services match the specified region, <em>this argument is ignored</em>.</item>
-        /// <item>If the <paramref name="region"/> argument is ignored as a result of the previous rule, this method filters the remaining items to only include region-independent endpoints, i.e. endpoints where <see cref="Endpoint.Region"/> is <c>null</c> or empty.</item>
+        /// <item>This method attempts to filter the remaining items to those matching <paramref name="serviceName"/>. If <paramref name="serviceName"/> is <see langword="null"/>, or if no services match the specified name, <em>this argument is ignored</em>.</item>
+        /// <item>This method attempts to filter the remaining items to those matching <paramref name="region"/>. If <paramref name="region"/> is <see langword="null"/>, the user's default region is used. If no services match the specified region, <em>this argument is ignored</em>.</item>
+        /// <item>If the <paramref name="region"/> argument is ignored as a result of the previous rule, this method filters the remaining items to only include region-independent endpoints, i.e. endpoints where <see cref="Endpoint.Region"/> is <see langword="null"/> or empty.</item>
         /// </list>
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
         /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
         /// <returns>An <see cref="Endpoint"/> object containing the details of the requested service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -615,9 +615,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c>, the service does not provide a region-independent endpoint, and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/>, the service does not provide a region-independent endpoint, and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -685,9 +685,9 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
         /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
         /// <returns>The <see cref="Endpoint.PublicURL"/> value for the <see cref="Endpoint"/> object containing the details of the requested service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -695,9 +695,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/> and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -718,9 +718,9 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <param name="serviceType">The service type (see <see cref="ServiceCatalog.Type"/>).</param>
         /// <param name="serviceName">The preferred name of the service (see <see cref="ServiceCatalog.Name"/>).</param>
-        /// <param name="region">The preferred region for the service. If this value is <c>null</c>, the user's default region will be used.</param>
+        /// <param name="region">The preferred region for the service. If this value is <see langword="null"/>, the user's default region will be used.</param>
         /// <returns>The <see cref="Endpoint.InternalURL"/> value for the <see cref="Endpoint"/> object containing the details of the requested service.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="serviceType"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -728,9 +728,9 @@ namespace net.openstack.Providers.Rackspace
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// </exception>
-        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <c>null</c> and no default region is available for the identity or provider.</exception>
+        /// <exception cref="NoDefaultRegionSetException">If <paramref name="region"/> is <see langword="null"/> and no default region is available for the identity or provider.</exception>
         /// <exception cref="UserAuthenticationException">If no service catalog is available for the user.</exception>
         /// <exception cref="UserAuthorizationException">If no endpoint is available for the requested service.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -756,7 +756,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region used for the request that created this object.</param>
         /// <param name="identity">The identity used for the request that created this object.</param>
         /// <returns>This method returns an enumerable collection containing the objects in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="input"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="input"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">If the current provider object is not an instance of <typeparamref name="TProvider"/>.</exception>
         protected IEnumerable<T> BuildCloudServersProviderAwareObject<T>(IEnumerable<T> input, string region, CloudIdentity identity)
             where T : ProviderStateBase<TProvider>
@@ -785,7 +785,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="region">The region used for the request that created this object.</param>
         /// <param name="identity">The identity used for the request that created this object.</param>
         /// <returns>This method returns the <paramref name="input"/> argument.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="input"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="input"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">If the current provider object is not an instance of <typeparamref name="TProvider"/>.</exception>
         protected T BuildCloudServersProviderAwareObject<T>(T input, string region, CloudIdentity identity)
             where T : ProviderStateBase<TProvider>
@@ -807,8 +807,8 @@ namespace net.openstack.Providers.Rackspace
         /// Gets the effective cloud identity to use for a request based on the <paramref name="identity"/>
         /// argument and the configured default identity.
         /// </summary>
-        /// <param name="identity">The explicitly specified identity for the request, or <c>null</c> if no identity was specified for the request.</param>
-        /// <returns>The effective identity to use for the request, or <c>null</c> if <paramref name="identity"/> is <c>null</c> and no default identity is available.</returns>
+        /// <param name="identity">The explicitly specified identity for the request, or <see langword="null"/> if no identity was specified for the request.</param>
+        /// <returns>The effective identity to use for the request, or <see langword="null"/> if <paramref name="identity"/> is <see langword="null"/> and no default identity is available.</returns>
         protected CloudIdentity GetDefaultIdentity(CloudIdentity identity)
         {
             if (identity != null)
@@ -827,8 +827,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="optionalParameters">The dictionary of optional parameters.</param>
         /// <returns>
         /// Returns a new dictionary created from <paramref name="optionalParameters"/> with all
-        /// entries with <c>null</c> or empty values removed. If <paramref name="optionalParameters"/>
-        /// is <c>null</c>, or if the resulting dictionary is empty, this method returns <c>null</c>.
+        /// entries with <see langword="null"/> or empty values removed. If <paramref name="optionalParameters"/>
+        /// is <see langword="null"/>, or if the resulting dictionary is empty, this method returns <see langword="null"/>.
         /// </returns>
         protected Dictionary<string, string> BuildOptionalParameterList(Dictionary<string, string> optionalParameters)
         {
@@ -845,8 +845,8 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Ensures that an identity is available for a request.
         /// </summary>
-        /// <param name="identity">The explicitly specified identity for the request, or <c>null</c> if the request should use the default identity for the provider.</param>
-        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <c>null</c> and no default identity is available for the request.</exception>
+        /// <param name="identity">The explicitly specified identity for the request, or <see langword="null"/> if the request should use the default identity for the provider.</param>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the request.</exception>
         protected virtual void CheckIdentity(CloudIdentity identity)
         {
             if (GetDefaultIdentity(identity) == null)
@@ -863,12 +863,12 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
         /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
         /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
-        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <see langword="null"/>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
         /// <returns>A task continuation delegate which can be used to create an <see cref="HttpWebRequest"/> following the completion of a task that obtains an <see cref="IdentityToken"/> and the base URI for a service.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="template"/> is <c>null</c>.
+        /// If <paramref name="template"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <preliminary/>
         protected Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> PrepareRequestAsyncFunc(HttpMethod method, UriTemplate template, IDictionary<string, string> parameters, Func<Uri, Uri> uriTransform = null)
@@ -898,12 +898,12 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
         /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
         /// <param name="body">A object modeling the body of the web request. The object is serialized in JSON notation for inclusion in the request.</param>
-        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <see langword="null"/>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
         /// <returns>A task continuation delegate which can be used to create an <see cref="HttpWebRequest"/> following the completion of a task that obtains an <see cref="IdentityToken"/> and the base URI for a service.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="template"/> is <c>null</c>.
+        /// If <paramref name="template"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <preliminary/>
         protected Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> PrepareRequestAsyncFunc<TBody>(HttpMethod method, UriTemplate template, IDictionary<string, string> parameters, TBody body, Func<Uri, Uri> uriTransform = null)
@@ -943,7 +943,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="request">The <see cref="HttpWebRequest"/> object for the request.</param>
         /// <param name="body"></param>
         /// <returns>The encoded content to send with the <see cref="HttpWebRequest"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual byte[] EncodeRequestBodyImpl<TBody>(HttpWebRequest request, TBody body)
         {
@@ -1000,16 +1000,16 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
         /// <param name="baseUri">The base URI to use for binding the URI template.</param>
         /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
-        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <c>null</c>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
+        /// <param name="uriTransform">An optional transformation to apply to the bound URI for the request. If this value is <see langword="null"/>, the result of binding the <paramref name="template"/> with <paramref name="parameters"/> will be used as the absolute request URI.</param>
         /// <returns>An <see cref="HttpWebRequest"/> to use for making the asynchronous REST API call.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="identityToken"/> is <c>null</c>.
+        /// If <paramref name="identityToken"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="template"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="template"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="baseUri"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="baseUri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="parameters"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="baseUri"/> is not an absolute URI.</exception>
         /// <preliminary/>
@@ -1088,7 +1088,7 @@ namespace net.openstack.Providers.Rackspace
         /// Invokes the <see cref="BeforeAsyncWebRequest"/> event for the specified <paramref name="request"/>.
         /// </summary>
         /// <param name="request">The web request.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual void OnBeforeAsyncWebRequest(HttpWebRequest request)
         {
@@ -1101,7 +1101,7 @@ namespace net.openstack.Providers.Rackspace
         /// Invokes the <see cref="AfterAsyncWebResponse"/> event for the specified <paramref name="response"/>.
         /// </summary>
         /// <param name="response">The web response.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual void OnAfterAsyncWebResponse(HttpWebResponse response)
         {
@@ -1152,7 +1152,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="parseResult">
         /// A continuation function delegate which parses the body of the <see cref="HttpWebResponse"/>
         /// and returns an object of type <typeparamref name="T"/>, as an asynchronous operation. If
-        /// this value is <c>null</c>, the conversion will be performed by calling <see cref="ParseJsonResultImplAsync{T}"/>.
+        /// this value is <see langword="null"/>, the conversion will be performed by calling <see cref="ParseJsonResultImplAsync{T}"/>.
         /// </param>
         /// <returns>
         /// A continuation function delegate which takes an asynchronously prepared <see cref="HttpWebRequest"/>
@@ -1193,7 +1193,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="task">A task which created and prepared the <see cref="HttpWebRequest"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual Task<WebResponse> RequestResourceImplAsync(Task<HttpWebRequest> task, CancellationToken cancellationToken)
         {
@@ -1213,7 +1213,7 @@ namespace net.openstack.Providers.Rackspace
         /// <see cref="WebResponse"/> provided by <paramref name="task"/> as an <see cref="HttpWebResponse"/>.
         /// The second element of the tuple contains the complete body of the response as a string.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual Tuple<HttpWebResponse, string> ReadResultImpl(Task<WebResponse> task, CancellationToken cancellationToken)
         {
@@ -1270,7 +1270,7 @@ namespace net.openstack.Providers.Rackspace
         /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain an
         /// object of type <typeparamref name="T"/> representing the serialized body of the response.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="task"/> is <see langword="null"/>.</exception>
         /// <preliminary/>
         protected virtual Task<T> ParseJsonResultImplAsync<T>(Task<Tuple<HttpWebResponse, string>> task, CancellationToken cancellationToken)
         {

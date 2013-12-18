@@ -49,7 +49,7 @@
         /// </summary>
         /// <value>
         /// A display representation of the URIs which are limited by this pattern, or
-        /// <c>null</c> if the JSON response from the server did not include this property.
+        /// <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public string Uri
         {
@@ -64,7 +64,7 @@
         /// </summary>
         /// <value>
         /// A regular expression pattern intended to match the URIs which are limited by this pattern, or
-        /// <c>null</c> if the JSON response from the server did not include this property.
+        /// <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public string RegularExpression
         {
@@ -80,7 +80,7 @@
         /// </summary>
         /// <value>
         /// A collection of <see cref="DnsRateLimit"/> objects describing the specific limits, or
-        /// <c>null</c> if the JSON response from the server did not include this property.
+        /// <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public ReadOnlyCollection<DnsRateLimit> Limit
         {

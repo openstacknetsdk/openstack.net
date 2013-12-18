@@ -26,7 +26,7 @@
         /// Initializes a new instance of the <see cref="FtpBannerCheckDetails"/> class
         /// with the specified port.
         /// </summary>
-        /// <param name="port">The port number of the FTP service. If this value is <c>null</c>, the default value (21) for the service is used.</param>
+        /// <param name="port">The port number of the FTP service. If this value is <see langword="null"/>, the default value (21) for the service is used.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than or equal to 0, or if <paramref name="port"/> is greater than 65535.</exception>
         public FtpBannerCheckDetails(int? port)
             : base(port)

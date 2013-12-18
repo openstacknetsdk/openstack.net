@@ -40,7 +40,7 @@
         /// Initializes a new instance of the <see cref="LoadBalancerEnabledFlag"/>
         /// with the specified value.
         /// </summary>
-        /// <param name="enabled"><c>true</c> if the option is enabled; otherwise, <c>false</c>.</param>
+        /// <param name="enabled"><see langword="true"/> if the option is enabled; otherwise, <see langword="false"/>.</param>
         public LoadBalancerEnabledFlag(bool enabled)
         {
             _enabled = enabled;
@@ -72,7 +72,7 @@
         /// Gets a value indicating whether or not the option is enabled.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the option is enabled; otherwise, <c>false</c>.
+        /// <see langword="true"/> if the option is enabled; otherwise, <see langword="false"/>.
         /// </value>
         public bool Enabled
         {

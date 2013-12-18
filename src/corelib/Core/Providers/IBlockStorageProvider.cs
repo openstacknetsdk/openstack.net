@@ -21,11 +21,11 @@ namespace net.openstack.Core.Providers
         /// <param name="size">The size of the volume in GB.</param>
         /// <param name="displayDescription">A description of the volume.</param>
         /// <param name="displayName">The name of the volume.</param>
-        /// <param name="snapshotId">The snapshot from which to create a volume. The value should be <c>null</c> or obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
-        /// <param name="volumeType">The type of volume to create. If not defined, then the default is used. The value should be <c>null</c> or obtained from <see cref="VolumeType.Id">VolumeType.Id</see>.</param>
+        /// <param name="snapshotId">The snapshot from which to create a volume. The value should be <see langword="null"/> or obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
+        /// <param name="volumeType">The type of volume to create. If not defined, then the default is used. The value should be <see langword="null"/> or obtained from <see cref="VolumeType.Id">VolumeType.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the request succeeded; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if the request succeeded; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="size"/> is less than zero.</exception>
         /// <exception cref="InvalidVolumeSizeException">If <paramref name="size"/> is not valid for this provider.</exception>
         /// <exception cref="NotSupportedException">
@@ -36,9 +36,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Create_Volume.html">Create Volume (OpenStack Block Storage Service API Reference)</seealso>
@@ -56,9 +56,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/List_Summary_Volumes.html">List Volume Summaries (OpenStack Block Storage Service API Reference)</seealso>
@@ -71,7 +71,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Volume"/> object containing the volume details.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -79,9 +79,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Show_Volume.html">Show Volume (OpenStack Block Storage Service API Reference)</seealso>
@@ -102,8 +102,8 @@ namespace net.openstack.Core.Providers
         /// <param name="volumeId">The ID of the volume to delete. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the volume was successfully deleted; otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the volume was successfully deleted; otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -111,9 +111,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Delete_Volume.html">Delete Volume (OpenStack Block Storage Service API Reference)</seealso>
@@ -131,9 +131,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Volume_List_Types.html">List Volume Types (OpenStack Block Storage Service API Reference)</seealso>
@@ -152,9 +152,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Volume_Show_Type.html">Show Volume Type (OpenStack Block Storage Service API Reference)</seealso>
@@ -168,11 +168,11 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="volumeId">The ID of the volume to poll. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
         /// <param name="refreshCount">The number of times to poll for the volume to become available.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 2.4 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 2.4 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Volume"/> object containing the details of the volume, including the final <see cref="Volume.Status"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -185,9 +185,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         Volume WaitForVolumeAvailable(string volumeId, int refreshCount = 600, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
@@ -200,11 +200,11 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="volumeId">The ID of the volume to poll. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
         /// <param name="refreshCount">The number of times to poll for the volume to be deleted.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the volume was successfully deleted; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the volume was successfully deleted; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -217,9 +217,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         bool WaitForVolumeDeleted(string volumeId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
@@ -235,16 +235,16 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected state for the volume.</param>
         /// <param name="errorStates">The error state(s) in which to stop polling once reached.</param>
         /// <param name="refreshCount">The number of times to poll the volume.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Volume"/> object containing the details of the volume, including the final <see cref="Volume.Status"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="volumeId"/> is <c>null</c>.
+        /// If <paramref name="volumeId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="expectedState"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="expectedState"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="volumeId"/> is empty.
@@ -260,9 +260,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="VolumeEnteredErrorStateException">If the method returned due to the volume entering one of the <paramref name="errorStates"/>.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
@@ -287,13 +287,13 @@ namespace net.openstack.Core.Providers
         /// The previous snapshot is still available. Note that you can create a new volume from the snapshot if desired.</para>
         /// </remarks>
         /// <param name="volumeId">The ID of the volume to snapshot. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
-        /// <param name="force">If <c>true</c>, the snapshot is created even if the volume is currently attached.</param>
+        /// <param name="force">If <see langword="true"/>, the snapshot is created even if the volume is currently attached.</param>
         /// <param name="displayName">Name of the snapshot.</param>
         /// <param name="displayDescription">Description of snapshot.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Snapshot"/> object containing the details about the snapshot.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -301,9 +301,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Create_Snapshot.html">Create Snapshot (OpenStack Block Storage Service API Reference)</seealso>
@@ -321,9 +321,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/List_Snapshots.html">List Snapshot Summaries (OpenStack Block Storage Service API Reference)</seealso>
@@ -336,7 +336,7 @@ namespace net.openstack.Core.Providers
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Snapshot"/> object containing the snapshot details.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="snapshotId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -344,9 +344,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Show_Snapshot.html">Show Snapshot (OpenStack Block Storage Service API Reference)</seealso>
@@ -363,8 +363,8 @@ namespace net.openstack.Core.Providers
         /// <param name="snapshotId">The ID of the snapshot. The value should be obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the snapshot was successfully marked for deletion; otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the snapshot was successfully marked for deletion; otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="snapshotId"/> is empty.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -372,9 +372,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-block-storage/2.0/content/Delete_Snapshot.html">Delete Snapshot (OpenStack Block Storage Service API Reference)</seealso>
@@ -388,11 +388,11 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="snapshotId">The ID of the snapshot to poll. The value should be obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
         /// <param name="refreshCount">The number of times to poll for the snapshot to become available.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Snapshot"/> object containing the snapshot details, including the final <see cref="Snapshot.Status"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="snapshotId"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -405,9 +405,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         Snapshot WaitForSnapshotAvailable(string snapshotId, int refreshCount = 360, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
@@ -420,11 +420,11 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="snapshotId">The ID of the snapshot to poll. The value should be obtained from <see cref="Snapshot.Id">Snapshot.Id</see>.</param>
         /// <param name="refreshCount">The number of times to poll for the snapshot to be deleted.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
-        /// <returns><c>true</c> if the snapshot was successfully deleted; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the snapshot was successfully deleted; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="snapshotId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="snapshotId"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="refreshCount"/> is less than 0.
@@ -437,9 +437,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         bool WaitForSnapshotDeleted(string snapshotId, int refreshCount = 180, TimeSpan? refreshDelay = null, string region = null, CloudIdentity identity = null);
@@ -455,16 +455,16 @@ namespace net.openstack.Core.Providers
         /// <param name="expectedState">The expected state for the snapshot.</param>
         /// <param name="errorStates">The error state(s) in which to stop polling once reached.</param>
         /// <param name="refreshCount">The number of times to poll the snapshot.</param>
-        /// <param name="refreshDelay">The refresh delay. If the value is <c>null</c>, the default value is 10 seconds.</param>
+        /// <param name="refreshDelay">The refresh delay. If the value is <see langword="null"/>, the default value is 10 seconds.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A <see cref="Snapshot"/> object containing the snapshot details, including the final <see cref="Snapshot.Status"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="snapshotId"/> is <c>null</c>.
+        /// If <paramref name="snapshotId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="expectedState"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="expectedState"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
-        /// <para>If <paramref name="errorStates"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="errorStates"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="snapshotId"/> is empty.
@@ -480,9 +480,9 @@ namespace net.openstack.Core.Providers
         /// <para>The specified <paramref name="region"/> is not supported.</para>
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        /// If <paramref name="identity"/> is <c>null</c> and no default identity is available for the provider.
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
         /// <para>-or-</para>
-        /// <para>If <paramref name="region"/> is <c>null</c> and no default region is available for the provider.</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="SnapshotEnteredErrorStateException">If the method returned due to the snapshot entering one of the <paramref name="errorStates"/>.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>

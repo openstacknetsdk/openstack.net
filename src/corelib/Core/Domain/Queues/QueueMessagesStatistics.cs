@@ -90,7 +90,7 @@
         /// </summary>
         /// <value>
         /// A <see cref="MessageStatistics"/> object containing statistics about the oldest message in the queue,
-        /// or <c>null</c> if <see cref="Total"/> is 0.
+        /// or <see langword="null"/> if <see cref="Total"/> is 0.
         /// </value>
         public MessageStatistics Oldest
         {
@@ -105,7 +105,7 @@
         /// </summary>
         /// <value>
         /// A <see cref="MessageStatistics"/> object containing statistics about the newest message in the queue,
-        /// or <c>null</c> if <see cref="Total"/> is 0.
+        /// or <see langword="null"/> if <see cref="Total"/> is 0.
         /// </value>
         public MessageStatistics Newest
         {

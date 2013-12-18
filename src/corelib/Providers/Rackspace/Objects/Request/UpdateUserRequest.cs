@@ -23,8 +23,8 @@
         /// with the specified user.
         /// </summary>
         /// <param name="user">A <see cref="User"/> instance containing the updated details for the user.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="user"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="user"/>.<see cref="net.openstack.Core.Domain.User.Id"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="user"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="user"/>.<see cref="net.openstack.Core.Domain.User.Id"/> is <see langword="null"/> or empty.</exception>
         public UpdateUserRequest(User user)
         {
             if (user == null)

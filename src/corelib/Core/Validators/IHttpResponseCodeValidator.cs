@@ -16,7 +16,7 @@ namespace net.openstack.Core.Validators
         /// if <paramref name="response"/> indicates a failure.
         /// </summary>
         /// <param name="response">The response from the REST call.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <see langword="null"/>.</exception>
         /// <exception cref="ResponseException">If <paramref name="response"/> indicates the REST API call failed.</exception>
         void Validate(Response response);
     }

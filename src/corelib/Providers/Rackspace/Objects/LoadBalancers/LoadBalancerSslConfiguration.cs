@@ -68,9 +68,9 @@
         /// certificates stored on the server during a call to
         /// <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.
         /// </remarks>
-        /// <param name="enabled"><c>true</c> to enable SSL termination on the load balancer; otherwise, <c>false</c>. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
-        /// <param name="secureTrafficOnly"><c>true</c> to require encryption for all traffic through the load balancer; otherwise, <c>false</c>. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
-        /// <param name="securePort">The port on which the SSL termination load balancer will listen for secure traffic. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="enabled"><see langword="true"/> to enable SSL termination on the load balancer; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="secureTrafficOnly"><see langword="true"/> to require encryption for all traffic through the load balancer; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="securePort">The port on which the SSL termination load balancer will listen for secure traffic. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="securePort"/> is less than 0 or greater than 65535.
         /// </exception>
@@ -88,16 +88,16 @@
         /// Initializes a new instance of the <see cref="LoadBalancerSslConfiguration"/> class
         /// using the specified configuration and certificates.
         /// </summary>
-        /// <param name="enabled"><c>true</c> to enable SSL termination on the load balancer; otherwise, <c>false</c>. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
-        /// <param name="secureTrafficOnly"><c>true</c> to require encryption for all traffic through the load balancer; otherwise, <c>false</c>. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
-        /// <param name="securePort">The port on which the SSL termination load balancer will listen for secure traffic. If this value is <c>null</c>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="enabled"><see langword="true"/> to enable SSL termination on the load balancer; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="secureTrafficOnly"><see langword="true"/> to require encryption for all traffic through the load balancer; otherwise, <see langword="false"/>. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
+        /// <param name="securePort">The port on which the SSL termination load balancer will listen for secure traffic. If this value is <see langword="null"/>, the current configuration for the value is not changed by a call to <see cref="ILoadBalancerService.UpdateSslConfigurationAsync"/>.</param>
         /// <param name="privateKey">The private key for the SSL certificate.</param>
         /// <param name="certificate">The certificate used for SSL termination.</param>
         /// <param name="intermediateCertificate">The user's intermediate certificate used for SSL termination.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="privateKey"/> is <c>null</c> and either <paramref name="certificate"/> or <paramref name="intermediateCertificate"/> is not <c>null</c>.
+        /// If <paramref name="privateKey"/> is <see langword="null"/> and either <paramref name="certificate"/> or <paramref name="intermediateCertificate"/> is not <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="certificate"/> is <c>null</c> and <paramref name="privateKey"/> is not <c>null</c>.</para>
+        /// <para>If <paramref name="certificate"/> is <see langword="null"/> and <paramref name="privateKey"/> is not <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="privateKey"/> is empty.

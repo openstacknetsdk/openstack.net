@@ -31,7 +31,7 @@
         /// Initializes a new instance of the <see cref="ConnectionCheckDetails"/> class
         /// with the specified port.
         /// </summary>
-        /// <param name="port">The port to use for connecting to the remote service. If this value is <c>null</c>, the default port for the associated service should be used.</param>
+        /// <param name="port">The port to use for connecting to the remote service. If this value is <see langword="null"/>, the default port for the associated service should be used.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than or equal to 0, or if <paramref name="port"/> is greater than 65535.</exception>
         protected ConnectionCheckDetails(int? port)
         {

@@ -22,7 +22,7 @@
         /// <summary>
         /// Gets a value indicating whether to create the snapshot even while the volume is attached to an active server.
         /// </summary>
-        /// <value><c>true</c> to create the snapshot even if the server is running; otherwise, <c>false</c>.</value>
+        /// <value><see langword="true"/> to create the snapshot even if the server is running; otherwise, <see langword="false"/>.</value>
         [JsonProperty("force")]
         public bool Force { get; private set; }
 
@@ -44,10 +44,10 @@
         /// not to create the snapshot even if the volume is attached to an active server.
         /// </summary>
         /// <param name="volumeId">The ID of the volume to snapshot. The value should be obtained from <see cref="Volume.Id">Volume.Id</see>.</param>
-        /// <param name="force"><c>true</c> to create the snapshot even if the volume is attached to an active server; otherwise, <c>false</c>.</param>
+        /// <param name="force"><see langword="true"/> to create the snapshot even if the volume is attached to an active server; otherwise, <see langword="false"/>.</param>
         /// <param name="displayName">Name of the snapshot.</param>
         /// <param name="displayDescription">Description of snapshot.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="volumeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="volumeId"/> is empty.</exception>
         public CreateCloudBlockStorageSnapshotDetails(string volumeId, bool force, string displayName, string displayDescription)
         {

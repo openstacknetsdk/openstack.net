@@ -29,10 +29,10 @@
         /// with the specified values.
         /// </summary>
         /// <param name="label">The name for the entity.</param>
-        /// <param name="agentId">The agent which this entity is bound to. If this parameter is <c>null</c>, <placeholder>placeholder</placeholder>.</param>
-        /// <param name="ipAddresses">The IP addresses which can be referenced by checks on this entity. If this parameter is <c>null</c>, <placeholder>placeholder</placeholder>.</param>
-        /// <param name="metadata">A collection of metadata to associate with the entity. If this parameter is <c>null</c>, the entity is created without any custom metadata.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="label"/> is <c>null</c>.</exception>
+        /// <param name="agentId">The agent which this entity is bound to. If this parameter is <see langword="null"/>, <placeholder>placeholder</placeholder>.</param>
+        /// <param name="ipAddresses">The IP addresses which can be referenced by checks on this entity. If this parameter is <see langword="null"/>, <placeholder>placeholder</placeholder>.</param>
+        /// <param name="metadata">A collection of metadata to associate with the entity. If this parameter is <see langword="null"/>, the entity is created without any custom metadata.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="label"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// If <paramref name="label"/> is empty.
         /// <para>-or-</para>

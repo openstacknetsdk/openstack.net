@@ -20,9 +20,9 @@
         /// <param name="obj">The JSON object representing the check details.</param>
         /// <returns>A <see cref="CheckDetails"/> object corresponding to the JSON object.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="checkTypeId"/> is <c>null</c>.
+        /// If <paramref name="checkTypeId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="obj"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="obj"/> is <see langword="null"/>.</para>
         /// </exception>
         public static CheckDetails FromJObject(CheckTypeId checkTypeId, JObject obj)
         {
@@ -68,8 +68,8 @@
         /// with checks of a particular type.
         /// </summary>
         /// <param name="checkTypeId">The check type ID.</param>
-        /// <returns><c>true</c> if the current <see cref="CheckDetails"/> object is compatible with <paramref name="checkTypeId"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="checkTypeId"/> is <c>null</c>.</exception>
+        /// <returns><see langword="true"/> if the current <see cref="CheckDetails"/> object is compatible with <paramref name="checkTypeId"/>; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="checkTypeId"/> is <see langword="null"/>.</exception>
         protected internal abstract bool SupportsCheckType(CheckTypeId checkTypeId);
     }
 }

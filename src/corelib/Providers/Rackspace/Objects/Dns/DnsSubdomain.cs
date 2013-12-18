@@ -64,7 +64,7 @@
         /// Gets the unique ID representing this subdomain within the DNS service.
         /// </summary>
         /// <value>
-        /// The unique ID for the subdomain, or <c>null</c> if the JSON response from the server
+        /// The unique ID for the subdomain, or <see langword="null"/> if the JSON response from the server
         /// did not include the associated property.
         /// </value>
         public DomainId Id
@@ -79,7 +79,7 @@
         /// Gets the fully-qualified DNS subdomain name.
         /// </summary>
         /// <value>
-        /// The fully-qualified subdomain name, or <c>null</c> if the JSON response from the server
+        /// The fully-qualified subdomain name, or <see langword="null"/> if the JSON response from the server
         /// did not include the associated property.
         /// </value>
         public string Name
@@ -94,7 +94,7 @@
         /// Gets the email address associated with this subdomain.
         /// </summary>
         /// <value>
-        /// The email address for the subdomain, or <c>null</c> if the JSON response from the server
+        /// The email address for the subdomain, or <see langword="null"/> if the JSON response from the server
         /// did not include the associated property.
         /// </value>
         public string EmailAddress
@@ -109,7 +109,7 @@
         /// Gets the optional comment associated with the subdomain.
         /// </summary>
         /// <value>
-        /// The comment associated with the subdomain, or <c>null</c> if the JSON response from the server
+        /// The comment associated with the subdomain, or <see langword="null"/> if the JSON response from the server
         /// did not include this property or if the subdomain does not have an associated comment.
         /// </value>
         public string Comment
@@ -124,7 +124,7 @@
         /// Gets the timestamp when this subdomain was initially created.
         /// </summary>
         /// <value>
-        /// The creation timestamp of the subdomain, or <c>null</c> if the JSON response from the server
+        /// The creation timestamp of the subdomain, or <see langword="null"/> if the JSON response from the server
         /// did not include the associated property.
         /// </value>
         public DateTimeOffset? Created
@@ -139,7 +139,7 @@
         /// Gets the timestamp when this subdomain was last updated.
         /// </summary>
         /// <value>
-        /// The last-updated timestamp of the subdomain, or <c>null</c> if the JSON response from the server
+        /// The last-updated timestamp of the subdomain, or <see langword="null"/> if the JSON response from the server
         /// did not include the associated property.
         /// </value>
         public DateTimeOffset? Updated

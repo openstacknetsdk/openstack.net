@@ -32,7 +32,7 @@
         /// specified volume state.
         /// </summary>
         /// <param name="status">The erroneous volume state.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="status"/> is <see langword="null"/>.</exception>
         public VolumeEnteredErrorStateException(VolumeState status)
             : base(string.Format("The volume entered an error state: '{0}'", status))
         {

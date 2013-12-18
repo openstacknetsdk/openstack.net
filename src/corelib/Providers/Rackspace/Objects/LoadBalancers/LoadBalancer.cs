@@ -70,7 +70,7 @@
         /// Gets unique ID representing this load balancer within the load balancers service.
         /// </summary>
         /// <value>
-        /// The unique ID for the load balancer, or <c>null</c> if the JSON response from the server
+        /// The unique ID for the load balancer, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public LoadBalancerId Id
@@ -90,7 +90,7 @@
         /// property.
         /// </remarks>
         /// <value>
-        /// The total number of nodes in the load balancer, or <c>null</c> if the JSON response
+        /// The total number of nodes in the load balancer, or <see langword="null"/> if the JSON response
         /// from the server did not include this property.
         /// </value>
         public int? NodeCount
@@ -105,7 +105,7 @@
         /// Gets the status of the load balancer.
         /// </summary>
         /// <value>
-        /// The status of the load balancer, or <c>null</c> if the JSON response from the server
+        /// The status of the load balancer, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public LoadBalancerStatus Status
@@ -121,7 +121,7 @@
         /// </summary>
         /// <value>
         /// A <see cref="LoadBalancerCluster"/> object describing the cluster where the load balancer
-        /// is located, or <c>null</c> if the JSON response from the server did not include this
+        /// is located, or <see langword="null"/> if the JSON response from the server did not include this
         /// property.
         /// </value>
         public LoadBalancerCluster Cluster
@@ -136,7 +136,7 @@
         /// Gets the timestamp when the load balancer was created.
         /// </summary>
         /// <value>
-        /// The creation timestamp of the load balancer, or <c>null</c> if the JSON response from the server
+        /// The creation timestamp of the load balancer, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Created
@@ -154,7 +154,7 @@
         /// Gets the timestamp when the load balancer was last updated.
         /// </summary>
         /// <value>
-        /// The last-updated timestamp of the load balancer, or <c>null</c> if the JSON response from the server
+        /// The last-updated timestamp of the load balancer, or <see langword="null"/> if the JSON response from the server
         /// did not include this property.
         /// </value>
         public DateTimeOffset? Updated
@@ -176,7 +176,7 @@
         /// </summary>
         /// <value>
         /// A dictionary mapping network names to source addresses for the load balancer,
-        /// or <c>null</c> if the JSON response from the server did not include this property.
+        /// or <see langword="null"/> if the JSON response from the server did not include this property.
         /// </value>
         public ReadOnlyDictionary<string, string> SourceAddresses
         {

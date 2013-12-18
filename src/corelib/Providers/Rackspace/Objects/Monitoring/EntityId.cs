@@ -18,7 +18,7 @@
         /// with the specified identifier value.
         /// </summary>
         /// <param name="id">The entity identifier value.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         public EntityId(string id)
             : base(id)

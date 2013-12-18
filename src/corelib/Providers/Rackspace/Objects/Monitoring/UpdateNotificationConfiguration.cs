@@ -27,14 +27,14 @@
         /// Initializes a new instance of the <see cref="UpdateNotificationConfiguration"/> class
         /// with the specified properties.
         /// </summary>
-        /// <param name="label">The friendly name of the notification. If this value is <c>null</c>, the existing value for the notification is not changed.</param>
-        /// <param name="notificationTypeId">The notification type ID. This is obtained from <see cref="NotificationType.Id">NotificationType.Id</see>, or from the predefined values in <see cref="NotificationTypeId"/>. If this value is <c>null</c>, the existing value for the notification is not changed.</param>
-        /// <param name="details">A <see cref="NotificationDetails"/> object containing the detailed configuration properties for the specified notification type. If this value is <c>null</c>, the existing value for the notification is not changed.</param>
-        /// <param name="metadata">A collection of metadata to associate with the notification. If this value is <c>null</c>, the existing value for the notification is not changed.</param>
+        /// <param name="label">The friendly name of the notification. If this value is <see langword="null"/>, the existing value for the notification is not changed.</param>
+        /// <param name="notificationTypeId">The notification type ID. This is obtained from <see cref="NotificationType.Id">NotificationType.Id</see>, or from the predefined values in <see cref="NotificationTypeId"/>. If this value is <see langword="null"/>, the existing value for the notification is not changed.</param>
+        /// <param name="details">A <see cref="NotificationDetails"/> object containing the detailed configuration properties for the specified notification type. If this value is <see langword="null"/>, the existing value for the notification is not changed.</param>
+        /// <param name="metadata">A collection of metadata to associate with the notification. If this value is <see langword="null"/>, the existing value for the notification is not changed.</param>
         /// <exception cref="ArgumentException">
         /// If <paramref name="label"/> is empty.
         /// <para>-or-</para>
-        /// <para>If <paramref name="details"/> is non-<c>null</c> and <paramref name="notificationTypeId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="details"/> is non-<see langword="null"/> and <paramref name="notificationTypeId"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="details"/> does not support notifications of type <paramref name="notificationTypeId"/>.</para>
         /// <para>-or-</para>

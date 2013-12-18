@@ -22,7 +22,7 @@
         /// with the specified identifier.
         /// </summary>
         /// <param name="id">The resource identifier value.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         protected ResourceIdentifier(string id)
         {
@@ -37,9 +37,9 @@
         /// <summary>
         /// Determines whether two specified resource identifiers have the same value.
         /// </summary>
-        /// <param name="left">The first resource identifier to compare, or <c>null</c>.</param>
-        /// <param name="right">The second resource identifier to compare, or <c>null</c>.</param>
-        /// <returns><c>true</c> if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, <c>false</c>.</returns>
+        /// <param name="left">The first resource identifier to compare, or <see langword="null"/>.</param>
+        /// <param name="right">The second resource identifier to compare, or <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
         public static bool operator ==(ResourceIdentifier<T> left, ResourceIdentifier<T> right)
         {
             if (object.ReferenceEquals(left, null))
@@ -53,9 +53,9 @@
         /// <summary>
         /// Determines whether two specified resource identifiers have different values.
         /// </summary>
-        /// <param name="left">The first resource identifier to compare, or <c>null</c>.</param>
-        /// <param name="right">The second resource identifier to compare, or <c>null</c>.</param>
-        /// <returns><c>true</c> if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, <c>false</c>.</returns>
+        /// <param name="left">The first resource identifier to compare, or <see langword="null"/>.</param>
+        /// <param name="right">The second resource identifier to compare, or <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
         public static bool operator !=(ResourceIdentifier<T> left, ResourceIdentifier<T> right)
         {
             return !(left == right);
@@ -132,7 +132,7 @@
             }
 
             /// <remarks>
-            /// If <paramref name="str"/> is <c>null</c> or an empty string, this method returns <c>null</c>.
+            /// If <paramref name="str"/> is <see langword="null"/> or an empty string, this method returns <see langword="null"/>.
             /// Otherwise, this method uses <see cref="FromValue"/> for deserialization.
             /// </remarks>
             /// <inheritdoc/>
@@ -147,7 +147,7 @@
             /// <summary>
             /// Creates a resource identifier with the given value.
             /// </summary>
-            /// <param name="id">The resource identifier value. This value is never <c>null</c> or empty.</param>
+            /// <param name="id">The resource identifier value. This value is never <see langword="null"/> or empty.</param>
             /// <returns>An instance of <typeparamref name="T"/> corresponding representing the specified <paramref name="id"/>.</returns>
             protected abstract T FromValue(string id);
         }

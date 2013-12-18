@@ -759,14 +759,14 @@
         /// </para>
         /// </remarks>
         /// <param name="provider">The DNS service.</param>
-        /// <param name="limit">The maximum number of <see cref="DnsDomain"/> objects to return from a single task. If this value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="detailed"><c>true</c> to return detailed information for each domain; otherwise, <c>false</c>.</param>
+        /// <param name="limit">The maximum number of <see cref="DnsDomain"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="detailed"><see langword="true"/> to return detailed information for each domain; otherwise, <see langword="false"/>.</param>
         /// <returns>
         /// A collections of <see cref="Task{TResult}"/> objects, each of which
         /// represents an asynchronous operation to gather a subset of the available
         /// domains.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         private static IEnumerable<DnsDomain> ListAllDomains(IDnsService provider, string domainName, int? limit, CancellationToken cancellationToken)
         {
@@ -811,8 +811,8 @@
         /// </para>
         /// </remarks>
         /// <param name="provider">The DNS service.</param>
-        /// <param name="limit">The maximum number of <see cref="DnsSubdomain"/> objects to return from a single task. If this value is <c>null</c>, a provider-specific default is used.</param>
-        /// <param name="detailed"><c>true</c> to return detailed information for each subdomain; otherwise, <c>false</c>.</param>
+        /// <param name="limit">The maximum number of <see cref="DnsSubdomain"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="detailed"><see langword="true"/> to return detailed information for each subdomain; otherwise, <see langword="false"/>.</param>
         /// <returns>
         /// A collections of <see cref="Task{TResult}"/> objects, each of which
         /// represents an asynchronous operation to gather a subset of the available

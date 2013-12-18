@@ -19,7 +19,7 @@
         protected internal string Region { get; set; }
 
         /// <summary>
-        /// Gets the identity the current entity belongs to, or <c>null</c> if
+        /// Gets the identity the current entity belongs to, or <see langword="null"/> if
         /// the identity was not explicitly specified in the request that created
         /// this object (i.e. the default identity of <see cref="Provider"/> was
         /// used).

@@ -42,9 +42,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeUpdate"/> class.
         /// </summary>
-        /// <param name="condition">The condition for the node, which determines its role within the load balancer. If this value is <c>null</c>, the existing value for the node is not changed.</param>
-        /// <param name="type">The node type. If this value is <c>null</c>, a provider-specific default value will be used. If this value is <c>null</c>, the existing value for the node is not changed.</param>
-        /// <param name="weight">The weight of the node. If this value is <c>null</c>, the existing value for the node is not changed.</param>
+        /// <param name="condition">The condition for the node, which determines its role within the load balancer. If this value is <see langword="null"/>, the existing value for the node is not changed.</param>
+        /// <param name="type">The node type. If this value is <see langword="null"/>, a provider-specific default value will be used. If this value is <see langword="null"/>, the existing value for the node is not changed.</param>
+        /// <param name="weight">The weight of the node. If this value is <see langword="null"/>, the existing value for the node is not changed.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="weight"/> is less than or equal to 0.</exception>
         public NodeUpdate(NodeCondition condition = null, NodeType type = null, int? weight = null)
         {

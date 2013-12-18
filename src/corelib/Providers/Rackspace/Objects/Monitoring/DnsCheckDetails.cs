@@ -41,11 +41,11 @@
         /// </summary>
         /// <param name="query">The DNS query.</param>
         /// <param name="recordType">The DNS record type.</param>
-        /// <param name="port">The port number of the DNS service. If this value is <c>null</c>, the default value (53) for the service is used.</param>
+        /// <param name="port">The port number of the DNS service. If this value is <see langword="null"/>, the default value (53) for the service is used.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="query"/> is <c>null</c>.
+        /// If <paramref name="query"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordType"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="recordType"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="port"/> is less than or equal to 0, or if <paramref name="port"/> is greater than 65535.</exception>
         public DnsCheckDetails(string query, DnsRecordType recordType, int? port = null)

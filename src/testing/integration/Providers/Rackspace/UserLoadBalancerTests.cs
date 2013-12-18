@@ -1959,12 +1959,12 @@
         /// each of which requests a subset of the available load balancers.
         /// </summary>
         /// <param name="provider">The load balancer service.</param>
-        /// <param name="limit">The maximum number of <see cref="LoadBalancer"/> objects to return from a single task. If this value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="limit">The maximum number of <see cref="LoadBalancer"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
         /// <returns>
         /// A collection of <see cref="LoadBalancer"/> objects describing the available load
         /// balancers.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         private static IEnumerable<LoadBalancer> ListAllLoadBalancers(ILoadBalancerService provider, int? limit, CancellationToken cancellationToken)
         {
@@ -2013,15 +2013,15 @@
         /// each of which requests a subset of the available nodes.
         /// </summary>
         /// <param name="provider">The load balancer service.</param>
-        /// <param name="limit">The maximum number of <see cref="Node"/> to return from a single task. If this value is <c>null</c>, a provider-specific default is used.</param>
+        /// <param name="limit">The maximum number of <see cref="Node"/> to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
         /// <returns>
         /// A collection of <see cref="Node"/> objects, each of which represents a subset
         /// of the available load balancer nodes.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="provider"/> is <c>null</c>.
+        /// If <paramref name="provider"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="loadBalancerId"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="loadBalancerId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="loadBalancerId"/> is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>

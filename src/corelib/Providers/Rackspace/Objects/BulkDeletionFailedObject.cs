@@ -30,9 +30,9 @@ namespace net.openstack.Providers.Rackspace.Objects
         /// <param name="obj">The name of the object which could not be deleted.</param>
         /// <param name="status">A <see cref="Status"/> object describing the reason the object could not be deleted.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="obj"/> is <c>null</c>.
+        /// If <paramref name="obj"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="status"/> is <c>null</c>.</para>
+        /// <para>If <paramref name="status"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="obj"/> is empty.</exception>
         public BulkDeletionFailedObject(string obj, Status status)

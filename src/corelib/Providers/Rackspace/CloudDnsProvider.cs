@@ -41,10 +41,10 @@
         /// Initializes a new instance of the <see cref="CloudDnsProvider"/> class with
         /// the specified values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="internalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="internalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         public CloudDnsProvider(CloudIdentity defaultIdentity, string defaultRegion, bool internalUrl, IIdentityProvider identityProvider)
             : this(defaultIdentity, defaultRegion, internalUrl, identityProvider, null, null)
         {
@@ -54,12 +54,12 @@
         /// Initializes a new instance of the <see cref="CloudDnsProvider"/> class with
         /// the specified values.
         /// </summary>
-        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <c>null</c>, no default identity is available so all calls must specify an explicit identity.</param>
-        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <c>null</c>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
-        /// <param name="internalUrl"><c>true</c> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <c>false</c> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
-        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <c>null</c>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing synchronous REST requests. If this value is <c>null</c>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
-        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use for synchronous REST requests. If this value is <c>null</c>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
+        /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
+        /// <param name="internalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing synchronous REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="httpStatusCodeValidator">The HTTP status code validator to use for synchronous REST requests. If this value is <see langword="null"/>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
         protected CloudDnsProvider(CloudIdentity defaultIdentity, string defaultRegion, bool internalUrl, IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
             : base(defaultIdentity, defaultRegion, identityProvider, restService, httpStatusCodeValidator)
         {
@@ -1025,9 +1025,9 @@
         /// Waits for an asynchronous server job to complete.
         /// </summary>
         /// <param name="job">The <see cref="DnsJob"/> to wait for.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob"/> object
@@ -1040,7 +1040,7 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         protected Task<DnsJob> WaitForJobAsync(DnsJob job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob> progress)
@@ -1106,9 +1106,9 @@
         /// </summary>
         /// <typeparam name="TResult">The class modeling the JSON result of the asynchronous operation.</typeparam>
         /// <param name="job">The <see cref="DnsJob{TResponse}"/> to wait for.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property will return a <see cref="DnsJob{TResponse}"/> object
@@ -1123,7 +1123,7 @@
         /// additional information about the error which occurred during the asynchronous server operation.</item>
         /// </list>
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         protected Task<DnsJob<TResult>> WaitForJobAsync<TResult>(DnsJob<TResult> job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob<TResult>> progress)
@@ -1211,16 +1211,16 @@
         /// Asynchronously poll the current state of a DNS job.
         /// </summary>
         /// <param name="job">The job in the DNS service.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When
         /// the task completes successfully, the <see cref="Task{TResult}.Result"/>
         /// property will contain a <see cref="DnsJob"/> object containing the
         /// updated state information for the job in the DNS service.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         private Task<DnsJob> PollJobStateAsync(DnsJob job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob> progress)
         {
@@ -1254,16 +1254,16 @@
         /// Asynchronously poll the current state of a DNS job.
         /// </summary>
         /// <param name="job">The job in the DNS service.</param>
-        /// <param name="showDetails"><c>true</c> to include detailed information about the job; otherwise, <c>false</c>.</param>
+        /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <param name="progress">An optional callback object to receive progress notifications. If this is <c>null</c>, no progress notifications are sent.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
         /// A <see cref="Task"/> object representing the asynchronous operation. When
         /// the task completes successfully, the <see cref="Task{TResult}.Result"/>
         /// property will contain a <see cref="DnsJob"/> object containing the
         /// updated state information for the job in the DNS service.
         /// </returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="job"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         private Task<DnsJob<TResponse>> PollJobStateAsync<TResponse>(DnsJob<TResponse> job, bool showDetails, CancellationToken cancellationToken, IProgress<DnsJob<TResponse>> progress)
         {

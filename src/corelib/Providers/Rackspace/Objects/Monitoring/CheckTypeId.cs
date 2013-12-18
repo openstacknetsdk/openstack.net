@@ -41,7 +41,7 @@
         /// with the specified identifier value.
         /// </summary>
         /// <param name="id">The identifier value.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="id"/> is empty.</exception>
         public CheckTypeId(string id)
             : base(id)
@@ -283,7 +283,7 @@
         /// Gets a value indicating whether this check type identifies an agent check.
         /// </summary>
         /// <value>
-        /// <c>true</c> if this check type identifies an agent check type; otherwise, <c>false</c>.
+        /// <see langword="true"/> if this check type identifies an agent check type; otherwise, <see langword="false"/>.
         /// </value>
         public bool IsAgent
         {
@@ -297,7 +297,7 @@
         /// Gets a value indicating whether this check type identifies a remote check.
         /// </summary>
         /// <value>
-        /// <c>true</c> if this check type identifies a remote check type; otherwise, <c>false</c>.
+        /// <see langword="true"/> if this check type identifies a remote check type; otherwise, <see langword="false"/>.
         /// </value>
         public bool IsRemote
         {

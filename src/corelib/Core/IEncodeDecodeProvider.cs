@@ -13,14 +13,14 @@
         /// The encoded string can be restored by calling <see cref="UrlDecode"/>.
         /// </remarks>
         /// <param name="stringToEncode">The string to encode.</param>
-        /// <returns>The encoded string. If <paramref name="stringToEncode"/> is <c>null</c>, this method returns <c>null</c>.</returns>
+        /// <returns>The encoded string. If <paramref name="stringToEncode"/> is <see langword="null"/>, this method returns <see langword="null"/>.</returns>
         string UrlEncode(string stringToEncode);
 
         /// <summary>
         /// Decodes a string which is embedded in a URL.
         /// </summary>
         /// <param name="stringToDecode">The string to decode.</param>
-        /// <returns>The decoded string. If <paramref name="stringToDecode"/> is <c>null</c>, this method returns <c>null</c>.</returns>
+        /// <returns>The decoded string. If <paramref name="stringToDecode"/> is <see langword="null"/>, this method returns <see langword="null"/>.</returns>
         string UrlDecode(string stringToDecode);
     }
 }

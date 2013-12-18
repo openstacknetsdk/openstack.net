@@ -114,7 +114,7 @@
         protected class IPAddressConverter : IPAddressSimpleConverter
         {
             /// <remarks>
-            /// If <paramref name="str"/> is an empty string or equal to <c>*</c>, this method returns <c>null</c>.
+            /// If <paramref name="str"/> is an empty string or equal to <c>*</c>, this method returns <see langword="null"/>.
             /// Otherwise, this method uses <see cref="System.Net.IPAddress.Parse"/> for deserialization.
             /// </remarks>
             /// <inheritdoc/>

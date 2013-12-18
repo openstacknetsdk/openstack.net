@@ -16,7 +16,7 @@ namespace net.openstack.Core.Domain
         public string PublicURL { get; private set; }
 
         /// <summary>
-        /// Gets the region where this service endpoint is located. If this is <c>null</c>
+        /// Gets the region where this service endpoint is located. If this is <see langword="null"/>
         /// or empty, the region is not specified.
         /// </summary>
         [JsonProperty("region")]
@@ -53,7 +53,7 @@ namespace net.openstack.Core.Domain
         public string VersionList { get; private set; }
 
         /// <summary>
-        /// Gets the internal URL of the service. If this is <c>null</c> or empty,
+        /// Gets the internal URL of the service. If this is <see langword="null"/> or empty,
         /// the service should be accessed using the <see cref="PublicURL"/>.
         /// </summary>
         [JsonProperty("internalURL")]
