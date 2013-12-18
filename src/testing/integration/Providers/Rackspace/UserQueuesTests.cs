@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Core.Providers;
@@ -51,15 +54,14 @@
         /// </remarks>
         [TestMethod]
         [TestCategory(TestCategories.Cleanup)]
-        public void CleanupTestQueues()
+        public async Task CleanupTestQueues()
         {
             IQueueingService provider = CreateProvider();
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60)));
             QueueName queueName = CreateRandomQueueName();
 
-            IEnumerable<Task<IEnumerable<CloudQueue>>> allQueueTasks = ListAllQueuesAsync(provider, null, false, cancellationTokenSource.Token);
-            CloudQueue[] allQueues = allQueueTasks.SelectMany(task => task.Result).ToArray();
-            Task[] deleteTasks = Array.ConvertAll(allQueues, queue =>
+            ReadOnlyCollection<CloudQueue> allQueues = await ListAllQueuesAsync(provider, null, false, cancellationTokenSource.Token, null);
+            Task[] deleteTasks = Array.ConvertAll(allQueues.ToArray(), queue =>
             {
                 Console.WriteLine("Deleting queue: {0}", queue.Name);
                 return provider.DeleteQueueAsync(queue.Name, cancellationTokenSource.Token);
@@ -118,10 +120,9 @@
 
             await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
 
-            foreach (Task<IEnumerable<CloudQueue>> queuesTask in ListAllQueuesAsync(provider, null, true, cancellationTokenSource.Token))
+            foreach (CloudQueue queue in await ListAllQueuesAsync(provider, null, true, cancellationTokenSource.Token, null))
             {
-                foreach (CloudQueue queue in await queuesTask)
-                    Console.WriteLine("{0}: {1}", queue.Name, queue.Href);
+                Console.WriteLine("{0}: {1}", queue.Name, queue.Href);
             }
 
             await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
@@ -654,46 +655,29 @@
         }
 
         /// <summary>
-        /// Gets all existing message queues through a series of asynchronous operations,
+        /// Gets all existing queues through a series of asynchronous operations,
         /// each of which requests a subset of the available queues.
         /// </summary>
-        /// <remarks>
-        /// Each of the returned tasks is executed asynchronously but sequentially. This
-        /// method will not send concurrent requests to the queueing service.
-        /// <para>
-        /// Due to the way the list end is detected, the final task will return an empty
-        /// collection of <see cref="CloudQueue"/> instances.
-        /// </para>
-        /// </remarks>
         /// <param name="provider">The queueing service.</param>
-        /// <param name="limit">The maximum number of <see cref="CloudQueue"/> to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
-        /// <param name="detailed"><see langword="true"/> to return detailed information for each queue; otherwise, <see langword="false"/>.</param>
+        /// <param name="limit">The maximum number of <see cref="CloudQueue"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="detailed"><see langword="true"/> to return detailed information about each queue; otherwise, <see langword="false"/>.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
-        /// A collections of <see cref="Task{TResult}"/> objects, each of which
-        /// represents an asynchronous operation to gather a subset of the available
-        /// queues.
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a
+        /// read-only collection containing the complete set of available queues.
         /// </returns>
-        private static IEnumerable<Task<IEnumerable<CloudQueue>>> ListAllQueuesAsync(IQueueingService provider, int? limit, bool detailed, CancellationToken cancellationToken)
+        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
+        private static async Task<ReadOnlyCollection<CloudQueue>> ListAllQueuesAsync(IQueueingService provider, int? limit, bool detailed, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CloudQueue>> progress)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            CloudQueue lastQueue = null;
-
-            do
-            {
-                QueueName marker = lastQueue != null ? lastQueue.Name : null;
-                Task<IEnumerable<CloudQueue>> queues = provider.ListQueuesAsync(marker, limit, detailed, cancellationToken);
-                lastQueue = null;
-                yield return queues.ContinueWith(task =>
-                {
-                    return task.Result.Select(queue =>
-                    {
-                        lastQueue = queue;
-                        return queue;
-                    });
-                });
-            } while (lastQueue != null);
+            return await (await provider.ListQueuesAsync(null, limit, detailed, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)
