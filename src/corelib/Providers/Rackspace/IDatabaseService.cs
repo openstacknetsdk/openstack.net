@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace.Objects.Databases;
     using CancellationToken = System.Threading.CancellationToken;
     using WebException = System.Net.WebException;
@@ -56,7 +57,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getInstance__version___accountId__instances_.html">List All Database Instances (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<DatabaseInstance[]> ListDatabaseInstancesAsync(DatabaseInstanceId marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<DatabaseInstance>> ListDatabaseInstancesAsync(DatabaseInstanceId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a database instance by ID.
@@ -242,7 +243,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getDatabases__version___accountId__instances__instanceId__databases_.html">List Databases for Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<Database[]> ListDatabasesAsync(DatabaseInstanceId instanceId, DatabaseName marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<Database>> ListDatabasesAsync(DatabaseInstanceId instanceId, DatabaseName marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Removes and deletes a database from a database instance.
@@ -302,7 +303,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUsers__version___accountId__instances__instanceId__users_.html">List Users in Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        Task<DatabaseUser[]> ListDatabaseUsersAsync(DatabaseInstanceId instanceId, UserName marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<DatabaseUser>> ListDatabaseUsersAsync(DatabaseInstanceId instanceId, UserName marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Set the password for a database user.

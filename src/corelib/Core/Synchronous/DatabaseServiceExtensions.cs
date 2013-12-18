@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Databases;
     using CancellationToken = System.Threading.CancellationToken;
@@ -66,7 +67,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getInstance__version___accountId__instances_.html">List All Database Instances (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static DatabaseInstance[] ListDatabaseInstances(this IDatabaseService service, DatabaseInstanceId marker, int? limit)
+        public static ReadOnlyCollectionPage<DatabaseInstance> ListDatabaseInstances(this IDatabaseService service, DatabaseInstanceId marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -373,7 +374,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getDatabases__version___accountId__instances__instanceId__databases_.html">List Databases for Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static Database[] ListDatabases(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName marker, int? limit)
+        public static ReadOnlyCollectionPage<Database> ListDatabases(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -483,7 +484,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUsers__version___accountId__instances__instanceId__users_.html">List Users in Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
-        public static DatabaseUser[] ListDatabaseUsers(this IDatabaseService service, DatabaseInstanceId instanceId, UserName marker, int? limit)
+        public static ReadOnlyCollectionPage<DatabaseUser> ListDatabaseUsers(this IDatabaseService service, DatabaseInstanceId instanceId, UserName marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

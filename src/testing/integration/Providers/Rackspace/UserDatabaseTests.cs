@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Databases;
     using CancellationToken = System.Threading.CancellationToken;
@@ -44,7 +46,7 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseInstance[] instances = ListAllDatabaseInstances(provider, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DatabaseInstance> instances = await ListAllDatabaseInstancesAsync(provider, null, cancellationTokenSource.Token);
                 List<Task> tasks = new List<Task>();
                 foreach (DatabaseInstance instance in instances)
                 {
@@ -243,7 +245,7 @@
                 await provider.CreateDatabaseAsync(instance.Id, databaseConfiguration, cancellationTokenSource.Token);
 
                 Console.WriteLine("Databases in instance '{0}':", instance.Name);
-                foreach (var database in ListAllDatabases(provider, instance.Id, null, cancellationTokenSource.Token))
+                foreach (var database in await ListAllDatabasesAsync(provider, instance.Id, null, cancellationTokenSource.Token))
                     Console.WriteLine("    {0}", database.Name);
 
                 await provider.RemoveDatabaseAsync(instance.Id, databaseName, cancellationTokenSource.Token);
@@ -369,46 +371,26 @@
             }
         }
 
-        protected IEnumerable<DatabaseInstance> ListAllDatabaseInstances(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken)
+        protected async Task<ReadOnlyCollection<DatabaseInstance>> ListAllDatabaseInstancesAsync(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DatabaseInstance>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
 
-            DatabaseInstance lastInstance = null;
-
-            do
-            {
-                DatabaseInstanceId marker = lastInstance != null ? lastInstance.Id : null;
-                IEnumerable<DatabaseInstance> instances = provider.ListDatabaseInstancesAsync(marker, blockSize, cancellationToken).Result;
-                lastInstance = null;
-                foreach (DatabaseInstance instance in instances)
-                {
-                    lastInstance = instance;
-                    yield return instance;
-                }
-            } while (lastInstance != null);
+            return await (await provider.ListDatabaseInstancesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected IEnumerable<Database> ListAllDatabases(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken)
+        protected async Task<ReadOnlyCollection<Database>> ListAllDatabasesAsync(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Database>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
 
-            Database lastInstance = null;
-
-            do
-            {
-                DatabaseName marker = lastInstance != null ? lastInstance.Name : null;
-                IEnumerable<Database> instances = provider.ListDatabasesAsync(instanceId, marker, blockSize, cancellationToken).Result;
-                lastInstance = null;
-                foreach (Database instance in instances)
-                {
-                    lastInstance = instance;
-                    yield return instance;
-                }
-            } while (lastInstance != null);
+            return await (await provider.ListDatabasesAsync(instanceId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)
