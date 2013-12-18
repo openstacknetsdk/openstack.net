@@ -70,13 +70,22 @@
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            UriTemplate template = new UriTemplate("/loadbalancers?markerId={markerId}&limit={limit}");
+            UriTemplate template = new UriTemplate("/loadbalancers?marker={markerId}&limit={limit}");
             var parameters = new Dictionary<string, string>();
             if (markerId != null)
                 parameters.Add("markerId", markerId.Value);
             if (limit != null)
-                parameters.Add("limit", limit.ToString());
-
+            {
+                if (markerId != null)
+                {
+                    // the server includes the item with the ID "markerId" in the result.
+                    parameters.Add("limit", (limit + 1).ToString());
+                }
+                else
+                {
+                    parameters.Add("limit", limit.ToString());
+                }
+            }
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
 
@@ -86,17 +95,26 @@
             Func<Task<ListLoadBalancersResponse>, ReadOnlyCollectionPage<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    ReadOnlyCollectionPage<LoadBalancer> page = null;
-                    if (task.Result != null && task.Result.LoadBalancers != null && task.Result.LoadBalancers.Count > 0)
+                    if (task.Result == null || task.Result.LoadBalancers == null)
+                        return ReadOnlyCollectionPage<LoadBalancer>.Empty;
+
+                    ReadOnlyCollection<LoadBalancer> result = task.Result.LoadBalancers;
+                    if (markerId != null && result.Count > 0)
                     {
-                        LoadBalancer last = task.Result.LoadBalancers.Last();
-                        LoadBalancerId nextMarker = last != null ? last.Id : markerId;
-                        Func<CancellationToken, Task<ReadOnlyCollectionPage<LoadBalancer>>> getNextPageAsync =
-                            nextCancellationToken => ListLoadBalancersAsync(nextMarker, limit, nextCancellationToken);
-                        page = new BasicReadOnlyCollectionPage<LoadBalancer>(task.Result.LoadBalancers, getNextPageAsync);
+                        if (result[0].Id != markerId)
+                            throw new InvalidOperationException("Expected the pagination result to include the marked load balancer.");
+
+                        // remove the marker so pagination behaves normally
+                        result = new List<LoadBalancer>(result.Skip(1)).AsReadOnly();
                     }
 
-                    return page ?? ReadOnlyCollectionPage<LoadBalancer>.Empty;
+                    if (!result.Any())
+                        return ReadOnlyCollectionPage<LoadBalancer>.Empty;
+
+                    LoadBalancerId nextMarker = result[result.Count - 1].Id;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<LoadBalancer>>> getNextPageAsync =
+                        nextCancellationToken => ListLoadBalancersAsync(nextMarker, limit, nextCancellationToken);
+                    return new BasicReadOnlyCollectionPage<LoadBalancer>(result, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -741,8 +759,22 @@
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/nodes/events");
+            UriTemplate template = new UriTemplate("/loadbalancers/{loadBalancerId}/nodes/events?marker={markerId}&limit={limit}");
             var parameters = new Dictionary<string, string> { { "loadBalancerId", loadBalancerId.Value } };
+            if (markerId != null)
+                parameters.Add("markerId", markerId.Value);
+            if (limit != null)
+            {
+                if (markerId != null)
+                {
+                    // the server includes the item with the ID "markerId" in the result.
+                    parameters.Add("limit", (limit + 1).ToString());
+                }
+                else
+                {
+                    parameters.Add("limit", limit.ToString());
+                }
+            }
 
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
@@ -753,17 +785,26 @@
             Func<Task<ListNodeServiceEventsResponse>, ReadOnlyCollectionPage<NodeServiceEvent>> resultSelector =
                 task =>
                 {
-                    ReadOnlyCollectionPage<NodeServiceEvent> page = null;
-                    if (task.Result != null && task.Result.NodeServiceEvents != null && task.Result.NodeServiceEvents.Count > 0)
+                    if (task.Result == null || task.Result.NodeServiceEvents == null)
+                        return ReadOnlyCollectionPage<NodeServiceEvent>.Empty;
+
+                    ReadOnlyCollection<NodeServiceEvent> result = task.Result.NodeServiceEvents;
+                    if (markerId != null && result.Count > 0)
                     {
-                        NodeServiceEvent last = task.Result.NodeServiceEvents.Last();
-                        NodeServiceEventId nextMarker = last != null ? last.Id : markerId;
-                        Func<CancellationToken, Task<ReadOnlyCollectionPage<NodeServiceEvent>>> getNextPageAsync =
-                            nextCancellationToken => ListNodeServiceEventsAsync(loadBalancerId, nextMarker, limit, nextCancellationToken);
-                        page = new BasicReadOnlyCollectionPage<NodeServiceEvent>(task.Result.NodeServiceEvents, getNextPageAsync);
+                        if (result[0].Id != markerId)
+                            throw new InvalidOperationException("Expected the pagination result to include the marked node service event.");
+
+                        // remove the marker so pagination behaves normally
+                        result = new List<NodeServiceEvent>(result.Skip(1)).AsReadOnly();
                     }
 
-                    return page ?? ReadOnlyCollectionPage<NodeServiceEvent>.Empty;
+                    if (!result.Any())
+                        return ReadOnlyCollectionPage<NodeServiceEvent>.Empty;
+
+                    NodeServiceEventId nextMarker = result[result.Count - 1].Id;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<NodeServiceEvent>>> getNextPageAsync =
+                        nextCancellationToken => ListNodeServiceEventsAsync(loadBalancerId, nextMarker, limit, nextCancellationToken);
+                    return new BasicReadOnlyCollectionPage<NodeServiceEvent>(result, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
