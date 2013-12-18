@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
@@ -10,6 +11,7 @@
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
@@ -48,7 +50,7 @@
         /// </remarks>
         [TestMethod]
         [TestCategory(TestCategories.Cleanup)]
-        public void CleanupTestDomains()
+        public async Task CleanupTestDomains()
         {
             const int BatchSize = 10;
 
@@ -66,7 +68,7 @@
                         return false;
                     };
 
-                DnsDomain[] allDomains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).Where(domainFilter).ToArray();
+                DnsDomain[] allDomains = (await ListAllDomainsAsync(provider, null, null, cancellationTokenSource.Token)).Where(domainFilter).ToArray();
 
                 List<Task> deleteTasks = new List<Task>();
                 for (int i = 0; i < allDomains.Length; i += BatchSize)
@@ -154,7 +156,7 @@
             IDnsService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(30))))
             {
-                DnsDomain[] domains = ListAllDomains(provider, null, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsDomain> domains = await ListAllDomainsAsync(provider, null, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(domains);
 
                 if (!domains.Any())
@@ -207,7 +209,7 @@
                     createdDomains = createResponse.Response.Domains;
                 }
 
-                DnsDomain[] domains = ListAllDomains(provider, domainName, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsDomain> domains = await ListAllDomainsAsync(provider, domainName, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(domains);
 
                 if (!domains.Any())
@@ -267,7 +269,7 @@
                     createdDomains = createResponse.Response.Domains;
                 }
 
-                DnsDomain[] domains = ListAllDomains(provider, domainName, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsDomain> domains = await ListAllDomainsAsync(provider, domainName, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(domains);
 
                 if (!domains.Any())
@@ -489,7 +491,7 @@
                     createdDomains = createResponse.Response.Domains;
                 }
 
-                DnsDomain[] domains = ListAllDomains(provider, domainName, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsDomain> domains = await ListAllDomainsAsync(provider, domainName, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(domains);
 
                 if (!domains.Any())
@@ -504,9 +506,9 @@
                 }
 
                 DomainId domainId = createResponse.Response.Domains[0].Id;
-                DnsSubdomain[] subdomains = ListAllSubdomains(provider, domainId, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsSubdomain> subdomains = await ListAllSubdomainsAsync(provider, domainId, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(subdomains);
-                Assert.AreEqual(1, subdomains.Length);
+                Assert.AreEqual(1, subdomains.Count);
                 foreach (var subdomain in subdomains)
                 {
                     Console.WriteLine();
@@ -556,9 +558,9 @@
                     createdDomains = createResponse.Response.Domains;
                 }
 
-                DnsDomain[] domains = ListAllDomains(provider, domainName, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DnsDomain> domains = await ListAllDomainsAsync(provider, domainName, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(domains);
-                Assert.AreEqual(1, domains.Length);
+                Assert.AreEqual(1, domains.Count);
 
                 foreach (var domain in domains)
                 {
@@ -750,101 +752,52 @@
         /// Gets all existing domains through a series of asynchronous operations,
         /// each of which requests a subset of the available domains.
         /// </summary>
-        /// <remarks>
-        /// Each of the returned tasks is executed asynchronously but sequentially. This
-        /// method will not send concurrent requests to the DNS service.
-        /// <para>
-        /// Due to the way the list end is detected, the final task may return an empty
-        /// collection of <see cref="DnsDomain"/> instances.
-        /// </para>
-        /// </remarks>
         /// <param name="provider">The DNS service.</param>
-        /// <param name="limit">The maximum number of <see cref="DnsDomain"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
-        /// <param name="detailed"><see langword="true"/> to return detailed information for each domain; otherwise, <see langword="false"/>.</param>
+        /// <param name="domainName">If specified, the list will be filtered to only include the specified domain and its subdomains (if any exist).</param>
+        /// <param name="limit">The maximum number of domains to return in a single page.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
-        /// A collections of <see cref="Task{TResult}"/> objects, each of which
-        /// represents an asynchronous operation to gather a subset of the available
-        /// domains.
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
+        /// the <see cref="Task{TResult}.Result"/> property will return a collection of <see cref="DnsDomain"/> objects
+        /// representing the requested domains.
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static IEnumerable<DnsDomain> ListAllDomains(IDnsService provider, string domainName, int? limit, CancellationToken cancellationToken)
+        private static async Task<ReadOnlyCollection<DnsDomain>> ListAllDomainsAsync(IDnsService provider, string domainName, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DnsDomain>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            int index = 0;
-            int previousIndex;
-            int? totalEntries = null;
-
-            do
-            {
-                previousIndex = index;
-                Task<Tuple<IEnumerable<DnsDomain>, int?>> domains = provider.ListDomainsAsync(domainName, index, limit, cancellationToken);
-                totalEntries = domains.Result.Item2;
-                foreach (DnsDomain domain in domains.Result.Item1)
-                {
-                    index++;
-                    yield return domain;
-                }
-
-                if (limit == null)
-                {
-                    // this service will return a 400 error if offset is not a multiple of limit,
-                    // or if the limit is not specified
-                    limit = index;
-                }
-            } while (index > previousIndex && (totalEntries == null || index < totalEntries));
+            return await (await provider.ListDomainsAsync(domainName, null, limit, cancellationToken)).Item1.GetAllPagesAsync(cancellationToken, progress);
         }
 
         /// <summary>
-        /// Gets all existing subdomains for a particular domain through a series of
-        /// asynchronous operations, each of which requests a subset of the available
-        /// subdomains.
+        /// Gets all subdomains associated with a domain through a series of asynchronous operations,
+        /// each of which requests a subset of the available subdomains.
         /// </summary>
-        /// <remarks>
-        /// Each of the returned tasks is executed asynchronously but sequentially. This
-        /// method will not send concurrent requests to the DNS service.
-        /// <para>
-        /// Due to the way the list end is detected, the final task may return an empty
-        /// collection of <see cref="DnsSubdomain"/> instances.
-        /// </para>
-        /// </remarks>
         /// <param name="provider">The DNS service.</param>
-        /// <param name="limit">The maximum number of <see cref="DnsSubdomain"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
-        /// <param name="detailed"><see langword="true"/> to return detailed information for each subdomain; otherwise, <see langword="false"/>.</param>
+        /// <param name="domainId">The top-level domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
+        /// <param name="limit">The maximum number of domains to return in a single page.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
         /// <returns>
-        /// A collections of <see cref="Task{TResult}"/> objects, each of which
-        /// represents an asynchronous operation to gather a subset of the available
-        /// subdomains.
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully,
+        /// the <see cref="Task{TResult}.Result"/> property will return a collection of <see cref="DnsDomain"/> objects
+        /// representing the requested domains.
         /// </returns>
-        private static IEnumerable<DnsSubdomain> ListAllSubdomains(IDnsService provider, DomainId domainId, int? limit, CancellationToken cancellationToken)
+        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
+        private static async Task<ReadOnlyCollection<DnsSubdomain>> ListAllSubdomainsAsync(IDnsService provider, DomainId domainId, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DnsSubdomain>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            int index = 0;
-            int previousIndex;
-            int? totalEntries = null;
-
-            do
-            {
-                previousIndex = index;
-                Task<Tuple<IEnumerable<DnsSubdomain>, int?>> subdomains = provider.ListSubdomainsAsync(domainId, index, limit, cancellationToken);
-                totalEntries = subdomains.Result.Item2;
-                foreach (DnsSubdomain subdomain in subdomains.Result.Item1)
-                {
-                    index++;
-                    yield return subdomain;
-                }
-
-                if (limit == null)
-                {
-                    // this service will return a 400 error if offset is not a multiple of limit,
-                    // or if the limit is not specified
-                    limit = index;
-                }
-            } while (index > previousIndex && (totalEntries == null || index < totalEntries));
+            return await (await provider.ListSubdomainsAsync(domainId, null, limit, cancellationToken)).Item1.GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)

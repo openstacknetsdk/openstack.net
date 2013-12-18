@@ -6,6 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Providers.Rackspace.Objects.Dns;
     using JsonSerializationException = Newtonsoft.Json.JsonSerializationException;
@@ -103,7 +104,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domains.html">List Domains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/search_domains_w_filters.html">Search Domains with Filtering (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<Tuple<IEnumerable<DnsDomain>, int?>> ListDomainsAsync(string domainName, int? offset, int? limit, CancellationToken cancellationToken);
+        Task<Tuple<ReadOnlyCollectionPage<DnsDomain>, int?>> ListDomainsAsync(string domainName, int? offset, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets detailed information about a specific domain.
@@ -346,7 +347,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Subdomains-d1e4295.html">List Subdomains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<Tuple<IEnumerable<DnsSubdomain>, int?>> ListSubdomainsAsync(DomainId domainId, int? offset, int? limit, CancellationToken cancellationToken);
+        Task<Tuple<ReadOnlyCollectionPage<DnsSubdomain>, int?>> ListSubdomainsAsync(DomainId domainId, int? offset, int? limit, CancellationToken cancellationToken);
 
         #endregion
 
@@ -378,7 +379,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Records-d1e4629.html">List Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Search_Records-e338d7e0.html">Search Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<Tuple<IEnumerable<DnsRecord>, int?>> ListRecordsAsync(DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit, CancellationToken cancellationToken);
+        Task<Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> ListRecordsAsync(DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets detailed information about a specific DNS record.
@@ -531,7 +532,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457000.html">List PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<Tuple<IEnumerable<DnsRecord>, int?>> ListPtrRecordsAsync(string serviceName, Uri deviceResourceUri, int? offset, int? limit, CancellationToken cancellationToken);
+        Task<Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> ListPtrRecordsAsync(string serviceName, Uri deviceResourceUri, int? offset, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets detailed information about a reverse DNS record currently associated with a cloud resource in the DNS service.

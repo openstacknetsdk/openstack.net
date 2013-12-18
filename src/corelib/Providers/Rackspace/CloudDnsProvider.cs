@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using JSIStudios.SimpleRESTServices.Client;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace.Objects.Dns;
@@ -238,7 +239,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Tuple<IEnumerable<DnsDomain>, int?>> ListDomainsAsync(string domainName, int? offset, int? limit, CancellationToken cancellationToken)
+        public Task<Tuple<ReadOnlyCollectionPage<DnsDomain>, int?>> ListDomainsAsync(string domainName, int? offset, int? limit, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/domains/?name={name}&offset={offset}&limit={limit}");
             var parameters = new Dictionary<string, string>();
@@ -255,7 +256,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Tuple<IEnumerable<DnsDomain>, int?>> resultSelector =
+            Func<Task<JObject>, Tuple<ReadOnlyCollectionPage<DnsDomain>, int?>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -271,7 +272,21 @@
                     if (totalEntriesToken != null)
                         totalEntries = totalEntriesToken.ToObject<int>();
 
-                    return Tuple.Create(domains.ToObject<IEnumerable<DnsDomain>>(), totalEntries);
+                    DnsDomain[] currentPage = domains.ToObject<DnsDomain[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return Tuple.Create(ReadOnlyCollectionPage<DnsDomain>.Empty, totalEntries);
+                    else if (!HasNextLink(result))
+                        return Tuple.Create((ReadOnlyCollectionPage<DnsDomain>)new BasicReadOnlyCollectionPage<DnsDomain>(currentPage, null), totalEntries);
+
+                    int nextOffset = (offset ?? 0) + currentPage.Length;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DnsDomain>>> getNextPageAsync =
+                        nextCancellationToken =>
+                        {
+                            return ListDomainsAsync(domainName, nextOffset, limit, nextCancellationToken)
+                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                        };
+                    ReadOnlyCollectionPage<DnsDomain> page = new BasicReadOnlyCollectionPage<DnsDomain>(currentPage, getNextPageAsync);
+                    return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -571,7 +586,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Tuple<IEnumerable<DnsSubdomain>, int?>> ListSubdomainsAsync(DomainId domainId, int? offset, int? limit, CancellationToken cancellationToken)
+        public Task<Tuple<ReadOnlyCollectionPage<DnsSubdomain>, int?>> ListSubdomainsAsync(DomainId domainId, int? offset, int? limit, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/domains/{domainId}/subdomains?offset={offset}&limit={limit}");
             var parameters = new Dictionary<string, string>
@@ -589,7 +604,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Tuple<IEnumerable<DnsSubdomain>, int?>> resultSelector =
+            Func<Task<JObject>, Tuple<ReadOnlyCollectionPage<DnsSubdomain>, int?>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -605,7 +620,21 @@
                     if (totalEntriesToken != null)
                         totalEntries = totalEntriesToken.ToObject<int>();
 
-                    return Tuple.Create(domains.ToObject<IEnumerable<DnsSubdomain>>(), totalEntries);
+                    DnsSubdomain[] currentPage = domains.ToObject<DnsSubdomain[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return Tuple.Create(ReadOnlyCollectionPage<DnsSubdomain>.Empty, totalEntries);
+                    else if (!HasNextLink(result))
+                        return Tuple.Create((ReadOnlyCollectionPage<DnsSubdomain>)new BasicReadOnlyCollectionPage<DnsSubdomain>(currentPage, null), totalEntries);
+
+                    int nextOffset = (offset ?? 0) + currentPage.Length;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DnsSubdomain>>> getNextPageAsync =
+                        nextCancellationToken =>
+                        {
+                            return ListSubdomainsAsync(domainId, nextOffset, limit, nextCancellationToken)
+                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                        };
+                    ReadOnlyCollectionPage<DnsSubdomain> page = new BasicReadOnlyCollectionPage<DnsSubdomain>(currentPage, getNextPageAsync);
+                    return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -615,7 +644,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Tuple<IEnumerable<DnsRecord>, int?>> ListRecordsAsync(DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit, CancellationToken cancellationToken)
+        public Task<Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> ListRecordsAsync(DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/domains/{domainId}/records?type={recordType}&name={recordName}&data={recordData}&offset={offset}&limit={limit}");
             var parameters = new Dictionary<string, string>
@@ -639,7 +668,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Tuple<IEnumerable<DnsRecord>, int?>> resultSelector =
+            Func<Task<JObject>, Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -655,7 +684,21 @@
                     if (totalEntriesToken != null)
                         totalEntries = totalEntriesToken.ToObject<int>();
 
-                    return Tuple.Create(records.ToObject<IEnumerable<DnsRecord>>(), totalEntries);
+                    DnsRecord[] currentPage = records.ToObject<DnsRecord[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return Tuple.Create(ReadOnlyCollectionPage<DnsRecord>.Empty, totalEntries);
+                    else if (!HasNextLink(result))
+                        return Tuple.Create((ReadOnlyCollectionPage<DnsRecord>)new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, null), totalEntries);
+
+                    int nextOffset = (offset ?? 0) + currentPage.Length;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DnsRecord>>> getNextPageAsync =
+                        nextCancellationToken =>
+                        {
+                            return ListRecordsAsync(domainId, recordType, recordName, recordData, nextOffset, limit, nextCancellationToken)
+                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                        };
+                    ReadOnlyCollectionPage<DnsRecord> page = new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, getNextPageAsync);
+                    return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -812,7 +855,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Tuple<IEnumerable<DnsRecord>, int?>> ListPtrRecordsAsync(string serviceName, Uri deviceResourceUri, int? offset, int? limit, CancellationToken cancellationToken)
+        public Task<Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> ListPtrRecordsAsync(string serviceName, Uri deviceResourceUri, int? offset, int? limit, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/rdns/{serviceName}?href={deviceResourceUri}&offset={offset}&limit={limit}");
             var parameters = new Dictionary<string, string>
@@ -831,7 +874,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Tuple<IEnumerable<DnsRecord>, int?>> resultSelector =
+            Func<Task<JObject>, Tuple<ReadOnlyCollectionPage<DnsRecord>, int?>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -847,7 +890,21 @@
                     if (totalEntriesToken != null)
                         totalEntries = totalEntriesToken.ToObject<int>();
 
-                    return Tuple.Create(records.ToObject<IEnumerable<DnsRecord>>(), totalEntries);
+                    DnsRecord[] currentPage = records.ToObject<DnsRecord[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return Tuple.Create(ReadOnlyCollectionPage<DnsRecord>.Empty, totalEntries);
+                    else if (!HasNextLink(result))
+                        return Tuple.Create((ReadOnlyCollectionPage<DnsRecord>)new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, null), totalEntries);
+
+                    int nextOffset = (offset ?? 0) + currentPage.Length;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DnsRecord>>> getNextPageAsync =
+                        nextCancellationToken =>
+                        {
+                            return ListPtrRecordsAsync(serviceName, deviceResourceUri, nextOffset, limit, nextCancellationToken)
+                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                        };
+                    ReadOnlyCollectionPage<DnsRecord> page = new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, getNextPageAsync);
+                    return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1182,6 +1239,25 @@
             currentTask.ContinueWith(continuation);
 
             return taskCompletionSource.Task;
+        }
+
+        /// <summary>
+        /// Determines if the JSON representation of a single page of a paginated collection includes a "next" link.
+        /// </summary>
+        /// <param name="result">The JSON object representing a page of a paginated collection.</param>
+        /// <returns><see langword="true"/> if the paginated collection result includes a "next" link; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null"/>.</exception>
+        protected virtual bool HasNextLink(JObject result)
+        {
+            if (result == null)
+                throw new ArgumentNullException("result");
+
+            JToken linksToken = result["links"];
+            if (linksToken == null)
+                return false;
+
+            Link[] links = linksToken.ToObject<Link[]>();
+            return links.Any(i => string.Equals(i.Rel, "next", StringComparison.OrdinalIgnoreCase));
         }
 
         /// <inheritdoc/>

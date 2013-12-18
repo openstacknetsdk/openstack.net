@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Net;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Dns;
     using Newtonsoft.Json;
@@ -201,7 +202,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domains.html">List Domains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/search_domains_w_filters.html">Search Domains with Filtering (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        public static Tuple<IEnumerable<DnsDomain>, int?> ListDomains(this IDnsService service, string domainName, int? offset, int? limit)
+        public static Tuple<ReadOnlyCollectionPage<DnsDomain>, int?> ListDomains(this IDnsService service, string domainName, int? offset, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -504,7 +505,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Subdomains-d1e4295.html">List Subdomains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        public static Tuple<IEnumerable<DnsSubdomain>, int?> ListSubdomains(this IDnsService service, DomainId domainId, int? offset, int? limit)
+        public static Tuple<ReadOnlyCollectionPage<DnsSubdomain>, int?> ListSubdomains(this IDnsService service, DomainId domainId, int? offset, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -553,7 +554,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Records-d1e4629.html">List Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Search_Records-e338d7e0.html">Search Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        public static Tuple<IEnumerable<DnsRecord>, int?> ListRecords(this IDnsService service, DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit)
+        public static Tuple<ReadOnlyCollectionPage<DnsRecord>, int?> ListRecords(this IDnsService service, DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -748,7 +749,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457000.html">List PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        public static Tuple<IEnumerable<DnsRecord>, int?> ListPtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, int? offset, int? limit)
+        public static Tuple<ReadOnlyCollectionPage<DnsRecord>, int?> ListPtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, int? offset, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
