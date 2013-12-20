@@ -153,6 +153,7 @@
     <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Synchronous\AutoScaleServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\DatabaseServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\DnsServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\ClaimExtensions.cs" />
