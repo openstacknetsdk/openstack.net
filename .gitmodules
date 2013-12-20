@@ -37,3 +37,6 @@
 [submodule "Reference/Rackspace/reddwarf_lite-integration"]
 	path = Reference/Rackspace/reddwarf_lite-integration
 	url = git@github.com:masthalter/reddwarf_lite-integration.git
+[submodule "Reference/Rackspace/otter"]
+	path = Reference/Rackspace/otter
+	url = git@github.com:rackerlabs/otter.git

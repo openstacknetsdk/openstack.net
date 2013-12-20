@@ -39,6 +39,12 @@
         public const string Compute = "Compute";
 
         /// <summary>
+        /// Auto Scale service tests.
+        /// </summary>
+        /// <seealso cref="IAutoScaleService"/>
+        public const string AutoScale = "Auto Scale";
+
+        /// <summary>
         /// DNS service tests.
         /// </summary>
         /// <seealso cref="IDnsService"/>

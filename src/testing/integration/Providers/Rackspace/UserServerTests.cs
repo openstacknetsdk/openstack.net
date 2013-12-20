@@ -26,7 +26,7 @@
         private static Server _server;
         private static string _password;
 
-        private static readonly string TestImageNameSubstring = "CentOS 6.4";
+        internal static readonly string TestImageNameSubstring = "CentOS 6.4";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
