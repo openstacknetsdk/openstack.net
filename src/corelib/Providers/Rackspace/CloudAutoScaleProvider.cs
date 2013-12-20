@@ -183,8 +183,8 @@
 
             UriTemplate template = new UriTemplate("/groups/{groupId}?force={force}");
             var parameters = new Dictionary<string, string> { { "groupId", groupId.Value } };
-            if (force != null)
-                parameters.Add("force", force.ToString());
+            if (force ?? false)
+                parameters.Add("force", force.ToString().ToLowerInvariant());
 
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.DELETE, template, parameters);
