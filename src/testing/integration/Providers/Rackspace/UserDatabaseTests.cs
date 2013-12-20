@@ -55,7 +55,8 @@
                     tasks.Add(provider.RemoveDatabaseInstanceAsync(instance.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null));
                 }
 
-                await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
+                if (tasks.Count > 0)
+                    await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
             }
         }
 
@@ -77,7 +78,8 @@
                     tasks.Add(provider.RemoveBackupAsync(backup.Id, cancellationTokenSource.Token));
                 }
 
-                await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
+                if (tasks.Count > 0)
+                    await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
             }
         }
 
