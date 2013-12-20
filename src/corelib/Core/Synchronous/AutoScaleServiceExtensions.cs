@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Net;
     using System.Threading;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.AutoScale;
 
@@ -28,7 +29,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroups_v1.0__tenantId__groups_Groups.html">List Scaling Groups (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        public static ReadOnlyCollection<ScalingGroup> ListScalingGroups(this IAutoScaleService service, ScalingGroupId marker, int? limit)
+        public static ReadOnlyCollectionPage<ScalingGroup> ListScalingGroups(this IAutoScaleService service, ScalingGroupId marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -364,7 +365,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicies_v1.0__tenantId__groups__groupId__policies_Policies.html">Get Policies List (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        public static ReadOnlyCollection<Policy> ListPolicies(this IAutoScaleService service, ScalingGroupId groupId, PolicyId marker, int? limit)
+        public static ReadOnlyCollectionPage<Policy> ListPolicies(this IAutoScaleService service, ScalingGroupId groupId, PolicyId marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -580,7 +581,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhooks_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_Webhooks.html">Get a list of webhooks for the policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        public static ReadOnlyCollection<Webhook> ListWebhooks(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit)
+        public static ReadOnlyCollectionPage<Webhook> ListWebhooks(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

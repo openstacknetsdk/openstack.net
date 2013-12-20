@@ -9,6 +9,8 @@
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Monitoring;
     using Newtonsoft.Json.Linq;
@@ -50,7 +52,7 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 List<Task> cleanupTasks = new List<Task>();
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
                 foreach (Entity entity in entities)
                 {
                     if (entity.Label == null || !entity.Label.StartsWith(TestEntityPrefix, StringComparison.OrdinalIgnoreCase))
@@ -87,7 +89,7 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 List<Task> cleanupTasks = new List<Task>();
-                NotificationPlan[] plans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<NotificationPlan> plans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
                 foreach (NotificationPlan plan in plans)
                 {
                     if (plan.Label == null || !plan.Label.StartsWith(TestNotificationPlanPrefix, StringComparison.OrdinalIgnoreCase))
@@ -110,7 +112,7 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 List<Task> cleanupTasks = new List<Task>();
-                Notification[] notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Notification> notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
                 foreach (Notification notification in notifications)
                 {
                     if (notification.Label == null || !notification.Label.StartsWith(TestNotificationPrefix, StringComparison.OrdinalIgnoreCase))
@@ -133,7 +135,7 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 List<Task> cleanupTasks = new List<Task>();
-                AgentToken[] agentTokens = await ListAllAgentTokensAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<AgentToken> agentTokens = await ListAllAgentTokensAsync(provider, null, cancellationTokenSource.Token);
                 foreach (AgentToken agentToken in agentTokens)
                 {
                     if (agentToken.Label == null || !agentToken.Label.StartsWith(TestAgentTokenPrefix, StringComparison.OrdinalIgnoreCase))
@@ -207,8 +209,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Audit[] audits = await ListAllAuditsAsync(provider, null, null, null, cancellationTokenSource.Token);
-                if (audits.Length == 0)
+                ReadOnlyCollection<Audit> audits = await ListAllAuditsAsync(provider, null, null, null, cancellationTokenSource.Token);
+                if (audits.Count == 0)
                     Assert.Inconclusive("The service did not report any audits.");
 
                 foreach (Audit audit in audits)
@@ -279,8 +281,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
-                if (entities.Length == 0)
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                if (entities.Count == 0)
                     Assert.Inconclusive("The service did not report any entities.");
 
                 foreach (Entity entity in entities)
@@ -296,8 +298,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
-                if (entities.Length == 0)
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                if (entities.Count == 0)
                     Assert.Inconclusive("The service did not report any entities.");
 
                 foreach (Entity entity in entities)
@@ -354,7 +356,7 @@
                 EntityId entityId = await provider.CreateEntityAsync(configuration, cancellationTokenSource.Token);
                 Assert.IsNotNull(entityId);
 
-                MonitoringZone[] monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<MonitoringZone> monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
                 MonitoringZone zone = monitoringZones.FirstOrDefault(x => x.Label.IndexOf("DFW", StringComparison.OrdinalIgnoreCase) >= 0);
                 zone = zone ?? monitoringZones.First();
 
@@ -436,9 +438,9 @@
                 IDictionary<string, string> metadata = null;
                 NewCheckConfiguration checkConfiguration = new NewCheckConfiguration(checkLabel, checkTypeId, details, monitoringZonesPoll, timeout, period, targetAlias, targetHostname, resolverType, metadata);
 
-                CheckData[] checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
                 foreach (CheckData data in checkData)
                 {
                     Assert.AreEqual(true, data.Available);
@@ -499,9 +501,9 @@
                 CheckId checkId = await provider.CreateCheckAsync(entityId, checkConfiguration, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkId);
 
-                CheckData[] checkData = await provider.TestExistingCheckAsync(entityId, checkId, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestExistingCheckAsync(entityId, checkId, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
                 foreach (CheckData data in checkData)
                 {
                     Assert.AreEqual(true, data.Available);
@@ -570,8 +572,8 @@
                 CheckId checkId2 = await provider.CreateCheckAsync(entityId, checkConfiguration2, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkId2);
 
-                Check[] checks = await ListAllChecksAsync(provider, entityId, null, cancellationTokenSource.Token);
-                Assert.AreEqual(2, checks.Length);
+                ReadOnlyCollection<Check> checks = await ListAllChecksAsync(provider, entityId, null, cancellationTokenSource.Token);
+                Assert.AreEqual(2, checks.Count);
                 foreach (Check check in checks)
                     Console.WriteLine("Check {0} ({1})", check.Label, check.Id);
 
@@ -649,8 +651,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                CheckType[] checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
-                if (checkTypes.Length == 0)
+                ReadOnlyCollection<CheckType> checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
+                if (checkTypes.Count == 0)
                     Assert.Inconclusive("The service did not report any check types.");
 
                 foreach (CheckType checkType in checkTypes)
@@ -670,8 +672,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                CheckType[] checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
-                if (checkTypes.Length == 0)
+                ReadOnlyCollection<CheckType> checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
+                if (checkTypes.Count == 0)
                     Assert.Inconclusive("The service did not report any check types.");
 
                 foreach (CheckType checkType in checkTypes)
@@ -707,17 +709,17 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 bool foundMetrics = false;
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
                 foreach (Entity entity in entities)
                 {
                     Console.WriteLine("Entity '{0}'", entity.Label);
 
-                    Check[] checks = await ListAllChecksAsync(provider, entity.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<Check> checks = await ListAllChecksAsync(provider, entity.Id, null, cancellationTokenSource.Token);
                     foreach (Check check in checks)
                     {
                         Console.WriteLine("  Check '{0}'", check.Label);
 
-                        Metric[] metrics = await ListAllMetricsAsync(provider, entity.Id, check.Id, null, cancellationTokenSource.Token);
+                        ReadOnlyCollection<Metric> metrics = await ListAllMetricsAsync(provider, entity.Id, check.Id, null, cancellationTokenSource.Token);
                         foundMetrics |= metrics.Any();
                         foreach (Metric metric in metrics)
                         {
@@ -741,17 +743,17 @@
             {
                 bool foundMetrics = false;
                 bool foundData = false;
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
                 foreach (Entity entity in entities)
                 {
                     Console.WriteLine("Entity '{0}'", entity.Label);
 
-                    Check[] checks = await ListAllChecksAsync(provider, entity.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<Check> checks = await ListAllChecksAsync(provider, entity.Id, null, cancellationTokenSource.Token);
                     foreach (Check check in checks)
                     {
                         Console.WriteLine("  Check '{0}'", check.Label);
 
-                        Metric[] metrics = await ListAllMetricsAsync(provider, entity.Id, check.Id, null, cancellationTokenSource.Token);
+                        ReadOnlyCollection<Metric> metrics = await ListAllMetricsAsync(provider, entity.Id, check.Id, null, cancellationTokenSource.Token);
                         foundMetrics |= metrics.Any();
                         foreach (Metric metric in metrics)
                         {
@@ -760,7 +762,7 @@
                             IEnumerable<DataPointStatistic> select = new[] { DataPointStatistic.NumPoints, DataPointStatistic.Average, DataPointStatistic.Variance, DataPointStatistic.Max };
                             DateTimeOffset from = DateTimeOffset.Now - TimeSpan.FromDays(1);
                             DateTimeOffset to = DateTimeOffset.Now;
-                            DataPoint[] dataPoints = await provider.GetDataPointsAsync(entity.Id, check.Id, metric.Name, points, resolution, select, from, to, cancellationTokenSource.Token);
+                            ReadOnlyCollection<DataPoint> dataPoints = await provider.GetDataPointsAsync(entity.Id, check.Id, metric.Name, points, resolution, select, from, to, cancellationTokenSource.Token);
                             foundData |= dataPoints.Any();
                         }
 
@@ -884,13 +886,13 @@
                 IDictionary<string, string> metadata = null;
                 NewCheckConfiguration checkConfiguration = new NewCheckConfiguration(checkLabel, checkTypeId, details, monitoringZonesPoll, timeout, period, targetAlias, targetHostname, resolverType, metadata);
 
-                CheckData[] checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckData> checkData = await provider.TestCheckAsync(entityId, checkConfiguration, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(checkData);
-                Assert.IsTrue(checkData.Length > 0);
+                Assert.IsTrue(checkData.Count > 0);
 
                 string criteria = "if (metric[\"code\"] == \"404\") { return new AlarmStatus(CRITICAL, \"not found\"); } return new AlarmStatus(OK);";
                 TestAlarmConfiguration testAlarmConfiguration = new TestAlarmConfiguration(criteria, checkData);
-                AlarmData[] alarmData = await provider.TestAlarmAsync(entityId, testAlarmConfiguration, cancellationTokenSource.Token);
+                ReadOnlyCollection<AlarmData> alarmData = await provider.TestAlarmAsync(entityId, testAlarmConfiguration, cancellationTokenSource.Token);
 
                 foreach (AlarmData data in alarmData)
                 {
@@ -960,8 +962,8 @@
                     alarmIds.Add(alarmId);
                 }
 
-                Alarm[] alarms = await ListAllAlarmsAsync(provider, entityId, null, cancellationTokenSource.Token);
-                Assert.IsTrue(alarms.Length >= 3);
+                ReadOnlyCollection<Alarm> alarms = await ListAllAlarmsAsync(provider, entityId, null, cancellationTokenSource.Token);
+                Assert.IsTrue(alarms.Count >= 3);
                 foreach (string alarmName in alarmNames)
                 {
                     Alarm alarm = alarms.Single(i => i.Label.Equals(alarmName));
@@ -1167,8 +1169,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                NotificationPlan[] notificationPlans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
-                if (notificationPlans.Length == 0)
+                ReadOnlyCollection<NotificationPlan> notificationPlans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
+                if (notificationPlans.Count == 0)
                     Assert.Inconclusive("The service did not report any notification plans.");
 
                 foreach (NotificationPlan notificationPlan in notificationPlans)
@@ -1184,8 +1186,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                NotificationPlan[] notificationPlans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
-                if (notificationPlans.Length == 0)
+                ReadOnlyCollection<NotificationPlan> notificationPlans = await ListAllNotificationPlansAsync(provider, null, cancellationTokenSource.Token);
+                if (notificationPlans.Count == 0)
                     Assert.Inconclusive("The service did not report any notification plans.");
 
                 foreach (NotificationPlan notificationPlan in notificationPlans)
@@ -1309,8 +1311,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                MonitoringZone[] monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
-                if (monitoringZones.Length == 0)
+                ReadOnlyCollection<MonitoringZone> monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
+                if (monitoringZones.Count == 0)
                     Assert.Inconclusive("The provider did not return any monitoring zones.");
 
                 foreach (MonitoringZone monitoringZone in monitoringZones)
@@ -1326,8 +1328,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                MonitoringZone[] monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
-                if (monitoringZones.Length == 0)
+                ReadOnlyCollection<MonitoringZone> monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
+                if (monitoringZones.Count == 0)
                     Assert.Inconclusive("The provider did not return any monitoring zones.");
 
                 foreach (MonitoringZone monitoringZone in monitoringZones)
@@ -1350,8 +1352,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                MonitoringZone[] monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
-                if (monitoringZones.Length == 0)
+                ReadOnlyCollection<MonitoringZone> monitoringZones = await ListAllMonitoringZonesAsync(provider, null, cancellationTokenSource.Token);
+                if (monitoringZones.Count == 0)
                     Assert.Inconclusive("The provider did not return any monitoring zones.");
 
                 string target = "docs.rackspace.com";
@@ -1389,7 +1391,7 @@
                     {
                         foreach (CheckId checkId in await provider.DiscoverAlarmNotificationHistoryAsync(entity.Id, alarm.Id, cancellationTokenSource.Token))
                         {
-                            AlarmNotificationHistoryItem[] alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationTokenSource.Token);
+                            ReadOnlyCollection<AlarmNotificationHistoryItem> alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationTokenSource.Token);
                             foundHistoryItem |= alarmNotificationHistory.Any();
                             foreach (AlarmNotificationHistoryItem item in alarmNotificationHistory)
                                 Console.WriteLine("Alarm notification history item '{0}'", item.Id);
@@ -1417,7 +1419,7 @@
                     {
                         foreach (CheckId checkId in await provider.DiscoverAlarmNotificationHistoryAsync(entity.Id, alarm.Id, cancellationTokenSource.Token))
                         {
-                            AlarmNotificationHistoryItem[] alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationTokenSource.Token);
+                            ReadOnlyCollection<AlarmNotificationHistoryItem> alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationTokenSource.Token);
                             foundHistoryItem |= alarmNotificationHistory.Any();
                             foreach (AlarmNotificationHistoryItem item in alarmNotificationHistory)
                             {
@@ -1518,7 +1520,7 @@
         private async Task<bool> TestGetAlarmNotificationHistory(IMonitoringService provider, Entity entity, Alarm alarm, CheckId checkId, CancellationToken cancellationToken)
         {
             List<Task<bool>> tasks = new List<Task<bool>>();
-            AlarmNotificationHistoryItem[] alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationToken);
+            ReadOnlyCollection<AlarmNotificationHistoryItem> alarmNotificationHistory = await ListAllAlarmNotificationHistoryAsync(provider, entity.Id, alarm.Id, checkId, null, null, null, cancellationToken);
             foreach (AlarmNotificationHistoryItem item in alarmNotificationHistory)
             {
                 tasks.Add(TestGetAlarmNotificationHistory(provider, entity, alarm, checkId, item, cancellationToken));
@@ -1773,9 +1775,9 @@
                 NewNotificationConfiguration configuration = new NewNotificationConfiguration(label, notificationTypeId, notificationDetails);
                 NotificationId notificationId = await provider.CreateNotificationAsync(configuration, cancellationTokenSource.Token);
 
-                Notification[] notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Notification> notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(notifications);
-                Assert.IsTrue(notifications.Length > 0);
+                Assert.IsTrue(notifications.Count > 0);
 
                 foreach (Notification notification in notifications)
                     Console.WriteLine("Notification '{0}' ({1})", notification.Label, notification.Id);
@@ -1798,9 +1800,9 @@
                 NewNotificationConfiguration configuration = new NewNotificationConfiguration(label, notificationTypeId, notificationDetails);
                 NotificationId notificationId = await provider.CreateNotificationAsync(configuration, cancellationTokenSource.Token);
 
-                Notification[] notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<Notification> notifications = await ListAllNotificationsAsync(provider, null, cancellationTokenSource.Token);
                 Assert.IsNotNull(notifications);
-                Assert.IsTrue(notifications.Length > 0);
+                Assert.IsTrue(notifications.Count > 0);
 
                 foreach (Notification notification in notifications)
                 {
@@ -1863,8 +1865,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                NotificationType[] notifications = await ListAllNotificationTypesAsync(provider, null, cancellationTokenSource.Token);
-                if (notifications.Length == 0)
+                ReadOnlyCollection<NotificationType> notifications = await ListAllNotificationTypesAsync(provider, null, cancellationTokenSource.Token);
+                if (notifications.Count == 0)
                     Assert.Inconclusive("The service did not report any notification types.");
 
                 foreach (NotificationType notificationType in notifications)
@@ -1884,8 +1886,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                NotificationType[] notifications = await ListAllNotificationTypesAsync(provider, null, cancellationTokenSource.Token);
-                if (notifications.Length == 0)
+                ReadOnlyCollection<NotificationType> notifications = await ListAllNotificationTypesAsync(provider, null, cancellationTokenSource.Token);
+                if (notifications.Count == 0)
                     Assert.Inconclusive("The service did not report any notification types.");
 
                 foreach (NotificationType notificationType in notifications)
@@ -1919,8 +1921,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AlarmChangelog[] alarmChangelogs = await ListAllAlarmChangelogsAsync(provider, null, null, null, cancellationTokenSource.Token);
-                if (alarmChangelogs.Length == 0)
+                ReadOnlyCollection<AlarmChangelog> alarmChangelogs = await ListAllAlarmChangelogsAsync(provider, null, null, null, cancellationTokenSource.Token);
+                if (alarmChangelogs.Count == 0)
                     Assert.Inconclusive("The service did not report any alarm changelogs.");
 
                 foreach (AlarmChangelog alarmChangelog in alarmChangelogs)
@@ -1936,16 +1938,16 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AlarmChangelog[] alarmChangelogs = await ListAllAlarmChangelogsAsync(provider, null, null, null, cancellationTokenSource.Token);
-                if (alarmChangelogs.Length == 0)
+                ReadOnlyCollection<AlarmChangelog> alarmChangelogs = await ListAllAlarmChangelogsAsync(provider, null, null, null, cancellationTokenSource.Token);
+                if (alarmChangelogs.Count == 0)
                     Assert.Inconclusive("The service did not report any alarm changelogs.");
 
                 ILookup<EntityId, AlarmChangelog> lookup = alarmChangelogs.ToLookup(i => i.EntityId);
                 foreach (IGrouping<EntityId, AlarmChangelog> group in lookup)
                 {
                     AlarmChangelog[] groupAlarmChangelogs = group.ToArray();
-                    AlarmChangelog[] entityAlarmChangelogs = await ListAllAlarmChangelogsAsync(provider, group.Key, null, null, null, cancellationTokenSource.Token);
-                    Assert.AreEqual(groupAlarmChangelogs.Length, entityAlarmChangelogs.Length);
+                    ReadOnlyCollection<AlarmChangelog> entityAlarmChangelogs = await ListAllAlarmChangelogsAsync(provider, group.Key, null, null, null, cancellationTokenSource.Token);
+                    Assert.AreEqual(groupAlarmChangelogs.Length, entityAlarmChangelogs.Count);
                 }
             }
         }
@@ -1958,8 +1960,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                EntityOverview[] entityOverviews = await ListAllEntityOverviewsAsync(provider, null, cancellationTokenSource.Token);
-                if (entityOverviews.Length == 0)
+                ReadOnlyCollection<EntityOverview> entityOverviews = await ListAllEntityOverviewsAsync(provider, null, cancellationTokenSource.Token);
+                if (entityOverviews.Count == 0)
                     Assert.Inconclusive("The service did not report any overview views.");
 
                 foreach (EntityOverview entity in entityOverviews)
@@ -1987,8 +1989,8 @@
                 foreach (Entity entity in filteredEntities)
                     Console.WriteLine("    {0} ({1})", entity.Label, entity.Id);
 
-                EntityOverview[] entityOverviews = await ListAllEntityOverviewsAsync(provider, null, filteredEntities.Select(i => i.Id), cancellationTokenSource.Token);
-                if (entityOverviews.Length == 0)
+                ReadOnlyCollection<EntityOverview> entityOverviews = await ListAllEntityOverviewsAsync(provider, null, filteredEntities.Select(i => i.Id), cancellationTokenSource.Token);
+                if (entityOverviews.Count == 0)
                     Assert.Inconclusive("The service did not report any overview views.");
 
                 Console.WriteLine();
@@ -2010,8 +2012,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AlarmExample[] alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
-                if (alarmExamples.Length == 0)
+                ReadOnlyCollection<AlarmExample> alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
+                if (alarmExamples.Count == 0)
                     Assert.Inconclusive("The provider did not return any alarm examples.");
 
                 foreach (AlarmExample alarmExample in alarmExamples)
@@ -2027,7 +2029,7 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AlarmExample[] alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<AlarmExample> alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
                 foreach (AlarmExample alarmExample in alarmExamples)
                 {
                     AlarmExample example = await provider.GetAlarmExampleAsync(alarmExample.Id, cancellationTokenSource.Token);
@@ -2048,8 +2050,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AlarmExample[] alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
-                if (alarmExamples.Length == 0)
+                ReadOnlyCollection<AlarmExample> alarmExamples = await ListAllAlarmExamplesAsync(provider, null, cancellationTokenSource.Token);
+                if (alarmExamples.Count == 0)
                     Assert.Inconclusive("The provider did not return any alarm examples.");
 
                 List<Task> tasks = new List<Task>();
@@ -2098,8 +2100,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 foreach (Agent agent in agents)
@@ -2115,8 +2117,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 foreach (Agent agent in agents)
@@ -2137,15 +2139,15 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 bool foundConnection = false;
                 foreach (Agent agent in agents)
                 {
                     Console.WriteLine("Connections for Agent {0}", agent.Id);
-                    AgentConnection[] connections = await ListAllAgentConnectionsAsync(provider, agent.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<AgentConnection> connections = await ListAllAgentConnectionsAsync(provider, agent.Id, null, cancellationTokenSource.Token);
                     foundConnection |= connections.Any();
                     foreach (AgentConnection connection in connections)
                     {
@@ -2167,14 +2169,14 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 bool foundConnection = false;
                 foreach (Agent agent in agents)
                 {
-                    AgentConnection[] connections = await ListAllAgentConnectionsAsync(provider, agent.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<AgentConnection> connections = await ListAllAgentConnectionsAsync(provider, agent.Id, null, cancellationTokenSource.Token);
                     foundConnection |= connections.Any();
                     foreach (AgentConnection connection in connections)
                     {
@@ -2226,8 +2228,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                AgentToken[] agentTokens = await ListAllAgentTokensAsync(provider, null, cancellationTokenSource.Token);
-                if (agentTokens.Length == 0)
+                ReadOnlyCollection<AgentToken> agentTokens = await ListAllAgentTokensAsync(provider, null, cancellationTokenSource.Token);
+                if (agentTokens.Count == 0)
                     Assert.Inconclusive("The service did not report any agent tokens.");
 
                 foreach (AgentToken agentToken in agentTokens)
@@ -2276,8 +2278,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2320,8 +2322,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2364,8 +2366,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2408,8 +2410,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2452,8 +2454,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2495,8 +2497,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2539,8 +2541,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2583,8 +2585,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2626,8 +2628,8 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
                 List<Task<string>> tasks = new List<Task<string>>();
@@ -2670,11 +2672,11 @@
             IMonitoringService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
-                if (agents.Length == 0)
+                ReadOnlyCollection<Agent> agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Count == 0)
                     Assert.Inconclusive("The service did not report any agents.");
 
-                Task<ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>>[] agentConnectionTasks = Array.ConvertAll(agents, agent => provider.ListAgentConnectionsAsync(agent.Id, null, 1, cancellationTokenSource.Token));
+                Task<ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>>[] agentConnectionTasks = Array.ConvertAll(agents.ToArray(), agent => provider.ListAgentConnectionsAsync(agent.Id, null, 1, cancellationTokenSource.Token));
                 await Task.Factory.ContinueWhenAll((Task[])agentConnectionTasks, TaskExtrasExtensions.PropagateExceptions);
 
                 ISet<AgentId> connectedAgents = new HashSet<AgentId>();
@@ -2686,14 +2688,14 @@
                     connectedAgents.Add(task.Result[0].AgentId);
                 }
 
-                CheckType[] checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<CheckType> checkTypes = await ListAllCheckTypesAsync(provider, null, cancellationTokenSource.Token);
                 CheckType[] agentCheckTypes = checkTypes.Where(i => i.Id.IsAgent).ToArray();
                 CheckType[] targetableAgentCheckTypes = agentCheckTypes.Where(i => i.Fields.Any(j => j.Name.Equals("target", StringComparison.OrdinalIgnoreCase))).ToArray();
                 if (targetableAgentCheckTypes.Length == 0)
                     Assert.Inconclusive("The service did not report any targetable agent check types.");
 
-                Entity[] entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
-                if (entities.Length == 0)
+                ReadOnlyCollection<Entity> entities = await ListAllEntitiesAsync(provider, null, cancellationTokenSource.Token);
+                if (entities.Count == 0)
                     Assert.Inconclusive("The service did not report any entities.");
 
                 List<Task> tasks = new List<Task>();
@@ -2724,429 +2726,172 @@
 
         private async Task TestListAgentCheckTargets(IMonitoringService provider, Entity entity, CheckTypeId agentCheckType, CancellationToken cancellationToken)
         {
-            CheckTarget[] agentCheckTargets = await ListAllAgentCheckTargetsAsync(provider, entity.Id, agentCheckType, null, cancellationToken);
+            ReadOnlyCollection<CheckTarget> agentCheckTargets = await ListAllAgentCheckTargetsAsync(provider, entity.Id, agentCheckType, null, cancellationToken);
             Console.WriteLine("Agent check targets for entity '{0}' ({1}) with agent check type '{2}'", entity.Label, entity.Id, agentCheckType);
             foreach (CheckTarget agentCheckTarget in agentCheckTargets)
                 Console.WriteLine("    {0}: {1}", agentCheckTarget.Id, agentCheckTarget.Label);
         }
 
-        protected static async Task<AlarmChangelog[]> ListAllAlarmChangelogsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AlarmChangelog> result = new List<AlarmChangelog>();
-            AlarmChangelogId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId> page = await service.ListAlarmChangelogsAsync(marker, blockSize, from, to, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAlarmChangelogsAsync(null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<AlarmChangelog[]> ListAllAlarmChangelogsAsync(IMonitoringService service, EntityId entityId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, EntityId entityId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AlarmChangelog> result = new List<AlarmChangelog>();
-            AlarmChangelogId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId> page = await service.ListAlarmChangelogsAsync(entityId, marker, blockSize, from, to, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAlarmChangelogsAsync(entityId, null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<AlarmExample[]> ListAllAlarmExamplesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmExample, AlarmExampleId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmExample>> ListAllAlarmExamplesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmExample>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AlarmExample> result = new List<AlarmExample>();
-            AlarmExampleId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AlarmExample, AlarmExampleId> page = await service.ListAlarmExamplesAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAlarmExamplesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<AlarmNotificationHistoryItem[]> ListAllAlarmNotificationHistoryAsync(IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmNotificationHistoryItem>> ListAllAlarmNotificationHistoryAsync(IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmNotificationHistoryItem>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AlarmNotificationHistoryItem> result = new List<AlarmNotificationHistoryItem>();
-            AlarmNotificationHistoryItemId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId> page = await service.ListAlarmNotificationHistoryAsync(entityId, alarmId, checkId, marker, blockSize, from, to, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAlarmNotificationHistoryAsync(entityId, alarmId, checkId, null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Audit[]> ListAllAuditsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Audit, AuditId>> progress = null)
+        protected static async Task<ReadOnlyCollection<Audit>> ListAllAuditsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Audit>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Audit> result = new List<Audit>();
-            AuditId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Audit, AuditId> page = await service.ListAuditsAsync(marker, blockSize, from, to, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAuditsAsync(null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Entity[]> ListAllEntitiesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Entity, EntityId>> progress = null)
+        protected static async Task<ReadOnlyCollection<Entity>> ListAllEntitiesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Entity>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Entity> result = new List<Entity>();
-            EntityId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Entity, EntityId> page = await service.ListEntitiesAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListEntitiesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<EntityOverview[]> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<EntityOverview, EntityId>> progress = null)
+        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<EntityOverview> result = new List<EntityOverview>();
-            EntityId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<EntityOverview, EntityId> page = await service.ListEntityOverviewsAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListEntityOverviewsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<EntityOverview[]> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, IEnumerable<EntityId> entityIdFilter, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<EntityOverview, EntityId>> progress = null)
+        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, IEnumerable<EntityId> entityIdFilter, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<EntityOverview> result = new List<EntityOverview>();
-            EntityId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<EntityOverview, EntityId> page = await service.ListEntityOverviewsAsync(marker, blockSize, entityIdFilter, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListEntityOverviewsAsync(null, blockSize, entityIdFilter, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Alarm[]> ListAllAlarmsAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Alarm, AlarmId>> progress = null)
+        protected static async Task<ReadOnlyCollection<Alarm>> ListAllAlarmsAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Alarm>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Alarm> result = new List<Alarm>();
-            AlarmId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Alarm, AlarmId> page = await service.ListAlarmsAsync(entityId, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAlarmsAsync(entityId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Check[]> ListAllChecksAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken)
+        protected static async Task<ReadOnlyCollection<Check>> ListAllChecksAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Check>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
 
-            List<Check> result = new List<Check>();
-            CheckId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Check, CheckId> page = await service.ListChecksAsync(entityId, marker, blockSize, cancellationToken);
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListChecksAsync(entityId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<CheckType[]> ListAllCheckTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<CheckType, CheckTypeId>> progress = null)
+        protected static async Task<ReadOnlyCollection<CheckType>> ListAllCheckTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CheckType>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<CheckType> result = new List<CheckType>();
-            CheckTypeId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<CheckType, CheckTypeId> page = await service.ListCheckTypesAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListCheckTypesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Metric[]> ListAllMetricsAsync(IMonitoringService service, EntityId entityId, CheckId checkId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Metric, MetricName>> progress = null)
+        protected static async Task<ReadOnlyCollection<Metric>> ListAllMetricsAsync(IMonitoringService service, EntityId entityId, CheckId checkId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Metric>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Metric> result = new List<Metric>();
-            MetricName marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Metric, MetricName> page = await service.ListMetricsAsync(entityId, checkId, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListMetricsAsync(entityId, checkId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<MonitoringZone[]> ListAllMonitoringZonesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId>> progress = null)
+        protected static async Task<ReadOnlyCollection<MonitoringZone>> ListAllMonitoringZonesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<MonitoringZone>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<MonitoringZone> result = new List<MonitoringZone>();
-            MonitoringZoneId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId> page = await service.ListMonitoringZonesAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListMonitoringZonesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<NotificationPlan[]> ListAllNotificationPlansAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId>> progress = null)
+        protected static async Task<ReadOnlyCollection<NotificationPlan>> ListAllNotificationPlansAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NotificationPlan>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<NotificationPlan> result = new List<NotificationPlan>();
-            NotificationPlanId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId> page = await service.ListNotificationPlansAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListNotificationPlansAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Notification[]> ListAllNotificationsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Notification, NotificationId>> progress = null)
+        protected static async Task<ReadOnlyCollection<Notification>> ListAllNotificationsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Notification>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Notification> result = new List<Notification>();
-            NotificationId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Notification, NotificationId> page = await service.ListNotificationsAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListNotificationsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<NotificationType[]> ListAllNotificationTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<NotificationType, NotificationTypeId>> progress = null)
+        protected static async Task<ReadOnlyCollection<NotificationType>> ListAllNotificationTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NotificationType>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<NotificationType> result = new List<NotificationType>();
-            NotificationTypeId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<NotificationType, NotificationTypeId> page = await service.ListNotificationTypesAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListNotificationTypesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Agent[]> ListAllAgentsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Agent, AgentId>> progress = null)
+        protected static async Task<ReadOnlyCollection<Agent>> ListAllAgentsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Agent>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Agent> result = new List<Agent>();
-            AgentId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<Agent, AgentId> page = await service.ListAgentsAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAgentsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<AgentConnection[]> ListAllAgentConnectionsAsync(IMonitoringService service, AgentId agentId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AgentConnection>> ListAllAgentConnectionsAsync(IMonitoringService service, AgentId agentId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AgentConnection>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AgentConnection> result = new List<AgentConnection>();
-            AgentConnectionId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AgentConnection, AgentConnectionId> page = await service.ListAgentConnectionsAsync(agentId, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAgentConnectionsAsync(agentId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<AgentToken[]> ListAllAgentTokensAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AgentToken, AgentTokenId>> progress = null)
+        protected static async Task<ReadOnlyCollection<AgentToken>> ListAllAgentTokensAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AgentToken>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<AgentToken> result = new List<AgentToken>();
-            AgentTokenId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<AgentToken, AgentTokenId> page = await service.ListAgentTokensAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAgentTokensAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<CheckTarget[]> ListAllAgentCheckTargetsAsync(IMonitoringService service, EntityId entityId, CheckTypeId agentCheckType, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<CheckTarget, CheckTargetId>> progress = null)
+        protected static async Task<ReadOnlyCollection<CheckTarget>> ListAllAgentCheckTargetsAsync(IMonitoringService service, EntityId entityId, CheckTypeId agentCheckType, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CheckTarget>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<CheckTarget> result = new List<CheckTarget>();
-            CheckTargetId marker = null;
-
-            do
-            {
-                ReadOnlyCollectionPage<CheckTarget, CheckTargetId> page = await service.ListAgentCheckTargetsAsync(entityId, agentCheckType, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.NextMarker;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListAgentCheckTargetsAsync(entityId, agentCheckType, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)

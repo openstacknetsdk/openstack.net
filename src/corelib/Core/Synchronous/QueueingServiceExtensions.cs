@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Domain.Queues;
     using CancellationToken = System.Threading.CancellationToken;
@@ -124,7 +125,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#List_Queues">List Queues (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static IEnumerable<CloudQueue> ListQueues(this IQueueingService queueingService, QueueName marker, int? limit, bool detailed)
+        public static ReadOnlyCollectionPage<CloudQueue> ListQueues(this IQueueingService queueingService, QueueName marker, int? limit, bool detailed)
         {
             if (queueingService == null)
                 throw new ArgumentNullException("queueingService");
@@ -426,7 +427,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_a_Set_of_Messages_by_ID">Get a Set of Messages by ID (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static IEnumerable<QueuedMessage> GetMessages(this IQueueingService queueingService, QueueName queueName, IEnumerable<MessageId> messageIds)
+        public static ReadOnlyCollection<QueuedMessage> GetMessages(this IQueueingService queueingService, QueueName queueName, IEnumerable<MessageId> messageIds)
         {
             if (queueingService == null)
                 throw new ArgumentNullException("queueingService");

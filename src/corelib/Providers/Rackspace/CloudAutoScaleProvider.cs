@@ -7,6 +7,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace.Objects.AutoScale;
@@ -63,7 +64,7 @@
         #region IAutoScaleService Members
 
         /// <inheritdoc/>
-        public Task<ReadOnlyCollection<ScalingGroup>> ListScalingGroupsAsync(ScalingGroupId marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<ScalingGroup>> ListScalingGroupsAsync(ScalingGroupId marker, int? limit, CancellationToken cancellationToken)
         {
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -81,7 +82,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, ReadOnlyCollection<ScalingGroup>> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<ScalingGroup>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -96,7 +97,13 @@
                     Link[] links = linksToken != null ? linksToken.ToObject<Link[]>() : null;
 
                     ScalingGroup[] values = valuesToken.ToObject<ScalingGroup[]>();
-                    return new ReadOnlyCollection<ScalingGroup>(values);
+
+                    ScalingGroupId nextMarker = values.Any() && (links == null || links.Any(i => string.Equals(i.Rel, "next", StringComparison.OrdinalIgnoreCase))) ? values.Last().Id : null;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<ScalingGroup>>> getNextPageAsync = null;
+                    if (nextMarker != null)
+                        getNextPageAsync = nextCancellationToken => ListScalingGroupsAsync(nextMarker, limit, cancellationToken);
+
+                    return new BasicReadOnlyCollectionPage<ScalingGroup>(values, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -387,7 +394,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<ReadOnlyCollection<Policy>> ListPoliciesAsync(ScalingGroupId groupId, PolicyId marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<Policy>> ListPoliciesAsync(ScalingGroupId groupId, PolicyId marker, int? limit, CancellationToken cancellationToken)
         {
             if (groupId == null)
                 throw new ArgumentNullException("groupId");
@@ -407,7 +414,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, ReadOnlyCollection<Policy>> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<Policy>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -422,7 +429,13 @@
                     Link[] links = linksToken != null ? linksToken.ToObject<Link[]>() : null;
 
                     Policy[] values = valuesToken.ToObject<Policy[]>();
-                    return new ReadOnlyCollection<Policy>(values);
+
+                    PolicyId nextMarker = values.Any() && (links == null || links.Any(i => string.Equals(i.Rel, "next", StringComparison.OrdinalIgnoreCase))) ? values.Last().Id : null;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<Policy>>> getNextPageAsync = null;
+                    if (nextMarker != null)
+                        getNextPageAsync = nextCancellationToken => ListPoliciesAsync(groupId, nextMarker, limit, cancellationToken);
+
+                    return new BasicReadOnlyCollectionPage<Policy>(values, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -575,7 +588,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<ReadOnlyCollection<Webhook>> ListWebhooksAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<Webhook>> ListWebhooksAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit, CancellationToken cancellationToken)
         {
             if (groupId == null)
                 throw new ArgumentNullException("groupId");
@@ -597,7 +610,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, ReadOnlyCollection<Webhook>> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<Webhook>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -612,7 +625,13 @@
                     Link[] links = linksToken != null ? linksToken.ToObject<Link[]>() : null;
 
                     Webhook[] values = valuesToken.ToObject<Webhook[]>();
-                    return new ReadOnlyCollection<Webhook>(values);
+
+                    WebhookId nextMarker = values.Any() && (links == null || links.Any(i => string.Equals(i.Rel, "next", StringComparison.OrdinalIgnoreCase))) ? values.Last().Id : null;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<Webhook>>> getNextPageAsync = null;
+                    if (nextMarker != null)
+                        getNextPageAsync = nextCancellationToken => ListWebhooksAsync(groupId, policyId, nextMarker, limit, cancellationToken);
+
+                    return new BasicReadOnlyCollectionPage<Webhook>(values, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)

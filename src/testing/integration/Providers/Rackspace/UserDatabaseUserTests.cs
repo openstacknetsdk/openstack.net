@@ -25,8 +25,8 @@
             IDatabaseService provider = UserDatabaseTests.CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = provider.ListFlavorsAsync(cancellationTokenSource.Token).Result;
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = provider.ListFlavorsAsync(cancellationTokenSource.Token).Result;
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -258,7 +258,7 @@
                 UserConfiguration userConfiguration = new UserConfiguration(userName, password);
                 await provider.CreateUserAsync(_instance.Id, userConfiguration, cancellationTokenSource.Token);
 
-                DatabaseName[] accessible;
+                ReadOnlyCollection<DatabaseName> accessible;
                 accessible = await provider.ListUserAccessAsync(_instance.Id, userName, cancellationTokenSource.Token);
 
                 // grant twice different

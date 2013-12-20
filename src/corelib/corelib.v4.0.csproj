@@ -63,6 +63,8 @@
     <Compile Include="Core\AsyncCompletionOption.cs" />
     <Compile Include="Core\Caching\ICache`1.cs" />
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
+    <Compile Include="Core\Collections\BasicReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Core\Collections\ReadOnlyCollectionPage`1.cs" />
     <Compile Include="Core\Collections\ReadOnlyDictionary`2.cs" />
     <Compile Include="Core\BackoffPolicy.cs" />
     <Compile Include="Core\Domain\AuthenticationRequirement.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Core\Providers\IIdentityService.cs" />
     <Compile Include="Core\Providers\IQueueingService.cs" />
     <Compile Include="Core\Providers\NamespaceDoc.cs" />
+    <Compile Include="Core\ReadOnlyCollectionPageExtensions.cs" />
     <Compile Include="Core\ResourceIdentifier`1.cs" />
     <Compile Include="Core\ResponseExtensions.cs" />
     <Compile Include="Core\RestWebHeaderCollection.cs" />
@@ -152,6 +155,7 @@
     <Compile Include="Core\Synchronous\MonitoringServiceExtensions.cs" />
     <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
     <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\ReadOnlyCollectionPageSynchronousExtensions.cs" />
     <Compile Include="Core\UriPart.cs" />
     <Compile Include="Core\UriUtility.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
@@ -464,7 +468,7 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\Pop3CheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\PostgresqlBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\ProcessInformation.cs" />
-    <Compile Include="Providers\Rackspace\Objects\Monitoring\ReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ReadOnlyCollectionPage`2.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SecureConnectionCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpCheckDetails.cs" />

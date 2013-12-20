@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Net;
     using System.Threading.Tasks;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace.Objects.Databases;
@@ -110,7 +112,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DatabaseInstance[]> ListDatabaseInstancesAsync(DatabaseInstanceId marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<DatabaseInstance>> ListDatabaseInstancesAsync(DatabaseInstanceId marker, int? limit, CancellationToken cancellationToken)
         {
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -128,7 +130,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DatabaseInstance[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<DatabaseInstance>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -139,7 +141,14 @@
                     if (instances == null)
                         return null;
 
-                    return instances.ToObject<DatabaseInstance[]>();
+                    DatabaseInstance[] currentPage = instances.ToObject<DatabaseInstance[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return ReadOnlyCollectionPage<DatabaseInstance>.Empty;
+
+                    DatabaseInstanceId nextMarker = currentPage[currentPage.Length - 1].Id;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DatabaseInstance>>> getNextPageAsync =
+                        nextCancellationToken => ListDatabaseInstancesAsync(nextMarker, limit, nextCancellationToken);
+                    return new BasicReadOnlyCollectionPage<DatabaseInstance>(currentPage, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -424,7 +433,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Database[]> ListDatabasesAsync(DatabaseInstanceId instanceId, DatabaseName marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<Database>> ListDatabasesAsync(DatabaseInstanceId instanceId, DatabaseName marker, int? limit, CancellationToken cancellationToken)
         {
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
@@ -444,7 +453,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Database[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<Database>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -455,7 +464,14 @@
                     if (databases == null)
                         return null;
 
-                    return databases.ToObject<Database[]>();
+                    Database[] currentPage = databases.ToObject<Database[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return ReadOnlyCollectionPage<Database>.Empty;
+
+                    DatabaseName nextMarker = currentPage[currentPage.Length - 1].Name;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<Database>>> getNextPageAsync =
+                        nextCancellationToken => ListDatabasesAsync(instanceId, nextMarker, limit, nextCancellationToken);
+                    return new BasicReadOnlyCollectionPage<Database>(currentPage, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -514,7 +530,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DatabaseUser[]> ListDatabaseUsersAsync(DatabaseInstanceId instanceId, UserName marker, int? limit, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollectionPage<DatabaseUser>> ListDatabaseUsersAsync(DatabaseInstanceId instanceId, UserName marker, int? limit, CancellationToken cancellationToken)
         {
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
@@ -534,18 +550,25 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DatabaseUser[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollectionPage<DatabaseUser>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
                     if (result == null)
                         return null;
 
-                    JToken databases = result["users"];
-                    if (databases == null)
+                    JToken users = result["users"];
+                    if (users == null)
                         return null;
 
-                    return databases.ToObject<DatabaseUser[]>();
+                    DatabaseUser[] currentPage = users.ToObject<DatabaseUser[]>();
+                    if (currentPage == null || currentPage.Length == 0)
+                        return ReadOnlyCollectionPage<DatabaseUser>.Empty;
+
+                    UserName nextMarker = currentPage[currentPage.Length - 1].UserName;
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<DatabaseUser>>> getNextPageAsync =
+                        nextCancellationToken => ListDatabaseUsersAsync(instanceId, nextMarker, limit, nextCancellationToken);
+                    return new BasicReadOnlyCollectionPage<DatabaseUser>(currentPage, getNextPageAsync);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -675,7 +698,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DatabaseName[]> ListUserAccessAsync(DatabaseInstanceId instanceId, UserName userName, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<DatabaseName>> ListUserAccessAsync(DatabaseInstanceId instanceId, UserName userName, CancellationToken cancellationToken)
         {
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
@@ -691,7 +714,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DatabaseName[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<DatabaseName>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -706,7 +729,7 @@
                     foreach (JObject @obj in databases)
                         names.Add(@obj["name"].ToObject<DatabaseName>());
 
-                    return names.ToArray();
+                    return names.AsReadOnly();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -775,7 +798,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DatabaseFlavor[]> ListFlavorsAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<DatabaseFlavor>> ListFlavorsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/flavors");
             var parameters = new Dictionary<string, string>();
@@ -786,7 +809,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DatabaseFlavor[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<DatabaseFlavor>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -797,7 +820,7 @@
                     if (records == null)
                         return null;
 
-                    return records.ToObject<DatabaseFlavor[]>();
+                    return records.ToObject<ReadOnlyCollection<DatabaseFlavor>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -897,7 +920,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Backup[]> ListBackupsAsync(CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<Backup>> ListBackupsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("/backups");
             var parameters = new Dictionary<string, string>();
@@ -908,7 +931,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Backup[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<Backup>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -919,7 +942,7 @@
                     if (backups == null)
                         return null;
 
-                    return backups.ToObject<Backup[]>();
+                    return backups.ToObject<ReadOnlyCollection<Backup>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -984,7 +1007,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<Backup[]> ListBackupsForInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<Backup>> ListBackupsForInstanceAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken)
         {
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
@@ -998,7 +1021,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, Backup[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<Backup>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -1009,7 +1032,7 @@
                     if (backups == null)
                         return null;
 
-                    return backups.ToObject<Backup[]>();
+                    return backups.ToObject<ReadOnlyCollection<Backup>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)

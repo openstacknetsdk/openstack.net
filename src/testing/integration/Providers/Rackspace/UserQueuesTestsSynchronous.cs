@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -589,24 +590,12 @@
         /// <param name="limit">The maximum number of <see cref="CloudQueue"/> to return from a single call to <see cref="QueueingServiceExtensions.ListQueues"/>. If this value is <see langword="null"/>, a provider-specific default is used.</param>
         /// <param name="detailed"><see langword="true"/> to return detailed information for each queue; otherwise, <see langword="false"/>.</param>
         /// <returns>A collection of <see cref="CloudQueue"/> objects describing the available queues.</returns>
-        private static IEnumerable<CloudQueue> ListAllQueues(IQueueingService provider, int? limit, bool detailed)
+        private static ReadOnlyCollection<CloudQueue> ListAllQueues(IQueueingService provider, int? limit, bool detailed)
         {
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
-            CloudQueue lastQueue = null;
-
-            do
-            {
-                QueueName marker = lastQueue != null ? lastQueue.Name : null;
-                IEnumerable<CloudQueue> queues = provider.ListQueues(marker, limit, detailed);
-                lastQueue = null;
-                foreach (CloudQueue queue in queues)
-                {
-                    lastQueue = queue;
-                    yield return queue;
-                }
-            } while (lastQueue != null);
+            return provider.ListQueues(null, limit, detailed).GetAllPages();
         }
 
         /// <summary>

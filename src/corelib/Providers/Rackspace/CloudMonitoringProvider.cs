@@ -154,8 +154,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Audit[] values = valuesToken.ToObject<Audit[]>();
+                    Func<AuditId, CancellationToken, Task<ReadOnlyCollectionPage<Audit, AuditId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAuditsAsync(nextMarker, limit, from, to, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Audit, AuditId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Audit, AuditId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -226,8 +228,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Entity[] values = valuesToken.ToObject<Entity[]>();
+                    Func<EntityId, CancellationToken, Task<ReadOnlyCollectionPage<Entity, EntityId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListEntitiesAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Entity, EntityId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Entity, EntityId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -330,7 +334,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckData[]> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckData>> TestCheckAsync(EntityId entityId, NewCheckConfiguration configuration, bool? debug, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -345,8 +349,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, configuration);
 
-            Func<Task<HttpWebRequest>, Task<CheckData[]>> requestResource =
-                GetResponseAsyncFunc<CheckData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<CheckData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<CheckData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()
@@ -354,7 +358,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckData[]> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckData>> TestExistingCheckAsync(EntityId entityId, CheckId checkId, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -367,8 +371,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters);
 
-            Func<Task<HttpWebRequest>, Task<CheckData[]>> requestResource =
-                GetResponseAsyncFunc<CheckData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<CheckData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<CheckData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)
@@ -410,8 +414,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Check[] values = valuesToken.ToObject<Check[]>();
+                    Func<CheckId, CancellationToken, Task<ReadOnlyCollectionPage<Check, CheckId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListChecksAsync(entityId, nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Check, CheckId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Check, CheckId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -521,8 +527,10 @@
                     JToken metadataToken = result["metadata"];
 
                     CheckType[] values = valuesToken.ToObject<CheckType[]>();
+                    Func<CheckTypeId, CancellationToken, Task<ReadOnlyCollectionPage<CheckType, CheckTypeId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListCheckTypesAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<CheckType, CheckTypeId>(values, metadata);
+                    return new ReadOnlyCollectionPage<CheckType, CheckTypeId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -588,8 +596,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Metric[] values = valuesToken.ToObject<Metric[]>();
+                    Func<MetricName, CancellationToken, Task<ReadOnlyCollectionPage<Metric, MetricName>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListMetricsAsync(entityId, checkId, nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Metric, MetricName>(values, metadata);
+                    return new ReadOnlyCollectionPage<Metric, MetricName>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -599,7 +609,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DataPoint[]> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<DataPoint>> GetDataPointsAsync(EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -639,7 +649,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DataPoint[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<DataPoint>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -650,7 +660,7 @@
                     if (valuesToken == null)
                         return null;
 
-                    return valuesToken.ToObject<DataPoint[]>();
+                    return valuesToken.ToObject<ReadOnlyCollection<DataPoint>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -691,7 +701,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<AlarmData[]> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<AlarmData>> TestAlarmAsync(EntityId entityId, TestAlarmConfiguration configuration, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -704,8 +714,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, configuration);
 
-            Func<Task<HttpWebRequest>, Task<AlarmData[]>> requestResource =
-                GetResponseAsyncFunc<AlarmData[]>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ReadOnlyCollection<AlarmData>>> requestResource =
+                GetResponseAsyncFunc<ReadOnlyCollection<AlarmData>>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest).Unwrap()
@@ -747,8 +757,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Alarm[] values = valuesToken.ToObject<Alarm[]>();
+                    Func<AlarmId, CancellationToken, Task<ReadOnlyCollectionPage<Alarm, AlarmId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAlarmsAsync(entityId, nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Alarm, AlarmId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Alarm, AlarmId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -887,8 +899,10 @@
                     JToken metadataToken = result["metadata"];
 
                     NotificationPlan[] values = valuesToken.ToObject<NotificationPlan[]>();
+                    Func<NotificationPlanId, CancellationToken, Task<ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListNotificationPlansAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId>(values, metadata);
+                    return new ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -992,8 +1006,10 @@
                     JToken metadataToken = result["metadata"];
 
                     MonitoringZone[] values = valuesToken.ToObject<MonitoringZone[]>();
+                    Func<MonitoringZoneId, CancellationToken, Task<ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListMonitoringZonesAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId>(values, metadata);
+                    return new ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1045,7 +1061,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<CheckId[]> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken)
+        public Task<ReadOnlyCollection<CheckId>> DiscoverAlarmNotificationHistoryAsync(EntityId entityId, AlarmId alarmId, CancellationToken cancellationToken)
         {
             if (entityId == null)
                 throw new ArgumentNullException("entityId");
@@ -1061,7 +1077,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, CheckId[]> resultSelector =
+            Func<Task<JObject>, ReadOnlyCollection<CheckId>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -1072,7 +1088,7 @@
                     if (checkIdsToken == null)
                         return null;
 
-                    return checkIdsToken.ToObject<CheckId[]>();
+                    return checkIdsToken.ToObject<ReadOnlyCollection<CheckId>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1124,8 +1140,10 @@
                     JToken metadataToken = result["metadata"];
 
                     AlarmNotificationHistoryItem[] values = valuesToken.ToObject<AlarmNotificationHistoryItem[]>();
+                    Func<AlarmNotificationHistoryItemId, CancellationToken, Task<ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAlarmNotificationHistoryAsync(entityId, alarmId, checkId, nextMarker, limit, from, to, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId>(values, metadata);
+                    return new ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1262,8 +1280,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Notification[] values = valuesToken.ToObject<Notification[]>();
+                    Func<NotificationId, CancellationToken, Task<ReadOnlyCollectionPage<Notification, NotificationId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListNotificationsAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Notification, NotificationId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Notification, NotificationId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1367,8 +1387,10 @@
                     JToken metadataToken = result["metadata"];
 
                     NotificationType[] values = valuesToken.ToObject<NotificationType[]>();
+                    Func<NotificationTypeId, CancellationToken, Task<ReadOnlyCollectionPage<NotificationType, NotificationTypeId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListNotificationTypesAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<NotificationType, NotificationTypeId>(values, metadata);
+                    return new ReadOnlyCollectionPage<NotificationType, NotificationTypeId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1442,8 +1464,10 @@
                     JToken metadataToken = result["metadata"];
 
                     AlarmChangelog[] values = valuesToken.ToObject<AlarmChangelog[]>();
+                    Func<AlarmChangelogId, CancellationToken, Task<ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAlarmChangelogsAsync(entityId, nextMarker, limit, from, to, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId>(values, metadata);
+                    return new ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1504,8 +1528,10 @@
                     JToken metadataToken = result["metadata"];
 
                     EntityOverview[] values = valuesToken.ToObject<EntityOverview[]>();
+                    Func<EntityId, CancellationToken, Task<ReadOnlyCollectionPage<EntityOverview, EntityId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListEntityOverviewsAsync(nextMarker, limit, entityIdFilter, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<EntityOverview, EntityId>(values, metadata);
+                    return new ReadOnlyCollectionPage<EntityOverview, EntityId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1547,8 +1573,10 @@
                     JToken metadataToken = result["metadata"];
 
                     AlarmExample[] values = valuesToken.ToObject<AlarmExample[]>();
+                    Func<AlarmExampleId, CancellationToken, Task<ReadOnlyCollectionPage<AlarmExample, AlarmExampleId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAlarmExamplesAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<AlarmExample, AlarmExampleId>(values, metadata);
+                    return new ReadOnlyCollectionPage<AlarmExample, AlarmExampleId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1633,8 +1661,10 @@
                     JToken metadataToken = result["metadata"];
 
                     Agent[] values = valuesToken.ToObject<Agent[]>();
+                    Func<AgentId, CancellationToken, Task<ReadOnlyCollectionPage<Agent, AgentId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAgentsAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<Agent, AgentId>(values, metadata);
+                    return new ReadOnlyCollectionPage<Agent, AgentId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1698,8 +1728,10 @@
                     JToken metadataToken = result["metadata"];
 
                     AgentConnection[] values = valuesToken.ToObject<AgentConnection[]>();
+                    Func<AgentConnectionId, CancellationToken, Task<ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAgentConnectionsAsync(agentId, nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>(values, metadata);
+                    return new ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1792,8 +1824,10 @@
                     JToken metadataToken = result["metadata"];
 
                     AgentToken[] values = valuesToken.ToObject<AgentToken[]>();
+                    Func<AgentTokenId, CancellationToken, Task<ReadOnlyCollectionPage<AgentToken, AgentTokenId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAgentTokensAsync(nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<AgentToken, AgentTokenId>(values, metadata);
+                    return new ReadOnlyCollectionPage<AgentToken, AgentTokenId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
@@ -1986,8 +2020,10 @@
                     JToken metadataToken = result["metadata"];
 
                     CheckTarget[] values = valuesToken.ToObject<CheckTarget[]>();
+                    Func<CheckTargetId, CancellationToken, Task<ReadOnlyCollectionPage<CheckTarget, CheckTargetId>>> getNextPageAsync =
+                        (nextMarker, nextCancellationToken) => ListAgentCheckTargetsAsync(entityId, agentCheckType, nextMarker, limit, nextCancellationToken);
                     IDictionary<string, object> metadata = metadataToken != null ? metadataToken.ToObject<IDictionary<string, object>>() : null;
-                    return new ReadOnlyCollectionPage<CheckTarget, CheckTargetId>(values, metadata);
+                    return new ReadOnlyCollectionPage<CheckTarget, CheckTargetId>(values, getNextPageAsync, metadata);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)

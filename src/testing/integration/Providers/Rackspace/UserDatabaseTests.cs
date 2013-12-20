@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using net.openstack.Core;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.Databases;
     using CancellationToken = System.Threading.CancellationToken;
@@ -44,7 +46,7 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseInstance[] instances = ListAllDatabaseInstances(provider, null, cancellationTokenSource.Token).ToArray();
+                ReadOnlyCollection<DatabaseInstance> instances = await ListAllDatabaseInstancesAsync(provider, null, cancellationTokenSource.Token);
                 List<Task> tasks = new List<Task>();
                 foreach (DatabaseInstance instance in instances)
                 {
@@ -67,7 +69,7 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                Backup[] backups = await provider.ListBackupsAsync(cancellationTokenSource.Token);
+                ReadOnlyCollection<Backup> backups = await provider.ListBackupsAsync(cancellationTokenSource.Token);
                 List<Task> tasks = new List<Task>();
                 foreach (Backup backup in backups)
                 {
@@ -91,8 +93,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -114,8 +116,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -153,8 +155,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -178,8 +180,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -204,8 +206,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -229,8 +231,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -243,7 +245,7 @@
                 await provider.CreateDatabaseAsync(instance.Id, databaseConfiguration, cancellationTokenSource.Token);
 
                 Console.WriteLine("Databases in instance '{0}':", instance.Name);
-                foreach (var database in ListAllDatabases(provider, instance.Id, null, cancellationTokenSource.Token))
+                foreach (var database in await ListAllDatabasesAsync(provider, instance.Id, null, cancellationTokenSource.Token))
                     Console.WriteLine("    {0}", database.Name);
 
                 await provider.RemoveDatabaseAsync(instance.Id, databaseName, cancellationTokenSource.Token);
@@ -262,8 +264,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 foreach (var flavor in flavors)
@@ -283,14 +285,14 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(60))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
-                Task<DatabaseFlavor>[] flavorTasks = Array.ConvertAll(flavors, flavor => provider.GetFlavorAsync(flavor.Id, cancellationTokenSource.Token));
+                Task<DatabaseFlavor>[] flavorTasks = Array.ConvertAll(flavors.ToArray(), flavor => provider.GetFlavorAsync(flavor.Id, cancellationTokenSource.Token));
                 await Task.WhenAll(flavorTasks);
 
-                for (int i = 0; i < flavors.Length; i++)
+                for (int i = 0; i < flavors.Count; i++)
                 {
                     DatabaseFlavor referenceFlavor = flavors[i];
                     Assert.IsNotNull(referenceFlavor);
@@ -320,8 +322,8 @@
             IDatabaseService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(600))))
             {
-                DatabaseFlavor[] flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
-                if (flavors.Length == 0)
+                ReadOnlyCollection<DatabaseFlavor> flavors = await provider.ListFlavorsAsync(cancellationTokenSource.Token);
+                if (flavors.Count == 0)
                     Assert.Inconclusive("The service did not report any flavors.");
 
                 DatabaseFlavor smallestFlavor = flavors.Where(i => i.Memory.HasValue).OrderBy(i => i.Memory).First();
@@ -329,9 +331,9 @@
                 DatabaseInstanceConfiguration configuration = new DatabaseInstanceConfiguration(smallestFlavor.Href, new DatabaseVolumeConfiguration(1), instanceName);
                 DatabaseInstance instance = await provider.CreateDatabaseInstanceAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
 
-                Backup[] initialBackups = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
+                ReadOnlyCollection<Backup> initialBackups = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
                 Assert.IsNotNull(initialBackups);
-                Assert.AreEqual(0, initialBackups.Length);
+                Assert.AreEqual(0, initialBackups.Count);
 
                 string backupName = CreateRandomBackupName();
                 string backupDescription = "My backup";
@@ -342,10 +344,10 @@
                 Backup backupCopy = await provider.GetBackupAsync(backup.Id, cancellationTokenSource.Token);
                 Assert.AreEqual(backup.Id, backupCopy.Id);
 
-                Backup[] allBackups = await provider.ListBackupsAsync(cancellationTokenSource.Token);
-                Backup[] instanceBackups = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
-                Assert.IsTrue(allBackups.Length >= instanceBackups.Length);
-                Assert.AreEqual(1, instanceBackups.Length);
+                ReadOnlyCollection<Backup> allBackups = await provider.ListBackupsAsync(cancellationTokenSource.Token);
+                ReadOnlyCollection<Backup> instanceBackups = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
+                Assert.IsTrue(allBackups.Count >= instanceBackups.Count);
+                Assert.AreEqual(1, instanceBackups.Count);
                 Assert.AreEqual(backupName, instanceBackups[0].Name);
                 Assert.AreEqual(backupDescription, instanceBackups[0].Description);
 
@@ -354,8 +356,8 @@
 
                 await provider.RemoveDatabaseInstanceAsync(instance.Id, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
 
-                Backup[] instanceBackupsAfterRemove = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
-                Assert.AreEqual(instanceBackups.Length, instanceBackupsAfterRemove.Length);
+                ReadOnlyCollection<Backup> instanceBackupsAfterRemove = await provider.ListBackupsForInstanceAsync(instance.Id, cancellationTokenSource.Token);
+                Assert.AreEqual(instanceBackups.Count, instanceBackupsAfterRemove.Count);
 
                 configuration = new DatabaseInstanceConfiguration(smallestFlavor.Href, new DatabaseVolumeConfiguration(1), instanceName, new RestorePoint(backup.Id));
                 instance = await provider.CreateDatabaseInstanceAsync(configuration, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
@@ -369,46 +371,26 @@
             }
         }
 
-        protected IEnumerable<DatabaseInstance> ListAllDatabaseInstances(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken)
+        protected async Task<ReadOnlyCollection<DatabaseInstance>> ListAllDatabaseInstancesAsync(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DatabaseInstance>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
 
-            DatabaseInstance lastInstance = null;
-
-            do
-            {
-                DatabaseInstanceId marker = lastInstance != null ? lastInstance.Id : null;
-                IEnumerable<DatabaseInstance> instances = provider.ListDatabaseInstancesAsync(marker, blockSize, cancellationToken).Result;
-                lastInstance = null;
-                foreach (DatabaseInstance instance in instances)
-                {
-                    lastInstance = instance;
-                    yield return instance;
-                }
-            } while (lastInstance != null);
+            return await (await provider.ListDatabaseInstancesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected IEnumerable<Database> ListAllDatabases(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken)
+        protected async Task<ReadOnlyCollection<Database>> ListAllDatabasesAsync(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Database>> progress = null)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (instanceId == null)
                 throw new ArgumentNullException("instanceId");
             if (blockSize <= 0)
                 throw new ArgumentOutOfRangeException("blockSize");
 
-            Database lastInstance = null;
-
-            do
-            {
-                DatabaseName marker = lastInstance != null ? lastInstance.Name : null;
-                IEnumerable<Database> instances = provider.ListDatabasesAsync(instanceId, marker, blockSize, cancellationToken).Result;
-                lastInstance = null;
-                foreach (Database instance in instances)
-                {
-                    lastInstance = instance;
-                    yield return instance;
-                }
-            } while (lastInstance != null);
+            return await (await provider.ListDatabasesAsync(instanceId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)
