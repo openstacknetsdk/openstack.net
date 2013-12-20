@@ -83,7 +83,7 @@
 
             _label = label;
             _type = notificationTypeId;
-            _details = JObject.FromObject(details);
+            _details = details != null ? JObject.FromObject(details) : null;
             _metadata = metadata;
         }
 
