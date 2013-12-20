@@ -44,7 +44,7 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 List<Task> cleanupTasks = new List<Task>();
-                ScalingGroup[] groups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                ReadOnlyCollection<ScalingGroup> groups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
                 foreach (ScalingGroup group in groups)
                 {
                     if (group == null || group.State == null || group.State.Name == null)
@@ -77,8 +77,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 foreach (ScalingGroup scalingGroup in scalingGroups)
@@ -147,8 +147,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 foreach (ScalingGroup scalingGroup in scalingGroups)
@@ -168,8 +168,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 foreach (ScalingGroup scalingGroup in scalingGroups)
@@ -222,8 +222,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 foreach (ScalingGroup scalingGroup in scalingGroups)
@@ -270,8 +270,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 foreach (ScalingGroup scalingGroup in scalingGroups)
@@ -319,15 +319,15 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 bool foundPolicy = false;
                 foreach (ScalingGroup scalingGroup in scalingGroups)
                 {
                     Console.WriteLine("Scaling group '{0}' ({1})", scalingGroup.State.Name, scalingGroup.Id);
-                    Policy[] policies = await ListAllPoliciesAsync(provider, scalingGroup.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<Policy> policies = await ListAllPoliciesAsync(provider, scalingGroup.Id, null, cancellationTokenSource.Token);
                     foreach (Policy policy in policies)
                     {
                         foundPolicy = true;
@@ -923,8 +923,8 @@
             IAutoScaleService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
-                ScalingGroup[] scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
-                if (scalingGroups.Length == 0)
+                ReadOnlyCollection<ScalingGroup> scalingGroups = await ListAllScalingGroupsAsync(provider, null, cancellationTokenSource.Token);
+                if (scalingGroups.Count == 0)
                     Assert.Inconclusive("The service did not report any scaling groups.");
 
                 bool foundPolicy = false;
@@ -932,12 +932,12 @@
                 foreach (ScalingGroup scalingGroup in scalingGroups)
                 {
                     Console.WriteLine("Scaling group '{0}' ({1})", scalingGroup.State.Name, scalingGroup.Id);
-                    Policy[] policies = await ListAllPoliciesAsync(provider, scalingGroup.Id, null, cancellationTokenSource.Token);
+                    ReadOnlyCollection<Policy> policies = await ListAllPoliciesAsync(provider, scalingGroup.Id, null, cancellationTokenSource.Token);
                     foreach (Policy policy in policies)
                     {
                         foundPolicy = true;
                         Console.WriteLine("    Policy '{0}' ({1})", policy.Name, policy.Id);
-                        Webhook[] webhooks = await ListAllWebhooksAsync(provider, scalingGroup.Id, policy.Id, null, cancellationTokenSource.Token);
+                        ReadOnlyCollection<Webhook> webhooks = await ListAllWebhooksAsync(provider, scalingGroup.Id, policy.Id, null, cancellationTokenSource.Token);
                         foreach (Webhook webhook in webhooks)
                         {
                             foundWebhook = true;
@@ -1131,67 +1131,28 @@
             }
         }
 
-        protected static async Task<ScalingGroup[]> ListAllScalingGroupsAsync(IAutoScaleService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<ScalingGroup>> progress = null)
+        protected static async Task<ReadOnlyCollection<ScalingGroup>> ListAllScalingGroupsAsync(IAutoScaleService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<ScalingGroup>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<ScalingGroup> result = new List<ScalingGroup>();
-            ScalingGroupId marker = null;
-
-            do
-            {
-                ReadOnlyCollection<ScalingGroup> page = await service.ListScalingGroupsAsync(marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.Count > 0 ? page[page.Count - 1].Id : null;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListScalingGroupsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Policy[]> ListAllPoliciesAsync(IAutoScaleService service, ScalingGroupId groupId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Policy>> progress = null)
+        protected static async Task<ReadOnlyCollection<Policy>> ListAllPoliciesAsync(IAutoScaleService service, ScalingGroupId groupId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Policy>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Policy> result = new List<Policy>();
-            PolicyId marker = null;
-
-            do
-            {
-                ReadOnlyCollection<Policy> page = await service.ListPoliciesAsync(groupId, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.Count > 0 ? page[page.Count - 1].Id : null;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListPoliciesAsync(groupId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<Webhook[]> ListAllWebhooksAsync(IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Webhook>> progress = null)
+        protected static async Task<ReadOnlyCollection<Webhook>> ListAllWebhooksAsync(IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Webhook>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            List<Webhook> result = new List<Webhook>();
-            WebhookId marker = null;
-
-            do
-            {
-                ReadOnlyCollection<Webhook> page = await service.ListWebhooksAsync(groupId, policyId, marker, blockSize, cancellationToken);
-                if (progress != null)
-                    progress.Report(page);
-
-                result.AddRange(page);
-                marker = page.Count > 0 ? page[page.Count - 1].Id : null;
-            } while (marker != null);
-
-            return result.ToArray();
+            return await (await service.ListWebhooksAsync(groupId, policyId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private Task<FlavorId> GetDefaultFlavorIdAsync(IAutoScaleService provider, CancellationToken cancellationToken)

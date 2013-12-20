@@ -6,6 +6,7 @@
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+    using net.openstack.Core.Collections;
     using net.openstack.Providers.Rackspace.Objects.AutoScale;
 
     /// <summary>
@@ -31,7 +32,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroups_v1.0__tenantId__groups_Groups.html">List Scaling Groups (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        Task<ReadOnlyCollection<ScalingGroup>> ListScalingGroupsAsync(ScalingGroupId marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<ScalingGroup>> ListScalingGroupsAsync(ScalingGroupId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new scaling group.
@@ -198,7 +199,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicies_v1.0__tenantId__groups__groupId__policies_Policies.html">Get Policies List (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        Task<ReadOnlyCollection<Policy>> ListPoliciesAsync(ScalingGroupId groupId, PolicyId marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<Policy>> ListPoliciesAsync(ScalingGroupId groupId, PolicyId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new scaling policy for a scaling group.
@@ -321,7 +322,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhooks_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_Webhooks.html">Get a list of webhooks for the policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
-        Task<ReadOnlyCollection<Webhook>> ListWebhooksAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit, CancellationToken cancellationToken);
+        Task<ReadOnlyCollectionPage<Webhook>> ListWebhooksAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a webhook capable of anonymously executing a scaling policy.
