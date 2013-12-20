@@ -2671,6 +2671,9 @@
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
             {
                 Agent[] agents = await ListAllAgentsAsync(provider, null, cancellationTokenSource.Token);
+                if (agents.Length == 0)
+                    Assert.Inconclusive("The service did not report any agents.");
+
                 Task<ReadOnlyCollectionPage<AgentConnection, AgentConnectionId>>[] agentConnectionTasks = Array.ConvertAll(agents, agent => provider.ListAgentConnectionsAsync(agent.Id, null, 1, cancellationTokenSource.Token));
                 await Task.Factory.ContinueWhenAll((Task[])agentConnectionTasks, TaskExtrasExtensions.PropagateExceptions);
 
@@ -2715,7 +2718,8 @@
             foreach (CheckTypeId agentCheckType in agentCheckTypes)
                 tasks.Add(TestListAgentCheckTargets(provider, entity, agentCheckType, cancellationToken));
 
-            await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
+            if (tasks.Count > 0)
+                await Task.Factory.ContinueWhenAll(tasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
         }
 
         private async Task TestListAgentCheckTargets(IMonitoringService provider, Entity entity, CheckTypeId agentCheckType, CancellationToken cancellationToken)

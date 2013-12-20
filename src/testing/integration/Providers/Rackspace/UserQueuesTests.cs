@@ -325,6 +325,9 @@
             int clientCount = 3;
             int serverCount = 2;
 
+            Assert.IsTrue(clientCount > 0);
+            Assert.IsTrue(serverCount > 0);
+
             QueueName requestQueueName = CreateRandomQueueName();
             QueueName[] responseQueueNames = Enumerable.Range(0, clientCount).Select(i => CreateRandomQueueName()).ToArray();
 
