@@ -151,7 +151,7 @@
 
             _label = label;
             _type = checkTypeId;
-            _details = JObject.FromObject(details);
+            _details = details != null ? JObject.FromObject(details) : null;
             _monitoringZonesPoll = monitoringZonesPoll != null ? monitoringZonesPoll.ToArray() : null;
             _timeout = timeout.HasValue ? (int?)timeout.Value.TotalSeconds : null;
             _period = period.HasValue ? (int?)period.Value.TotalSeconds : null;
