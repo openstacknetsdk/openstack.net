@@ -262,7 +262,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Queues)]
-        public async Task TestListAllQueueMessages()
+        public async Task TestListAllQueueMessagesWithUpdates()
         {
             IQueueingService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
@@ -303,6 +303,42 @@
                         Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
                     }
                 }
+
+                Assert.AreEqual(28, locatedMessages.Count);
+                for (int i = 0; i < 28; i++)
+                {
+                    Assert.IsTrue(locatedMessages.Contains(i), "The message listing did not include message '{0}', which was in the queue when the listing started and still in it afterwards.", i);
+                }
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestListAllQueueMessages()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                List<Task> postMessagesTasks = new List<Task>();
+                for (int i = 0; i < 28; i++)
+                {
+                    postMessagesTasks.Add(provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, new Message<SampleMetadata>(TimeSpan.FromSeconds(120), new SampleMetadata(i, "Some Message " + i))));
+                }
+
+                await Task.Factory.ContinueWhenAll(postMessagesTasks.ToArray(), TaskExtrasExtensions.PropagateExceptions);
+
+                HashSet<int> locatedMessages = new HashSet<int>();
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, false, cancellationTokenSource.Token, null);
+                foreach (QueuedMessage message in messages)
+                    Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
 
                 Assert.AreEqual(28, locatedMessages.Count);
                 for (int i = 0; i < 28; i++)
@@ -678,6 +714,40 @@
                 throw new ArgumentOutOfRangeException("limit");
 
             return await (await provider.ListQueuesAsync(null, limit, detailed, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
+        }
+
+        /// <summary>
+        /// Gets all existing messages in a queue through a series of asynchronous operations,
+        /// each of which requests a subset of the available messages.
+        /// </summary>
+        /// <param name="provider">The queueing service.</param>
+        /// <param name="queueName">The queue name.</param>
+        /// <param name="limit">The maximum number of <see cref="QueuedMessage"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="echo"><see langword="true"/> to include messages created by the current client; otherwise, <see langword="false"/>.</param>
+        /// <param name="includeClaimed"><see langword="true"/> to include claimed messages; otherwise <see langword="false"/> to return only unclaimed messages.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the operation
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a
+        /// read-only collection containing the complete set of messages in the queue.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="provider"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="queueName"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
+        private static async Task<ReadOnlyCollection<QueuedMessage>> ListAllMessagesAsync(IQueueingService provider, QueueName queueName, int? limit, bool echo, bool includeClaimed, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<QueuedMessage>> progress)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (queueName == null)
+                throw new ArgumentNullException("queueName");
+            if (limit <= 0)
+                throw new ArgumentOutOfRangeException("limit");
+
+            return await (await provider.ListMessagesAsync(queueName, null, limit, echo, includeClaimed, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
         private TimeSpan TestTimeout(TimeSpan timeout)
