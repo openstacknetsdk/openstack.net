@@ -543,7 +543,7 @@ namespace net.openstack.Providers.Rackspace
             {
                 if (!isRetry)
                 {
-                    return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, maxReadLength, queryStringParameter, headers, isRetry, requestSettings, progressUpdated);
+                    return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, maxReadLength, queryStringParameter, headers, true, requestSettings, progressUpdated);
                 }
             }
 
