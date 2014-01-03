@@ -12,6 +12,8 @@
     /// single page within a paginated collection.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
+    /// <threadsafety static="true" instance="false"/>
+    /// <preliminary/>
     public abstract class ReadOnlyCollectionPage<T> : ReadOnlyCollection<T>
     {
         /// <summary>

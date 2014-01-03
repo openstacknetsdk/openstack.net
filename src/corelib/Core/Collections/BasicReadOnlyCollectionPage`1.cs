@@ -10,6 +10,8 @@
     /// a function delegate as the implementation of <see cref="GetNextPageAsync"/>.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
+    /// <threadsafety static="true" instance="false"/>
+    /// <preliminary/>
     public class BasicReadOnlyCollectionPage<T> : ReadOnlyCollectionPage<T>
     {
         /// <summary>
