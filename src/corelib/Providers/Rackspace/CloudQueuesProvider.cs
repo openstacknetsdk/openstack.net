@@ -353,7 +353,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<QueuedMessageList> ListMessagesAsync(QueueName queueName, QueuedMessageList marker, int? limit, bool echo, bool includeClaimed, CancellationToken cancellationToken)
+        public Task<QueuedMessageList> ListMessagesAsync(QueueName queueName, QueuedMessageListId marker, int? limit, bool echo, bool includeClaimed, CancellationToken cancellationToken)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -369,49 +369,60 @@
                     { "echo", echo.ToString() },
                     { "include_claimed", includeClaimed.ToString() }
                 };
-
             if (marker != null)
-            {
-                Link nextLink = null;
-                if (marker.Links != null)
-                {
-                    foreach (Link link in marker.Links)
-                    {
-                        if (link.Rel == "next")
-                        {
-                            nextLink = link;
-                            break;
-                        }
-                    }
-                }
-
-                if (nextLink == null)
-                {
-                    return InternalTaskExtensions.CompletedTask(QueuedMessageList.Empty);
-                }
-
-                Uri baseUri = new Uri("https://example.com");
-                Uri absoluteUri;
-                if (nextLink.Href.StartsWith("/v1"))
-                    absoluteUri = new Uri(baseUri, nextLink.Href.Substring("/v1".Length));
-                else
-                    absoluteUri = new Uri(baseUri, nextLink.Href);
-
-                UriTemplateMatch match = template.Match(baseUri, absoluteUri);
-                parameters.Add("marker", match.BoundVariables["marker"]);
-            }
-
+                parameters["marker"] = marker.Value;
             if (limit != null)
                 parameters["limit"] = limit.ToString();
 
             Func<Task<Tuple<IdentityToken, Uri>>, HttpWebRequest> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.GET, template, parameters);
 
-            Func<Task<HttpWebRequest>, Task<QueuedMessageList>> requestResource =
-                GetResponseAsyncFunc<QueuedMessageList>(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<ListCloudQueueMessagesResponse>> requestResource =
+                GetResponseAsyncFunc<ListCloudQueueMessagesResponse>(cancellationToken);
 
-            Func<Task<QueuedMessageList>, QueuedMessageList> resultSelector =
-                task => (task.Result != null && task.Result.Messages != null ? task.Result : null) ?? QueuedMessageList.Empty;
+            Func<Task<ListCloudQueueMessagesResponse>, QueuedMessageList> resultSelector =
+                task =>
+                {
+                    ReadOnlyCollection<QueuedMessage> messages = null;
+                    if (task.Result != null)
+                        messages = task.Result.Messages;
+
+                    QueuedMessageListId nextMarker = null;
+                    if (task.Result != null && task.Result.Links != null)
+                    {
+                        Link nextLink = task.Result.Links.FirstOrDefault(i => string.Equals(i.Rel, "next", StringComparison.OrdinalIgnoreCase));
+                        if (nextLink != null)
+                        {
+                            Uri baseUri = new Uri("https://example.com");
+                            Uri absoluteUri;
+                            if (nextLink.Href.StartsWith("/v1"))
+                                absoluteUri = new Uri(baseUri, nextLink.Href.Substring("/v1".Length));
+                            else
+                                absoluteUri = new Uri(baseUri, nextLink.Href);
+
+                            UriTemplateMatch match = template.Match(baseUri, absoluteUri);
+                            if (!string.IsNullOrEmpty(match.BoundVariables["marker"]))
+                                nextMarker = new QueuedMessageListId(match.BoundVariables["marker"]);
+                        }
+                    }
+
+                    if (messages == null || messages.Count == 0)
+                    {
+                        // use the same marker again
+                        messages = messages ?? new ReadOnlyCollection<QueuedMessage>(new QueuedMessage[0]);
+                        nextMarker = marker;
+                    }
+
+                    Func<CancellationToken, Task<ReadOnlyCollectionPage<QueuedMessage>>> getNextPageAsync = null;
+                    if (nextMarker != null || messages.Count == 0)
+                    {
+                        getNextPageAsync =
+                            nextCancellationToken => ListMessagesAsync(queueName, nextMarker, limit, echo, includeClaimed, nextCancellationToken)
+                                .ContinueWith(t => (ReadOnlyCollectionPage<QueuedMessage>)t.Result, TaskContinuationOptions.ExecuteSynchronously);
+                    }
+
+                    return new QueuedMessageList(messages, getNextPageAsync, nextMarker);
+                };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .ContinueWith(prepareRequest)

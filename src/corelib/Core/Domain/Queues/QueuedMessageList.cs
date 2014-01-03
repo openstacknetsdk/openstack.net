@@ -2,110 +2,50 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Providers;
-    using Newtonsoft.Json;
 
     /// <summary>
-    /// Represents a collection of messages stored in a queue in the <see cref="IQueueingService"/>.
+    /// This class extends the <see cref="ReadOnlyCollectionPage{T}"/> class
+    /// to provide access to the opaque marker used for paginating messages
+    /// in the <see cref="IQueueingService"/> (via the <see cref="NextPageId"/>
+    /// property.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    [JsonObject(MemberSerialization.OptIn)]
-    public class QueuedMessageList
+    public class QueuedMessageList : BasicReadOnlyCollectionPage<QueuedMessage>
     {
         /// <summary>
-        /// This is the backing field for the <see cref="Empty"/> property.
+        /// This is the backing field for the <see cref="NextPageId"/> property.
         /// </summary>
-        private static readonly QueuedMessageList _empty = new QueuedMessageList(Enumerable.Empty<QueuedMessage>(), Enumerable.Empty<Link>());
-
+        private QueuedMessageListId _nextPageId;
+        
         /// <summary>
-        /// This is the backing field for the <see cref="Links"/> property.
+        /// Initializes a new instance of the <see cref="BasicReadOnlyCollectionPage{T}"/> class
+        /// that is a read-only wrapper around the specified list.
         /// </summary>
-        [JsonProperty("links")]
-        private Link[] _links;
-
-        /// <summary>
-        /// This is the backing field for the <see cref="Messages"/> property.
-        /// </summary>
-        [JsonProperty("messages")]
-        private QueuedMessage[] _messages;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueuedMessageList"/> class during
-        /// JSON deserialization.
-        /// </summary>
-        [JsonConstructor]
-        protected QueuedMessageList()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueuedMessageList"/> class.
-        /// </summary>
-        /// <param name="messages">A collection of <see cref="QueuedMessage"/> objects describing the messages in a queue.</param>
-        /// <param name="links">A collection of <see cref="Link"/> objects describing resources related to the list of messages.</param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains any <see langword="null"/> values.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="links"/> contains any <see langword="null"/> values.</para>
+        /// <param name="list">The list to wrap.</param>
+        /// <param name="getNextPageAsync">A function that returns a <see cref="Task{TResult}"/> representing the asynchronous operation to get the next page of items in the collection. If specified, this function implements <see cref="BasicReadOnlyCollectionPage{T}.GetNextPageAsync"/>. If the value is <see langword="null"/>, then <see cref="BasicReadOnlyCollectionPage{T}.CanHaveNextPage"/> will return <see langword="false"/>.</param>
+        /// <param name="nextPageId">The identifier of the next page in the message list.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="list"/> is <see langword="null"/>.
         /// </exception>
-        public QueuedMessageList(IEnumerable<QueuedMessage> messages, IEnumerable<Link> links)
+        public QueuedMessageList(IList<QueuedMessage> list, Func<CancellationToken, Task<ReadOnlyCollectionPage<QueuedMessage>>> getNextPageAsync, QueuedMessageListId nextPageId)
+            : base(list, getNextPageAsync)
         {
-            if (messages != null)
-            {
-                _messages = messages.ToArray();
-                if (_messages.Contains(null))
-                    throw new ArgumentException("messages cannot contain any null values", "messages");
-            }
-
-            if (links != null)
-            {
-                _links = links.ToArray();
-                if (_links.Contains(null))
-                    throw new ArgumentException("links cannot contain any null values", "links");
-            }
+            _nextPageId = nextPageId;
         }
 
         /// <summary>
-        /// Gets an empty list of messages, which is not specific to any queue.
+        /// Gets the identifier of the next page of the message list.
         /// </summary>
-        public static QueuedMessageList Empty
+        public QueuedMessageListId NextPageId
         {
             get
             {
-                return _empty;
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection of <see cref="Link"/> objects describing resources related
-        /// to this list of messages.
-        /// </summary>
-        public ReadOnlyCollection<Link> Links
-        {
-            get
-            {
-                if (_links == null)
-                    return null;
-
-                return new ReadOnlyCollection<Link>(_links);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of <see cref="QueuedMessage"/> objects describing the messages in
-        /// the queue.
-        /// </summary>
-        public ReadOnlyCollection<QueuedMessage> Messages
-        {
-            get
-            {
-                if (_messages == null)
-                    return null;
-
-                return new ReadOnlyCollection<QueuedMessage>(_messages);
+                return _nextPageId;
             }
         }
     }
