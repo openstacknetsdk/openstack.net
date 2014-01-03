@@ -536,12 +536,37 @@ namespace net.openstack.Providers.Rackspace
             if (string.IsNullOrEmpty(requestSettings.UserAgent))
                 requestSettings.UserAgent = UserAgentGenerator.UserAgent;
 
+            long? initialPosition;
+            try
+            {
+                initialPosition = stream.Position;
+            }
+            catch (NotSupportedException)
+            {
+                initialPosition = null;
+            }
+
             var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
 
             // on errors try again 1 time.
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && initialPosition != null)
             {
-                if (!isRetry)
+                bool canRetry;
+
+                try
+                {
+                    if (stream.Position != initialPosition.Value)
+                        stream.Position = initialPosition.Value;
+
+                    canRetry = true;
+                }
+                catch (NotSupportedException)
+                {
+                    // unable to retry the operation
+                    canRetry = false;
+                }
+
+                if (canRetry)
                 {
                     return StreamRESTRequest(identity, absoluteUri, method, stream, chunkSize, maxReadLength, queryStringParameter, headers, true, requestSettings, progressUpdated);
                 }
