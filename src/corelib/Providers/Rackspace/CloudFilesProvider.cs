@@ -995,21 +995,14 @@ namespace net.openstack.Providers.Rackspace
                 if (resp == null)
                     return new Response(0, null, null);
 
-                try
+                using (var respStream = resp.GetResponseStream())
                 {
-                    using (var respStream = resp.GetResponseStream())
-                    {
-                        CopyStream(respStream, outputStream, chunkSize, progressUpdated);
-                    }
-
-                    var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader(key, resp.GetResponseHeader(key))).ToList();
-
-                    return new Response(resp.StatusCode, respHeaders, "[Binary]");
+                    CopyStream(respStream, outputStream, chunkSize, progressUpdated);
                 }
-                catch (Exception)
-                {
-                    return new Response(0, null, null);
-                }
+
+                var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader(key, resp.GetResponseHeader(key))).ToList();
+
+                return new Response(resp.StatusCode, respHeaders, "[Binary]");
             }, headers: headers);
 
             string etag;
