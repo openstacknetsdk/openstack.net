@@ -1003,6 +1003,10 @@ namespace net.openstack.Providers.Rackspace
                 initialPosition = null;
             }
 
+            // This flag indicates whether the outputStream needs to be set prior to copying data.
+            // See: https://github.com/openstacknetsdk/openstack.net/issues/297
+            bool requiresPositionReset = false;
+
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
             {
                 if (resp == null)
@@ -1014,6 +1018,12 @@ namespace net.openstack.Providers.Rackspace
                 {
                     using (var respStream = resp.GetResponseStream())
                     {
+                        // The second condition will throw a proper NotSupportedException if the position
+                        // cannot be checked.
+                        if (requiresPositionReset && outputStream.Position != initialPosition)
+                            outputStream.Position = initialPosition.Value;
+
+                        requiresPositionReset = true;
                         CopyStream(respStream, outputStream, chunkSize, progressUpdated);
                     }
 
