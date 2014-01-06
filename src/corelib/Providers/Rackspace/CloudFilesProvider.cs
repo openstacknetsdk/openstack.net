@@ -990,6 +990,19 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
+            long? initialPosition;
+            try
+            {
+                initialPosition = outputStream.Position;
+            }
+            catch (NotSupportedException)
+            {
+                if (verifyEtag)
+                    throw;
+
+                initialPosition = null;
+            }
+
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
             {
                 if (resp == null)
@@ -1022,8 +1035,10 @@ namespace net.openstack.Providers.Rackspace
             string etag;
             if (verifyEtag && response.TryGetHeader(Etag, out etag))
             {
-                outputStream.Flush(); // flush the contents of the stream to the output device
-                outputStream.Position = 0;  // reset the head of the stream to the beginning
+                // flush the contents of the stream to the output device
+                outputStream.Flush();
+                // reset the head of the stream to the beginning
+                outputStream.Position = initialPosition.Value;
 
                 string objectManifest;
                 if (response.TryGetHeader(ObjectManifest, out objectManifest) && !string.IsNullOrEmpty(objectManifest))
