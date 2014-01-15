@@ -565,7 +565,18 @@ namespace net.openstack.Providers.Rackspace
             return response.Data.User;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the details for users with the specified email address.
+        /// </summary>
+        /// <param name="email">The email address.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="User"/> objects describing the users with the specified email address.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="email"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="email"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/GET_getUserByEmail_v2.0_users_User_Calls.html">Get User by Email (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
         public virtual IEnumerable<User> GetUsersByEmail(string email, CloudIdentity identity)
         {
             if (email == null)
