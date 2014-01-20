@@ -66,7 +66,15 @@
 
             Assert.IsNotNull(userAccess.ServiceCatalog);
 
-            Console.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
+            Console.Error.WriteLine(JsonConvert.SerializeObject(userAccess, Formatting.Indented));
+
+            Console.WriteLine("Available Services:");
+            foreach (ServiceCatalog serviceCatalog in userAccess.ServiceCatalog)
+            {
+                Console.WriteLine("    {0} ({1})", serviceCatalog.Name, serviceCatalog.Type);
+                var regions = serviceCatalog.Endpoints.Select(i => i.Region ?? "global").OrderBy(i => i, StringComparer.OrdinalIgnoreCase);
+                Console.WriteLine("        {0}", string.Join(", ", regions));
+            }
         }
 
         /// <summary>
