@@ -102,6 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
+    <None Include="Content\Authentication\Authentication.aml" />
+    <None Include="Content\Authentication\OpenStackAuthentication.aml" />
+    <None Include="Content\Authentication\RackspaceAuthentication.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
     <None Include="Content\PreliminaryFeatures.aml" />
@@ -112,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content" />
+    <Folder Include="Content\Authentication\" />
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
