@@ -990,33 +990,65 @@ namespace net.openstack.Providers.Rackspace
 
             var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
 
+            long? initialPosition;
+            try
+            {
+                initialPosition = outputStream.Position;
+            }
+            catch (NotSupportedException)
+            {
+                if (verifyEtag)
+                    throw;
+
+                initialPosition = null;
+            }
+
+            // This flag indicates whether the outputStream needs to be set prior to copying data.
+            // See: https://github.com/openstacknetsdk/openstack.net/issues/297
+            bool requiresPositionReset = false;
+
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.GET, (resp, isError) =>
             {
                 if (resp == null)
                     return new Response(0, null, null);
 
-                try
+                string body;
+
+                if (!isError)
                 {
                     using (var respStream = resp.GetResponseStream())
                     {
+                        // The second condition will throw a proper NotSupportedException if the position
+                        // cannot be checked.
+                        if (requiresPositionReset && outputStream.Position != initialPosition)
+                            outputStream.Position = initialPosition.Value;
+
+                        requiresPositionReset = true;
                         CopyStream(respStream, outputStream, chunkSize, progressUpdated);
                     }
 
-                    var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader(key, resp.GetResponseHeader(key))).ToList();
-
-                    return new Response(resp.StatusCode, respHeaders, "[Binary]");
+                    body = "[Binary]";
                 }
-                catch (Exception)
+                else
                 {
-                    return new Response(0, null, null);
+                    using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
+                    {
+                        body = reader.ReadToEnd();
+                    }
                 }
+
+                var respHeaders = resp.Headers.AllKeys.Select(key => new HttpHeader(key, resp.GetResponseHeader(key))).ToList();
+
+                return new Response(resp.StatusCode, respHeaders, body);
             }, headers: headers);
 
             string etag;
             if (verifyEtag && response.TryGetHeader(Etag, out etag))
             {
-                outputStream.Flush(); // flush the contents of the stream to the output device
-                outputStream.Position = 0;  // reset the head of the stream to the beginning
+                // flush the contents of the stream to the output device
+                outputStream.Flush();
+                // reset the head of the stream to the beginning
+                outputStream.Position = initialPosition.Value;
 
                 string objectManifest;
                 if (response.TryGetHeader(ObjectManifest, out objectManifest) && !string.IsNullOrEmpty(objectManifest))
