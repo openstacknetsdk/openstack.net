@@ -455,48 +455,12 @@
 
             protected override byte[] EncodeRequestBodyImpl<TBody>(HttpWebRequest request, TBody body)
             {
-                byte[] encoded = base.EncodeRequestBodyImpl<TBody>(request, body);
-                Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(encoded));
-                return encoded;
+                return TestHelpers.EncodeRequestBody(request, body, base.EncodeRequestBodyImpl);
             }
 
             protected override Tuple<HttpWebResponse, string> ReadResultImpl(Task<WebResponse> task, CancellationToken cancellationToken)
             {
-                try
-                {
-                    Tuple<HttpWebResponse, string> result = base.ReadResultImpl(task, cancellationToken);
-                    LogResult(result.Item1, result.Item2, false);
-                    return result;
-                }
-                catch (WebException ex)
-                {
-                    HttpWebResponse response = ex.Response as HttpWebResponse;
-                    if (response != null && response.ContentLength != 0)
-                        LogResult(response, ex.Message, false);
-
-                    throw;
-                }
-            }
-
-            private void LogResult(HttpWebResponse response, string rawBody, bool reformat)
-            {
-                foreach (string header in response.Headers)
-                {
-                    Console.Error.WriteLine(string.Format("{0}: {1}", header, response.Headers[header]));
-                }
-
-                if (!string.IsNullOrEmpty(rawBody))
-                {
-                    if (reformat)
-                    {
-                        object parsed = JsonConvert.DeserializeObject(rawBody);
-                        Console.Error.WriteLine("==> " + JsonConvert.SerializeObject(parsed, Formatting.Indented));
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine("==> " + rawBody);
-                    }
-                }
+                return TestHelpers.ReadResult(task, cancellationToken, base.ReadResultImpl);
             }
         }
     }

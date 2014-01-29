@@ -2991,28 +2991,12 @@
 
             protected override byte[] EncodeRequestBodyImpl<TBody>(HttpWebRequest request, TBody body)
             {
-                byte[] encoded = base.EncodeRequestBodyImpl<TBody>(request, body);
-                Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(encoded));
-                return encoded;
+                return TestHelpers.EncodeRequestBody(request, body, base.EncodeRequestBodyImpl);
             }
 
             protected override Tuple<HttpWebResponse, string> ReadResultImpl(Task<WebResponse> task, CancellationToken cancellationToken)
             {
-                try
-                {
-                    Tuple<HttpWebResponse, string> result = base.ReadResultImpl(task, cancellationToken);
-                    if (!string.IsNullOrEmpty(result.Item2))
-                        Console.Error.WriteLine("==> " + result.Item2);
-
-                    return result;
-                }
-                catch (WebException ex)
-                {
-                    if (ex.Response != null && ex.Response.ContentLength != 0)
-                        Console.Error.WriteLine("==> " + ex.Message);
-
-                    throw;
-                }
+                return TestHelpers.ReadResult(task, cancellationToken, base.ReadResultImpl);
             }
         }
     }
