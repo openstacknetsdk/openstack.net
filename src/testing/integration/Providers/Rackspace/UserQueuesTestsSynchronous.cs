@@ -10,7 +10,6 @@
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Core.Providers;
     using net.openstack.Core.Synchronous;
-    using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
@@ -315,6 +314,8 @@
             {
                 Stopwatch processingTimer = Stopwatch.StartNew();
 
+                List<Exception> errors = new List<Exception>();
+
                 List<Thread> clientThreads = new List<Thread>();
 
                 for (int i = 0; i < clientCount; i++)
@@ -323,10 +324,17 @@
                     Thread client = new Thread(
                         () =>
                         {
-                            int result = PublishMessages(requestQueueName, responseQueueNames[clientIndex], cancellationTokenSource.Token);
-                            clientResults[clientIndex] = result;
+                            try
+                            {
+                                PublishMessages(requestQueueName, responseQueueNames[clientIndex], ref clientResults[clientIndex], cancellationTokenSource.Token);
+                            }
+                            catch (Exception ex)
+                            {
+                                errors.Add(ex);
+                            }
                         });
                     client.Start();
+                    client.Name = "Client " + i;
                     clientThreads.Add(client);
                 }
 
@@ -337,16 +345,26 @@
                     Thread server = new Thread(
                         () =>
                         {
-                            int result = SubscribeMessages(requestQueueName, cancellationTokenSource.Token);
-                            serverResults[serverIndex] = result;
+                            try
+                            {
+                                SubscribeMessages(requestQueueName, ref serverResults[serverIndex], cancellationTokenSource.Token);
+                            }
+                            catch (Exception ex)
+                            {
+                                errors.Add(ex);
+                            }
                         });
                     server.Start();
+                    server.Name = "Server " + i;
                     serverThreads.Add(server);
                 }
 
                 // wait for all client and server threads to finish processing
                 foreach (Thread thread in clientThreads.Concat(serverThreads))
                     thread.Join();
+
+                if (errors.Count > 0)
+                    throw new AggregateException(errors);
             }
 
             int clientTotal = 0;
@@ -377,10 +395,10 @@
                 Assert.Inconclusive("No messages were fully processed by the test.");
         }
 
-        private int PublishMessages(QueueName requestQueueName, QueueName replyQueueName, CancellationToken token)
+        private void PublishMessages(QueueName requestQueueName, QueueName replyQueueName, ref int processedMessages, CancellationToken token)
         {
             IQueueingService queueingService = CreateProvider();
-            int processedMessages = 0;
+            processedMessages = 0;
             Random random = new Random();
 
             while (true)
@@ -412,27 +430,33 @@
                             else if (token.IsCancellationRequested)
                             {
                                 // shutdown trigger
-                                return processedMessages;
+                                return;
                             }
                         }
                     }
 
                     if (handled)
                         break;
+
+                    if (token.IsCancellationRequested)
+                    {
+                        // shutdown trigger
+                        return;
+                    }
                 }
 
                 if (token.IsCancellationRequested)
                 {
                     // shutdown trigger
-                    return processedMessages;
+                    return;
                 }
             }
         }
 
-        private int SubscribeMessages(QueueName requestQueueName, CancellationToken token)
+        private void SubscribeMessages(QueueName requestQueueName, ref int processedMessages, CancellationToken token)
         {
             IQueueingService queueingService = CreateProvider();
-            int processedMessages = 0;
+            processedMessages = 0;
 
             while (true)
             {
@@ -445,7 +469,7 @@
                     {
                         if (token.IsCancellationRequested)
                         {
-                            return processedMessages;
+                            return;
                         }
 
                         CalculatorOperation operation = queuedMessage.Body.ToObject<CalculatorOperation>();
@@ -484,7 +508,7 @@
 
                 if (token.IsCancellationRequested)
                 {
-                    return processedMessages;
+                    return;
                 }
             }
         }
@@ -614,9 +638,7 @@
         /// <returns>An instance of <see cref="IQueueingService"/> for integration testing.</returns>
         private IQueueingService CreateProvider()
         {
-            var provider = new CloudQueuesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, Guid.NewGuid(), false, null);
-            provider.ConnectionLimit = 80;
-            return provider;
+            return UserQueuesTests.CreateProvider();
         }
     }
 }
