@@ -702,7 +702,7 @@
         /// the <see cref="OpenstackNetSetings.TestIdentity"/>.
         /// </summary>
         /// <returns>An instance of <see cref="IQueueingService"/> for integration testing.</returns>
-        private IQueueingService CreateProvider()
+        internal static IQueueingService CreateProvider()
         {
             var provider = new TestCloudQueuesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, Guid.NewGuid(), false, null);
             provider.BeforeAsyncWebRequest +=

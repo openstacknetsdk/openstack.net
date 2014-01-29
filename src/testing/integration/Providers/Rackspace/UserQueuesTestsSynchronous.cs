@@ -10,7 +10,6 @@
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Core.Providers;
     using net.openstack.Core.Synchronous;
-    using net.openstack.Providers.Rackspace;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
@@ -614,9 +613,7 @@
         /// <returns>An instance of <see cref="IQueueingService"/> for integration testing.</returns>
         private IQueueingService CreateProvider()
         {
-            var provider = new CloudQueuesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, Guid.NewGuid(), false, null);
-            provider.ConnectionLimit = 80;
-            return provider;
+            return UserQueuesTests.CreateProvider();
         }
     }
 }
