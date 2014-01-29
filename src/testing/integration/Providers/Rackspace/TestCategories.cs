@@ -18,13 +18,13 @@
         /// Block storage service tests.
         /// </summary>
         /// <seealso cref="IBlockStorageProvider"/>
-        public const string BlockStorage = "BlockStorage";
+        public const string BlockStorage = "Block Storage";
 
         /// <summary>
         /// Object storage service tests.
         /// </summary>
         /// <seealso cref="IObjectStorageProvider"/>
-        public const string ObjectStorage = "ObjectStorage";
+        public const string ObjectStorage = "Object Storage";
 
         /// <summary>
         /// Networks service tests.
@@ -61,7 +61,7 @@
         /// </summary>
         /// <seealso cref="ILoadBalancerProvider"/>
         /// <preliminary/>
-        public const string LoadBalancers = "LoadBalancers";
+        public const string LoadBalancers = "Load Balancers";
 
         /// <summary>
         /// Monitoring service tests.
@@ -80,7 +80,7 @@
         /// Tests Synchronous extensions to the queueing service.
         /// </summary>
         /// <seealso cref="QueueingServiceExtensions"/>
-        public const string QueuesSynchronous = "QueuesSynchronous";
+        public const string QueuesSynchronous = "Queues (Synchronous)";
 
         /// <summary>
         /// Unit tests designed to remove resources from an account which were created
