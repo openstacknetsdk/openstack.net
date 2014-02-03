@@ -391,11 +391,13 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTypeId.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTypeType.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\ConnectionCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CpuCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\CpuInformation.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPoint.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPointGranularity.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPointStatistic.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DateTimeOffsetExtensions.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DiskCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DiskInformation.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\DnsCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\EmailNotificationDetails.cs" />
@@ -403,6 +405,7 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityConfiguration.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityId.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityOverview.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\FilesystemCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\FilesystemInformation.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\FtpBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\GenericCheckDetails.cs" />
@@ -411,7 +414,9 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\HostInformation`1.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\HttpCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\ImapBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\LoadAverageCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\LoginInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MemoryCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\MemoryInformation.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\Metric.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\MetricName.cs" />
@@ -423,6 +428,7 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\MssqlBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\MysqlBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NetworkCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\NetworkInterfaceInformation.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\NewAlarmConfiguration.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\NewCheckConfiguration.cs" />
@@ -444,6 +450,7 @@
     <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationTypeId.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\PagerDutyNotificationDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\PingCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\PluginCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\Pop3CheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\PostgresqlBannerCheckDetails.cs" />
     <Compile Include="Providers\Rackspace\Objects\Monitoring\ProcessInformation.cs" />

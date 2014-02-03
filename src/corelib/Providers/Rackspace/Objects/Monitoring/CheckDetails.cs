@@ -22,6 +22,7 @@
         private static readonly Dictionary<CheckTypeId, Func<JObject, CheckDetails>> DetailsFactories =
             new Dictionary<CheckTypeId, Func<JObject, CheckDetails>>
             {
+                // remote checks
                 { CheckTypeId.RemoteDns, obj => obj.ToObject<DnsCheckDetails>() },
                 { CheckTypeId.RemoteFtpBanner, obj => obj.ToObject<FtpBannerCheckDetails>() },
                 { CheckTypeId.RemoteHttp, obj => obj.ToObject<HttpCheckDetails>() },
@@ -36,6 +37,15 @@
                 { CheckTypeId.RemoteSsh, obj => obj.ToObject<SshCheckDetails>() },
                 { CheckTypeId.RemoteTcp, obj => obj.ToObject<TcpCheckDetails>() },
                 { CheckTypeId.RemoteTelnetBanner, obj => obj.ToObject<TelnetBannerCheckDetails>() },
+
+                // agent checks
+                { CheckTypeId.AgentFilesystem, obj => obj.ToObject<FilesystemCheckDetails>() },
+                { CheckTypeId.AgentMemory, obj => obj.ToObject<MemoryCheckDetails>() },
+                { CheckTypeId.AgentLoadAverage, obj => obj.ToObject<LoadAverageCheckDetails>() },
+                { CheckTypeId.AgentCpu, obj => obj.ToObject<CpuCheckDetails>() },
+                { CheckTypeId.AgentDisk, obj => obj.ToObject<DiskCheckDetails>() },
+                { CheckTypeId.AgentNetwork, obj => obj.ToObject<NetworkCheckDetails>() },
+                { CheckTypeId.AgentPlugin, obj => obj.ToObject<PluginCheckDetails>() },
             };
 
         /// <summary>
