@@ -169,6 +169,26 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        public void TestListRoles()
+        {
+            IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
+            IExtendedCloudIdentityProvider extendedProvider = provider as IExtendedCloudIdentityProvider;
+            if (extendedProvider == null)
+                Assert.Inconclusive("The current identity provider does not implement {0}", typeof(IExtendedCloudIdentityProvider).Name);
+
+            IEnumerable<Role> roles = extendedProvider.ListRoles(limit: 500);
+            Console.WriteLine("Roles:");
+            foreach (Role role in roles)
+            {
+                Console.WriteLine("  Role \"{0}\" (id: {1})", role.Name, role.Id);
+                if (!string.IsNullOrEmpty(role.Description))
+                    Console.WriteLine("    Description: {0}", role.Description);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
         public void TestGetRolesByUser()
         {
             IIdentityProvider provider = Bootstrapper.CreateIdentityProvider();
@@ -299,6 +319,13 @@
             Assert.AreEqual(username, user.Username);
             Assert.IsFalse(string.IsNullOrEmpty(user.Id));
             Assert.IsFalse(string.IsNullOrEmpty(user.Password));
+
+            IEnumerable<Role> roles = provider.GetRolesByUser(user.Id);
+            Console.WriteLine("Roles for the created user:");
+            foreach (Role role in roles)
+                Console.WriteLine("    {0} ({1}) # {2}", role.Name, role.Id, role.Description);
+
+            Assert.IsTrue(roles.Any(i => string.Equals(i.Name, "identity:default", StringComparison.OrdinalIgnoreCase)));
 
             try
             {
