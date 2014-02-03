@@ -1,5 +1,6 @@
 namespace net.openstack.Core.Domain
 {
+    using System.Diagnostics;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -8,6 +9,7 @@ namespace net.openstack.Core.Domain
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/LinksReferences.html">Links and References (OpenStack Compute API v2 and Extensions Reference)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
+    [DebuggerDisplay("{Rel,nq}: {Href,nq}")]
     public class Link
     {
         /// <summary>
