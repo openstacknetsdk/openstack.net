@@ -143,6 +143,9 @@
     <Folder Include="Content" />
     <Folder Include="Content\Authentication\" />
   </ItemGroup>
+  <ItemGroup>
+    <Tokens Include="SharedTokens.tokens" />
+  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>

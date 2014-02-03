@@ -10,6 +10,7 @@
     using net.openstack.Core.Domain.Queues;
     using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
+    using CloudQueuesProvider = net.openstack.Providers.Rackspace.CloudQueuesProvider;
     using JsonSerializationException = Newtonsoft.Json.JsonSerializationException;
     using WebException = System.Net.WebException;
 
@@ -28,6 +29,20 @@
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain a <see cref="HomeDocument"/> object describing the operations supported by the service.</returns>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="GetHomeAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="GetHomeAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="GetHomeAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="GetHomeAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="GetHomeAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="GetHomeAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="GetHomeAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Get_Home_Document">Get Home Document (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<HomeDocument> GetHomeAsync(CancellationToken cancellationToken);
 
@@ -42,6 +57,20 @@
         /// <see cref="Task.Exception"/> property will contain the reason for the failure.
         /// </returns>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="GetNodeHealthAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="GetNodeHealthAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="GetNodeHealthAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="GetNodeHealthAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="GetNodeHealthAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="GetNodeHealthAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="GetNodeHealthAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/wiki/Marconi/specs/api/v1#Check_Node_Health">Check Node Health (OpenStack Marconi API v1 Blueprint)</seealso>
         Task GetNodeHealthAsync(CancellationToken cancellationToken);
 
@@ -57,6 +86,20 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <see langword="true"/> if the queue was created by the call, or <see langword="false"/> if the queue already existed.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="CreateQueueAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="CreateQueueAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="CreateQueueAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="CreateQueueAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="CreateQueueAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="CreateQueueAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="CreateQueueAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Create_Queue">Create Queue (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<bool> CreateQueueAsync(QueueName queueName, CancellationToken cancellationToken);
 
@@ -70,6 +113,20 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <placeholder>placeholder</placeholder>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="ListQueuesAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="ListQueuesAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="ListQueuesAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="ListQueuesAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="ListQueuesAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="ListQueuesAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="ListQueuesAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#List_Queues">List Queues (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<ReadOnlyCollectionPage<CloudQueue>> ListQueuesAsync(QueueName marker, int? limit, bool detailed, CancellationToken cancellationToken);
 
@@ -81,6 +138,20 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation. When the task completes successfully, the <see cref="Task{TResult}.Result"/> property will contain <see langword="true"/> if queue with the specified name exists; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="QueueExistsAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="QueueExistsAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="QueueExistsAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="QueueExistsAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="QueueExistsAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="QueueExistsAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="QueueExistsAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Checking_Queue_Existence">Checking Queue Existence (OpenStack Marconi API v1 Blueprint)</seealso>
         Task<bool> QueueExistsAsync(QueueName queueName, CancellationToken cancellationToken);
 
@@ -95,6 +166,20 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueName"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudQueuesProvider"/>
+        /// implementation of the <see cref="IQueueingService"/>. For more information about creating the provider, see
+        /// <see cref="CloudQueuesProvider.CloudQueuesProvider(CloudIdentity, string, Guid, bool, IIdentityProvider)"/>.</para>
+        /// <token>AsyncAwaitExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="DeleteQueueAsync (await)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="DeleteQueueAsync (await)" language="vbnet"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="DeleteQueueAsync (await)" language="fs"/>
+        /// <token>TplExample</token>
+        /// <code source="..\Samples\CSharpCodeSamples\QueueingServiceExamples.cs" region="DeleteQueueAsync (TPL)" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\QueueingServiceExamples.vb" region="DeleteQueueAsync (TPL)" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\QueueingServiceExamples.cpp" region="DeleteQueueAsync (TPL)" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\QueueingServiceExamples.fs" region="DeleteQueueAsync (TPL)" language="fs"/>
+        /// </example>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Delete_Queue">Delete Queue (OpenStack Marconi API v1 Blueprint)</seealso>
         Task DeleteQueueAsync(QueueName queueName, CancellationToken cancellationToken);
 

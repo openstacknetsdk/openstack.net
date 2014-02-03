@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content
+  xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <!--
+    The following items can only be used in <token> elements that appear in the XML documentation comments.
+  -->
+
+  <item id="TaskParallelLibrary">
+    <see href="http://msdn.microsoft.com/en-us/library/dd460717.aspx">Task Parallel Library</see>
+  </item>
+
+  <item id="AsyncAwaitExample">
+    <note>
+      <para>
+        The following code uses the <see langword="async/await"/> operators. For more information
+        about using these operators in your code, see <conceptualLink target="32cc6156-3b31-4450-b209-b55fcfc0a210"/>.
+      </para>
+    </note>
+  </item>
+
+  <item id="TplExample">
+    <para>
+      The following code shows demonstrates the same example using the <token>TaskParallelLibrary</token>
+      instead of the <see langword="async/await"/> operators.
+    </para>
+  </item>
+</content>
