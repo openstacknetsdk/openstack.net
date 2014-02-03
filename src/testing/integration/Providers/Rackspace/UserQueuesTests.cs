@@ -282,23 +282,23 @@
                 HashSet<int> locatedMessages = new HashSet<int>();
 
                 QueuedMessageList messages = await provider.ListMessagesAsync(queueName, null, null, true, false, cancellationTokenSource.Token);
-                foreach (QueuedMessage message in messages.Messages)
+                foreach (QueuedMessage message in messages)
                     Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
 
-                int deletedMessage = messages.Messages[0].Body.ToObject<SampleMetadata>().ValueA;
-                await provider.DeleteMessageAsync(queueName, messages.Messages[0].Id, null, cancellationTokenSource.Token);
+                int deletedMessage = messages[0].Body.ToObject<SampleMetadata>().ValueA;
+                await provider.DeleteMessageAsync(queueName, messages[0].Id, null, cancellationTokenSource.Token);
 
-                while (messages.Messages.Count > 0)
+                while (messages.Count > 0)
                 {
-                    QueuedMessageList tempList = await provider.ListMessagesAsync(queueName, messages, null, true, false, cancellationTokenSource.Token);
-                    if (tempList.Messages.Count > 0)
+                    QueuedMessageList tempList = await provider.ListMessagesAsync(queueName, messages.NextPageId, null, true, false, cancellationTokenSource.Token);
+                    if (tempList.Count > 0)
                     {
-                        Assert.IsTrue(locatedMessages.Add(tempList.Messages[0].Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
-                        await provider.DeleteMessageAsync(queueName, tempList.Messages[0].Id, null, cancellationTokenSource.Token);
+                        Assert.IsTrue(locatedMessages.Add(tempList[0].Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
+                        await provider.DeleteMessageAsync(queueName, tempList[0].Id, null, cancellationTokenSource.Token);
                     }
 
-                    messages = await provider.ListMessagesAsync(queueName, messages, null, true, false, cancellationTokenSource.Token);
-                    foreach (QueuedMessage message in messages.Messages)
+                    messages = await provider.ListMessagesAsync(queueName, messages.NextPageId, null, true, false, cancellationTokenSource.Token);
+                    foreach (QueuedMessage message in messages)
                     {
                         Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
                     }

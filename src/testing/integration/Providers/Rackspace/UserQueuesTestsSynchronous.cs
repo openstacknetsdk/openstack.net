@@ -249,23 +249,23 @@
             HashSet<int> locatedMessages = new HashSet<int>();
 
             QueuedMessageList messages = provider.ListMessages(queueName, null, null, true, false);
-            foreach (QueuedMessage message in messages.Messages)
+            foreach (QueuedMessage message in messages)
                 Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
 
-            int deletedMessage = messages.Messages[0].Body.ToObject<SampleMetadata>().ValueA;
-            provider.DeleteMessage(queueName, messages.Messages[0].Id, null);
+            int deletedMessage = messages[0].Body.ToObject<SampleMetadata>().ValueA;
+            provider.DeleteMessage(queueName, messages[0].Id, null);
 
-            while (messages.Messages.Count > 0)
+            while (messages.Count > 0)
             {
-                QueuedMessageList tempList = provider.ListMessages(queueName, messages, null, true, false);
-                if (tempList.Messages.Count > 0)
+                QueuedMessageList tempList = provider.ListMessages(queueName, messages.NextPageId, null, true, false);
+                if (tempList.Count > 0)
                 {
-                    Assert.IsTrue(locatedMessages.Add(tempList.Messages[0].Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
-                    provider.DeleteMessage(queueName, tempList.Messages[0].Id, null);
+                    Assert.IsTrue(locatedMessages.Add(tempList[0].Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
+                    provider.DeleteMessage(queueName, tempList[0].Id, null);
                 }
 
-                messages = provider.ListMessages(queueName, messages, null, true, false);
-                foreach (QueuedMessage message in messages.Messages)
+                messages = provider.ListMessages(queueName, messages.NextPageId, null, true, false);
+                foreach (QueuedMessage message in messages)
                 {
                     Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
                 }
