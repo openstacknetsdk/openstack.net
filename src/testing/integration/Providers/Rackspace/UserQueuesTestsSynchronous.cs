@@ -6,6 +6,7 @@
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Core.Providers;
@@ -234,7 +235,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.QueuesSynchronous)]
-        public void SynchronousTestListAllQueueMessages()
+        public void SynchronousTestListAllQueueMessagesWithUpdates()
         {
             IQueueingService provider = CreateProvider();
             QueueName queueName = CreateRandomQueueName();
@@ -270,6 +271,36 @@
                     Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
                 }
             }
+
+            Assert.AreEqual(28, locatedMessages.Count);
+            for (int i = 0; i < 28; i++)
+            {
+                Assert.IsTrue(locatedMessages.Contains(i), "The message listing did not include message '{0}', which was in the queue when the listing started and still in it afterwards.", i);
+            }
+
+            provider.DeleteQueue(queueName);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestListAllQueueMessages()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            for (int i = 0; i < 28; i++)
+            {
+                provider.PostMessages(queueName, new Message<SampleMetadata>(TimeSpan.FromSeconds(120), new SampleMetadata(i, "Some Message " + i)));
+            }
+
+            HashSet<int> locatedMessages = new HashSet<int>();
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, false);
+            foreach (QueuedMessage message in messages)
+                Assert.IsTrue(locatedMessages.Add(message.Body.ToObject<SampleMetadata>().ValueA), "Received the same message more than once.");
 
             Assert.AreEqual(28, locatedMessages.Count);
             for (int i = 0; i < 28; i++)
@@ -614,12 +645,47 @@
         /// <param name="limit">The maximum number of <see cref="CloudQueue"/> to return from a single call to <see cref="QueueingServiceExtensions.ListQueues"/>. If this value is <see langword="null"/>, a provider-specific default is used.</param>
         /// <param name="detailed"><see langword="true"/> to return detailed information for each queue; otherwise, <see langword="false"/>.</param>
         /// <returns>A collection of <see cref="CloudQueue"/> objects describing the available queues.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
+        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         private static ReadOnlyCollection<CloudQueue> ListAllQueues(IQueueingService provider, int? limit, bool detailed)
         {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
             if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
 
             return provider.ListQueues(null, limit, detailed).GetAllPages();
+        }
+
+        /// <summary>
+        /// Gets all existing messages in a queue through a series of synchronous operations,
+        /// each of which requests a subset of the available messages.
+        /// </summary>
+        /// <param name="provider">The queueing service.</param>
+        /// <param name="queueName">The queue name.</param>
+        /// <param name="limit">The maximum number of <see cref="QueuedMessage"/> objects to return from a single task. If this value is <see langword="null"/>, a provider-specific default is used.</param>
+        /// <param name="echo"><see langword="true"/> to include messages created by the current client; otherwise, <see langword="false"/>.</param>
+        /// <param name="includeClaimed"><see langword="true"/> to include claimed messages; otherwise <see langword="false"/> to return only unclaimed messages.</param>
+        /// <param name="progress">An optional callback object to receive progress notifications. If this is <see langword="null"/>, no progress notifications are sent.</param>
+        /// <returns>A collection of <see cref="CloudQueue"/> objects describing the available queues.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="provider"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="queueName"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
+        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        private static ReadOnlyCollection<QueuedMessage> ListAllMessages(IQueueingService provider, QueueName queueName, int? limit, bool echo, bool includeClaimed)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (queueName == null)
+                throw new ArgumentNullException("queueName");
+            if (limit <= 0)
+                throw new ArgumentOutOfRangeException("limit");
+
+            return provider.ListMessages(queueName, null, limit, echo, includeClaimed).GetAllPages();
         }
 
         /// <summary>
