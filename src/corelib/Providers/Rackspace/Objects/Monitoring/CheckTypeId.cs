@@ -51,6 +51,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote DNS check.
         /// </summary>
+        /// <seealso cref="DnsCheckDetails"/>
         public static CheckTypeId RemoteDns
         {
             get
@@ -62,6 +63,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote FTP banner check.
         /// </summary>
+        /// <seealso cref="FtpBannerCheckDetails"/>
         public static CheckTypeId RemoteFtpBanner
         {
             get
@@ -73,6 +75,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote HTTP check.
         /// </summary>
+        /// <seealso cref="HttpCheckDetails"/>
         public static CheckTypeId RemoteHttp
         {
             get
@@ -84,6 +87,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote IMAP check.
         /// </summary>
+        /// <seealso cref="ImapBannerCheckDetails"/>
         public static CheckTypeId RemoteImapBanner
         {
             get
@@ -95,6 +99,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote SQL Server check.
         /// </summary>
+        /// <seealso cref="MssqlBannerCheckDetails"/>
         public static CheckTypeId RemoteMssqlBanner
         {
             get
@@ -106,6 +111,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote MySQL check.
         /// </summary>
+        /// <seealso cref="MysqlBannerCheckDetails"/>
         public static CheckTypeId RemoteMysqlBanner
         {
             get
@@ -117,6 +123,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote PING check.
         /// </summary>
+        /// <seealso cref="PingCheckDetails"/>
         public static CheckTypeId RemotePing
         {
             get
@@ -128,6 +135,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote POP3 check.
         /// </summary>
+        /// <seealso cref="Pop3CheckDetails"/>
         public static CheckTypeId RemotePop3Banner
         {
             get
@@ -139,6 +147,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote PostgreSQL check.
         /// </summary>
+        /// <seealso cref="PostgresqlBannerCheckDetails"/>
         public static CheckTypeId RemotePostgresqlBanner
         {
             get
@@ -150,6 +159,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote SMTP banner check.
         /// </summary>
+        /// <seealso cref="SmtpBannerCheckDetails"/>
         public static CheckTypeId RemoteSmtpBanner
         {
             get
@@ -161,6 +171,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote SMTP check.
         /// </summary>
+        /// <seealso cref="SmtpCheckDetails"/>
         public static CheckTypeId RemoteSmtp
         {
             get
@@ -172,6 +183,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote SSH check.
         /// </summary>
+        /// <seealso cref="SshCheckDetails"/>
         public static CheckTypeId RemoteSsh
         {
             get
@@ -183,6 +195,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote TCP check.
         /// </summary>
+        /// <seealso cref="TcpCheckDetails"/>
         public static CheckTypeId RemoteTcp
         {
             get
@@ -194,6 +207,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing a remote telnet banner check.
         /// </summary>
+        /// <seealso cref="TelnetBannerCheckDetails"/>
         public static CheckTypeId RemoteTelnetBanner
         {
             get
@@ -205,6 +219,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent filesystem check.
         /// </summary>
+        /// <seealso cref="FilesystemCheckDetails"/>
         public static CheckTypeId AgentFilesystem
         {
             get
@@ -216,6 +231,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent memory check.
         /// </summary>
+        /// <seealso cref="MemoryCheckDetails"/>
         public static CheckTypeId AgentMemory
         {
             get
@@ -227,6 +243,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent load average check.
         /// </summary>
+        /// <seealso cref="LoadAverageCheckDetails"/>
         public static CheckTypeId AgentLoadAverage
         {
             get
@@ -238,6 +255,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent CPU check.
         /// </summary>
+        /// <seealso cref="CpuCheckDetails"/>
         public static CheckTypeId AgentCpu
         {
             get
@@ -249,6 +267,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent disk check.
         /// </summary>
+        /// <seealso cref="DiskCheckDetails"/>
         public static CheckTypeId AgentDisk
         {
             get
@@ -260,6 +279,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent network check.
         /// </summary>
+        /// <seealso cref="NetworkCheckDetails"/>
         public static CheckTypeId AgentNetwork
         {
             get
@@ -271,6 +291,7 @@
         /// <summary>
         /// Gets a <see cref="CheckTypeId"/> representing an agent plug-in check.
         /// </summary>
+        /// <seealso cref="PluginCheckDetails"/>
         public static CheckTypeId AgentPlugin
         {
             get

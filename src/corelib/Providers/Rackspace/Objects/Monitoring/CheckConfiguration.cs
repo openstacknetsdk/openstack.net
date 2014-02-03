@@ -191,6 +191,11 @@
         /// Gets a <see cref="CheckDetails"/> object describing the detailed properties specific
         /// to this type of check.
         /// </summary>
+        /// <remarks>
+        /// The exact type returned by this property depends on the <see cref="CheckTypeId"/>
+        /// for the current check. For additional information about the predefined check types,
+        /// see <see cref="Monitoring.CheckTypeId"/>.
+        /// </remarks>
         public CheckDetails Details
         {
             get

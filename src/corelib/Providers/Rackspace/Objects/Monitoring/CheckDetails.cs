@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Monitoring
 {
     using System;
+    using System.Collections.Generic;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -13,6 +14,40 @@
     [JsonObject(MemberSerialization.OptIn)]
     public abstract class CheckDetails
     {
+        /// <summary>
+        /// Provides factory methods for deserializing a <see cref="CheckDetails"/> instance from
+        /// a <see cref="JObject"/> according to the <see cref="CheckTypeId"/> of the associated
+        /// check.
+        /// </summary>
+        private static readonly Dictionary<CheckTypeId, Func<JObject, CheckDetails>> DetailsFactories =
+            new Dictionary<CheckTypeId, Func<JObject, CheckDetails>>
+            {
+                // remote checks
+                { CheckTypeId.RemoteDns, obj => obj.ToObject<DnsCheckDetails>() },
+                { CheckTypeId.RemoteFtpBanner, obj => obj.ToObject<FtpBannerCheckDetails>() },
+                { CheckTypeId.RemoteHttp, obj => obj.ToObject<HttpCheckDetails>() },
+                { CheckTypeId.RemoteImapBanner, obj => obj.ToObject<ImapBannerCheckDetails>() },
+                { CheckTypeId.RemoteMssqlBanner, obj => obj.ToObject<MssqlBannerCheckDetails>() },
+                { CheckTypeId.RemoteMysqlBanner, obj => obj.ToObject<MysqlBannerCheckDetails>() },
+                { CheckTypeId.RemotePing, obj => obj.ToObject<PingCheckDetails>() },
+                { CheckTypeId.RemotePop3Banner, obj => obj.ToObject<Pop3CheckDetails>() },
+                { CheckTypeId.RemotePostgresqlBanner, obj => obj.ToObject<PostgresqlBannerCheckDetails>() },
+                { CheckTypeId.RemoteSmtpBanner, obj => obj.ToObject<SmtpBannerCheckDetails>() },
+                { CheckTypeId.RemoteSmtp, obj => obj.ToObject<SmtpCheckDetails>() },
+                { CheckTypeId.RemoteSsh, obj => obj.ToObject<SshCheckDetails>() },
+                { CheckTypeId.RemoteTcp, obj => obj.ToObject<TcpCheckDetails>() },
+                { CheckTypeId.RemoteTelnetBanner, obj => obj.ToObject<TelnetBannerCheckDetails>() },
+
+                // agent checks
+                { CheckTypeId.AgentFilesystem, obj => obj.ToObject<FilesystemCheckDetails>() },
+                { CheckTypeId.AgentMemory, obj => obj.ToObject<MemoryCheckDetails>() },
+                { CheckTypeId.AgentLoadAverage, obj => obj.ToObject<LoadAverageCheckDetails>() },
+                { CheckTypeId.AgentCpu, obj => obj.ToObject<CpuCheckDetails>() },
+                { CheckTypeId.AgentDisk, obj => obj.ToObject<DiskCheckDetails>() },
+                { CheckTypeId.AgentNetwork, obj => obj.ToObject<NetworkCheckDetails>() },
+                { CheckTypeId.AgentPlugin, obj => obj.ToObject<PluginCheckDetails>() },
+            };
+
         /// <summary>
         /// Deserializes a JSON object to a <see cref="CheckDetails"/> instance of the proper type.
         /// </summary>
@@ -31,36 +66,11 @@
             if (obj == null)
                 throw new ArgumentNullException("obj");
 
-            if (checkTypeId == CheckTypeId.RemoteDns)
-                return obj.ToObject<DnsCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteFtpBanner)
-                return obj.ToObject<FtpBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteHttp)
-                return obj.ToObject<HttpCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteImapBanner)
-                return obj.ToObject<ImapBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteMssqlBanner)
-                return obj.ToObject<MssqlBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteMysqlBanner)
-                return obj.ToObject<MysqlBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemotePing)
-                return obj.ToObject<PingCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemotePop3Banner)
-                return obj.ToObject<Pop3CheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemotePostgresqlBanner)
-                return obj.ToObject<PostgresqlBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteSmtpBanner)
-                return obj.ToObject<SmtpBannerCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteSmtp)
-                return obj.ToObject<SmtpCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteSsh)
-                return obj.ToObject<SshCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteTcp)
-                return obj.ToObject<TcpCheckDetails>();
-            else if (checkTypeId == CheckTypeId.RemoteTelnetBanner)
-                return obj.ToObject<TelnetBannerCheckDetails>();
-            else
-                return obj.ToObject<GenericCheckDetails>();
+            Func<JObject, CheckDetails> factory;
+            if (DetailsFactories.TryGetValue(checkTypeId, out factory))
+                return factory(obj);
+
+            return obj.ToObject<GenericCheckDetails>();
         }
 
         /// <summary>
