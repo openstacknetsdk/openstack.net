@@ -105,10 +105,10 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector)
-                .ContinueWith(completionSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector)
+                .SelectAsync(completionSelector);
         }
 
         /// <inheritdoc/>
@@ -152,9 +152,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -187,9 +187,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -218,9 +218,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(completionSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(completionSelector);
         }
 
         /// <inheritdoc/>
@@ -253,9 +253,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -288,9 +288,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -315,7 +315,6 @@
             Func<Task<string>, Task<DatabaseInstance>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForDatabaseInstanceToLeaveStateAsync(instanceId, DatabaseInstanceStatus.Reboot, cancellationToken, progress);
 
@@ -323,9 +322,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -353,7 +352,6 @@
             Func<Task<string>, Task<DatabaseInstance>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForDatabaseInstanceToLeaveStateAsync(instanceId, DatabaseInstanceStatus.Resize, cancellationToken, progress);
 
@@ -361,9 +359,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -392,7 +390,6 @@
             Func<Task<string>, Task<DatabaseInstance>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForDatabaseInstanceToLeaveStateAsync(instanceId, DatabaseInstanceStatus.Reboot, cancellationToken, progress);
 
@@ -400,9 +397,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -428,8 +425,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -475,9 +472,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -498,8 +495,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -525,8 +522,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -572,9 +569,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -606,8 +603,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -634,8 +631,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -670,9 +667,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -693,8 +690,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -733,9 +730,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -764,8 +761,8 @@
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -793,8 +790,8 @@
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -824,9 +821,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -859,9 +856,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -906,17 +903,17 @@
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                     {
                         return WaitForDatabaseInstanceToLeaveStateAsync(configuration.InstanceId, DatabaseInstanceStatus.Backup, cancellationToken, progress)
-                            .ContinueWith(finalResultSelector).Unwrap();
+                            .SelectAsync(finalResultSelector);
                     }
 
                     return InternalTaskExtensions.CompletedTask(task.Result);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector)
-                .ContinueWith(completionSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector)
+                .SelectAsync(completionSelector);
         }
 
         /// <inheritdoc/>
@@ -946,9 +943,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -981,9 +978,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1002,8 +999,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -1036,9 +1033,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         #endregion
@@ -1095,7 +1092,7 @@
                            {
                                task.PropagateExceptions();
                                return pollDatabaseInstance();
-                           }).Unwrap();
+                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                     }
                 };
 
@@ -1120,9 +1117,9 @@
 
                     // reschedule
                     currentTask = moveNext();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
         }
@@ -1191,12 +1188,12 @@
 
             if (progress != null)
             {
-                chain = chain.ContinueWith(
+                chain = chain.Select(
                     task =>
                     {
                         progress.Report(task.Result);
                         return task.Result;
-                    }, TaskContinuationOptions.ExecuteSynchronously);
+                    });
             }
 
             return chain;

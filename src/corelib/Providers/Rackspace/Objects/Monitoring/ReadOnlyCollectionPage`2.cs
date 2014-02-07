@@ -103,7 +103,7 @@
                 throw new InvalidOperationException("Cannot obtain the next page when CanHaveNextPage is false.");
 
             return _getNextPageAsync(NextMarker, cancellationToken)
-                .ContinueWith<ReadOnlyCollectionPage<T>>(task => task.Result, TaskContinuationOptions.ExecuteSynchronously);
+                .Select(task => (ReadOnlyCollectionPage<T>)task.Result);
         }
     }
 }

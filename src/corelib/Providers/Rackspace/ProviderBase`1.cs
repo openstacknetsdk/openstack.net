@@ -942,7 +942,7 @@ namespace net.openstack.Providers.Rackspace
 
                     Task<Stream> streamTask = Task.Factory.FromAsync<Stream>(request.BeginGetRequestStream(null, null), request.EndGetRequestStream);
                     return
-                        streamTask.ContinueWith(subTask =>
+                        streamTask.Chain(subTask =>
                         {
                             using (Stream stream = subTask.Result)
                             {
@@ -1106,7 +1106,7 @@ namespace net.openstack.Providers.Rackspace
                         });
                 };
 
-            return authenticate.ContinueWith(getBaseUri).Unwrap();
+            return authenticate.SelectAsync(getBaseUri);
         }
 
         /// <summary>
@@ -1161,9 +1161,9 @@ namespace net.openstack.Providers.Rackspace
             Func<Task<HttpWebRequest>, Task<string>> result =
                 task =>
                 {
-                    return task.ContinueWith(requestResource).Unwrap()
-                        .ContinueWith(readResult)
-                        .ContinueWith(parseResult);
+                    return task.SelectAsync(requestResource)
+                        .Select(readResult, true)
+                        .Select(parseResult);
                 };
 
             return result;
@@ -1200,9 +1200,9 @@ namespace net.openstack.Providers.Rackspace
             Func<Task<HttpWebRequest>, Task<T>> result =
                 task =>
                 {
-                    return task.ContinueWith(requestResource).Unwrap()
-                        .ContinueWith(readResult)
-                        .ContinueWith(parseResult).Unwrap();
+                    return task.SelectAsync(requestResource)
+                        .Select(readResult, true)
+                        .SelectAsync(parseResult);
                 };
 
             return result;

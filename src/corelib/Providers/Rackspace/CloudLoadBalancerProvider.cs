@@ -118,9 +118,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -141,9 +141,9 @@
                 task => task.Result.LoadBalancer;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -173,9 +173,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -199,7 +199,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -207,9 +206,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -229,7 +228,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingDelete, cancellationToken, progress);
 
@@ -237,9 +235,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -314,7 +312,6 @@
                 Func<Task<string>, Task<LoadBalancer[]>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                             return WaitForLoadBalancersToLeaveStateAsync(loadBalancerIds, LoadBalancerStatus.PendingDelete, cancellationToken, progress);
 
@@ -322,9 +319,9 @@
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -350,9 +347,9 @@
                 task => task.Result != null ? task.Result.Content : null;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -381,7 +378,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -389,9 +385,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -415,7 +411,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -423,9 +418,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -447,8 +442,8 @@
                 GetResponseAsyncFunc<LoadBalancerStatistics>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -470,9 +465,9 @@
                 task => (task.Result != null ? task.Result.Nodes : null) ?? new ReadOnlyCollection<Node>(new Node[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -495,9 +490,9 @@
                 task => task.Result.Node;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -511,7 +506,7 @@
 
             return
                 AddNodeRangeAsync(loadBalancerId, new[] { nodeConfiguration }, completionOption, cancellationToken, progress)
-                    .ContinueWith(resultSelector);
+                    .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -579,24 +574,19 @@
                 Func<Task<ListLoadBalancerNodesResponse>, Task<ReadOnlyCollection<Node>>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                         {
-                            return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress).ContinueWith(
-                                t =>
-                                {
-                                    t.PropagateExceptions();
-                                    return task.Result.Nodes;
-                                });
+                            return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress)
+                                .Select(t => task.Result.Nodes);
                         }
 
                         return InternalTaskExtensions.CompletedTask(task.Result.Nodes);
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest).Unwrap()
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .SelectAsync(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -623,7 +613,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -631,9 +620,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -655,7 +644,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -663,9 +651,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -737,7 +725,6 @@
                 Func<Task<string>, Task<LoadBalancer>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                             return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -745,9 +732,9 @@
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -808,9 +795,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -832,9 +819,9 @@
                 task => (task.Result != null ? task.Result.VirtualAddresses : null) ?? new ReadOnlyCollection<LoadBalancerVirtualAddress>(new LoadBalancerVirtualAddress[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -863,24 +850,19 @@
             Func<Task<LoadBalancerVirtualAddress>, Task<LoadBalancerVirtualAddress>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                     {
-                        return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress).ContinueWith(
-                            t =>
-                            {
-                                t.PropagateExceptions();
-                                return task.Result;
-                            });
+                        return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress)
+                            .Select(t => task.Result);
                     }
 
                     return InternalTaskExtensions.CompletedTask(task.Result);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -902,7 +884,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -910,9 +891,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -992,7 +973,6 @@
                 Func<Task<string>, Task<LoadBalancer>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                             return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1000,9 +980,9 @@
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -1021,9 +1001,9 @@
                 task => new ReadOnlyCollection<string>(task.Result.AllowedDomains.ToArray());
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1069,9 +1049,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1097,9 +1077,9 @@
                 task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1127,9 +1107,9 @@
                 task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1151,9 +1131,9 @@
                 task => (task.Result != null ? task.Result.UsageRecords : null) ?? new ReadOnlyCollection<LoadBalancerUsage>(new LoadBalancerUsage[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1178,9 +1158,9 @@
                 task => task.Result.AccessList;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1258,7 +1238,6 @@
                 Func<Task<string>, Task<LoadBalancer>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                             return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1266,9 +1245,9 @@
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest).Unwrap()
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .SelectAsync(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -1296,7 +1275,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1304,9 +1282,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1382,7 +1360,6 @@
                 Func<Task<string>, Task<LoadBalancer>> resultSelector =
                     task =>
                     {
-                        task.PropagateExceptions();
                         if (completionOption == AsyncCompletionOption.RequestCompleted)
                             return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1390,9 +1367,9 @@
                     };
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap()
-                    .ContinueWith(resultSelector).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource)
+                    .SelectAsync(resultSelector);
             }
         }
 
@@ -1417,7 +1394,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1425,9 +1401,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1462,9 +1438,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1490,7 +1466,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1498,9 +1473,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1524,7 +1499,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1532,9 +1506,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1556,8 +1530,8 @@
                 GetResponseAsyncFunc<SessionPersistence>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -1583,7 +1557,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1591,9 +1564,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1617,7 +1590,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1625,9 +1597,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1652,9 +1624,9 @@
                 task => task.Result != null ? task.Result.Enabled ?? false : false;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1679,7 +1651,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1687,9 +1658,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1714,9 +1685,9 @@
                 task => task.Result.Throttles;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1742,7 +1713,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1750,9 +1720,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1776,7 +1746,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1784,9 +1753,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1811,9 +1780,9 @@
                 task => task.Result != null ? task.Result.Enabled ?? false : false;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1838,7 +1807,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1846,9 +1814,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1868,9 +1836,9 @@
 
             // authenticate -> request resource -> check result -> parse result -> cache result -> return
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1890,9 +1858,9 @@
 
             // authenticate -> request resource -> check result -> parse result -> cache result -> return
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest, cancellationToken)
-                .ContinueWith(requestResource, cancellationToken).Unwrap()
-                .ContinueWith(resultSelector, cancellationToken);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1917,9 +1885,9 @@
                 task => task.Result != null ? task.Result.SslConfiguration : null;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1946,7 +1914,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1954,9 +1921,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1980,7 +1947,6 @@
             Func<Task<string>, Task<LoadBalancer>> resultSelector =
                 task =>
                 {
-                    task.PropagateExceptions();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
                         return WaitForLoadBalancerToLeaveStateAsync(loadBalancerId, LoadBalancerStatus.PendingUpdate, cancellationToken, progress);
 
@@ -1988,9 +1954,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector).Unwrap();
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .SelectAsync(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2015,9 +1981,9 @@
                 task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2045,9 +2011,9 @@
                 task => task.Result != null ? task.Result.MetadataItem : null;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2075,9 +2041,9 @@
                 task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2108,9 +2074,9 @@
                 task => task.Result != null ? task.Result.MetadataItem : null;
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2138,9 +2104,9 @@
                 task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2171,9 +2137,9 @@
                 task => (task.Result != null ? task.Result.Metadata : null) ?? new ReadOnlyCollection<LoadBalancerMetadataItem>(new LoadBalancerMetadataItem[0]);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -2201,8 +2167,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -2233,8 +2199,8 @@
                 GetResponseAsyncFunc(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap();
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource);
         }
 
         /// <inheritdoc/>
@@ -2292,8 +2258,8 @@
                     GetResponseAsyncFunc(cancellationToken);
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource);
             }
             else
             {
@@ -2319,8 +2285,8 @@
                     GetResponseAsyncFunc(cancellationToken);
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource);
             }
         }
 
@@ -2385,8 +2351,8 @@
                     GetResponseAsyncFunc(cancellationToken);
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource);
             }
             else
             {
@@ -2413,8 +2379,8 @@
                     GetResponseAsyncFunc(cancellationToken);
 
                 return AuthenticateServiceAsync(cancellationToken)
-                    .ContinueWith(prepareRequest)
-                    .ContinueWith(requestResource).Unwrap();
+                    .Select(prepareRequest)
+                    .SelectAsync(requestResource);
             }
         }
 
@@ -2472,7 +2438,7 @@
                            {
                                task.PropagateExceptions();
                                return pollLoadBalancer();
-                           }).Unwrap();
+                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                     }
                 };
 
@@ -2497,9 +2463,9 @@
 
                     // reschedule
                     currentTask = moveNext();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
         }
@@ -2521,23 +2487,23 @@
         private Task<LoadBalancer> PollLoadBalancerStateAsync(LoadBalancerId loadBalancerId, CancellationToken cancellationToken, IProgress<LoadBalancer> progress)
         {
             Task<LoadBalancer> chain = GetLoadBalancerAsync(loadBalancerId, cancellationToken);
-            chain = chain.ContinueWith(
+            chain = chain.Select(
                 task =>
                 {
                     if (task.Result == null || task.Result.Id != loadBalancerId)
                         throw new InvalidOperationException("Could not obtain status for load balancer");
 
                     return task.Result;
-                }, TaskContinuationOptions.ExecuteSynchronously);
+                });
 
             if (progress != null)
             {
-                chain = chain.ContinueWith(
+                chain = chain.Select(
                     task =>
                     {
                         progress.Report(task.Result);
                         return task.Result;
-                    }, TaskContinuationOptions.ExecuteSynchronously);
+                    });
             }
 
             return chain;
@@ -2589,7 +2555,7 @@
                             return PollLoadBalancerStateAsync(loadBalancerId, cancellationToken, null);
                         });
 
-                    return Task.Factory.WhenAll(tasks).ContinueWith(
+                    return Task.Factory.WhenAll(tasks).Select(
                         completedTasks =>
                         {
                             LoadBalancer[] loadBalancers = Array.ConvertAll(completedTasks.Result, completedTask => completedTask.Result);
@@ -2618,7 +2584,7 @@
                            {
                                task.PropagateExceptions();
                                return pollLoadBalancers();
-                           }).Unwrap();
+                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                     }
                 };
 
@@ -2643,9 +2609,9 @@
 
                     // reschedule
                     currentTask = moveNext();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
         }

@@ -91,9 +91,9 @@
 
                     // continue with the next page
                     currentTask = getNextPage();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
 
             return taskCompletionSource.Task;

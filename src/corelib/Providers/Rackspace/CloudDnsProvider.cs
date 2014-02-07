@@ -97,9 +97,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -129,9 +129,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -164,9 +164,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -199,9 +199,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -234,9 +234,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -284,16 +284,16 @@
                         nextCancellationToken =>
                         {
                             return ListDomainsAsync(domainName, nextOffset, limit, nextCancellationToken)
-                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                                .Select(i => i.Result.Item1);
                         };
                     ReadOnlyCollectionPage<DnsDomain> page = new BasicReadOnlyCollectionPage<DnsDomain>(currentPage, getNextPageAsync);
                     return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -324,9 +324,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -357,9 +357,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -392,9 +392,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -427,9 +427,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -462,9 +462,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -502,9 +502,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -538,9 +538,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -581,9 +581,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -632,16 +632,16 @@
                         nextCancellationToken =>
                         {
                             return ListSubdomainsAsync(domainId, nextOffset, limit, nextCancellationToken)
-                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                                .Select(i => i.Result.Item1);
                         };
                     ReadOnlyCollectionPage<DnsSubdomain> page = new BasicReadOnlyCollectionPage<DnsSubdomain>(currentPage, getNextPageAsync);
                     return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -696,16 +696,16 @@
                         nextCancellationToken =>
                         {
                             return ListRecordsAsync(domainId, recordType, recordName, recordData, nextOffset, limit, nextCancellationToken)
-                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                                .Select(i => i.Result.Item1);
                         };
                     ReadOnlyCollectionPage<DnsRecord> page = new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, getNextPageAsync);
                     return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -735,9 +735,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -771,9 +771,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -807,9 +807,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -850,9 +850,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -902,16 +902,16 @@
                         nextCancellationToken =>
                         {
                             return ListPtrRecordsAsync(serviceName, deviceResourceUri, nextOffset, limit, nextCancellationToken)
-                                .ContinueWith(i => i.Result.Item1, TaskContinuationOptions.ExecuteSynchronously);
+                                .Select(i => i.Result.Item1);
                         };
                     ReadOnlyCollectionPage<DnsRecord> page = new BasicReadOnlyCollectionPage<DnsRecord>(currentPage, getNextPageAsync);
                     return Tuple.Create(page, totalEntries);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -942,9 +942,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -988,9 +988,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1034,9 +1034,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest).Unwrap()
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .SelectAsync(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1072,9 +1072,9 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .ContinueWith(prepareRequest)
-                .ContinueWith(requestResource).Unwrap()
-                .ContinueWith(resultSelector);
+                .Select(prepareRequest)
+                .SelectAsync(requestResource)
+                .Select(resultSelector);
         }
 
         #endregion
@@ -1127,7 +1127,7 @@
                            {
                                task.PropagateExceptions();
                                return pollJob();
-                           }).Unwrap();
+                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                     }
                 };
 
@@ -1152,9 +1152,9 @@
 
                     // reschedule
                     currentTask = moveNext();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
         }
@@ -1210,7 +1210,7 @@
                            {
                                task.PropagateExceptions();
                                return pollJob();
-                           }).Unwrap();
+                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
                     }
                 };
 
@@ -1235,9 +1235,9 @@
 
                     // reschedule
                     currentTask = moveNext();
-                    currentTask.ContinueWith(continuation);
+                    currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
-            currentTask.ContinueWith(continuation);
+            currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
         }
@@ -1305,23 +1305,23 @@
                 throw new ArgumentNullException("job");
 
             Task<DnsJob> chain = GetJobStatusAsync(job, showDetails, cancellationToken);
-            chain = chain.ContinueWith(
+            chain = chain.Select(
                 task =>
                 {
                     if (task.Result == null || task.Result.Id != job.Id)
                         throw new InvalidOperationException("Could not obtain status for job");
 
                     return task.Result;
-                }, TaskContinuationOptions.ExecuteSynchronously);
+                });
 
             if (progress != null)
             {
-                chain = chain.ContinueWith(
+                chain = chain.Select(
                     task =>
                     {
                         progress.Report(task.Result);
                         return task.Result;
-                    }, TaskContinuationOptions.ExecuteSynchronously);
+                    });
             }
 
             return chain;
@@ -1348,23 +1348,23 @@
                 throw new ArgumentNullException("job");
 
             Task<DnsJob<TResponse>> chain = GetJobStatusAsync(job, showDetails, cancellationToken);
-            chain = chain.ContinueWith(
+            chain = chain.Select(
                 task =>
                 {
                     if (task.Result == null || task.Result.Id != job.Id)
                         throw new InvalidOperationException("Could not obtain status for job");
 
                     return task.Result;
-                }, TaskContinuationOptions.ExecuteSynchronously);
+                });
 
             if (progress != null)
             {
-                chain = chain.ContinueWith(
+                chain = chain.Select(
                     task =>
                     {
                         progress.Report(task.Result);
                         return task.Result;
-                    }, TaskContinuationOptions.ExecuteSynchronously);
+                    });
             }
 
             return chain;
