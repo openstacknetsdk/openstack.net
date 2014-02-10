@@ -1234,6 +1234,44 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        public void TestCreateObjectWithMetadata()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = Path.GetRandomFileName();
+            // another random name counts as random content
+            string fileData = Path.GetRandomFileName();
+
+            ObjectStore containerResult = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, containerResult);
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
+            {
+                Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "X-Object-Meta-Projectcode", "ProjectCode" },
+                    { "X-Object-Meta-Filedesc", "FileDescription" },
+                    { "X-Object-Meta-Usercode", "User Code" },
+                };
+                provider.CreateObject(containerName, uploadStream, objectName, headers: headers);
+            }
+
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
+            Assert.AreEqual(fileData, actualData);
+
+            Dictionary<string, string> metadata = provider.GetObjectMetaData(containerName, objectName);
+            Assert.AreEqual("ProjectCode", metadata["projectcode"]);
+            Assert.AreEqual("FileDescription", metadata["fileDesc"]);
+            Assert.AreEqual("User Code", metadata["usercode"]);
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
         [DeploymentItem("DarkKnightRises.jpg")]
         public void TestCreateLargeObject()
         {
