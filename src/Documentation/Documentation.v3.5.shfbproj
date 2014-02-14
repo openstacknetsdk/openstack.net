@@ -91,7 +91,11 @@
     <ApiFilter />
     <HelpAttributes />
     <NamespaceSummaries />
-    <PlugInConfigurations />
+    <PlugInConfigurations>
+      <PlugInConfig id="Lightweight TOC" enabled="True">
+        <configuration />
+      </PlugInConfig>
+    </PlugInConfigurations>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
     <HtmlHelp2xCompilerPath />
