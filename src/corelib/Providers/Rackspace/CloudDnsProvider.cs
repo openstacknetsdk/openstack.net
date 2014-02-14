@@ -98,7 +98,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -130,7 +130,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -165,7 +165,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -200,7 +200,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -235,7 +235,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -292,7 +292,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -325,7 +325,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -358,7 +358,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -393,7 +393,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -427,8 +427,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -462,8 +462,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -503,7 +503,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -538,8 +538,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -582,7 +582,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -640,7 +640,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -704,7 +704,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -736,7 +736,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -771,8 +771,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -807,8 +807,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -851,7 +851,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -910,7 +910,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -943,7 +943,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -988,8 +988,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -1034,8 +1034,8 @@
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
-                .SelectAsync(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(prepareRequest)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
@@ -1073,7 +1073,7 @@
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
-                .SelectAsync(requestResource)
+                .Then(requestResource)
                 .Select(resultSelector);
         }
 
