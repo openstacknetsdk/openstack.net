@@ -24,7 +24,7 @@
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, MSHelpViewer, Website</HelpFileFormat>
-    <IndentHtml>True</IndentHtml>
+    <IndentHtml>False</IndentHtml>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -91,7 +91,11 @@
     <ApiFilter />
     <HelpAttributes />
     <NamespaceSummaries />
-    <PlugInConfigurations />
+    <PlugInConfigurations>
+      <PlugInConfig id="Lightweight TOC" enabled="True">
+        <configuration />
+      </PlugInConfig>
+    </PlugInConfigurations>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
     <HtmlHelp2xCompilerPath />

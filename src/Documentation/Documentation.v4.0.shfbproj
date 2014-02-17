@@ -24,7 +24,7 @@
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, MSHelpViewer, Website</HelpFileFormat>
-    <IndentHtml>True</IndentHtml>
+    <IndentHtml>False</IndentHtml>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -95,6 +95,9 @@
             <version label=".NET Framework" version="3.5" helpFileProject="Documentation.v3.5.shfbproj" />
           </versions>
         </configuration>
+      </PlugInConfig>
+      <PlugInConfig id="Lightweight TOC" enabled="True">
+        <configuration />
       </PlugInConfig>
     </PlugInConfigurations>
     <ApiFilter />
