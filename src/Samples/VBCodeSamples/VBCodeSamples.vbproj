@@ -79,6 +79,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ObjectStorageProviderExamples.vb" />
     <Compile Include="QueueingServiceExamples.vb" />
   </ItemGroup>
   <ItemGroup>

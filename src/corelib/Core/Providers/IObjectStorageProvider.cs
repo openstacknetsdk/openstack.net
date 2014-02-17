@@ -1038,6 +1038,15 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method to output the names of all objects in a container
+        /// using <see cref="Console.WriteLine(string, object[])"/>. In the example, the pagination details of this method are handled by the
+        /// helper method <c>ListAllObjects</c>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\ObjectStorageProviderExamples.cs" region="ListObjectsInContainer" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\ObjectStorageProviderExamples.vb" region="ListObjectsInContainer" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\ObjectStorageProviderExamples.cpp" region="ListObjectsInContainer" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\ObjectStorageProviderExamples.fs" region="ListObjectsInContainer" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/list-objects.html">List Objects (OpenStack Object Storage API v1 Reference)</seealso>
         IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
