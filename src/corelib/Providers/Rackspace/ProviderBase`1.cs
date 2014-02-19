@@ -942,14 +942,11 @@ namespace net.openstack.Providers.Rackspace
 
                     Task<Stream> streamTask = Task.Factory.FromAsync<Stream>(request.BeginGetRequestStream(null, null), request.EndGetRequestStream);
                     return
-                        streamTask.ContinueWith(subTask =>
+                        streamTask.Then(subTask =>
                         {
-                            using (Stream stream = subTask.Result)
-                            {
-                                stream.Write(encodedBody, 0, encodedBody.Length);
-                            }
-
-                            return request;
+                            return
+                                Task.Factory.FromAsync((callback, state) => subTask.Result.BeginWrite(encodedBody, 0, encodedBody.Length, callback, state), subTask.Result.EndWrite, null)
+                                .Select(t => request);
                         });
                 };
         }
@@ -1106,7 +1103,7 @@ namespace net.openstack.Providers.Rackspace
                         });
                 };
 
-            return authenticate.ContinueWith(getBaseUri).Unwrap();
+            return authenticate.Then(getBaseUri);
         }
 
         /// <summary>
@@ -1161,9 +1158,9 @@ namespace net.openstack.Providers.Rackspace
             Func<Task<HttpWebRequest>, Task<string>> result =
                 task =>
                 {
-                    return task.ContinueWith(requestResource).Unwrap()
-                        .ContinueWith(readResult)
-                        .ContinueWith(parseResult);
+                    return task.Then(requestResource)
+                        .Select(readResult, true)
+                        .Select(parseResult);
                 };
 
             return result;
@@ -1200,9 +1197,9 @@ namespace net.openstack.Providers.Rackspace
             Func<Task<HttpWebRequest>, Task<T>> result =
                 task =>
                 {
-                    return task.ContinueWith(requestResource).Unwrap()
-                        .ContinueWith(readResult)
-                        .ContinueWith(parseResult).Unwrap();
+                    return task.Then(requestResource)
+                        .Select(readResult, true)
+                        .Then(parseResult);
                 };
 
             return result;

@@ -710,7 +710,7 @@ namespace net.openstack.Providers.Rackspace
         public virtual Task<IdentityToken> GetTokenAsync(CloudIdentity identity, CancellationToken cancellationToken)
         {
             return GetUserAccessAsync(identity, false, cancellationToken)
-                .ContinueWith(task => task.Result.Token, TaskContinuationOptions.ExecuteSynchronously);
+                .Select(task => task.Result.Token);
         }
 
         /// <inheritdoc/>
