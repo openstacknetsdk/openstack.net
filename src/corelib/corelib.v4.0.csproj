@@ -625,7 +625,7 @@
       <Link>openstacknetsdk.snk</Link>
     </None>
     <None Include="corelib.nuspec" />
-    <None Include="packages.config" />
+    <None Include="packages.corelib.v4.0.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\openstack_net_logo.png" />
