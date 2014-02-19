@@ -28,14 +28,29 @@
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT'">
         <!-- Windows specific commands -->
         <NuGetToolsPath>$([System.IO.Path]::Combine($(SolutionDir), ".nuget"))</NuGetToolsPath>
-        <PackagesConfig>$([System.IO.Path]::Combine($(ProjectDir), "packages.config"))</PackagesConfig>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(OS)' != 'Windows_NT'">
         <!-- We need to launch nuget.exe with the mono command if we're not on windows -->
         <NuGetToolsPath>$(SolutionDir).nuget</NuGetToolsPath>
-        <PackagesConfig>packages.config</PackagesConfig>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <PackagesProjectConfig>packages.$(MSBuildProjectName.Replace(' ', '_')).config</PackagesProjectConfig>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="Exists('$(PackagesProjectConfig)')">
+            <PropertyGroup>
+                <PackagesConfig>$(PackagesProjectConfig)</PackagesConfig>
+            </PropertyGroup>
+        </When>
+        <When Condition="Exists('packages.config')">
+            <PropertyGroup>
+                <PackagesConfig>packages.config</PackagesConfig>
+            </PropertyGroup>
+        </When>
+    </Choose>
     
     <PropertyGroup>
         <!-- NuGet command -->
