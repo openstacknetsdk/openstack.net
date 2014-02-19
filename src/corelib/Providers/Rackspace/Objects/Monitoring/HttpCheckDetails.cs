@@ -88,8 +88,8 @@
         /// <param name="url">The target URI.</param>
         /// <param name="authUser">The username of the user to authenticate over HTTP.</param>
         /// <param name="authPassword">The password of the user to authenticate over HTTP.</param>
-        /// <param name="body">The regular expression to match against the body of the reply.</param>
-        /// <param name="bodyMatches">A collection of named regular expressions to match against the body of the reply.</param>
+        /// <param name="body">The regular expression to match against the body of the reply. For more information, see <see cref="Body"/>.</param>
+        /// <param name="bodyMatches">A collection of named regular expressions to match against the body of the reply. For more information, see <see cref="BodyMatches"/>.</param>
         /// <param name="followRedirects"><see langword="true"/> to follow redirects; otherwise, <see langword="false"/>.</param>
         /// <param name="headers">A collection of additional HTTP headers which are sent with the request.</param>
         /// <param name="method">The HTTP method to use for the request.</param>
@@ -159,6 +159,10 @@
         /// <summary>
         /// Gets the regular expression to match against the body of the reply.
         /// </summary>
+        /// <remarks>
+        /// The data matched by this regular expression is provided by the
+        /// <c>body_match</c> metric in the alarm criteria.
+        /// </remarks>
         public string Body
         {
             get
@@ -171,6 +175,16 @@
         /// Gets a collection of named regular expressions to match against the
         /// body of the reply.
         /// </summary>
+        /// <remarks>
+        /// When this property is specified, a metric will be available for each of
+        /// the named regular expressions. The keys of this dictionary provide the
+        /// names for each of the regular expressions and determine the names of
+        /// alarm criteria metrics which provide the data matched by the expression.
+        /// For example, if <see cref="BodyMatches"/> contains a key
+        /// <c><em>helloworld</em></c>, the metric
+        /// <c>body_match_<em>helloworld</em></c> provides the data in the body
+        /// matched by the associated regular expression.
+        /// </remarks>
         public ReadOnlyDictionary<string, string> BodyMatches
         {
             get
