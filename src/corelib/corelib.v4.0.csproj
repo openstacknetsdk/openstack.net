@@ -163,6 +163,9 @@
     <Compile Include="Core\UriPart.cs" />
     <Compile Include="Core\UriUtility.cs" />
     <Compile Include="Core\Validators\NamespaceDoc.cs" />
+    <Compile Include="Providers\Hp\HpIdentityProvider.cs" />
+    <Compile Include="Providers\Hp\NamespaceDoc.cs" />
+    <Compile Include="Providers\Hp\PredefinedHpIdentityEndpoints.cs" />
     <Compile Include="Providers\Rackspace\CloudAutoScaleProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudDatabasesProvider.cs" />
     <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
