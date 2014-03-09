@@ -6,6 +6,7 @@
     using Newtonsoft.Json;
 
     /// <summary>
+    /// Represents an Auto Scale launch type.
     /// </summary>
     /// <remarks>
     /// This class functions as a strongly-typed enumeration of known launch types,

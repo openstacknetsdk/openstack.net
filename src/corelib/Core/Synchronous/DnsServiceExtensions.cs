@@ -145,6 +145,7 @@
         /// <summary>
         /// Gets information about an asynchronous task with a strongly-typed result being executed by the DNS service.
         /// </summary>
+        /// <typeparam name="TResponse">The class modeling the JSON result of the asynchronous operation.</typeparam>
         /// <param name="service">The DNS service instance.</param>
         /// <param name="job">The <see cref="DnsJob{TResponse}"/> to query.</param>
         /// <param name="showDetails"><see langword="true"/> to include detailed information about the job; otherwise, <see langword="false"/>.</param>

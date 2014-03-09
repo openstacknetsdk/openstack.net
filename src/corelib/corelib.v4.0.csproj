@@ -232,6 +232,7 @@
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchConfiguration`1.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchType.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LoadBalancerArgument.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\NewWebhookConfiguration.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\Policy.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\PolicyConfiguration.cs" />

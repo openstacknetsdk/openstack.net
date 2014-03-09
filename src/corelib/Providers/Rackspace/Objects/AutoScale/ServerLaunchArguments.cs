@@ -40,7 +40,7 @@
         /// Initializes a new instance of the <see cref="ServerLaunchArguments"/> class
         /// with the specified server argument.
         /// </summary>
-        /// <param name="server"></param>
+        /// <param name="server">A <see cref="ServerArgument"/> object containing the detailed arguments for launching a server.</param>
         public ServerLaunchArguments(ServerArgument server)
             : this(server, null)
         {
