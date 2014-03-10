@@ -188,7 +188,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute{T}(Uri, HttpMethod, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -247,7 +247,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute(Uri, HttpMethod, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -306,7 +306,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute(Uri, HttpMethod, Func{HttpWebResponse, bool, Response}, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -369,7 +369,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         /// </remarks>
         /// <typeparam name="T">The <see cref="Response"/> type used for representing the response to the REST call.</typeparam>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -462,7 +462,7 @@ namespace net.openstack.Providers.Rackspace
         ///
         /// <para>This method uses an HTTP request timeout of 4 hours.</para>
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <param name="absoluteUri">The absolute URI for the request.</param>

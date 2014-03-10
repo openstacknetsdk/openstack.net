@@ -2220,16 +2220,16 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// This value is used as the key for storing metadata information in the dictionary
-        /// returned by <see cref="CloudFilesMetadataProcessor.ProcessMetadata"/>.
+        /// returned by <see cref="IObjectStorageMetadataProcessor.ProcessMetadata"/>.
         /// </summary>
-        /// <seealso cref="CloudFilesMetadataProcessor"/>
+        /// <seealso cref="IObjectStorageMetadataProcessor"/>
         public const string ProcessedHeadersMetadataKey = "metadata";
 
         /// <summary>
         /// This value is used as the key for storing non-metadata header information in the
-        /// dictionary returned by <see cref="CloudFilesMetadataProcessor.ProcessMetadata"/>.
+        /// dictionary returned by <see cref="IObjectStorageMetadataProcessor.ProcessMetadata"/>.
         /// </summary>
-        /// <seealso cref="CloudFilesMetadataProcessor"/>
+        /// <seealso cref="IObjectStorageMetadataProcessor"/>
         public const string ProcessedHeadersHeaderKey = "headers";
 
         #endregion
