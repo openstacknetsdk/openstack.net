@@ -171,6 +171,7 @@
             }
         }
 
+        /// <inheritdoc/>
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
             get
@@ -179,6 +180,7 @@
             }
         }
 
+        /// <inheritdoc/>
         bool IDictionary.IsFixedSize
         {
             get
@@ -187,6 +189,7 @@
             }
         }
 
+        /// <inheritdoc/>
         bool IDictionary.IsReadOnly
         {
             get
@@ -195,6 +198,7 @@
             }
         }
 
+        /// <inheritdoc/>
         bool ICollection.IsSynchronized
         {
             get
@@ -203,6 +207,7 @@
             }
         }
 
+        /// <inheritdoc/>
         object ICollection.SyncRoot
         {
             get
@@ -239,6 +244,7 @@
             return _dictionary.ContainsKey(key);
         }
 
+        /// <inheritdoc/>
         bool IDictionary.Contains(object key)
         {
             if (key == null)
@@ -286,56 +292,67 @@
             return _dictionary.TryGetValue(key, out value);
         }
 
+        /// <inheritdoc/>
         void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void IDictionary.Add(object key, object value)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         bool IDictionary<TKey, TValue>.Remove(TKey key)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void IDictionary.Remove(object key)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void ICollection<KeyValuePair<TKey, TValue>>.Clear()
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void IDictionary.Clear()
         {
             throw new NotSupportedException();
         }
 
+        /// <inheritdoc/>
         void ICollection.CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
@@ -379,6 +396,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             bool ICollection<TKey>.IsReadOnly
             {
                 get
@@ -387,6 +405,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             bool ICollection.IsSynchronized
             {
                 get
@@ -395,6 +414,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             object ICollection.SyncRoot
             {
                 get
@@ -422,6 +442,7 @@
                 _keys.CopyTo(array, arrayIndex);
             }
 
+            /// <inheritdoc/>
             void ICollection.CopyTo(Array array, int index)
             {
                 throw new NotImplementedException();
@@ -442,21 +463,25 @@
                 return GetEnumerator();
             }
 
+            /// <inheritdoc/>
             bool ICollection<TKey>.Contains(TKey item)
             {
                 return _keys.Contains(item);
             }
 
+            /// <inheritdoc/>
             void ICollection<TKey>.Add(TKey item)
             {
                 throw new NotSupportedException();
             }
 
+            /// <inheritdoc/>
             bool ICollection<TKey>.Remove(TKey item)
             {
                 throw new NotSupportedException();
             }
 
+            /// <inheritdoc/>
             void ICollection<TKey>.Clear()
             {
                 throw new NotSupportedException();
@@ -501,6 +526,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             bool ICollection<TValue>.IsReadOnly
             {
                 get
@@ -509,6 +535,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             bool ICollection.IsSynchronized
             {
                 get
@@ -517,6 +544,7 @@
                 }
             }
 
+            /// <inheritdoc/>
             object ICollection.SyncRoot
             {
                 get
@@ -544,6 +572,7 @@
                 _values.CopyTo(array, arrayIndex);
             }
 
+            /// <inheritdoc/>
             void ICollection.CopyTo(Array array, int index)
             {
                 throw new NotImplementedException();
@@ -564,21 +593,25 @@
                 return GetEnumerator();
             }
 
+            /// <inheritdoc/>
             bool ICollection<TValue>.Contains(TValue item)
             {
                 return _values.Contains(item);
             }
 
+            /// <inheritdoc/>
             void ICollection<TValue>.Add(TValue item)
             {
                 throw new NotSupportedException();
             }
 
+            /// <inheritdoc/>
             bool ICollection<TValue>.Remove(TValue item)
             {
                 throw new NotSupportedException();
             }
 
+            /// <inheritdoc/>
             void ICollection<TValue>.Clear()
             {
                 throw new NotSupportedException();
