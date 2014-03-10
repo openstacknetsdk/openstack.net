@@ -442,17 +442,17 @@
                 return GetEnumerator();
             }
 
-            bool ICollection<TKey>.Contains(TKey value)
+            bool ICollection<TKey>.Contains(TKey item)
             {
-                return _keys.Contains(value);
+                return _keys.Contains(item);
             }
 
-            void ICollection<TKey>.Add(TKey value)
+            void ICollection<TKey>.Add(TKey item)
             {
                 throw new NotSupportedException();
             }
 
-            bool ICollection<TKey>.Remove(TKey value)
+            bool ICollection<TKey>.Remove(TKey item)
             {
                 throw new NotSupportedException();
             }
@@ -564,17 +564,17 @@
                 return GetEnumerator();
             }
 
-            bool ICollection<TValue>.Contains(TValue value)
+            bool ICollection<TValue>.Contains(TValue item)
             {
-                return _values.Contains(value);
+                return _values.Contains(item);
             }
 
-            void ICollection<TValue>.Add(TValue value)
+            void ICollection<TValue>.Add(TValue item)
             {
                 throw new NotSupportedException();
             }
 
-            bool ICollection<TValue>.Remove(TValue value)
+            bool ICollection<TValue>.Remove(TValue item)
             {
                 throw new NotSupportedException();
             }

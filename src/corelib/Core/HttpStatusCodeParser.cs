@@ -78,18 +78,18 @@ namespace net.openstack.Core
         }
 
         /// <inheritdoc/>
-        public virtual bool TryParse(string value, out Status result)
+        public virtual bool TryParse(string value, out Status status)
         {
             if (value == null)
             {
-                result = null;
+                status = null;
                 return false;
             }
 
             var match = _expression.Match(value);
             if (!match.Success)
             {
-                result = null;
+                status = null;
                 return false;
             }
 
@@ -98,7 +98,7 @@ namespace net.openstack.Core
             if (string.IsNullOrEmpty(description))
                 description = statusCode.ToString();
 
-            result = new Status((int)statusCode, description);
+            status = new Status((int)statusCode, description);
             return true;
         }
     }
