@@ -205,7 +205,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<DnsJob<TResult>> GetJobStatusAsync<TResult>(DnsJob<TResult> job, bool showDetails, CancellationToken cancellationToken)
+        public Task<DnsJob<TResponse>> GetJobStatusAsync<TResponse>(DnsJob<TResponse> job, bool showDetails, CancellationToken cancellationToken)
         {
             if (job == null)
                 throw new ArgumentNullException("job");
@@ -223,14 +223,14 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob<TResult>> resultSelector =
+            Func<Task<JObject>, DnsJob<TResponse>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
                     if (result == null)
                         return null;
 
-                    return result.ToObject<DnsJob<TResult>>();
+                    return result.ToObject<DnsJob<TResponse>>();
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
