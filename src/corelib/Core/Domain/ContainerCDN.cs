@@ -42,7 +42,7 @@
         /// <value>
         /// <see langword="true"/> if the container is CDN-Enabled; otherwise, <see langword="false"/>.
         /// </value>
-        /// <seealso cref="O:IObjectStorageProvider.EnableCDNOnContainer"/>
+        /// <seealso cref="O:net.openstack.Core.Providers.IObjectStorageProvider.EnableCDNOnContainer"/>
         /// <seealso cref="IObjectStorageProvider.DisableCDNOnContainer"/>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_enabled")]

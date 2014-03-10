@@ -6,7 +6,7 @@ namespace net.openstack.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when the server enters an error state during a
-    /// call to <see cref="O:IComputeProvider.WaitForImageState"/>.
+    /// call to <see cref="O:net.openstack.Core.Providers.IComputeProvider.WaitForImageState"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [Serializable]

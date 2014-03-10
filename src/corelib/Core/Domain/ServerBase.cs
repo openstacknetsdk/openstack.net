@@ -372,7 +372,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <remarks>
         /// This operation is completed asynchronously. To wait for the server to enter rescue mode,
-        /// call <see cref="O:WaitForState"/> with the state <see cref="ServerState.Rescue"/>.
+        /// call <see cref="O:net.openstack.Core.Domain.ServerBase.WaitForState"/> with the state <see cref="ServerState.Rescue"/>.
         ///
         /// <note>
         /// The provider may limit the duration of rescue mode, after which the rescue image is destroyed
@@ -392,7 +392,7 @@ namespace net.openstack.Core.Domain
         /// </summary>
         /// <remarks>
         /// This operation is completed asynchronously. To wait for the server to exit rescue mode,
-        /// call <see cref="O:WaitForActive"/>.
+        /// call <see cref="WaitForActive"/>.
         ///
         /// <note>
         /// The provider may limit the duration of rescue mode, after which the rescue image is destroyed
