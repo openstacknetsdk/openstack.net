@@ -6,6 +6,7 @@
     using Newtonsoft.Json;
 
     /// <summary>
+    /// Represents an Auto Scale launch type.
     /// </summary>
     /// <remarks>
     /// This class functions as a strongly-typed enumeration of known launch types,
@@ -34,6 +35,7 @@
         /// Gets the <see cref="LaunchType"/> instance with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <returns>The unique <see cref="LaunchType"/> instance with the specified name.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         public static LaunchType FromName(string name)

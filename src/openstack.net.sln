@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPPCodeSamples", "Samples\C
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpCodeSamples", "Samples\FSharpCodeSamples\FSharpCodeSamples.fsproj", "{6F852167-4873-4541-A4FF-F4D9E396927B}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocumentation", "Documentation\AdditionalReferenceDocumentation.shfbproj", "{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
@@ -187,6 +189,14 @@ Global
 		{6F852167-4873-4541-A4FF-F4D9E396927B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6F852167-4873-4541-A4FF-F4D9E396927B}.Release|Win32.ActiveCfg = Release|Any CPU
 		{6F852167-4873-4541-A4FF-F4D9E396927B}.Release|x86.ActiveCfg = Release|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Release|Win32.ActiveCfg = Release|Any CPU
+		{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

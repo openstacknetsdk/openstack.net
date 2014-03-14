@@ -72,7 +72,7 @@
         /// <seealso cref="IComputeProvider.ListAddressesByNetwork"/>
         /// <threadsafety static="true" instance="false"/>
         [JsonObject(MemberSerialization.OptIn)]
-        private class AddressDetails
+        protected class AddressDetails
         {
             /// <summary>
             /// Gets the network address. This is an IPv4 address if <see cref="Version"/> is <c>"4"</c>,
@@ -102,7 +102,7 @@
             /// This constructor is used for JSON deserialization.
             /// </remarks>
             [JsonConstructor]
-            private AddressDetails()
+            protected AddressDetails()
             {
             }
 

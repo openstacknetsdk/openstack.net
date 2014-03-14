@@ -254,6 +254,7 @@
         /// claimed by this claim. To prevent other subscribers from re-claiming the messages, make
         /// sure to delete the messages before calling <see cref="DisposeAsync"/>.
         /// </remarks>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         public Task DisposeAsync(CancellationToken cancellationToken)
         {

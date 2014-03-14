@@ -68,8 +68,9 @@
         /// with the specified virtual address type and family.
         /// </summary>
         /// <param name="type">The virtual address type.</param>
-        /// <param name="version"></param>
+        /// <param name="version">The address family for this virtual address, or <see langword="null"/> to not specify the address family.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <see langword="null"/>.</exception>
+        /// <exception cref="NotSupportedException">If <paramref name="version"/> is not <see cref="AddressFamily.InterNetwork"/> or <see cref="AddressFamily.InterNetworkV6"/>.</exception>
         public LoadBalancerVirtualAddress(LoadBalancerVirtualAddressType type, AddressFamily? version)
         {
             if (type == null)

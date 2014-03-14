@@ -49,9 +49,15 @@
         /// Initializes a new instance of the <see cref="DatabaseInstanceConfiguration"/> class
         /// with the specified values.
         /// </summary>
-        /// <param name="flavorRef"></param>
-        /// <param name="volumeConfiguration"></param>
-        /// <param name="name"></param>
+        /// <param name="flavorRef">A <see cref="FlavorRef"/> object describing the flavor of the database instance.</param>
+        /// <param name="volumeConfiguration">A <see cref="DatabaseVolumeConfiguration"/> object containing additional information about
+        /// the database instance storage volume.</param>
+        /// <param name="name">The name of the database instance, or <see langword="null"/> if the database instance is not named.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="flavorRef"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="volumeConfiguration"/> is <see langword="null"/>.</para>
+        /// </exception>
         public DatabaseInstanceConfiguration(FlavorRef flavorRef, DatabaseVolumeConfiguration volumeConfiguration, string name)
             : this(flavorRef, volumeConfiguration, name, null)
         {
@@ -61,10 +67,16 @@
         /// Initializes a new instance of the <see cref="DatabaseInstanceConfiguration"/> class
         /// with a restore point for restoring a database instance from a backup.
         /// </summary>
-        /// <param name="flavorRef"></param>
-        /// <param name="volumeConfiguration"></param>
-        /// <param name="name"></param>
-        /// <param name="restorePoint"></param>
+        /// <param name="flavorRef">A <see cref="FlavorRef"/> object describing the flavor of the database instance.</param>
+        /// <param name="volumeConfiguration">A <see cref="DatabaseVolumeConfiguration"/> object containing additional information about
+        /// the database instance storage volume.</param>
+        /// <param name="name">The name of the database instance, or <see langword="null"/> if the database instance is not named.</param>
+        /// <param name="restorePoint">A <see cref="RestorePoint"/> object describing the backup from which this database instance was restored, or null if the restore point is not available.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="flavorRef"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="volumeConfiguration"/> is <see langword="null"/>.</para>
+        /// </exception>
         public DatabaseInstanceConfiguration(FlavorRef flavorRef, DatabaseVolumeConfiguration volumeConfiguration, string name, RestorePoint restorePoint)
         {
             if (flavorRef == null)

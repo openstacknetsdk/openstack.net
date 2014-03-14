@@ -58,12 +58,12 @@
     </TransformComponentArguments>
     <ComponentConfigurations>
       <ComponentConfig id="IntelliSense Component" enabled="True">
-        <component id="IntelliSense Component" type="Microsoft.Ddue.Tools.IntelliSenseComponent" assembly="{@SandcastlePath}ProductionTools\BuildComponents.dll">
+        <component id="IntelliSense Component">
           <output includeNamespaces="false" namespacesFile="Namespaces" folder="{@OutputFolder}\..\..\Api\v3.5" />
         </component>
       </ComponentConfig>
       <ComponentConfig id="Code Block Component" enabled="True">
-        <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+        <component id="Code Block Component">
           <basePath value="{@HtmlEncProjectFolder}" />
           <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
           <allowMissingSource value="false" />
@@ -72,7 +72,7 @@
         </component>
       </ComponentConfig>
       <ComponentConfig id="API Token Resolution" enabled="True">
-        <component id="API Token Resolution" type="Microsoft.Ddue.Tools.SharedContentComponent" assembly="{@SandcastlePath}ProductionTools\BuildComponents.dll">
+        <component id="API Token Resolution">
           {@TokenFiles}
           <replace elements="/*//token" item="string(.)" />
         </component>
@@ -94,6 +94,13 @@
     <PlugInConfigurations>
       <PlugInConfig id="Lightweight TOC" enabled="True">
         <configuration />
+      </PlugInConfig>
+      <PlugInConfig id="Additional Reference Links" enabled="True">
+        <configuration>
+          <targets>
+            <target htmlSdkLinkType="None" help2SdkLinkType="Index" helpViewerSdkLinkType="Id" websiteSdkLinkType="None" helpFileProject="AdditionalReferenceDocumentation.shfbproj" />
+          </targets>
+        </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
     <BuildLogFile />

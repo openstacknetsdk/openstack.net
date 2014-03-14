@@ -341,6 +341,7 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
@@ -360,6 +361,7 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <param name="messages">The messages to post.</param>

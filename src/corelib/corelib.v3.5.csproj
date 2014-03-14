@@ -69,6 +69,7 @@
     <Compile Include="Core\Caching\ICache`1.cs" />
     <Compile Include="Core\Caching\NamespaceDoc.cs" />
     <Compile Include="Core\Collections\BasicReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Core\Collections\NamespaceDoc.cs" />
     <Compile Include="Core\Collections\ReadOnlyCollectionPage`1.cs" />
     <Compile Include="Core\Collections\ReadOnlyDictionary`2.cs" />
     <Compile Include="Core\Compat\Funcs.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchConfiguration`1.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchType.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\LoadBalancerArgument.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\NewWebhookConfiguration.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\Policy.cs" />
     <Compile Include="Providers\Rackspace\Objects\AutoScale\PolicyConfiguration.cs" />

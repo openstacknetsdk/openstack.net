@@ -6,7 +6,7 @@
     /// <summary>
     /// This class models the JSON representation of a monitoring entity overview.
     /// </summary>
-    /// <seealso cref="O:IMonitoringService.ListEntityOverviewsAsync"/>
+    /// <seealso cref="O:net.openstack.Providers.Rackspace.IMonitoringService.ListEntityOverviewsAsync"/>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]

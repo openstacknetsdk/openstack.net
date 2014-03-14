@@ -521,6 +521,7 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueingService">The queueing service instance.</param>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
@@ -557,6 +558,7 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueingService">The queueing service instance.</param>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>

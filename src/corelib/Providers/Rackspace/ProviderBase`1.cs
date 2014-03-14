@@ -24,6 +24,7 @@ namespace net.openstack.Providers.Rackspace
     /// <summary>
     /// Adds common functionality for all Rackspace Providers.
     /// </summary>
+    /// <typeparam name="TProvider">The service provider interface this object implements.</typeparam>
     /// <threadsafety static="true" instance="false"/>
     public abstract class ProviderBase<TProvider>
         where TProvider : class
@@ -187,7 +188,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute{T}(Uri, HttpMethod, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -246,7 +247,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute(Uri, HttpMethod, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -305,7 +306,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         ///
         /// <para>This method uses <see cref="IRestService.Execute(Uri, HttpMethod, Func{HttpWebResponse, bool, Response}, string, Dictionary{string, string}, Dictionary{string, string}, RequestSettings)"/> to handle the underlying REST request(s).</para>
         /// </remarks>
@@ -368,7 +369,7 @@ namespace net.openstack.Providers.Rackspace
         /// If the request fails due to an authorization failure, i.e. the <see cref="Response.StatusCode"/> is <see cref="HttpStatusCode.Unauthorized"/>,
         /// the request is attempted a second time.
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         /// </remarks>
         /// <typeparam name="T">The <see cref="Response"/> type used for representing the response to the REST call.</typeparam>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -461,7 +462,7 @@ namespace net.openstack.Providers.Rackspace
         ///
         /// <para>This method uses an HTTP request timeout of 4 hours.</para>
         ///
-        /// <para>This method calls <see cref="CheckResponse"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
+        /// <para>This method calls <see cref="IHttpResponseCodeValidator.Validate"/>, which results in a <see cref="ResponseException"/> if the request fails.</para>
         /// </remarks>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <param name="absoluteUri">The absolute URI for the request.</param>
@@ -766,8 +767,20 @@ namespace net.openstack.Providers.Rackspace
             return endpoint.InternalURL;
         }
 
+        /// <summary>
+        /// Validate the response to an HTTP request.
+        /// </summary>
+        /// <remarks>
+        /// The validation is performed by calling <see cref="IHttpResponseCodeValidator.Validate"/>.
+        /// </remarks>
+        /// <param name="response">The response to the HTTP request.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="response"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ResponseException">If <paramref name="response"/> indicates the REST API call failed.</exception>
         internal void CheckResponse(Response response)
         {
+            if (response == null)
+                throw new ArgumentNullException("response");
+
             ResponseCodeValidator.Validate(response);
         }
 
@@ -919,6 +932,7 @@ namespace net.openstack.Providers.Rackspace
         /// to create and prepare the resulting <see cref="HttpWebRequest"/>, and then asynchronously obtains
         /// the request stream for the request and writes the specified <paramref name="body"/> in JSON notation.
         /// </summary>
+        /// <typeparam name="TBody">The type modeling the body of the request.</typeparam>
         /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
         /// <param name="template">The <see cref="UriTemplate"/> for the target URI.</param>
         /// <param name="parameters">A collection of parameters for binding the URI template in a call to <see cref="UriTemplate.BindByName(Uri, IDictionary{string, string})"/>.</param>
@@ -961,9 +975,9 @@ namespace net.openstack.Providers.Rackspace
         /// <see cref="HttpWebRequest.ContentType"/> and <see cref="HttpWebRequest.ContentLength"/>
         /// properties are updated to reflect the JSON content.
         /// </remarks>
-        /// <typeparam name="TBody">The object modeling the body of the request.</typeparam>
+        /// <typeparam name="TBody">The type modeling the body of the request.</typeparam>
         /// <param name="request">The <see cref="HttpWebRequest"/> object for the request.</param>
-        /// <param name="body"></param>
+        /// <param name="body">The object modeling the body of the request.</param>
         /// <returns>The encoded content to send with the <see cref="HttpWebRequest"/>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
         /// <preliminary/>

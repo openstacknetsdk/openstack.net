@@ -530,7 +530,7 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <remarks>
         /// This operation is completed asynchronously. To wait for the server to enter rescue mode,
-        /// call <see cref="O:WaitForServerState"/> with the state <see cref="ServerState.Rescue"/>.
+        /// call <see cref="O:net.openstack.Core.Providers.IComputeProvider.WaitForServerState"/> with the state <see cref="ServerState.Rescue"/>.
         ///
         /// <note>
         /// The provider may limit the duration of rescue mode, after which the rescue image is destroyed
@@ -563,7 +563,7 @@ namespace net.openstack.Core.Providers
         /// </summary>
         /// <remarks>
         /// This operation is completed asynchronously. To wait for the server to exit rescue mode,
-        /// call <see cref="O:WaitForServerActive"/>.
+        /// call <see cref="WaitForServerActive"/>.
         ///
         /// <note>
         /// The provider may limit the duration of rescue mode, after which the rescue image is destroyed

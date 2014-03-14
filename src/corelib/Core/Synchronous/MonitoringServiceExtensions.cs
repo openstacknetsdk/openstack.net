@@ -2454,7 +2454,7 @@
         /// Gets a collection of monitoring agent check targets.
         /// </summary>
         /// <param name="service">The monitoring service instance.</param>
-        /// <param name="entityId"></param>
+        /// <param name="entityId">The entity ID. This is obtained from <see cref="Entity.Id">Entity.Id</see>.</param>
         /// <param name="agentCheckType">The agent check type ID. This is obtained from <see cref="CheckType.Id">CheckType.Id</see>, or from the predefined values in <see cref="CheckTypeId"/>.</param>
         /// <param name="marker">A marker identifying the next page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>, and is obtained from <see cref="ReadOnlyCollectionPage{T, TMarker}.NextMarker"/>. If the value is <see langword="null"/>, the list starts at the beginning.</param>
         /// <param name="limit">The maximum number of items to include in a single page of results. This parameter is used for <see href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">pagination</see>. If the value is <see langword="null"/>, a provider-specific default value is used.</param>

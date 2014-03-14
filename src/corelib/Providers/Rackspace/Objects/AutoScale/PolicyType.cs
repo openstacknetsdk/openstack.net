@@ -6,6 +6,7 @@
     using Newtonsoft.Json;
 
     /// <summary>
+    /// Represents an Auto Scale policy type.
     /// </summary>
     /// <remarks>
     /// This class functions as a strongly-typed enumeration of known policy types,
@@ -36,6 +37,7 @@
         /// Gets the <see cref="PolicyType"/> instance with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <returns>The unique <see cref="PolicyType"/> instance with the specified name.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         public static PolicyType FromName(string name)

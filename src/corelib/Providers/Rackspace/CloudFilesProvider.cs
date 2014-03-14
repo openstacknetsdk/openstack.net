@@ -423,7 +423,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string marker = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
+        public IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string markerId = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null)
         {
             if (limit < 0)
                 throw new ArgumentOutOfRangeException("limit");
@@ -440,8 +440,8 @@ namespace net.openstack.Providers.Rackspace
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
 
-            if (!string.IsNullOrEmpty(marker))
-                queryStringParameter.Add("marker", marker);
+            if (!string.IsNullOrEmpty(markerId))
+                queryStringParameter.Add("marker", markerId);
 
             if (!string.IsNullOrEmpty(markerEnd))
                 queryStringParameter.Add("end_marker", markerEnd);
@@ -557,17 +557,17 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void DeleteContainerMetadata(string container, IEnumerable<string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void DeleteContainerMetadata(string container, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
-            if (metadata == null)
-                throw new ArgumentNullException("metadata");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
             if (string.IsNullOrEmpty(container))
                 throw new ArgumentException("container cannot be empty");
             CheckIdentity(identity);
 
-            Dictionary<string, string> headers = metadata.ToDictionary(i => i, i => default(string), StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, string> headers = keys.ToDictionary(i => i, i => default(string), StringComparer.OrdinalIgnoreCase);
             UpdateContainerMetadata(container, headers, region, useInternalUrl, identity);
         }
 
@@ -2220,16 +2220,16 @@ namespace net.openstack.Providers.Rackspace
 
         /// <summary>
         /// This value is used as the key for storing metadata information in the dictionary
-        /// returned by <see cref="CloudFilesMetadataProcessor.ProcessMetadata"/>.
+        /// returned by <see cref="IObjectStorageMetadataProcessor.ProcessMetadata"/>.
         /// </summary>
-        /// <seealso cref="CloudFilesMetadataProcessor"/>
+        /// <seealso cref="IObjectStorageMetadataProcessor"/>
         public const string ProcessedHeadersMetadataKey = "metadata";
 
         /// <summary>
         /// This value is used as the key for storing non-metadata header information in the
-        /// dictionary returned by <see cref="CloudFilesMetadataProcessor.ProcessMetadata"/>.
+        /// dictionary returned by <see cref="IObjectStorageMetadataProcessor.ProcessMetadata"/>.
         /// </summary>
-        /// <seealso cref="CloudFilesMetadataProcessor"/>
+        /// <seealso cref="IObjectStorageMetadataProcessor"/>
         public const string ProcessedHeadersHeaderKey = "headers";
 
         #endregion

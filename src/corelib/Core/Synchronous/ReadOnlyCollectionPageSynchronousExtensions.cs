@@ -52,6 +52,7 @@
         /// <summary>
         /// Gets the next page in the paginated collection.
         /// </summary>
+        /// <typeparam name="T">The type of elements in the collection.</typeparam>
         /// <param name="page">A page of a paginated collection.</param>
         /// <returns>A collection containing the next page of results.</returns>
         /// <exception cref="InvalidOperationException">If <see cref="ReadOnlyCollectionPage{T}.CanHaveNextPage"/> is <see langword="false"/>.</exception>

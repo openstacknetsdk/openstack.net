@@ -471,7 +471,7 @@
         /// Removes one or more domain records from the DNS service.
         /// </summary>
         /// <param name="domainId">The domain ID. This is obtained from <see cref="DnsDomain.Id">DnsDomain.Id</see>.</param>
-        /// <param name="recordId">A collection of IDs for the records to remove. These are obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
+        /// <param name="recordIds">A collection of IDs for the records to remove. These are obtained from <see cref="DnsRecord.Id">DnsRecord.Id</see>.</param>
         /// <param name="completionOption">Specifies when the <see cref="Task"/> representing the asynchronous server operation should be considered complete.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <param name="progress">An optional callback object to receive progress notifications, if <paramref name="completionOption"/> is <see cref="AsyncCompletionOption.RequestCompleted"/>. If this is <see langword="null"/>, no progress notifications are sent.</param>
@@ -491,16 +491,16 @@
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="domainId"/> is <see langword="null"/>.
         /// <para>-or-</para>
-        /// <para>If <paramref name="recordId"/> is <see langword="null"/>.</para>
+        /// <para>If <paramref name="recordIds"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="recordId"/> contains any <see langword="null"/> values.
+        /// If <paramref name="recordIds"/> contains any <see langword="null"/> values.
         /// <para>-or-</para>
         /// <para>If <paramref name="completionOption"/> is not a valid <see cref="AsyncCompletionOption"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Remove_Records-d1e5188.html">Remove Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
-        Task<DnsJob> RemoveRecordsAsync(DomainId domainId, IEnumerable<RecordId> recordId, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<DnsJob> progress);
+        Task<DnsJob> RemoveRecordsAsync(DomainId domainId, IEnumerable<RecordId> recordIds, AsyncCompletionOption completionOption, CancellationToken cancellationToken, IProgress<DnsJob> progress);
 
         #endregion
 

@@ -42,6 +42,7 @@
         /// Gets the <see cref="DnsRecordType"/> instance with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <returns>The unique <see cref="DnsRecordType"/> instance with the specified name.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
         public static DnsRecordType FromName(string name)
