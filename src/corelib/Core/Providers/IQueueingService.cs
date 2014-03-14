@@ -341,10 +341,10 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
@@ -361,10 +361,10 @@
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <param name="messages">The messages to post.</param>
-        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
