@@ -595,15 +595,15 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public virtual User GetUser(string userId, CloudIdentity identity)
+        public virtual User GetUser(string id, CloudIdentity identity)
         {
-            if (userId == null)
-                throw new ArgumentNullException("userId");
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("userId cannot be empty");
+            if (id == null)
+                throw new ArgumentNullException("id");
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("id cannot be empty");
             CheckIdentity(identity);
 
-            var urlPath = string.Format("v2.0/users/{0}", userId);
+            var urlPath = string.Format("v2.0/users/{0}", id);
 
             var response = ExecuteRESTRequest<UserResponse>(identity, new Uri(UrlBase, urlPath), HttpMethod.GET);
 
@@ -611,24 +611,24 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public virtual NewUser AddUser(NewUser newUser, CloudIdentity identity)
+        public virtual NewUser AddUser(NewUser user, CloudIdentity identity)
         {
-            if (newUser == null)
-                throw new ArgumentNullException("newUser");
-            if (string.IsNullOrEmpty(newUser.Username))
-                throw new ArgumentException("newUser.Username cannot be null or empty");
-            if (newUser.Id != null)
-                throw new InvalidOperationException("newUser.Id must be null");
+            if (user == null)
+                throw new ArgumentNullException("user");
+            if (string.IsNullOrEmpty(user.Username))
+                throw new ArgumentException("user.Username cannot be null or empty");
+            if (user.Id != null)
+                throw new InvalidOperationException("user.Id must be null");
             CheckIdentity(identity);
 
-            var response = ExecuteRESTRequest<NewUserResponse>(identity, new Uri(UrlBase, "/v2.0/users"), HttpMethod.POST, new AddUserRequest(newUser));
+            var response = ExecuteRESTRequest<NewUserResponse>(identity, new Uri(UrlBase, "/v2.0/users"), HttpMethod.POST, new AddUserRequest(user));
 
             if (response == null || response.Data == null)
                 return null;
 
             // If the user specifies a password, then the password will not be in the response, so we need to fill it in on the return object.
             if (string.IsNullOrEmpty(response.Data.NewUser.Password))
-                response.Data.NewUser.Password = newUser.Password;
+                response.Data.NewUser.Password = user.Password;
 
             return response.Data.NewUser;
         }
