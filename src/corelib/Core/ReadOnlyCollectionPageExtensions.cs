@@ -91,8 +91,10 @@
 
                     // continue with the next page
                     currentTask = getNextPage();
+                    // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
                     currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
+            // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
             currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
 

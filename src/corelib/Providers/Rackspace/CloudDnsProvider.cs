@@ -1122,12 +1122,8 @@
                     }
                     else
                     {
-                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
-                           task =>
-                           {
-                               task.PropagateExceptions();
-                               return pollJob();
-                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken)
+                            .Then(task => pollJob());
                     }
                 };
 
@@ -1152,8 +1148,10 @@
 
                     // reschedule
                     currentTask = moveNext();
+                    // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
                     currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
+            // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
             currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
@@ -1205,12 +1203,8 @@
                     }
                     else
                     {
-                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
-                           task =>
-                           {
-                               task.PropagateExceptions();
-                               return pollJob();
-                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken)
+                            .Then(task => pollJob());
                     }
                 };
 
@@ -1235,8 +1229,10 @@
 
                     // reschedule
                     currentTask = moveNext();
+                    // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
                     currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
+            // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
             currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;

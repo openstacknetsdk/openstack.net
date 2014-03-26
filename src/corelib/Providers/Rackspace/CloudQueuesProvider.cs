@@ -263,7 +263,7 @@
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
                 .Then(requestResource)
-                .ContinueWith(interpretResult);
+                .Select(interpretResult, true);
         }
 
         /// <inheritdoc/>
