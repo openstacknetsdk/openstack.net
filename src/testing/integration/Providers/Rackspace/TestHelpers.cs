@@ -12,6 +12,12 @@
         public static byte[] EncodeRequestBody<TBody>(HttpWebRequest request, TBody body, Func<HttpWebRequest, TBody, byte[]> encodeRequestBodyImpl)
         {
             byte[] encoded = encodeRequestBodyImpl(request, body);
+
+            foreach (string header in request.Headers)
+            {
+                Console.Error.WriteLine(string.Format("{0}: {1}", header, request.Headers[header]));
+            }
+
             Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(encoded));
             return encoded;
         }
