@@ -12,7 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known policy types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
-    /// <seealso href="http://docs-internal.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createPolicies_v1.0__tenantId__groups__groupId__policies_Policies.html">Create Policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+    /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createPolicies_v1.0__tenantId__groups__groupId__policies_autoscale-policies.html">Create policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonConverter(typeof(PolicyType.Converter))]

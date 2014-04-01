@@ -31,7 +31,7 @@
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroups_v1.0__tenantId__groups_Groups.html">List Scaling Groups (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_listGroups_v1.0__tenantId__groups_autoscale-groups.html">List scaling groups (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ReadOnlyCollectionPage<ScalingGroup>> ListScalingGroupsAsync(ScalingGroupId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
@@ -46,7 +46,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createGroup_v1.0__tenantId__groups_Groups.html">Create Group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createGroup_v1.0__tenantId__groups_autoscale-groups.html">Create Group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ScalingGroup> CreateGroupAsync(ScalingGroupConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -61,19 +61,24 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupManifest_v1.0__tenantId__groups__groupId__Groups.html">List All Group Details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_showGroupManifest_v1.0__tenantId__groups__groupId__autoscale-groups.html">Show scaling group details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ScalingGroup> GetGroupAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Remove and delete a scaling group.
         /// </summary>
+        /// <remarks>
+        /// If <paramref name="force"/> is <see langword="true"/>, active servers in the group will be
+        /// immediately deleted, and pending servers will be deleted once they finish building and become
+        /// active.
+        /// </remarks>
         /// <param name="groupId">The ID of the scaling group. This is obtained from <see cref="ScalingGroup.Id">ScalingGroup.Id</see>.</param>
         /// <param name="force"><see langword="true"/> to delete the scaling group even if it has active or pending entities; otherwise, <see langword="false"/> to only delete the group if it does not contain any entities. If the value is <see langword="null"/>, a provider-specific default value is used.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteGroup_v1.0__tenantId__groups__groupId__Groups.html">Delete Group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteGroup_v1.0__tenantId__groups__groupId__autoscale-groups.html">Delete scaling group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task DeleteGroupAsync(ScalingGroupId groupId, bool? force, CancellationToken cancellationToken);
 
         /// <summary>
@@ -88,7 +93,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupState_v1.0__tenantId__groups__groupId__state_Groups.html">Get Group State (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupState_v1.0__tenantId__groups__groupId__state_autoscale-groups.html">Get scaling group state (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<GroupState> GetGroupStateAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -99,7 +104,7 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_pauseGroup_v1.0__tenantId__groups__groupId__pause_Groups.html">Pause Group Policy Execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_pauseGroup_v1.0__tenantId__groups__groupId__pause_autoscale-groups.html">Pause group policy execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task PauseGroupAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -110,7 +115,7 @@
         /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_resumeGroup_v1.0__tenantId__groups__groupId__resume_Groups.html">Resume Group Policy Execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_resumeGroup_v1.0__tenantId__groups__groupId__resume_autoscale-groups.html">Resume group policy execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task ResumeGroupAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         #endregion Groups
@@ -129,7 +134,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Get Group Configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Show scaling group configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<GroupConfiguration> GetGroupConfigurationAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -145,7 +150,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Replace Group Configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Update scaling group configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task SetGroupConfigurationAsync(ScalingGroupId groupId, GroupConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -160,7 +165,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Get Launch Configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Show launch configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<LaunchConfiguration> GetLaunchConfigurationAsync(ScalingGroupId groupId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -176,7 +181,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Replace Launch Configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Update launch configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task SetLaunchConfigurationAsync(ScalingGroupId groupId, LaunchConfiguration configuration, CancellationToken cancellationToken);
 
         #endregion Configurations
@@ -198,7 +203,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicies_v1.0__tenantId__groups__groupId__policies_Policies.html">Get Policies List (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicies_v1.0__tenantId__groups__groupId__policies_autoscale-policies.html">List policies (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ReadOnlyCollectionPage<Policy>> ListPoliciesAsync(ScalingGroupId groupId, PolicyId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
@@ -218,7 +223,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createPolicies_v1.0__tenantId__groups__groupId__policies_Policies.html">Create Policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createPolicies_v1.0__tenantId__groups__groupId__policies_autoscale-policies.html">Create policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<Policy> CreatePolicyAsync(ScalingGroupId groupId, PolicyConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -238,7 +243,7 @@
         /// <para>If <paramref name="policyId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicy_v1.0__tenantId__groups__groupId__policies__policyId__Policies.html">Get Policy Details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Show policy details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<Policy> GetPolicyAsync(ScalingGroupId groupId, PolicyId policyId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -261,7 +266,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putPolicy_v1.0__tenantId__groups__groupId__policies__policyId__Policies.html">Replace Policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putPolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Replace policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task SetPolicyAsync(ScalingGroupId groupId, PolicyId policyId, PolicyConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -277,7 +282,7 @@
         /// <para>If <paramref name="policyId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deletePolicy_v1.0__tenantId__groups__groupId__policies__policyId__Policies.html">Delete Policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deletePolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Delete policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task DeletePolicyAsync(ScalingGroupId groupId, PolicyId policyId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -293,7 +298,7 @@
         /// <para>If <paramref name="policyId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_executePolicy_v1.0__tenantId__groups__groupId__policies__policyId__execute_Policies.html">Execute Policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_executePolicy_v1.0__tenantId__groups__groupId__policies__policyId__execute_autoscale-policies.html">Execute policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task ExecutePolicyAsync(ScalingGroupId groupId, PolicyId policyId, CancellationToken cancellationToken);
 
         #endregion Policies
@@ -321,7 +326,7 @@
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhooks_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_Webhooks.html">Get a list of webhooks for the policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhooks_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">List webhooks for the policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ReadOnlyCollectionPage<Webhook>> ListWebhooksAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit, CancellationToken cancellationToken);
 
         /// <summary>
@@ -344,7 +349,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_Webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<Webhook> CreateWebhookAsync(ScalingGroupId groupId, PolicyId policyId, NewWebhookConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -368,7 +373,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="configurations"/> contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_Webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<ReadOnlyCollection<Webhook>> CreateWebhookRangeAsync(ScalingGroupId groupId, PolicyId policyId, IEnumerable<NewWebhookConfiguration> configurations, CancellationToken cancellationToken);
 
         /// <summary>
@@ -391,7 +396,7 @@
         /// <para>If <paramref name="webhookId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__Webhooks.html">View Webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Show webhook details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task<Webhook> GetWebhookAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -413,7 +418,7 @@
         /// <para>If <paramref name="configuration"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__Webhooks.html">Update Webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Update webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task UpdateWebhookAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId, UpdateWebhookConfiguration configuration, CancellationToken cancellationToken);
 
         /// <summary>
@@ -432,7 +437,7 @@
         /// <para>If <paramref name="webhookId"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__Webhooks.html">Delete a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Delete webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
         Task DeleteWebhookAsync(ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId, CancellationToken cancellationToken);
 
         #endregion Webhooks

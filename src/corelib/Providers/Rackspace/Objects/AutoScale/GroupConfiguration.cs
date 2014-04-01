@@ -7,6 +7,11 @@
     /// <summary>
     /// This class represents the configuration for a scaling group in the <see cref="IAutoScaleService"/>.
     /// </summary>
+    /// <remarks>
+    /// The configuration options for the scaling group. The scaling group configuration specifies
+    /// the basic elements of the Auto Scale configuration. It manages how many servers can
+    /// participate in the scaling group. It specifies information related to load balancers.
+    /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
@@ -105,8 +110,12 @@
         }
 
         /// <summary>
-        /// Gets the cooldown time of the scaling group.
+        /// Gets the cooldown time of the scaling group, which specifies the time the group must wait
+        /// after a scaling policy is triggered before another request for scaling is accepted.
         /// </summary>
+        /// <remarks>
+        /// Applies mainly to event-based policies.
+        /// </remarks>
         public TimeSpan? Cooldown
         {
             get
@@ -119,7 +128,9 @@
         }
 
         /// <summary>
-        /// Gets the minimum number of servers to include in the scaling group.
+        /// Gets the minimum amount of entities that are allowed in this group. You cannot scale down
+        /// below this value. Increasing this value can cause an immediate addition to the scaling
+        /// group.
         /// </summary>
         public long? MinEntities
         {
@@ -130,7 +141,9 @@
         }
 
         /// <summary>
-        /// Gets the maximum number of servers to include in the scaling group.
+        /// Gets the maximum amount of entities that are allowed in this group. You cannot scale up
+        /// above this value. Decreasing this value can cause an immediate reduction of the scaling
+        /// group.
         /// </summary>
         public long? MaxEntities
         {

@@ -68,7 +68,7 @@
         }
 
         /// <summary>
-        /// Gets the port used for the load balancer protocol.
+        /// Gets the port on which new servers will receive traffic from the load balancer, often port 80.
         /// </summary>
         /// <seealso cref="LoadBalancers.LoadBalancerConfiguration{TNodeConfiguration}.Port"/>
         public int? Port

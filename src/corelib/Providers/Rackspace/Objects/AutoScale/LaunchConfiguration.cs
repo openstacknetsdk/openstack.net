@@ -1,15 +1,17 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// This class represents the launch configuration for a scaling group in the <see cref="IAutoScaleService"/>.
     /// </summary>
+    /// <remarks>
+    /// A launch configuration defines what to do when a new server is created, including information
+    /// about the server image, the flavor of the server image, and the load balancer to which to
+    /// connect. Currently, the only supported <see cref="LaunchType"/> is <see cref="LaunchType.LaunchServer"/>.
+    /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]

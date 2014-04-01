@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -14,7 +13,6 @@
     using net.openstack.Core.Providers;
     using net.openstack.Providers.Rackspace;
     using net.openstack.Providers.Rackspace.Objects.AutoScale;
-    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
     using CancellationTokenSource = System.Threading.CancellationTokenSource;
@@ -24,7 +22,6 @@
     using IIdentityProvider = net.openstack.Core.Providers.IIdentityProvider;
     using Path = System.IO.Path;
     using StreamReader = System.IO.StreamReader;
-    using WebException = System.Net.WebException;
     using WebRequest = System.Net.WebRequest;
     using WebResponse = System.Net.WebResponse;
 
@@ -100,7 +97,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 0, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -125,7 +122,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 1, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -199,7 +196,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 0, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -249,7 +246,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -297,14 +294,14 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
                 Assert.IsNotNull(scalingGroup);
 
                 Personality[] personality = { new Personality("/usr/lib/myfile.txt", "Stuff", Encoding.UTF8) };
-                LaunchConfiguration updatedConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, personality)));
+                LaunchConfiguration updatedConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, personality)));
                 await provider.SetLaunchConfigurationAsync(scalingGroup.Id, updatedConfiguration, cancellationTokenSource.Token);
 
                 await provider.DeleteGroupAsync(scalingGroup.Id, false, cancellationTokenSource.Token);
@@ -354,7 +351,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 0, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -433,152 +430,6 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatHours()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HH'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatMinutes()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HHmm'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatSeconds()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HHmmss'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatFractionalHours()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HH'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatFractionalMinutes()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HHmm'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyBasicFormatFractionalTenthsMicroseconds()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyyMMdd'T'HHmmss'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatHours()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatMinutes()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatSeconds()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatFractionalHours()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatFractionalMinutes()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatFractionalTenthsMicroseconds()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'");
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
-        public async Task TestCreatePolicyExtendedFormatEndOfDay()
-        {
-            await TestCreatePolicyWithTimeFormat("yyyy'-'MM'-'dd'T24:00:00Z'");
-        }
-
-        private async Task TestCreatePolicyWithTimeFormat(string timeFormat)
-        {
-            IAutoScaleService provider = CreateProvider();
-            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(300))))
-            {
-                FlavorId flavorId = await GetDefaultFlavorIdAsync(provider, cancellationTokenSource.Token);
-                ImageId imageId = await GetDefaultImageIdAsync(provider, cancellationTokenSource.Token);
-
-                string groupName = CreateRandomScalingGroupName();
-                string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
-                GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 0, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
-                PolicyConfiguration[] policyConfigurations = { };
-                ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
-                ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
-                Assert.IsNotNull(scalingGroup);
-                Assert.IsNotNull(scalingGroup.Id);
-
-                PolicyConfiguration policyConfiguration;
-                Policy policy;
-
-                /* Percentage Change At Time
-                 */
-                policyConfiguration = PolicyConfiguration.PercentageChangeAtTimeInternal("Percentage Change -50% At Time Policy", -50.0, TimeSpan.FromSeconds(60), DateTimeOffset.UtcNow.AddMinutes(30).ToString(timeFormat, CultureInfo.InvariantCulture));
-                Assert.AreEqual(PolicyType.Schedule, policyConfiguration.PolicyType);
-                policy = await provider.CreatePolicyAsync(scalingGroup.Id, policyConfiguration, cancellationTokenSource.Token);
-                Assert.IsNotNull(policy);
-                Assert.AreEqual(policyConfiguration.Change, policy.Change);
-                Assert.AreEqual(policyConfiguration.ChangePercent, policy.ChangePercent);
-                Assert.AreEqual(policyConfiguration.Cooldown, policy.Cooldown);
-                Assert.AreEqual(policyConfiguration.DesiredCapacity, policy.DesiredCapacity);
-                Assert.AreEqual(policyConfiguration.Name, policy.Name);
-                Assert.AreEqual(policyConfiguration.PolicyType, policy.PolicyType);
-
-                await provider.DeletePolicyAsync(scalingGroup.Id, policy.Id, cancellationTokenSource.Token);
-
-                /* Cleanup
-                 */
-                await provider.DeleteGroupAsync(scalingGroup.Id, false, cancellationTokenSource.Token);
-            }
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.User)]
-        [TestCategory(TestCategories.AutoScale)]
         public async Task TestGetPolicy()
         {
             IAutoScaleService provider = CreateProvider();
@@ -590,7 +441,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 0, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -737,7 +588,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.FromSeconds(60), minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -807,7 +658,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -877,7 +728,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { PolicyConfiguration.Capacity("Capacity 1 Policy", 1, TimeSpan.Zero) };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -967,7 +818,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { PolicyConfiguration.Capacity("Capacity 1 Policy", 1, TimeSpan.Zero) };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -1004,7 +855,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { PolicyConfiguration.Capacity("Capacity 1 Policy", 1, TimeSpan.Zero) };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -1043,7 +894,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { PolicyConfiguration.Capacity("Capacity 1 Policy", 1, TimeSpan.Zero) };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);
@@ -1086,7 +937,7 @@
                 string groupName = CreateRandomScalingGroupName();
                 string serverName = UserComputeTests.UnitTestServerPrefix + groupName + '-';
                 GroupConfiguration groupConfiguration = new GroupConfiguration(name: groupName, cooldown: TimeSpan.Zero, minEntities: 0, maxEntities: 1, metadata: new JObject());
-                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null)));
+                LaunchConfiguration launchConfiguration = new ServerLaunchConfiguration(new ServerLaunchArguments(new ServerArgument(flavorId, imageId, serverName, null, null, null)));
                 PolicyConfiguration[] policyConfigurations = { PolicyConfiguration.Capacity("Capacity 1 Policy", 1, TimeSpan.Zero) };
                 ScalingGroupConfiguration configuration = new ScalingGroupConfiguration(groupConfiguration, launchConfiguration, policyConfigurations);
                 ScalingGroup scalingGroup = await provider.CreateGroupAsync(configuration, cancellationTokenSource.Token);

@@ -76,6 +76,10 @@
         /// Gets a value indicating whether execution of the scaling policies in the Auto Scale
         /// group is currently suspended.
         /// </summary>
+        /// <remarks>
+        /// If this value is <see langword="true"/>, the group will not scale up or down. All
+        /// policy execution calls will be ignored while this value is set to <see langword="true"/>.
+        /// </remarks>
         public bool? Paused
         {
             get
