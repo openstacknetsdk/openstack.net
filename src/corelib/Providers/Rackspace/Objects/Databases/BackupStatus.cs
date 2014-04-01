@@ -13,6 +13,7 @@
     /// with added support for unknown statuses returned by a server extension.
     /// </remarks>
     /// <seealso cref="Backup.Status"/>
+    /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/backups.html">Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonConverter(typeof(BackupStatus.Converter))]
@@ -21,7 +22,10 @@
         private static readonly ConcurrentDictionary<string, BackupStatus> _types =
             new ConcurrentDictionary<string, BackupStatus>(StringComparer.OrdinalIgnoreCase);
         private static readonly BackupStatus _new = FromName("NEW");
+        private static readonly BackupStatus _building = FromName("BUILDING");
         private static readonly BackupStatus _completed = FromName("COMPLETED");
+        private static readonly BackupStatus _failed = FromName("FAILED");
+        private static readonly BackupStatus _deleteFailed = FromName("DELETE_FAILED");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BackupStatus"/> class with the specified name.
@@ -50,7 +54,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="BackupStatus"/> representing <placeholder>placeholder</placeholder>.
+        /// Gets a <see cref="BackupStatus"/> representing a backup task that is created but not yet running.
         /// </summary>
         public static BackupStatus New
         {
@@ -61,13 +65,46 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="BackupStatus"/> representing <placeholder>placeholder</placeholder>.
+        /// Gets a <see cref="BackupStatus"/> representing a backup task that is currently running.
+        /// </summary>
+        public static BackupStatus Building
+        {
+            get
+            {
+                return _building;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="BackupStatus"/> representing a backup task which completed successfully.
         /// </summary>
         public static BackupStatus Completed
         {
             get
             {
                 return _completed;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="BackupStatus"/> representing a backup task which failed to complete successfully.
+        /// </summary>
+        public static BackupStatus Failed
+        {
+            get
+            {
+                return _failed;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="BackupStatus"/> representing a backup task which failed to delete Cloud Files objects.
+        /// </summary>
+        public static BackupStatus DeleteFailed
+        {
+            get
+            {
+                return _deleteFailed;
             }
         }
 
