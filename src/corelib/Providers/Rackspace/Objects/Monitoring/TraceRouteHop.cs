@@ -58,6 +58,10 @@
         /// </summary>
         /// <remarks>
         /// The first hop in the trace has <see cref="Number"/>=1.
+        /// <note type="note">
+        /// Hop numbers may repeat themselves in <see cref="TraceRoute.Hops"/>, which
+        /// just indicates a split in the route.
+        /// </note>
         /// </remarks>
         public int? Number
         {
