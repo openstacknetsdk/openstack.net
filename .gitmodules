@@ -24,7 +24,7 @@
 	url = git@github.com:rackerlabs/docs-cloud-block-storage.git
 [submodule "Reference/Rackspace/cloud-files"]
 	path = Reference/Rackspace/cloud-files
-	url = git@github.rackspace.com:IX/cloud-files.git
+	url = git@github.com:rackerlabs/docs-cloud-files.git
 [submodule "Reference/Rackspace/cloud-networks"]
 	path = Reference/Rackspace/cloud-networks
 	url = git@github.rackspace.com:IX/cloud-networks.git

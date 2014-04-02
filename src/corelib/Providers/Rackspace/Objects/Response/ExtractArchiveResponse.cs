@@ -9,7 +9,7 @@
     /// </summary>
     /// <seealso cref="CloudFilesProvider.ExtractArchive"/>
     /// <seealso cref="CloudFilesProvider.ExtractArchiveFromFile"/>
-    /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extract Archive (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+    /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Extract_Archive-d1e2338.html">Extracting Archive Files (Rackspace Cloud Files Developer Guide - API v1)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]

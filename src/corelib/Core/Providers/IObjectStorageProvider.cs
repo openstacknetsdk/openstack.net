@@ -41,7 +41,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/s_listcontainers.html">List Containers (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showAccountDetails_v1__account__storage_account_services.html">Show account details and list containers (OpenStack Object Storage API v1 Reference)</seealso>
         IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-container.html">Create Container (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createContainer_v1__account___container__storage_container_services.html">Create container (OpenStack Object Storage API v1 Reference)</seealso>
         ObjectStore CreateContainer(string container, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ContainerNotEmptyException">If the container could not be deleted because it was not empty and <paramref name="deleteObjects"/> was <see langword="false"/>.</exception>
         /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container.html">Delete Container (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/DELETE_deleteContainer_v1__account___container__storage_container_services.html">Delete container (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteContainer(string container, bool deleteObjects = false, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showContainerMeta_v1__account___container__storage_container_services.html">Show container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetContainerHeader(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showContainerMeta_v1__account___container__storage_container_services.html">Show container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetContainerMetaData(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Details-d1e2566.html">View CDN Container Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         ContainerCDN GetContainerCDNHeader(string container, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Containers-d1e2414.html">List CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listCDNcontainers_v1__account__CDN_Account_Operations-d1e2397.html">List CDN-Enabled Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         IEnumerable<ContainerCDN> ListCDNContainers(int? limit = null, string markerId = null, string markerEnd = null, bool cdnEnabled = false, string region = null, CloudIdentity identity = null);
 
         /// <overloads>
@@ -257,7 +257,7 @@ namespace net.openstack.Core.Providers
         /// This feature is a Rackspace-specific extension to the OpenStack Object Storage Service.
         /// </note>
         /// </remarks>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         /// </overloads>
         ///
         /// <summary>
@@ -298,7 +298,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> EnableCDNOnContainer(string container, bool logRetention, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, bool logRetention, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         Dictionary<string, string> DisableCDNOnContainer(string container, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">Create or Update Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateContainerMeta_v1__account___container__storage_container_services.html">Create, update, or delete container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateContainerMetadata(string container, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateContainerMeta_v1__account___container__storage_container_services.html">Create, update, or delete container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteContainerMetadata(string container, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -529,7 +529,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateContainerMeta_v1__account___container__storage_container_services.html">Create, update, or delete container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteContainerMetadata(string container, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -567,7 +567,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ItemNotFoundException">If the specified container does not exist.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/POST_updateCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">Update CDN-Enabled Container Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         void UpdateContainerCdnHeaders(string container, Dictionary<string, string> headers, string region = null, CloudIdentity identity = null);
 
         /// <summary>
@@ -621,7 +621,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -668,7 +668,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -706,7 +706,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string css, bool listing, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -752,7 +752,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         void EnableStaticWebOnContainer(string container, string index, string error, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -779,7 +779,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the provider requires containers be CDN-enabled before they can be accessed from the web, and the <see cref="ContainerCDN.CDNEnabled"/> property is false.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         void DisableStaticWebOnContainer(string container, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         #endregion
@@ -827,7 +827,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showObjectMeta_v1__account___container___object__storage_object_services.html">Show object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -874,7 +874,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object-metadata.html">Get Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showObjectMeta_v1__account___container___object__storage_object_services.html">Show object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -924,7 +924,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta_v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -965,7 +965,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta_v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteObjectMetadata(string container, string objectName, IEnumerable<string> keys, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1006,7 +1006,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta_v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteObjectMetadata(string container, string objectName, string key, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1047,7 +1047,7 @@ namespace net.openstack.Core.Providers
         /// <code source="..\Samples\CPPCodeSamples\ObjectStorageProviderExamples.cpp" region="ListObjectsInContainer" language="cpp"/>
         /// <code source="..\Samples\FSharpCodeSamples\ObjectStorageProviderExamples.fs" region="ListObjectsInContainer" language="fs"/>
         /// </example>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/list-objects.html">List Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showContainerDetails_v1__account___container__storage_container_services.html">Show container details and list objects (OpenStack Object Storage API v1 Reference)</seealso>
         IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1092,7 +1092,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1138,7 +1138,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1187,7 +1187,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_getObject_v1__account___container___object__storage_object_services.html">Get object content and metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1241,7 +1241,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-object.html">Get Object Details (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_getObject_v1__account___container___object__storage_object_services.html">Get object content and metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1299,7 +1299,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/COPY_copyObject_v1__account___container___object__storage_object_services.html">Copy object (OpenStack Object Storage API v1 Reference)</seealso>
         void CopyObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1367,8 +1367,8 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object.html">Delete Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/COPY_copyObject_v1__account___container___object__storage_object_services.html">Copy object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/DELETE_deleteObject_v1__account___container___object__storage_object_services.html">Delete object (OpenStack Object Storage API v1 Reference)</seealso>
         void MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1416,8 +1416,8 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-object.html">Delete Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/manifest-objects.html">Manifest objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/DELETE_deleteObject_v1__account___container___object__storage_object_services.html">Delete object (OpenStack Object Storage API v1 Reference)</seealso>
         void DeleteObject(string container, string objectName, Dictionary<string, string> headers = null, bool deleteSegments = true, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1454,7 +1454,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="CDNNotEnabledException">If the specified <paramref name="container"/> is not CDN-enabled.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/DELETE_deleteCDNobject_v1__account___object__CDN_Object_Services.html">Delete CDN-Enabled Object (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         void PurgeObjectFromCDN(string container, string objectName, IEnumerable<string> emails = null, string region = null, CloudIdentity identity = null);
 
         #endregion
@@ -1488,7 +1488,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showAccountMeta_v1__account__storage_account_services.html">Show account metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetAccountHeaders(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1521,7 +1521,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showAccountMeta_v1__account__storage_account_services.html">Show account metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetAccountMetaData(string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
@@ -1559,7 +1559,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateAccountMeta_v1__account__storage_account_services.html">Create, update, or delete account metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void UpdateAccountMetadata(Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         #endregion
