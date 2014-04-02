@@ -12,7 +12,7 @@
     /// This class functions as a strongly-typed enumeration of known launch types,
     /// with added support for unknown types returned by a server extension.
     /// </remarks>
-    /// <seealso href="http://docs-internal.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Replace Launch Configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+    /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Update launch configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonConverter(typeof(LaunchType.Converter))]

@@ -17,13 +17,16 @@
     {
         private static readonly ConcurrentDictionary<string, VolumeState> _states =
             new ConcurrentDictionary<string, VolumeState>(StringComparer.OrdinalIgnoreCase);
-        private static readonly VolumeState _creating = FromName("CREATING");
-        private static readonly VolumeState _available = FromName("AVAILABLE");
-        private static readonly VolumeState _attaching = FromName("ATTACHING");
-        private static readonly VolumeState _inUse = FromName("IN-USE");
-        private static readonly VolumeState _deleting = FromName("DELETING");
-        private static readonly VolumeState _error = FromName("ERROR");
-        private static readonly VolumeState _errorDeleting = FromName("ERROR_DELETING");
+        private static readonly VolumeState _creating = FromName("creating");
+        private static readonly VolumeState _available = FromName("available");
+        private static readonly VolumeState _attaching = FromName("attaching");
+        private static readonly VolumeState _inUse = FromName("in-use");
+        private static readonly VolumeState _deleting = FromName("deleting");
+        private static readonly VolumeState _error = FromName("error");
+        private static readonly VolumeState _errorDeleting = FromName("error_deleting");
+        private static readonly VolumeState _backingUp = FromName("backing-up");
+        private static readonly VolumeState _restoringBackup = FromName("restoring-backup");
+        private static readonly VolumeState _errorRestoring = FromName("error_restoring");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VolumeState"/> class with the specified name.
@@ -107,7 +110,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="VolumeState"/> indicating there has been some error with the volume.
+        /// Gets a <see cref="VolumeState"/> indicating an error occurred during volume creation.
         /// </summary>
         public static VolumeState Error
         {
@@ -118,13 +121,46 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="VolumeState"/> indicating an error occurred while deleting the volume.
+        /// Gets a <see cref="VolumeState"/> indicating an error occurred during volume deletion.
         /// </summary>
         public static VolumeState ErrorDeleting
         {
             get
             {
                 return _errorDeleting;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="VolumeState"/> indicating the volume is being backed-up.
+        /// </summary>
+        public static VolumeState BackingUp
+        {
+            get
+            {
+                return _backingUp;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="VolumeState"/> indicating a backup is being restored to the volume.
+        /// </summary>
+        public static VolumeState RestoringBackup
+        {
+            get
+            {
+                return _restoringBackup;
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="VolumeState"/> indicating an error occurred during backup restoration to a volume.
+        /// </summary>
+        public static VolumeState ErrorRestoring
+        {
+            get
+            {
+                return _errorRestoring;
             }
         }
 

@@ -148,6 +148,7 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</para>
         /// </exception>
+        /// <exception cref="ServiceConflictException">If a user with the specified <see cref="NewUser.Username"/> already exists.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_addUser_v2.0_users_.html">Add User (OpenStack Identity Service API v2.0 Reference)</seealso>
         NewUser AddUser(NewUser user, CloudIdentity identity = null);

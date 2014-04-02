@@ -48,6 +48,12 @@
         private Personality[] _personality;
 
         /// <summary>
+        /// This is the backing field for the <see cref="DiskConfiguration"/> property.
+        /// </summary>
+        [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private DiskConfiguration _diskConfiguration;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ServerArgument"/> class
         /// during JSON deserialization.
         /// </summary>
@@ -63,6 +69,7 @@
         /// <param name="flavorId">The ID of the flavor to use when creating new servers. See <see cref="Flavor.Id"/>.</param>
         /// <param name="imageId">The ID of the image to use when creating new servers. See <see cref="SimpleServerImage.Id"/>.</param>
         /// <param name="name">The prefix to use when assigning names to new servers.</param>
+        /// <param name="diskConfiguration">The disk configuration to use for new servers.</param>
         /// <param name="networks">A collection of <see cref="ServerNetworkArgument"/> objects describing the networks to initially connect newly created servers to.</param>
         /// <param name="personality">A collection of <see cref="Personality"/> objects describing the personality for new server instances.</param>
         /// <exception cref="ArgumentNullException">
@@ -75,7 +82,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="personality"/> contains any <see langword="null"/> values.</para>
         /// </exception>
-        public ServerArgument(FlavorId flavorId, ImageId imageId, string name, IEnumerable<ServerNetworkArgument> networks, IEnumerable<Personality> personality)
+        public ServerArgument(FlavorId flavorId, ImageId imageId, string name, DiskConfiguration diskConfiguration, IEnumerable<ServerNetworkArgument> networks, IEnumerable<Personality> personality)
         {
             if (flavorId == null)
                 throw new ArgumentNullException("flavorId");
@@ -136,6 +143,17 @@
             get
             {
                 return _name;
+            }
+        }
+
+        /// <summary>
+        /// Gets the disk configuration, which specifies how new servers are partitioned.
+        /// </summary>
+        public DiskConfiguration DiskConfiguration
+        {
+            get
+            {
+                return _diskConfiguration;
             }
         }
 

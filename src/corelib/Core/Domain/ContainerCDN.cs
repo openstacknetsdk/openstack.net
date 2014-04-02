@@ -44,14 +44,14 @@
         /// </value>
         /// <seealso cref="O:net.openstack.Core.Providers.IObjectStorageProvider.EnableCDNOnContainer"/>
         /// <seealso cref="IObjectStorageProvider.DisableCDNOnContainer"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_enabled")]
         public bool CDNEnabled { get; private set; }
 
         /// <summary>
         /// Gets the Time To Live (TTL) in seconds for a CDN-Enabled container.
         /// </summary>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/PUT_enableDisableCDNcontainer_v1__account___container__CDN_Container_Services-d1e2632.html">CDN-Enable and CDN-Disable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("ttl")]
         public long Ttl { get; private set; }
 
@@ -64,14 +64,14 @@
         /// <value>
         /// <see langword="true"/> if log retention is enabled for the container; otherwise, <see langword="false"/>.
         /// </value>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Container_Metadata-d1e2711.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("log_retention")]
         public bool LogRetention { get; private set; }
 
         /// <summary>
         /// Gets a publicly accessible URL for the container, which can be combined with any object name within the container to form the publicly accessible URL for that object for distribution over a CDN system.
         /// </summary>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Container_Metadata-d1e2711.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         [JsonProperty("cdn_uri")]
         public string CDNUri { get; private set; }
 

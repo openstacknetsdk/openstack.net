@@ -1,9 +1,6 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -124,6 +121,9 @@
         /// <summary>
         /// Gets the name of the scaling policy.
         /// </summary>
+        /// <remarks>
+        /// The <see cref="Name"/> must be unique for each scaling policy.
+        /// </remarks>
         public string Name
         {
             get
@@ -135,6 +135,11 @@
         /// <summary>
         /// Gets the desired capacity of the scaling policy.
         /// </summary>
+        /// <remarks>
+        /// Specifies the final capacity that is desired by the scale up event. Note that this value
+        /// is always rounded up. Use to specify a number of servers for the policy to implement - by
+        /// either adding or removing servers as needed.
+        /// </remarks>
         public long? DesiredCapacity
         {
             get
@@ -146,6 +151,12 @@
         /// <summary>
         /// Gets the cooldown period of the scaling policy.
         /// </summary>
+        /// <remarks>
+        /// The cooldown period prohibits the execution of this specific policy until the configured
+        /// cooldown time period has passed. Helps prevent an event triggering a policy and can help
+        /// to ensure that servers can be added quickly (short cooldown) and removed gradually (long
+        /// cooldown).
+        /// </remarks>
         public TimeSpan? Cooldown
         {
             get
@@ -160,6 +171,11 @@
         /// <summary>
         /// Gets the incremental change for the scaling policy.
         /// </summary>
+        /// <remarks>
+        /// Specifies the number of entities to add or remove, for example "1" implies that 1 server
+        /// needs to be added. Use to change the number of servers to a specific number. If a positive
+        /// number is used, servers are added; if a negative number is used, servers are removed.
+        /// </remarks>
         public long? Change
         {
             get
@@ -171,6 +187,13 @@
         /// <summary>
         /// Gets the percentage change for the scaling policy.
         /// </summary>
+        /// <remarks>
+        /// Use to change the percentage of servers relative to the current number of servers. If a positive
+        /// number is used, servers are added; if a negative number is used, servers are removed. The absolute
+        /// change in the number of servers is always rounded up. For example, if -X% of the current number
+        /// of servers translates to -0.5 or -0.25 or -0.75 servers, the actual number of servers that will
+        /// be shut down is 1.
+        /// </remarks>
         public double? ChangePercent
         {
             get
@@ -288,41 +311,11 @@
             if (changePercentage == 0)
                 throw new ArgumentException("changePercentage cannot be 0", "changePercentage");
 
-            const string timeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'";
+            const string timeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
             string serializedTime = time.ToUniversalTime().ToString(timeFormat);
 
             JObject arguments = new JObject(
                 new JProperty("at", JValue.CreateString(serializedTime)));
-
-            return new PolicyConfiguration(name, PolicyType.Schedule, null, cooldown, null, changePercentage, arguments);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="PolicyConfiguration"/> for a scaling policy that changes the
-        /// desired capacity of a scaling group by a percentage amount at the specified time.
-        /// </summary>
-        /// <remarks>
-        /// This method is used for testing the supported date/time formats accepted by the Auto Scale service.
-        /// </remarks>
-        /// <param name="name">The name of scaling policy.</param>
-        /// <param name="changePercentage">The percentage change to apply to the desired capacity for the scaling group.</param>
-        /// <param name="cooldown">The cooldown period for the scaling policy.</param>
-        /// <param name="time">The time at which to apply the change. The time should already be serialized to a format that the Auto Scale service accepts.</param>
-        /// <returns>A <see cref="PolicyConfiguration"/> representing the desired scaling policy configuration.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="name"/> is empty.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="changePercentage"/> is 0.</para>
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="cooldown"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
-        internal static PolicyConfiguration PercentageChangeAtTimeInternal(string name, double changePercentage, TimeSpan cooldown, string time)
-        {
-            if (changePercentage == 0)
-                throw new ArgumentException("changePercentage cannot be 0", "changePercentage");
-
-            JObject arguments = new JObject(
-                new JProperty("at", JValue.CreateString(time)));
 
             return new PolicyConfiguration(name, PolicyType.Schedule, null, cooldown, null, changePercentage, arguments);
         }

@@ -84,6 +84,11 @@
         /// Gets a collection of <see cref="LoadBalancerArgument"/> objects describing the load balancers to
         /// initially add the created server to.
         /// </summary>
+        /// <remarks>
+        /// All servers are added to these load balancers with the IP addresses of their ServiceNet network.
+        /// All servers are enabled and equally weighted. Any new servers that are not connected to the
+        /// ServiceNet network are not added to any load balancers.
+        /// </remarks>
         public ReadOnlyCollection<LoadBalancerArgument> LoadBalancers
         {
             get

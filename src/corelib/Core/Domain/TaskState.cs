@@ -18,7 +18,7 @@
     /// </note>
     /// </remarks>
     /// <seealso cref="Server.TaskState"/>
-    /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ch_extensions.html#task_state">OS-EXT-STS:task_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
+    /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/ext_status.html#task_state">OS-EXT-STS:task_state (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverter(typeof(TaskState.Converter))]
     public sealed class TaskState : ExtensibleEnum<TaskState>
@@ -122,6 +122,7 @@
         /// <summary>
         /// Gets a <see cref="TaskState"/> instance representing <placeholder>description</placeholder>.
         /// </summary>
+        [Obsolete("This task state is no longer used.")]
         public static TaskState ImageBackup
         {
             get

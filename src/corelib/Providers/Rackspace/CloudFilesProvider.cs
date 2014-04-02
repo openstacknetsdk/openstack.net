@@ -1255,7 +1255,7 @@ namespace net.openstack.Providers.Rackspace
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public void DeleteObjects(string container, IEnumerable<string> objects, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
@@ -1299,7 +1299,7 @@ namespace net.openstack.Providers.Rackspace
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Bulk_Delete-d1e2338.html.html">Bulk Delete (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public void BulkDelete(IEnumerable<KeyValuePair<string, string>> items, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             var urlPath = new Uri(string.Format("{0}/?bulk-delete", GetServiceEndpointCloudFiles(identity, region, useInternalUrl)));
@@ -1318,7 +1318,7 @@ namespace net.openstack.Providers.Rackspace
                 });
             var body = string.Join("\n", encoded.ToArray());
 
-            var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.DELETE, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
+            var response = ExecuteRESTRequest<BulkDeleteResponse>(identity, urlPath, HttpMethod.POST, body: body, headers: headers, settings: new JsonRequestSettings { ContentType = "text/plain" });
 
             Status status;
             if (_statusParser.TryParse(response.Data.Status, out status))
@@ -1720,8 +1720,8 @@ namespace net.openstack.Providers.Rackspace
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/manifest-objects.html">Manifest objects (OpenStack Object Storage API v1 Reference)</seealso>
         private void CreateObjectInSegments(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 4096, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
@@ -1864,22 +1864,22 @@ namespace net.openstack.Providers.Rackspace
         #region Auth Constants
 
         /// <summary>
-        /// The X-Auth-Token header, which specifies the token to use for authenticated requests.
+        /// The <strong>X-Auth-Token</strong> header, which specifies the token to use for authenticated requests.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/authentication-object-dev-guide.html">Authentication (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/authentication.html">Authentication (OpenStack Object Storage API v1 Reference)</seealso>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Authentication-d1e639.html">Authentication (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string AuthToken = "x-auth-token";
 
         /// <summary>
-        /// The X-Cdn-Management-Url header.
+        /// The <strong>X-Cdn-Management-Url</strong> header.
         /// <note type="warning">The value of this header is not defined. Do not use.</note>
         /// </summary>
         public const string CdnManagementUrl = "x-cdn-management-url";
 
         /// <summary>
-        /// The X-Storage-Url header, which specifies the base URI for all object storage requests.
+        /// The <strong>X-Storage-Url</strong> header, which specifies the base URI for all object storage requests.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/authentication-object-dev-guide.html">Authentication (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/authentication.html">Authentication (OpenStack Object Storage API v1 Reference)</seealso>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Authentication-d1e639.html">Authentication (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string StorageUrl = "x-storage-url";
 
@@ -1888,33 +1888,30 @@ namespace net.openstack.Providers.Rackspace
         #region Account Constants
 
         /// <summary>
-        /// The X-Account-Meta- header prefix, which specifies the HTTP header prefix for metadata keys associated with an account.
+        /// The <strong>X-Account-Meta-</strong> header prefix, which specifies the HTTP header prefix for metadata keys associated with an account.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-account-metadata.html">Create or Update Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateAccountMeta_v1__account__storage_account_services.html">Create, update, or delete account metadata (OpenStack Object Storage API v1 Reference)</seealso>
         public const string AccountMetaDataPrefix = "x-account-meta-";
 
         /// <summary>
-        /// The X-Account-Bytes-Used header, which specifies total storage used by an account in bytes.
-        /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
+        /// The <strong>X-Account-Bytes-Used</strong> header, which specifies the total number of bytes that are stored in Object Storage for the account.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/View_Account_Details-d1e108.html">View Account Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showAccountMeta_v1__account__storage_account_services.html">Show account metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listcontainers_v1__account__accountServicesOperations_d1e000.html">Show Account Details and List Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string AccountBytesUsed = "x-account-bytes-used";
 
         /// <summary>
-        /// The X-Account-Container-Count header, which specifies the number of containers associated with an account.
-        /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
+        /// The <strong>X-Account-Container-Count</strong> header, which specifies the number of containers associated with an account.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-account-metadata.html">Get Account Metadata (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/View_Account_Details-d1e108.html">View Account Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showAccountMeta_v1__account__storage_account_services.html">Show account metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listcontainers_v1__account__accountServicesOperations_d1e000.html">Show Account Details and List Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string AccountContainerCount = "x-account-container-count";
 
         /// <summary>
-        /// The X-Account-Object-Count header, which specifies the number of objects associated with an account.
-        /// <note type="warning">The value of this property is not defined by OpenStack, and may not be consistent across vendors.</note>
+        /// The <strong>X-Account-Object-Count</strong> header, which specifies the number of objects in an account.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/listing-and-creating-storage-containers.html">Listing and Creating Containers (OpenStack Object Storage API v1 Reference)</seealso>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/View_Account_Details-d1e108.html">View Account Details (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showAccountDetails_v1__account__storage_account_services.html">Show account details and list containers (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listcontainers_v1__account__accountServicesOperations_d1e000.html">Show Account Details and List Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string AccountObjectCount = "x-account-object-count";
 
         #endregion
@@ -1922,44 +1919,42 @@ namespace net.openstack.Providers.Rackspace
         #region Container Constants
 
         /// <summary>
-        /// The X-Container-Meta- header prefix, which specifies the HTTP header prefix for metadata keys associated with a container.
+        /// The <strong>X-Container-Meta-</strong> header prefix, which specifies the HTTP header prefix for metadata keys associated with a container.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Update_Container_Metadata-d1e1900.html">Create or Update Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateContainerMeta_v1__account___container__storage_container_services.html">Create, update, or delete container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ContainerMetaDataPrefix = "x-container-meta-";
 
         /// <summary>
-        /// The X-Remove-Container-Meta- header prefix, which specifies the HTTP header prefix for removing metadata keys from a container.
+        /// The <strong>X-Remove-Container-Meta-</strong> header prefix, which specifies the HTTP header prefix for removing metadata keys from a container.
         /// </summary>
-        /// <remarks>
-        /// This value is not required in the .NET SDK, since a shorter way to remove metadata is to simply assign an empty string as the value for a metadata key.
-        /// </remarks>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/delete-container-metadata.html">Delete Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateContainerMeta_v1__account___container__storage_container_services.html">Create, update, or delete container metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        [Obsolete("This value is not required in the .NET SDK, since a shorter way to remove metadata is to simply assign an empty string as the value for a metadata key.")]
         public const string ContainerRemoveMetaDataPrefix = "x-remove-container-meta-";
 
         /// <summary>
-        /// The X-Container-Bytes-Used header, which specifies the total size of all objects stored in a container.
+        /// The <strong>X-Container-Bytes-Used</strong> header, which specifies the total size of all objects stored in a container.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showContainerMeta_v1__account___container__storage_container_services.html">Show container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ContainerBytesUsed = "x-container-bytes-used";
 
         /// <summary>
-        /// The X-Container-Object-Count header, which specifies the total number of objects stored in a container.
+        /// The <strong>X-Container-Object-Count</strong> header, which specifies the total number of objects stored in a container.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/retrieve-container-metadata.html">Get Container Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showContainerMeta_v1__account___container__storage_container_services.html">Show container metadata (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ContainerObjectCount = "x-container-object-count";
 
         /// <summary>
-        /// The Web-Index metadata key, which specifies the index page for every pseudo-directory in a website.
+        /// The <strong>Web-Index</strong> metadata key, which specifies the index page for every pseudo-directory in a website.
         /// </summary>
         /// <remarks>
         /// If your pseudo-directory does not have a file with the same name as your index file, visits to the sub-directory return a 404 error.
         /// </remarks>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Create_Static_Website-dle4000.html">Create Static Website (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string WebIndex = "web-index";
 
         /// <summary>
-        /// The Web-Error metadata key, which specifies the suffix for error pages displayed for a website.
+        /// The <strong>Web-Error</strong> metadata key, which specifies the suffix for error pages displayed for a website.
         /// </summary>
         /// <remarks>
         /// You may create and set custom error pages for visitors to your website; currently, only
@@ -1984,7 +1979,7 @@ namespace net.openstack.Providers.Rackspace
         public const string WebError = "web-error";
 
         /// <summary>
-        /// The Web-Listings metadata key, which specifies whether or not pseudo-directories should
+        /// The <strong>Web-Listings</strong> metadata key, which specifies whether or not pseudo-directories should
         /// display a list of files instead of returning a 404 error when the pseudo-directory does
         /// not contain an index file.
         /// </summary>
@@ -1992,22 +1987,22 @@ namespace net.openstack.Providers.Rackspace
         /// To display a list of files in pseudo-directories instead of an index, set the
         /// <see cref="WebListings"/> metadata value to <c>"TRUE"</c> for a container.
         /// </remarks>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         public const string WebListings = "web-listings";
 
         /// <summary>
-        /// The Web-Listings-CSS metadata key, which specifies the stylesheet to use for file listings
+        /// The <strong>Web-Listings-CSS</strong> metadata key, which specifies the stylesheet to use for file listings
         /// when <see cref="WebListings"/> is <see langword="true"/> and a pseudo-directory does not contain an
         /// index file.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Create_Static_Website-dle4000.html">Create Static Website (OpenStack Object Storage API v1 Reference - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-website.html">Create static website (OpenStack Object Storage API v1 Reference)</seealso>
         public const string WebListingsCSS = "web-listings-css";
 
         /// <summary>
-        /// The X-Versions-Location header, which specifies the name of the container where previous
+        /// The <strong>X-Versions-Location</strong> header, which specifies the name of the container where previous
         /// versions of objects are stored for a container.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Object_Versioning-e1e3230.html">Object Versioning (OpenStack Object Storage API v1 Reference - API v1)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/set-object-versions.html">Object versioning (OpenStack Object Storage API v1 Reference - API v1)</seealso>
         public const string VersionsLocation = "x-versions-location";
 
         #endregion
@@ -2015,7 +2010,7 @@ namespace net.openstack.Providers.Rackspace
         #region CDN Container Constants
 
         /// <summary>
-        /// The X-Cdn-Uri header, which specifies the publicly-available URL
+        /// The <strong>X-Cdn-Uri</strong> header, which specifies the publicly-available URL
         /// for a CDN-enabled container.
         /// </summary>
         /// <remarks>
@@ -2024,11 +2019,11 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.CDNUri"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnUri = "x-cdn-uri";
 
         /// <summary>
-        /// The X-Cdn-Ssl-Uri header, which specifies the publicly-available
+        /// The <strong>X-Cdn-Ssl-Uri</strong> header, which specifies the publicly-available
         /// URL for SSL access to a CDN-enabled container.
         /// </summary>
         /// <remarks>
@@ -2037,12 +2032,12 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.CDNSslUri"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnSslUri = "x-cdn-ssl-uri";
 
         /// <summary>
-        /// The X-Cdn-Streaming-Uri header, which specifies the publicly-available
-        /// URL for streaming access to a CDN-enabled container.
+        /// The <strong>X-Cdn-Streaming-Uri</strong> header, which specifies the publicly-available
+        /// URL for streaming access to a CDN-enabled container (using Adobe HTTP Dynamic Streaming).
         /// </summary>
         /// <remarks>
         /// <note type="note">
@@ -2050,11 +2045,11 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.CDNStreamingUri"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnStreamingUri = "x-cdn-streaming-uri";
 
         /// <summary>
-        /// The X-Ttl header, which specifies the Time To Live (TTL) in seconds for a CDN-enabled container.
+        /// The <strong>X-Ttl</strong> header, which specifies the Time To Live (TTL) in seconds for a CDN-enabled container.
         /// </summary>
         /// <remarks>
         /// <note type="note">
@@ -2062,11 +2057,11 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.Ttl"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnTTL = "x-ttl";
 
         /// <summary>
-        /// The X-Log-Retention header, which specifies whether or not log retention is enabled for a CDN-enabled container.
+        /// The <strong>X-Log-Retention</strong> header, which specifies whether or not log retention is enabled for a CDN-enabled container.
         /// </summary>
         /// <remarks>
         /// <note type="note">
@@ -2074,11 +2069,11 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.LogRetention"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/List_CDN-Enabled_Container_Metadata-d1e2711.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnLogRetention = "x-log-retention";
 
         /// <summary>
-        /// The X-Cdn-Enabled header, which specifies whether or not a container is CDN-enabled.
+        /// The <strong>X-Cdn-Enabled</strong> header, which specifies whether or not a container is CDN-enabled.
         /// </summary>
         /// <remarks>
         /// <note type="note">
@@ -2086,12 +2081,12 @@ namespace net.openstack.Providers.Rackspace
         /// </note>
         /// </remarks>
         /// <seealso cref="ContainerCDN.CDNEnabled"/>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN-Enable_a_Container-d1e2665.html">CDN-Enable a Container (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/HEAD_retrieveCDNcontainermeta_v1__account___container__CDN_Container_Services-d1e2632.html">List a CDN-Enabled Container's Metadata (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnEnabled = "x-cdn-enabled";
 
         /// <summary>
-        /// The X-Cdn-Ios-Uri header, which specifies the publicly-available URL for
-        /// iOS streaming access to a CDN-enabled container.
+        /// The <strong>X-Cdn-Ios-Uri</strong> header, which specifies the publicly-available URL for
+        /// iOS streaming access to a CDN-enabled container (using Apple HTTP Live Streaming).
         /// </summary>
         /// <remarks>
         /// <note type="note">
@@ -2107,21 +2102,21 @@ namespace net.openstack.Providers.Rackspace
         #region Object Constants
 
         /// <summary>
-        /// The X-Object-Meta- header prefix, which specifies the HTTP header prefix for metadata keys associated with an object.
+        /// The <strong>X-Object-Meta-</strong> header prefix, which specifies the HTTP header prefix for metadata keys associated with an object.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/update-object-metadata.html">Update Object Metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta_v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ObjectMetaDataPrefix = "x-object-meta-";
 
         /// <summary>
-        /// The X-Delete-After header, which specifies the relative time (in seconds
+        /// The <strong>X-Delete-After</strong> header, which specifies the relative time (in seconds
         /// from "now") after which an object should expire, not be served, and be
         /// deleted completely from the storage system.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Expiring_Objects-e1e3228.html">Expiring Objects with the X-Delete-After and X-Delete-At Headers (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/expire-objects.html">Schedule objects for deletion (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ObjectDeleteAfter = "x-delete-after";
 
         /// <summary>
-        /// The X-Delete-At header, which specifies the absolute time (in Unix Epoch
+        /// The <strong>X-Delete-At</strong> header, which specifies the absolute time (in Unix Epoch
         /// format) after which an object should expire, not be served, and be deleted
         /// completely from the storage system.
         /// </summary>
@@ -2130,34 +2125,34 @@ namespace net.openstack.Providers.Rackspace
         /// 1 January 1970, not counting leap seconds.
         /// </remarks>
         /// <seealso href="http://en.wikipedia.org/wiki/Unix_time">Unix time (Wikipedia)</seealso>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/Expiring_Objects-e1e3228.html">Expiring Objects with the X-Delete-After and X-Delete-At Headers (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/expire-objects.html">Schedule objects for deletion (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ObjectDeleteAt = "x-delete-at";
 
         /// <summary>
-        /// The ETag header, which specifies the MD5 checksum of the data in an object stored in Object Storage.
+        /// The <strong>ETag</strong> header, which specifies the MD5 checksum of the data in an object stored in Object Storage.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/create-update-object.html">Create or Update Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         public const string Etag = "etag";
 
         /// <summary>
-        /// The Destination header, which specifies the destination container and object
+        /// The <strong>Destination</strong> header, which specifies the destination container and object
         /// name for a Copy Object operation.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/copy-object.html">Copy Object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/COPY_copyObject_v1__account___container___object__storage_object_services.html">Copy object (OpenStack Object Storage API v1 Reference)</seealso>
         public const string Destination = "destination";
 
         /// <summary>
-        /// The X-Object-Manifest header, which specifies the container and prefix for the segments of a
+        /// The <strong>X-Object-Manifest</strong> header, which specifies the container and prefix for the segments of a
         /// dynamic large object.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/dynamic-large-object-creation.html">Dynamic Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/dynamic-large-object-creation.html">Dynamic large objects (OpenStack Object Storage API v1 Reference)</seealso>
         public const string ObjectManifest = "x-object-manifest";
 
         /// <summary>
-        /// The X-Static-Large-Object header, which specifies whether an object is a manifest for a static
+        /// The <strong>X-Static-Large-Object</strong> header, which specifies whether an object is a manifest for a static
         /// large object.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-large-objects.html">Static Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/static-large-objects.html">Static large objects (OpenStack Object Storage API v1 Reference)</seealso>
         /// <preliminary/>
         public const string StaticLargeObject = "x-static-large-object";
 
@@ -2166,14 +2161,14 @@ namespace net.openstack.Providers.Rackspace
         #region CDN Object Constants
 
         /// <summary>
-        /// The X-Purge-Email header, which specifies the comma-separated list of email addresses to notify when a CDN purge request completes.
+        /// The <strong>X-Purge-Email</strong> header, which specifies the comma-separated list of email addresses to notify when a CDN purge request completes.
         /// </summary>
         /// <remarks>
         /// <note type="note">
         /// This header is a Rackspace-specific extension to the OpenStack Object Storage Service.
         /// </note>
         /// </remarks>
-        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Purge_CDN-Enabled_Objects-d1e3858.html">Purge CDN-Enabled Objects (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/DELETE_deleteCDNobject_v1__account___object__CDN_Object_Services.html">Delete CDN-Enabled Object (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string CdnPurgeEmail = "x-purge-email";
 
         #endregion
@@ -2186,7 +2181,7 @@ namespace net.openstack.Providers.Rackspace
         /// the value may result in the server closing the TCP/IP connection and purging the object's
         /// data.
         /// </summary>
-        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Create Large Objects (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/large-object-creation.html">Large objects (OpenStack Object Storage API v1 Reference)</seealso>
         public static readonly long MaxLargeFileBatchThreshold = 5368709120; // 5GB
 
         /// <summary>
