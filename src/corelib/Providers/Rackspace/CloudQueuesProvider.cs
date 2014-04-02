@@ -528,7 +528,7 @@
             if (messages.Length == 0)
                 return QueueExistsAsync(queueName, cancellationToken);
 
-            UriTemplate template = new UriTemplate("/v1/queues/{queue_name}/messages");
+            UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 
             var parameters =
                 new Dictionary<string, string>()
