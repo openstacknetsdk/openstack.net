@@ -665,8 +665,46 @@ namespace net.openstack.Providers.Rackspace
             return resp;
         }
 
-        private T ExecuteServerAction<T>(string serverId, object body, string region = null, CloudIdentity identity = null) where T : new()
+        /// <summary>
+        /// Execute a Cloud Servers action which returns a strongly-typed value in the body of the response.
+        /// </summary>
+        /// <remarks>
+        /// This method executes actions using a <see cref="HttpMethod.POST"/> request to the URI
+        /// <strong>servers/{serverId}/action</strong>.
+        /// </remarks>
+        /// <typeparam name="T">The type modeling the JSON representation of the result of executing the action.</typeparam>
+        /// <param name="serverId">The server ID. This is obtained from <see cref="ServerBase.Id"/>.</param>
+        /// <param name="body">The body of the action.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>The result of the web request, as an object of type <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="serverId"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="body"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">If <paramref name="serverId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected T ExecuteServerAction<T>(string serverId, object body, string region = null, CloudIdentity identity = null)
         {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+            if (body == null)
+                throw new ArgumentNullException("body");
+            if (string.IsNullOrEmpty(serverId))
+                throw new ArgumentException("serverId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
 
             var response = ExecuteRESTRequest<T>(identity, urlPath, HttpMethod.POST, body);
@@ -677,8 +715,45 @@ namespace net.openstack.Providers.Rackspace
             return response.Data;
         }
 
-        private bool ExecuteServerAction(string serverId, object body, string region = null, CloudIdentity identity = null)
+        /// <summary>
+        /// Execute a Cloud Servers action which does not return a response.
+        /// </summary>
+        /// <remarks>
+        /// This method executes actions using a <see cref="HttpMethod.POST"/> request to the URI
+        /// <strong>servers/{serverId}/action</strong>.
+        /// </remarks>
+        /// <param name="serverId">The server ID. This is obtained from <see cref="ServerBase.Id"/>.</param>
+        /// <param name="body">The body of the action.</param>
+        /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns><see langword="true"/> if the <see cref="HttpMethod.POST"/> request is executed successfully; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="serverId"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="body"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">If <paramref name="serverId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        protected bool ExecuteServerAction(string serverId, object body, string region = null, CloudIdentity identity = null)
         {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+            if (body == null)
+                throw new ArgumentNullException("body");
+            if (string.IsNullOrEmpty(serverId))
+                throw new ArgumentException("serverId cannot be empty");
+            CheckIdentity(identity);
+
             var urlPath = new Uri(string.Format("{0}/servers/{1}/action", GetServiceEndpoint(identity, region), serverId));
 
             var response = ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, body);
