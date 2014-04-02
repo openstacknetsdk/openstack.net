@@ -351,6 +351,49 @@
         }
 
         /// <summary>
+        /// This method tests each of the overloads of <see cref="O:IQueueingService.PostMessagesAsync"/>
+        /// and <see cref="O:IQueueingService.PostMessagesAsync{T}"/> for basic functionality.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                JObject genericBody =
+                    new JObject(
+                        new JProperty("type", "generic"));
+                Message genericMessage = new Message(TimeSpan.FromMinutes(50), genericBody);
+                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token);
+                await provider.PostMessagesAsync(queueName, Enumerable.Empty<Message>(), cancellationTokenSource.Token);
+                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage);
+                await provider.PostMessagesAsync(queueName, new[] { genericMessage }, cancellationTokenSource.Token);
+                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage, genericMessage);
+                await provider.PostMessagesAsync(queueName, new[] { genericMessage, genericMessage }, cancellationTokenSource.Token);
+
+                Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token);
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, Enumerable.Empty<Message<SampleMetadata>>(), cancellationTokenSource.Token);
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage);
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage }, cancellationTokenSource.Token);
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage, typedMessage);
+                await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage, typedMessage }, cancellationTokenSource.Token);
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(12, messages.Count);
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
         /// Tests the queueing service message functionality by creating two queues
         /// and two sub-processes and using them for two-way communication.
         /// </summary>
