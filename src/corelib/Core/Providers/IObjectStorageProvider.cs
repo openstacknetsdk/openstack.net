@@ -27,7 +27,7 @@ namespace net.openstack.Core.Providers
         /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns>A collection of <see cref="Container"/> objects containing the details of the specified containers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than 0.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
         /// <para>-or-</para>

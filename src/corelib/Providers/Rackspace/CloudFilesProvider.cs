@@ -230,7 +230,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public IEnumerable<Container> ListContainers(int? limit = null, string marker = null, string markerEnd = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
-            if (limit < 0)
+            if (limit <= 0)
                 throw new ArgumentOutOfRangeException("limit");
             CheckIdentity(identity);
 
