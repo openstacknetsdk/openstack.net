@@ -17,11 +17,11 @@
     {
         private static readonly ConcurrentDictionary<string, SnapshotState> _states =
             new ConcurrentDictionary<string, SnapshotState>(StringComparer.OrdinalIgnoreCase);
-        private static readonly SnapshotState _creating = FromName("CREATING");
-        private static readonly SnapshotState _available = FromName("AVAILABLE");
-        private static readonly SnapshotState _deleting = FromName("DELETING");
-        private static readonly SnapshotState _error = FromName("ERROR");
-        private static readonly SnapshotState _errorDeleting = FromName("ERROR_DELETING");
+        private static readonly SnapshotState _creating = FromName("creating");
+        private static readonly SnapshotState _available = FromName("available");
+        private static readonly SnapshotState _deleting = FromName("deleting");
+        private static readonly SnapshotState _error = FromName("error");
+        private static readonly SnapshotState _errorDeleting = FromName("error_deleting");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SnapshotState"/> class with the specified name.
@@ -83,7 +83,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating there has been some error with the snapshot.
+        /// Gets a <see cref="SnapshotState"/> indicating an error occurred during snapshot creation.
         /// </summary>
         public static SnapshotState Error
         {
@@ -94,7 +94,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="SnapshotState"/> indicating an error occurred while deleting the snapshot.
+        /// Gets a <see cref="SnapshotState"/> indicating an error occurred during snapshot deletion.
         /// </summary>
         public static SnapshotState ErrorDeleting
         {

@@ -21,7 +21,7 @@
 	url = git@github.rackspace.com:IX/auth-2.0.git
 [submodule "Reference/Rackspace/cbs-api"]
 	path = Reference/Rackspace/cbs-api
-	url = git@github.rackspace.com:IX/cbs-api.git
+	url = git@github.com:rackerlabs/docs-cloud-block-storage.git
 [submodule "Reference/Rackspace/cloud-files"]
 	path = Reference/Rackspace/cloud-files
 	url = git@github.rackspace.com:IX/cloud-files.git
