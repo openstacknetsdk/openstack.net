@@ -525,6 +525,9 @@
             if (messages.Contains(null))
                 throw new ArgumentException("messages cannot contain any null values");
 
+            if (messages.Length == 0)
+                return QueueExistsAsync(queueName, cancellationToken);
+
             UriTemplate template = new UriTemplate("/v1/queues/{queue_name}/messages");
 
             var parameters =
@@ -564,6 +567,9 @@
                 throw new ArgumentNullException("messages");
             if (messages.Contains(null))
                 throw new ArgumentException("messages cannot contain any null values");
+
+            if (messages.Length == 0)
+                return QueueExistsAsync(queueName, cancellationToken);
 
             UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 
