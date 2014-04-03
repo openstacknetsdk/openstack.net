@@ -78,6 +78,7 @@
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
     <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
+    <Compile Include="Core\Domain\ExtensibleJsonObject.cs" />
     <Compile Include="Core\Domain\FlavorId.cs" />
     <Compile Include="Core\Domain\ImageId.cs" />
     <Compile Include="Core\Domain\ImageState.cs" />
