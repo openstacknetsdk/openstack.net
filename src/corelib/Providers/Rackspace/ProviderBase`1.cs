@@ -988,7 +988,9 @@ namespace net.openstack.Providers.Rackspace
 
             string bodyText = JsonConvert.SerializeObject(body);
             byte[] encodedBody = Encoding.UTF8.GetBytes(bodyText);
-            request.ContentType = new ContentType() { MediaType = JsonRequestSettings.JsonContentType, CharSet = "UTF-8" }.ToString();
+            if (string.IsNullOrEmpty(request.ContentType))
+                request.ContentType = new ContentType() { MediaType = JsonRequestSettings.JsonContentType, CharSet = "UTF-8" }.ToString();
+
             request.ContentLength = encodedBody.Length;
 
             return encodedBody;
