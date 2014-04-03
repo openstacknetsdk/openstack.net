@@ -198,7 +198,7 @@
         public Task RefreshAsync(CancellationToken cancellationToken)
         {
             Action<Task<Claim>> applyChanges = task => RefreshImpl(task.Result);
-            return _service.QueryClaimAsync(_queueName, this, cancellationToken).ContinueWith(applyChanges, TaskContinuationOptions.ExecuteSynchronously);
+            return _service.QueryClaimAsync(_queueName, this, cancellationToken).Select(applyChanges);
         }
 
         /// <summary>
@@ -226,11 +226,10 @@
             Action<Task> applyChanges =
                 task =>
                 {
-                    task.PropagateExceptions();
                     _age = TimeSpan.Zero;
                     TimeToLive = timeToLive;
                 };
-            return _service.UpdateClaimAsync(_queueName, this, timeToLive, cancellationToken).ContinueWith(applyChanges, TaskContinuationOptions.ExecuteSynchronously);
+            return _service.UpdateClaimAsync(_queueName, this, timeToLive, cancellationToken).Select(applyChanges);
         }
 
         /// <inheritdoc/>

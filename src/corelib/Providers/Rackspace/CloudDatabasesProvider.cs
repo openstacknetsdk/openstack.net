@@ -1087,12 +1087,8 @@
                     }
                     else
                     {
-                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken).ContinueWith(
-                           task =>
-                           {
-                               task.PropagateExceptions();
-                               return pollDatabaseInstance();
-                           }, TaskContinuationOptions.ExecuteSynchronously).Unwrap();
+                        return Task.Factory.StartNewDelayed((int)backoffPolicy.Current.TotalMilliseconds, cancellationToken)
+                            .Then(task => pollDatabaseInstance());
                     }
                 };
 
@@ -1117,8 +1113,10 @@
 
                     // reschedule
                     currentTask = moveNext();
+                    // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
                     currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
                 };
+            // use ContinueWith since the continuation handles cancellation and faulted antecedent tasks
             currentTask.ContinueWith(continuation, TaskContinuationOptions.ExecuteSynchronously);
 
             return taskCompletionSource.Task;
@@ -1165,7 +1163,7 @@
         private Task<DatabaseInstance> PollDatabaseInstanceStateAsync(DatabaseInstanceId instanceId, CancellationToken cancellationToken, IProgress<DatabaseInstance> progress)
         {
             Task<DatabaseInstance> chain = GetDatabaseInstanceAsync(instanceId, cancellationToken);
-            chain = chain.ContinueWith(
+            chain = chain.Select(
                 task =>
                 {
                     if (task.IsFaulted)
@@ -1184,7 +1182,7 @@
                         throw new InvalidOperationException("Could not obtain status for database instance");
 
                     return task.Result;
-                }, TaskContinuationOptions.ExecuteSynchronously);
+                }, true);
 
             if (progress != null)
             {
