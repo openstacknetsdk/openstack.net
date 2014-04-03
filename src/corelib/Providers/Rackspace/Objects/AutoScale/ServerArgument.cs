@@ -36,6 +36,12 @@
         private string _name;
 
         /// <summary>
+        /// This is the backing field for the <see cref="DiskConfiguration"/> property.
+        /// </summary>
+        [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private DiskConfiguration _diskConfiguration;
+
+        /// <summary>
         /// This is the backing field for the <see cref="Networks"/> property.
         /// </summary>
         [JsonProperty("networks", DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -46,12 +52,6 @@
         /// </summary>
         [JsonProperty("personality", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private Personality[] _personality;
-
-        /// <summary>
-        /// This is the backing field for the <see cref="DiskConfiguration"/> property.
-        /// </summary>
-        [JsonProperty("OS-DCF:diskConfig", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private DiskConfiguration _diskConfiguration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerArgument"/> class
@@ -92,6 +92,7 @@
             _flavorId = flavorId;
             _imageId = imageId;
             _name = name;
+            _diskConfiguration = diskConfiguration;
 
             if (networks != null)
             {
