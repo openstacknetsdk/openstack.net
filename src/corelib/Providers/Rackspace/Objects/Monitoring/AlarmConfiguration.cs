@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of the basic properties of an Alarm resource
@@ -16,7 +17,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class AlarmConfiguration
+    public abstract class AlarmConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="CheckId"/> property.

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This is the base class for classes modeling the detailed configuration parameters
@@ -12,7 +13,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class CheckDetails
+    public abstract class CheckDetails : ExtensibleJsonObject
     {
         /// <summary>
         /// Provides factory methods for deserializing a <see cref="CheckDetails"/> instance from

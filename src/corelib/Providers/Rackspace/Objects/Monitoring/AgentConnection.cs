@@ -4,6 +4,7 @@
     using System.Net;
     using net.openstack.Core.Domain.Converters;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of a monitoring agent connection.
@@ -12,7 +13,7 @@
     /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent-connections">List Agent Connections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    public class AgentConnection
+    public class AgentConnection : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
