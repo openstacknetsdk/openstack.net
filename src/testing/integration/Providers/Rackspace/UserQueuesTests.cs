@@ -17,7 +17,6 @@
     using Newtonsoft.Json.Linq;
     using CancellationToken = System.Threading.CancellationToken;
     using CancellationTokenSource = System.Threading.CancellationTokenSource;
-    using Encoding = System.Text.Encoding;
     using HttpWebRequest = System.Net.HttpWebRequest;
     using HttpWebResponse = System.Net.HttpWebResponse;
     using Path = System.IO.Path;

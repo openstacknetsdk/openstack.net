@@ -4,7 +4,6 @@
     using System.Text;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// Describes a file to inject into the file system while creating or

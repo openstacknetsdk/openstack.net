@@ -1,10 +1,9 @@
 using System;
-using System.Runtime.Serialization;
-using System.Security;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using RestResponse = JSIStudios.SimpleRESTServices.Client.Response;
-using System.Collections.Generic;
 
 namespace net.openstack.Core.Exceptions.Response
 {

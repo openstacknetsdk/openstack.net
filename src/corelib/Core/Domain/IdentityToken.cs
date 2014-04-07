@@ -1,9 +1,9 @@
 ﻿namespace net.openstack.Core.Domain
 {
     using System;
+    using System.Collections.Generic;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Represents the authentication token used for making authenticated calls to

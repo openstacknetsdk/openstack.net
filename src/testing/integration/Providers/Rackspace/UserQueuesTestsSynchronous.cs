@@ -6,7 +6,6 @@
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using net.openstack.Core.Collections;
     using net.openstack.Core.Domain;
     using net.openstack.Core.Domain.Queues;
     using net.openstack.Core.Providers;
