@@ -2,6 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
     using ProjectId = net.openstack.Core.Domain.ProjectId;
     using Tenant = net.openstack.Core.Domain.Tenant;
 
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsDomainChange
+    public class DnsDomainChange : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

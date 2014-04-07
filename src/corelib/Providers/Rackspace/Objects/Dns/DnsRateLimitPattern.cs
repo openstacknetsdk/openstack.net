@@ -3,6 +3,7 @@
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
     using CancellationToken = System.Threading.CancellationToken;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class describes the rate limits in effect for resource URIs matching
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsRateLimitPattern
+    public class DnsRateLimitPattern : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

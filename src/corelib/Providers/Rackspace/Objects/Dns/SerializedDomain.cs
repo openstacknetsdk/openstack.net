@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This models the JSON representation of a serialized domain for calls to
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class SerializedDomain
+    public class SerializedDomain : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Contents"/> property.

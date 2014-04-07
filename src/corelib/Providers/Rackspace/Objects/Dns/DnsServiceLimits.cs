@@ -5,6 +5,7 @@
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
     using CancellationToken = System.Threading.CancellationToken;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the rate and absolute limits in effect for the DNS service.
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsServiceLimits
+    public class DnsServiceLimits : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>
