@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents the configuration for a new database in the <see cref="IDatabaseService"/>.
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DatabaseConfiguration
+    public class DatabaseConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Name"/> property.

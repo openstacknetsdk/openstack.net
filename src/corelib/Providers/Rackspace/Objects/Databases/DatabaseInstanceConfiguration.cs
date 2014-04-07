@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON object used to describe a new database instance in the <see cref="IDatabaseService"/>.
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DatabaseInstanceConfiguration
+    public class DatabaseInstanceConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="FlavorRef"/> property.
