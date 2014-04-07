@@ -6,6 +6,7 @@
     using System.Linq;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// Represents a load balancer configuration.
@@ -20,7 +21,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class LoadBalancerConfiguration<TNodeConfiguration>
+    public class LoadBalancerConfiguration<TNodeConfiguration> : ExtensibleJsonObject
         where TNodeConfiguration : NodeConfiguration
     {
         /// <summary>

@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents a session persistence configuration in the load balancer service.
@@ -9,7 +10,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class SessionPersistence
+    public class SessionPersistence : ExtensibleJsonObject
     {
         /// <summary>
         /// This intermediate field is required for modeling the JSON representation of a
@@ -60,7 +61,7 @@
         /// configuration.
         /// </summary>
         [JsonObject(MemberSerialization.OptIn)]
-        protected class SessionPersistenceBody
+        protected class SessionPersistenceBody : ExtensibleJsonObject
         {
             /// <summary>
             /// This is the backing field for the <see cref="SessionPersistenceType"/> property.

@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents a connection throttling configuration for a load
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ConnectionThrottles
+    public class ConnectionThrottles : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="MaxConnectionRate"/> property.
