@@ -10,7 +10,7 @@
     /// <seealso cref="IBlockStorageProvider.ListSnapshots"/>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Snapshot
+    public class Snapshot : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the unique identifier for the snapshot.

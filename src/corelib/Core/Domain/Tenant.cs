@@ -9,7 +9,7 @@
     /// <seealso cref="IIdentityProvider.ListTenants"/>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Tenant
+    public class Tenant : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the unique identifier for the tenant.

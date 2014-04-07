@@ -11,7 +11,7 @@
     /// <seealso cref="IBlockStorageProvider"/>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Volume
+    public class Volume : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the unique identifier for the volume.

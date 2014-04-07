@@ -20,7 +20,7 @@
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/Server_Personality-d1e2543.html">Server Personality (OpenStack Compute API V2 and Extensions Reference)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Personality
+    public sealed class Personality : ExtensibleJsonObject
     {
         /// <summary>
         /// The path of the file to create on the target file system.

@@ -12,7 +12,7 @@ namespace net.openstack.Core.Domain
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("{Name,nq} ({Type,nq})")]
-    public class ServiceCatalog
+    public class ServiceCatalog : ExtensibleJsonObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCatalog"/> class.

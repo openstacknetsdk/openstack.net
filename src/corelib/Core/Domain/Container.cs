@@ -11,7 +11,7 @@
     /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listcontainers_v1__account__accountServicesOperations_d1e000.html">Show Account Details and List Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Container
+    public class Container : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the name of the container.

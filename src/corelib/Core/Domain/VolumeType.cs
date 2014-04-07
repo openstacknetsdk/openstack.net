@@ -10,7 +10,7 @@
     /// <seealso cref="IBlockStorageProvider.DescribeVolumeType"/>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class VolumeType
+    public class VolumeType : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the unique identifier for this volume type.

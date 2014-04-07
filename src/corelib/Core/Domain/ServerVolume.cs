@@ -11,7 +11,7 @@
     /// <seealso href="http://docs.rackspace.com/servers/api/v2/cs-devguide/content/List_Volume_Attachments.html">List Volume Attachments (Rackspace Next Generation Cloud Servers Developer Guide - API v2)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ServerVolume
+    public class ServerVolume : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the "device" property associated with the volume attachment.

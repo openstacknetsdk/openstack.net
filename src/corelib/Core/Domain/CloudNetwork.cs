@@ -8,7 +8,7 @@
     /// <seealso href="http://docs.rackspace.com/networks/api/v2/cn-devguide/content/ch_overview.html">Overview (Rackspace Cloud Networks Developer Guide - OpenStack Networking API v2)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class CloudNetwork
+    public class CloudNetwork : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the network ID.

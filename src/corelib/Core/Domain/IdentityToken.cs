@@ -11,7 +11,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class IdentityToken
+    public class IdentityToken : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the token expiration time in the format originally returned by the

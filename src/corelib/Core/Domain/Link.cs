@@ -10,7 +10,7 @@ namespace net.openstack.Core.Domain
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("{Rel,nq}: {Href,nq}")]
-    public class Link
+    public class Link : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the link target.

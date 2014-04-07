@@ -9,7 +9,7 @@
     /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showContainerDetails_v1__account___container__storage_container_services.html">Show container details and list objects (OpenStack Object Storage API v1 Reference)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ContainerObject
+    public class ContainerObject : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets a "name" associated with the object.
