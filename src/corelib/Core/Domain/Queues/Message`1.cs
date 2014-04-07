@@ -10,7 +10,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Message<T>
+    public class Message<T> : ExtensibleJsonObject
     {
         /// <summary>
         /// The backing field for the <see cref="TimeToLive"/> property.
