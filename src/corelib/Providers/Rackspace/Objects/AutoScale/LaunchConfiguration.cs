@@ -3,6 +3,7 @@
     using System;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents the launch configuration for a scaling group in the <see cref="IAutoScaleService"/>.
@@ -15,7 +16,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class LaunchConfiguration
+    public abstract class LaunchConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LaunchConfiguration"/> class

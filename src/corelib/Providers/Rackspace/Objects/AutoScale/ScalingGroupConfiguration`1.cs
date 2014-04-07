@@ -6,6 +6,7 @@
     using System.Linq;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the basic information related to the configuration of a
@@ -15,7 +16,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class ScalingGroupConfiguration<TPolicyConfiguration>
+    public abstract class ScalingGroupConfiguration<TPolicyConfiguration> : ExtensibleJsonObject
         where TPolicyConfiguration : PolicyConfiguration
     {
         /// <summary>

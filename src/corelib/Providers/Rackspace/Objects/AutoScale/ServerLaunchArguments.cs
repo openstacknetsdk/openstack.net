@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// Represents the launch arguments for a <see cref="ServerLaunchConfiguration"/> in
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ServerLaunchArguments
+    public class ServerLaunchArguments : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="LoadBalancers"/> property.
