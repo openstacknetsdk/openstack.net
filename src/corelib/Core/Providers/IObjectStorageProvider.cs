@@ -1053,6 +1053,12 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Creates an object using data from a file. If the destination file already exists, the contents are overwritten.
         /// </summary>
+        /// <remarks>
+        /// The content type for the object may be specified by providing the <paramref name="contentType"/> argument,
+        /// or by setting <see cref="CloudFilesProvider.DetectContentType"/> to <c>True</c> in the
+        /// <paramref name="headers"/> argument. If neither of these is used, the resulting content type of the object
+        /// is unspecified.
+        /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\image_name.jpeg</localUri></param>
         /// <param name="objectName">The destination object name. If <see langword="null"/>, the filename portion of <paramref name="filePath"/> will be used.</param>
@@ -1092,12 +1098,19 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.DetectContentType"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates an object using data from a <see cref="Stream"/>. If the destination file already exists, the contents are overwritten.
         /// </summary>
+        /// <remarks>
+        /// The content type for the object may be specified by providing the <paramref name="contentType"/> argument,
+        /// or by setting <see cref="CloudFilesProvider.DetectContentType"/> to <c>True</c> in the
+        /// <paramref name="headers"/> argument. If neither of these is used, the resulting content type of the object
+        /// is unspecified.
+        /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
         /// <param name="objectName">The destination object name. Example <localUri>image_name.jpeg</localUri></param>
@@ -1138,6 +1151,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.DetectContentType"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
