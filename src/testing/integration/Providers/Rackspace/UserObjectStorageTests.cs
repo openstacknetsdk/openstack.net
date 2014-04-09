@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Text;
     using ICSharpCode.SharpZipLib.BZip2;
     using ICSharpCode.SharpZipLib.GZip;
@@ -20,6 +21,7 @@
     using Container = net.openstack.Core.Domain.Container;
     using File = System.IO.File;
     using FileInfo = System.IO.FileInfo;
+    using HttpMethod = JSIStudios.SimpleRESTServices.Client.HttpMethod;
     using HttpWebRequest = System.Net.HttpWebRequest;
     using MD5 = System.Security.Cryptography.MD5;
     using MemoryStream = System.IO.MemoryStream;
@@ -776,6 +778,142 @@
             provider.EnableStaticWebOnContainer(containerName, index: index, error: error, listing: false);
 
             provider.DisableStaticWebOnContainer(containerName);
+
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestTempUrlValid()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            Assert.IsInstanceOfType(provider, typeof(CloudFilesProvider), "Temp URLs are a Rackspace-specific extension to the Object Storage service.");
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = Path.GetRandomFileName();
+            string fileContents = "File contents!";
+
+            Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();
+            string tempUrlKey;
+            if (!accountMetadata.TryGetValue(CloudFilesProvider.TempUrlKey, out tempUrlKey))
+            {
+                tempUrlKey = Guid.NewGuid().ToString("N");
+                accountMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                accountMetadata[CloudFilesProvider.TempUrlKey] = tempUrlKey;
+                provider.UpdateAccountMetadata(accountMetadata);
+            }
+
+            ObjectStore result = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            provider.CreateObject(containerName, stream, objectName);
+
+            // verify a future time works
+            DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+            Uri uri = ((CloudFilesProvider)provider).CreateTemporaryPublicUri(HttpMethod.GET, containerName, objectName, tempUrlKey, expirationTime);
+            WebRequest request = HttpWebRequest.Create(uri);
+            using (WebResponse response = request.GetResponse())
+            {
+                Stream cdnStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                string text = reader.ReadToEnd();
+                Assert.AreEqual(fileContents, text);
+            }
+
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestTempUrlExpired()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            Assert.IsInstanceOfType(provider, typeof(CloudFilesProvider), "Temp URLs are a Rackspace-specific extension to the Object Storage service.");
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = Path.GetRandomFileName();
+            string fileContents = "File contents!";
+
+            Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();
+            string tempUrlKey;
+            if (!accountMetadata.TryGetValue(CloudFilesProvider.TempUrlKey, out tempUrlKey))
+            {
+                tempUrlKey = Guid.NewGuid().ToString("N");
+                accountMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                accountMetadata[CloudFilesProvider.TempUrlKey] = tempUrlKey;
+                provider.UpdateAccountMetadata(accountMetadata);
+            }
+
+            ObjectStore result = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            provider.CreateObject(containerName, stream, objectName);
+
+            // verify a past time does not work
+            try
+            {
+                DateTimeOffset expirationTime = DateTimeOffset.Now - TimeSpan.FromSeconds(3);
+                Uri uri = ((CloudFilesProvider)provider).CreateTemporaryPublicUri(HttpMethod.GET, containerName, objectName, tempUrlKey, expirationTime);
+                WebRequest request = HttpWebRequest.Create(uri);
+                using (WebResponse response = request.GetResponse())
+                {
+                    Stream cdnStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                    string text = reader.ReadToEnd();
+                    Assert.Fail("Expected an exception");
+                }
+            }
+            catch (WebException ex)
+            {
+                Assert.AreEqual(HttpStatusCode.Unauthorized, ((HttpWebResponse)ex.Response).StatusCode);
+            }
+
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestTempUrlWithSpecialCharactersInObjectName()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            Assert.IsInstanceOfType(provider, typeof(CloudFilesProvider), "Temp URLs are a Rackspace-specific extension to the Object Storage service.");
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = "§ / 你好";
+            string fileContents = "File contents!";
+
+            Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();
+            string tempUrlKey;
+            if (!accountMetadata.TryGetValue(CloudFilesProvider.TempUrlKey, out tempUrlKey))
+            {
+                tempUrlKey = Guid.NewGuid().ToString("N");
+                accountMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                accountMetadata[CloudFilesProvider.TempUrlKey] = tempUrlKey;
+                provider.UpdateAccountMetadata(accountMetadata);
+            }
+
+            ObjectStore result = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            provider.CreateObject(containerName, stream, objectName);
+
+            // verify a future time works
+            DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+            Uri uri = ((CloudFilesProvider)provider).CreateTemporaryPublicUri(HttpMethod.GET, containerName, objectName, tempUrlKey, expirationTime);
+            WebRequest request = HttpWebRequest.Create(uri);
+            using (WebResponse response = request.GetResponse())
+            {
+                Stream cdnStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                string text = reader.ReadToEnd();
+                Assert.AreEqual(fileContents, text);
+            }
 
             provider.DeleteContainer(containerName, deleteObjects: true);
         }
