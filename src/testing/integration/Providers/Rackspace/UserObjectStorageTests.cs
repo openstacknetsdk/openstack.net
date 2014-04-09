@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Text;
+    using System.Threading.Tasks;
     using ICSharpCode.SharpZipLib.BZip2;
     using ICSharpCode.SharpZipLib.GZip;
     using ICSharpCode.SharpZipLib.Tar;
@@ -983,6 +985,69 @@
                 string text = reader.ReadToEnd();
                 Assert.AreEqual(fileContents, text);
             }
+
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestFormPostValid()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            Assert.IsInstanceOfType(provider, typeof(CloudFilesProvider), "Temp URLs are a Rackspace-specific extension to the Object Storage service.");
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = Path.GetRandomFileName();
+            string fileContents = "File contents!";
+
+            Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();
+            string tempUrlKey;
+            if (!accountMetadata.TryGetValue(CloudFilesProvider.TempUrlKey, out tempUrlKey))
+            {
+                tempUrlKey = Guid.NewGuid().ToString("N");
+                accountMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                accountMetadata[CloudFilesProvider.TempUrlKey] = tempUrlKey;
+                provider.UpdateAccountMetadata(accountMetadata);
+            }
+
+            ObjectStore result = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            provider.CreateObject(containerName, stream, objectName);
+
+            // verify a future time works
+            DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+            Uri redirectUri = new Uri("http://example.com");
+            long maxFileSize = 1000000;
+            int maxFileCount = 10;
+            var formPostData = ((CloudFilesProvider)provider).CreateFormPostUri(containerName, objectName, tempUrlKey, expirationTime, redirectUri, maxFileSize, maxFileCount);
+            Uri uri = formPostData.Item1;
+            IDictionary<string, string> fields = formPostData.Item2;
+
+            using (HttpClientHandler handler = new HttpClientHandler()
+                {
+                    AllowAutoRedirect = false
+                })
+            {
+                using (HttpClient client = new HttpClient(handler, false))
+                {
+                    using (var formData = new MultipartFormDataContent())
+                    {
+                        foreach (var field in fields)
+                            formData.Add(new StringContent(field.Value), field.Key);
+
+                        formData.Add(new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(fileContents))), "file1", "file1");
+                        var response = await client.PostAsync(uri, formData);
+                        var text = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(text);
+                    }
+                }
+            }
+
+            string actualData = ReadAllObjectText(provider, containerName, objectName + "file1", Encoding.UTF8, verifyEtag: true);
+            Assert.AreEqual(fileContents, actualData);
 
             provider.DeleteContainer(containerName, deleteObjects: true);
         }
