@@ -790,6 +790,11 @@ namespace net.openstack.Core.Providers
         /// Gets the non-metadata headers for the specified object.
         /// </summary>
         /// <remarks>
+        /// This call returns information for the first replicant of the object located in the distributed storage
+        /// system. If changes were made to the specified object that are not yet fully replicated through the
+        /// storage system, the results of this call may not match the most recent information uploaded to Object
+        /// Storage.
+        ///
         /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
         /// should use the <see cref="StringComparer.OrdinalIgnoreCase"/> equality comparer to ensure
@@ -827,6 +832,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.Newest"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showObjectMeta_v1__account___container___object__storage_object_services.html">Show object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectHeaders(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
@@ -836,6 +842,13 @@ namespace net.openstack.Core.Providers
         /// <remarks>
         /// The metadata associated with objects in the Object Storage Service are
         /// case-insensitive.
+        ///
+        /// <para>
+        /// This call returns information for the first replicant of the object located in the distributed storage
+        /// system. If changes were made to the specified object that are not yet fully replicated through the
+        /// storage system, the results of this call may not match the most recent information uploaded to Object
+        /// Storage.
+        /// </para>
         ///
         /// <note type="implement">
         /// The resulting <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string&gt;</see>
@@ -874,6 +887,7 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.Newest"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showObjectMeta_v1__account___container___object__storage_object_services.html">Show object metadata (OpenStack Object Storage API v1 Reference)</seealso>
         Dictionary<string, string> GetObjectMetaData(string container, string objectName, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
@@ -1144,6 +1158,13 @@ namespace net.openstack.Core.Providers
         /// <summary>
         /// Gets an object, writing the data to the specified <see cref="Stream"/>.
         /// </summary>
+        /// <remarks>
+        /// This call returns information for the first replicant of the object located in the distributed storage
+        /// system. If changes were made to the specified object that are not yet fully replicated through the
+        /// storage system, the results of this call may not match the most recent information uploaded to Object
+        /// Storage. To force the system to locate the most recent replica instead, set <see cref="CloudFilesProvider.Newest"/> to
+        /// <c>"True"</c> in the <paramref name="headers"/> argument.
+        /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="objectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
         /// <param name="outputStream">The output stream.</param>
@@ -1187,12 +1208,20 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.Newest"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_getObject_v1__account___container___object__storage_object_services.html">Get object content and metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObject(string container, string objectName, Stream outputStream, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Gets an object, saving the data to the specified file.
         /// </summary>
+        /// <remarks>
+        /// This call returns information for the first replicant of the object located in the distributed storage
+        /// system. If changes were made to the specified object that are not yet fully replicated through the
+        /// storage system, the results of this call may not match the most recent information uploaded to Object
+        /// Storage. To force the system to locate the most recent replica instead, set <see cref="CloudFilesProvider.Newest"/> to
+        /// <c>"True"</c> in the <paramref name="headers"/> argument.
+        /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="saveDirectory">The destination directory name. Example <localUri>c:\user\</localUri></param>
         /// <param name="objectName">The source object name. Example <localUri>image_name.jpeg</localUri></param>
@@ -1241,6 +1270,7 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidETagException">If <paramref name="verifyEtag"/> is <see langword="true"/>, the object includes an ETag header, and the downloaded data does not match the ETag header value.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="CloudFilesProvider.Newest"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_getObject_v1__account___container___object__storage_object_services.html">Get object content and metadata (OpenStack Object Storage API v1 Reference)</seealso>
         void GetObjectSaveToFile(string container, string saveDirectory, string objectName, string fileName = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, bool verifyEtag = false, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
