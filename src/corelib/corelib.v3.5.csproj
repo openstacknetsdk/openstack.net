@@ -226,6 +226,7 @@
     <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
     <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
     <Compile Include="Providers\Rackspace\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\ExtendedJsonRestServices.cs" />
     <Compile Include="Providers\Rackspace\IAutoScaleService.cs" />
     <Compile Include="Providers\Rackspace\IDatabaseService.cs" />
     <Compile Include="Providers\Rackspace\IDnsService.cs" />

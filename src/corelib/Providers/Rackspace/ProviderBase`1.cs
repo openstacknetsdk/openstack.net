@@ -74,7 +74,7 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="ExtendedJsonRestServices"/>.</param>
         protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
             : this(defaultIdentity, defaultRegion, identityProvider, restService, null) { }
 
@@ -85,14 +85,14 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="defaultRegion">The default region to use for calls that do not explicitly specify a region. If this value is <see langword="null"/>, the default region for the user will be used; otherwise if the service uses region-specific endpoints all calls must specify an explicit region.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
-        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
+        /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="ExtendedJsonRestServices"/>.</param>
         /// <param name="httpStatusCodeValidator">The HTTP status code validator to use. If this value is <see langword="null"/>, the provider will use <see cref="HttpResponseCodeValidator.Default"/>.</param>
         protected ProviderBase(CloudIdentity defaultIdentity, string defaultRegion,  IIdentityProvider identityProvider, IRestService restService, IHttpResponseCodeValidator httpStatusCodeValidator)
         {
             DefaultIdentity = defaultIdentity;
             _defaultRegion = defaultRegion;
             IdentityProvider = identityProvider ?? this as IIdentityProvider ?? new CloudIdentityProvider(defaultIdentity);
-            RestService = restService ?? new JsonRestServices();
+            RestService = restService ?? new ExtendedJsonRestServices();
             ResponseCodeValidator = httpStatusCodeValidator ?? HttpResponseCodeValidator.Default;
         }
 
@@ -625,7 +625,7 @@ namespace net.openstack.Providers.Rackspace
 
             return new JsonRequestSettings
             {
-                RetryCount = 2,
+                RetryCount = 0,
                 RetryDelay = TimeSpan.FromMilliseconds(200),
                 Non200SuccessCodes = non200SuccessCodesAggregate,
                 UserAgent = UserAgentGenerator.UserAgent,
