@@ -12,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class QueuedMessage
+    public class QueuedMessage : QueuedMessageBase
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
@@ -61,15 +61,7 @@
                 if (Href == null)
                     return null;
 
-                Uri href = Href;
-                // make sure we have an absolute URI, or Segments will throw an InvalidOperationException
-                if (!href.IsAbsoluteUri)
-                    href = new Uri(new Uri("http://example.com"), href);
-
-                if (href.Segments.Length == 0)
-                    return null;
-
-                return new MessageId(href.Segments.Last());
+                return ParseMessageId(Href);
             }
         }
 
