@@ -1,4 +1,6 @@
-﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
+﻿using Newtonsoft.Json.Linq;
+
+namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System;
     using System.Collections.Generic;
@@ -42,6 +44,12 @@
         private DiskConfiguration _diskConfiguration;
 
         /// <summary>
+        /// This is the backing field for the <see cref="Metadata"/> property.
+        /// </summary>
+        [JsonProperty("metadata", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private JObject _metadata;
+
+        /// <summary>
         /// This is the backing field for the <see cref="Networks"/> property.
         /// </summary>
         [JsonProperty("networks", DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -70,6 +78,7 @@
         /// <param name="imageId">The ID of the image to use when creating new servers. See <see cref="SimpleServerImage.Id"/>.</param>
         /// <param name="name">The prefix to use when assigning names to new servers.</param>
         /// <param name="diskConfiguration">The disk configuration to use for new servers.</param>
+        /// <param name="metadata">The metadata to associate with the server arugument.</param>
         /// <param name="networks">A collection of <see cref="ServerNetworkArgument"/> objects describing the networks to initially connect newly created servers to.</param>
         /// <param name="personality">A collection of <see cref="Personality"/> objects describing the personality for new server instances.</param>
         /// <exception cref="ArgumentNullException">
@@ -82,7 +91,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="personality"/> contains any <see langword="null"/> values.</para>
         /// </exception>
-        public ServerArgument(FlavorId flavorId, ImageId imageId, string name, DiskConfiguration diskConfiguration, IEnumerable<ServerNetworkArgument> networks, IEnumerable<Personality> personality)
+        public ServerArgument(FlavorId flavorId, ImageId imageId, string name, DiskConfiguration diskConfiguration,  JObject metadata, IEnumerable<ServerNetworkArgument> networks, IEnumerable<Personality> personality)
         {
             if (flavorId == null)
                 throw new ArgumentNullException("flavorId");
@@ -93,6 +102,7 @@
             _imageId = imageId;
             _name = name;
             _diskConfiguration = diskConfiguration;
+            _metadata = metadata;
 
             if (networks != null)
             {
@@ -156,6 +166,17 @@
             {
                 return _diskConfiguration;
             }
+        }
+
+        /// <summary>
+        /// Gets the metadata associated with the server argument resource.
+        /// </summary>
+        public JObject Metadata
+        {
+          get
+          {
+            return _metadata;
+          }
         }
 
         /// <summary>
