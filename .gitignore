@@ -33,6 +33,9 @@ obj/
 Ankh.NoLoad
 *.DotSettings
 
+# Roslyn IntelliSense Cache
+*.sln.ide/
+
 # Visual Studio Profiling Output
 *.psess
 *.vsp
