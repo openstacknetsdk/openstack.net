@@ -9,6 +9,7 @@ using System.Text;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
 using net.openstack.Core;
+using net.openstack.Core.Collections;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Domain.Mapping;
 using net.openstack.Core.Exceptions;
@@ -1651,6 +1652,151 @@ namespace net.openstack.Providers.Rackspace
                 };
 
                 return uriTemplate.BindByName(baseAddress, parameters);
+            }
+        }
+
+        /// <summary>
+        /// Construct a <see cref="Uri"/> and field information supporting the public upload of objects to a Cloud Files container via an HTTP form submission.
+        /// </summary>
+        /// <remarks>
+        /// The HTTP form used for uploading files has the following form, where <em>uri</em> is a placeholder
+        /// for the URI described in the return value from this method.
+        ///
+        /// <code>
+        /// &lt;form action="<em>uri</em>" method="POST" enctype="multipart/form-data"&gt;
+        ///   &lt;input type="file" name="file1"/&gt;&lt;br/&gt;
+        ///   &lt;input type="submit"/&gt;
+        /// &lt;/form&gt;
+        /// </code>
+        ///
+        /// <para>
+        /// In addition to the above <c>&lt;input&gt;</c> fields, the form should include one hidden input
+        /// for each of the key/value pairs described in the return value from this method. Each of these
+        /// fields should have the following form, where <em>key</em> and <em>value</em> are placeholders
+        /// for one key/value pair.
+        /// </para>
+        ///
+        /// <code>
+        /// &lt;input type="hidden" name="<em>key</em>" value="<em>value</em>"/&gt;
+        /// </code>
+        /// </remarks>
+        /// <param name="container">The container name where uploaded files are placed.</param>
+        /// <param name="objectPrefix">The prefix applied to uploaded objects.</param>
+        /// <param name="key">The account key to use with the Form POST feature, as specified in the account <see cref="TempUrlKey"/> metadata.</param>
+        /// <param name="expiration">The expiration time for the generated URI.</param>
+        /// <param name="redirectUri">The URI to redirect the user to after the upload operation completes.</param>
+        /// <param name="maxFileSize">Specifies the maximum size in bytes of a single file.</param>
+        /// <param name="maxFileCount">The maximum number of files which can be uploaded in a single request.</param>
+        /// <param name="region">The region in which to access the object. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>
+        /// A <see cref="Tuple{T1, T2}"/> object containing the information necessary to submit a POST operation uploading one or more files to Cloud Files.
+        /// The first item in the tuple is the absolute URI where the form data should be submitted, which is valid until the <paramref name="expiration"/>
+        /// time passes or the account key is changed. The value is a collection of key/value pairs describing
+        /// the names/values of additional fields to submit with the form.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectPrefix"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="redirectUri"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="maxFileSize"/> is less than 0.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="maxFileCount"/> is less or equal to 0.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectPrefix"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="maxFileSize"/> is greater than <see cref="LargeFileBatchThreshold"/>.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectPrefix"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="TempUrlKey"/>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/form-post.html">Form POST middleware (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/FormPost-d1a555.html">FormPost (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <preliminary/>
+        public Tuple<Uri, ReadOnlyDictionary<string, string>> CreateFormPostUri(string container, string objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectPrefix == null)
+                throw new ArgumentNullException("objectPrefix");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (redirectUri == null)
+                throw new ArgumentNullException("redirectUri");
+            if (maxFileSize < 0)
+                throw new ArgumentOutOfRangeException("maxFileSize");
+            if (maxFileCount <= 0)
+                throw new ArgumentOutOfRangeException("maxFileCount");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectPrefix))
+                throw new ArgumentException("objectPrefix cannot be empty");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("key cannot be empty");
+            if (maxFileSize > LargeFileBatchThreshold)
+                throw new ArgumentException("maxFileSize cannot exceed LargeFileBatchThreshold");
+            CheckIdentity(identity);
+
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectPrefix);
+
+            Uri baseAddress = new Uri(GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriKind.Absolute);
+
+            StringBuilder body = new StringBuilder();
+            body.Append(baseAddress.PathAndQuery).Append('/').Append(container).Append('/').Append(objectPrefix).Append('\n');
+            body.Append(redirectUri.AbsoluteUri).Append('\n');
+            body.Append(maxFileSize).Append('\n');
+            body.Append(maxFileCount).Append('\n');
+            body.Append(expiration.ToTimestamp() / 1000);
+
+            using (HMAC hmac = HMAC.Create())
+            {
+                hmac.HashName = "SHA1";
+                hmac.Key = Encoding.UTF8.GetBytes(key);
+                byte[] hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(body.ToString()));
+                string sig = string.Join(string.Empty, Array.ConvertAll(hash, i => i.ToString("x2")));
+
+                UriTemplate uriTemplate = new UriTemplate("{container}/{objectPrefix}");
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                    { "container", container },
+                    { "objectPrefix", objectPrefix },
+                };
+
+                Uri uri = uriTemplate.BindByName(baseAddress, parameters);
+                Dictionary<string, string> fields = new Dictionary<string, string>
+                {
+                    { "expires", (expiration.ToTimestamp() / 1000).ToString() },
+                    { "redirect", redirectUri.AbsoluteUri },
+                    { "max_file_size", maxFileSize.ToString() },
+                    { "max_file_count", maxFileCount.ToString() },
+                    { "signature", sig },
+                };
+
+                return Tuple.Create(uri, new ReadOnlyDictionary<string, string>(fields));
             }
         }
 
