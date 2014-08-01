@@ -621,17 +621,20 @@
                 throw new ArgumentOutOfRangeException("points");
 
             UriTemplate template = new UriTemplate("/entities/{entityId}/checks/{checkId}/metrics/{metricName}/plot?points={points}&resolution={resolution}&SELECT={select}&from={from}&to={to}");
-            var parameters = new Dictionary<string, string> { { "entityId", entityId.Value }, { "checkId", checkId.Value }, { "metricName", metricName.Value } };
+            var parameters = new Dictionary<string, string>
+            {
+                { "entityId", entityId.Value },
+                { "checkId", checkId.Value },
+                { "metricName", metricName.Value },
+                { "from",from.ToTimestamp().ToString() },
+                { "to", to.ToTimestamp().ToString() }
+            };
             if (points != null)
                 parameters.Add("points", points.ToString());
             if (resolution != null)
                 parameters.Add("resolution", resolution.Name);
             if (select != null)
                 parameters.Add("select", "select");
-            if (from != null)
-                parameters.Add("from", from.ToTimestamp().ToString());
-            if (to != null)
-                parameters.Add("to", to.ToTimestamp().ToString());
 
             Func<Uri, Uri> transform =
                 uri =>
