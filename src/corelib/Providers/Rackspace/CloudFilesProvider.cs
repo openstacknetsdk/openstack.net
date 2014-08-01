@@ -2389,6 +2389,20 @@ namespace net.openstack.Providers.Rackspace
         public const string Destination = "destination";
 
         /// <summary>
+        /// The <strong>If-None-Match</strong> header, which allows calls to create or update objects to
+        /// query whether the server already has a copy of the object before any data is sent.
+        /// </summary>
+        /// <remarks>
+        /// Currently the service only supports specifying the header <c>If-None-Match: *</c>, which
+        /// results in a <seealso cref="HttpStatusCode.PreconditionFailed"/> response if the Object
+        /// Storage Service contains any file matching the name of the object being updated. Neither
+        /// the content of the object nor its associated metadata are checked by the service.
+        /// </remarks>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject__v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <preliminary/>
+        public const string IfNoneMatch = "if-none-match";
+
+        /// <summary>
         /// The <strong>X-Object-Manifest</strong> header, which specifies the container and prefix for the segments of a
         /// dynamic large object.
         /// </summary>

@@ -1506,6 +1506,68 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        public void TestCreateObjectIfNoneMatch()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = Path.GetRandomFileName();
+            // another random name counts as random content
+            char[] fileDataChars = new char[5000];
+            for (int i = 0; i < fileDataChars.Length; i++)
+                fileDataChars[i] = (char)i;
+
+            string fileData = new string(fileDataChars);
+
+            ObjectStore containerResult = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, containerResult);
+
+            using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
+            {
+                provider.CreateObject(containerName, uploadStream, objectName);
+
+                Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { CloudFilesProvider.IfNoneMatch, "*" },
+                };
+
+                uploadStream.Position = 0;
+                ProgressMonitor progressMonitor = new ProgressMonitor(uploadStream.Length);
+                try
+                {
+                    provider.CreateObject(containerName, uploadStream, objectName, headers: headers, progressUpdated: progressMonitor.Updated);
+                    Assert.Fail("Expected a 412 (Precondition Failed)");
+                }
+                catch (ResponseException ex)
+                {
+                    Assert.IsNotNull(ex.Response);
+                    Assert.AreEqual(HttpStatusCode.PreconditionFailed, ex.Response.StatusCode);
+                    Assert.AreEqual(0, uploadStream.Position);
+                }
+
+                try
+                {
+                    provider.CreateObject(containerName, uploadStream, objectName, headers: headers, progressUpdated: progressMonitor.Updated);
+                    Assert.Fail("Expected a 412 (Precondition Failed)");
+                }
+                catch (ResponseException ex)
+                {
+                    Assert.IsNotNull(ex.Response);
+                    Assert.AreEqual(HttpStatusCode.PreconditionFailed, ex.Response.StatusCode);
+                    Assert.AreEqual(0, uploadStream.Position);
+                }
+            }
+
+            string actualData = ReadAllObjectText(provider, containerName, objectName, Encoding.UTF8, verifyEtag: true);
+            Assert.AreEqual(fileData, actualData);
+
+            /* Cleanup
+             */
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
         public void TestCreateObjectWithMetadata()
         {
             IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
