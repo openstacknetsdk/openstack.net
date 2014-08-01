@@ -20,7 +20,7 @@
         /// </summary>
         /// <remarks>
         /// This method calls <see cref="IQueueingService.QueryClaimAsync"/> to obtain updated
-        /// information about the current claim, and then synchronously invokes <see cref="Claim.RefreshImpl"/>
+        /// information about the current claim, and then synchronously invokes <see cref="Claim.RefreshAsync"/>
         /// to update the current instance to match the results.
         /// </remarks>
         /// <param name="claim">The claim.</param>
