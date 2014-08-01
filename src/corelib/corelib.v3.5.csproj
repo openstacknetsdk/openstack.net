@@ -82,6 +82,7 @@
     <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
+    <Compile Include="Core\Domain\EndpointTemplate.cs" />
     <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
     <Compile Include="Core\Domain\ExtensibleJsonObject.cs" />
     <Compile Include="Core\Domain\FlavorId.cs" />
@@ -521,12 +522,14 @@
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddServiceCatalogEndpointRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveError.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetEndpointResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListEndpointsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
