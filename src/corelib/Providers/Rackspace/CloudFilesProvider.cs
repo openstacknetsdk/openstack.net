@@ -18,6 +18,7 @@ using net.openstack.Core.Validators;
 using net.openstack.Providers.Rackspace.Exceptions;
 using net.openstack.Providers.Rackspace.Objects;
 using net.openstack.Providers.Rackspace.Objects.Mapping;
+using net.openstack.Providers.Rackspace.Objects.Monitoring;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using net.openstack.Providers.Rackspace.Validators;
 using Newtonsoft.Json;
@@ -1564,6 +1565,95 @@ namespace net.openstack.Providers.Rackspace
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: headers);
         }
 
+        /// <summary>
+        /// Construct a <see cref="Uri"/> which allows public access to an object hosted in Cloud Files.
+        /// </summary>
+        /// <param name="method">The HTTP method that will be used to access the object. This is typically <see cref="HttpMethod.GET"/> or <see cref="HttpMethod.PUT"/>.</param>
+        /// <param name="container">The container name.</param>
+        /// <param name="objectName">The object name. Example <localUri>image_name.jpeg</localUri></param>
+        /// <param name="key">The account key to use with the TempURL feature, as specified in the account <see cref="TempUrlKey"/> metadata.</param>
+        /// <param name="expiration">The expiration time for the generated URI.</param>
+        /// <param name="region">The region in which to access the object. If not specified, the user's default region will be used.</param>
+        /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
+        /// <returns>An absolute <see cref="Uri"/> which allows unauthenticated (public) access to the specified object until the <paramref name="expiration"/> time passes or the account key is changed.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="container"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="container"/> is empty.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="objectName"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="key"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="ContainerNameException">If <paramref name="container"/> is not a valid container name.</exception>
+        /// <exception cref="ObjectNameException">If <paramref name="objectName"/> is not a valid object name.</exception>
+        /// <exception cref="NotSupportedException">
+        /// If the provider does not support the given <paramref name="identity"/> type.
+        /// <para>-or-</para>
+        /// <para>The specified <paramref name="region"/> is not supported.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
+        /// </exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso cref="TempUrlKey"/>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/tempurl.html">Temporary URL middleware (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Create_TempURL-d1a444.html">Create the TempURL (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        /// <preliminary/>
+        public Uri CreateTemporaryPublicUri(HttpMethod method, string container, string objectName, string key, DateTimeOffset expiration, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("key cannot be empty");
+            CheckIdentity(identity);
+
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+
+            Uri baseAddress = new Uri(GetServiceEndpointCloudFiles(identity, region, useInternalUrl), UriKind.Absolute);
+
+            StringBuilder body = new StringBuilder();
+            body.Append(method.ToString().ToUpperInvariant()).Append('\n');
+            body.Append(expiration.ToTimestamp() / 1000).Append('\n');
+            body.Append(baseAddress.PathAndQuery).Append('/').Append(container).Append('/').Append(objectName);
+
+            using (HMAC hmac = HMAC.Create())
+            {
+                hmac.HashName = "SHA1";
+                hmac.Key = Encoding.UTF8.GetBytes(key);
+                byte[] hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(body.ToString()));
+                string sig = string.Join(string.Empty, Array.ConvertAll(hash, i => i.ToString("x2")));
+
+                UriTemplate uriTemplate = new UriTemplate("{container}/{objectName}?temp_url_sig={sig}&temp_url_expires={expires}");
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                    { "container", container },
+                    { "objectName", objectName },
+                    { "sig", sig },
+                    { "expires", (expiration.ToTimestamp() / 1000).ToString() },
+                };
+
+                return uriTemplate.BindByName(baseAddress, parameters);
+            }
+        }
+
         private static string EncodeUnicodeValue(string value)
         {
             if (value == null)
@@ -1913,6 +2003,17 @@ namespace net.openstack.Providers.Rackspace
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showAccountDetails_v1__account__storage_account_services.html">Show account details and list containers (OpenStack Object Storage API v1 Reference)</seealso>
         /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/GET_listcontainers_v1__account__accountServicesOperations_d1e000.html">Show Account Details and List Containers (Rackspace Cloud Files Developer Guide - API v1)</seealso>
         public const string AccountObjectCount = "x-account-object-count";
+
+        /// <summary>
+        /// The <strong>Temp-Url-Key</strong> account metadata key for use with <see cref="CreateTemporaryPublicUri"/>.
+        /// </summary>
+        /// <remarks>
+        /// This account metadata value is passed as the <em>key</em> parameter to <see cref="CreateTemporaryPublicUri"/>.
+        /// </remarks>
+        /// <seealso cref="GetAccountMetaData"/>
+        /// <seealso cref="UpdateAccountMetadata"/>
+        /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/Set_Account_Metadata-d1a4460.html">Set Account TempURL Metadata Key (Rackspace Cloud Files Developer Guide - API v1)</seealso>
+        public const string TempUrlKey = "Temp-Url-Key";
 
         #endregion
 
