@@ -2156,6 +2156,20 @@ namespace net.openstack.Providers.Rackspace
         /// <preliminary/>
         public const string StaticLargeObject = "x-static-large-object";
 
+        /// <summary>
+        /// The <strong>X-Detect-Content-Type</strong> header, which specifies that the Object Storage service should
+        /// automatically assign the content type for the object.
+        /// </summary>
+        /// <remarks>
+        /// The provider may use any algorithm to assign the content type for the object, including but not limited
+        /// to filename extension analysis and file contents analysis. The resulting content type is not required
+        /// to accurately reflect the true contents of the file.
+        ///
+        /// <note>If this header is set to <c>True</c>, the <strong>Content-Type</strong> header is ignored.</note>
+        /// </remarks>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
+        public const string DetectContentType = "x-detect-content-type";
+
         #endregion
 
         #region CDN Object Constants
