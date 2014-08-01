@@ -172,10 +172,10 @@
         /// </summary>
         public JObject Metadata
         {
-          get
-          {
-            return _metadata;
-          }
+            get
+            {
+                return _metadata;
+            }
         }
 
         /// <summary>
