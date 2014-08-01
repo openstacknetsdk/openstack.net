@@ -2173,6 +2173,23 @@ namespace net.openstack.Providers.Rackspace
 
         #endregion
 
+        /// <summary>
+        /// The <strong>X-Newest</strong> header, which indicates that Cloud Files should locate
+        /// the most recent version of an object or container listing rather than return the
+        /// first response provided by an underlying storage node.
+        /// </summary>
+        /// <remarks>
+        /// Setting this header to <c>True</c> can have a substantial performance impact on the
+        /// <see cref="HttpMethod.GET"/> or <see cref="HttpMethod.HEAD"/> request. It should only
+        /// be used when absolutely necessary.
+        /// </remarks>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showAccountDetails_v1__account__storage_account_services.html">Show account details and list containers (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showAccountMeta_v1__account__storage_account_services.html">Show account metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showContainerMeta_v1__account___container__storage_container_services.html">Show container metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_getObject_v1__account___container___object__storage_object_services.html">Get object content and metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/HEAD_showObjectMeta_v1__account___container___object__storage_object_services.html">Show object metadata (OpenStack Object Storage API v1 Reference)</seealso>
+        public const string Newest = "x-newest";
+
         #endregion
 
         /// <summary>
