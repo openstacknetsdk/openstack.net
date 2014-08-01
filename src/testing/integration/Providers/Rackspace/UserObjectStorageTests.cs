@@ -782,6 +782,32 @@
             provider.DeleteContainer(containerName, deleteObjects: true);
         }
 
+        /// <summary>
+        /// This is a regression test for openstacknetsdk/openstack.net#333.
+        /// </summary>
+        /// <seealso href="https://github.com/openstacknetsdk/openstack.net/issues/333">Chunked Encoding Issues (#333)</seealso>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestProtocolViolation()
+        {
+            try
+            {
+                TestTempUrlWithControlCharactersInObjectName();
+                Assert.Inconclusive("This test relies on the previous call throwing a WebException placing the ServicePoint in a bad state.");
+            }
+            catch (WebException ex)
+            {
+                Assert.IsNotNull(ex.Response);
+
+                ServicePoint servicePoint = ServicePointManager.FindServicePoint(ex.Response.ResponseUri);
+                if (servicePoint.ProtocolVersion >= HttpVersion.Version11)
+                    Assert.Inconclusive("The ServicePoint must be set to HTTP/1.0 in order to test the ProtocolViolationException handling.");
+            }
+
+            TestTempUrlExpired();
+        }
+
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
@@ -885,6 +911,49 @@
 
             string containerName = TestContainerPrefix + Path.GetRandomFileName();
             string objectName = "§ / 你好";
+            string fileContents = "File contents!";
+
+            Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();
+            string tempUrlKey;
+            if (!accountMetadata.TryGetValue(CloudFilesProvider.TempUrlKey, out tempUrlKey))
+            {
+                tempUrlKey = Guid.NewGuid().ToString("N");
+                accountMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                accountMetadata[CloudFilesProvider.TempUrlKey] = tempUrlKey;
+                provider.UpdateAccountMetadata(accountMetadata);
+            }
+
+            ObjectStore result = provider.CreateContainer(containerName);
+            Assert.AreEqual(ObjectStore.ContainerCreated, result);
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            provider.CreateObject(containerName, stream, objectName);
+
+            // verify a future time works
+            DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+            Uri uri = ((CloudFilesProvider)provider).CreateTemporaryPublicUri(HttpMethod.GET, containerName, objectName, tempUrlKey, expirationTime);
+            WebRequest request = HttpWebRequest.Create(uri);
+            using (WebResponse response = request.GetResponse())
+            {
+                Stream cdnStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                string text = reader.ReadToEnd();
+                Assert.AreEqual(fileContents, text);
+            }
+
+            provider.DeleteContainer(containerName, deleteObjects: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public void TestTempUrlWithControlCharactersInObjectName()
+        {
+            IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
+            Assert.IsInstanceOfType(provider, typeof(CloudFilesProvider), "Temp URLs are a Rackspace-specific extension to the Object Storage service.");
+
+            string containerName = TestContainerPrefix + Path.GetRandomFileName();
+            string objectName = "foo\n\rbar";
             string fileContents = "File contents!";
 
             Dictionary<string, string> accountMetadata = provider.GetAccountMetaData();

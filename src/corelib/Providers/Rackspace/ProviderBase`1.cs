@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CancellationToken = System.Threading.CancellationToken;
 using Encoding = System.Text.Encoding;
+using Thread = System.Threading.Thread;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -547,7 +548,27 @@ namespace net.openstack.Providers.Rackspace
                 initialPosition = null;
             }
 
-            var response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
+            Response response;
+            try
+            {
+                response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
+            }
+            catch (ProtocolViolationException)
+            {
+                ServicePoint servicePoint = ServicePointManager.FindServicePoint(absoluteUri);
+                if (servicePoint.ProtocolVersion < HttpVersion.Version11)
+                {
+                    // this is a workaround for issue #333
+                    // https://github.com/openstacknetsdk/openstack.net/issues/333
+                    // http://stackoverflow.com/a/22976809/138304
+                    int maxIdleTime = servicePoint.MaxIdleTime;
+                    servicePoint.MaxIdleTime = 0;
+                    Thread.Sleep(1);
+                    servicePoint.MaxIdleTime = maxIdleTime;
+                }
+
+                response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
+            }
 
             // on errors try again 1 time.
             if (response.StatusCode == HttpStatusCode.Unauthorized && !isRetry && initialPosition != null)
