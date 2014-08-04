@@ -505,7 +505,7 @@
         }
 
         /// <inheritdoc/>
-        public Task PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken)
+        public Task<MessagesEnqueued> PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -526,8 +526,10 @@
                 throw new ArgumentException("messages cannot contain any null values");
 
             if (messages.Length == 0)
+            {
                 return QueueExistsAsync(queueName, cancellationToken)
-                    .ContinueWith(t => new MessagesEnqueued(), cancellationToken);
+                    .Select(_ => MessagesEnqueued.Empty);
+            }
 
             UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 
@@ -570,8 +572,10 @@
                 throw new ArgumentException("messages cannot contain any null values");
 
             if (messages.Length == 0)
+            {
                 return QueueExistsAsync(queueName, cancellationToken)
-                    .ContinueWith(task => new MessagesEnqueued(), cancellationToken);
+                    .Select(_ => MessagesEnqueued.Empty);
+            }
 
             UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 

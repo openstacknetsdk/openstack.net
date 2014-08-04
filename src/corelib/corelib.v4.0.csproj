@@ -95,7 +95,6 @@
     <Compile Include="Core\Domain\Queues\Message`1.cs" />
     <Compile Include="Core\Domain\Queues\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\Queues\QueuedMessage.cs" />
-    <Compile Include="Core\Domain\Queues\QueuedMessageBase.cs" />
     <Compile Include="Core\Domain\Queues\QueuedMessageList.cs" />
     <Compile Include="Core\Domain\Queues\QueuedMessageListId.cs" />
     <Compile Include="Core\Domain\Queues\QueueMessagesStatistics.cs" />
