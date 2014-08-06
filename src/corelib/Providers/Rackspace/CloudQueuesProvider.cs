@@ -505,7 +505,7 @@
         }
 
         /// <inheritdoc/>
-        public Task PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken)
+        public Task<MessagesEnqueued> PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -516,7 +516,7 @@
         }
 
         /// <inheritdoc/>
-        public Task PostMessagesAsync(QueueName queueName, CancellationToken cancellationToken, params Message[] messages)
+        public Task<MessagesEnqueued> PostMessagesAsync(QueueName queueName, CancellationToken cancellationToken, params Message[] messages)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -526,7 +526,10 @@
                 throw new ArgumentException("messages cannot contain any null values");
 
             if (messages.Length == 0)
-                return QueueExistsAsync(queueName, cancellationToken);
+            {
+                return QueueExistsAsync(queueName, cancellationToken)
+                    .Select(_ => MessagesEnqueued.Empty);
+            }
 
             UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 
@@ -539,8 +542,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, messages);
 
-            Func<Task<HttpWebRequest>, Task<string>> requestResource =
-                GetResponseAsyncFunc(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<MessagesEnqueued>> requestResource =
+                GetResponseAsyncFunc<MessagesEnqueued>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Then(prepareRequest)
@@ -548,7 +551,7 @@
         }
 
         /// <inheritdoc/>
-        public Task PostMessagesAsync<T>(QueueName queueName, IEnumerable<Message<T>> messages, CancellationToken cancellationToken)
+        public Task<MessagesEnqueued> PostMessagesAsync<T>(QueueName queueName, IEnumerable<Message<T>> messages, CancellationToken cancellationToken)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -559,7 +562,7 @@
         }
 
         /// <inheritdoc/>
-        public Task PostMessagesAsync<T>(QueueName queueName, CancellationToken cancellationToken, params Message<T>[] messages)
+        public Task<MessagesEnqueued> PostMessagesAsync<T>(QueueName queueName, CancellationToken cancellationToken, params Message<T>[] messages)
         {
             if (queueName == null)
                 throw new ArgumentNullException("queueName");
@@ -569,7 +572,10 @@
                 throw new ArgumentException("messages cannot contain any null values");
 
             if (messages.Length == 0)
-                return QueueExistsAsync(queueName, cancellationToken);
+            {
+                return QueueExistsAsync(queueName, cancellationToken)
+                    .Select(_ => MessagesEnqueued.Empty);
+            }
 
             UriTemplate template = new UriTemplate("/queues/{queue_name}/messages");
 
@@ -582,8 +588,8 @@
             Func<Task<Tuple<IdentityToken, Uri>>, Task<HttpWebRequest>> prepareRequest =
                 PrepareRequestAsyncFunc(HttpMethod.POST, template, parameters, messages);
 
-            Func<Task<HttpWebRequest>, Task<string>> requestResource =
-                GetResponseAsyncFunc(cancellationToken);
+            Func<Task<HttpWebRequest>, Task<MessagesEnqueued>> requestResource =
+                GetResponseAsyncFunc<MessagesEnqueued>(cancellationToken);
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Then(prepareRequest)

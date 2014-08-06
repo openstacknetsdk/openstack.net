@@ -90,6 +90,7 @@
     <Compile Include="Core\Domain\Queues\CloudQueue.cs" />
     <Compile Include="Core\Domain\Queues\Message.cs" />
     <Compile Include="Core\Domain\Queues\MessageId.cs" />
+    <Compile Include="Core\Domain\Queues\MessagesEnqueued.cs" />
     <Compile Include="Core\Domain\Queues\MessageStatistics.cs" />
     <Compile Include="Core\Domain\Queues\Message`1.cs" />
     <Compile Include="Core\Domain\Queues\NamespaceDoc.cs" />

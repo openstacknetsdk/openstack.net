@@ -304,12 +304,18 @@
         /// Posts messages to a queue.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>.
+        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>,
+        /// and the <see cref="Task{TResult}.Result"/> property of the returned task contains
+        /// <see cref="MessagesEnqueued.Empty"/>.
         /// </remarks>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes
+        /// successfully, the <see cref="Task{TResult}.Result"/> property will contain a
+        /// <see cref="MessagesEnqueued"/> object representing the result of the operation.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
@@ -320,18 +326,24 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        Task PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken);
+        Task<MessagesEnqueued> PostMessagesAsync(QueueName queueName, IEnumerable<Message> messages, CancellationToken cancellationToken);
 
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>.
+        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>,
+        /// and upon success the <see cref="Task{TResult}.Result"/> property of the returned task contains
+        /// <see cref="MessagesEnqueued.Empty"/>.
         /// </remarks>
         /// <param name="queueName">The queue name.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <param name="messages">The messages to post.</param>
-        /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes
+        /// successfully, the <see cref="Task{TResult}.Result"/> property will contain a
+        /// <see cref="MessagesEnqueued"/> object representing the result of the operation.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
@@ -342,19 +354,25 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        Task PostMessagesAsync(QueueName queueName, CancellationToken cancellationToken, params Message[] messages);
+        Task<MessagesEnqueued> PostMessagesAsync(QueueName queueName, CancellationToken cancellationToken, params Message[] messages);
 
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>.
+        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>,
+        /// and the <see cref="Task{TResult}.Result"/> property of the returned task contains
+        /// <see cref="MessagesEnqueued.Empty"/>.
         /// </remarks>
         /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>A <see cref="Task"/> object representing the asynchronous operation.</returns>
+        /// <returns>
+        /// A <see cref="Task"/> object representing the asynchronous operation. When the task completes
+        /// successfully, the <see cref="Task{TResult}.Result"/> property will contain a
+        /// <see cref="MessagesEnqueued"/> object representing the result of the operation.
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
         /// <para>-or-</para>
@@ -365,13 +383,15 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        Task PostMessagesAsync<T>(QueueName queueName, IEnumerable<Message<T>> messages, CancellationToken cancellationToken);
+        Task<MessagesEnqueued> PostMessagesAsync<T>(QueueName queueName, IEnumerable<Message<T>> messages, CancellationToken cancellationToken);
 
         /// <summary>
         /// Posts messages to a queue.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>.
+        /// If <paramref name="messages"/> is empty, this call is equivalent to <see cref="QueueExistsAsync"/>,
+        /// and upon success the <see cref="Task{TResult}.Result"/> property of the returned task contains
+        /// <see cref="MessagesEnqueued.Empty"/>.
         /// </remarks>
         /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
         /// <param name="queueName">The queue name.</param>
@@ -388,7 +408,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        Task PostMessagesAsync<T>(QueueName queueName, CancellationToken cancellationToken, params Message<T>[] messages);
+        Task<MessagesEnqueued> PostMessagesAsync<T>(QueueName queueName, CancellationToken cancellationToken, params Message<T>[] messages);
 
         /// <summary>
         /// Deletes a message from a queue.

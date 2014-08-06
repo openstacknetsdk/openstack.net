@@ -312,6 +312,322 @@
         }
 
         /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 0 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Generic_0()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            //
+            // Generic messages
+            //
+
+            enqueued = provider.PostMessages(queueName);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.AreEqual(0, enqueued.Ids.Count());
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+            enqueued = provider.PostMessages(queueName, Enumerable.Empty<Message>());
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(0, enqueued.Ids.Count());
+            Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(0, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 1 message.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Generic_1()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            Message genericMessage = new Message(TimeSpan.FromMinutes(50), new JObject(new JProperty("type", "generic")));
+
+            //
+            // Generic messages
+            //
+
+            enqueued = provider.PostMessages(queueName, genericMessage);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(1, enqueued.Ids.Count());
+
+            enqueued = provider.PostMessages(queueName, new[] { genericMessage });
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(1, enqueued.Ids.Count());
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(2, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 2 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Generic_2()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            Message genericMessage = new Message(TimeSpan.FromMinutes(50), new JObject(new JProperty("type", "generic")));
+
+            //
+            // Generic messages
+            //
+
+            enqueued = provider.PostMessages(queueName, genericMessage, genericMessage);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(2, enqueued.Ids.Count());
+            Assert.AreEqual(false, enqueued.Partial);
+
+            enqueued = provider.PostMessages(queueName, new[] { genericMessage, genericMessage });
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(2, enqueued.Ids.Count());
+            Assert.AreEqual(false, enqueued.Partial);
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(4, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 0 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Typed_0()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+            //
+            // Typed messages
+            //
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(0, enqueued.Ids.Count());
+            Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName, Enumerable.Empty<Message<SampleMetadata>>());
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(0, enqueued.Ids.Count());
+            Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(0, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 1 message.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Typed_1()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+            //
+            // Typed messages
+            //
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName, typedMessage);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(1, enqueued.Ids.Count());
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName, new[] { typedMessage });
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(1, enqueued.Ids.Count());
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(2, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="QueueingServiceExtensions.PostMessages{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 2 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.QueuesSynchronous)]
+        public void SynchronousTestPostQueueMessages_Typed_2()
+        {
+            IQueueingService provider = CreateProvider();
+            QueueName queueName = CreateRandomQueueName();
+
+            provider.CreateQueue(queueName);
+
+            MessagesEnqueued enqueued;
+
+            Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+            //
+            // Typed messages
+            //
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName, typedMessage, typedMessage);
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(2, enqueued.Ids.Count());
+
+            enqueued = provider.PostMessages<SampleMetadata>(queueName, new[] { typedMessage, typedMessage });
+            Assert.IsNotNull(enqueued);
+            Assert.AreEqual(false, enqueued.Partial);
+            Assert.IsNotNull(enqueued.Ids);
+            Assert.IsFalse(enqueued.Ids.Contains(null));
+            Assert.AreEqual(2, enqueued.Ids.Count());
+
+            //
+            // Validation
+            //
+
+            ReadOnlyCollection<QueuedMessage> messages = ListAllMessages(provider, queueName, null, true, true);
+            Assert.IsNotNull(messages);
+            Assert.AreEqual(4, messages.Count);
+
+            //
+            // Cleanup
+            //
+
+            provider.DeleteQueue(queueName);
+        }
+
+        /// <summary>
         /// Tests the queueing service message functionality by creating two queues
         /// and two sub-processes and using them for two-way communication.
         /// </summary>

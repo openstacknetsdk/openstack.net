@@ -351,13 +351,14 @@
         }
 
         /// <summary>
-        /// This method tests each of the overloads of <see cref="O:IQueueingService.PostMessagesAsync"/>
-        /// and <see cref="O:IQueueingService.PostMessagesAsync{T}"/> for basic functionality.
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 0 messages.
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Queues)]
-        public async Task TestPostQueueMessages()
+        public async Task TestPostQueueMessages_Generic_0()
         {
             IQueueingService provider = CreateProvider();
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
@@ -366,28 +367,318 @@
 
                 await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
 
-                JObject genericBody =
-                    new JObject(
-                        new JProperty("type", "generic"));
-                Message genericMessage = new Message(TimeSpan.FromMinutes(50), genericBody);
-                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token);
-                await provider.PostMessagesAsync(queueName, Enumerable.Empty<Message>(), cancellationTokenSource.Token);
-                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage);
-                await provider.PostMessagesAsync(queueName, new[] { genericMessage }, cancellationTokenSource.Token);
-                await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage, genericMessage);
-                await provider.PostMessagesAsync(queueName, new[] { genericMessage, genericMessage }, cancellationTokenSource.Token);
+                MessagesEnqueued enqueued;
 
-                Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token);
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, Enumerable.Empty<Message<SampleMetadata>>(), cancellationTokenSource.Token);
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage);
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage }, cancellationTokenSource.Token);
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage, typedMessage);
-                await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage, typedMessage }, cancellationTokenSource.Token);
+                //
+                // Generic messages
+                //
+
+                enqueued = await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.AreEqual(0, enqueued.Ids.Count());
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+                enqueued = await provider.PostMessagesAsync(queueName, Enumerable.Empty<Message>(), cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(0, enqueued.Ids.Count());
+                Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+                //
+                // Validation
+                //
 
                 ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
                 Assert.IsNotNull(messages);
-                Assert.AreEqual(12, messages.Count);
+                Assert.AreEqual(0, messages.Count);
+
+                //
+                // Cleanup
+                //
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 1 message.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages_Generic_1()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                MessagesEnqueued enqueued;
+
+                Message genericMessage = new Message(TimeSpan.FromMinutes(50), new JObject(new JProperty("type", "generic")));
+
+                //
+                // Generic messages
+                //
+
+                enqueued = await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(1, enqueued.Ids.Count());
+
+                enqueued = await provider.PostMessagesAsync(queueName, new[] { genericMessage }, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(1, enqueued.Ids.Count());
+
+                //
+                // Validation
+                //
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(2, messages.Count);
+
+                //
+                // Cleanup
+                //
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync(QueueName, CancellationToken, Message[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync(QueueName, IEnumerable{Message}, CancellationToken)"/>
+        /// methods when posting 2 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages_Generic_2()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                MessagesEnqueued enqueued;
+
+                Message genericMessage = new Message(TimeSpan.FromMinutes(50), new JObject(new JProperty("type", "generic")));
+
+                //
+                // Generic messages
+                //
+
+                enqueued = await provider.PostMessagesAsync(queueName, cancellationTokenSource.Token, genericMessage, genericMessage);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(2, enqueued.Ids.Count());
+                Assert.AreEqual(false, enqueued.Partial);
+
+                enqueued = await provider.PostMessagesAsync(queueName, new[] { genericMessage, genericMessage }, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(2, enqueued.Ids.Count());
+                Assert.AreEqual(false, enqueued.Partial);
+
+                //
+                // Validation
+                //
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(4, messages.Count);
+
+                //
+                // Cleanup
+                //
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 0 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages_Typed_0()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                MessagesEnqueued enqueued;
+
+                Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+                //
+                // Typed messages
+                //
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(0, enqueued.Ids.Count());
+                Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, Enumerable.Empty<Message<SampleMetadata>>(), cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(0, enqueued.Ids.Count());
+                Assert.AreSame(MessagesEnqueued.Empty, enqueued);
+
+                //
+                // Validation
+                //
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(0, messages.Count);
+
+                //
+                // Cleanup
+                //
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 1 message.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages_Typed_1()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                MessagesEnqueued enqueued;
+
+                Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+                //
+                // Typed messages
+                //
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(1, enqueued.Ids.Count());
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage }, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(1, enqueued.Ids.Count());
+
+                //
+                // Validation
+                //
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(2, messages.Count);
+
+                //
+                // Cleanup
+                //
+
+                await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
+            }
+        }
+
+        /// <summary>
+        /// This method tests the <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, CancellationToken, Message{T}[])"/>
+        /// and <see cref="IQueueingService.PostMessagesAsync{T}(QueueName, IEnumerable{Message{T}}, CancellationToken)"/>
+        /// methods when posting 2 messages.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Queues)]
+        public async Task TestPostQueueMessages_Typed_2()
+        {
+            IQueueingService provider = CreateProvider();
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(TestTimeout(TimeSpan.FromSeconds(10))))
+            {
+                QueueName queueName = CreateRandomQueueName();
+
+                await provider.CreateQueueAsync(queueName, cancellationTokenSource.Token);
+
+                MessagesEnqueued enqueued;
+
+                Message<SampleMetadata> typedMessage = new Message<SampleMetadata>(TimeSpan.FromMinutes(40), new SampleMetadata(1, "Stuff!"));
+
+                //
+                // Typed messages
+                //
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, cancellationTokenSource.Token, typedMessage, typedMessage);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(2, enqueued.Ids.Count());
+
+                enqueued = await provider.PostMessagesAsync<SampleMetadata>(queueName, new[] { typedMessage, typedMessage }, cancellationTokenSource.Token);
+                Assert.IsNotNull(enqueued);
+                Assert.AreEqual(false, enqueued.Partial);
+                Assert.IsNotNull(enqueued.Ids);
+                Assert.IsFalse(enqueued.Ids.Contains(null));
+                Assert.AreEqual(2, enqueued.Ids.Count());
+
+                //
+                // Validation
+                //
+
+                ReadOnlyCollection<QueuedMessage> messages = await ListAllMessagesAsync(provider, queueName, null, true, true, cancellationTokenSource.Token, null);
+                Assert.IsNotNull(messages);
+                Assert.AreEqual(4, messages.Count);
+
+                //
+                // Cleanup
+                //
 
                 await provider.DeleteQueueAsync(queueName, cancellationTokenSource.Token);
             }

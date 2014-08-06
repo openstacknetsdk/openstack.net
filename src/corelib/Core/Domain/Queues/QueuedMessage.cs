@@ -61,15 +61,7 @@
                 if (Href == null)
                     return null;
 
-                Uri href = Href;
-                // make sure we have an absolute URI, or Segments will throw an InvalidOperationException
-                if (!href.IsAbsoluteUri)
-                    href = new Uri(new Uri("http://example.com"), href);
-
-                if (href.Segments.Length == 0)
-                    return null;
-
-                return new MessageId(href.Segments.Last());
+                return ParseMessageId(Href);
             }
         }
 
@@ -115,6 +107,23 @@
             {
                 return _body;
             }
+        }
+
+        /// <summary>
+        /// Parses a URI to extract a <see cref="MessageId"/>.
+        /// </summary>
+        /// <param name="href">The resource URI.</param>
+        /// <returns>The ID of the message.</returns>
+        public static MessageId ParseMessageId(Uri href)
+        {
+            // make sure we have an absolute URI, or Segments will throw an InvalidOperationException
+            if (!href.IsAbsoluteUri)
+                href = new Uri(new Uri("http://example.com"), href);
+
+            if (href.Segments.Length == 0)
+                return null;
+
+            return new MessageId(href.Segments.Last());
         }
     }
 }

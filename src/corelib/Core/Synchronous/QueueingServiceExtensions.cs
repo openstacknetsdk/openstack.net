@@ -452,6 +452,7 @@
         /// <param name="queueingService">The queueing service instance.</param>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
+        /// <returns>A <see cref="MessagesEnqueued"/> object representing the result of the operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueingService"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
@@ -463,14 +464,14 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static void PostMessages(this IQueueingService queueingService, QueueName queueName, IEnumerable<Message> messages)
+        public static MessagesEnqueued PostMessages(this IQueueingService queueingService, QueueName queueName, IEnumerable<Message> messages)
         {
             if (queueingService == null)
                 throw new ArgumentNullException("queueingService");
 
             try
             {
-                queueingService.PostMessagesAsync(queueName, messages, CancellationToken.None).Wait();
+                return queueingService.PostMessagesAsync(queueName, messages, CancellationToken.None).Result;
             }
             catch (AggregateException ex)
             {
@@ -488,6 +489,7 @@
         /// <param name="queueingService">The queueing service instance.</param>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
+        /// <returns>A <see cref="MessagesEnqueued"/> object representing the result of the operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueingService"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
@@ -499,51 +501,14 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static void PostMessages(this IQueueingService queueingService, QueueName queueName, params Message[] messages)
+        public static MessagesEnqueued PostMessages(this IQueueingService queueingService, QueueName queueName, params Message[] messages)
         {
             if (queueingService == null)
                 throw new ArgumentNullException("queueingService");
 
             try
             {
-                queueingService.PostMessagesAsync(queueName, CancellationToken.None, messages).Wait();
-            }
-            catch (AggregateException ex)
-            {
-                ReadOnlyCollection<Exception> innerExceptions = ex.Flatten().InnerExceptions;
-                if (innerExceptions.Count == 1)
-                    throw innerExceptions[0];
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Posts messages to a queue.
-        /// </summary>
-        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
-        /// <param name="queueingService">The queueing service instance.</param>
-        /// <param name="queueName">The queue name.</param>
-        /// <param name="messages">The messages to post.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="queueingService"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="queueName"/> is <see langword="null"/>.
-        /// <para>-or-</para>
-        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
-        /// </exception>
-        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
-        /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static void PostMessages<T>(this IQueueingService queueingService, QueueName queueName, IEnumerable<Message<T>> messages)
-        {
-            if (queueingService == null)
-                throw new ArgumentNullException("queueingService");
-
-            try
-            {
-                queueingService.PostMessagesAsync(queueName, messages, CancellationToken.None).Wait();
+                return queueingService.PostMessagesAsync(queueName, CancellationToken.None, messages).Result;
             }
             catch (AggregateException ex)
             {
@@ -562,6 +527,7 @@
         /// <param name="queueingService">The queueing service instance.</param>
         /// <param name="queueName">The queue name.</param>
         /// <param name="messages">The messages to post.</param>
+        /// <returns>A <see cref="MessagesEnqueued"/> object representing the result of the operation.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="queueingService"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="queueName"/> is <see langword="null"/>.
@@ -573,14 +539,52 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
-        public static void PostMessages<T>(this IQueueingService queueingService, QueueName queueName, params Message<T>[] messages)
+        public static MessagesEnqueued PostMessages<T>(this IQueueingService queueingService, QueueName queueName, IEnumerable<Message<T>> messages)
         {
             if (queueingService == null)
                 throw new ArgumentNullException("queueingService");
 
             try
             {
-                queueingService.PostMessagesAsync(queueName, CancellationToken.None, messages).Wait();
+                return queueingService.PostMessagesAsync(queueName, messages, CancellationToken.None).Result;
+            }
+            catch (AggregateException ex)
+            {
+                ReadOnlyCollection<Exception> innerExceptions = ex.Flatten().InnerExceptions;
+                if (innerExceptions.Count == 1)
+                    throw innerExceptions[0];
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Posts messages to a queue.
+        /// </summary>
+        /// <typeparam name="T">The class modeling the JSON representation of the messages to post in the queue.</typeparam>
+        /// <param name="queueingService">The queueing service instance.</param>
+        /// <param name="queueName">The queue name.</param>
+        /// <param name="messages">The messages to post.</param>
+        /// <returns>A <see cref="MessagesEnqueued"/> object representing the result of the operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="queueingService"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="queueName"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="messages"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="messages"/> contains a <see langword="null"/> value.
+        /// </exception>
+        /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
+        public static MessagesEnqueued PostMessages<T>(this IQueueingService queueingService, QueueName queueName, params Message<T>[] messages)
+        {
+            if (queueingService == null)
+                throw new ArgumentNullException("queueingService");
+
+            try
+            {
+                return queueingService.PostMessagesAsync(queueName, CancellationToken.None, messages).Result;
             }
             catch (AggregateException ex)
             {
