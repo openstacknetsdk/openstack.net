@@ -32,7 +32,7 @@
     <SyntaxFilters>Standard</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
-    <PresentationStyle>VS2013Alt</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>openstack.net API Reference Documentation</HelpTitle>
@@ -97,9 +97,6 @@
           </versions>
         </configuration>
       </PlugInConfig>
-      <PlugInConfig id="Lightweight TOC" enabled="True">
-        <configuration />
-      </PlugInConfig>
       <PlugInConfig id="Additional Reference Links" enabled="True">
         <configuration>
           <targets>
@@ -138,13 +135,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\corelib\corelib.v4.0.csproj">
-      <Name>corelib.v4.0</Name>
-      <Project>{7dba11eb-dba7-4d3a-8d42-b5312e74b9c0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
     <None Include="Content\Authentication\Authentication.aml" />
