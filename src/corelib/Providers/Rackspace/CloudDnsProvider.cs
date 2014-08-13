@@ -447,7 +447,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -456,15 +456,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Then(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -566,7 +566,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -575,15 +575,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -792,7 +792,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -801,15 +801,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Then(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -835,7 +835,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -844,15 +844,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1019,7 +1019,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -1028,15 +1028,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Then(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         /// <inheritdoc/>
@@ -1057,7 +1057,7 @@
             Func<Task<HttpWebRequest>, Task<JObject>> requestResource =
                 GetResponseAsyncFunc<JObject>(cancellationToken);
 
-            Func<Task<JObject>, DnsJob> resultSelector =
+            Func<Task<JObject>, Task<DnsJob>> resultSelector =
                 task =>
                 {
                     JObject result = task.Result;
@@ -1066,15 +1066,15 @@
 
                     DnsJob job = task.Result.ToObject<DnsJob>();
                     if (completionOption == AsyncCompletionOption.RequestCompleted)
-                        job = WaitForJobAsync(job, true, cancellationToken, progress).Result;
+                        return WaitForJobAsync(job, true, cancellationToken, progress);
 
-                    return job;
+                    return InternalTaskExtensions.CompletedTask(job);
                 };
 
             return AuthenticateServiceAsync(cancellationToken)
                 .Select(prepareRequest)
                 .Then(requestResource)
-                .Select(resultSelector);
+                .Then(resultSelector);
         }
 
         #endregion
