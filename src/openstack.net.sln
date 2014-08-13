@@ -18,10 +18,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{1C279666-B88A-4765-8A51-B352C85EFC28}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.v4.0", "Documentation\Documentation.v4.0.shfbproj", "{EA57BD15-3742-45B8-BDE2-263F7236BAFD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318} = {E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}
+		{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0} = {7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corelib.v3.5", "corelib\corelib.v3.5.csproj", "{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.v3.5", "Documentation\Documentation.v3.5.shfbproj", "{60B1668C-4331-4E3D-86F6-954FFCE0CD36}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318} = {E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{75DE60CC-05A2-49B4-A145-C5FD7AB2CB91}"
 	ProjectSection(SolutionItems) = preProject

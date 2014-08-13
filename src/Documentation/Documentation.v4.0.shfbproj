@@ -136,13 +136,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\corelib\corelib.v4.0.csproj">
-      <Name>corelib.v4.0</Name>
-      <Project>{7dba11eb-dba7-4d3a-8d42-b5312e74b9c0}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
     <None Include="Content\Authentication\Authentication.aml" />
     <None Include="Content\Authentication\HPAuthentication.aml" />
