@@ -49,6 +49,16 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpCodeSamples", "Sample
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocumentation", "Documentation\AdditionalReferenceDocumentation.shfbproj", "{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE-1829-4783-92CF-390CFCE22E43}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\build.ps1 = ..\build\build.ps1
+		..\build\check-key.ps1 = ..\build\check-key.ps1
+		..\build\KeyReporting.targets = ..\build\KeyReporting.targets
+		..\build\keys.ps1 = ..\build\keys.ps1
+		..\build\push.ps1 = ..\build\push.ps1
+		..\build\version.ps1 = ..\build\version.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
