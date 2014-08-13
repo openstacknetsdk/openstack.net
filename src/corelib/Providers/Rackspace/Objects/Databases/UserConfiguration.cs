@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class describes the configuration for a new database user in the <see cref="IDatabaseService"/>.
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class UserConfiguration
+    public class UserConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is one of the backing fields for the <see cref="UserName"/> property.
@@ -169,7 +170,7 @@
         /// </summary>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createUser__version___accountId__instances__instanceId__users_.html">Create User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         [JsonObject(MemberSerialization.OptIn)]
-        protected class WrappedDatabaseName
+        protected class WrappedDatabaseName : ExtensibleJsonObject
         {
             /// <summary>
             /// This is the backing field for the <see cref="Name"/> property.

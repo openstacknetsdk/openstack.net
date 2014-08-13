@@ -3,6 +3,7 @@
     using System;
     using net.openstack.Core.Domain;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents a node service event in the load balancer service.
@@ -11,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class NodeServiceEvent
+    public class NodeServiceEvent : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

@@ -5,6 +5,7 @@
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of the data produced by testing a monitoring check.
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class CheckData
+    public class CheckData : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
@@ -142,7 +143,7 @@
         /// <threadsafety static="true" instance="false"/>
         /// <preliminary/>
         [JsonObject(MemberSerialization.OptIn)]
-        public class CheckMetric
+        public class CheckMetric : ExtensibleJsonObject
         {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
             /// <summary>
@@ -216,7 +217,7 @@
         /// <threadsafety static="true" instance="false"/>
         /// <preliminary/>
         [JsonObject(MemberSerialization.OptIn)]
-        public class DebugInformation
+        public class DebugInformation : ExtensibleJsonObject
         {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
             /// <summary>

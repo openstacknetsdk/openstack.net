@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This models the JSON object representing a load balancing protocol.
@@ -11,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class LoadBalancingProtocol
+    public class LoadBalancingProtocol : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Name"/> property.

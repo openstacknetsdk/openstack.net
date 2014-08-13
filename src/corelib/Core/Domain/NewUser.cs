@@ -11,7 +11,7 @@
     /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_addUser_v2.0_users_.html">Add User (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class NewUser
+    public class NewUser : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the password for the new user.

@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Monitoring
 {
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of the results of testing a notification.
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class NotificationData
+    public class NotificationData : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

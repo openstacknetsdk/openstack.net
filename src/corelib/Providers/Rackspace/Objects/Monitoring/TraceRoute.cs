@@ -2,6 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON result of a traceroute operation from
@@ -11,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TraceRoute
+    public class TraceRoute : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

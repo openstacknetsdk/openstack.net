@@ -6,7 +6,7 @@
     /// </summary>
     /// <typeparam name="T">The provider type.</typeparam>
     /// <threadsafety static="true" instance="false"/>
-    public abstract class ProviderStateBase<T>
+    public abstract class ProviderStateBase<T> : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the provider which created the instance.

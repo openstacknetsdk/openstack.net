@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.LoadBalancers
 {
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON object used to represent an enabled/disabled
@@ -9,7 +10,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class LoadBalancerEnabledFlag
+    public class LoadBalancerEnabledFlag : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="True"/> property.

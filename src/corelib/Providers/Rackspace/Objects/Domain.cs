@@ -2,6 +2,7 @@ namespace net.openstack.Providers.Rackspace.Objects
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// Represents the domain for a user account.
@@ -13,7 +14,7 @@ namespace net.openstack.Providers.Rackspace.Objects
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Domain
+    public class Domain : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the "name" property for the domain.

@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Dns
 {
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of a nameserver associated with a domain
@@ -11,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsNameserver
+    public class DnsNameserver : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

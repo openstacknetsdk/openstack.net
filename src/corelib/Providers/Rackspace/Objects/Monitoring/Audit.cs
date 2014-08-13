@@ -7,6 +7,7 @@
     using net.openstack.Core.Domain;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
     using HttpMethod = JSIStudios.SimpleRESTServices.Client.HttpMethod;
 
     /// <summary>
@@ -25,7 +26,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Audit
+    public class Audit : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

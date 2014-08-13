@@ -1,9 +1,9 @@
 ﻿namespace net.openstack.Core.Domain
 {
     using System;
+    using System.Collections.Generic;
     using net.openstack.Core.Providers;
     using Newtonsoft.Json;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Represents the authentication token used for making authenticated calls to
@@ -11,7 +11,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class IdentityToken
+    public class IdentityToken : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the token expiration time in the format originally returned by the

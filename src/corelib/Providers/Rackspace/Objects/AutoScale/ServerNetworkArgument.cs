@@ -1,9 +1,10 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System;
-    using net.openstack.Core.Domain;
     using Newtonsoft.Json;
     using CloudNetwork = net.openstack.Core.Domain.CloudNetwork;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
+    using NetworkId = net.openstack.Core.Domain.NetworkId;
 
     /// <summary>
     /// This class models the JSON representation of a network to initially connect to new
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ServerNetworkArgument
+    public class ServerNetworkArgument : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="NetworkId"/> property.

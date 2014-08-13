@@ -1,8 +1,11 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System.Collections.ObjectModel;
-    using net.openstack.Core.Domain;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
+    using Link = net.openstack.Core.Domain.Link;
+    using ServerBase = net.openstack.Core.Domain.ServerBase;
+    using ServerId = net.openstack.Core.Domain.ServerId;
 
     /// <summary>
     /// Represents an active server which is part of a scaling group in the <see cref="IAutoScaleService"/>.
@@ -10,7 +13,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ActiveServer
+    public class ActiveServer : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

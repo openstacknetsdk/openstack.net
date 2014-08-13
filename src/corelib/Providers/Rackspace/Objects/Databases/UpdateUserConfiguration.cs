@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Databases
 {
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of an operation to update properties
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class UpdateUserConfiguration
+    public class UpdateUserConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is one of the backing fields for the <see cref="UserName"/> property.

@@ -3,6 +3,7 @@
     using System;
     using System.Net;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// Represents a load balancer node configuration.
@@ -16,7 +17,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class NodeConfiguration
+    public class NodeConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Address"/> property.

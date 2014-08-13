@@ -1,6 +1,7 @@
 ﻿namespace net.openstack.Providers.Rackspace.Objects.Monitoring
 {
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of a Metric resource in the <see cref="IMonitoringService"/>.
@@ -18,7 +19,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Metric
+    public class Metric : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

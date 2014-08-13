@@ -6,6 +6,7 @@
     using System.Linq;
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the configurable properties of the JSON representation of
@@ -19,7 +20,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class NotificationPlanConfiguration
+    public abstract class NotificationPlanConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Label"/> property.

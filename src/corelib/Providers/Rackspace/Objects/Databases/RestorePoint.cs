@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of a restore point, used to restore
@@ -11,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class RestorePoint
+    public class RestorePoint : ExtensibleJsonObject
     {
         [JsonProperty("backupRef", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private BackupId _backupId;

@@ -14,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class MessagesEnqueued
+    public class MessagesEnqueued : ExtensibleJsonObject
     {
         /// <summary>
         /// A default instance of the <see cref="MessagesEnqueued"/> class representing a successful

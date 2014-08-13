@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of the configurable properties of a monitoring account.
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class AccountConfiguration
+    public class AccountConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Metadata"/> property.

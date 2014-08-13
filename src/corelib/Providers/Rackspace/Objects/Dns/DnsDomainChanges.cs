@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents the changes made to various DNS resources as a result of
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsDomainChanges
+    public class DnsDomainChanges : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

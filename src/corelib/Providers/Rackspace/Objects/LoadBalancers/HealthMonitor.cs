@@ -3,6 +3,7 @@
     using System;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This is the base class for load balancer health monitoring configurations.
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public abstract class HealthMonitor
+    public abstract class HealthMonitor : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Type"/> property.

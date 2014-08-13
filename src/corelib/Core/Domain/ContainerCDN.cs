@@ -14,7 +14,7 @@
     /// <seealso href="http://docs.rackspace.com/files/api/v1/cf-devguide/content/CDN_Container_Services-d1e2632.html">CDN Container Services (Rackspace Cloud Files Developer Guide - API v1)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ContainerCDN
+    public class ContainerCDN : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the name of the container.

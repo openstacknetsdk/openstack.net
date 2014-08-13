@@ -2,6 +2,7 @@
 {
     using System;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This object models the JSON representation of a configuration update to apply
@@ -10,7 +11,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class NodeUpdate
+    public class NodeUpdate : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="Condition"/> property.

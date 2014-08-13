@@ -17,7 +17,7 @@ namespace net.openstack.Core.Domain
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("{Name,nq} ({Id, nq})")]
-    public class Role
+    public class Role : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the unique identifier for the role.

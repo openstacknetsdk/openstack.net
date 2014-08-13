@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of the resource and rate limits
@@ -13,7 +14,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class MonitoringLimits
+    public class MonitoringLimits : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
@@ -73,7 +74,7 @@
         /// <threadsafety static="true" instance="false"/>
         /// <preliminary/>
         [JsonObject(MemberSerialization.OptIn)]
-        public class RateLimit
+        public class RateLimit : ExtensibleJsonObject
         {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
             /// <summary>

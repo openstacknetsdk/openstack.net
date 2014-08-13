@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using CancellationToken = System.Threading.CancellationToken;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the detailed parameters of a specific single rate limit within
@@ -15,7 +16,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsRateLimit
+    public class DnsRateLimit : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value
         /// <summary>

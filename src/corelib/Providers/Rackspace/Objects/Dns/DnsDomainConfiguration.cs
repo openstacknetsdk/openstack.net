@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class represents a domain configuration for calls to <see cref="IDnsService.CreateDomainsAsync"/>.
@@ -14,7 +15,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DnsDomainConfiguration
+    public class DnsDomainConfiguration : ExtensibleJsonObject
     {
         /// <summary>
         /// This is the backing field for the <see cref="RecordsList"/> property.
@@ -233,7 +234,7 @@
         /// <threadsafety static="true" instance="false"/>
         /// <preliminary/>
         [JsonObject(MemberSerialization.OptIn)]
-        protected class RecordsList
+        protected class RecordsList : ExtensibleJsonObject
         {
             /// <summary>
             /// This is the backing field for the <see cref="Records"/> property.
@@ -285,7 +286,7 @@
         /// <threadsafety static="true" instance="false"/>
         /// <preliminary/>
         [JsonObject(MemberSerialization.OptIn)]
-        protected class SubdomainsList
+        protected class SubdomainsList : ExtensibleJsonObject
         {
             /// <summary>
             /// This is the backing field for the <see cref="Subdomains"/> property.

@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using net.openstack.Core.Domain;
     using Newtonsoft.Json;
+    using ExtensibleJsonObject = net.openstack.Core.Domain.ExtensibleJsonObject;
 
     /// <summary>
     /// This class models the JSON representation of a database instance flavor in the <see cref="IDatabaseService"/>.
@@ -12,7 +13,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class DatabaseFlavor
+    public class DatabaseFlavor : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>

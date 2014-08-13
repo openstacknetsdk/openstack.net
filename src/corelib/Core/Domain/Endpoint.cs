@@ -7,7 +7,7 @@ namespace net.openstack.Core.Domain
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Endpoint
+    public class Endpoint : ExtensibleJsonObject
     {
         /// <summary>
         /// Gets the public URL of the service.

@@ -10,7 +10,7 @@ namespace net.openstack.Core.Domain
     /// <seealso cref="IIdentityProvider.Authenticate"/>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class UserDetails
+    public class UserDetails : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
