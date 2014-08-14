@@ -9,7 +9,7 @@
     /// <summary>
     /// Represents the response returned when posting messages to a queue in the <see cref="IQueueingService"/>.
     /// </summary>
-    /// <seealso cref="O:net.openstack.Core.Domain.Queues.IQueueingService.PostMessagesAsync"/>
+    /// <seealso cref="O:net.openstack.Core.Providers.IQueueingService.PostMessagesAsync"/>
     /// <seealso href="https://wiki.openstack.org/w/index.php?title=Marconi/specs/api/v1#Post_Message.28s.29">Post Message(s) (OpenStack Marconi API v1 Blueprint)</seealso>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
