@@ -1068,10 +1068,18 @@ namespace net.openstack.Core.Providers
         /// Creates an object using data from a file. If the destination file already exists, the contents are overwritten.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// The content type for the object may be specified by providing the <paramref name="contentType"/> argument,
         /// or by setting <see cref="CloudFilesProvider.DetectContentType"/> to <c>True</c> in the
         /// <paramref name="headers"/> argument. If neither of these is used, the resulting content type of the object
         /// is unspecified.
+        /// </para>
+        /// <para>
+        /// Object metadata can be set at the time the object is created by including the custom metadata items in the
+        /// <paramref name="headers"/> argument. Note that unlike the <see cref="UpdateObjectMetadata"/> method, the
+        /// keys of all custom metadata items included as headers must be prefixed with
+        /// <see cref="CloudFilesProvider.ObjectMetaDataPrefix"/>.
+        /// </para>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="filePath">The source file path. Example <localUri>c:\folder1\folder2\image_name.jpeg</localUri></param>
@@ -1112,6 +1120,12 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// The following code shows two ways to create an object with custom metadata. The first uses the <paramref name="headers"/>
+        /// argument to this method, and the second shows an alternative method of calling <see cref="UpdateObjectMetadata"/> after
+        /// the object is created.
+        /// <code source="..\Samples\CSharpCodeSamples\ObjectStorageProviderExamples.cs" region="CreateObjectFromFileWithMetadata" language="cs"/>
+        /// </example>
         /// <seealso cref="CloudFilesProvider.DetectContentType"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObjectFromFile(string container, string filePath, string objectName = null, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
@@ -1120,10 +1134,18 @@ namespace net.openstack.Core.Providers
         /// Creates an object using data from a <see cref="Stream"/>. If the destination file already exists, the contents are overwritten.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// The content type for the object may be specified by providing the <paramref name="contentType"/> argument,
         /// or by setting <see cref="CloudFilesProvider.DetectContentType"/> to <c>True</c> in the
         /// <paramref name="headers"/> argument. If neither of these is used, the resulting content type of the object
         /// is unspecified.
+        /// </para>
+        /// <para>
+        /// Object metadata can be set at the time the object is created by including the custom metadata items in the
+        /// <paramref name="headers"/> argument. Note that unlike the <see cref="UpdateObjectMetadata"/> method, the
+        /// keys of all custom metadata items included as headers must be prefixed with
+        /// <see cref="CloudFilesProvider.ObjectMetaDataPrefix"/>.
+        /// </para>
         /// </remarks>
         /// <param name="container">The container name.</param>
         /// <param name="stream">A <see cref="Stream"/> providing the data for the file.</param>
@@ -1165,6 +1187,12 @@ namespace net.openstack.Core.Providers
         /// <para>If <paramref name="region"/> is <see langword="null"/> and no default region is available for the provider.</para>
         /// </exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// The following code shows two ways to create an object with custom metadata. The first uses the <paramref name="headers"/>
+        /// argument to this method, and the second shows an alternative method of calling <see cref="UpdateObjectMetadata"/> after
+        /// the object is created.
+        /// <code source="..\Samples\CSharpCodeSamples\ObjectStorageProviderExamples.cs" region="CreateObjectWithMetadata" language="cs"/>
+        /// </example>
         /// <seealso cref="CloudFilesProvider.DetectContentType"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/PUT_createOrReplaceObject_v1__account___container___object__storage_object_services.html">Create or replace object (OpenStack Object Storage API v1 Reference)</seealso>
         void CreateObject(string container, Stream stream, string objectName, string contentType = null, int chunkSize = 65536, Dictionary<string, string> headers = null, string region = null, Action<long> progressUpdated = null, bool useInternalUrl = false, CloudIdentity identity = null);
