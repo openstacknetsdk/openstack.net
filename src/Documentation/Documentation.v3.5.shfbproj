@@ -136,6 +136,7 @@
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
     <None Include="Content\PreliminaryFeatures.aml" />
+    <None Include="Content\UserGuide\UserGuide.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +145,7 @@
   <ItemGroup>
     <Folder Include="Content" />
     <Folder Include="Content\Authentication\" />
+    <Folder Include="Content\UserGuide\" />
   </ItemGroup>
   <ItemGroup>
     <Tokens Include="SharedTokens.tokens" />

@@ -17,9 +17,11 @@
   </Topic>
   <Topic id="9c4a6074-9d84-4488-9565-50ecb5049ffe" visible="True" title="Preliminary Features" />
   <Topic id="32cc6156-3b31-4450-b209-b55fcfc0a210" visible="True" title="Asynchronous Services" />
-  <Topic id="92e2ae00-a53d-4efb-925f-2772495e9b6d" visible="True" isExpanded="true" title="Authentication">
-    <Topic id="1bb35d97-0c79-4e98-a2ae-6c1eef098ba7" visible="True" title="OpenStack Authentication" />
-    <Topic id="182a1c50-9b73-4d72-abe3-b3578caedfa6" visible="True" title="HP Authentication" />
-    <Topic id="9135e7f8-b287-44ca-9faf-802a50dbad1a" visible="True" title="Rackspace Authentication" />
+  <Topic id="e11545c6-88c9-4ff1-b0cf-abffd4bd3ff7" visible="True" isExpanded="true" title="User Guide">
+    <Topic id="92e2ae00-a53d-4efb-925f-2772495e9b6d" visible="True" isExpanded="true" title="Authentication">
+      <Topic id="1bb35d97-0c79-4e98-a2ae-6c1eef098ba7" visible="True" title="OpenStack Authentication" />
+      <Topic id="182a1c50-9b73-4d72-abe3-b3578caedfa6" visible="True" title="HP Authentication" />
+      <Topic id="9135e7f8-b287-44ca-9faf-802a50dbad1a" visible="True" title="Rackspace Authentication" />
+    </Topic>
   </Topic>
 </Topics>
