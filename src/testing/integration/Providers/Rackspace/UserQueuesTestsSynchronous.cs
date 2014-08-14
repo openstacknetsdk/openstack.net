@@ -44,7 +44,8 @@
             QueueName queueName = CreateRandomQueueName();
 
             CloudQueue[] allQueues = ListAllQueues(provider, null, false).ToArray();
-            foreach (CloudQueue queue in allQueues)
+            IEnumerable<CloudQueue> testQueues = allQueues.Where(queue => queue.Name != null && queue.Name.Value.StartsWith(TestQueuePrefix));
+            foreach (CloudQueue queue in testQueues)
             {
                 Console.WriteLine("Deleting queue: {0}", queue.Name);
                 provider.DeleteQueue(queue.Name);

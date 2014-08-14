@@ -60,7 +60,8 @@
             QueueName queueName = CreateRandomQueueName();
 
             ReadOnlyCollection<CloudQueue> allQueues = await ListAllQueuesAsync(provider, null, false, cancellationTokenSource.Token, null);
-            Task[] deleteTasks = Array.ConvertAll(allQueues.ToArray(), queue =>
+            IEnumerable<CloudQueue> testQueues = allQueues.Where(queue => queue.Name != null && queue.Name.Value.StartsWith(TestQueuePrefix));
+            Task[] deleteTasks = Array.ConvertAll(testQueues.ToArray(), queue =>
             {
                 Console.WriteLine("Deleting queue: {0}", queue.Name);
                 return provider.DeleteQueueAsync(queue.Name, cancellationTokenSource.Token);
