@@ -1583,9 +1583,9 @@
             {
                 Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    { "X-Object-Meta-Projectcode", "ProjectCode" },
-                    { "X-Object-Meta-Filedesc", "FileDescription" },
-                    { "X-Object-Meta-Usercode", "User Code" },
+                    { CloudFilesProvider.ObjectMetaDataPrefix + "Projectcode", "ProjectCode" },
+                    { CloudFilesProvider.ObjectMetaDataPrefix + "Filedesc", "FileDescription" },
+                    { CloudFilesProvider.ObjectMetaDataPrefix + "Usercode", "User Code" },
                 };
                 provider.CreateObject(containerName, uploadStream, objectName, headers: headers);
             }
