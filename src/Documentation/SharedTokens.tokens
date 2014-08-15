@@ -52,6 +52,16 @@
       <ddue:linkUri>https://github.com/rackerlabs/dotnet-threading</ddue:linkUri>
     </ddue:externalLink></item>
 
+  <item id="OpenStackIdentityService"><ddue:externalLink>
+                <ddue:linkText>OpenStack Identity Service</ddue:linkText>
+                <ddue:linkUri>http://docs.openstack.org/api/openstack-identity-service/2.0/content/</ddue:linkUri>
+              </ddue:externalLink></item>
+
+  <item id="HpScopedTokens"><ddue:externalLink>
+                <ddue:linkText>Scoped Tokens</ddue:linkText>
+                <ddue:linkUri>http://docs.hpcloud.com/api/identity/#scoped-tokens</ddue:linkUri>
+              </ddue:externalLink></item>
+
   <item id="Async"><ddue:markup><span class="keyword">async</span></ddue:markup></item>
 
   <item id="Await"><ddue:markup><span class="keyword">await</span></ddue:markup></item>

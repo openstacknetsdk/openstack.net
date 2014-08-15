@@ -30,10 +30,7 @@
             <para>
               <codeEntityReference>T:net.openstack.Core.Providers.IIdentityProvider</codeEntityReference>:
               This interface is defines the basic methods for authenticating a client against a service.
-              The interface follows an API similar to the <externalLink>
-                <linkText>OpenStack Identity Service</linkText>
-                <linkUri>http://docs.openstack.org/api/openstack-identity-service/2.0/content/</linkUri>
-              </externalLink>.
+              The interface follows an API similar to the <token>OpenStackIdentityService</token>.
             </para>
           </listItem>
           <listItem>
