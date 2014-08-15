@@ -14,6 +14,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class MonitoringServiceExtensions
     {
         #region Core
@@ -28,6 +29,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-root">Get Account (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static MonitoringAccount GetAccount(this IMonitoringService service)
         {
             if (service == null)
@@ -61,6 +63,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-put-account">Update Account (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateAccount(this IMonitoringService service, MonitoringAccountId accountId, AccountConfiguration configuration)
         {
             if (service == null)
@@ -91,6 +94,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-get-limits">Get Limits (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static MonitoringLimits GetLimits(this IMonitoringService service)
         {
             if (service == null)
@@ -135,6 +139,7 @@
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-account.html#service-account-list-audits">List Audits (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">Time Series Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Audit, AuditId> ListAudits(this IMonitoringService service, AuditId marker, int? limit, DateTimeOffset? from, DateTimeOffset? to)
         {
             if (service == null)
@@ -168,6 +173,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-create">Create Entities (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static EntityId CreateEntity(this IMonitoringService service, NewEntityConfiguration configuration)
         {
             if (service == null)
@@ -202,6 +208,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-list">List Entities (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Entity, EntityId> ListEntities(this IMonitoringService service, EntityId marker, int? limit)
         {
             if (service == null)
@@ -231,6 +238,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-get">Get Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Entity GetEntity(this IMonitoringService service, EntityId entityId)
         {
             if (service == null)
@@ -264,6 +272,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-update">Update Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateEntity(this IMonitoringService service, EntityId entityId, UpdateEntityConfiguration configuration)
         {
             if (service == null)
@@ -292,6 +301,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="entityId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-entities.html#service-entities-delete">Delete Entity (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveEntity(this IMonitoringService service, EntityId entityId)
         {
             if (service == null)
@@ -330,6 +340,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-create">Create Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static CheckId CreateCheck(this IMonitoringService service, EntityId entityId, NewCheckConfiguration configuration)
         {
             if (service == null)
@@ -360,6 +371,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test">Test Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-debug">Test Check and Include Debug Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<CheckData> TestCheck(this IMonitoringService service, EntityId entityId, NewCheckConfiguration configuration, bool? debug)
         {
             if (service == null)
@@ -394,6 +406,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-test-existing">Test Existing Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<CheckData> TestExistingCheck(this IMonitoringService service, EntityId entityId, CheckId checkId)
         {
             if (service == null)
@@ -430,6 +443,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-list">List Checks (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Check, CheckId> ListChecks(this IMonitoringService service, EntityId entityId, CheckId marker, int? limit)
         {
             if (service == null)
@@ -464,6 +478,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-get">Get Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Check GetCheck(this IMonitoringService service, EntityId entityId, CheckId checkId)
         {
             if (service == null)
@@ -500,6 +515,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-update">Update Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateCheck(this IMonitoringService service, EntityId entityId, CheckId checkId, UpdateCheckConfiguration configuration)
         {
             if (service == null)
@@ -533,6 +549,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-checks.html#service-checks-delete">Delete Check (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveCheck(this IMonitoringService service, EntityId entityId, CheckId checkId)
         {
             if (service == null)
@@ -571,6 +588,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-check-types.html#service-check-types-list">List Check Types (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<CheckType, CheckTypeId> ListCheckTypes(this IMonitoringService service, CheckTypeId marker, int? limit)
         {
             if (service == null)
@@ -600,6 +618,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="checkTypeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-check-types.html#service-check-types-get">Get Check Type (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static CheckType GetCheckType(this IMonitoringService service, CheckTypeId checkTypeId)
         {
             if (service == null)
@@ -645,6 +664,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/metrics-api.html#list-metrics">List Metrics (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Metric, MetricName> ListMetrics(this IMonitoringService service, EntityId entityId, CheckId checkId, MetricName marker, int? limit)
         {
             if (service == null)
@@ -702,6 +722,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/metrics-api.html#fetch-data-points">Fetch Data Points (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<DataPoint> GetDataPoints(this IMonitoringService service, EntityId entityId, CheckId checkId, MetricName metricName, int? points, DataPointGranularity resolution, IEnumerable<DataPointStatistic> select, DateTimeOffset from, DateTimeOffset to)
         {
             if (service == null)
@@ -740,6 +761,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-create">Create Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AlarmId CreateAlarm(this IMonitoringService service, EntityId entityId, NewAlarmConfiguration configuration)
         {
             if (service == null)
@@ -774,6 +796,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-test">Test Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<AlarmData> TestAlarm(this IMonitoringService service, EntityId entityId, TestAlarmConfiguration configuration)
         {
             if (service == null)
@@ -810,6 +833,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-list">List Alarms (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Alarm, AlarmId> ListAlarms(this IMonitoringService service, EntityId entityId, AlarmId marker, int? limit)
         {
             if (service == null)
@@ -844,6 +868,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-get">Get Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Alarm GetAlarm(this IMonitoringService service, EntityId entityId, AlarmId alarmId)
         {
             if (service == null)
@@ -880,6 +905,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-update">Update Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateAlarm(this IMonitoringService service, EntityId entityId, AlarmId alarmId, UpdateAlarmConfiguration configuration)
         {
             if (service == null)
@@ -913,6 +939,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarms.html#service-alarms-delete">Remove Alarm (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveAlarm(this IMonitoringService service, EntityId entityId, AlarmId alarmId)
         {
             if (service == null)
@@ -946,6 +973,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-create">Create Notification Plan (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationPlanId CreateNotificationPlan(this IMonitoringService service, NewNotificationPlanConfiguration configuration)
         {
             if (service == null)
@@ -980,6 +1008,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-list">List Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<NotificationPlan, NotificationPlanId> ListNotificationPlans(this IMonitoringService service, NotificationPlanId marker, int? limit)
         {
             if (service == null)
@@ -1009,6 +1038,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-get">Get Notification Plan (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationPlan GetNotificationPlan(this IMonitoringService service, NotificationPlanId notificationPlanId)
         {
             if (service == null)
@@ -1042,6 +1072,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-update">Update Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateNotificationPlan(this IMonitoringService service, NotificationPlanId notificationPlanId, UpdateNotificationPlanConfiguration configuration)
         {
             if (service == null)
@@ -1070,6 +1101,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationPlanId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-plans.html#service-notification-plans-delete">Delete Notification Plans (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveNotificationPlan(this IMonitoringService service, NotificationPlanId notificationPlanId)
         {
             if (service == null)
@@ -1108,6 +1140,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-list">List Monitoring Zones (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<MonitoringZone, MonitoringZoneId> ListMonitoringZones(this IMonitoringService service, MonitoringZoneId marker, int? limit)
         {
             if (service == null)
@@ -1137,6 +1170,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="monitoringZoneId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-get">Get Monitoring Zone (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static MonitoringZone GetMonitoringZone(this IMonitoringService service, MonitoringZoneId monitoringZoneId)
         {
             if (service == null)
@@ -1171,6 +1205,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-monitoring-zones.html#service-monitoring-zones-traceroute">Perform a "traceroute" from a Monitoring Zone (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static TraceRoute PerformTraceRouteFromMonitoringZone(this IMonitoringService service, MonitoringZoneId monitoringZoneId, TraceRouteConfiguration configuration)
         {
             if (service == null)
@@ -1214,6 +1249,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-discover">Discover Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<CheckId> DiscoverAlarmNotificationHistory(this IMonitoringService service, EntityId entityId, AlarmId alarmId)
         {
             if (service == null)
@@ -1268,6 +1304,7 @@
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-list">List Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">Time Series Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AlarmNotificationHistoryItem, AlarmNotificationHistoryItemId> ListAlarmNotificationHistory(this IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, AlarmNotificationHistoryItemId marker, int? limit, DateTimeOffset? from, DateTimeOffset? to)
         {
             if (service == null)
@@ -1308,6 +1345,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-notification-history.html#service-alarm-notification-history-get">Get Alarm Notification History (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AlarmNotificationHistoryItem GetAlarmNotificationHistory(this IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, AlarmNotificationHistoryItemId alarmNotificationHistoryItemId)
         {
             if (service == null)
@@ -1341,6 +1379,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-create">Create Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationId CreateNotification(this IMonitoringService service, NewNotificationConfiguration configuration)
         {
             if (service == null)
@@ -1370,6 +1409,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-test-new">Test Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationData TestNotification(this IMonitoringService service, NewNotificationConfiguration configuration)
         {
             if (service == null)
@@ -1399,6 +1439,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-test-existing">Test Existing Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationData TestExistingNotification(this IMonitoringService service, NotificationId notificationId)
         {
             if (service == null)
@@ -1433,6 +1474,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-list">List Notifications (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Notification, NotificationId> ListNotifications(this IMonitoringService service, NotificationId marker, int? limit)
         {
             if (service == null)
@@ -1462,6 +1504,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-get">Get Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Notification GetNotification(this IMonitoringService service, NotificationId notificationId)
         {
             if (service == null)
@@ -1495,6 +1538,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-update">Update Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateNotification(this IMonitoringService service, NotificationId notificationId, UpdateNotificationConfiguration configuration)
         {
             if (service == null)
@@ -1523,6 +1567,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notifications.html#service-notifications-delete">Delete Notification (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveNotification(this IMonitoringService service, NotificationId notificationId)
         {
             if (service == null)
@@ -1561,6 +1606,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-types-crud.html#Service-Notification-Types-List">List Notification Types (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<NotificationType, NotificationTypeId> ListNotificationTypes(this IMonitoringService service, NotificationTypeId marker, int? limit)
         {
             if (service == null)
@@ -1590,6 +1636,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="notificationTypeId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-notification-types-crud.html#Service-Notification-Types-get">Get Notification Type (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static NotificationType GetNotificationType(this IMonitoringService service, NotificationTypeId notificationTypeId)
         {
             if (service == null)
@@ -1638,6 +1685,7 @@
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-changelogs.html#service-changelogs-alarms-list">List Alarm Changelogs (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">Time Series Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId> ListAlarmChangelogs(this IMonitoringService service, AlarmChangelogId marker, int? limit, DateTimeOffset? from, DateTimeOffset? to)
         {
             if (service == null)
@@ -1683,6 +1731,7 @@
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-changelogs.html#service-changelogs-alarms-list">List Alarm Changelogs (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-time-series-collections.html">Time Series Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AlarmChangelog, AlarmChangelogId> ListAlarmChangelogs(this IMonitoringService service, EntityId entityId, AlarmChangelogId marker, int? limit, DateTimeOffset? from, DateTimeOffset? to)
         {
             if (service == null)
@@ -1721,6 +1770,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-views.html#service-views-overview">Get Overview (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<EntityOverview, EntityId> ListEntityOverviews(this IMonitoringService service, EntityId marker, int? limit)
         {
             if (service == null)
@@ -1757,6 +1807,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-views.html#service-views-overview">Get Overview (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<EntityOverview, EntityId> ListEntityOverviews(this IMonitoringService service, EntityId marker, int? limit, IEnumerable<EntityId> entityIdFilter)
         {
             if (service == null)
@@ -1795,6 +1846,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-examples.html#service-alarm-examples-list">List Alarm Examples (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AlarmExample, AlarmExampleId> ListAlarmExamples(this IMonitoringService service, AlarmExampleId marker, int? limit)
         {
             if (service == null)
@@ -1824,6 +1876,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="alarmExampleId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-examples.html#service-alarm-examples-get">Get Alarm Example (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AlarmExample GetAlarmExample(this IMonitoringService service, AlarmExampleId alarmExampleId)
         {
             if (service == null)
@@ -1859,6 +1912,7 @@
         /// <exception cref="ArgumentException">If <paramref name="exampleParameters"/> contains any empty keys.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-alarm-examples.html#service-alarm-examples-post">Evaluate Alarm Example (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static BoundAlarmExample EvaluateAlarmExample(this IMonitoringService service, AlarmExampleId alarmExampleId, IDictionary<string, object> exampleParameters)
         {
             if (service == null)
@@ -1901,6 +1955,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agents">List Agents (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Agent, AgentId> ListAgents(this IMonitoringService service, AgentId marker, int? limit)
         {
             if (service == null)
@@ -1930,6 +1985,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent">Get Agent (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Agent GetAgent(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -1966,6 +2022,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent-connections">List Agent Connections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AgentConnection, AgentConnectionId> ListAgentConnections(this IMonitoringService service, AgentId agentId, AgentConnectionId marker, int? limit)
         {
             if (service == null)
@@ -2000,6 +2057,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent.html#service-agent-list-agent-connection">Get Agent Connection (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AgentConnection GetAgentConnection(this IMonitoringService service, AgentId agentId, AgentConnectionId agentConnectionId)
         {
             if (service == null)
@@ -2033,6 +2091,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-create-token">Create Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AgentTokenId CreateAgentToken(this IMonitoringService service, AgentTokenConfiguration configuration)
         {
             if (service == null)
@@ -2067,6 +2126,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-list">List Agent Tokens (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<AgentToken, AgentTokenId> ListAgentTokens(this IMonitoringService service, AgentTokenId marker, int? limit)
         {
             if (service == null)
@@ -2096,6 +2156,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-get">Get Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static AgentToken GetAgentToken(this IMonitoringService service, AgentTokenId agentTokenId)
         {
             if (service == null)
@@ -2129,6 +2190,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-update">Update Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateAgentToken(this IMonitoringService service, AgentTokenId agentTokenId, AgentTokenConfiguration configuration)
         {
             if (service == null)
@@ -2157,6 +2219,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentTokenId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-tokens.html#service-agent-token-delete">Delete Agent Token (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveAgentToken(this IMonitoringService service, AgentTokenId agentTokenId)
         {
             if (service == null)
@@ -2195,6 +2258,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html">Agent Host Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<JToken> GetAgentHostInformation(this IMonitoringService service, AgentId agentId, HostInformationType hostInformation)
         {
             if (service == null)
@@ -2224,6 +2288,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-cpus">Get CPUs Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<CpuInformation>> GetCpuInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2253,6 +2318,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-disks">Get Disks Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<DiskInformation>> GetDiskInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2282,6 +2348,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-filesystems">Get Filesystems Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<FilesystemInformation>> GetFilesystemInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2311,6 +2378,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-memory">Get Memory Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<MemoryInformation> GetMemoryInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2340,6 +2408,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-network_interfaces">Get Network Interfaces Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<NetworkInterfaceInformation>> GetNetworkInterfaceInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2369,6 +2438,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-processes">Get Processes Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<ProcessInformation>> GetProcessInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2398,6 +2468,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-system">Get System Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<SystemInformation> GetSystemInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2427,6 +2498,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="agentId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-host_info.html#service-agent-host_info-who">Get Logged-in User Information (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HostInformation<ReadOnlyCollection<LoginInformation>> GetLoginInformation(this IMonitoringService service, AgentId agentId)
         {
             if (service == null)
@@ -2473,6 +2545,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/service-agent-targets.html#service-agent-list-check-targets">List Agent Check Targets (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cm/api/v1.0/cm-devguide/content/api-paginated-collections.html">Paginated Collections (Rackspace Cloud Monitoring Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<CheckTarget, CheckTargetId> ListAgentCheckTargets(this IMonitoringService service, EntityId entityId, CheckTypeId agentCheckType, CheckTargetId marker, int? limit)
         {
             if (service == null)

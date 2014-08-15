@@ -14,6 +14,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class AutoScaleServiceExtensions
     {
         #region Groups
@@ -29,6 +30,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_listGroups_v1.0__tenantId__groups_autoscale-groups.html">List scaling groups (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<ScalingGroup> ListScalingGroups(this IAutoScaleService service, ScalingGroupId marker, int? limit)
         {
             if (service == null)
@@ -58,6 +60,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createGroup_v1.0__tenantId__groups_autoscale-groups.html">Create group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ScalingGroup CreateGroup(this IAutoScaleService service, ScalingGroupConfiguration configuration)
         {
             if (service == null)
@@ -87,6 +90,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_showGroupManifest_v1.0__tenantId__groups__groupId__autoscale-groups.html">Show scaling group details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ScalingGroup GetGroup(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -116,6 +120,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteGroup_v1.0__tenantId__groups__groupId__autoscale-groups.html">Delete scaling group (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void DeleteGroup(this IAutoScaleService service, ScalingGroupId groupId, bool? force)
         {
             if (service == null)
@@ -145,6 +150,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupState_v1.0__tenantId__groups__groupId__state_autoscale-groups.html">Get scaling group state (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static GroupState GetGroupState(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -173,6 +179,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_pauseGroup_v1.0__tenantId__groups__groupId__pause_autoscale-groups.html">Pause group policy execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void PauseGroup(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -201,6 +208,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_resumeGroup_v1.0__tenantId__groups__groupId__resume_autoscale-groups.html">Resume group policy execution (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void ResumeGroup(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -234,6 +242,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Show scaling group configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static GroupConfiguration GetGroupConfiguration(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -267,6 +276,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putGroupConfig_v1.0__tenantId__groups__groupId__config_Configurations.html">Update scaling group configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetGroupConfiguration(this IAutoScaleService service, ScalingGroupId groupId, GroupConfiguration configuration)
         {
             if (service == null)
@@ -296,6 +306,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="groupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Show launch configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LaunchConfiguration GetLaunchConfiguration(this IAutoScaleService service, ScalingGroupId groupId)
         {
             if (service == null)
@@ -329,6 +340,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html">Update launch configuration (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetLaunchConfiguration(this IAutoScaleService service, ScalingGroupId groupId, LaunchConfiguration configuration)
         {
             if (service == null)
@@ -365,6 +377,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicies_v1.0__tenantId__groups__groupId__policies_autoscale-policies.html">List policies (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Policy> ListPolicies(this IAutoScaleService service, ScalingGroupId groupId, PolicyId marker, int? limit)
         {
             if (service == null)
@@ -399,6 +412,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createPolicies_v1.0__tenantId__groups__groupId__policies_autoscale-policies.html">Create policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Policy CreatePolicy(this IAutoScaleService service, ScalingGroupId groupId, PolicyConfiguration configuration)
         {
             if (service == null)
@@ -433,6 +447,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getPolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Show policy details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Policy GetPolicy(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId)
         {
             if (service == null)
@@ -473,6 +488,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putPolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Replace policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetPolicy(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, PolicyConfiguration configuration)
         {
             if (service == null)
@@ -506,6 +522,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deletePolicy_v1.0__tenantId__groups__groupId__policies__policyId__autoscale-policies.html">Delete policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void DeletePolicy(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId)
         {
             if (service == null)
@@ -539,6 +556,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_executePolicy_v1.0__tenantId__groups__groupId__policies__policyId__execute_autoscale-policies.html">Execute policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void ExecutePolicy(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId)
         {
             if (service == null)
@@ -581,6 +599,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhooks_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">List webhooks for the policy (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Webhook> ListWebhooks(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId marker, int? limit)
         {
             if (service == null)
@@ -618,6 +637,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Webhook CreateWebhook(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, NewWebhookConfiguration configuration)
         {
             if (service == null)
@@ -656,6 +676,7 @@
         /// <exception cref="ArgumentException">If <paramref name="configurations"/> contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/POST_createWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks_autoscale-webhooks.html">Create a webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<Webhook> CreateWebhookRange(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, IEnumerable<NewWebhookConfiguration> configurations)
         {
             if (service == null)
@@ -693,6 +714,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/GET_getWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Show webhook details (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Webhook GetWebhook(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId)
         {
             if (service == null)
@@ -732,6 +754,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Update webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateWebhook(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId, UpdateWebhookConfiguration configuration)
         {
             if (service == null)
@@ -768,6 +791,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/DELETE_deleteWebhook_v1.0__tenantId__groups__groupId__policies__policyId__webhooks__webhookId__autoscale-webhooks.html">Delete webhook (Rackspace Auto Scale Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void DeleteWebhook(this IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, WebhookId webhookId)
         {
             if (service == null)

@@ -15,6 +15,7 @@
     /// Provides extension methods to allow synchronous calls to the methods in <see cref="IDnsService"/>.
     /// </summary>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class DnsServiceExtensions
     {
         #region Limits
@@ -27,6 +28,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_All_Limits.html">List All Limits (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsServiceLimits ListLimits(this IDnsService service)
         {
             if (service == null)
@@ -54,6 +56,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Limit_Types.html">List Limit Types (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LimitType> ListLimitTypes(this IDnsService service)
         {
             if (service == null)
@@ -86,6 +89,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Specific_Limit.html">List Specific Limit (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsServiceLimits ListLimits(this IDnsService service, LimitType type)
         {
             if (service == null)
@@ -123,6 +127,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob GetJobStatus(this IDnsService service, DnsJob job, bool showDetails)
         {
             if (service == null)
@@ -159,6 +164,7 @@
         /// <exception cref="JsonSerializationException">If an error occurs while deserializing the response object.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/sync_asynch_responses.html">Synchronous and Asynchronous Responses (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<TResponse> GetJobStatus<TResponse>(this IDnsService service, DnsJob<TResponse> job, bool showDetails)
         {
             if (service == null)
@@ -203,6 +209,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domains.html">List Domains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/search_domains_w_filters.html">Search Domains with Filtering (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Tuple<ReadOnlyCollectionPage<DnsDomain>, int?> ListDomains(this IDnsService service, string domainName, int? offset, int? limit)
         {
             if (service == null)
@@ -234,6 +241,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/list_domain_details.html">List Domain Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsDomain ListDomainDetails(this IDnsService service, DomainId domainId, bool showRecords, bool showSubdomains)
         {
             if (service == null)
@@ -264,6 +272,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Domain_Changes.html">List Domain Changes (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsDomainChanges ListDomainChanges(this IDnsService service, DomainId domainId, DateTimeOffset? since)
         {
             if (service == null)
@@ -302,6 +311,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="domainId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/export_domain.html">Export Domain (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<ExportedDomain> ExportDomain(this IDnsService service, DomainId domainId)
         {
             if (service == null)
@@ -331,6 +341,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/create_domains.html">Create Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<DnsDomains> CreateDomains(this IDnsService service, DnsConfiguration configuration)
         {
             if (service == null)
@@ -360,6 +371,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Modify_Domain_s_-d1e3848.html">Modify Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob UpdateDomains(this IDnsService service, DnsUpdateConfiguration configuration)
         {
             if (service == null)
@@ -401,6 +413,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/clone_domain-dle846.html">Clone Domain (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<DnsDomains> CloneDomain(this IDnsService service, DomainId domainId, string cloneName, bool? cloneSubdomains, bool? modifyRecordData, bool? modifyEmailAddress, bool? modifyComment)
         {
             if (service == null)
@@ -431,6 +444,7 @@
         /// <exception cref="ArgumentException">If <paramref name="serializedDomains"/> is contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/import_domain.html">Import Domain (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<DnsDomains> ImportDomain(this IDnsService service, IEnumerable<SerializedDomain> serializedDomains)
         {
             if (service == null)
@@ -462,6 +476,7 @@
         /// <exception cref="ArgumentException">If <paramref name="domainIds"/> contains any <see langword="null"/> values.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Remove_Domain_s_-d1e4022.html">Remove Domain(s) (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob RemoveDomains(this IDnsService service, IEnumerable<DomainId> domainIds, bool deleteSubdomains)
         {
             if (service == null)
@@ -506,6 +521,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Subdomains-d1e4295.html">List Subdomains (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Tuple<ReadOnlyCollectionPage<DnsSubdomain>, int?> ListSubdomains(this IDnsService service, DomainId domainId, int? offset, int? limit)
         {
             if (service == null)
@@ -555,6 +571,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Records-d1e4629.html">List Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Search_Records-e338d7e0.html">Search Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Tuple<ReadOnlyCollectionPage<DnsRecord>, int?> ListRecords(this IDnsService service, DomainId domainId, DnsRecordType recordType, string recordName, string recordData, int? offset, int? limit)
         {
             if (service == null)
@@ -589,6 +606,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/List_Record_Details-d1e4770.html">List Record Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsRecord ListRecordDetails(this IDnsService service, DomainId domainId, RecordId recordId)
         {
             if (service == null)
@@ -626,6 +644,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Add_Records-d1e4895.html">Add Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<DnsRecordsList> AddRecords(this IDnsService service, DomainId domainId, IEnumerable<DnsDomainRecordConfiguration> recordConfigurations)
         {
             if (service == null)
@@ -663,6 +682,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Modify_Records-d1e5033.html">Modify Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob UpdateRecords(this IDnsService service, DomainId domainId, IEnumerable<DnsDomainRecordUpdateConfiguration> recordConfigurations)
         {
             if (service == null)
@@ -700,6 +720,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/Remove_Records-d1e5188.html">Remove Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob RemoveRecords(this IDnsService service, DomainId domainId, IEnumerable<RecordId> recordId)
         {
             if (service == null)
@@ -750,6 +771,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457000.html">List PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Tuple<ReadOnlyCollectionPage<DnsRecord>, int?> ListPtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, int? offset, int? limit)
         {
             if (service == null)
@@ -792,6 +814,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457001.html">List PTR Record Details (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsRecord ListPtrRecordDetails(this IDnsService service, string serviceName, Uri deviceResourceUri, RecordId recordId)
         {
             if (service == null)
@@ -834,6 +857,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457003.html">Add PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob<DnsRecordsList> AddPtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, IEnumerable<DnsDomainRecordConfiguration> recordConfigurations)
         {
             if (service == null)
@@ -876,6 +900,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457004.html">Modify PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob UpdatePtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, IEnumerable<DnsDomainRecordUpdateConfiguration> recordConfigurations)
         {
             if (service == null)
@@ -914,6 +939,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdns/api/v1.0/cdns-devguide/content/ReverseDNS-123457005.html">Remove PTR Records (Rackspace Cloud DNS Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DnsJob RemovePtrRecords(this IDnsService service, string serviceName, Uri deviceResourceUri, IPAddress ipAddress)
         {
             if (service == null)

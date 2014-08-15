@@ -15,6 +15,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class LoadBalancerServiceExtensions
     {
         #region Load Balancers
@@ -32,6 +33,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancers-d1e1367.html">List Load Balancers (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<LoadBalancer> ListLoadBalancers(this ILoadBalancerService service, LoadBalancerId markerId, int? limit)
         {
             if (service == null)
@@ -63,6 +65,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Details-d1e1522.html">List Load Balancer Details (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancer GetLoadBalancer(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -94,6 +97,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Details-d1e1522.html">List Load Balancer Details (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancer CreateLoadBalancer(this ILoadBalancerService service, LoadBalancerConfiguration configuration)
         {
             if (service == null)
@@ -127,6 +131,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Update_Load_Balancer_Attributes-d1e1812.html">Update Load Balancer Attributes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateLoadBalancer(this ILoadBalancerService service, LoadBalancerId loadBalancerId, LoadBalancerUpdate configuration)
         {
             if (service == null)
@@ -155,6 +160,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Load_Balancer-d1e2093.html">Remove Load Balancer (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveLoadBalancer(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -186,6 +192,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Load_Balancer-d1e2093.html">Remove Load Balancer (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveLoadBalancerRange(this ILoadBalancerService service, IEnumerable<LoadBalancerId> loadBalancerIds)
         {
             if (service == null)
@@ -222,6 +229,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Errorpage-d1e2218.html">Error Page Operations (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static string GetErrorPage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -258,6 +266,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Errorpage-d1e2218.html">Error Page Operations (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetErrorPage(this ILoadBalancerService service, LoadBalancerId loadBalancerId, string content)
         {
             if (service == null)
@@ -286,6 +295,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Errorpage-d1e2218.html">Error Page Operations (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveErrorPage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -322,6 +332,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancer_Stats-d1e1524.html">List Load Balancer Stats (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancerStatistics GetStatistics(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -358,6 +369,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Nodes-d1e2218.html">List Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<Node> ListNodes(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -394,6 +406,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Nodes-d1e2218.html">List Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Node GetNode(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId)
         {
             if (service == null)
@@ -430,6 +443,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Node AddNode(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeConfiguration nodeConfiguration)
         {
             if (service == null)
@@ -469,6 +483,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Nodes-d1e2379.html">Add Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<Node> AddNodeRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NodeConfiguration> nodeConfigurations)
         {
             if (service == null)
@@ -505,6 +520,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Nodes-d1e2503.html">Modify Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateNode(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, NodeUpdate configuration)
         {
             if (service == null)
@@ -538,6 +554,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Nodes-d1e2675.html">Remove Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveNode(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId)
         {
             if (service == null)
@@ -574,6 +591,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Nodes-d1e2675.html">Remove Nodes (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveNodeRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NodeId> nodeIds)
         {
             if (service == null)
@@ -608,6 +626,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<NodeServiceEvent> ListNodeServiceEvents(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeServiceEventId markerId, int? limit)
         {
             if (service == null)
@@ -644,6 +663,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Virtual_IPs-d1e2809.html">List Virtual IPs (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerVirtualAddress> ListVirtualAddresses(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -684,6 +704,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Virtual_IP_Version_6.html">Add Virtual IP Version 6 (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancerVirtualAddress AddVirtualAddress(this ILoadBalancerService service, LoadBalancerId loadBalancerId, LoadBalancerVirtualAddressType type, AddressFamily addressFamily)
         {
             if (service == null)
@@ -717,6 +738,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Virtual_IP-d1e2919.html">Remove Virtual IP (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveVirtualAddress(this ILoadBalancerService service, LoadBalancerId loadBalancerId, VirtualAddressId virtualAddressId)
         {
             if (service == null)
@@ -753,6 +775,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Virtual_IP-d1e2919.html">Remove Virtual IP (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveVirtualAddressRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<VirtualAddressId> virtualAddressIds)
         {
             if (service == null)
@@ -786,6 +809,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Node-Events-d1e264.html">View Node Service Events (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<string> ListAllowedDomains(this ILoadBalancerService service)
         {
             if (service == null)
@@ -830,6 +854,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<LoadBalancer> ListBillableLoadBalancers(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime, int? offset, int? limit)
         {
             if (service == null)
@@ -863,6 +888,7 @@
         /// <exception cref="ArgumentException">If <paramref name="endTime"/> occurs before <paramref name="startTime"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerUsage> ListAccountLevelUsage(this ILoadBalancerService service, DateTimeOffset? startTime, DateTimeOffset? endTime)
         {
             if (service == null)
@@ -900,6 +926,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerUsage> ListHistoricalUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId, DateTimeOffset? startTime, DateTimeOffset? endTime)
         {
             if (service == null)
@@ -932,6 +959,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Usage-d1e3014.html">List Usage (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerUsage> ListCurrentUsage(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -968,6 +996,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<NetworkItem> ListAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1001,6 +1030,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void CreateAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NetworkItem networkItem)
         {
             if (service == null)
@@ -1037,6 +1067,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void CreateAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NetworkItem> networkItems)
         {
             if (service == null)
@@ -1070,6 +1101,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NetworkItemId networkItemId)
         {
             if (service == null)
@@ -1106,6 +1138,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveAccessListRange(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<NetworkItemId> networkItemIds)
         {
             if (service == null)
@@ -1134,6 +1167,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Access_Lists-d1e3187.html">Manage Access Lists (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void ClearAccessList(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1170,6 +1204,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static HealthMonitor GetHealthMonitor(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1203,6 +1238,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetHealthMonitor(this ILoadBalancerService service, LoadBalancerId loadBalancerId, HealthMonitor monitor)
         {
             if (service == null)
@@ -1231,6 +1267,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Monitor_Health-d1e3434.html">Monitor Health (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveHealthMonitor(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1266,6 +1303,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static SessionPersistence GetSessionPersistence(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1320,6 +1358,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetSessionPersistence(this ILoadBalancerService service, LoadBalancerId loadBalancerId, SessionPersistence sessionPersistence)
         {
             if (service == null)
@@ -1348,6 +1387,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Manage_Session_Persistence-d1e3733.html">Manage Session Persistence (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveSessionPersistence(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1383,6 +1423,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Log_Connections-d1e3924.html">Log Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static bool GetConnectionLogging(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1412,6 +1453,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Log_Connections-d1e3924.html">Log Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetConnectionLogging(this ILoadBalancerService service, LoadBalancerId loadBalancerId, bool enabled)
         {
             if (service == null)
@@ -1443,6 +1485,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ConnectionThrottles ListThrottles(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1476,6 +1519,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateThrottles(this ILoadBalancerService service, LoadBalancerId loadBalancerId, ConnectionThrottles throttleConfiguration)
         {
             if (service == null)
@@ -1504,6 +1548,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Throttle_Connections-d1e4057.html">Throttle Connections (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveThrottles(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1553,6 +1598,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/ContentCaching-d1e3358.html">Content Caching (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static bool GetContentCaching(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1596,6 +1642,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/ContentCaching-d1e3358.html">Content Caching (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetContentCaching(this ILoadBalancerService service, LoadBalancerId loadBalancerId, bool enabled)
         {
             if (service == null)
@@ -1630,6 +1677,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Protocols-d1e4269.html">List Load Balancing Protocols (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancingProtocol> ListProtocols(this ILoadBalancerService service)
         {
             if (service == null)
@@ -1664,6 +1712,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Load_Balancing_Algorithms-d1e4459.html">List Load Balancing Algorithms (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancingAlgorithm> ListAlgorithms(this ILoadBalancerService service)
         {
             if (service == null)
@@ -1700,6 +1749,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancerSslConfiguration GetSslConfiguration(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1733,6 +1783,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateSslConfiguration(this ILoadBalancerService service, LoadBalancerId loadBalancerId, LoadBalancerSslConfiguration configuration)
         {
             if (service == null)
@@ -1761,6 +1812,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html#d6e3823">SSL Termination (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveSslConfiguration(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1797,6 +1849,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="loadBalancerId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerMetadataItem> ListLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId)
         {
             if (service == null)
@@ -1833,6 +1886,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancerMetadataItem GetLoadBalancerMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, MetadataId metadataId)
         {
             if (service == null)
@@ -1870,6 +1924,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerMetadataItem> ListNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId)
         {
             if (service == null)
@@ -1909,6 +1964,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/List_Metadata-d1e2218.html">List Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static LoadBalancerMetadataItem GetNodeMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, MetadataId metadataId)
         {
             if (service == null)
@@ -1954,6 +2010,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerMetadataItem> AddLoadBalancerMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<KeyValuePair<string, string>> metadata)
         {
             if (service == null)
@@ -2002,6 +2059,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Add_Metadata-d1e2379.html">Add Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<LoadBalancerMetadataItem> AddNodeMetadata(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<KeyValuePair<string, string>> metadata)
         {
             if (service == null)
@@ -2038,6 +2096,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Metadata-d1e2503.html">Modify Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateLoadBalancerMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, MetadataId metadataId, string value)
         {
             if (service == null)
@@ -2077,6 +2136,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Modify_Metadata-d1e2503.html">Modify Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateNodeMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, MetadataId metadataId, string value)
         {
             if (service == null)
@@ -2113,6 +2173,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveLoadBalancerMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, IEnumerable<MetadataId> metadataIds)
         {
             if (service == null)
@@ -2152,6 +2213,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/Remove_Metadata-d1e2675.html">Remove Metadata (Rackspace Cloud Load Balancers Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveNodeMetadataItem(this ILoadBalancerService service, LoadBalancerId loadBalancerId, NodeId nodeId, IEnumerable<MetadataId> metadataIds)
         {
             if (service == null)
