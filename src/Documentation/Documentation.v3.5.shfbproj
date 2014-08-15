@@ -133,9 +133,9 @@
     <None Include="Content\Authentication\HPAuthentication.aml" />
     <None Include="Content\Authentication\OpenStackAuthentication.aml" />
     <None Include="Content\Authentication\RackspaceAuthentication.aml" />
+    <None Include="Content\BreakingChangesPolicy.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
-    <None Include="Content\PreliminaryFeatures.aml" />
     <None Include="Content\UserGuide\UserGuide.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
