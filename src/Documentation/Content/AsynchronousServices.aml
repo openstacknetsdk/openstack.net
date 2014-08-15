@@ -6,15 +6,9 @@
 
     <introduction>
       <para>
-        The openstack.net SDK is migrating to an asynchronous service model using the
-        <externalLink>
-          <linkText>Task-based Asynchronous Pattern (TAP)</linkText>
-          <linkAlternateText>Task-based Asynchronous Pattern (TAP) (Microsoft Developer Network)</linkAlternateText>
-          <linkUri>http://msdn.microsoft.com/en-us/library/hh873175.aspx</linkUri>
-        </externalLink>
-        for ongoing feature support.
-        This page contains information about several aspects of the asynchronous interfaces which could
-        result in some confusion during development. It also describes the inclusion of extension methods
+        The openstack.net SDK is migrating to an asynchronous service model using the <token>TaskBasedAsync</token>
+        for ongoing feature support. This page contains information about several aspects of the asynchronous interfaces
+        which could result in some confusion during development. It also describes the inclusion of extension methods
         that allow new product features to be used in code that is not allowed to make asynchronous API
         calls.
       </para>
@@ -33,12 +27,8 @@
         <para>
           The Task Parallel Library is used extensively by the implementation of this SDK. The library was
           originally added as part of .NET 4, users still working with .NET 3.5 make use of the
-          <externalLink>
-            <linkText>Task Parallel Library for .NET 3.5</linkText>
-            <linkUri>http://www.nuget.org/packages/TaskParallelLibrary/</linkUri>
-          </externalLink>
-          package using NuGet. This package is automatically installed by NuGet when the SDK package is
-          added to a project targeting .NET 3.5.
+          <token>TaskParallelLibrary35</token> package using NuGet. This package is automatically installed by NuGet
+          when the SDK package is added to a project targeting .NET 3.5.
         </para>
         <para>
           Language support varies by language. The following table shows the language features available
@@ -182,6 +172,14 @@
               project file.
             </para>
             <code language="xml">&lt;UseHostCompilerIfAvailable&gt;false&lt;/UseHostCompilerIfAvailable&gt;</code>
+            <alert class="important">
+              <para>
+                While the <codeInline>UseHostCompilerIfAvailable</codeInline> setting allows Visual Studio 2010 to
+                compile C# and Visual Basic projects using <token>AsyncAwait</token>, the editor itself does not
+                recognize these keywords. As a result, some functionality including but not limited to IntelliSense may
+                not function if this option is used.
+              </para>
+            </alert>
           </content>
         </section>
       </sections>
@@ -193,11 +191,15 @@
         <para>
           Asynchronous methods are capable of throwing exceptions before creating a
           <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> or during the asynchronous
-          execution of the task itself. The asynchronous service interfaces do not distinguish between these
+          execution of the task itself. The documentation for asynchronous methods does not distinguish between these
           two cases, allowing for any of the specified exceptions to be thrown in either manner.
         </para>
-        <list class="bullet">
-          <listItem>
+      </content>
+
+      <sections>
+        <section>
+          <title>Exceptions Prior to Task Creation</title>
+          <content>
             <para>
               Exceptions thrown prior to the creation of the
               <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> object representing the
@@ -207,8 +209,14 @@
               <codeEntityReference>T:System.ArgumentNullException</codeEntityReference> or
               <codeEntityReference>T:System.ArgumentException</codeEntityReference> to handle the exception.
             </para>
-          </listItem>
-          <listItem>
+            <code language="cs" region="ExceptionPriorToTaskCreation" source="..\Samples\CSharpCodeSamples\AsynchronousExceptionsExamples.cs"/>
+            <code language="vb" region="ExceptionPriorToTaskCreation" source="..\Samples\VBCodeSamples\AsynchronousExceptionsExamples.vb"/>
+          </content>
+        </section>
+
+        <section>
+          <title>Exceptions During Task Execution</title>
+          <content>
             <para>
               Exceptions thrown during the asynchronous execution of the task are wrapped in an
               <codeEntityReference>T:System.AggregateException</codeEntityReference> object and returned by the
@@ -220,9 +228,54 @@
               property within an exception handling block that includes a handler for
               <codeEntityReference>T:System.AggregateException</codeEntityReference>.
             </para>
-          </listItem>
-        </list>
-      </content>
+            <para>
+              This library additionally ensures that exceptions thrown by asynchronous operations are not wrapped in
+              multiple layers of <codeEntityReference>T:System.AggregateException</codeEntityReference>. In other words,
+              an <codeEntityReference>T:System.AggregateException</codeEntityReference> thrown during the asynchronous
+              execution of a task will result in the
+              <codeEntityReference>P:System.Threading.Tasks.Task.Exception</codeEntityReference> property returning an
+              <codeEntityReference>T:System.AggregateException</codeEntityReference> with exactly one inner exception,
+              which is the original <codeEntityReference>T:System.ArgumentException</codeEntityReference>. This
+              guarantee simplifies the use of the API is languages that support <token>AsyncAwait</token>, since those
+              operators automatically unwrap the first layer of
+              <codeEntityReference>T:System.AggregateException</codeEntityReference>.
+            </para>
+            <code language="cs" region="ExceptionDuringTaskExecution" source="..\Samples\CSharpCodeSamples\AsynchronousExceptionsExamples.cs"/>
+            <code language="vb" region="ExceptionDuringTaskExecution" source="..\Samples\VBCodeSamples\AsynchronousExceptionsExamples.vb"/>
+          </content>
+        </section>
+
+        <section>
+          <title>Consistent Exception Handling</title>
+          <content>
+            <para>
+              Applications implementing specialized handling for exception which occur during asynchronous calls have
+              multiple options available for consistent handling. The simplest solution, when available, involves using
+              <token>AsyncAwait</token>. These operators automatically unwrap the first exception instance in the
+              <codeEntityReference>P:System.AggregateException.InnerExceptions</codeEntityReference> collection of an
+              <codeEntityReference>T:System.AggregateException</codeEntityReference>, resulting in behavior that appears
+              to calling code as though the exception was directly thrown by the invoked method. The second method
+              involves treating the original call as a continuation of another task, ensuring that all exceptions are
+              presented as an <codeEntityReference>T:System.AggregateException</codeEntityReference> to the exception
+              handling code. The following code shows the application of this strategy to an existing asynchronous call.
+              Note that the <codeEntityReference>T:Rackspace.Threading.CompletedTask</codeEntityReference> class and
+              <codeEntityReference>Overload:Rackspace.Threading.CoreTaskExtensions.Then</codeEntityReference>
+              extension method are part of the <token>RackspaceThreadingLibrary</token> separately from this SDK.
+            </para>
+            <code language="cs" region="AsynchronousMethodAsContinuation" source="..\Samples\CSharpCodeSamples\AsynchronousExceptionsExamples.cs"/>
+            <code language="vb" region="AsynchronousMethodAsContinuation" source="..\Samples\VBCodeSamples\AsynchronousExceptionsExamples.vb"/>
+            <para>
+              Code using the continuation strategy for consistent error handling may benefit from the use of the
+              <codeEntityReference>Overload:Rackspace.Threading.CoreTaskExtensions.Catch</codeEntityReference> methods,
+              which are also part of the <token>RackspaceThreadingLibrary</token>. This extension method behaves in a
+              manner similar to <token>Await</token>, automatically unwrapping the first exception instance in the
+              <codeEntityReference>P:System.AggregateException.InnerExceptions</codeEntityReference> collection
+              of an <codeEntityReference>T:System.AggregateException</codeEntityReference> before invoking the
+              continuation function which handles the exception.
+            </para>
+          </content>
+        </section>
+      </sections>
     </section>
 
     <section address="SynchronousExtensions">
