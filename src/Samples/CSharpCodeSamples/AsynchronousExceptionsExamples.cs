@@ -27,6 +27,7 @@
             try
             {
                 Task myTask = SomeOperationAsync();
+                myTask.Wait();
             }
             catch (AggregateException wrapperEx)
             {
