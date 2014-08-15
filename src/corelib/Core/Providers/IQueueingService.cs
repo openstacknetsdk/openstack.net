@@ -459,8 +459,8 @@
         /// Claim messages from a queue.
         /// </summary>
         /// <remarks>
-        /// When the claim is no longer required, the code should call <see cref="Claim.DisposeAsync"/>
-        /// or <see cref="Claim.Dispose()"/> to ensure the following actions are taken.
+        /// <para>When the claim is no longer required, the code should call <see cref="Claim.DisposeAsync"/>
+        /// or <see cref="Claim.Dispose()"/> to ensure the following actions are taken.</para>
         /// <list type="bullet">
         /// <item>Messages which are part of this claim which were not processed are made available to other nodes.</item>
         /// <item>The claim resource is cleaned up without waiting for the time-to-live to expire.</item>

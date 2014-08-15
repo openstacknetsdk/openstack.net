@@ -28,10 +28,7 @@
               and initialize its properties with the desired authentication credentials. The
               <codeEntityReference>T:net.openstack.Core.Domain.CloudIdentityWithProject</codeEntityReference>
               credentials class allows the <codeInline>tenantName</codeInline> and <codeInline>tenantId</codeInline>
-              properties described in the HP documentation on <externalLink>
-                <linkText>Scoped Tokens</linkText>
-                <linkUri>http://docs.hpcloud.com/api/identity/#scoped-tokens</linkUri>
-              </externalLink> to be defined.
+              properties described in the HP documentation on <token>HpScopedTokens</token> to be defined.
             </para>
             <list class="bullet">
               <listItem>
