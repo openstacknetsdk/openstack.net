@@ -18,6 +18,7 @@ Public Class AsynchronousExceptionsExamples
         ' #Region ExceptionDuringTaskExecution
         Try
             Dim myTask As Task = SomeOperationAsync()
+            myTask.Wait()
         Catch wrapperEx As AggregateException
             Dim ex = TryCast(wrapperEx.InnerException, ArgumentException)
             If ex Is Nothing Then
