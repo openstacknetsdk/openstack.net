@@ -228,6 +228,12 @@
     <section address="SynchronousExtensions">
       <title>Synchronous Extensions</title>
       <content>
+        <alert class="warning">
+          <para>
+            All synchronous extension methods provided by this library are obsolete, and will be removed from a future
+            release.
+          </para>
+        </alert>
         <para>
           The namespace <codeEntityReference>N:net.openstack.Core.Synchronous</codeEntityReference> contains extension
           methods that allow methods in an asynchronous service interface to be invoked synchronously. These extension

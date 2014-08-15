@@ -13,6 +13,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class DatabaseServiceExtensions
     {
         #region Database instances
@@ -29,6 +30,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createInstance__version___accountId__instances_.html">Create Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DatabaseInstance CreateDatabaseInstance(this IDatabaseService service, DatabaseInstanceConfiguration configuration)
         {
             if (service == null)
@@ -67,6 +69,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getInstance__version___accountId__instances_.html">List All Database Instances (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<DatabaseInstance> ListDatabaseInstances(this IDatabaseService service, DatabaseInstanceId marker, int? limit)
         {
             if (service == null)
@@ -98,6 +101,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getInstanceById__version___accountId__instances__instanceId__.html">List Database Instance Status and Details (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DatabaseInstance GetDatabaseInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
@@ -126,6 +130,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteInstance__version___accountId__instances__instanceId__.html">Delete Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveDatabaseInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
@@ -168,6 +173,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createRoot__version___accountId__instances__instanceId__root_.html">Enable Root User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static RootUser EnableRootUser(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
@@ -199,6 +205,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_isRootEnabled__version___accountId__instances__instanceId__root_.html">List Root-Enabled Status (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static bool? CheckRootEnabledStatus(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
@@ -231,6 +238,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_restartInstance__version___accountId__instances__instanceId__action_.html">Restart Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RestartDatabaseInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)
@@ -264,6 +272,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_resizeInstance__version___accountId__instances__instanceId__action_.html">Resize the Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void ResizeDatabaseInstance(this IDatabaseService service, DatabaseInstanceId instanceId, FlavorRef flavorRef)
         {
             if (service == null)
@@ -297,6 +306,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="volumeSize"/> is less than or equal to 0.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_resizeVolume__version___accountId__instances__instanceId__action_.html">Resize the Instance Volume (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void ResizeDatabaseInstanceVolume(this IDatabaseService service, DatabaseInstanceId instanceId, int volumeSize)
         {
             if (service == null)
@@ -334,6 +344,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createDatabase__version___accountId__instances__instanceId__databases_.html">Create Database (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void CreateDatabase(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseConfiguration configuration)
         {
             if (service == null)
@@ -374,6 +385,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getDatabases__version___accountId__instances__instanceId__databases_.html">List Databases for Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<Database> ListDatabases(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName marker, int? limit)
         {
             if (service == null)
@@ -407,6 +419,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteDatabase__version___accountId__instances__instanceId__databases__databaseName__.html">Delete Database (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveDatabase(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName databaseName)
         {
             if (service == null)
@@ -444,6 +457,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createUser__version___accountId__instances__instanceId__users_.html">Create User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void CreateUser(this IDatabaseService service, DatabaseInstanceId instanceId, UserConfiguration configuration)
         {
             if (service == null)
@@ -484,6 +498,7 @@
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUsers__version___accountId__instances__instanceId__users_.html">List Users in Database Instance (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/pagination.html">Pagination (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<DatabaseUser> ListDatabaseUsers(this IDatabaseService service, DatabaseInstanceId instanceId, UserName marker, int? limit)
         {
             if (service == null)
@@ -521,6 +536,7 @@
         /// <exception cref="ArgumentException">If <paramref name="password"/> is empty.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/PUT_changePass__version___accountId__instances__instanceId__users_.html">Change User(s) Password (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void SetUserPassword(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName, string password)
         {
             if (service == null)
@@ -557,6 +573,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/PUT_modifyUser__version___accountId__instances__instanceId__users__name__.html">Modify User Attributes (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void UpdateUser(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName, UpdateUserConfiguration configuration)
         {
             if (service == null)
@@ -593,6 +610,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_listUser__version___accountId__instances__instanceId__users__name__.html">List User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DatabaseUser GetUser(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName)
         {
             if (service == null)
@@ -626,6 +644,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteUser__version___accountId__instances__instanceId__users__name__.html">Delete User (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveUser(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName)
         {
             if (service == null)
@@ -662,6 +681,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">List User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<DatabaseName> ListUserAccess(this IDatabaseService service, DatabaseInstanceId instanceId, UserName userName)
         {
             if (service == null)
@@ -698,6 +718,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/PUT_grantUserAccess__version___accountId__instances__instanceId__users__name__databases_.html">Grant User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void GrantUserAccess(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName databaseName, UserName userName)
         {
             if (service == null)
@@ -734,6 +755,7 @@
         /// </exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_revokeUserAccess__version___accountId__instances__instanceId__users__name__databases__databaseName__.html">Revoke User Access (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RevokeUserAccess(this IDatabaseService service, DatabaseInstanceId instanceId, DatabaseName databaseName, UserName userName)
         {
             if (service == null)
@@ -767,6 +789,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getFlavors__version___accountId__flavors_.html">List Flavors (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<DatabaseFlavor> ListFlavors(this IDatabaseService service)
         {
             if (service == null)
@@ -798,6 +821,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="flavorId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getFlavorById__version___accountId__flavors__flavorId__.html">List Flavor By ID (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static DatabaseFlavor GetFlavor(this IDatabaseService service, FlavorId flavorId)
         {
             if (service == null)
@@ -833,6 +857,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="configuration"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/POST_createBackup__version___accountId__backups_.html">Create Backup (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Backup CreateBackup(this IDatabaseService service, BackupConfiguration configuration)
         {
             if (service == null)
@@ -862,6 +887,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<Backup> ListBackups(this IDatabaseService service)
         {
             if (service == null)
@@ -893,6 +919,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackupById__version___accountId__backups__backupId__.html">List Backup by ID (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static Backup GetBackup(this IDatabaseService service, BackupId backupId)
         {
             if (service == null)
@@ -921,6 +948,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="backupId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/DELETE_deleteBackup__version___accountId__backups__backupId__.html">Delete Backup (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void RemoveBackup(this IDatabaseService service, BackupId backupId)
         {
             if (service == null)
@@ -953,6 +981,7 @@
         /// <exception cref="ArgumentNullException">If <paramref name="instanceId"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso href="http://docs.rackspace.com/cdb/api/v1.0/cdb-devguide/content/GET_getBackups__version___accountId__backups_.html">List Backups (Rackspace Cloud Databases Developer Guide - API v1.0)</seealso>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<Backup> ListBackupsForInstance(this IDatabaseService service, DatabaseInstanceId instanceId)
         {
             if (service == null)

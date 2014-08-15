@@ -12,6 +12,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class ReadOnlyCollectionPageSynchronousExtensions
     {
         /// <summary>
@@ -30,6 +31,7 @@
         /// <returns>A read-only collection containing the complete set of results from the paginated collection.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="page"/> is <see langword="null"/>.</exception>
         /// <seealso cref="ReadOnlyCollectionPageExtensions.GetAllPagesAsync"/>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollection<T> GetAllPages<T>(this ReadOnlyCollectionPage<T> page)
         {
             if (page == null)
@@ -58,6 +60,7 @@
         /// <exception cref="InvalidOperationException">If <see cref="ReadOnlyCollectionPage{T}.CanHaveNextPage"/> is <see langword="false"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
         /// <seealso cref="ReadOnlyCollectionPage{T}.GetNextPageAsync"/>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static ReadOnlyCollectionPage<T> GetNextPage<T>(this ReadOnlyCollectionPage<T> page)
         {
             if (page == null)

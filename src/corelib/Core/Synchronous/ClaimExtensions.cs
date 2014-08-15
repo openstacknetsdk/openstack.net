@@ -13,6 +13,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
+    [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
     public static class ClaimExtensions
     {
         /// <summary>
@@ -26,6 +27,7 @@
         /// <param name="claim">The claim.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="claim"/> is <see langword="null"/>.</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void Refresh(this Claim claim)
         {
             if (claim == null)
@@ -61,6 +63,7 @@
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="timeToLive"/> is negative or <see cref="TimeSpan.Zero"/>.</exception>
         /// <exception cref="InvalidOperationException">If the claim is empty (i.e. <see cref="Claim.Messages"/> is empty).</exception>
         /// <exception cref="WebException">If the REST request does not return successfully.</exception>
+        [Obsolete("These synchronous wrappers should not be used. For more information, see http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx.")]
         public static void Renew(this Claim claim, TimeSpan timeToLive)
         {
             if (claim == null)
