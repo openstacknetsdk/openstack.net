@@ -29,8 +29,10 @@ If ($NoDocs -and -not $Debug) {
 }
 
 # build the main project
+$nuget = '..\src\.nuget\NuGet.exe'
 $msbuild = "$env:windir\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe"
 
+&$nuget 'restore' $SolutionPath
 &$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
 if ($LASTEXITCODE -ne 0) {
 	$host.ui.WriteErrorLine('Build failed, aborting!')
@@ -55,4 +57,4 @@ if (-not (Test-Path 'nuget')) {
 	mkdir "nuget"
 }
 
-..\src\.nuget\NuGet.exe 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
+&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
