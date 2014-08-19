@@ -18,6 +18,7 @@
     using Thread = System.Threading.Thread;
 
     /// <preliminary/>
+    [Obsolete]
     [TestClass]
     public class UserQueuesTestsSynchronous
     {
