@@ -18,6 +18,8 @@
         <dependency id="Newtonsoft.Json" version="6.0" />
         <dependency id="Rackspace.HttpClient35" version="[1.0,1.1)" />
         <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
         <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
       </group>
@@ -27,10 +29,14 @@
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
         <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
       </group>
       <group targetFramework="net45">
         <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
       </group>
@@ -40,6 +46,8 @@
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
         <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
       </group>
       <group targetFramework="portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1">
@@ -48,6 +56,8 @@
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
         <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
       </group>
       <group targetFramework="portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1">
@@ -55,6 +65,8 @@
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta002,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Threading" version="[1.1.0-beta001,2.0)" />
       </group>

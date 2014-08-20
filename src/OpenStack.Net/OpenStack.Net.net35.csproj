@@ -42,6 +42,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rackspace.Net.UriTemplate">
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net35-client\Rackspace.Net.UriTemplate.dll</HintPath>
+    </Reference>
     <Reference Include="Rackspace.Threading">
       <HintPath>..\packages\Rackspace.Threading.1.1.0-beta001\lib\net35-client\Rackspace.Threading.dll</HintPath>
     </Reference>

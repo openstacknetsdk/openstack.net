@@ -42,6 +42,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rackspace.Net.UriTemplate">
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\portable-net40+sl4+wp7+win8\Rackspace.Net.UriTemplate.dll</HintPath>
+    </Reference>
     <Reference Include="Rackspace.Threading">
       <HintPath>..\packages\Rackspace.Threading.1.1.0-beta001\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\Rackspace.Threading.dll</HintPath>
     </Reference>
