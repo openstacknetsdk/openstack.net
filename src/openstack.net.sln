@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corelib.v4.0", "corelib\corelib.v4.0.csproj", "{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integration", "testing\integration\integration.csproj", "{C1D0D0D8-9EF2-4557-B85F-34FDB0F466C4}"
@@ -93,9 +95,6 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.0.0", "Documentation.History\1.0.0\Documentation.1.0.0.shfbproj", "{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = openstack.net.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Release|Mixed Platforms = Release|Mixed Platforms
@@ -234,5 +233,8 @@ Global
 		{55D69660-CC73-469A-94CE-A28405B7C13F} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{1A9A19DB-3244-4A7B-A346-AD3E6C06B49B} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = openstack.net.vsmdi
 	EndGlobalSection
 EndGlobal
