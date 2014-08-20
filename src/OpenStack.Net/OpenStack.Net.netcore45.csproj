@@ -62,6 +62,9 @@
     <Compile Include="OpenStack\Collections\ReadOnlyCollectionPage`1.cs" />
     <Compile Include="OpenStack\IO\NamespaceDoc.cs" />
     <Compile Include="OpenStack\IO\ProgressStream.cs" />
+    <Compile Include="OpenStack\Net\HttpRequestEventArgs.cs" />
+    <Compile Include="OpenStack\Net\HttpResponseEventArgs.cs" />
+    <Compile Include="OpenStack\Net\HttpWebException.cs" />
     <Compile Include="OpenStack\Net\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Net\UriPart.cs" />
     <Compile Include="OpenStack\Net\UriUtility.cs" />
@@ -88,6 +91,9 @@
     <Compile Include="System\Collections\Concurrent\SplitOrderedList`2.cs" />
     <Compile Include="System\Collections\Generic\OpenStackListExtensions.cs" />
     <Compile Include="System\Collections\ObjectModel\ReadOnlyDictionary`2.cs" />
+    <Compile Include="System\NonSerializedAttribute.cs" />
+    <Compile Include="System\Runtime\Serialization\ISafeSerializationData.cs" />
+    <Compile Include="System\SerializableAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\keys\openstack.net.netcore45.snk">
