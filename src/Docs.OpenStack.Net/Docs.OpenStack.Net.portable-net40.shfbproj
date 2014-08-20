@@ -88,7 +88,16 @@
     <MSHelpViewerSdkLinkType>Id</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
-    <ApiFilter />
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="System.Collections.Generic" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.Generic.OpenStackListExtensions" filterName="OpenStackListExtensions" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections.ObjectModel" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.KeyCollection" filterName="ReadOnlyDictionary`2.KeyCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.ValueCollection" filterName="ReadOnlyDictionary`2.ValueCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2" filterName="ReadOnlyDictionary`2" isExposed="False" />
+      </Filter>
+    </ApiFilter>
     <HelpAttributes />
     <NamespaceSummaries />
     <PlugInConfigurations>

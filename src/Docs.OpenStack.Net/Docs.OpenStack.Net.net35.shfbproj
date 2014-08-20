@@ -88,7 +88,31 @@
     <MSHelpViewerSdkLinkType>Id</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
-    <ApiFilter />
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="System" isExposed="True">
+        <Filter entryType="Class" fullName="System.Tuple" filterName="Tuple" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`8" filterName="Tuple`8" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`7" filterName="Tuple`7" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`6" filterName="Tuple`6" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`5" filterName="Tuple`5" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`4" filterName="Tuple`4" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`3" filterName="Tuple`3" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`2" filterName="Tuple`2" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`1" filterName="Tuple`1" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections" isExposed="True">
+        <Filter entryType="Interface" fullName="System.Collections.IStructuralComparable" filterName="IStructuralComparable" isExposed="False" />
+        <Filter entryType="Interface" fullName="System.Collections.IStructuralEquatable" filterName="IStructuralEquatable" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections.Generic" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.Generic.OpenStackListExtensions" filterName="OpenStackListExtensions" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections.ObjectModel" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.KeyCollection" filterName="ReadOnlyDictionary`2.KeyCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.ValueCollection" filterName="ReadOnlyDictionary`2.ValueCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2" filterName="ReadOnlyDictionary`2" isExposed="False" />
+      </Filter>
+    </ApiFilter>
     <HelpAttributes />
     <NamespaceSummaries />
     <PlugInConfigurations>
