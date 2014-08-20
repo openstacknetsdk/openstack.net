@@ -44,6 +44,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenStack.Net.nuspec" />
     <None Include="packages.OpenStack.Net.netcore45.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
