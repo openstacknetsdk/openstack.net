@@ -11,6 +11,8 @@
     <RootNamespace />
     <AssemblyName>OpenStack.Net</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\keys\openstack.net.netcore45.snk</AssemblyOriginatorKeyFile>
     <DefaultLanguage>en-US</DefaultLanguage>
     <BaseIntermediateOutputPath>obj\netcore45\</BaseIntermediateOutputPath>
   </PropertyGroup>
@@ -37,9 +39,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\keys\openstack.net.netcore45.snk">
+      <Link>openstack.net.netcore45.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.OpenStack.Net.netcore45.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(SolutionDir)\..\build\KeyReporting.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
