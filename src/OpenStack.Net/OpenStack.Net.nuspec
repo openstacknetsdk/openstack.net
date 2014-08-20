@@ -80,27 +80,27 @@
     <!-- Runtime libraries -->
     <file src="bin\net35\$Configuration$\OpenStack.Net.dll" target="lib\net35"/>
     <file src="bin\net35\$Configuration$\OpenStack.Net.pdb" target="lib\net35"/>
-    <file src="bin\net35\$Configuration$\OpenStack.Net.xml" target="lib\net35"/>
+    <file src="..\..\docs\Api\net35\OpenStack.Net.xml" target="lib\net35"/>
 
     <file src="bin\net40\$Configuration$\OpenStack.Net.dll" target="lib\net40"/>
     <file src="bin\net40\$Configuration$\OpenStack.Net.pdb" target="lib\net40"/>
-    <file src="bin\net40\$Configuration$\OpenStack.Net.xml" target="lib\net40"/>
+    <file src="..\..\docs\Api\net40\OpenStack.Net.xml" target="lib\net40"/>
 
     <file src="bin\net45\$Configuration$\OpenStack.Net.dll" target="lib\net45"/>
     <file src="bin\net45\$Configuration$\OpenStack.Net.pdb" target="lib\net45"/>
-    <file src="bin\net45\$Configuration$\OpenStack.Net.xml" target="lib\net45"/>
+    <file src="..\..\docs\Api\net45\OpenStack.Net.xml" target="lib\net45"/>
 
     <file src="bin\netcore45\$Configuration$\OpenStack.Net.dll" target="lib\netcore45"/>
     <file src="bin\netcore45\$Configuration$\OpenStack.Net.pdb" target="lib\netcore45"/>
-    <file src="bin\netcore45\$Configuration$\OpenStack.Net.xml" target="lib\netcore45"/>
+    <file src="..\..\docs\Api\netcore45\OpenStack.Net.xml" target="lib\netcore45"/>
 
     <file src="bin\portable-net40\$Configuration$\OpenStack.Net.dll" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
     <file src="bin\portable-net40\$Configuration$\OpenStack.Net.pdb" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
-    <file src="bin\portable-net40\$Configuration$\OpenStack.Net.xml" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="..\..\docs\Api\portable-net40\OpenStack.Net.xml" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
 
     <file src="bin\portable-net45\$Configuration$\OpenStack.Net.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
     <file src="bin\portable-net45\$Configuration$\OpenStack.Net.pdb" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
-    <file src="bin\portable-net45\$Configuration$\OpenStack.Net.xml" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="..\..\docs\Api\portable-net45\OpenStack.Net.xml" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
 
     <!-- Source code -->
     <file src="**\*.cs" target="src" />
