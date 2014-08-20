@@ -14,7 +14,13 @@
     <copyright></copyright>
     <tags>openstack</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="6.0" />
+      <group targetFramework="4.0">
+        <dependency id="Newtonsoft.Json" version="6.0" />
+      </group>
+      <group targetFramework="3.5">
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
+      </group>
     </dependencies>
   </metadata>
   <files>
