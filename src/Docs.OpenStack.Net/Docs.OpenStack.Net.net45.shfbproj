@@ -103,6 +103,19 @@
           </targets>
         </configuration>
       </PlugInConfig>
+      <PlugInConfig id="Version Builder" enabled="True">
+        <configuration>
+          <currentProject label=".NET Framework" version="4.5" ripOldApis="False" />
+          <versions>
+            <version label=".NET Framework" version="3.5" helpFileProject="Docs.OpenStack.Net.net35.shfbproj" />
+            <version label=".NET Framework" version="4.0" helpFileProject="Docs.OpenStack.Net.net40.shfbproj" />
+            <version label=".NET for Windows Store apps" version="Windows 8" helpFileProject="Docs.OpenStack.Net.netcore45.shfbproj" />
+            <version label="Portable Class Library" version="Portable Class Library (Legacy)" helpFileProject="Docs.OpenStack.Net.portable-net40.shfbproj" />
+            <version label="Portable Class Library" version="Portable Class Library" helpFileProject="Docs.OpenStack.Net.portable-net45.shfbproj" />
+            <version label="OpenStack.Net" version="2.0" ripOldApis="False" helpFileProject="..\Docs.OpenStack.Net.History\Current\Docs.OpenStack.Net.Current.shfbproj" />
+          </versions>
+        </configuration>
+      </PlugInConfig>
     </PlugInConfigurations>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
