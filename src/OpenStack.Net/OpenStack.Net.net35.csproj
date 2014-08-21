@@ -94,6 +94,8 @@
     <Compile Include="OpenStack\ObjectModel\JsonHome\ResourceObject.cs" />
     <Compile Include="OpenStack\ObjectModel\NamespaceDoc.cs" />
     <Compile Include="OpenStack\ObjectModel\ResourceIdentifier`1.cs" />
+    <Compile Include="OpenStack\Security\Authentication\IAuthenticationService.cs" />
+    <Compile Include="OpenStack\Security\Authentication\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Threading\AsyncCompletionOption.cs" />
     <Compile Include="OpenStack\Threading\BackoffPolicy.cs" />
     <Compile Include="OpenStack\Threading\IBackoffPolicy.cs" />
