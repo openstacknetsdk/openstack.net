@@ -31,6 +31,8 @@
       <DocumentationSource sourceFile="..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.xml" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Threading.1.1.0-beta001\lib\net40-client\Rackspace.Threading.dll" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Threading.1.1.0-beta001\lib\net40-client\Rackspace.Threading.xml" />
+      <DocumentationSource sourceFile="C:\Program Files (x86)\Windows Kits\8.0\References\CommonConfiguration\Neutral\Windows.winmd" />
+      <DocumentationSource sourceFile="C:\Program Files (x86)\Windows Kits\8.0\References\CommonConfiguration\Neutral\Windows.xml" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.dll" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.xml" />
     </DocumentationSources>
