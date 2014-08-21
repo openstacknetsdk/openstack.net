@@ -7,7 +7,7 @@
 
     /// <summary>
     /// The exception that is thrown when an <see cref="HttpResponseMessage"/> indicates
-    /// a <see cref="WebExceptionStatus.ProtocolError"/> occurred during an HTTP request
+    /// a <see cref="F:System.Net.WebExceptionStatus.ProtocolError"/> occurred during an HTTP request
     /// sent using <see cref="HttpClient"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
