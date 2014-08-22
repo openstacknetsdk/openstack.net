@@ -106,6 +106,10 @@
     <Compile Include="OpenStack\ObjectModel\ResourceIdentifier`1.cs" />
     <Compile Include="OpenStack\Security\Authentication\IAuthenticationService.cs" />
     <Compile Include="OpenStack\Security\Authentication\NamespaceDoc.cs" />
+    <Compile Include="OpenStack\Services\HttpServiceExtensions.cs" />
+    <Compile Include="OpenStack\Services\IHttpService.cs" />
+    <Compile Include="OpenStack\Services\NamespaceDoc.cs" />
+    <Compile Include="OpenStack\Services\ServiceClient.cs" />
     <Compile Include="OpenStack\Threading\AsyncCompletionOption.cs" />
     <Compile Include="OpenStack\Threading\BackoffPolicy.cs" />
     <Compile Include="OpenStack\Threading\IBackoffPolicy.cs" />
