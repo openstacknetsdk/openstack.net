@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -117,6 +118,24 @@
         protected override Task<Uri> GetBaseUriAsyncImpl(CancellationToken cancellationToken)
         {
             return CompletedTask.FromResult(_baseAddress);
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// <para>This method extends the base implementation by treating a response of
+        /// <see cref="HttpStatusCode.MultipleChoices"/> as successful for the <see cref="ListApiVersionsApiCall"/> API
+        /// call.</para>
+        /// </remarks>
+        protected override Task<HttpResponseMessage> ValidateResultImplAsync(Task<HttpResponseMessage> task, CancellationToken cancellationToken)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            // Handle the Multiple Choices status for the List API Versions call
+            if (task.Result.RequestMessage.RequestUri.Equals(BaseAddress) && task.Result.StatusCode == HttpStatusCode.MultipleChoices)
+                return task;
+
+            return base.ValidateResultImplAsync(task, cancellationToken);
         }
     }
 }
