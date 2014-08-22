@@ -22,7 +22,7 @@
 //
 //
 
-#if PORTABLE
+#if PORTABLE && !WINRT
 
 using System;
 using System.Threading;
