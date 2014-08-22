@@ -148,6 +148,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Docs.OpenStack.Net.Current"
 		{F407F288-3E74-4704-9FFA-8B3597C15BA2} = {F407F288-3E74-4704-9FFA-8B3597C15BA2}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStackNetTests.Live.net45", "OpenStackNetTests.Live\OpenStackNetTests.Live.net45.csproj", "{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -323,6 +325,12 @@ Global
 		{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.ReleaseNoDocs|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -359,6 +367,7 @@ Global
 		{868B2257-5F07-41A2-9210-B5A9745895FF} = {5EB9C284-E943-4333-9F80-7C12475ACD00}
 		{1528FB39-1997-4422-B9E1-C73B454CF70E} = {5EB9C284-E943-4333-9F80-7C12475ACD00}
 		{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
+		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036} = {62B45D81-B643-4E2B-B612-F479B9570F3A}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
