@@ -27,6 +27,10 @@
     </para>
   </item>
 
+  <item id="NullIfNotIncluded">
+    <para>-or-</para>
+    <para><see langword="null"/> if the underlying property was not included in the JSON representation of the object.</para>
+  </item>
   <!--
     The following items can only be used in <token> elements that appear in **MAML topics**.
   -->
