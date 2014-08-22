@@ -49,11 +49,16 @@
         /// <param name="requestMessage">The <see cref="HttpRequestMessage"/> representing the request for the API call.</param>
         /// <param name="completionOption">The <see cref="HttpCompletionOption"/> to specify when sending the HTTP request.</param>
         /// <returns>An HTTP API call which returns the response body as a string.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="requestMessage"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="requestMessage"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="completionOption"/> is not a valid <see cref="HttpCompletionOption"/>.
+        /// </exception>
         HttpApiCall CreateBasicApiCall(HttpRequestMessage requestMessage, HttpCompletionOption completionOption);
 
         /// <summary>
-        /// Create an HTTP API call where the deserialation logic is provided as a user-defined function.
+        /// Create an HTTP API call where the deserialization logic is provided as a user-defined function.
         /// </summary>
         /// <typeparam name="T">The type modeling the response to the API call.</typeparam>
         /// <param name="requestMessage">The <see cref="HttpRequestMessage"/> representing the request for the API call.</param>
@@ -64,6 +69,9 @@
         /// If <paramref name="requestMessage"/> is <see langword="null"/>.
         /// <para>-or-</para>
         /// <para>If <paramref name="deserializeResult"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="completionOption"/> is not a valid <see cref="HttpCompletionOption"/>.
         /// </exception>
         HttpApiCall<T> CreateCustomApiCall<T>(HttpRequestMessage requestMessage, HttpCompletionOption completionOption, Func<HttpResponseMessage, CancellationToken, Task<T>> deserializeResult);
     }
