@@ -31,6 +31,8 @@
       <DocumentationSource sourceFile="..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.xml" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Threading.1.1.0-beta001\lib\net40-client\Rackspace.Threading.dll" />
       <DocumentationSource sourceFile="..\packages\Rackspace.Threading.1.1.0-beta001\lib\net40-client\Rackspace.Threading.xml" />
+      <DocumentationSource sourceFile="..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.dll" />
+      <DocumentationSource sourceFile="..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.xml" />
     </DocumentationSources>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
