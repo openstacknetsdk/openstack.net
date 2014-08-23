@@ -31,6 +31,16 @@
     <para>-or-</para>
     <para><see langword="null"/> if the underlying property was not included in the JSON representation of the object.</para>
   </item>
+
+  <item id="OpenStackNotDefined">
+    <note type="warning">
+      <para>
+        The value of this property is not defined by OpenStack, and may differ in meaning across
+        vendors.
+      </para>
+    </note>
+  </item>
+
   <!--
     The following items can only be used in <token> elements that appear in **MAML topics**.
   -->
