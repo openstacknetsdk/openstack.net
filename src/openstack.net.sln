@@ -150,6 +150,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Docs.OpenStack.Net.Current"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStackNetTests.Live.net45", "OpenStackNetTests.Live\OpenStackNetTests.Live.net45.csproj", "{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStackNetTests.Unit.net45", "OpenStackNetTests.Unit\OpenStackNetTests.Unit.net45.csproj", "{DAB34AAC-D1B3-4161-A0E5-B004B3880822}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -331,6 +333,12 @@ Global
 		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}.ReleaseNoDocs|Mixed Platforms.Build.0 = Release|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822}.ReleaseNoDocs|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -368,6 +376,7 @@ Global
 		{1528FB39-1997-4422-B9E1-C73B454CF70E} = {5EB9C284-E943-4333-9F80-7C12475ACD00}
 		{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036} = {62B45D81-B643-4E2B-B612-F479B9570F3A}
+		{DAB34AAC-D1B3-4161-A0E5-B004B3880822} = {62B45D81-B643-4E2B-B612-F479B9570F3A}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
