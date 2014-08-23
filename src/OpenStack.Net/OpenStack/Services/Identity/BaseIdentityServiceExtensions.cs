@@ -50,7 +50,7 @@
         /// the current endpoint for the service.
         /// </summary>
         /// <param name="service">The <see cref="IBaseIdentityService"/> instance.</param>
-        /// <param name="apiVersionId"></param>
+        /// <param name="apiVersionId">The unique ID of the API version.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the

@@ -3,7 +3,7 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using OpenStack.Net;
 
     /// <summary>
     /// This is the base interface for the OpenStack Identity Service. It provides the ability to obtain details about
@@ -23,6 +23,9 @@
         /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="ListApiVersionsApiCall"/> instance
         /// describing the HTTP API call.
         /// </returns>
+        /// <exception cref="HttpWebException">
+        /// If an error occurs during an HTTP request as part of preparing the API call.
+        /// </exception>
         /// <seealso cref="BaseIdentityServiceExtensions.ListApiVersionsAsync"/>
         /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#identity-v2-versions">API versions (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
         /// <seealso href="http://developer.openstack.org/api-ref-identity-v3.html#versions-identity-v3">API versions (Identity API v3 - OpenStack Complete API Reference)</seealso>
@@ -32,7 +35,7 @@
         /// Prepare an HTTP API call to obtain information about a particular version of the API available at the
         /// current endpoint for the service.
         /// </summary>
-        /// <param name="apiVersionId"></param>
+        /// <param name="apiVersionId">The unique ID of the API version.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns>
         /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
@@ -41,6 +44,9 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="apiVersionId"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="HttpWebException">
+        /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>
         /// <seealso cref="BaseIdentityServiceExtensions.GetApiVersionAsync"/>
         /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#identity-v2-versions">API versions (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
