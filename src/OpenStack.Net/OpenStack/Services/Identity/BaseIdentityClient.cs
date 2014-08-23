@@ -59,7 +59,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<ListApiVersionsApiCall> PrepareListApiVersionsAsync(CancellationToken cancellationToken)
+        public virtual Task<ListApiVersionsApiCall> PrepareListApiVersionsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate(string.Empty);
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -103,7 +103,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<GetApiVersionApiCall> PrepareGetApiVersionAsync(ApiVersionId apiVersionId, CancellationToken cancellationToken)
+        public virtual Task<GetApiVersionApiCall> PrepareGetApiVersionAsync(ApiVersionId apiVersionId, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("{version_id}");
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "version_id", apiVersionId.Value } };
