@@ -1,0 +1,12 @@
+﻿{
+  "tenants": [
+    {
+      "description": "Auto created account",
+      "enabled": true,
+      "id": "{tenantId}",
+      "name": "{tenantName}"
+    }
+  ],
+  "tenants_links": []
+}
+

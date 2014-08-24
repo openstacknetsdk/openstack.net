@@ -12,6 +12,7 @@
     using OpenStack.Net;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
+    using Rackspace.Net;
     using Encoding = System.Text.Encoding;
     using StreamReader = System.IO.StreamReader;
 
@@ -78,6 +79,11 @@
                 case "tokens":
                 case "tokens/":
                     await ProcessTokensRequestAsync(context, cancellationToken).ConfigureAwait(false);
+                    return;
+
+                case "tenants":
+                case "tenants/":
+                    await ProcessTenantsRequestAsync(context, cancellationToken).ConfigureAwait(false);
                     return;
 
                 default:
@@ -150,6 +156,53 @@
                 await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
             }
 
+            context.Response.Close();
+        }
+
+        private async Task ProcessTenantsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        {
+            string[] segments = context.Request.Url.Segments;
+            if (segments.Length != 3)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.Close();
+                return;
+            }
+
+            if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                context.Response.Close();
+                return;
+            }
+
+            ValidateAuthenticatedRequest(context.Request);
+
+            if (!string.IsNullOrEmpty(context.Request.Url.Query))
+            {
+                UriTemplate queryTemplate = new UriTemplate("{?marker,limit,ignored*}");
+                UriTemplateMatch match = queryTemplate.Match(new Uri(context.Request.Url.Query, UriKind.RelativeOrAbsolute));
+                if (match != null)
+                {
+                    if (match.Bindings.ContainsKey("marker"))
+                        throw new NotImplementedException();
+                    if (match.Bindings.ContainsKey("limit"))
+                        throw new NotImplementedException();
+                }
+            }
+
+            string responseBody = IdentityServiceResources.ListTenantsResponseTemplate;
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters["tenantId"] = JsonConvert.SerializeObject(_tenantId);
+            parameters["tenantName"] = JsonConvert.SerializeObject(_tenantName);
+            foreach (var pair in parameters)
+                responseBody = responseBody.Replace("{" + pair.Key + "}", JsonConvert.DeserializeObject<string>(pair.Value));
+
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Response.ContentType = "application/json";
+            byte[] responseData = Encoding.UTF8.GetBytes(responseBody);
+            await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
             context.Response.Close();
         }
 
@@ -276,6 +329,22 @@
             byte[] buffer = Encoding.UTF8.GetBytes(responseBody);
             await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
             context.Response.Close();
+        }
+
+        protected virtual void ValidateAuthenticatedRequest(HttpListenerRequest request)
+        {
+            ValidateRequest(request);
+
+            if (_tokenId == null || _tokenExpires < DateTimeOffset.Now)
+                throw new InvalidOperationException();
+
+            string authHeader = request.Headers.Get("X-Auth-Token");
+            if (authHeader == null)
+                throw new InvalidOperationException();
+
+            TokenId tokenId = new TokenId(authHeader.Trim());
+            if (tokenId != _tokenId)
+                throw new InvalidOperationException();
         }
     }
 }

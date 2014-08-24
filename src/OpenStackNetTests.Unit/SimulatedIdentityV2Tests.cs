@@ -9,6 +9,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using OpenStack.Collections;
+    using OpenStack.Security.Authentication;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
     using OpenStackNetTests.Unit.Simulator.IdentityService.V2;
@@ -247,6 +248,41 @@
             }
         }
 
+        [TestMethod]
+        public async Task TestListTenants()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+
+                string tenantName = "simulated_tenant";
+                string username = "simulated_user";
+                string password = "simulated_password";
+                PasswordCredentials passwordCredentials = new PasswordCredentials(username, password);
+                AuthenticationData auth = new AuthenticationData(tenantName, passwordCredentials);
+                AuthenticationRequest request = new AuthenticationRequest(auth);
+
+                IdentityV2AuthenticationService authenticationService = new IdentityV2AuthenticationService(CreateService(), request);
+
+                using (IIdentityService service = CreateService(authenticationService))
+                {
+                    ListTenantsApiCall apiCall = await service.PrepareListTenantsAsync(cancellationTokenSource.Token);
+                    Tuple<HttpResponseMessage, ReadOnlyCollectionPage<Tenant>> response = await apiCall.SendAsync(cancellationTokenSource.Token);
+
+                    Assert.IsNotNull(response);
+                    Assert.IsNotNull(response.Item2);
+
+                    ReadOnlyCollectionPage<Tenant> tenants = response.Item2;
+                    Assert.IsNotNull(tenants);
+                    Assert.AreNotEqual(0, tenants.Count);
+                    Assert.IsFalse(tenants.CanHaveNextPage);
+
+                    foreach (Tenant tenant in tenants)
+                        CheckTenant(tenant);
+                }
+            }
+        }
+
         protected void CheckExtension(Extension extension)
         {
             Assert.IsNotNull(extension);
@@ -265,6 +301,17 @@
             }
         }
 
+        protected void CheckTenant(Tenant tenant)
+        {
+            Assert.IsNotNull(tenant);
+            Assert.IsNotNull(tenant.Id);
+            Assert.IsNotNull(tenant.Name);
+            Assert.IsFalse(string.IsNullOrEmpty(tenant.Name));
+            Assert.IsNotNull(tenant.Description);
+            Assert.IsFalse(string.IsNullOrEmpty(tenant.Description));
+            Assert.AreEqual(true, tenant.Enabled);
+        }
+
         protected TimeSpan TestTimeout(TimeSpan timeSpan)
         {
             if (Debugger.IsAttached)
@@ -276,6 +323,15 @@
         protected IIdentityService CreateService()
         {
             IdentityClient client = new IdentityClient(BaseAddress);
+            client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
+            client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
+
+            return client;
+        }
+
+        protected IIdentityService CreateService(IAuthenticationService authenticationService)
+        {
+            IdentityClient client = new IdentityClient(authenticationService, BaseAddress);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

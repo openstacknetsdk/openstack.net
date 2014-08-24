@@ -169,5 +169,26 @@ namespace OpenStackNetTests.Unit.Simulator.IdentityService {
                 return ResourceManager.GetString("ListExtensionsResponse", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;tenants&quot;: [
+        ///    {
+        ///      &quot;description&quot;: &quot;Auto created account&quot;,
+        ///      &quot;enabled&quot;: true,
+        ///      &quot;id&quot;: &quot;{tenantId}&quot;,
+        ///      &quot;name&quot;: &quot;{tenantName}&quot;
+        ///    }
+        ///  ],
+        ///  &quot;tenants_links&quot;: []
+        ///}
+        ///
+        ///.
+        /// </summary>
+        internal static string ListTenantsResponseTemplate {
+            get {
+                return ResourceManager.GetString("ListTenantsResponseTemplate", resourceCulture);
+            }
+        }
     }
 }

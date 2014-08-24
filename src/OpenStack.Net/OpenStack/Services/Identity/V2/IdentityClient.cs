@@ -142,7 +142,41 @@
         /// <inheritdoc/>
         public Task<ListTenantsApiCall> PrepareListTenantsAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            UriTemplate template = new UriTemplate("v2.0/tenants");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            Func<HttpResponseMessage, CancellationToken, Task<ReadOnlyCollectionPage<Tenant>>> deserializeResult =
+                (responseMessage, innerCancellationToken) =>
+                {
+                    Uri originalUri = responseMessage.RequestMessage.RequestUri;
+
+                    if (!HttpApiCall.IsAcceptable(responseMessage))
+                        throw new HttpWebException(responseMessage);
+
+                    return responseMessage.Content.ReadAsStringAsync()
+                        .Select(
+                            innerTask =>
+                            {
+                                if (string.IsNullOrEmpty(innerTask.Result))
+                                    return null;
+
+                                JObject responseObject = JsonConvert.DeserializeObject<JObject>(innerTask.Result);
+                                JArray tenantsArray = responseObject["tenants"] as JArray;
+                                if (tenantsArray == null)
+                                    return null;
+
+                                IList<Tenant> list = tenantsArray.ToObject<Tenant[]>();
+                                // according to the available documentation, this call does not appear to be paginated
+                                Func<CancellationToken, Task<ReadOnlyCollectionPage<Tenant>>> getNextPageAsync = null;
+
+                                ReadOnlyCollectionPage<Tenant> results = new BasicReadOnlyCollectionPage<Tenant>(list, getNextPageAsync);
+                                return results;
+                            });
+                };
+
+            return GetBaseUriAsync(cancellationToken)
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Select(task => new ListTenantsApiCall(CreateCustomApiCall(task.Result, HttpCompletionOption.ResponseContentRead, deserializeResult)));
         }
 
         /// <summary>

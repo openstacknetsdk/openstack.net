@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
@@ -83,6 +87,7 @@
     <None Include="Simulator\IdentityService\AuthenticateWithoutTenantResponseTemplate.json" />
     <None Include="Simulator\IdentityService\ListApiVersionsResponse.json" />
     <None Include="Simulator\IdentityService\ListExtensionsResponse.json" />
+    <None Include="Simulator\IdentityService\ListTenantsResponseTemplate.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Simulator\IdentityService\IdentityServiceResources.resx">
