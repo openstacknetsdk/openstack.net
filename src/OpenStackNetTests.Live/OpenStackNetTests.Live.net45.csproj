@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseIdentityTests.cs" />
+    <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="LiveTestConfiguration.cs" />
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />

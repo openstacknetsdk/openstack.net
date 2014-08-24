@@ -121,6 +121,7 @@
     <Compile Include="OpenStack\Services\Identity\V2\ExtensionAlias.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ExtensionResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\GetExtensionApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V2\IdentityClient.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IdentityServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IIdentityService.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListExtensionsApiCall.cs" />

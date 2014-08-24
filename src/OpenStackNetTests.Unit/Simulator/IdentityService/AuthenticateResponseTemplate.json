@@ -1,0 +1,175 @@
+﻿{
+  "access": {
+    "token": {
+      "issued_at": "{issued_at}",
+      "expires": "{expires}",
+      "id": "{tokenId}",
+      "tenant": {
+        "description": "Auto created account",
+        "enabled": true,
+        "id": "{tenantId}",
+        "name": "{tenantName}"
+      }
+    },
+    "serviceCatalog": [
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8774/v2/c6aa8049133644d288a6cfc9ae21d55d",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8774/v2/c6aa8049133644d288a6cfc9ae21d55d",
+            "id": "2915627fe74b4321a685e726eb795753",
+            "publicURL": "http://8.21.28.222:8774/v2/c6aa8049133644d288a6cfc9ae21d55d"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.4:9696/",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.4:9696/",
+            "id": "2505082c74654d33ae9bf60e36e8c52e",
+            "publicURL": "http://8.21.28.4:9696/"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8776/v2/c6aa8049133644d288a6cfc9ae21d55d",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8776/v2/c6aa8049133644d288a6cfc9ae21d55d",
+            "id": "49b493ffac434d60a7d8f161094f3886",
+            "publicURL": "http://8.21.28.222:8776/v2/c6aa8049133644d288a6cfc9ae21d55d"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "volumev2",
+        "name": "cinderv2"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8080",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8080",
+            "id": "631800305474407989efc54294129ab3",
+            "publicURL": "http://8.21.28.222:8080"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "s3",
+        "name": "swift_s3"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:9292",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:9292",
+            "id": "9d95cfba46fd4dd691e0d73ffdb1b8ad",
+            "publicURL": "http://8.21.28.222:9292"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8777",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8777",
+            "id": "59734e9effb34afbbe37ba64be677c34",
+            "publicURL": "http://8.21.28.222:8777"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "metering",
+        "name": "ceilometer"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8776/v1/c6aa8049133644d288a6cfc9ae21d55d",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8776/v1/c6aa8049133644d288a6cfc9ae21d55d",
+            "id": "4199f967d73640b8acc65145c787f947",
+            "publicURL": "http://8.21.28.222:8776/v1/c6aa8049133644d288a6cfc9ae21d55d"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "volume",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8773/services/Admin",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8773/services/Cloud",
+            "id": "05ba7b6e63554b10a6fdba302ae92b12",
+            "publicURL": "http://8.21.28.222:8773/services/Cloud"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "ec2",
+        "name": "nova_ec2"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:8080/",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:8080/v1/AUTH_c6aa8049133644d288a6cfc9ae21d55d",
+            "id": "32965d7ca68b47ef900957c25d392efa",
+            "publicURL": "http://8.21.28.222:8080/v1/AUTH_c6aa8049133644d288a6cfc9ae21d55d"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.100.0.222:35357/v2.0",
+            "region": "RegionOne",
+            "internalURL": "http://10.100.0.222:5000/v2.0",
+            "id": "ac27a0fab59a44e78c2900a68fed3815",
+            "publicURL": "http://8.21.28.222:5000/v2.0"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "identity",
+        "name": "keystone"
+      }
+    ],
+    "user": {
+      "username": "{username}",
+      "roles_links": [],
+      "id": "{userId}",
+      "roles": [
+        {
+          "name": "_member_"
+        }
+      ],
+      "name": "{userFullName}"
+    },
+    "metadata": {
+      "is_admin": 0,
+      "roles": [
+        "9fe2ff9ee4384b1894a90878d3e92bab"
+      ]
+    }
+  }
+}
+

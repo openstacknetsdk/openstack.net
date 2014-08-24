@@ -118,7 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AuthenticateResponseTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>authenticateresponsetemplate.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="AuthenticateWithoutTenantResponseTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>authenticatewithouttenantresponsetemplate.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="ListApiVersionsResponse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>listapiversionsresponse.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <comment>Applies to Identity Service V2 and V3. The GetApiVersion operation response is also extracted from this value.</comment>
+  </data>
+  <data name="ListExtensionsResponse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>listextensionsresponse.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
