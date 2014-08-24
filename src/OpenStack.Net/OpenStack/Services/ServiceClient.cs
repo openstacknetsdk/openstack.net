@@ -328,7 +328,7 @@
                     HttpRequestMessage request = PrepareRequestImpl(method, template, baseUri, parameters);
 
                     Func<Task<HttpRequestMessage>, Task<HttpRequestMessage>> authenticateRequest =
-                        task2 => _authenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
+                        task2 => AuthenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
                     return CompletedTask.FromResult(request).Then(authenticateRequest);
                 };
         }
@@ -420,7 +420,7 @@
                     request.Content = EncodeRequestBodyImpl(request, body);
 
                     Func<Task<HttpRequestMessage>, Task<HttpRequestMessage>> authenticateRequest =
-                        task2 => _authenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
+                        task2 => AuthenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
                     return CompletedTask.FromResult(request).Then(authenticateRequest);
                 };
         }
