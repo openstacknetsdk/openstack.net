@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -186,7 +187,10 @@
                     Assert.IsNotNull(token);
                     Assert.IsNotNull(token.Id);
                     Assert.IsNotNull(token.Tenant);
-                    Assert.IsNotNull(token.IssuedAt);
+
+                    // Rackspace does not return this property, and it doesn't seem to be particularly useful.
+                    //Assert.IsNotNull(token.IssuedAt);
+
                     Assert.IsNotNull(token.ExpiresAt);
 
                     // check the user
@@ -194,9 +198,12 @@
                     Assert.IsNotNull(user);
                     Assert.IsNotNull(user.Id);
                     Assert.IsNotNull(user.Name);
-                    Assert.IsNotNull(user.Username);
+
+                    // If the Username is null, it's presumed to be the same as the Name. (Rackspace does not return
+                    // this property.)
+                    //Assert.IsNotNull(user.Username);
+
                     Assert.IsNotNull(user.Roles);
-                    Assert.IsNotNull(user.RolesLinks);
 
                     Assert.AreNotEqual(0, user.Roles.Count);
                     foreach (Role role in user.Roles)
@@ -206,13 +213,17 @@
                         Assert.AreNotEqual(string.Empty, role.Name);
                     }
 
-                    foreach (Link link in user.RolesLinks)
+                    // At least Rackspace does not return the roles_links property.
+                    if (user.RolesLinks != null)
                     {
-                        Assert.IsNotNull(link);
-                        Assert.IsNotNull(link.Relation);
-                        Assert.AreNotEqual(string.Empty, link.Relation);
-                        Assert.IsNotNull(link.Target);
-                        Assert.IsTrue(link.Target.IsAbsoluteUri);
+                        foreach (Link link in user.RolesLinks)
+                        {
+                            Assert.IsNotNull(link);
+                            Assert.IsNotNull(link.Relation);
+                            Assert.AreNotEqual(string.Empty, link.Relation);
+                            Assert.IsNotNull(link.Target);
+                            Assert.IsTrue(link.Target.IsAbsoluteUri);
+                        }
                     }
 
                     // check the service catalog
@@ -225,24 +236,33 @@
                         Assert.IsNotNull(entry.Name);
                         Assert.IsNotNull(entry.Type);
                         Assert.IsNotNull(entry.Endpoints);
-                        Assert.IsNotNull(entry.EndpointsLinks);
 
                         Assert.AreNotEqual(0, entry.Endpoints.Count);
                         foreach (Endpoint endpoint in entry.Endpoints)
                         {
                             Assert.IsNotNull(endpoint);
-                            Assert.IsNotNull(endpoint.Id);
-                            Assert.IsNotNull(endpoint.Region);
+
+                            // At least Rackspace does not return an ID with their endpoints. The ID doesn't seem
+                            // necessary for API calls.
+                            //Assert.IsNotNull(endpoint.Id);
+
+                            // Region-independent endpoints may have a null Region value.
+                            //Assert.IsNotNull(endpoint.Region);
+
                             Assert.IsFalse(endpoint.PublicUrl == null && endpoint.InternalUrl == null && endpoint.AdminUrl == null);
                         }
 
-                        foreach (Link link in entry.EndpointsLinks)
+                        // At least Rackspace does not return the endpoints_links property.
+                        if (entry.EndpointsLinks != null)
                         {
-                            Assert.IsNotNull(link);
-                            Assert.IsNotNull(link.Relation);
-                            Assert.AreNotEqual(string.Empty, link.Relation);
-                            Assert.IsNotNull(link.Target);
-                            Assert.IsTrue(link.Target.IsAbsoluteUri);
+                            foreach (Link link in entry.EndpointsLinks)
+                            {
+                                Assert.IsNotNull(link);
+                                Assert.IsNotNull(link.Relation);
+                                Assert.AreNotEqual(string.Empty, link.Relation);
+                                Assert.IsNotNull(link.Target);
+                                Assert.IsTrue(link.Target.IsAbsoluteUri);
+                            }
                         }
                     }
                 }
@@ -279,6 +299,8 @@
 
                     foreach (Tenant tenant in tenants)
                         CheckTenant(tenant);
+
+                    Assert.IsTrue(tenants.Any(i => i.Enabled ?? false));
                 }
             }
         }
@@ -307,9 +329,13 @@
             Assert.IsNotNull(tenant.Id);
             Assert.IsNotNull(tenant.Name);
             Assert.IsFalse(string.IsNullOrEmpty(tenant.Name));
-            Assert.IsNotNull(tenant.Description);
-            Assert.IsFalse(string.IsNullOrEmpty(tenant.Description));
-            Assert.AreEqual(true, tenant.Enabled);
+
+            // Caller should check for at least one enabled Tenant
+            //Assert.AreEqual(true, tenant.Enabled);
+
+            // At least Rackspace does not send back this property.
+            //Assert.IsNotNull(tenant.Description);
+            //Assert.IsFalse(string.IsNullOrEmpty(tenant.Description));
         }
 
         protected TimeSpan TestTimeout(TimeSpan timeSpan)
