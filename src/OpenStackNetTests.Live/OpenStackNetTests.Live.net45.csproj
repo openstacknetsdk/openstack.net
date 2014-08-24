@@ -58,6 +58,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseIdentityTests.cs" />
+    <Compile Include="LiveTestConfiguration.cs" />
+    <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,6 +70,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\LiveTestConfiguration.json">
+      <Link>LiveTestConfiguration.json</Link>
+    </None>
+    <None Include="LiveTestConfigurationTemplate.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

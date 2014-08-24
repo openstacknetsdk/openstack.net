@@ -12,12 +12,39 @@
     [TestClass]
     public class BaseIdentityTests
     {
+        private LiveTestConfiguration _configuration;
+
         protected Uri BaseAddress
         {
             get
             {
-                return new Uri("http://x86.trystack.org:5000");
+                if (_configuration == null)
+                    return null;
+
+                TestCredentials credentials = _configuration.TryGetSelectedCredentials();
+                if (credentials != null)
+                    return credentials.BaseAddress;
+
+                //credentials = _configuration.TryGetCredentials("Rackspace_US_Anonymous");
+                //credentials = _configuration.TryGetCredentials("HP_West_Anonymous");
+                //credentials = _configuration.TryGetCredentials("HP_East_Anonymous");
+                credentials = _configuration.TryGetCredentials("TryStack_Anonymous");
+                if (credentials == null)
+                    return null;
+
+                return credentials.BaseAddress;
             }
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _configuration = LiveTestConfiguration.LoadDefaultConfiguration();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
         }
 
         [TestMethod]

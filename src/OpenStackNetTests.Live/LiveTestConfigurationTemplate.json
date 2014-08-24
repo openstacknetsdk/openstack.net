@@ -1,0 +1,36 @@
+﻿{
+    "name": "Example Test Configuration",
+    "selectedCredentials": "TryStack_Anonymous",
+    "credentials": [
+        {
+            "name": "TryStack",
+            "description": "Valid TryStack credentials without specifying a tenant",
+            "baseAddress": "http://x86.trystack.org:5000",
+            "authRequest": {
+                "auth": {
+                    "tenantName": "facebook0000000",
+                    "passwordCredentials": {
+                        "username": "facebook0000000",
+                        "password": "xxx API Password xxx"
+                    }
+                }
+            }
+        },
+        {
+            "name": "TryStack_Anonymous",
+            "baseAddress": "http://x86.trystack.org:5000"
+        },
+        {
+            "name": "Rackspace_US_Anonymous",
+            "baseAddress": "https://identity.api.rackspacecloud.com"
+        },
+        {
+            "name": "HP_West_Anonymous",
+            "baseAddress": "https://region-a.geo-1.identity.hpcloudsvc.com:35357"
+        },
+        {
+            "name": "HP_East_Anonymous",
+            "baseAddress": "https://region-b.geo-1.identity.hpcloudsvc.com:35357"
+        }
+    ]
+}
