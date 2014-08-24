@@ -41,8 +41,13 @@ namespace OpenStack.Services.Identity.V2
         /// <summary>
         /// This is the backing field for the <see cref="LastModified"/> property.
         /// </summary>
+        /// <remarks>
+        /// <para>This is stored as a <see cref="string"/> since OpenStack currently returns the timestamp in an
+        /// unrecognized format. Rather than throw an exception during initial deserialization, defer the exception to
+        /// cases where the <see cref="LastModified"/> property is accessed.</para>
+        /// </remarks>
         [JsonProperty("updated", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private DateTimeOffset? _updated;
+        private string _updated;
 #pragma warning restore 649
 
         /// <summary>
@@ -129,7 +134,10 @@ namespace OpenStack.Services.Identity.V2
         {
             get
             {
-                return _updated;
+                if (_updated == null)
+                    return null;
+
+                return JsonConvert.DeserializeObject<DateTimeOffset>(_updated);
             }
         }
     }
