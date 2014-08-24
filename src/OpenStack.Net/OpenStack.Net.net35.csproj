@@ -79,6 +79,7 @@
     <Compile Include="OpenStack\Net\JsonHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Net\StreamingHttpApiCall.cs" />
+    <Compile Include="OpenStack\Net\UriExtensions.cs" />
     <Compile Include="OpenStack\Net\UriPart.cs" />
     <Compile Include="OpenStack\Net\UriUtility.cs" />
     <Compile Include="OpenStack\ObjectModel\Converters\AddressFamilySimpleConverter.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="OpenStack\ObjectModel\JsonHome\ResourceObject.cs" />
     <Compile Include="OpenStack\ObjectModel\NamespaceDoc.cs" />
     <Compile Include="OpenStack\ObjectModel\ResourceIdentifier`1.cs" />
+    <Compile Include="OpenStack\Security\Authentication\DelegatingPartialAuthenticationService.cs" />
     <Compile Include="OpenStack\Security\Authentication\IAuthenticationService.cs" />
     <Compile Include="OpenStack\Security\Authentication\IdentityV2AuthenticationService.cs" />
     <Compile Include="OpenStack\Security\Authentication\NamespaceDoc.cs" />

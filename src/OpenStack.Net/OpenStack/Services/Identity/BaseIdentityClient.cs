@@ -32,6 +32,12 @@
         /// Initializes a new instance of the <see cref="BaseIdentityClient"/> class with the specified fixed base
         /// address.
         /// </summary>
+        /// <remarks>
+        /// <para>This constructor initializes the identity client using the
+        /// <see cref="PassThroughAuthenticationService"/>, which does not perform any authentication operations on HTTP
+        /// API calls made through the client. For authenticating some (or all) requests made by this service, use the
+        /// <see cref="BaseIdentityClient(IAuthenticationService, Uri)"/> constructor instead.</para>
+        /// </remarks>
         /// <param name="baseAddress">The base address of the Identity Service.</param>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="baseAddress"/> is <see langword="null"/>.
@@ -40,9 +46,44 @@
         /// If <paramref name="baseAddress"/> is not an absolute URI.
         /// </exception>
         public BaseIdentityClient(Uri baseAddress)
-            : base(new PassThroughAuthenticationService(baseAddress), null)
+            : this(new PassThroughAuthenticationService(baseAddress), baseAddress)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseIdentityClient"/> class with the specified fixed base
+        /// address.
+        /// </summary>
+        /// <param name="authenticationService">The authentication service to use for authenticating requests made to
+        /// this service.</param>
+        /// <param name="baseAddress">The base address of the Identity Service.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="baseAddress"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="baseAddress"/> is not an absolute URI.
+        /// </exception>
+        protected BaseIdentityClient(IAuthenticationService authenticationService, Uri baseAddress)
+            : base(CreateAuthenticationService(authenticationService, baseAddress), null)
         {
             _baseAddress = baseAddress;
+        }
+
+        /// <summary>
+        /// Create an authentication service instance which distinguishes between the authenticated and unauthenticated
+        /// HTTP API calls in the Identity Service.
+        /// </summary>
+        /// <param name="authenticationService">The authentication service to use for authenticating requests made to
+        /// this service.</param>
+        /// <param name="baseAddress">The base address of the Identity Service.</param>
+        /// <returns>The authentication service to use for this client.</returns>
+        private static BaseIdentityClientAuthenticationService CreateAuthenticationService(IAuthenticationService authenticationService, Uri baseAddress)
+        {
+            BaseIdentityClientAuthenticationService result = authenticationService as BaseIdentityClientAuthenticationService;
+            if (result != null)
+                return result;
+
+            return new BaseIdentityClientAuthenticationService(baseAddress, authenticationService, new PassThroughAuthenticationService(baseAddress));
         }
 
         /// <summary>
@@ -136,6 +177,88 @@
                 return task;
 
             return base.ValidateResultImplAsync(task, cancellationToken);
+        }
+
+        /// <summary>
+        /// This class provides support for using <see cref="DelegatingPartialAuthenticationService"/> in Identity
+        /// Service clients derived from <see cref="BaseIdentityClient"/>.
+        /// </summary>
+        /// <threadsafety static="true" instance="false"/>
+        /// <preliminary/>
+        protected class BaseIdentityClientAuthenticationService : DelegatingPartialAuthenticationService
+        {
+            /// <summary>
+            /// The absolute base URI of the Identity Service endpoint.
+            /// </summary>
+            private readonly Uri _baseAddress;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="BaseIdentityClientAuthenticationService"/> class with the
+            /// specified delegate authentication service implementations to use for authenticating calls made from a
+            /// client.
+            /// </summary>
+            /// <param name="baseAddress">The base address of the Identity Service.</param>
+            /// <param name="authenticatedCallsService">
+            /// The authentication service to use for authenticated HTTP API calls.
+            /// </param>
+            /// <param name="unauthenticatedCallsService">
+            /// The authentication service to use for unauthenticated HTTP API calls.
+            /// </param>
+            /// <exception cref="ArgumentNullException">
+            /// <para>If <paramref name="baseAddress"/> is <see langword="null"/>.</para>
+            /// <para>-or-</para>
+            /// <para>If <paramref name="authenticatedCallsService"/> is <see langword="null"/>.</para>
+            /// <para>-or-</para>
+            /// <para>If <paramref name="unauthenticatedCallsService"/> is <see langword="null"/>.</para>
+            /// </exception>
+            public BaseIdentityClientAuthenticationService(Uri baseAddress, IAuthenticationService authenticatedCallsService, IAuthenticationService unauthenticatedCallsService)
+                : base(authenticatedCallsService, unauthenticatedCallsService)
+            {
+                if (baseAddress == null)
+                    throw new ArgumentNullException("baseAddress");
+
+                _baseAddress = baseAddress;
+            }
+
+            /// <summary>
+            /// Gets the absolute base URI of the Identity Service endpoint.
+            /// </summary>
+            /// <value>
+            /// The absolute base URI of the Identity Service endpoint.
+            /// </value>
+            protected Uri BaseAddress
+            {
+                get
+                {
+                    return _baseAddress;
+                }
+            }
+
+            /// <inheritdoc/>
+            /// <remarks>
+            /// <para>The base implementation implements this method by returning false for the HTTP API calls
+            /// associated with <see cref="ListApiVersionsApiCall"/> and <see cref="GetApiVersionApiCall"/>, and
+            /// otherwise returns <see langword="null"/>.</para>
+            /// </remarks>
+            protected override bool? IsAuthenticatedCall(HttpRequestMessage requestMessage)
+            {
+                if (requestMessage == null)
+                    throw new ArgumentNullException("requestMessage");
+
+                // normalize the request URI
+                Uri relativeUri = BaseAddress.MakeRelativeUri(requestMessage.RequestUri);
+                if (relativeUri.IsAbsoluteUri)
+                    return null;
+
+                Uri normalizedUri = new Uri(new Uri("http://localhost"), relativeUri);
+
+                // the only unauthenticated calls are / and /{apiVersion}
+                string[] segments = normalizedUri.GetSegments();
+                if (segments.Length <= 2)
+                    return false;
+
+                return null;
+            }
         }
     }
 }

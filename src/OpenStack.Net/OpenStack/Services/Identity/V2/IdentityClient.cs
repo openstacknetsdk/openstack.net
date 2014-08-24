@@ -9,6 +9,7 @@
     using Newtonsoft.Json.Linq;
     using OpenStack.Collections;
     using OpenStack.Net;
+    using OpenStack.Security.Authentication;
     using Rackspace.Net;
     using Rackspace.Threading;
 
@@ -33,6 +34,40 @@
         public IdentityClient(Uri baseAddress)
             : base(baseAddress)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdentityClient"/> class with the specified fixed base address.
+        /// </summary>
+        /// <param name="authenticationService">The authentication service to use for authenticating requests made to
+        /// this service.</param>
+        /// <param name="baseAddress">The base address of the Identity Service.</param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="baseAddress"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="baseAddress"/> is not an absolute URI.
+        /// </exception>
+        public IdentityClient(IAuthenticationService authenticationService, Uri baseAddress)
+            : base(CreateAuthenticationService(authenticationService, baseAddress), baseAddress)
+        {
+        }
+
+        /// <summary>
+        /// Create an authentication service instance which distinguishes between the authenticated and unauthenticated
+        /// HTTP API calls in the Identity Service.
+        /// </summary>
+        /// <param name="authenticationService">The authentication service to use for authenticating requests made to
+        /// this service.</param>
+        /// <param name="baseAddress">The base address of the Identity Service.</param>
+        /// <returns>The authentication service to use for this client.</returns>
+        private static IdentityClientAuthenticationService CreateAuthenticationService(IAuthenticationService authenticationService, Uri baseAddress)
+        {
+            IdentityClientAuthenticationService result = authenticationService as IdentityClientAuthenticationService;
+            if (result != null)
+                return result;
+
+            return new IdentityClientAuthenticationService(baseAddress, authenticationService, new PassThroughAuthenticationService(baseAddress));
         }
 
         /// <inheritdoc/>
@@ -108,6 +143,84 @@
         public Task<ListTenantsApiCall> PrepareListTenantsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This class extends the support of <see cref="IdentityClientAuthenticationService"/> to include support
+        /// for <see cref="IdentityClient"/> calls.
+        /// </summary>
+        /// <threadsafety static="true" instance="false"/>
+        /// <preliminary/>
+        protected class IdentityClientAuthenticationService : BaseIdentityClientAuthenticationService
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="IdentityClientAuthenticationService"/> class with the
+            /// specified delegate authentication service implementations to use for authenticating calls made from a
+            /// client.
+            /// </summary>
+            /// <inheritdoc/>
+            public IdentityClientAuthenticationService(Uri baseAddress, IAuthenticationService authenticatedCallsService, IAuthenticationService unauthenticatedCallsService)
+                : base(baseAddress, authenticatedCallsService, unauthenticatedCallsService)
+            {
+            }
+
+            /// <inheritdoc/>
+            /// <remarks>
+            /// <para>The <see cref="IdentityClientAuthenticationService"/> implementation of this method treats the
+            /// unauthenticated calls inherited from <see cref="BaseIdentityClient"/> along with
+            /// <see cref="AuthenticateApiCall"/>, <see cref="ListExtensionsApiCall"/>, and
+            /// <see cref="GetExtensionApiCall"/> as unauthenticated. All other calls are treated as
+            /// authenticated.</para>
+            /// </remarks>
+            protected override bool? IsAuthenticatedCall(HttpRequestMessage requestMessage)
+            {
+                if (requestMessage == null)
+                    throw new ArgumentNullException("requestMessage");
+
+                bool? baseResult = base.IsAuthenticatedCall(requestMessage);
+                if (baseResult.HasValue)
+                    return baseResult;
+
+                // normalize the request URI
+                Uri relativeUri = BaseAddress.MakeRelativeUri(requestMessage.RequestUri);
+                if (relativeUri.IsAbsoluteUri)
+                    return null;
+
+                Uri normalizedUri = new Uri(new Uri("http://localhost"), relativeUri);
+                string[] segments = normalizedUri.GetSegments();
+                if (segments.Length < 3)
+                {
+                    // these are handled by the base client, if at all
+                    return null;
+                }
+
+                // if the second segment isn't "v2.0/", then it's not a known call to this service
+                if (!string.Equals("v2.0/", segments[1], StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                // authenticate isn't authenticated
+                if (string.Equals(segments[2], "tokens", StringComparison.Ordinal)
+                    || string.Equals(segments[2], "tokens/", StringComparison.Ordinal))
+                {
+                    if (requestMessage.Method == HttpMethod.Post && segments.Length == 3)
+                    {
+                        return false;
+                    }
+                }
+
+                // list extensions and get extension aren't authenticated
+                if (string.Equals(segments[2], "extensions", StringComparison.Ordinal)
+                    || string.Equals(segments[2], "extensions/", StringComparison.Ordinal))
+                {
+                    if (requestMessage.Method == HttpMethod.Get && segments.Length <= 4)
+                        return false;
+                }
+
+                // all other calls are assumed to be authenticated
+                return true;
+            }
         }
     }
 }
