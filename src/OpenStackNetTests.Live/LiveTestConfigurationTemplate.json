@@ -4,7 +4,7 @@
     "credentials": [
         {
             "name": "TryStack",
-            "description": "Valid TryStack credentials without specifying a tenant",
+            "description": "Valid TryStack credentials with the tenant specified by name",
             "baseAddress": "http://x86.trystack.org:5000",
             "authRequest": {
                 "auth": {
