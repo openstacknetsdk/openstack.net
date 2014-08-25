@@ -129,6 +129,7 @@
     <Compile Include="OpenStack\Services\Identity\V2\IIdentityService.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListExtensionsApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListTenantsApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V2\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\PasswordCredentials.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\Role.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ServiceCatalogEntry.cs" />
