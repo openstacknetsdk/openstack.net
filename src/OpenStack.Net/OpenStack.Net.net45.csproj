@@ -100,6 +100,7 @@
     <Compile Include="OpenStack\Services\Identity\ApiVersionId.cs" />
     <Compile Include="OpenStack\Services\Identity\ApiVersionResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\BaseIdentityClient.cs" />
+    <Compile Include="OpenStack\Services\Identity\BaseIdentityServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\Identity\BaseIdentityServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\GetApiVersionApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\IBaseIdentityService.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="OpenStack\Services\Identity\V2\ExtensionResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\GetExtensionApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IdentityClient.cs" />
+    <Compile Include="OpenStack\Services\Identity\V2\IdentityServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IdentityServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IIdentityService.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListExtensionsApiCall.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="OpenStack\Services\IHttpService.cs" />
     <Compile Include="OpenStack\Services\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\ServiceClient.cs" />
+    <Compile Include="OpenStack\Services\ServiceExtensionDefinition`2.cs" />
     <Compile Include="OpenStack\Threading\AsyncCompletionOption.cs" />
     <Compile Include="OpenStack\Threading\BackoffPolicy.cs" />
     <Compile Include="OpenStack\Threading\IBackoffPolicy.cs" />

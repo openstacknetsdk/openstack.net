@@ -156,6 +156,15 @@
         }
 
         /// <inheritdoc/>
+        public virtual TExtension GetServiceExtension<TExtension>(BaseIdentityServiceExtensionDefinition<TExtension> definition)
+        {
+            if (definition == null)
+                throw new ArgumentNullException("definition");
+
+            return definition.CreateDefaultInstance(this);
+        }
+
+        /// <inheritdoc/>
         protected override Task<Uri> GetBaseUriAsyncImpl(CancellationToken cancellationToken)
         {
             return CompletedTask.FromResult(_baseAddress);

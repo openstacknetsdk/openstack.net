@@ -71,7 +71,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<ListExtensionsApiCall> PrepareListExtensionsAsync(CancellationToken cancellationToken)
+        public virtual Task<ListExtensionsApiCall> PrepareListExtensionsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("v2.0/extensions");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -115,7 +115,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<GetExtensionApiCall> PrepareGetExtensionAsync(ExtensionAlias alias, CancellationToken cancellationToken)
+        public virtual Task<GetExtensionApiCall> PrepareGetExtensionAsync(ExtensionAlias alias, CancellationToken cancellationToken)
         {
             if (alias == null)
                 throw new ArgumentNullException("alias");
@@ -129,7 +129,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<AuthenticateApiCall> PrepareAuthenticateAsync(AuthenticationRequest request, CancellationToken cancellationToken)
+        public virtual Task<AuthenticateApiCall> PrepareAuthenticateAsync(AuthenticationRequest request, CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("v2.0/tokens/");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -140,7 +140,7 @@
         }
 
         /// <inheritdoc/>
-        public Task<ListTenantsApiCall> PrepareListTenantsAsync(CancellationToken cancellationToken)
+        public virtual Task<ListTenantsApiCall> PrepareListTenantsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate("v2.0/tenants");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -177,6 +177,15 @@
             return GetBaseUriAsync(cancellationToken)
                 .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 .Select(task => new ListTenantsApiCall(CreateCustomApiCall(task.Result, HttpCompletionOption.ResponseContentRead, deserializeResult)));
+        }
+
+        /// <inheritdoc/>
+        public virtual TExtension GetServiceExtension<TExtension>(IdentityServiceExtensionDefinition<TExtension> definition)
+        {
+            if (definition == null)
+                throw new ArgumentNullException("definition");
+
+            return definition.CreateDefaultInstance(this);
         }
 
         /// <summary>

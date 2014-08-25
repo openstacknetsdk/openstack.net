@@ -52,5 +52,22 @@
         /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#identity-v2-versions">API versions (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
         /// <seealso href="http://developer.openstack.org/api-ref-identity-v3.html#versions-identity-v3">API versions (Identity API v3 - OpenStack Complete API Reference)</seealso>
         Task<GetApiVersionApiCall> PrepareGetApiVersionAsync(ApiVersionId apiVersionId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets an implementation of an extension to the <seealso cref="IBaseIdentityService"/>.
+        /// </summary>
+        /// <typeparam name="TExtension">The service extension type.</typeparam>
+        /// <param name="definition">The service extension definition.</param>
+        /// <returns>
+        /// An instance of <typeparamref name="TExtension"/> providing the implementation of the service extension.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="definition"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If the service client implementation does not provide its own implementation of the specified service
+        /// extension, and the service extension definition does not provide a default implementation.
+        /// </exception>
+        TExtension GetServiceExtension<TExtension>(BaseIdentityServiceExtensionDefinition<TExtension> definition);
     }
 }
