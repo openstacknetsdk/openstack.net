@@ -213,7 +213,7 @@
                 return _httpClient;
             }
 
-            protected set
+            set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
