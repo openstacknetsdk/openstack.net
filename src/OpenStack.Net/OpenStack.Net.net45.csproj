@@ -64,6 +64,7 @@
     <Compile Include="OpenStack\Net\HttpApiCall.cs" />
     <Compile Include="OpenStack\Net\HttpApiCallFactory.cs" />
     <Compile Include="OpenStack\Net\HttpApiCall`1.cs" />
+    <Compile Include="OpenStack\Net\HttpApiRequestExtensions.cs" />
     <Compile Include="OpenStack\Net\HttpRequestEventArgs.cs" />
     <Compile Include="OpenStack\Net\HttpResponseEventArgs.cs" />
     <Compile Include="OpenStack\Net\HttpWebException.cs" />
@@ -127,7 +128,9 @@
     <Compile Include="OpenStack\Services\Identity\V2\IdentityServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\IIdentityService.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListExtensionsApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V2\ListExtensionsApiCallExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\ListTenantsApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V2\ListTenantsApiCallExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\PasswordCredentials.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\Role.cs" />

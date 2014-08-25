@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -101,8 +102,25 @@
                                     return null;
 
                                 IList<Extension> list = extensionsArray.ToObject<Extension[]>();
-                                // according to the available documentation, this call does not appear to be paginated
+                                // http://docs.openstack.org/api/openstack-identity-service/2.0/content/Paginated_Collections-d1e325.html
                                 Func<CancellationToken, Task<ReadOnlyCollectionPage<Extension>>> getNextPageAsync = null;
+                                JArray extensionsLinksArray = responseObject["extensions_links"] as JArray;
+                                if (extensionsLinksArray != null)
+                                {
+                                    IList<Link> extensionsLinks = extensionsLinksArray.ToObject<Link[]>();
+                                    Link nextLink = extensionsLinks.FirstOrDefault(i => string.Equals("next", i.Relation, StringComparison.OrdinalIgnoreCase));
+                                    if (nextLink != null)
+                                    {
+                                        getNextPageAsync =
+                                            nextCancellationToken =>
+                                            {
+                                                return PrepareListExtensionsAsync(nextCancellationToken)
+                                                    .WithUri(nextLink.Target)
+                                                    .Then(nextApiCall => nextApiCall.Result.SendAsync(nextCancellationToken))
+                                                    .Select(nextApiCallResult => nextApiCallResult.Result.Item2);
+                                            };
+                                    }
+                                }
 
                                 ReadOnlyCollectionPage<Extension> results = new BasicReadOnlyCollectionPage<Extension>(list, getNextPageAsync);
                                 return results;
@@ -166,8 +184,25 @@
                                     return null;
 
                                 IList<Tenant> list = tenantsArray.ToObject<Tenant[]>();
-                                // according to the available documentation, this call does not appear to be paginated
+                                // http://docs.openstack.org/api/openstack-identity-service/2.0/content/Paginated_Collections-d1e325.html
                                 Func<CancellationToken, Task<ReadOnlyCollectionPage<Tenant>>> getNextPageAsync = null;
+                                JArray tenantsLinksArray = responseObject["tenants_links"] as JArray;
+                                if (tenantsLinksArray != null)
+                                {
+                                    IList<Link> tenantsLinks = tenantsLinksArray.ToObject<Link[]>();
+                                    Link nextLink = tenantsLinks.FirstOrDefault(i => string.Equals("next", i.Relation, StringComparison.OrdinalIgnoreCase));
+                                    if (nextLink != null)
+                                    {
+                                        getNextPageAsync =
+                                            nextCancellationToken =>
+                                            {
+                                                return PrepareListTenantsAsync(nextCancellationToken)
+                                                    .WithUri(nextLink.Target)
+                                                    .Then(nextApiCall => nextApiCall.Result.SendAsync(nextCancellationToken))
+                                                    .Select(nextApiCallResult => nextApiCallResult.Result.Item2);
+                                            };
+                                    }
+                                }
 
                                 ReadOnlyCollectionPage<Tenant> results = new BasicReadOnlyCollectionPage<Tenant>(list, getNextPageAsync);
                                 return results;
