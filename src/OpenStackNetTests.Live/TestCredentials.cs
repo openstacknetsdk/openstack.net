@@ -17,6 +17,9 @@
 
         [JsonProperty("authRequest", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private AuthenticationRequest _authRequest;
+
+        [JsonProperty("proxy", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private TestProxy _proxy;
 #pragma warning restore 649
 
         /// <summary>
@@ -52,6 +55,14 @@
             get
             {
                 return _authRequest;
+            }
+        }
+
+        public TestProxy Proxy
+        {
+            get
+            {
+                return _proxy;
             }
         }
     }

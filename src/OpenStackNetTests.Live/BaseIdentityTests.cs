@@ -36,6 +36,21 @@
             }
         }
 
+        protected TestProxy Proxy
+        {
+            get
+            {
+                if (_configuration == null)
+                    return null;
+
+                TestCredentials credentials = _configuration.TryGetSelectedCredentials();
+                if (credentials == null)
+                    return null;
+
+                return credentials.Proxy;
+            }
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -147,6 +162,7 @@
         protected IBaseIdentityService CreateService()
         {
             BaseIdentityClient client = new BaseIdentityClient(BaseAddress);
+            TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

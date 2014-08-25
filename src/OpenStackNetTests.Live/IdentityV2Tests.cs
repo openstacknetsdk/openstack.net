@@ -4,12 +4,14 @@
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using OpenStack.Collections;
+    using OpenStack.Net;
     using OpenStack.Security.Authentication;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
@@ -31,6 +33,21 @@
                     return null;
 
                 return credentials.BaseAddress;
+            }
+        }
+
+        protected TestProxy Proxy
+        {
+            get
+            {
+                if (_configuration == null)
+                    return null;
+
+                TestCredentials credentials = _configuration.TryGetSelectedCredentials();
+                if (credentials == null)
+                    return null;
+
+                return credentials.Proxy;
             }
         }
 
@@ -349,6 +366,7 @@
         protected IIdentityService CreateService()
         {
             IdentityClient client = new IdentityClient(BaseAddress);
+            TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 
@@ -358,6 +376,7 @@
         protected IIdentityService CreateService(IAuthenticationService authenticationService)
         {
             IdentityClient client = new IdentityClient(authenticationService, BaseAddress);
+            TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

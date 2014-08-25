@@ -63,6 +63,7 @@
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenStack.Net\OpenStack.Net.net45.csproj">

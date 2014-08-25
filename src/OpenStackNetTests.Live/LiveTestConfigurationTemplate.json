@@ -18,7 +18,11 @@
         },
         {
             "name": "TryStack_Anonymous",
-            "baseAddress": "http://x86.trystack.org:5000"
+            "baseAddress": "http://x86.trystack.org:5000",
+            "proxy": {
+                "host": "example.com",
+                "port": 8888
+            }
         },
         {
             "name": "Rackspace_US_Anonymous",
