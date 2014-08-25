@@ -18,7 +18,8 @@
         /// <param name="username">The account username.</param>
         /// <param name="apiKey">The account API key.</param>
         /// <returns>
-        /// An <see cref="AuthenticationRequest"/> instance containing the specified credentials.
+        /// <para>An <see cref="AuthenticationRequest"/> instance containing the specified credentials, which is
+        /// typically used for constructing an instance of <see cref="RackspaceAuthenticationService"/>.</para>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para>If <paramref name="username"/> is <see langword="null"/>.</para>
@@ -63,7 +64,8 @@
         /// <param name="username">The account username.</param>
         /// <param name="password">The account password.</param>
         /// <returns>
-        /// <para>An <see cref="AuthenticationRequest"/> instance containing the specified credentials.</para>
+        /// <para>An <see cref="AuthenticationRequest"/> instance containing the specified credentials, which is
+        /// typically used for constructing an instance of <see cref="RackspaceAuthenticationService"/>.</para>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <para>If <paramref name="username"/> is <see langword="null"/>.</para>
