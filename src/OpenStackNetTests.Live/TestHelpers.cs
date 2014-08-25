@@ -104,6 +104,10 @@ namespace OpenStackNetTests.Live
                     {
                         // couldn't reformat as JSON
                     }
+                    catch (ArgumentException)
+                    {
+                        // couldn't reformat as JSON
+                    }
                 }
 
                 Console.Error.WriteLine("==> " + formatted);
