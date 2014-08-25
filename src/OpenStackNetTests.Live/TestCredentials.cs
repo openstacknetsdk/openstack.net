@@ -12,6 +12,9 @@
         [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _name;
 
+        [JsonProperty("description", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private string _description;
+
         [JsonProperty("baseAddress", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _baseAddress;
 
@@ -36,6 +39,14 @@
             get
             {
                 return _name;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return _description;
             }
         }
 
