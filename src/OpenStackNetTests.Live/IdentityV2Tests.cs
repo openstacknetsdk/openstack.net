@@ -15,6 +15,7 @@
     using OpenStack.Security.Authentication;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
+    using Rackspace.Services.Identity.V2;
 
     [TestClass]
     public class IdentityV2Tests
@@ -388,8 +389,8 @@
                 goto default;
 
             case "Rackspace":
-                // currently Rackspace does not have a vendor-specific IIdentityService
-                goto default;
+                client = new RackspaceIdentityClient(BaseAddress);
+                break;
 
             case "OpenStack":
             default:
@@ -414,8 +415,8 @@
                 goto default;
 
             case "Rackspace":
-                // currently Rackspace does not have a vendor-specific IIdentityService
-                goto default;
+                client = new RackspaceIdentityClient(authenticationService, BaseAddress);
+                break;
 
             case "OpenStack":
             default:

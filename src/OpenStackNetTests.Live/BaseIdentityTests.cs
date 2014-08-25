@@ -8,6 +8,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using OpenStack.Collections;
     using OpenStack.Services.Identity;
+    using Rackspace.Services.Identity.V2;
 
     [TestClass]
     public class BaseIdentityTests
@@ -184,8 +185,8 @@
                 goto default;
 
             case "Rackspace":
-                // currently Rackspace does not have a vendor-specific IBaseIdentityService
-                goto default;
+                client = new RackspaceIdentityClient(BaseAddress);
+                break;
 
             case "OpenStack":
             default:
