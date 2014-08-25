@@ -29,6 +29,10 @@
             "baseAddress": "https://identity.api.rackspacecloud.com"
         },
         {
+            "name": "Rackspace_UK_Anonymous",
+            "baseAddress": "https://lon.identity.api.rackspacecloud.com"
+        },
+        {
             "name": "HP_West_Anonymous",
             "baseAddress": "https://region-a.geo-1.identity.hpcloudsvc.com:35357"
         },
