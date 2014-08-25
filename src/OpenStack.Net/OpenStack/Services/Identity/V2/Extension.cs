@@ -95,7 +95,7 @@ namespace OpenStack.Services.Identity.V2
         /// </summary>
         /// <value>
         /// <para>The namespace in which an extension is defined.</para>
-        /// <token>NullIfNotDefined</token>
+        /// <token>NullIfNotIncluded</token>
         /// </value>
         public Uri Namespace
         {
