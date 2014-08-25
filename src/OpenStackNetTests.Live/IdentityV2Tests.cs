@@ -51,6 +51,21 @@
             }
         }
 
+        protected string Vendor
+        {
+            get
+            {
+                if (_configuration == null)
+                    return null;
+
+                TestCredentials credentials = _configuration.TryGetSelectedCredentials();
+                if (credentials != null)
+                    return credentials.Vendor;
+
+                return "OpenStack";
+            }
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -365,7 +380,23 @@
 
         protected IIdentityService CreateService()
         {
-            IdentityClient client = new IdentityClient(BaseAddress);
+            IdentityClient client;
+            switch (Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                // currently Rackspace does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "OpenStack":
+            default:
+                client = new IdentityClient(BaseAddress);
+                break;
+            }
+
             TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
@@ -375,7 +406,23 @@
 
         protected IIdentityService CreateService(IAuthenticationService authenticationService)
         {
-            IdentityClient client = new IdentityClient(authenticationService, BaseAddress);
+            IdentityClient client;
+            switch (Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                // currently Rackspace does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "OpenStack":
+            default:
+                client = new IdentityClient(authenticationService, BaseAddress);
+                break;
+            }
+
             TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;

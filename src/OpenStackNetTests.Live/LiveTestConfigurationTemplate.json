@@ -5,6 +5,7 @@
         {
             "name": "TryStack",
             "description": "Valid TryStack credentials with the tenant specified by name",
+            "vendor": "OpenStack",
             "baseAddress": "http://x86.trystack.org:5000",
             "authRequest": {
                 "auth": {
@@ -18,6 +19,7 @@
         },
         {
             "name": "TryStack_Anonymous",
+            "vendor": "OpenStack",
             "baseAddress": "http://x86.trystack.org:5000",
             "proxy": {
                 "host": "example.com",
@@ -26,18 +28,22 @@
         },
         {
             "name": "Rackspace_US_Anonymous",
+            "vendor": "Rackspace",
             "baseAddress": "https://identity.api.rackspacecloud.com"
         },
         {
             "name": "Rackspace_UK_Anonymous",
+            "vendor": "Rackspace",
             "baseAddress": "https://lon.identity.api.rackspacecloud.com"
         },
         {
             "name": "HP_West_Anonymous",
+            "vendor": "HP",
             "baseAddress": "https://region-a.geo-1.identity.hpcloudsvc.com:35357"
         },
         {
             "name": "HP_East_Anonymous",
+            "vendor": "HP",
             "baseAddress": "https://region-b.geo-1.identity.hpcloudsvc.com:35357"
         }
     ]

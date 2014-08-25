@@ -51,6 +51,21 @@
             }
         }
 
+        protected string Vendor
+        {
+            get
+            {
+                if (_configuration == null)
+                    return null;
+
+                TestCredentials credentials = _configuration.TryGetSelectedCredentials();
+                if (credentials != null)
+                    return credentials.Vendor;
+
+                return "OpenStack";
+            }
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -161,7 +176,23 @@
 
         protected IBaseIdentityService CreateService()
         {
-            BaseIdentityClient client = new BaseIdentityClient(BaseAddress);
+            BaseIdentityClient client;
+            switch (Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IBaseIdentityService
+                goto default;
+
+            case "Rackspace":
+                // currently Rackspace does not have a vendor-specific IBaseIdentityService
+                goto default;
+
+            case "OpenStack":
+            default:
+                client = new BaseIdentityClient(BaseAddress);
+                break;
+            }
+
             TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;

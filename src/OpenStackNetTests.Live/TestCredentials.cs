@@ -15,6 +15,9 @@
         [JsonProperty("description", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _description;
 
+        [JsonProperty("vendor", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private string _vendor;
+
         [JsonProperty("baseAddress", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _baseAddress;
 
@@ -47,6 +50,14 @@
             get
             {
                 return _description;
+            }
+        }
+
+        public string Vendor
+        {
+            get
+            {
+                return _vendor;
             }
         }
 
