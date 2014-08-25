@@ -18,6 +18,11 @@
 
     public class SimulatedIdentityService : SimulatedBaseIdentityService
     {
+        private static readonly UriTemplate _authenticateTemplate = new UriTemplate("v2.0/tokens{?params*}");
+        private static readonly UriTemplate _listExtensionsTemplate = new UriTemplate("v2.0/extensions{?params*}");
+        private static readonly UriTemplate _getExtensionTemplate = new UriTemplate("v2.0/extensions/{alias}{?params*}");
+        private static readonly UriTemplate _listTenantsTemplate = new UriTemplate("v2.0/tenants{?limit,marker,params*}");
+
         private static readonly string _username = "simulated_user";
         private static readonly string _password = "simulated_password";
         private static readonly string _tenantName = "simulated_tenant";
@@ -55,39 +60,43 @@
         {
             try
             {
-                string[] segments = context.Request.Url.Segments;
-                if (segments.Length <= 2)
+                Uri uri = RemoveTrailingSlash(context.Request.Url);
+
+                UriTemplateMatch match;
+                match = _authenticateTemplate.Match(BaseAddress, uri);
+                if (match != null)
                 {
-                    await base.ProcessRequestAsync(context, cancellationToken).ConfigureAwait(false);
+                    await AuthenticateAsync(context, cancellationToken).ConfigureAwait(false);
                     return;
                 }
 
-                if (!string.Equals(segments[1], "v2.0/", StringComparison.Ordinal))
+                match = _listExtensionsTemplate.Match(BaseAddress, uri);
+                if (match != null)
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    context.Response.Close();
+                    await ProcessListExtensionsRequestAsync(context, cancellationToken).ConfigureAwait(false);
                     return;
                 }
 
-                switch (segments[2])
+                match = _getExtensionTemplate.Match(BaseAddress, uri);
+                if (match != null)
                 {
-                case "extensions":
-                case "extensions/":
-                    await ProcessExtensionsRequestAsync(context, cancellationToken).ConfigureAwait(false);
-                    return;
+                    KeyValuePair<VariableReference, object> aliasArgument;
+                    if (match.Bindings.TryGetValue("alias", out aliasArgument))
+                    {
+                        string alias = aliasArgument.Value as string;
+                        if (!string.IsNullOrEmpty(alias))
+                        {
+                            await ProcessGetExtensionRequestAsync(context, new ExtensionAlias(alias), cancellationToken).ConfigureAwait(false);
+                            return;
+                        }
+                    }
+                }
 
-                case "tokens":
-                case "tokens/":
-                    await ProcessTokensRequestAsync(context, cancellationToken).ConfigureAwait(false);
+                match = _listTenantsTemplate.Match(BaseAddress, uri);
+                if (match != null)
+                {
+                    await ProcessListTenantsRequestAsync(context, match, cancellationToken).ConfigureAwait(false);
                     return;
-
-                case "tenants":
-                case "tenants/":
-                    await ProcessTenantsRequestAsync(context, cancellationToken).ConfigureAwait(false);
-                    return;
-
-                default:
-                    break;
                 }
 
                 await base.ProcessRequestAsync(context, cancellationToken).ConfigureAwait(false);
@@ -100,9 +109,8 @@
             }
         }
 
-        private async Task ProcessExtensionsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        private async Task ProcessListExtensionsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
-            string[] segments = context.Request.Url.Segments;
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
@@ -112,25 +120,6 @@
 
             ValidateRequest(context.Request);
 
-            switch (segments.Length)
-            {
-            case 3:
-                await ProcessListExtensionRequestAsync(context, cancellationToken);
-                return;
-
-            case 4:
-                await ProcessGetExtensionRequestAsync(context, new ExtensionAlias(segments[3].TrimEnd('/')), cancellationToken);
-                return;
-
-            default:
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Response.Close();
-                return;
-            }
-        }
-
-        private async Task ProcessListExtensionRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
-        {
             context.Response.ContentType = "application/json";
 
             byte[] buffer = Encoding.UTF8.GetBytes(IdentityServiceResources.ListExtensionsResponse);
@@ -140,6 +129,15 @@
 
         private async Task ProcessGetExtensionRequestAsync(HttpListenerContext context, ExtensionAlias alias, CancellationToken cancellationToken)
         {
+            if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                context.Response.Close();
+                return;
+            }
+
+            ValidateRequest(context.Request);
+
             JObject allExtensions = JsonConvert.DeserializeObject<JObject>(IdentityServiceResources.ListExtensionsResponse);
             Extension[] extensions = allExtensions["extensions"]["values"].ToObject<Extension[]>();
             Extension extension = extensions.FirstOrDefault(i => i.Alias.Equals(alias));
@@ -159,16 +157,8 @@
             context.Response.Close();
         }
 
-        private async Task ProcessTenantsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        private async Task ProcessListTenantsRequestAsync(HttpListenerContext context, UriTemplateMatch match, CancellationToken cancellationToken)
         {
-            string[] segments = context.Request.Url.Segments;
-            if (segments.Length != 3)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Response.Close();
-                return;
-            }
-
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
@@ -178,18 +168,10 @@
 
             ValidateAuthenticatedRequest(context.Request);
 
-            if (!string.IsNullOrEmpty(context.Request.Url.Query))
-            {
-                UriTemplate queryTemplate = new UriTemplate("{?marker,limit,ignored*}");
-                UriTemplateMatch match = queryTemplate.Match(new Uri(context.Request.Url.Query, UriKind.RelativeOrAbsolute));
-                if (match != null)
-                {
-                    if (match.Bindings.ContainsKey("marker"))
-                        throw new NotImplementedException();
-                    if (match.Bindings.ContainsKey("limit"))
-                        throw new NotImplementedException();
-                }
-            }
+            if (match.Bindings.ContainsKey("marker"))
+                throw new NotImplementedException();
+            if (match.Bindings.ContainsKey("limit"))
+                throw new NotImplementedException();
 
             string responseBody = IdentityServiceResources.ListTenantsResponseTemplate;
 
@@ -206,16 +188,8 @@
             context.Response.Close();
         }
 
-        private async Task ProcessTokensRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        private async Task AuthenticateAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
-            string[] segments = context.Request.Url.Segments;
-            if (segments.Length != 3)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Response.Close();
-                return;
-            }
-
             if (!string.Equals("POST", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
@@ -234,11 +208,6 @@
 
             ValidateRequest(context.Request);
 
-            await AuthenticateAsync(context, cancellationToken).ConfigureAwait(false);
-        }
-
-        private async Task AuthenticateAsync(HttpListenerContext context, CancellationToken cancellationToken)
-        {
             StreamReader reader = new StreamReader(context.Request.InputStream, Encoding.UTF8);
             AuthenticationRequest authenticationRequest = JsonConvert.DeserializeObject<AuthenticationRequest>(await reader.ReadToEndAsync().ConfigureAwait(false));
             if (authenticationRequest == null)

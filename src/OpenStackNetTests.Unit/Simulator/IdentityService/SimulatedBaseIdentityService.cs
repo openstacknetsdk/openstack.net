@@ -1,6 +1,7 @@
 ﻿namespace OpenStackNetTests.Unit.Simulator.IdentityService
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
@@ -11,15 +12,34 @@
     using Newtonsoft.Json.Linq;
     using OpenStack.Net;
     using OpenStack.Services.Identity;
+    using Rackspace.Net;
 
     public class SimulatedBaseIdentityService : IDisposable
     {
+        private static readonly UriTemplate _listApiVersionsTemplate = new UriTemplate("{?params*}");
+        private static readonly UriTemplate _getApiVersionTemplate = new UriTemplate("{version}{?params*}");
+
         private readonly HttpListener _listener;
 
         public SimulatedBaseIdentityService(int port)
         {
             _listener = new HttpListener();
             _listener.Prefixes.Add(string.Format("http://localhost:{0}/", port));
+        }
+
+        public Uri BaseAddress
+        {
+            get
+            {
+                return new Uri(_listener.Prefixes.Single());
+            }
+        }
+
+        protected static Uri RemoveTrailingSlash(Uri uri)
+        {
+            UriBuilder builder = new UriBuilder(uri);
+            builder.Path = builder.Path.TrimEnd('/');
+            return builder.Uri;
         }
 
         public void Dispose()
@@ -56,21 +76,33 @@
         {
             try
             {
-                string[] segments = context.Request.Url.Segments;
-                switch (segments.Length)
+                Uri uri = RemoveTrailingSlash(context.Request.Url);
+
+                UriTemplateMatch match;
+                match = _listApiVersionsTemplate.Match(BaseAddress, uri);
+                if (match != null)
                 {
-                case 1:
-                    await ListApiVersionsAsync(context, cancellationToken);
-                    break;
-
-                case 2:
-                    await GetApiVersionAsync(context, new ApiVersionId(segments[1].TrimEnd('/')), cancellationToken);
-                    break;
-
-                default:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    throw new NotImplementedException();
+                    await ListApiVersionsAsync(context, cancellationToken).ConfigureAwait(false);
+                    return;
                 }
+
+                match = _getApiVersionTemplate.Match(BaseAddress, uri);
+                if (match != null)
+                {
+                    KeyValuePair<VariableReference, object> versionParameter;
+                    if (match.Bindings.TryGetValue("version", out versionParameter))
+                    {
+                        string version = versionParameter.Value as string;
+                        if (!string.IsNullOrEmpty(version))
+                        {
+                            await GetApiVersionAsync(context, new ApiVersionId(version), cancellationToken).ConfigureAwait(false);
+                            return;
+                        }
+                    }
+                }
+
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.Close();
             }
             catch
             {
