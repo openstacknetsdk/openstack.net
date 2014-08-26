@@ -118,13 +118,13 @@
         /// Add a query parameter with the specified name and value to a URI.
         /// </summary>
         /// <remarks>
-        /// This method always adds a new query parameter to the end of the query string, even
+        /// <para>This method always adds a new query parameter to the end of the query string, even
         /// if the URI already contains one or more query parameters with the specified parameter
-        /// name.
+        /// name.</para>
         ///
         /// <note>
-        /// If necessary, characters in the <paramref name="parameter"/> name are percent-encoded
-        /// to conform to the requirements of a <c>varname</c> defined by RFC 6570.
+        /// <para>If necessary, characters in the <paramref name="parameter"/> name are percent-encoded
+        /// to conform to the requirements of a <c>varname</c> defined by RFC 6570.</para>
         /// </note>
         /// </remarks>
         /// <param name="uri">The URI to add a query parameter to.</param>
@@ -132,7 +132,7 @@
         /// <param name="value">The value of the query parameter.</param>
         /// <returns>A <see cref="Uri"/> representing the input <paramref name="uri"/> with the specified query parameter added to the end of the query string.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="uri"/> is <see langword="null"/>.
+        /// <para>If <paramref name="uri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="parameter"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
@@ -202,8 +202,8 @@
         /// as appropriate.
         /// </summary>
         /// <remarks>
-        /// This method is a convenience method for calling <see cref="RemoveQueryParameter"/> followed
-        /// by <see cref="AddQueryParameter"/>.
+        /// <para>This method is a convenience method for calling <see cref="RemoveQueryParameter"/> followed
+        /// by <see cref="AddQueryParameter"/>.</para>
         /// </remarks>
         /// <param name="uri">The URI to add a query parameter to.</param>
         /// <param name="parameter">The name of the query parameter to add or update.</param>
@@ -214,7 +214,7 @@
         /// with the specified name and value added to the query string.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="uri"/> is <see langword="null"/>.
+        /// <para>If <paramref name="uri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="parameter"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
@@ -230,14 +230,14 @@
         /// Remove all query parameters matching a particular parameter name from a URI.
         /// </summary>
         /// <remarks>
-        /// This method handles percent-encoded octets as UTF-8 encoded characters in both the
-        /// <paramref name="parameter"/> argument and the query string.
+        /// <para>This method handles percent-encoded octets as UTF-8 encoded characters in both the
+        /// <paramref name="parameter"/> argument and the query string.</para>
         /// </remarks>
         /// <param name="uri">The URI.</param>
         /// <param name="parameter">The name of the parameter to remove.</param>
         /// <returns>A <see cref="Uri"/> representing the input <paramref name="uri"/> with all query parameters with a name matching <paramref name="parameter"/> removed from the query string.</returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="uri"/> is <see langword="null"/>.
+        /// <para>If <paramref name="uri"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="parameter"/> is <see langword="null"/>.</para>
         /// </exception>
@@ -303,8 +303,8 @@
         /// then evaluating the result using the default <see cref="Encoding.UTF8"/> encoding.
         /// </summary>
         /// <remarks>
-        /// This method calls <see cref="UriDecode(string, Encoding)"/> using the default
-        /// <see cref="Encoding.UTF8"/> encoding.
+        /// <para>This method calls <see cref="UriDecode(string, Encoding)"/> using the default
+        /// <see cref="Encoding.UTF8"/> encoding.</para>
         /// </remarks>
         /// <param name="text">The encoded URI.</param>
         /// <returns>The decoded URI text.</returns>
@@ -343,8 +343,8 @@
         /// Encodes text for inclusion in a URI using the <see cref="Encoding.UTF8"/> encoding.
         /// </summary>
         /// <remarks>
-        /// This method calls <see cref="UriEncode(string, UriPart, Encoding)"/> using the default
-        /// <see cref="Encoding.UTF8"/> encoding.
+        /// <para>This method calls <see cref="UriEncode(string, UriPart, Encoding)"/> using the default
+        /// <see cref="Encoding.UTF8"/> encoding.</para>
         /// </remarks>
         /// <param name="text">The text to encode for inclusion in a URI.</param>
         /// <param name="uriPart">A <see cref="UriPart"/> value indicating where in the URI the specified text will be included.</param>
