@@ -149,12 +149,14 @@ namespace OpenStack.Services.ObjectStorage.V1
                         {
                             requestHeaders.Remove(pair.Key);
                             requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            ValidateAccountMetadataValue(true, pair.Key, pair.Value);
                         }
 
                         foreach (var pair in metadata.Metadata)
                         {
                             requestHeaders.Remove(AccountMetadata.AccountMetadataPrefix + pair.Key);
                             requestHeaders.Add(AccountMetadata.AccountMetadataPrefix + pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            ValidateAccountMetadataValue(false, pair.Key, pair.Value);
                         }
 
                         return new UpdateAccountMetadataApiCall(call);
@@ -298,12 +300,14 @@ namespace OpenStack.Services.ObjectStorage.V1
                         {
                             requestHeaders.Remove(pair.Key);
                             requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            ValidateContainerMetadataValue(true, pair.Key, pair.Value);
                         }
 
                         foreach (var pair in metadata.Metadata)
                         {
                             requestHeaders.Remove(ContainerMetadata.ContainerMetadataPrefix + pair.Key);
                             requestHeaders.Add(ContainerMetadata.ContainerMetadataPrefix + pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            ValidateContainerMetadataValue(false, pair.Key, pair.Value);
                         }
 
                         return new UpdateContainerMetadataApiCall(call);
@@ -504,13 +508,19 @@ namespace OpenStack.Services.ObjectStorage.V1
                                 {
                                     contentHeaders.Remove(pair.Key);
                                     if (!string.IsNullOrEmpty(pair.Value))
+                                    {
                                         contentHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                                        ValidateObjectMetadataValue(true, pair.Key, pair.Value);
+                                    }
                                 }
                                 else
                                 {
                                     requestHeaders.Remove(pair.Key);
                                     if (!string.IsNullOrEmpty(pair.Value))
+                                    {
                                         requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                                        ValidateObjectMetadataValue(true, pair.Key, pair.Value);
+                                    }
                                 }
 
                                 break;
@@ -524,7 +534,10 @@ namespace OpenStack.Services.ObjectStorage.V1
                             string value = pair.Value;
                             requestHeaders.Remove(key);
                             if (!string.IsNullOrEmpty(value))
+                            {
                                 requestHeaders.Add(key, StorageMetadata.EncodeHeaderValue(value));
+                                ValidateObjectMetadataValue(false, pair.Key, value);
+                            }
                         }
 
                         return new SetObjectMetadataApiCall(call);
@@ -532,6 +545,132 @@ namespace OpenStack.Services.ObjectStorage.V1
         }
 
         #endregion
+
+        /// <summary>
+        /// Validate a header or metadata item associated with an account in the Object Storage Service.
+        /// </summary>
+        /// <remarks>
+        /// <note type="implement">
+        /// <para>This method is provided in order to change the specific behavior for accounts in the Object Storage
+        /// Service. To change the common behavior for all resources, override <see cref="ValidateMetadataValue"/>
+        /// instead.</para>
+        /// </note>
+        /// <para>The default implementation simply calls <see cref="ValidateMetadataValue"/>.</para>
+        /// </remarks>
+        /// <param name="isHeader">
+        /// <para><see langword="true"/> if the value is associated with a non-metadata HTTP header.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if the value is associated with a metadata HTTP header.</para>
+        /// </param>
+        /// <param name="key">
+        /// The header or metadata key. If <paramref name="isHeader"/> is <see langword="false"/>, this value does not
+        /// contain the <see cref="AccountMetadata.AccountMetadataPrefix"/>.
+        /// </param>
+        /// <param name="value">The header or metadata value.</param>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the specified header or metadata item is not supported by the Object Storage Service.</para>
+        /// </exception>
+        protected virtual void ValidateAccountMetadataValue(bool isHeader, string key, string value)
+        {
+            ValidateMetadataValue(isHeader, key, value);
+        }
+
+        /// <summary>
+        /// Validate a header or metadata item associated with a container in the Object Storage Service.
+        /// </summary>
+        /// <remarks>
+        /// <note type="implement">
+        /// <para>This method is provided in order to change the specific behavior for containers in the Object Storage
+        /// Service. To change the common behavior for all resources, override <see cref="ValidateMetadataValue"/>
+        /// instead.</para>
+        /// </note>
+        /// <para>The default implementation simply calls <see cref="ValidateMetadataValue"/>.</para>
+        /// </remarks>
+        /// <param name="isHeader">
+        /// <para><see langword="true"/> if the value is associated with a non-metadata HTTP header.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if the value is associated with a metadata HTTP header.</para>
+        /// </param>
+        /// <param name="key">
+        /// The name of the header or metadata item. If <paramref name="isHeader"/> is <see langword="false"/>, this
+        /// value does not contain the <see cref="ContainerMetadata.ContainerMetadataPrefix"/>.
+        /// </param>
+        /// <param name="value">The header or metadata value.</param>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the specified header or metadata item is not supported by the Object Storage Service.</para>
+        /// </exception>
+        protected virtual void ValidateContainerMetadataValue(bool isHeader, string key, string value)
+        {
+            ValidateMetadataValue(isHeader, key, value);
+        }
+
+        /// <summary>
+        /// Validate a header or metadata item associated with an object in the Object Storage Service.
+        /// </summary>
+        /// <remarks>
+        /// <note type="implement">
+        /// <para>This method is provided in order to change the specific behavior for objects in the Object Storage
+        /// Service. To change the common behavior for all resources, override <see cref="ValidateMetadataValue"/>
+        /// instead.</para>
+        /// </note>
+        /// <para>The default implementation simply calls <see cref="ValidateMetadataValue"/>.</para>
+        /// </remarks>
+        /// <param name="isHeader">
+        /// <para><see langword="true"/> if the value is associated with a non-metadata HTTP header.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if the value is associated with a metadata HTTP header.</para>
+        /// </param>
+        /// <param name="key">
+        /// The name of the header or metadata item. If <paramref name="isHeader"/> is <see langword="false"/>, this
+        /// value does not contain the <see cref="ObjectMetadata.ObjectMetadataPrefix"/>.
+        /// </param>
+        /// <param name="value">The header or metadata value.</param>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the specified header or metadata item is not supported by the Object Storage Service.</para>
+        /// </exception>
+        protected virtual void ValidateObjectMetadataValue(bool isHeader, string key, string value)
+        {
+            ValidateMetadataValue(isHeader, key, value);
+        }
+
+        /// <summary>
+        /// Validate a header or metadata item associated with a resource in the Object Storage Service.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method is called <em>after</em> verifying that the metadata key and value are valid according to
+        /// the HTTP/1.1 specification. It provides support for additional restrictions which are imposed by a
+        /// particular vendor's deployment of the Object Storage Service. The default implementation returns
+        /// <see langword="false"/> for any <paramref name="key"/> which contains an underscore (<c>_</c>), since the
+        /// default OpenStack Object Storage Service does not allow a header or metadata key to contain that
+        /// character.</para>
+        /// <note type="implement">
+        /// <para>This method is called by the default implementations of <see cref="ValidateAccountMetadataValue"/>,
+        /// <see cref="ValidateContainerMetadataValue"/>, and <see cref="ValidateObjectMetadataValue"/>. Override this
+        /// method to change the common behavior shared by of each of those methods.</para>
+        /// </note>
+        /// </remarks>
+        /// <param name="isHeader">
+        /// <para><see langword="true"/> if the value is associated with a non-metadata HTTP header.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if the value is associated with a metadata HTTP header.</para>
+        /// </param>
+        /// <param name="key">
+        /// The header or metadata key. If <paramref name="isHeader"/> is <see langword="false"/>, this value does not
+        /// contain the metadata prefix for the associated resource.
+        /// </param>
+        /// <param name="value">The header or metadata value for an account, container, or object in the Object Storage
+        /// Service.</param>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the specified header or metadata item is not supported by the Object Storage Service.</para>
+        /// </exception>
+        protected virtual void ValidateMetadataValue(bool isHeader, string key, string value)
+        {
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            if (key.IndexOf('_') >= 0)
+                throw new NotSupportedException("Metadata keys in the Object Storage Service cannot contain an underscore");
+        }
 
         /// <inheritdoc/>
         /// <remarks>

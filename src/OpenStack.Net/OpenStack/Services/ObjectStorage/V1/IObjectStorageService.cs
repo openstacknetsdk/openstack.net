@@ -82,6 +82,14 @@
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="metadata"/> is <see langword="null"/>.
         /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
+        /// </exception>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>
@@ -199,6 +207,14 @@
         /// <para>If <paramref name="container"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
         /// </exception>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
@@ -370,6 +386,14 @@
         /// <para>If <paramref name="object"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
         /// </exception>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.

@@ -127,6 +127,14 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
+        /// </exception>
         /// <exception cref="HttpWebException">If an HTTP API call failed during the operation.</exception>
         /// <seealso cref="UpdateAccountMetadataApiCall"/>
         /// <seealso cref="IObjectStorageService.PrepareUpdateAccountMetadataAsync"/>
@@ -309,6 +317,14 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <para>If <paramref name="container"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
         /// </exception>
         /// <exception cref="HttpWebException">If an HTTP API call failed during the operation.</exception>
         /// <seealso cref="UpdateContainerMetadataApiCall"/>
@@ -637,6 +653,14 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
+        /// </exception>
         /// <exception cref="HttpWebException">If an HTTP API call failed during the operation.</exception>
         /// <seealso cref="SetObjectMetadataApiCall"/>
         /// <seealso cref="IObjectStorageService.PrepareSetObjectMetadataAsync"/>
@@ -692,6 +716,14 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <para>If <paramref name="object"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <para>If <paramref name="metadata"/> contains any headers or metadata keys which are not a valid
+        /// <c>token</c> according to the HTTP/1.1 specification.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If <paramref name="metadata"/> contains any keys or values which are not supported by the Object
+        /// Storage Service.</para>
         /// </exception>
         /// <exception cref="HttpWebException">If an HTTP API call failed during the operation.</exception>
         /// <seealso cref="ObjectStorageServiceExtensions.GetObjectMetadataAsync"/>
