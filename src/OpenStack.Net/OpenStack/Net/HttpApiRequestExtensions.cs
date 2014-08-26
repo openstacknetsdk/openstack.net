@@ -47,24 +47,27 @@
         /// <see langword="async/await"/> are not used for the preparation of the HTTP API request.</para>
         /// </remarks>
         /// <typeparam name="T">The specific type of HTTP API request.</typeparam>
-        /// <param name="apiRequest">A <see cref="Task"/> representing the asynchronous operation to prepare the HTTP
-        /// API request.</param>
+        /// <param name="apiRequestTask">A <see cref="Task"/> representing the asynchronous operation to prepare the
+        /// HTTP API request.</param>
         /// <param name="uri">The URI to use for the request.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation. When the task completes successfully,
         /// the <see cref="Task{TResult}.Result"/> property contains the result of the input task
-        /// <paramref name="apiRequest"/>, which was modified according to the specified
+        /// <paramref name="apiRequestTask"/>, which was modified according to the specified
         /// <paramref name="uri"/>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <para>If <paramref name="apiRequest"/> is <see langword="null"/>.</para>
+        /// <para>If <paramref name="apiRequestTask"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="uri"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ObjectDisposedException">If the HTTP API request has been disposed.</exception>
         /// <exception cref="InvalidOperationException">If the HTTP API request has already been sent.</exception>
-        public static Task<T> WithUri<T>(this Task<T> apiRequest, Uri uri)
+        public static Task<T> WithUri<T>(this Task<T> apiRequestTask, Uri uri)
             where T : IHttpApiRequest
         {
-            return apiRequest.Select(task => task.Result.WithUri(uri));
+            if (apiRequestTask == null)
+                throw new ArgumentNullException("apiRequestTask");
+
+            return apiRequestTask.Select(task => task.Result.WithUri(uri));
         }
     }
 }
