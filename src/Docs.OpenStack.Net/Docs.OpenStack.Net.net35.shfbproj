@@ -141,13 +141,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
-    <None Include="Content\Authentication\Authentication.aml" />
-    <None Include="Content\Authentication\HPAuthentication.aml" />
-    <None Include="Content\Authentication\OpenStackAuthentication.aml" />
-    <None Include="Content\Authentication\RackspaceAuthentication.aml" />
     <None Include="Content\BreakingChangesPolicy.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
+    <None Include="Content\UserGuide\Authentication\Authentication.aml" />
+    <None Include="Content\UserGuide\Authentication\HPAuthentication.aml" />
+    <None Include="Content\UserGuide\Authentication\OpenStackAuthentication.aml" />
+    <None Include="Content\UserGuide\Authentication\RackspaceAuthentication.aml" />
     <None Include="Content\UserGuide\UserGuide.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
@@ -156,8 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content" />
-    <Folder Include="Content\Authentication\" />
     <Folder Include="Content\UserGuide\" />
+    <Folder Include="Content\UserGuide\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Tokens Include="SharedTokens.tokens" />
