@@ -4,23 +4,33 @@
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using OpenStack.Collections;
-    using OpenStack.Net;
     using OpenStack.Security.Authentication;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
+    using Rackspace.Security.Authentication;
     using Rackspace.Services.Identity.V2;
 
     [TestClass]
     public class IdentityV2Tests
     {
         private LiveTestConfiguration _configuration;
+
+        internal TestCredentials Credentials
+        {
+            get
+            {
+                if (_configuration == null)
+                    return null;
+
+                return _configuration.TryGetSelectedCredentials();
+            }
+        }
 
         protected Uri BaseAddress
         {
@@ -379,30 +389,64 @@
             return timeSpan;
         }
 
-        protected IIdentityService CreateService()
+        internal static IIdentityService CreateService(TestCredentials credentials)
         {
+            if (credentials == null)
+                throw new ArgumentNullException("credentials");
+
             IdentityClient client;
-            switch (Vendor)
+            switch (credentials.Vendor)
             {
             case "HP":
                 // currently HP does not have a vendor-specific IIdentityService
                 goto default;
 
             case "Rackspace":
-                client = new RackspaceIdentityClient(BaseAddress);
+                client = new RackspaceIdentityClient(credentials.BaseAddress);
                 break;
 
             case "OpenStack":
             default:
-                client = new IdentityClient(BaseAddress);
+                client = new IdentityClient(credentials.BaseAddress);
                 break;
             }
 
-            TestProxy.ConfigureService(client, Proxy);
+            TestProxy.ConfigureService(client, credentials.Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 
             return client;
+        }
+
+        internal static IAuthenticationService CreateAuthenticationService(TestCredentials credentials)
+        {
+            if (credentials == null)
+                throw new ArgumentNullException("credentials");
+
+            IIdentityService identityService = CreateService(credentials);
+            IAuthenticationService authenticationService;
+            switch (credentials.Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                authenticationService = new RackspaceAuthenticationService(identityService, credentials.AuthenticationRequest);
+                break;
+
+            case "OpenStack":
+            default:
+                authenticationService = new IdentityV2AuthenticationService(identityService, credentials.AuthenticationRequest);
+                break;
+            }
+
+            return authenticationService;
+        }
+
+        protected IIdentityService CreateService()
+        {
+            return CreateService(Credentials);
         }
 
         protected IIdentityService CreateService(IAuthenticationService authenticationService)
