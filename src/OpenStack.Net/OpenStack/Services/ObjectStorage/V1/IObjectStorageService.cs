@@ -16,7 +16,7 @@
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">OpenStack Object Storage API V1 Reference</seealso>
     /// <preliminary/>
-    public interface IObjectStorageService : IHttpService
+    public interface IObjectStorageService : IHttpService, IExtensibleService<IObjectStorageService>
     {
         #region Discoverability
 

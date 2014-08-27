@@ -187,6 +187,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectMetadata.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectName.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageClient.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\RemoveContainerApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\RemoveObjectApiCall.cs" />

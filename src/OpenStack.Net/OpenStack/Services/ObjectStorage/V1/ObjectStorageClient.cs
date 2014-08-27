@@ -544,6 +544,15 @@ namespace OpenStack.Services.ObjectStorage.V1
                     });
         }
 
+        /// <inheritdoc/>
+        public virtual TExtension GetServiceExtension<TExtension>(ServiceExtensionDefinition<IObjectStorageService, TExtension> definition)
+        {
+            if (definition == null)
+                throw new ArgumentNullException("definition");
+
+            return definition.CreateDefaultInstance(this, this);
+        }
+
         #endregion
 
         /// <summary>
