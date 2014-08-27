@@ -21,6 +21,9 @@
         [JsonProperty("baseAddress", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _baseAddress;
 
+        [JsonProperty("defaultRegion", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private string _defaultRegion;
+
         [JsonProperty("authRequest", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private AuthenticationRequest _authRequest;
 
@@ -69,6 +72,14 @@
                     return null;
 
                 return new Uri(_baseAddress);
+            }
+        }
+
+        public string DefaultRegion
+        {
+            get
+            {
+                return _defaultRegion;
             }
         }
 

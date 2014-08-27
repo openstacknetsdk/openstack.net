@@ -7,6 +7,7 @@
             "description": "Valid TryStack credentials with the tenant specified by name",
             "vendor": "OpenStack",
             "baseAddress": "http://x86.trystack.org:5000",
+            "defaultRegion": "RegionOne",
             "authRequest": {
                 "auth": {
                     "tenantName": "facebook0000000",
