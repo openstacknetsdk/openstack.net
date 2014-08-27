@@ -46,6 +46,33 @@
             _progress = progress;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressStream"/> class from
+        /// the specified <see cref="Stream"/> and <see cref="IProgress{T}"/> handler.
+        /// </summary>
+        /// <param name="underlyingStream">The stream to wrap.</param>
+        /// <param name="progress">The handler to report progress updates to.</param>
+        /// <param name="ownsStream">
+        /// <para><see langword="true"/> if this object owns the wrapped stream, and should dispose
+        /// of it when this instance is closed or disposed.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if this object should not dispose of the wrapped stream.</para>
+        /// <para>The default value is <see langword="true"/>.</para>
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="underlyingStream"/> is <see langword="null"/>.
+        /// <para>-or-</para>
+        /// <para>If <paramref name="progress"/> is <see langword="null"/>.</para>
+        /// </exception>
+        public ProgressStream(Stream underlyingStream, IProgress<long> progress, bool ownsStream)
+            : base(underlyingStream, ownsStream)
+        {
+            if (progress == null)
+                throw new ArgumentNullException("progress");
+
+            _progress = progress;
+        }
+
         /// <inheritdoc/>
         public override long Position
         {

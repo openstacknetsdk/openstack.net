@@ -16,7 +16,16 @@
     /// <preliminary/>
     public class DelegatingStream : Stream
     {
+        /// <summary>
+        /// This is the backing field for the <see cref="UnderlyingStream"/> property.
+        /// </summary>
         private readonly Stream _underlyingStream;
+
+        /// <summary>
+        /// Indicates whether this instance owns the underlying stream, and thus dispose of the stream when this
+        /// instance is closed or disposed.
+        /// </summary>
+        private readonly bool _ownsStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegatingStream"/> class from the specified
@@ -27,11 +36,32 @@
         /// If <paramref name="underlyingStream"/> is <see langword="null"/>.
         /// </exception>
         public DelegatingStream(Stream underlyingStream)
+            : this(underlyingStream, true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DelegatingStream"/> class from the specified
+        /// <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="underlyingStream">The stream to wrap.</param>
+        /// <param name="ownsStream">
+        /// <para><see langword="true"/> if this object owns the wrapped stream, and should dispose
+        /// of it when this instance is closed or disposed.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if this object should not dispose of the wrapped stream.</para>
+        /// <para>The default value is <see langword="true"/>.</para>
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="underlyingStream"/> is <see langword="null"/>.
+        /// </exception>
+        public DelegatingStream(Stream underlyingStream, bool ownsStream)
         {
             if (underlyingStream == null)
                 throw new ArgumentNullException("underlyingStream");
 
             _underlyingStream = underlyingStream;
+            _ownsStream = ownsStream;
         }
 
         /// <inheritdoc/>
@@ -177,7 +207,8 @@
         /// <inheritdoc/>
         public override void Close()
         {
-            _underlyingStream.Close();
+            if (_ownsStream)
+                _underlyingStream.Close();
         }
 
         /// <inheritdoc/>
@@ -238,7 +269,7 @@
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && _ownsStream)
                 _underlyingStream.Dispose();
 
             base.Dispose(disposing);
