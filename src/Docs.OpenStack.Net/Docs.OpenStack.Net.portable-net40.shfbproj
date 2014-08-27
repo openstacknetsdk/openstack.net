@@ -127,6 +127,7 @@
   <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
     <None Include="Content\BreakingChangesPolicy.aml" />
+    <None Include="Content\Extensibility\Extensibility.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
     <None Include="Content\UserGuide\Authentication\Authentication.aml" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content" />
+    <Folder Include="Content\Extensibility\" />
     <Folder Include="Content\UserGuide\" />
     <Folder Include="Content\UserGuide\Authentication\" />
   </ItemGroup>

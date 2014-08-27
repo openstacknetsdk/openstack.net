@@ -23,5 +23,6 @@
       <Topic id="182a1c50-9b73-4d72-abe3-b3578caedfa6" visible="True" title="HP Authentication" />
       <Topic id="9135e7f8-b287-44ca-9faf-802a50dbad1a" visible="True" title="Rackspace Authentication" />
     </Topic>
+    <Topic id="cf9b20de-b869-456b-9528-401ac4c0859b" visible="True" title="Extensibility" />
   </Topic>
 </Topics>
