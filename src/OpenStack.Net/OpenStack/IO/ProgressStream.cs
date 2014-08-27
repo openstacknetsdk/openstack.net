@@ -1,7 +1,6 @@
 ﻿namespace OpenStack.IO
 {
     using System;
-    using System.Threading.Tasks;
     using SeekOrigin = System.IO.SeekOrigin;
     using Stream = System.IO.Stream;
 
@@ -13,6 +12,7 @@
 #if NET45PLUS
     // Uses CoreTaskExtensions.Select
     using Rackspace.Threading;
+    using System.Threading.Tasks;
     using CancellationToken = System.Threading.CancellationToken;
 #endif
 
@@ -22,9 +22,8 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    public class ProgressStream : Stream
+    public class ProgressStream : DelegatingStream
     {
-        private readonly Stream _underlyingStream;
         private readonly IProgress<long> _progress;
 
         /// <summary>
@@ -34,64 +33,17 @@
         /// <param name="underlyingStream">The stream to wrap.</param>
         /// <param name="progress">The handler to report progress updates to.</param>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="underlyingStream"/> is <see langword="null"/>.
+        /// <para>If <paramref name="underlyingStream"/> is <see langword="null"/>.</para>
         /// <para>-or-</para>
         /// <para>If <paramref name="progress"/> is <see langword="null"/>.</para>
         /// </exception>
         public ProgressStream(Stream underlyingStream, IProgress<long> progress)
+            : base(underlyingStream)
         {
-            if (underlyingStream == null)
-                throw new ArgumentNullException("underlyingStream");
             if (progress == null)
                 throw new ArgumentNullException("progress");
 
-            _underlyingStream = underlyingStream;
             _progress = progress;
-        }
-
-        /// <inheritdoc/>
-        public override bool CanRead
-        {
-            get
-            {
-                return _underlyingStream.CanRead;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override bool CanSeek
-        {
-            get
-            {
-                return _underlyingStream.CanSeek;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override bool CanTimeout
-        {
-            get
-            {
-                return _underlyingStream.CanTimeout;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override bool CanWrite
-        {
-            get
-            {
-                return _underlyingStream.CanWrite;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override long Length
-        {
-            get
-            {
-                return _underlyingStream.Length;
-            }
         }
 
         /// <inheritdoc/>
@@ -99,41 +51,13 @@
         {
             get
             {
-                return _underlyingStream.Position;
+                return base.Position;
             }
 
             set
             {
-                _underlyingStream.Position = value;
+                base.Position = value;
                 _progress.Report(Position);
-            }
-        }
-
-        /// <inheritdoc/>
-        public override int ReadTimeout
-        {
-            get
-            {
-                return _underlyingStream.ReadTimeout;
-            }
-
-            set
-            {
-                _underlyingStream.ReadTimeout = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override int WriteTimeout
-        {
-            get
-            {
-                return _underlyingStream.WriteTimeout;
-            }
-
-            set
-            {
-                _underlyingStream.WriteTimeout = value;
             }
         }
 
@@ -142,7 +66,7 @@
         public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
         {
             return
-                _underlyingStream.CopyToAsync(destination, bufferSize, cancellationToken)
+                base.CopyToAsync(destination, bufferSize, cancellationToken)
                 .Select(task => _progress.Report(Position));
         }
 
@@ -150,7 +74,7 @@
         public override Task FlushAsync(CancellationToken cancellationToken)
         {
             return
-                _underlyingStream.FlushAsync(cancellationToken)
+                base.FlushAsync(cancellationToken)
                 .Select(task => _progress.Report(Position));
         }
 
@@ -158,7 +82,7 @@
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return
-                _underlyingStream.ReadAsync(buffer, offset, count, cancellationToken)
+                base.ReadAsync(buffer, offset, count, cancellationToken)
                 .Select(
                     task =>
                     {
@@ -171,34 +95,16 @@
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return
-                _underlyingStream.WriteAsync(buffer, offset, count, cancellationToken)
+                base.WriteAsync(buffer, offset, count, cancellationToken)
                 .Select(task => _progress.Report(Position));
         }
 #endif
 
 #if !PORTABLE
         /// <inheritdoc/>
-        public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
-        {
-            return _underlyingStream.BeginRead(buffer, offset, count, callback, state);
-        }
-
-        /// <inheritdoc/>
-        public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
-        {
-            return _underlyingStream.BeginWrite(buffer, offset, count, callback, state);
-        }
-
-        /// <inheritdoc/>
-        public override void Close()
-        {
-            _underlyingStream.Close();
-        }
-
-        /// <inheritdoc/>
         public override int EndRead(IAsyncResult asyncResult)
         {
-            int result = _underlyingStream.EndRead(asyncResult);
+            int result = base.EndRead(asyncResult);
             _progress.Report(Position);
             return result;
         }
@@ -206,21 +112,15 @@
         /// <inheritdoc/>
         public override void EndWrite(IAsyncResult asyncResult)
         {
-            _underlyingStream.EndWrite(asyncResult);
+            base.EndWrite(asyncResult);
             _progress.Report(Position);
         }
 #endif
 
         /// <inheritdoc/>
-        public override void Flush()
-        {
-            _underlyingStream.Flush();
-        }
-
-        /// <inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int result = _underlyingStream.Read(buffer, offset, count);
+            int result = base.Read(buffer, offset, count);
             _progress.Report(Position);
             return result;
         }
@@ -228,7 +128,7 @@
         /// <inheritdoc/>
         public override int ReadByte()
         {
-            int result = _underlyingStream.ReadByte();
+            int result = base.ReadByte();
             _progress.Report(Position);
             return result;
         }
@@ -236,38 +136,23 @@
         /// <inheritdoc/>
         public override long Seek(long offset, SeekOrigin origin)
         {
-            long result = _underlyingStream.Seek(offset, origin);
+            long result = base.Seek(offset, origin);
             _progress.Report(result);
             return result;
         }
 
         /// <inheritdoc/>
-        public override void SetLength(long value)
-        {
-            _underlyingStream.SetLength(value);
-        }
-
-        /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            _underlyingStream.Write(buffer, offset, count);
+            base.Write(buffer, offset, count);
             _progress.Report(Position);
         }
 
         /// <inheritdoc/>
         public override void WriteByte(byte value)
         {
-            _underlyingStream.WriteByte(value);
+            base.WriteByte(value);
             _progress.Report(Position);
-        }
-
-        /// <inheritdoc/>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                _underlyingStream.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }
