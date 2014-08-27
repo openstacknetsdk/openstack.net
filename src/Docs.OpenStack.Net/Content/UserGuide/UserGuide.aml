@@ -194,6 +194,11 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>T:OpenStack.Services.Identity.IBaseIdentityService</codeEntityReference>
+              </para>
+              <para>
+                <codeEntityReference>T:OpenStack.Services.Identity.V2.IIdentityService</codeEntityReference> (OpenStack
+                Identity Service v2.0)
               </para>
             </entry>
           </row>
@@ -204,6 +209,15 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>T:OpenStack.Services.Identity.BaseIdentityClient</codeEntityReference>
+              </para>
+              <para>
+                <codeEntityReference>T:OpenStack.Services.Identity.V2.IdentityClient</codeEntityReference> (OpenStack
+                Identity Service v2.0)
+              </para>
+              <para>
+                <codeEntityReference>T:Rackspace.Services.Identity.V2.RackspaceIdentityClient</codeEntityReference>
+                (Rackspace Cloud Identity)
               </para>
             </entry>
           </row>
@@ -214,6 +228,14 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>N:OpenStack.Services.Identity</codeEntityReference>
+              </para>
+              <para>
+                <codeEntityReference>N:OpenStack.Services.Identity.V2</codeEntityReference> (OpenStack Identity Service
+                v2.0)
+              </para>
+              <para>
+                <codeEntityReference>N:Rackspace.Services.Identity.V2</codeEntityReference> (Rackspace Cloud Identity)
               </para>
             </entry>
           </row>
