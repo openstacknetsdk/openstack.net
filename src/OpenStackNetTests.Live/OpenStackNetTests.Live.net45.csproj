@@ -60,6 +60,7 @@
     <Compile Include="BaseIdentityTests.cs" />
     <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="LiveTestConfiguration.cs" />
+    <Compile Include="TestCategories.cs" />
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

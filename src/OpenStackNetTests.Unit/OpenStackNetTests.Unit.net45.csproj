@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Simulator\IdentityService\SimulatedBaseIdentityService.cs" />
     <Compile Include="Simulator\IdentityService\V2\SimulatedIdentityService.cs" />
+    <Compile Include="TestCategories.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenStack.Net\OpenStack.Net.net45.csproj">

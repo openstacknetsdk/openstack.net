@@ -79,6 +79,8 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
         public async Task TestListApiVersions()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -130,6 +132,8 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
         public async Task TestListApiVersionsSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -149,6 +153,8 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
         public async Task TestGetApiVersion2()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
