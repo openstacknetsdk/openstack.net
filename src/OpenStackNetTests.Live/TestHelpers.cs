@@ -10,8 +10,17 @@ namespace OpenStackNetTests.Live
 
     internal static class TestHelpers
     {
+        public static bool SuppressOutput
+        {
+            get;
+            set;
+        }
+
         public static void HandleBeforeAsyncWebRequest(object sender, HttpRequestEventArgs e)
         {
+            if (SuppressOutput)
+                return;
+
             HttpRequestMessage request = e.Request;
 
             Console.Error.WriteLine("{0} (Request) {1} {2}", DateTime.Now, e.Request.Method, e.Request.RequestUri);
@@ -41,6 +50,9 @@ namespace OpenStackNetTests.Live
 
         public static void HandleAfterAsyncWebResponse(object sender, HttpResponseEventArgs e)
         {
+            if (SuppressOutput)
+                return;
+
             if (e.Response.Status == TaskStatus.RanToCompletion)
             {
                 Console.Error.WriteLine("{0} (Result {1})", DateTime.Now, e.Response.Result.StatusCode);
