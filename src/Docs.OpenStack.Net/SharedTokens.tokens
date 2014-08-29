@@ -35,8 +35,7 @@
   <item id="OpenStackNotDefined">
     <note type="warning">
       <para>
-        The value of this property is not defined by OpenStack, and may differ in meaning across
-        vendors.
+        The value of this property is not defined by OpenStack, and may not be consistent across vendors.
       </para>
     </note>
   </item>
