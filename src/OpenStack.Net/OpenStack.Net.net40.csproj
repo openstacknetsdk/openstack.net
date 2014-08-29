@@ -184,6 +184,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListObjectsApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListObjectsExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\NamespaceDoc.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\NewestExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectMetadata.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectName.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageClient.cs" />

@@ -48,6 +48,13 @@
     </para>
   </item>
 
+  <item id="ObjectStorage_XNewest_Remarks">
+    <para>
+      If <c>X-Newest</c> is set to <c>true</c>, Object Storage queries all replicas to return the most recent one.
+      If you omit this header, Object Storage responds faster after it finds one valid replica. Because setting
+      this header to <c>true</c> is more expensive for the back end, use it only when it is absolutely needed.
+    </para>
+  </item>
   <!--
     The following items can only be used in <token> elements that appear in **MAML topics**.
   -->
