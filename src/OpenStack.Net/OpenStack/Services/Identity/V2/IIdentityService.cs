@@ -20,11 +20,7 @@
         /// endpoint.
         /// </summary>
         /// <param name="cancellationToken">The <seealso cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="ListExtensionsApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>
@@ -38,11 +34,7 @@
         /// </summary>
         /// <param name="alias">The unique alias identifying the extension.</param>
         /// <param name="cancellationToken">The <seealso cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="GetExtensionApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="alias"/> is <see langword="null"/>.
         /// </exception>
@@ -64,11 +56,7 @@
         /// <param name="request">An <seealso cref="AuthenticationRequest"/> object containing the credentials to
         /// authenticate.</param>
         /// <param name="cancellationToken">The <seealso cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="AuthenticateApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>
@@ -80,11 +68,7 @@
         /// Prepare an HTTP API call to list the tenants to which an authentication token has access.
         /// </summary>
         /// <param name="cancellationToken">The <seealso cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="ListTenantsApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>

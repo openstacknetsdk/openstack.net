@@ -18,11 +18,7 @@
         /// Prepare an HTTP API call to obtain a list of API versions available at the current endpoint for a service.
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="ListApiVersionsApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="HttpWebException">
         /// If an error occurs during an HTTP request as part of preparing the API call.
         /// </exception>
@@ -37,11 +33,7 @@
         /// </summary>
         /// <param name="apiVersionId">The unique ID of the API version.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <seealso cref="Task"/> representing the asynchronous operation. When the task completes successfully, the
-        /// <see cref="Task{TResult}.Result"/> property will contain a <see cref="GetApiVersionApiCall"/> instance
-        /// describing the HTTP API call.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="apiVersionId"/> is <see langword="null"/>.
         /// </exception>

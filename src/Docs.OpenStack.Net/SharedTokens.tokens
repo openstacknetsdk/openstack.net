@@ -40,6 +40,14 @@
     </note>
   </item>
 
+  <item id="PrepareCallReturns">
+    <para>
+      A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation. When the task completes
+      successfully, the <see cref="P:System.Threading.Tasks.Task`1.Result"/> property contains the prepared API
+      call.
+    </para>
+  </item>
+
   <!--
     The following items can only be used in <token> elements that appear in **MAML topics**.
   -->
