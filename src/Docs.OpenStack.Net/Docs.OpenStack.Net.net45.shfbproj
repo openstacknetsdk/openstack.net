@@ -107,7 +107,7 @@
         <configuration>
           <currentProject label=".NET Framework" version="4.5" ripOldApis="False" />
           <versions>
-            <version label=".NET Framework" version="3.5" helpFileProject="Docs.OpenStack.Net.net35.shfbproj" />
+            <version label=".NET Framework" version="3.5" helpFileProject="Docs.OpenStack.Net.net35.shfbproj" ripOldApis="True" />
             <version label=".NET Framework" version="4.0" helpFileProject="Docs.OpenStack.Net.net40.shfbproj" />
             <version label=".NET for Windows Store apps" version="Windows 8" helpFileProject="Docs.OpenStack.Net.netcore45.shfbproj" />
             <version label="Portable Class Library" version="Portable Class Library (Legacy)" helpFileProject="Docs.OpenStack.Net.portable-net40.shfbproj" />

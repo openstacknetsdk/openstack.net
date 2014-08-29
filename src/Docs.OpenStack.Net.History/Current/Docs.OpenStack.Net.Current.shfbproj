@@ -20,7 +20,7 @@
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\OpenStack.Net\OpenStack.Net.net35.csproj" />
+      <DocumentationSource sourceFile="..\..\OpenStack.Net\OpenStack.Net.net45.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>

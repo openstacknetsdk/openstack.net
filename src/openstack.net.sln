@@ -145,7 +145,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Docs.Extra", "Docs.OpenStac
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Docs.OpenStack.Net.Current", "Docs.OpenStack.Net.History\Current\Docs.OpenStack.Net.Current.shfbproj", "{A1CB084B-0C57-4ED4-92B4-84995EFCF6E2}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F407F288-3E74-4704-9FFA-8B3597C15BA2} = {F407F288-3E74-4704-9FFA-8B3597C15BA2}
+		{4BDEC871-C683-49A5-8B93-2DD114D46B99} = {4BDEC871-C683-49A5-8B93-2DD114D46B99}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStackNetTests.Live.net45", "OpenStackNetTests.Live\OpenStackNetTests.Live.net45.csproj", "{4AEBA927-2DFB-4C24-8306-A7F9B5F8D036}"
