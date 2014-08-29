@@ -147,10 +147,12 @@
     <Compile Include="OpenStack\Services\Identity\V2\Tenant.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\Token.cs" />
     <Compile Include="OpenStack\Services\Identity\V2\User.cs" />
+    <Compile Include="OpenStack\Services\IExtensibleService`1.cs" />
     <Compile Include="OpenStack\Services\IHttpService.cs" />
     <Compile Include="OpenStack\Services\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\ServiceClient.cs" />
     <Compile Include="OpenStack\Services\ServiceExtensionDefinition`2.cs" />
+    <Compile Include="OpenStack\Services\ServiceExtension`1.cs" />
     <Compile Include="OpenStack\Threading\AsyncCompletionOption.cs" />
     <Compile Include="OpenStack\Threading\BackoffPolicy.cs" />
     <Compile Include="OpenStack\Threading\IBackoffPolicy.cs" />

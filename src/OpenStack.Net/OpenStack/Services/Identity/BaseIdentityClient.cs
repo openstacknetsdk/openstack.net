@@ -156,7 +156,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual TExtension GetServiceExtension<TExtension>(BaseIdentityServiceExtensionDefinition<TExtension> definition)
+        public virtual TExtension GetServiceExtension<TExtension>(ServiceExtensionDefinition<IBaseIdentityService, TExtension> definition)
         {
             if (definition == null)
                 throw new ArgumentNullException("definition");
