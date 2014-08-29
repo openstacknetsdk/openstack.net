@@ -149,6 +149,7 @@
     <Compile Include="OpenStack\Services\IHttpService.cs" />
     <Compile Include="OpenStack\Services\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\AccountMetadata.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ArchiveFormat.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\Container.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ContainerMetadata.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ContainerName.cs" />
@@ -156,11 +157,18 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\CopyObjectApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\CreateContainerApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\CreateObjectApiCall.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveApiCall.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveError.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveExtension.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveExtensions.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveResponse.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveSupportedApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetAccountMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetContainerMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetObjectApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetObjectMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetObjectStorageInfoApiCall.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\IExtractArchiveExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IObjectStorageService.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListContainersApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListContainersExtensions.cs" />
@@ -173,6 +181,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageClient.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ObjectStorageServiceExtensions.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\PredefinedObjectStorageExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\RemoveContainerApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\RemoveObjectApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\SetObjectMetadataApiCall.cs" />

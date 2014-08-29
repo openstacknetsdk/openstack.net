@@ -8,8 +8,12 @@
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Security.Cryptography;
     using System.Threading;
     using System.Threading.Tasks;
+    using ICSharpCode.SharpZipLib.BZip2;
+    using ICSharpCode.SharpZipLib.GZip;
+    using ICSharpCode.SharpZipLib.Tar;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json.Linq;
     using OpenStack.Collections;
@@ -18,6 +22,7 @@
     using OpenStack.Services;
     using OpenStack.Services.ObjectStorage.V1;
     using Encoding = System.Text.Encoding;
+    using File = System.IO.File;
     using MemoryStream = System.IO.MemoryStream;
     using Path = System.IO.Path;
     using Stream = System.IO.Stream;
@@ -1341,6 +1346,284 @@
                  */
                 await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
             }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestSupportsExtractArchive()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+                bool supportsExtractArchive = await service.SupportsExtractArchiveAsync(cancellationToken);
+                Assert.IsTrue(supportsExtractArchive);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public async Task TestExtractArchiveTar()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName sourceFileName = new ObjectName("DarkKnightRises.jpg");
+                byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+                using (MemoryStream outputStream = new MemoryStream())
+                {
+                    using (TarArchive archive = TarArchive.CreateOutputTarArchive(outputStream))
+                    {
+                        archive.IsStreamOwner = false;
+                        archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName.Value)).Replace('\\', '/');
+                        TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName.Value);
+                        archive.WriteEntry(entry, true);
+                        archive.Close();
+                    }
+
+                    outputStream.Flush();
+                    outputStream.Position = 0;
+                    ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.Tar, cancellationToken, null);
+                    Assert.IsNotNull(response);
+                    Assert.AreEqual(1, response.CreatedFiles);
+                    Assert.IsNotNull(response.Errors);
+                    Assert.AreEqual(0, response.Errors.Count);
+                }
+
+                using (MemoryStream downloadStream = new MemoryStream())
+                {
+                    var result = await service.GetObjectAsync(containerName, sourceFileName, cancellationToken);
+                    await result.Item2.CopyToAsync(downloadStream);
+
+                    Assert.AreEqual(content.Length, await GetContainerObjectSizeAsync(service, containerName, sourceFileName, cancellationToken));
+
+                    downloadStream.Position = 0;
+                    byte[] actualData = new byte[downloadStream.Length];
+                    downloadStream.Read(actualData, 0, actualData.Length);
+                    Assert.AreEqual(content.Length, actualData.Length);
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] contentMd5 = md5.ComputeHash(content);
+                        byte[] actualMd5 = md5.ComputeHash(actualData);
+                        Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                    }
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public async Task TestExtractArchiveTarGz()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName sourceFileName = new ObjectName("DarkKnightRises.jpg");
+                byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+                using (MemoryStream outputStream = new MemoryStream())
+                {
+                    using (GZipOutputStream gzoStream = new GZipOutputStream(outputStream))
+                    {
+                        gzoStream.IsStreamOwner = false;
+                        gzoStream.SetLevel(9);
+                        using (TarArchive archive = TarArchive.CreateOutputTarArchive(gzoStream))
+                        {
+                            archive.IsStreamOwner = false;
+                            archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName.Value)).Replace('\\', '/');
+                            TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName.Value);
+                            archive.WriteEntry(entry, true);
+                            archive.Close();
+                        }
+                    }
+
+                    outputStream.Flush();
+                    outputStream.Position = 0;
+                    ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.TarGz, cancellationToken, null);
+                    Assert.IsNotNull(response);
+                    Assert.AreEqual(1, response.CreatedFiles);
+                    Assert.IsNotNull(response.Errors);
+                    Assert.AreEqual(0, response.Errors.Count);
+                }
+
+                using (MemoryStream downloadStream = new MemoryStream())
+                {
+                    var result = await service.GetObjectAsync(containerName, sourceFileName, cancellationToken);
+                    await result.Item2.CopyToAsync(downloadStream);
+
+                    Assert.AreEqual(content.Length, await GetContainerObjectSizeAsync(service, containerName, sourceFileName, cancellationToken));
+
+                    downloadStream.Position = 0;
+                    byte[] actualData = new byte[downloadStream.Length];
+                    downloadStream.Read(actualData, 0, actualData.Length);
+                    Assert.AreEqual(content.Length, actualData.Length);
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] contentMd5 = md5.ComputeHash(content);
+                        byte[] actualMd5 = md5.ComputeHash(actualData);
+                        Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                    }
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public async Task TestExtractArchiveTarBz2()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName sourceFileName = new ObjectName("DarkKnightRises.jpg");
+                byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+                using (MemoryStream outputStream = new MemoryStream())
+                {
+                    using (BZip2OutputStream bz2Stream = new BZip2OutputStream(outputStream))
+                    {
+                        bz2Stream.IsStreamOwner = false;
+                        using (TarArchive archive = TarArchive.CreateOutputTarArchive(bz2Stream))
+                        {
+                            archive.IsStreamOwner = false;
+                            archive.RootPath = Path.GetDirectoryName(Path.GetFullPath(sourceFileName.Value)).Replace('\\', '/');
+                            TarEntry entry = TarEntry.CreateEntryFromFile(sourceFileName.Value);
+                            archive.WriteEntry(entry, true);
+                            archive.Close();
+                        }
+                    }
+
+                    outputStream.Flush();
+                    outputStream.Position = 0;
+                    ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.TarBz2, cancellationToken, null);
+                    Assert.IsNotNull(response);
+                    Assert.AreEqual(1, response.CreatedFiles);
+                    Assert.IsNotNull(response.Errors);
+                    Assert.AreEqual(0, response.Errors.Count);
+                }
+
+                using (MemoryStream downloadStream = new MemoryStream())
+                {
+                    var result = await service.GetObjectAsync(containerName, sourceFileName, cancellationToken);
+                    await result.Item2.CopyToAsync(downloadStream);
+
+                    Assert.AreEqual(content.Length, await GetContainerObjectSizeAsync(service, containerName, sourceFileName, cancellationToken));
+
+                    downloadStream.Position = 0;
+                    byte[] actualData = new byte[downloadStream.Length];
+                    downloadStream.Read(actualData, 0, actualData.Length);
+                    Assert.AreEqual(content.Length, actualData.Length);
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] contentMd5 = md5.ComputeHash(content);
+                        byte[] actualMd5 = md5.ComputeHash(actualData);
+                        Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                    }
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        [DeploymentItem("DarkKnightRises.jpg")]
+        public async Task TestExtractArchiveTarGzCreateContainer()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName sourceFileName = new ObjectName("DarkKnightRises.jpg");
+                byte[] content = File.ReadAllBytes("DarkKnightRises.jpg");
+                using (MemoryStream outputStream = new MemoryStream())
+                {
+                    using (GZipOutputStream gzoStream = new GZipOutputStream(outputStream))
+                    {
+                        gzoStream.IsStreamOwner = false;
+                        gzoStream.SetLevel(9);
+                        using (TarOutputStream tarOutputStream = new TarOutputStream(gzoStream))
+                        {
+                            tarOutputStream.IsStreamOwner = false;
+                            TarEntry entry = TarEntry.CreateTarEntry(containerName.Value + '/' + sourceFileName);
+                            entry.Size = content.Length;
+                            tarOutputStream.PutNextEntry(entry);
+                            tarOutputStream.Write(content, 0, content.Length);
+                            tarOutputStream.CloseEntry();
+                            tarOutputStream.Close();
+                        }
+                    }
+
+                    outputStream.Flush();
+                    outputStream.Position = 0;
+                    ExtractArchiveResponse response = await service.ExtractArchiveAsync(outputStream, ArchiveFormat.TarGz, cancellationToken, null);
+                    Assert.IsNotNull(response);
+                    Assert.AreEqual(1, response.CreatedFiles);
+                    Assert.IsNotNull(response.Errors);
+                    Assert.AreEqual(0, response.Errors.Count);
+                }
+
+                using (MemoryStream downloadStream = new MemoryStream())
+                {
+                    var objectData = await service.GetObjectAsync(containerName, sourceFileName, cancellationToken);
+                    await objectData.Item2.CopyToAsync(downloadStream);
+
+                    Assert.AreEqual(content.Length, await GetContainerObjectSizeAsync(service, containerName, sourceFileName, cancellationToken));
+
+                    downloadStream.Position = 0;
+                    byte[] actualData = new byte[downloadStream.Length];
+                    downloadStream.Read(actualData, 0, actualData.Length);
+                    Assert.AreEqual(content.Length, actualData.Length);
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] contentMd5 = md5.ComputeHash(content);
+                        byte[] actualMd5 = md5.ComputeHash(actualData);
+                        Assert.AreEqual(BitConverter.ToString(contentMd5), BitConverter.ToString(actualMd5));
+                    }
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        private static async Task<long> GetContainerObjectSizeAsync(IObjectStorageService service, ContainerName container, ObjectName @object, CancellationToken cancellationToken)
+        {
+            ObjectMetadata metadata = await service.GetObjectMetadataAsync(container, @object, cancellationToken);
+            return long.Parse(metadata.Headers["Content-Length"]);
         }
 
         private class ProgressMonitor : IProgress<long>
