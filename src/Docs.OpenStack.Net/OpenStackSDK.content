@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="611a098e-d337-496f-a1dd-9bf3203bc898" visible="False" isMSHVRoot="true" isSelected="true" title="openstack.net SDK">
+  <Topic id="611a098e-d337-496f-a1dd-9bf3203bc898" visible="False" isMSHVRoot="true" isSelected="true" title="OpenStack.Net SDK">
     <HelpKeywords>
-      <HelpKeyword index="K" term="openstack.net SDK" />
+      <HelpKeyword index="K" term="OpenStack.Net SDK" />
     </HelpKeywords>
   </Topic>
   <Topic id="362f6481-64dd-4f21-9e71-1d157b5dc745" visible="True" isDefault="true" title="Welcome">

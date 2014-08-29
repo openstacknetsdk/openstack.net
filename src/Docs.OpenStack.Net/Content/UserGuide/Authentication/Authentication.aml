@@ -7,13 +7,13 @@
     <summary>
       <para>
         This section describes the various authentication methods which are supported by the
-        openstack.net SDK.
+        OpenStack.Net SDK.
       </para>
     </summary>
 
     <introduction>
       <para>
-        The services provided by the openstack.net SDK require authentication with a cloud
+        The services provided by the OpenStack.Net SDK require authentication with a cloud
         services provider.
       </para>
     </introduction>
