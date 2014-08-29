@@ -75,6 +75,7 @@
     <Compile Include="OpenStack\Net\JsonHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Net\StreamingHttpApiCall.cs" />
+    <Compile Include="OpenStack\Net\TransformHttpApiCall`2.cs" />
     <Compile Include="OpenStack\Net\UriExtensions.cs" />
     <Compile Include="OpenStack\Net\UriPart.cs" />
     <Compile Include="OpenStack\Net\UriUtility.cs" />
