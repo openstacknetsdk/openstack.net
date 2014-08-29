@@ -104,7 +104,6 @@
     <Compile Include="OpenStack\Security\Authentication\IdentityV2AuthenticationService.cs" />
     <Compile Include="OpenStack\Security\Authentication\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Security\Authentication\PassThroughAuthenticationService.cs" />
-    <Compile Include="OpenStack\Services\HttpServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\ApiStatus.cs" />
     <Compile Include="OpenStack\Services\Identity\ApiVersion.cs" />
     <Compile Include="OpenStack\Services\Identity\ApiVersionId.cs" />

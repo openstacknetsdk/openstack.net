@@ -1,6 +1,7 @@
 ﻿namespace OpenStack.Services
 {
     using System;
+    using OpenStack.Net;
 
     /// <summary>
     /// This class serves as the base class for all service extension definitions. Service extension definitions are
@@ -34,16 +35,20 @@
         /// service extension if the service client implementation does not provide its own implementation.
         /// </remarks>
         /// <param name="service">The service client instance.</param>
+        /// <param name="httpApiCallFactory">The factory to use for creating new HTTP API calls for the
+        /// extension.</param>
         /// <returns>
         /// A default instance of <typeparamref name="TExtension"/> for the specified service client.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="service"/> is <see langword="null"/>.
+        /// <para>If <paramref name="service"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="httpApiCallFactory"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the service extension definition does not provide a default implementation.
         /// </exception>
-        public abstract TExtension CreateDefaultInstance(TService service);
+        public abstract TExtension CreateDefaultInstance(TService service, IHttpApiCallFactory httpApiCallFactory);
 
         /// <inheritdoc/>
         /// <remarks>

@@ -161,7 +161,7 @@
             if (definition == null)
                 throw new ArgumentNullException("definition");
 
-            return definition.CreateDefaultInstance(this);
+            return definition.CreateDefaultInstance(this, this);
         }
 
         /// <inheritdoc/>
