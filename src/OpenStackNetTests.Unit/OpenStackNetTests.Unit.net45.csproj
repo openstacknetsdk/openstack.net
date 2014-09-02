@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Simulator\IdentityService\SimulatedBaseIdentityService.cs" />
     <Compile Include="Simulator\IdentityService\V2\SimulatedIdentityService.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\SimulatedObjectStorageService.cs" />
     <Compile Include="Simulator\SimulatedService.cs" />
     <Compile Include="TestCategories.cs" />
   </ItemGroup>
