@@ -31,7 +31,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            _simulator = new SimulatedIdentityService(5000);
+            _simulator = new SimulatedIdentityService();
             _simulator.StartAsync(CancellationToken.None);
         }
 

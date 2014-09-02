@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
@@ -18,10 +19,10 @@
 
     public class SimulatedIdentityService : SimulatedBaseIdentityService
     {
-        private static readonly UriTemplate _authenticateTemplate = new UriTemplate("v2.0/tokens{?params*}");
-        private static readonly UriTemplate _listExtensionsTemplate = new UriTemplate("v2.0/extensions{?params*}");
-        private static readonly UriTemplate _getExtensionTemplate = new UriTemplate("v2.0/extensions/{alias}{?params*}");
-        private static readonly UriTemplate _listTenantsTemplate = new UriTemplate("v2.0/tenants{?limit,marker,params*}");
+        private static readonly UriTemplate _authenticateTemplate = new UriTemplate("v2.0/tokens");
+        private static readonly UriTemplate _listExtensionsTemplate = new UriTemplate("v2.0/extensions");
+        private static readonly UriTemplate _getExtensionTemplate = new UriTemplate("v2.0/extensions/{alias}");
+        private static readonly UriTemplate _listTenantsTemplate = new UriTemplate("v2.0/tenants");
 
         private static readonly string _username = "simulated_user";
         private static readonly string _password = "simulated_password";
@@ -51,90 +52,65 @@
         private DateTimeOffset? _tokenCreated;
         private DateTimeOffset? _tokenExpires;
 
-        public SimulatedIdentityService(int port)
-            : base(port)
+        public SimulatedIdentityService()
+            : base(5000)
         {
         }
 
-        public override async Task ProcessRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> ProcessRequestImplAsync(HttpListenerContext context, Uri dispatchUri, CancellationToken cancellationToken)
         {
-            try
+            UriTemplateMatch match;
+            match = _authenticateTemplate.Match(dispatchUri);
+            if (match != null)
             {
-                Uri uri = RemoveTrailingSlash(context.Request.Url);
+                return await AuthenticateAsync(context, cancellationToken).ConfigureAwait(false);
+            }
 
-                UriTemplateMatch match;
-                match = _authenticateTemplate.Match(BaseAddress, uri);
-                if (match != null)
-                {
-                    await AuthenticateAsync(context, cancellationToken).ConfigureAwait(false);
-                    return;
-                }
+            match = _listExtensionsTemplate.Match(dispatchUri);
+            if (match != null)
+            {
+                return ProcessListExtensionsRequestAsync(context, cancellationToken);
+            }
 
-                match = _listExtensionsTemplate.Match(BaseAddress, uri);
-                if (match != null)
+            match = _getExtensionTemplate.Match(dispatchUri);
+            if (match != null)
+            {
+                KeyValuePair<VariableReference, object> aliasArgument;
+                if (match.Bindings.TryGetValue("alias", out aliasArgument))
                 {
-                    await ProcessListExtensionsRequestAsync(context, cancellationToken).ConfigureAwait(false);
-                    return;
-                }
-
-                match = _getExtensionTemplate.Match(BaseAddress, uri);
-                if (match != null)
-                {
-                    KeyValuePair<VariableReference, object> aliasArgument;
-                    if (match.Bindings.TryGetValue("alias", out aliasArgument))
+                    string alias = aliasArgument.Value as string;
+                    if (!string.IsNullOrEmpty(alias))
                     {
-                        string alias = aliasArgument.Value as string;
-                        if (!string.IsNullOrEmpty(alias))
-                        {
-                            await ProcessGetExtensionRequestAsync(context, new ExtensionAlias(alias), cancellationToken).ConfigureAwait(false);
-                            return;
-                        }
+                        return ProcessGetExtensionRequestAsync(context, new ExtensionAlias(alias), cancellationToken);
                     }
                 }
-
-                match = _listTenantsTemplate.Match(BaseAddress, uri);
-                if (match != null)
-                {
-                    await ProcessListTenantsRequestAsync(context, match, cancellationToken).ConfigureAwait(false);
-                    return;
-                }
-
-                await base.ProcessRequestAsync(context, cancellationToken).ConfigureAwait(false);
-                return;
             }
-            catch
+
+            match = _listTenantsTemplate.Match(dispatchUri);
+            if (match != null)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                context.Response.Close();
+                return ProcessListTenantsRequestAsync(context, cancellationToken);
             }
+
+            return await base.ProcessRequestImplAsync(context, dispatchUri, cancellationToken);
         }
 
-        private async Task ProcessListExtensionsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        private HttpResponseMessage ProcessListExtensionsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
 
             ValidateRequest(context.Request);
 
-            context.Response.ContentType = "application/json";
-
-            byte[] buffer = Encoding.UTF8.GetBytes(IdentityServiceResources.ListExtensionsResponse);
-            await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-            context.Response.Close();
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new StringContent(IdentityServiceResources.ListExtensionsResponse, Encoding.UTF8, "application/json");
+            return result;
         }
 
-        private async Task ProcessGetExtensionRequestAsync(HttpListenerContext context, ExtensionAlias alias, CancellationToken cancellationToken)
+        private HttpResponseMessage ProcessGetExtensionRequestAsync(HttpListenerContext context, ExtensionAlias alias, CancellationToken cancellationToken)
         {
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
 
             ValidateRequest(context.Request);
 
@@ -143,35 +119,32 @@
             Extension extension = extensions.FirstOrDefault(i => i.Alias.Equals(alias));
             if (extension == null)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
             else
             {
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
-                context.Response.ContentType = "application/json";
-                JObject responseObject = new JObject(new JProperty("extension", JObject.FromObject(extension)));
-                byte[] responseData = Encoding.UTF8.GetBytes(responseObject.ToString(Formatting.None));
-                await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
-            }
+                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
 
-            context.Response.Close();
+                JObject responseObject = new JObject(new JProperty("extension", JObject.FromObject(extension)));
+                result.Content = new StringContent(responseObject.ToString(Formatting.None), Encoding.UTF8, "application/json");
+                return result;
+            }
         }
 
-        private async Task ProcessListTenantsRequestAsync(HttpListenerContext context, UriTemplateMatch match, CancellationToken cancellationToken)
+        private HttpResponseMessage ProcessListTenantsRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
 
             ValidateAuthenticatedRequest(context.Request);
 
-            if (match.Bindings.ContainsKey("marker"))
-                throw new NotImplementedException();
-            if (match.Bindings.ContainsKey("limit"))
-                throw new NotImplementedException();
+            if (context.Request.Url.AbsoluteUri.IndexOf('?') >= 0)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotImplemented)
+                {
+                    Content = new StringContent("The call supports query parameters which are not implemented by the simulator.", Encoding.UTF8, "text/plain")
+                };
+            }
 
             string responseBody = IdentityServiceResources.ListTenantsResponseTemplate;
 
@@ -181,64 +154,40 @@
             foreach (var pair in parameters)
                 responseBody = responseBody.Replace("{" + pair.Key + "}", JsonConvert.DeserializeObject<string>(pair.Value));
 
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
-            context.Response.ContentType = "application/json";
-            byte[] responseData = Encoding.UTF8.GetBytes(responseBody);
-            await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
-            context.Response.Close();
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new StringContent(responseBody, Encoding.UTF8, "application/json");
+            return result;
         }
 
-        private async Task AuthenticateAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        private async Task<HttpResponseMessage> AuthenticateAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
             if (!string.Equals("POST", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
 
             MediaTypeHeaderValue acceptedType = new MediaTypeHeaderValue("application/json");
             MediaTypeHeaderValue contentType = MediaTypeHeaderValue.Parse(context.Request.ContentType);
             if (!HttpApiCall.IsAcceptable(acceptedType, contentType))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             ValidateRequest(context.Request);
 
             StreamReader reader = new StreamReader(context.Request.InputStream, Encoding.UTF8);
             AuthenticationRequest authenticationRequest = JsonConvert.DeserializeObject<AuthenticationRequest>(await reader.ReadToEndAsync().ConfigureAwait(false));
             if (authenticationRequest == null)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             AuthenticationData authenticationData = authenticationRequest.AuthenticationData;
             if (authenticationData == null)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             if (authenticationData.TenantName != null
                 && !string.Equals(authenticationData.TenantName, _tenantName, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
             if (authenticationData.TenantId != null
                 && authenticationData.TenantId != new ProjectId(_tenantId))
             {
-                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                context.Response.Close();
-                return;
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
             }
 
             if (authenticationData.Token != null)
@@ -246,18 +195,12 @@
 
             PasswordCredentials passwordCredentials = authenticationData.PasswordCredentials;
             if (passwordCredentials == null)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Close();
-                return;
-            }
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             if (!string.Equals(passwordCredentials.Username, _username, StringComparison.OrdinalIgnoreCase)
                 || !string.Equals(passwordCredentials.Password, _password, StringComparison.Ordinal))
             {
-                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                context.Response.Close();
-                return;
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
             }
 
             bool hasTenant = authenticationData.TenantId != null || authenticationData.TenantName != null;
@@ -294,13 +237,12 @@
                     responseBody = responseBody.Replace("{" + pair.Key + "}", JsonConvert.DeserializeObject<string>(pair.Value));
             }
 
-            context.Response.ContentType = "application/json";
-            byte[] buffer = Encoding.UTF8.GetBytes(responseBody);
-            await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-            context.Response.Close();
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new StringContent(responseBody, Encoding.UTF8, "application/json");
+            return result;
         }
 
-        protected virtual void ValidateAuthenticatedRequest(HttpListenerRequest request)
+        public virtual void ValidateAuthenticatedRequest(HttpListenerRequest request)
         {
             ValidateRequest(request);
 

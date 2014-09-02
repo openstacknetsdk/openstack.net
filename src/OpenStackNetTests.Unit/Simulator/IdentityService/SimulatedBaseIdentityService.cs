@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading;
@@ -14,104 +15,41 @@
     using OpenStack.Services.Identity;
     using Rackspace.Net;
 
-    public class SimulatedBaseIdentityService : IDisposable
+    public class SimulatedBaseIdentityService : SimulatedService
     {
-        private static readonly UriTemplate _listApiVersionsTemplate = new UriTemplate("{?params*}");
-        private static readonly UriTemplate _getApiVersionTemplate = new UriTemplate("{version}{?params*}");
-
-        private readonly HttpListener _listener;
+        private static readonly UriTemplate _listApiVersionsTemplate = new UriTemplate("");
+        private static readonly UriTemplate _getApiVersionTemplate = new UriTemplate("{version}");
 
         public SimulatedBaseIdentityService(int port)
+            : base(port)
         {
-            _listener = new HttpListener();
-            _listener.Prefixes.Add(string.Format("http://localhost:{0}/", port));
         }
 
-        public Uri BaseAddress
+        protected override async Task<HttpResponseMessage> ProcessRequestImplAsync(HttpListenerContext context, Uri dispatchUri, CancellationToken cancellationToken)
         {
-            get
+            UriTemplateMatch match;
+            match = _listApiVersionsTemplate.Match(dispatchUri);
+            if (match != null)
             {
-                return new Uri(_listener.Prefixes.Single());
+                return await ListApiVersionsAsync(context, cancellationToken).ConfigureAwait(false);
             }
-        }
 
-        protected static Uri RemoveTrailingSlash(Uri uri)
-        {
-            UriBuilder builder = new UriBuilder(uri);
-            builder.Path = builder.Path.TrimEnd('/');
-            return builder.Uri;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
+            match = _getApiVersionTemplate.Match(dispatchUri);
+            if (match != null)
             {
-                _listener.Close();
-            }
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _listener.Start();
-            return Task.Run(() => ProcessRequests(cancellationToken), cancellationToken);
-        }
-
-        public async Task ProcessRequests(CancellationToken cancellationToken)
-        {
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                HttpListenerContext context = await _listener.GetContextAsync().ConfigureAwait(false);
-                Task childTask = Task.Run(() => ProcessRequestAsync(context, cancellationToken), cancellationToken);
-            }
-        }
-
-        public virtual async Task ProcessRequestAsync(HttpListenerContext context, CancellationToken cancellationToken)
-        {
-            try
-            {
-                Uri uri = RemoveTrailingSlash(context.Request.Url);
-
-                UriTemplateMatch match;
-                match = _listApiVersionsTemplate.Match(BaseAddress, uri);
-                if (match != null)
+                KeyValuePair<VariableReference, object> versionParameter;
+                if (match.Bindings.TryGetValue("version", out versionParameter))
                 {
-                    await ListApiVersionsAsync(context, cancellationToken).ConfigureAwait(false);
-                    return;
+                    string version = versionParameter.Value as string;
+                    if (!string.IsNullOrEmpty(version))
+                        return await GetApiVersionAsync(context, new ApiVersionId(version), cancellationToken).ConfigureAwait(false);
                 }
-
-                match = _getApiVersionTemplate.Match(BaseAddress, uri);
-                if (match != null)
-                {
-                    KeyValuePair<VariableReference, object> versionParameter;
-                    if (match.Bindings.TryGetValue("version", out versionParameter))
-                    {
-                        string version = versionParameter.Value as string;
-                        if (!string.IsNullOrEmpty(version))
-                        {
-                            await GetApiVersionAsync(context, new ApiVersionId(version), cancellationToken).ConfigureAwait(false);
-                            return;
-                        }
-                    }
-                }
-
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Response.Close();
             }
-            catch
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                context.Response.Close();
-            }
+
+            return await base.ProcessRequestImplAsync(context, dispatchUri, cancellationToken);
         }
 
-        public async Task ListApiVersionsAsync(HttpListenerContext context, CancellationToken cancellationToken)
+        public Task<HttpResponseMessage> ListApiVersionsAsync(HttpListenerContext context, CancellationToken cancellationToken)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -120,21 +58,14 @@
 
             context.Response.ContentType = "application/json";
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
 
-            context.Response.StatusCode = (int)HttpStatusCode.MultipleChoices;
-
-            byte[] responseData = Encoding.UTF8.GetBytes(IdentityServiceResources.ListApiVersionsResponse);
-
-            await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
-            context.Response.Close();
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.MultipleChoices);
+            response.Content = new StringContent(IdentityServiceResources.ListApiVersionsResponse, Encoding.UTF8, "application/json");
+            return Task.FromResult(response);
         }
 
-        public async Task GetApiVersionAsync(HttpListenerContext context, ApiVersionId id, CancellationToken cancellationToken)
+        public Task<HttpResponseMessage> GetApiVersionAsync(HttpListenerContext context, ApiVersionId id, CancellationToken cancellationToken)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -143,13 +74,8 @@
 
             ValidateRequest(context.Request);
 
-            context.Response.ContentType = "application/json";
             if (!string.Equals("GET", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                context.Response.Close();
-                return;
-            }
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
 
             JObject allVersions = JsonConvert.DeserializeObject<JObject>(IdentityServiceResources.ListApiVersionsResponse);
             ApiVersion[] versions = allVersions["versions"]["values"].ToObject<ApiVersion[]>();
@@ -157,17 +83,17 @@
 
             if (version == null)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
             else
             {
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
-                JObject responseObject = new JObject(new JProperty("version", JObject.FromObject(version)));
-                byte[] responseData = Encoding.UTF8.GetBytes(responseObject.ToString(Formatting.None));
-                await context.Response.OutputStream.WriteAsync(responseData, 0, responseData.Length, cancellationToken);
-            }
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            context.Response.Close();
+                JObject responseObject = new JObject(new JProperty("version", JObject.FromObject(version)));
+                response.Content = new StringContent(responseObject.ToString(Formatting.None), Encoding.UTF8, "application/json");
+
+                return Task.FromResult(response);
+            }
         }
 
         protected virtual void ValidateRequest(HttpListenerRequest request)
