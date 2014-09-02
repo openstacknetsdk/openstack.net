@@ -61,10 +61,21 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\OpenStackNetTests.Live\TestCredentials.cs">
+      <Link>TestCredentials.cs</Link>
+    </Compile>
     <Compile Include="..\OpenStackNetTests.Live\TestHelpers.cs">
       <Link>TestHelpers.cs</Link>
     </Compile>
+    <Compile Include="..\OpenStackNetTests.Live\TestProxy.cs">
+      <Link>TestProxy.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SimulatedBaseIdentityTests.cs" />
     <Compile Include="SimulatedIdentityV2Tests.cs" />
     <Compile Include="Simulator\IdentityService\IdentityServiceResources.Designer.cs">
@@ -85,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SimulatedCredentials.json" />
     <None Include="Simulator\IdentityService\AuthenticateResponseTemplate.json" />
     <None Include="Simulator\IdentityService\AuthenticateWithoutTenantResponseTemplate.json" />
     <None Include="Simulator\IdentityService\ListApiVersionsResponse.json" />
@@ -92,6 +104,10 @@
     <None Include="Simulator\IdentityService\ListTenantsResponseTemplate.json" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Simulator\IdentityService\IdentityServiceResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityServiceResources.Designer.cs</LastGenOutput>

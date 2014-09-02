@@ -13,18 +13,46 @@
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
     using OpenStackNetTests.Unit.Simulator.IdentityService.V2;
+    using Rackspace.Security.Authentication;
+    using Rackspace.Services.Identity.V2;
+    using TestCredentials = OpenStackNetTests.Live.TestCredentials;
     using TestHelpers = OpenStackNetTests.Live.TestHelpers;
+    using TestProxy = OpenStackNetTests.Live.TestProxy;
 
     [TestClass]
     public class SimulatedIdentityV2Tests
     {
         private SimulatedIdentityService _simulator;
 
+        internal TestCredentials Credentials
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<TestCredentials>(Resources.SimulatedCredentials);
+            }
+        }
+
         protected Uri BaseAddress
         {
             get
             {
                 return new Uri("http://localhost:5000");
+            }
+        }
+
+        protected TestProxy Proxy
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        protected string Vendor
+        {
+            get
+            {
+                return "OpenStack";
             }
         }
 
@@ -171,12 +199,11 @@
 
                 using (IIdentityService service = CreateService())
                 {
-                    string tenantName = "simulated_tenant";
-                    string username = "simulated_user";
-                    string password = "simulated_password";
-                    PasswordCredentials passwordCredentials = new PasswordCredentials(username, password);
-                    AuthenticationData auth = new AuthenticationData(tenantName, passwordCredentials);
-                    AuthenticationRequest request = new AuthenticationRequest(auth);
+                    TestCredentials credentials = Credentials;
+                    Assert.IsNotNull(credentials);
+
+                    AuthenticationRequest request = credentials.AuthenticationRequest;
+                    Assert.IsNotNull(request);
 
                     AuthenticateApiCall apiCall = await service.PrepareAuthenticateAsync(request, cancellationTokenSource.Token);
                     Tuple<HttpResponseMessage, AccessResponse> response = await apiCall.SendAsync(cancellationTokenSource.Token);
@@ -332,18 +359,84 @@
             return timeSpan;
         }
 
-        protected IIdentityService CreateService()
+        internal static IIdentityService CreateService(TestCredentials credentials)
         {
-            IdentityClient client = new IdentityClient(BaseAddress);
+            if (credentials == null)
+                throw new ArgumentNullException("credentials");
+
+            IdentityClient client;
+            switch (credentials.Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                client = new RackspaceIdentityClient(credentials.BaseAddress);
+                break;
+
+            case "OpenStack":
+            default:
+                client = new IdentityClient(credentials.BaseAddress);
+                break;
+            }
+
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 
             return client;
         }
 
+        internal static IAuthenticationService CreateAuthenticationService(TestCredentials credentials)
+        {
+            if (credentials == null)
+                throw new ArgumentNullException("credentials");
+
+            IIdentityService identityService = CreateService(credentials);
+            IAuthenticationService authenticationService;
+            switch (credentials.Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                authenticationService = new RackspaceAuthenticationService(identityService, credentials.AuthenticationRequest);
+                break;
+
+            case "OpenStack":
+            default:
+                authenticationService = new IdentityV2AuthenticationService(identityService, credentials.AuthenticationRequest);
+                break;
+            }
+
+            return authenticationService;
+        }
+
+        protected IIdentityService CreateService()
+        {
+            return CreateService(Credentials);
+        }
+
         protected IIdentityService CreateService(IAuthenticationService authenticationService)
         {
-            IdentityClient client = new IdentityClient(authenticationService, BaseAddress);
+            IdentityClient client;
+            switch (Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IIdentityService
+                goto default;
+
+            case "Rackspace":
+                client = new RackspaceIdentityClient(authenticationService, BaseAddress);
+                break;
+
+            case "OpenStack":
+            default:
+                client = new IdentityClient(authenticationService, BaseAddress);
+                break;
+            }
+
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

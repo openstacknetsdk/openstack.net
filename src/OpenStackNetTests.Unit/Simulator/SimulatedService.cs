@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -86,32 +87,53 @@
                 context.Response.StatusCode = (int)response.StatusCode;
                 foreach (var header in response.Headers)
                 {
-                    throw new NotImplementedException();
-                }
-
-                foreach (var header in response.Content.Headers)
-                {
-                    switch (header.Key.ToLowerInvariant())
+                    switch (header.Key)
                     {
-                    case "content-type":
-                        context.Response.ContentType = string.Join(", ", header.Value);
-                        break;
-
-                    case "content-length":
-                        context.Response.ContentLength64 = long.Parse(header.Value.Single());
-                        break;
-
                     default:
-                        throw new NotImplementedException();
+                        context.Response.Headers.Add(header.Key, string.Join(", ", header.Value));
+                        break;
                     }
                 }
 
-                await response.Content.CopyToAsync(context.Response.OutputStream);
+                if (response.Content != null)
+                {
+                    foreach (var header in response.Content.Headers)
+                    {
+                        switch (header.Key.ToLowerInvariant())
+                        {
+                        case "content-type":
+                            context.Response.ContentType = string.Join(", ", header.Value);
+                            break;
+
+                        case "content-length":
+                            context.Response.ContentLength64 = long.Parse(header.Value.Single());
+                            break;
+
+                        default:
+                            context.Response.Headers.Add(header.Key, string.Join(", ", header.Value));
+                            break;
+                        }
+                    }
+
+                    await response.Content.CopyToAsync(context.Response.OutputStream);
+                }
+
                 context.Response.Close();
             }
-            catch
+            catch (Exception ex)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "text/plain";
+
+                if (!string.Equals(context.Request.HttpMethod, "HEAD", StringComparison.OrdinalIgnoreCase))
+                {
+                    StringBuilder body = new StringBuilder();
+                    body.AppendLine(ex.ToString());
+                    body.AppendLine(ex.StackTrace);
+                    byte[] buffer = Encoding.UTF8.GetBytes(body.ToString());
+                    context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                }
+
                 context.Response.Close();
             }
         }
