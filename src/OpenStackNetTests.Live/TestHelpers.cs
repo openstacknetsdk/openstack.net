@@ -21,40 +21,21 @@ namespace OpenStackNetTests.Live
             if (SuppressOutput)
                 return;
 
-            HttpRequestMessage request = e.Request;
-
-            Console.Error.WriteLine("{0} (Request) {1} {2}", DateTime.Now, e.Request.Method, e.Request.RequestUri);
-
-            foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
-            {
-                Console.Error.WriteLine(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
-            }
-
-            if (request.Content != null)
-            {
-                foreach (KeyValuePair<string, IEnumerable<string>> header in request.Content.Headers)
-                {
-                    Console.Error.WriteLine(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
-                }
-
-                if (request.Content is StreamContent)
-                {
-                    Console.Error.WriteLine("<== [STREAM CONTENT]");
-                }
-                else
-                {
-                    Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(request.Content.ReadAsByteArrayAsync().Result));
-                }
-            }
+            LogRequest(e.Request);
         }
 
         public static void HandleAfterAsyncWebResponse(object sender, HttpResponseEventArgs e)
         {
-            if (SuppressOutput)
-                return;
-
             if (e.Response.Status == TaskStatus.RanToCompletion)
             {
+                if (SuppressOutput)
+                {
+                    if (e.Response.Result.IsSuccessStatusCode)
+                        return;
+                    else
+                        LogRequest(e.Response.Result.RequestMessage);
+                }
+
                 Console.Error.WriteLine("{0} (Result {1})", DateTime.Now, e.Response.Result.StatusCode);
 
                 if (e.Response.Result.Content != null && e.Response.Result.Content.Headers.ContentType != null)
@@ -84,6 +65,33 @@ namespace OpenStackNetTests.Live
             else
             {
                 Console.Error.WriteLine("{0} (Result {1})", DateTime.Now, e.Response.Status);
+            }
+        }
+
+        private static void LogRequest(HttpRequestMessage request)
+        {
+            Console.Error.WriteLine("{0} (Request) {1} {2}", DateTime.Now, request.Method, request.RequestUri);
+
+            foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
+            {
+                Console.Error.WriteLine(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
+            }
+
+            if (request.Content != null)
+            {
+                foreach (KeyValuePair<string, IEnumerable<string>> header in request.Content.Headers)
+                {
+                    Console.Error.WriteLine(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
+                }
+
+                if (request.Content is StreamContent)
+                {
+                    Console.Error.WriteLine("<== [STREAM CONTENT]");
+                }
+                else
+                {
+                    Console.Error.WriteLine("<== " + Encoding.UTF8.GetString(request.Content.ReadAsByteArrayAsync().Result));
+                }
             }
         }
 
