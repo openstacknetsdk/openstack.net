@@ -72,6 +72,7 @@
     <Compile Include="IdentityV2Tests.Shared.cs" />
     <Compile Include="LiveTestConfiguration.cs" />
     <Compile Include="ObjectStorageTests.cs" />
+    <Compile Include="ObjectStorageTests.Shared.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />

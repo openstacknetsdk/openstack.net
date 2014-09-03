@@ -7,5 +7,7 @@
         public const string User = "User (Simulated)";
 
         public const string Identity = "Identity (Simulated)";
+
+        public const string ObjectStorage = "Object Storage (Simulated)";
     }
 }
