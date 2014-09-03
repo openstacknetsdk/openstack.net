@@ -1863,24 +1863,16 @@
                     Assert.IsTrue(headers.Headers.ContainsKey(pair.Key.ToLowerInvariant()));
                 }
 
-                string containerCountText;
-                Assert.IsTrue(headers.Headers.TryGetValue("x-account-container-count", out containerCountText));
-                long containerCount;
-                Assert.IsTrue(long.TryParse(containerCountText, out containerCount));
+                long? containerCount = headers.GetContainerCount();
                 Assert.IsTrue(containerCount >= 0);
 
-                string accountBytesText;
-                Assert.IsTrue(headers.Headers.TryGetValue("x-account-bytes-used", out accountBytesText));
-                long accountBytes;
-                Assert.IsTrue(long.TryParse(accountBytesText, out accountBytes));
+                long? accountBytes = headers.GetBytesUsed();
                 Assert.IsTrue(accountBytes >= 0);
 
-                string objectCountText;
-                if (headers.Headers.TryGetValue("x-account-object-count", out objectCountText))
+                long? objectCount = headers.GetObjectCount();
+                if (objectCount.HasValue)
                 {
                     // the X-Account-Object-Count header is optional, but when included should be a non-negative integer
-                    long objectCount;
-                    Assert.IsTrue(long.TryParse(objectCountText, out objectCount));
                     Assert.IsTrue(objectCount >= 0);
                 }
             }

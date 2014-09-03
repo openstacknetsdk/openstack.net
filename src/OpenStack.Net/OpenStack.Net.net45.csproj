@@ -143,6 +143,7 @@
     <Compile Include="OpenStack\Services\IHttpService.cs" />
     <Compile Include="OpenStack\Services\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\AccountMetadata.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\AccountMetadataExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ArchiveFormat.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\Container.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ContainerMetadata.cs" />

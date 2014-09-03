@@ -662,9 +662,9 @@
             long containerSize = containers.Sum(i => i.Size ?? 0);
 
             IDictionary<string, string> headers = new Dictionary<string, string>(accountMetadata.Headers, StringComparer.OrdinalIgnoreCase);
-            headers.Add("X-Account-Container-Count", containerCount.ToString());
-            headers.Add("X-Account-Object-Count", objectCount.ToString());
-            headers.Add("X-Account-Bytes-Used", containerSize.ToString());
+            headers.Add(AccountMetadataExtensions.AccountContainerCount, containerCount.ToString());
+            headers.Add(AccountMetadataExtensions.AccountObjectCount, objectCount.ToString());
+            headers.Add(AccountMetadataExtensions.AccountBytesUsed, containerSize.ToString());
 
             IDictionary<string, string> metadata = accountMetadata.Metadata;
 
