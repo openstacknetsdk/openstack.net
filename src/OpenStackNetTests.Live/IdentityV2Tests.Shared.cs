@@ -1,8 +1,9 @@
-﻿namespace OpenStackNetTests.Unit
+﻿namespace OpenStackNetTests.Live
 {
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -12,31 +13,20 @@
     using OpenStack.Security.Authentication;
     using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V2;
-    using OpenStackNetTests.Unit.Simulator.IdentityService.V2;
     using Rackspace.Security.Authentication;
     using Rackspace.Services.Identity.V2;
-    using TestCredentials = OpenStackNetTests.Live.TestCredentials;
-    using TestHelpers = OpenStackNetTests.Live.TestHelpers;
-    using TestProxy = OpenStackNetTests.Live.TestProxy;
 
-    [TestClass]
-    public class SimulatedIdentityV2Tests
+    partial class IdentityV2Tests
     {
-        private SimulatedIdentityService _simulator;
-
-        internal TestCredentials Credentials
-        {
-            get
-            {
-                return JsonConvert.DeserializeObject<TestCredentials>(Resources.SimulatedCredentials);
-            }
-        }
-
         protected Uri BaseAddress
         {
             get
             {
-                return new Uri("http://localhost:5000");
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return null;
+
+                return credentials.BaseAddress;
             }
         }
 
@@ -44,7 +34,11 @@
         {
             get
             {
-                return null;
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return null;
+
+                return credentials.Proxy;
             }
         }
 
@@ -52,22 +46,12 @@
         {
             get
             {
-                return "OpenStack";
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return "OpenStack";
+
+                return credentials.Vendor;
             }
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _simulator = new SimulatedIdentityService();
-            _simulator.StartAsync(CancellationToken.None);
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _simulator.Dispose();
-            _simulator = null;
         }
 
         [TestMethod]
@@ -131,8 +115,8 @@
 
                 using (IIdentityService service = CreateService())
                 {
-                    ListExtensionsApiCall apiCall = await service.PrepareListExtensionsAsync(cancellationTokenSource.Token).ConfigureAwait(false);
-                    Tuple<HttpResponseMessage, ReadOnlyCollectionPage<Extension>> response = await apiCall.SendAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                    ListExtensionsApiCall apiCall = await service.PrepareListExtensionsAsync(cancellationTokenSource.Token);
+                    Tuple<HttpResponseMessage, ReadOnlyCollectionPage<Extension>> response = await apiCall.SendAsync(cancellationTokenSource.Token);
 
                     Assert.IsNotNull(response);
                     Assert.IsNotNull(response.Item2);
@@ -147,8 +131,8 @@
                         Assert.IsNotNull(listedExtension);
                         Assert.IsNotNull(listedExtension.Alias);
 
-                        GetExtensionApiCall getApiCall = await service.PrepareGetExtensionAsync(listedExtension.Alias, cancellationTokenSource.Token).ConfigureAwait(false);
-                        Tuple<HttpResponseMessage, ExtensionResponse> getResponse = await getApiCall.SendAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                        GetExtensionApiCall getApiCall = await service.PrepareGetExtensionAsync(listedExtension.Alias, cancellationTokenSource.Token);
+                        Tuple<HttpResponseMessage, ExtensionResponse> getResponse = await getApiCall.SendAsync(cancellationTokenSource.Token);
 
                         Extension extension = getResponse.Item2.Extension;
                         CheckExtension(extension);
@@ -222,7 +206,10 @@
                     Assert.IsNotNull(token);
                     Assert.IsNotNull(token.Id);
                     Assert.IsNotNull(token.Tenant);
-                    Assert.IsNotNull(token.IssuedAt);
+
+                    // Rackspace does not return this property, and it doesn't seem to be particularly useful.
+                    //Assert.IsNotNull(token.IssuedAt);
+
                     Assert.IsNotNull(token.ExpiresAt);
 
                     // check the user
@@ -230,9 +217,12 @@
                     Assert.IsNotNull(user);
                     Assert.IsNotNull(user.Id);
                     Assert.IsNotNull(user.Name);
-                    Assert.IsNotNull(user.Username);
+
+                    // If the Username is null, it's presumed to be the same as the Name. (Rackspace does not return
+                    // this property.)
+                    //Assert.IsNotNull(user.Username);
+
                     Assert.IsNotNull(user.Roles);
-                    Assert.IsNotNull(user.RolesLinks);
 
                     Assert.AreNotEqual(0, user.Roles.Count);
                     foreach (Role role in user.Roles)
@@ -242,13 +232,17 @@
                         Assert.AreNotEqual(string.Empty, role.Name);
                     }
 
-                    foreach (Link link in user.RolesLinks)
+                    // At least Rackspace does not return the roles_links property.
+                    if (user.RolesLinks != null)
                     {
-                        Assert.IsNotNull(link);
-                        Assert.IsNotNull(link.Relation);
-                        Assert.AreNotEqual(string.Empty, link.Relation);
-                        Assert.IsNotNull(link.Target);
-                        Assert.IsTrue(link.Target.IsAbsoluteUri);
+                        foreach (Link link in user.RolesLinks)
+                        {
+                            Assert.IsNotNull(link);
+                            Assert.IsNotNull(link.Relation);
+                            Assert.AreNotEqual(string.Empty, link.Relation);
+                            Assert.IsNotNull(link.Target);
+                            Assert.IsTrue(link.Target.IsAbsoluteUri);
+                        }
                     }
 
                     // check the service catalog
@@ -261,24 +255,33 @@
                         Assert.IsNotNull(entry.Name);
                         Assert.IsNotNull(entry.Type);
                         Assert.IsNotNull(entry.Endpoints);
-                        Assert.IsNotNull(entry.EndpointsLinks);
 
                         Assert.AreNotEqual(0, entry.Endpoints.Count);
                         foreach (Endpoint endpoint in entry.Endpoints)
                         {
                             Assert.IsNotNull(endpoint);
-                            Assert.IsNotNull(endpoint.Id);
-                            Assert.IsNotNull(endpoint.Region);
+
+                            // At least Rackspace does not return an ID with their endpoints. The ID doesn't seem
+                            // necessary for API calls.
+                            //Assert.IsNotNull(endpoint.Id);
+
+                            // Region-independent endpoints may have a null Region value.
+                            //Assert.IsNotNull(endpoint.Region);
+
                             Assert.IsFalse(endpoint.PublicUrl == null && endpoint.InternalUrl == null && endpoint.AdminUrl == null);
                         }
 
-                        foreach (Link link in entry.EndpointsLinks)
+                        // At least Rackspace does not return the endpoints_links property.
+                        if (entry.EndpointsLinks != null)
                         {
-                            Assert.IsNotNull(link);
-                            Assert.IsNotNull(link.Relation);
-                            Assert.AreNotEqual(string.Empty, link.Relation);
-                            Assert.IsNotNull(link.Target);
-                            Assert.IsTrue(link.Target.IsAbsoluteUri);
+                            foreach (Link link in entry.EndpointsLinks)
+                            {
+                                Assert.IsNotNull(link);
+                                Assert.IsNotNull(link.Relation);
+                                Assert.AreNotEqual(string.Empty, link.Relation);
+                                Assert.IsNotNull(link.Target);
+                                Assert.IsTrue(link.Target.IsAbsoluteUri);
+                            }
                         }
                     }
                 }
@@ -294,12 +297,11 @@
             {
                 cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
 
-                string tenantName = "simulated_tenant";
-                string username = "simulated_user";
-                string password = "simulated_password";
-                PasswordCredentials passwordCredentials = new PasswordCredentials(username, password);
-                AuthenticationData auth = new AuthenticationData(tenantName, passwordCredentials);
-                AuthenticationRequest request = new AuthenticationRequest(auth);
+                TestCredentials credentials = Credentials;
+                Assert.IsNotNull(credentials);
+
+                AuthenticationRequest request = credentials.AuthenticationRequest;
+                Assert.IsNotNull(request);
 
                 IdentityV2AuthenticationService authenticationService = new IdentityV2AuthenticationService(CreateService(), request);
 
@@ -318,6 +320,8 @@
 
                     foreach (Tenant tenant in tenants)
                         CheckTenant(tenant);
+
+                    Assert.IsTrue(tenants.Any(i => i.Enabled ?? false));
                 }
             }
         }
@@ -346,9 +350,13 @@
             Assert.IsNotNull(tenant.Id);
             Assert.IsNotNull(tenant.Name);
             Assert.IsFalse(string.IsNullOrEmpty(tenant.Name));
-            Assert.IsNotNull(tenant.Description);
-            Assert.IsFalse(string.IsNullOrEmpty(tenant.Description));
-            Assert.AreEqual(true, tenant.Enabled);
+
+            // Caller should check for at least one enabled Tenant
+            //Assert.AreEqual(true, tenant.Enabled);
+
+            // At least Rackspace does not send back this property.
+            //Assert.IsNotNull(tenant.Description);
+            //Assert.IsFalse(string.IsNullOrEmpty(tenant.Description));
         }
 
         protected TimeSpan TestTimeout(TimeSpan timeSpan)
@@ -381,6 +389,7 @@
                 break;
             }
 
+            TestProxy.ConfigureService(client, credentials.Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 
@@ -437,6 +446,7 @@
                 break;
             }
 
+            TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

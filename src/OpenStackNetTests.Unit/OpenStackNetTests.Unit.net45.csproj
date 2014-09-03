@@ -64,6 +64,9 @@
     <Compile Include="..\OpenStackNetTests.Live\BaseIdentityTests.Shared.cs">
       <Link>BaseIdentityTests.Shared.cs</Link>
     </Compile>
+    <Compile Include="..\OpenStackNetTests.Live\IdentityV2Tests.Shared.cs">
+      <Link>IdentityV2Tests.Shared.cs</Link>
+    </Compile>
     <Compile Include="..\OpenStackNetTests.Live\TestCredentials.cs">
       <Link>TestCredentials.cs</Link>
     </Compile>
@@ -74,13 +77,13 @@
       <Link>TestProxy.cs</Link>
     </Compile>
     <Compile Include="BaseIdentityTests.cs" />
+    <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SimulatedIdentityV2Tests.cs" />
     <Compile Include="Simulator\IdentityService\IdentityServiceResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
