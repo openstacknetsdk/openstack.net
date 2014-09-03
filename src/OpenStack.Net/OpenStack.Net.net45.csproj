@@ -159,6 +159,9 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveResponse.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ExtractArchiveSupportedApiCall.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\FormPostExtension.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\FormPostExtensions.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\FormPostSupportedApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetAccountMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetContainerMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetObjectApiCall.cs" />
@@ -166,6 +169,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetObjectStorageInfoApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\GetVersionsLocationApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IExtractArchiveExtension.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\IFormPostExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IObjectStorageService.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IObjectVersioningExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListContainersApiCall.cs" />

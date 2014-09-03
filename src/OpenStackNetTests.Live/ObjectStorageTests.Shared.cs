@@ -847,6 +847,76 @@
             }
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestFormPostValid()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName objectName = new ObjectName(Path.GetRandomFileName());
+                string fileContents = "File contents!";
+
+                AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
+                string tempUrlKey = accountMetadata.GetSecretKey();
+                if (string.IsNullOrEmpty(tempUrlKey))
+                {
+                    tempUrlKey = Guid.NewGuid().ToString("N");
+                    accountMetadata = AccountMetadata.Empty.WithSecretKey(tempUrlKey);
+                    await service.UpdateAccountMetadataAsync(accountMetadata, cancellationToken);
+                }
+
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
+                }
+
+                // verify a future time works
+                DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+                Uri redirectUri = new Uri("http://example.com");
+                long maxFileSize = 1000000;
+                int maxFileCount = 10;
+                var formPostData = await service.CreateFormPostUriAsync(containerName, objectName, tempUrlKey, expirationTime, redirectUri, maxFileSize, maxFileCount, cancellationToken);
+                Uri uri = formPostData.Item1;
+                IDictionary<string, string> fields = formPostData.Item2;
+
+                using (HttpClientHandler handler = new HttpClientHandler()
+                {
+                    AllowAutoRedirect = false
+                })
+                {
+                    using (HttpClient client = new HttpClient(handler, false))
+                    {
+                        using (var formData = new MultipartFormDataContent())
+                        {
+                            foreach (var field in fields)
+                                formData.Add(new StringContent(field.Value), field.Key);
+
+                            formData.Add(new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(fileContents))), "file1", "file1");
+                            var response = await client.PostAsync(uri, formData);
+                            var text = await response.Content.ReadAsStringAsync();
+                            Console.WriteLine(text);
+                        }
+                    }
+                }
+
+                string actualData = await ReadAllObjectTextAsync(service, containerName, new ObjectName(objectName.Value + "file1"), Encoding.UTF8, cancellationToken);
+                Assert.AreEqual(fileContents, actualData);
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
         private static async Task<ReadOnlyCollection<Container>> ListAllContainersAsync(IObjectStorageService service, CancellationToken cancellationToken)
         {
             if (service == null)

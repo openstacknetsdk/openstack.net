@@ -1,5 +1,6 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
+    using System;
     using OpenStack.Net;
 
     /// <summary>
@@ -28,6 +29,23 @@
             get
             {
                 return ExtractArchiveExtensionDefinition.Instance;
+            }
+        }
+
+        /// <summary>
+        /// Gets a service definition for the Form POST middleware extension to the OpenStack Object Storage Service.
+        /// </summary>
+        /// <value>
+        /// An <see cref="ObjectStorageServiceExtensionDefinition{TExtension}"/> representing the Form POST middleware
+        /// extension.
+        /// </value>
+        /// <seealso cref="IFormPostExtension"/>
+        /// <seealso cref="FormPostExtension"/>
+        public static ObjectStorageServiceExtensionDefinition<IFormPostExtension> FormPost
+        {
+            get
+            {
+                return FormPostExtensionDefinition.Instance;
             }
         }
 
@@ -80,6 +98,45 @@
             public override IExtractArchiveExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
             {
                 return new ExtractArchiveExtension(service, httpApiCallFactory);
+            }
+        }
+
+        /// <summary>
+        /// This class provides the internal definition for the <see cref="FormPost"/> property.
+        /// </summary>
+        /// <threadsafety static="true" instance="true"/>
+        /// <preliminary/>
+        private class FormPostExtensionDefinition : ObjectStorageServiceExtensionDefinition<IFormPostExtension>
+        {
+            /// <summary>
+            /// A singleton instance of the Form POST middleware service extension definition.
+            /// </summary>
+            public static readonly FormPostExtensionDefinition Instance = new FormPostExtensionDefinition();
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FormPostExtensionDefinition"/> class.
+            /// </summary>
+            private FormPostExtensionDefinition()
+            {
+            }
+
+            /// <inheritdoc/>
+            public override string Name
+            {
+                get
+                {
+                    return "Form POST";
+                }
+            }
+
+            /// <inheritdoc/>
+            public override IFormPostExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
+            {
+#if !PORTABLE || WINRT
+                return new FormPostExtension(service, httpApiCallFactory);
+#else
+                throw new NotSupportedException("The Form POST extension is currently not supported on this platform.");
+#endif
             }
         }
 
