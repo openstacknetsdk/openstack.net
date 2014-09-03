@@ -488,20 +488,18 @@
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
 
                 IObjectStorageService service = CreateService();
+                IObjectVersioningExtension objectVersioningExtension = service.GetServiceExtension(PredefinedObjectStorageExtensions.ObjectVersioning);
+
                 ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
                 ContainerName versionsContainerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
 
                 await service.CreateContainerAsync(versionsContainerName, cancellationToken);
 
-                CreateContainerApiCall createCall = await service.PrepareCreateContainerAsync(containerName, cancellationToken);
-                createCall.RequestMessage.Headers.Add("X-Versions-Location", UriUtility.UriEncode(versionsContainerName.Value, UriPart.Any, Encoding.UTF8));
+                CreateVersionedContainerApiCall createCall = await objectVersioningExtension.PrepareCreateVersionedContainerAsync(containerName, versionsContainerName, cancellationToken);
                 await createCall.SendAsync(cancellationToken);
 
-                ContainerMetadata metadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
-                string location;
-                Assert.IsTrue(metadata.Headers.TryGetValue("X-Versions-Location", out location));
-                location = UriUtility.UriDecode(location);
-                Assert.AreEqual(versionsContainerName, new ContainerName(location));
+                ContainerName location = await service.GetVersionsLocationAsync(containerName, cancellationToken);
+                Assert.AreEqual(versionsContainerName, location);
 
                 ObjectName objectName = new ObjectName(Path.GetRandomFileName());
                 string fileData1 = "first-content";
