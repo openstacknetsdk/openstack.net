@@ -1,4 +1,4 @@
-﻿namespace OpenStackNetTests.Unit
+﻿namespace OpenStackNetTests.Live
 {
     using System;
     using System.Diagnostics;
@@ -8,34 +8,44 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using OpenStack.Collections;
     using OpenStack.Services.Identity;
-    using SimulatedBaseIdentityService = OpenStackNetTests.Unit.Simulator.IdentityService.SimulatedBaseIdentityService;
-    using TestHelpers = OpenStackNetTests.Live.TestHelpers;
+    using Rackspace.Services.Identity.V2;
 
-    [TestClass]
-    public class SimulatedBaseIdentityTests
+    partial class BaseIdentityTests
     {
-        private SimulatedBaseIdentityService _simulator;
-
         protected Uri BaseAddress
         {
             get
             {
-                return new Uri("http://localhost:5000");
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return null;
+
+                return credentials.BaseAddress;
             }
         }
 
-        [TestInitialize]
-        public void TestInitialize()
+        protected TestProxy Proxy
         {
-            _simulator = new SimulatedBaseIdentityService(5000);
-            _simulator.StartAsync(CancellationToken.None);
+            get
+            {
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return null;
+
+                return credentials.Proxy;
+            }
         }
 
-        [TestCleanup]
-        public void TestCleanup()
+        protected string Vendor
         {
-            _simulator.Dispose();
-            _simulator = null;
+            get
+            {
+                TestCredentials credentials = Credentials;
+                if (credentials == null)
+                    return "OpenStack";
+
+                return credentials.Vendor;
+            }
         }
 
         [TestMethod]
@@ -143,7 +153,24 @@
 
         protected IBaseIdentityService CreateService()
         {
-            BaseIdentityClient client = new BaseIdentityClient(BaseAddress);
+            BaseIdentityClient client;
+            switch (Vendor)
+            {
+            case "HP":
+                // currently HP does not have a vendor-specific IBaseIdentityService
+                goto default;
+
+            case "Rackspace":
+                client = new RackspaceIdentityClient(BaseAddress);
+                break;
+
+            case "OpenStack":
+            default:
+                client = new BaseIdentityClient(BaseAddress);
+                break;
+            }
+
+            TestProxy.ConfigureService(client, Proxy);
             client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
             client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
 

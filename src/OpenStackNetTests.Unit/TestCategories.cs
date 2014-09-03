@@ -1,4 +1,4 @@
-﻿namespace OpenStackNetTests.Unit
+﻿namespace OpenStackNetTests.Live
 {
     internal static class TestCategories
     {
