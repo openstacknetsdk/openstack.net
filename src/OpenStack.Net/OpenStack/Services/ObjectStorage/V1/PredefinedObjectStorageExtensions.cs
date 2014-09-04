@@ -67,6 +67,24 @@
         }
 
         /// <summary>
+        /// Gets a service definition for the Temporary URL middleware extension to the OpenStack Object Storage
+        /// Service.
+        /// </summary>
+        /// <value>
+        /// An <see cref="ObjectStorageServiceExtensionDefinition{TExtension}"/> representing the Temporary URL
+        /// middleware extension.
+        /// </value>
+        /// <seealso cref="ITemporaryUriExtension"/>
+        /// <seealso cref="TemporaryUriExtension"/>
+        public static ObjectStorageServiceExtensionDefinition<ITemporaryUriExtension> TemporaryUri
+        {
+            get
+            {
+                return TemporaryUriExtensionDefinition.Instance;
+            }
+        }
+
+        /// <summary>
         /// This class provides the internal definition for the <see cref="ExtractArchive"/> property.
         /// </summary>
         /// <threadsafety static="true" instance="true"/>
@@ -172,6 +190,45 @@
             public override IObjectVersioningExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
             {
                 return new ObjectVersioningExtension(service, httpApiCallFactory);
+            }
+        }
+
+        /// <summary>
+        /// This class provides the internal definition for the <see cref="TemporaryUri"/> property.
+        /// </summary>
+        /// <threadsafety static="true" instance="true"/>
+        /// <preliminary/>
+        private class TemporaryUriExtensionDefinition : ObjectStorageServiceExtensionDefinition<ITemporaryUriExtension>
+        {
+            /// <summary>
+            /// A singleton instance of the Temporary URL middleware service extension definition.
+            /// </summary>
+            public static readonly TemporaryUriExtensionDefinition Instance = new TemporaryUriExtensionDefinition();
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TemporaryUriExtensionDefinition"/> class.
+            /// </summary>
+            private TemporaryUriExtensionDefinition()
+            {
+            }
+
+            /// <inheritdoc/>
+            public override string Name
+            {
+                get
+                {
+                    return "Temporary URL middleware";
+                }
+            }
+
+            /// <inheritdoc/>
+            public override ITemporaryUriExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
+            {
+#if !PORTABLE || WINRT
+                return new TemporaryUriExtension(service, httpApiCallFactory);
+#else
+                throw new NotSupportedException("The Temporary URL middleware extension is currently not supported on this platform.");
+#endif
             }
         }
     }

@@ -175,6 +175,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IFormPostExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IObjectStorageService.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\IObjectVersioningExtension.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\ITemporaryUriExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListContainersApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListContainersExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\ListObjectsApiCall.cs" />
@@ -194,6 +195,9 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\SetObjectMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\SetVersionsLocationApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\StorageMetadata.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriExtension.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriExtensions.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriSupportedApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\UpdateAccountMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\UpdateContainerMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ServiceClient.cs" />

@@ -1,0 +1,148 @@
+#if !PORTABLE || WINRT
+
+namespace OpenStack.Services.ObjectStorage.V1
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using OpenStack.Collections;
+    using OpenStack.Net;
+    using Rackspace.Net;
+    using Rackspace.Threading;
+
+#if WINRT
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using Windows.Security.Cryptography;
+    using Windows.Security.Cryptography.Core;
+    using Windows.Storage.Streams;
+#else
+    using CngAlgorithm = System.Security.Cryptography.CngAlgorithm;
+    using HMAC = System.Security.Cryptography.HMAC;
+#endif
+
+    /// <summary>
+    /// This class provides the default implementation of the Temporary URL middleware extension to the OpenStack Object
+    /// Storage Service V1.
+    /// </summary>
+    /// <remarks>
+    /// <note type="note">
+    /// <para>This class should not be instantiated directly. It should be obtained by passing
+    /// <see cref="PredefinedObjectStorageExtensions.TemporaryUri"/> to
+    /// <see cref="IExtensibleService{TService}.GetServiceExtension{TExtension}"/>.</para>
+    /// </note>
+    /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
+    /// <preliminary/>
+    public class TemporaryUriExtension : ServiceExtension<IObjectStorageService>, ITemporaryUriExtension
+    {
+        /// <summary>
+        /// The Epoch used as a reference for Unix timestamps and file times.
+        /// </summary>
+        protected static readonly DateTimeOffset Epoch = new DateTimeOffset(new DateTime(1970, 1, 1), TimeSpan.Zero);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TemporaryUriExtension"/> class using the specified Object
+        /// Storage Service client and HTTP API call factory.
+        /// </summary>
+        /// <param name="service">The <see cref="IObjectStorageService"/> instance.</param>
+        /// <param name="httpApiCallFactory">The factory to use for creating new HTTP API calls for the
+        /// extension.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="service"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="httpApiCallFactory"/> is <see langword="null"/>.</para>
+        /// </exception>
+        public TemporaryUriExtension(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
+            : base(service, httpApiCallFactory)
+        {
+        }
+
+        /// <inheritdoc/>
+        public virtual Task<TemporaryUriSupportedApiCall> PrepareTemporaryUriSupportedAsync(CancellationToken cancellationToken)
+        {
+            return Service.PrepareGetObjectStorageInfoAsync(cancellationToken)
+                .Select(task => new TemporaryUriSupportedApiCall(task.Result));
+        }
+
+        /// <inheritdoc/>
+        public Task<Uri> CreateTemporaryUriAsync(HttpMethod method, ContainerName container, ObjectName @object, string key, DateTimeOffset expiration, CancellationToken cancellationToken)
+        {
+            if (method == null)
+                throw new ArgumentNullException("method");
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (@object == null)
+                throw new ArgumentNullException("object");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentException("key cannot be empty");
+
+            Func<Task<GetObjectMetadataApiCall>> resource = () => Service.PrepareGetObjectMetadataAsync(container, @object, cancellationToken);
+            Func<Task<GetObjectMetadataApiCall>, Task<Uri>> body =
+                resourceTask =>
+                {
+                    Uri resourceAddress = resourceTask.Result.RequestMessage.RequestUri;
+
+                    StringBuilder message = new StringBuilder();
+                    message.Append(method.ToString().ToUpperInvariant()).Append('\n');
+                    message.Append(ToTimestamp(expiration)).Append('\n');
+                    message.Append(resourceAddress.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped));
+
+                    byte[] hash;
+
+#if WINRT
+                    IBuffer messageBuffer = CryptographicBuffer.ConvertStringToBinary(message.ToString(), BinaryStringEncoding.Utf8);
+                    IBuffer keyBuffer = CryptographicBuffer.ConvertStringToBinary(key, BinaryStringEncoding.Utf8);
+                    MacAlgorithmProvider provider = MacAlgorithmProvider.OpenAlgorithm(MacAlgorithmNames.HmacSha1);
+                    CryptographicKey cryptographicKey = provider.CreateKey(keyBuffer);
+                    IBuffer signatureBuffer = CryptographicEngine.Sign(cryptographicKey, messageBuffer);
+                    hash = signatureBuffer.ToArray();
+#else
+                    using (HMAC hmac = HMAC.Create())
+                    {
+                        hmac.HashName = CngAlgorithm.Sha1.Algorithm;
+                        hmac.Key = Encoding.UTF8.GetBytes(key);
+                        hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(message.ToString()));
+                    }
+#endif
+
+                    string sig = string.Join(string.Empty, hash.ConvertAll(i => i.ToString("x2")));
+
+                    UriTemplate uriTemplate = new UriTemplate("{?temp_url_sig,temp_url_expires}");
+                    Dictionary<string, object> parameters = new Dictionary<string, object>()
+                    {
+                        { "temp_url_sig", sig },
+                        { "temp_url_expires", ToTimestamp(expiration).ToString() },
+                    };
+
+                    return CompletedTask.FromResult(uriTemplate.BindByName(resourceAddress, parameters));
+                };
+
+            return TaskBlocks.Using(resource, body);
+        }
+
+        /// <summary>
+        /// Converts a <see cref="DateTimeOffset"/> value to a Unix-style timestamp (number of seconds since the
+        /// <see cref="Epoch"/>).
+        /// </summary>
+        /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> to convert.</param>
+        /// <returns>The number of seconds since the <see cref="Epoch"/> until the time indicated by
+        /// <paramref name="dateTimeOffset"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="dateTimeOffset"/> occurs before <see cref="Epoch"/>.
+        /// </exception>
+        protected long ToTimestamp(DateTimeOffset dateTimeOffset)
+        {
+            if (dateTimeOffset < Epoch)
+                throw new ArgumentOutOfRangeException("Cannot convert a time before the epoch (January 1, 1970, 00:00 UTC) to a timestamp.", "dateTimeOffset");
+
+            return (long)(dateTimeOffset - Epoch).TotalSeconds;
+        }
+    }
+}
+
+#endif

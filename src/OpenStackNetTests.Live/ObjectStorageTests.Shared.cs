@@ -847,6 +847,257 @@
             }
         }
 
+        /// <summary>
+        /// This is a regression test for openstacknetsdk/openstack.net#333.
+        /// </summary>
+        /// <seealso href="https://github.com/openstacknetsdk/openstack.net/issues/333">Chunked Encoding Issues (#333)</seealso>
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestProtocolViolation()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                try
+                {
+                    await TestTempUrlWithControlCharactersInObjectName();
+                    Assert.Inconclusive("This test relies on the previous call throwing a WebException placing the ServicePoint in a bad state.");
+                }
+                catch (WebException ex)
+                {
+                    Assert.IsNotNull(ex.Response);
+
+                    ServicePoint servicePoint = ServicePointManager.FindServicePoint(ex.Response.ResponseUri);
+                    if (servicePoint.ProtocolVersion >= HttpVersion.Version11)
+                        Assert.Inconclusive("The ServicePoint must be set to HTTP/1.0 in order to test the ProtocolViolationException handling.");
+                }
+
+                await TestTempUrlExpired();
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestTempUrlValid()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName objectName = new ObjectName(Path.GetRandomFileName());
+                string fileContents = "File contents!";
+
+                AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
+                string tempUrlKey = accountMetadata.GetSecretKey();
+                if (string.IsNullOrEmpty(tempUrlKey))
+                {
+                    tempUrlKey = Guid.NewGuid().ToString("N");
+                    accountMetadata = AccountMetadata.Empty.WithSecretKey(tempUrlKey);
+                    await service.UpdateAccountMetadataAsync(accountMetadata, cancellationToken);
+                }
+
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
+                }
+
+                // verify a future time works
+                DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+                Uri uri = await service.CreateTemporaryUriAsync(HttpMethod.Get, containerName, objectName, tempUrlKey, expirationTime, cancellationToken);
+
+                Console.WriteLine("Temporary URI: {0}", uri.AbsoluteUri);
+
+                WebRequest request = WebRequest.Create(uri);
+                using (WebResponse response = await request.GetResponseAsync())
+                {
+                    Stream cdnStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                    string text = reader.ReadToEnd();
+                    Assert.AreEqual(fileContents, text);
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestTempUrlExpired()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName objectName = new ObjectName(Path.GetRandomFileName());
+                string fileContents = "File contents!";
+
+                AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
+                string tempUrlKey = accountMetadata.GetSecretKey();
+                if (string.IsNullOrEmpty(tempUrlKey))
+                {
+                    tempUrlKey = Guid.NewGuid().ToString("N");
+                    accountMetadata = AccountMetadata.Empty.WithSecretKey(tempUrlKey);
+                    await service.UpdateAccountMetadataAsync(accountMetadata, cancellationToken);
+                }
+
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
+                }
+
+                // verify a past time does not work
+                try
+                {
+                    DateTimeOffset expirationTime = DateTimeOffset.Now - TimeSpan.FromSeconds(3);
+                    Uri uri = await service.CreateTemporaryUriAsync(HttpMethod.Get, containerName, objectName, tempUrlKey, expirationTime, cancellationToken);
+
+                    Console.WriteLine("Temporary URI: {0}", uri.AbsoluteUri);
+
+                    WebRequest request = WebRequest.Create(uri);
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        Stream cdnStream = response.GetResponseStream();
+                        StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                        string text = reader.ReadToEnd();
+                        Assert.Fail("Expected an exception");
+                    }
+                }
+                catch (WebException ex)
+                {
+                    Assert.AreEqual(HttpStatusCode.Unauthorized, ((HttpWebResponse)ex.Response).StatusCode);
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestTempUrlWithSpecialCharactersInObjectName()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName objectName = new ObjectName("§ / 你好");
+                string fileContents = "File contents!";
+
+                AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
+                string tempUrlKey = accountMetadata.GetSecretKey();
+                if (string.IsNullOrEmpty(tempUrlKey))
+                {
+                    tempUrlKey = Guid.NewGuid().ToString("N");
+                    accountMetadata = AccountMetadata.Empty.WithSecretKey(tempUrlKey);
+                    await service.UpdateAccountMetadataAsync(accountMetadata, cancellationToken);
+                }
+
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
+                }
+
+                // verify a future time works
+                DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+                Uri uri = await service.CreateTemporaryUriAsync(HttpMethod.Get, containerName, objectName, tempUrlKey, expirationTime, cancellationToken);
+
+                Console.WriteLine("Temporary URI: {0}", uri.AbsoluteUri);
+
+                WebRequest request = WebRequest.Create(uri);
+                using (WebResponse response = request.GetResponse())
+                {
+                    Stream cdnStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                    string text = reader.ReadToEnd();
+                    Assert.AreEqual(fileContents, text);
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ObjectStorage)]
+        public async Task TestTempUrlWithControlCharactersInObjectName()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(60)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                ObjectName objectName = new ObjectName("foo\n\rbar");
+                string fileContents = "File contents!";
+
+                AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
+                string tempUrlKey = accountMetadata.GetSecretKey();
+                if (string.IsNullOrEmpty(tempUrlKey))
+                {
+                    tempUrlKey = Guid.NewGuid().ToString("N");
+                    accountMetadata = AccountMetadata.Empty.WithSecretKey(tempUrlKey);
+                    await service.UpdateAccountMetadataAsync(accountMetadata, cancellationToken);
+                }
+
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
+                }
+
+                // verify a future time works
+                DateTimeOffset expirationTime = DateTimeOffset.Now + TimeSpan.FromSeconds(10);
+                Uri uri = await service.CreateTemporaryUriAsync(HttpMethod.Get, containerName, objectName, tempUrlKey, expirationTime, cancellationToken);
+
+                Console.WriteLine("Temporary URI: {0}", uri.AbsoluteUri);
+
+                WebRequest request = WebRequest.Create(uri);
+                using (WebResponse response = request.GetResponse())
+                {
+                    Stream cdnStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(cdnStream, Encoding.UTF8);
+                    string text = reader.ReadToEnd();
+                    Assert.AreEqual(fileContents, text);
+                }
+
+                /* Cleanup
+                 */
+                await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
+            }
+        }
+
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
