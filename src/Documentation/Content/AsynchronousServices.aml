@@ -8,9 +8,7 @@
       <para>
         The openstack.net SDK is migrating to an asynchronous service model using the <token>TaskBasedAsync</token>
         for ongoing feature support. This page contains information about several aspects of the asynchronous interfaces
-        which could result in some confusion during development. It also describes the inclusion of extension methods
-        that allow new product features to be used in code that is not allowed to make asynchronous API
-        calls.
+        which could result in some confusion during development.
       </para>
     </introduction>
 
