@@ -194,6 +194,14 @@
           execution of the task itself. The documentation for asynchronous methods does not distinguish between these
           two cases, allowing for any of the specified exceptions to be thrown in either manner.
         </para>
+        <alert class="important">
+          <para>
+            This documentation uses the term asynchronous method to refer to any method with a return type of
+            <codeEntityReference>T:System.Threading.Tasks.Task</codeEntityReference> or
+            <codeEntityReference>T:System.Threading.Tasks.Task`1</codeEntityReference>. Languages with built-in support
+            for asynchronous programming have their own related terminology which may differ in meaning.
+          </para>
+        </alert>
       </content>
 
       <sections>
