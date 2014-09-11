@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using net.openstack.Core.Collections;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using IEnumerable = System.Collections.IEnumerable;
+    using IEnumerator = System.Collections.IEnumerator;
 
     /// <summary>
     /// This is the abstract base class for types modeling the JSON representation of a resource
@@ -27,7 +30,6 @@
         /// <summary>
         /// This is the backing field for the <see cref="ExtensionData"/> property.
         /// </summary>
-        [JsonExtensionData]
         private Dictionary<string, JToken> _extensionData;
 
         /// <summary>
@@ -111,6 +113,275 @@
                     return EmptyExtensionData;
 
                 return new ReadOnlyDictionary<string, JToken>(_extensionData);
+            }
+        }
+
+        /// <summary>
+        /// This property exposes the <see cref="_extensionData"/> field to Json.NET as a dictionary with
+        /// <see cref="object"/> values instead of <see cref="JToken"/> values, which works around a known bug in the
+        /// way Json.NET 5.x handled <see langword="null"/> values in the extension data.
+        /// </summary>
+        [JsonExtensionData]
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtensionDataDictionary ExtensionDataWrapper
+        {
+            get
+            {
+                // This can never return null or Json.NET will attempt to set the value.
+                return new ExtensionDataDictionary(this);
+            }
+
+            set
+            {
+                // This setter must exist or Json.NET will not recognize the extension data. It cannot be used because
+                // Json.NET will bypass the getter, resulting in a lost update.
+                throw new NotSupportedException("Attempted to set the extension data wrapper. See issue openstacknetsdk/openstack.net#419.");
+            }
+        }
+
+        /// <summary>
+        /// Converts an object to a <see cref="JToken"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Unlike <see cref="JToken.FromObject(object)"/>, this method supports <see langword="null"/> values.
+        /// </para>
+        /// </remarks>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// <para>The result of calling <see cref="JToken.FromObject(object)"/> on the input object.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="null"/> if <paramref name="obj"/> is <see langword="null"/>.</para>
+        /// </returns>
+        private static JToken ToJToken(object obj)
+        {
+            if (obj == null)
+                return null;
+
+            return JToken.FromObject(obj);
+        }
+
+        /// <summary>
+        /// This class works around a known bug in Json.NET's handling of JSON extension data.
+        /// </summary>
+        /// <remarks>
+        /// <para>Adding values to the underlying dictionary requires converting the value to a <see cref="JToken"/> by
+        /// calling <see cref="ToJToken(object)"/>. Reading values does not require the inverse because the serializer
+        /// in Json.NET has no trouble handling <see cref="JToken"/> values as input.</para>
+        /// </remarks>
+        /// <seealso cref="ExtensionDataWrapper"/>
+        private sealed class ExtensionDataDictionary : IDictionary<string, object>
+        {
+            private readonly ExtensibleJsonObject _underlying;
+
+            [JsonConstructor]
+            private ExtensionDataDictionary()
+            {
+                // This constructor must exist or Json.NET will not be able to set the extension data. It cannot be used
+                // because Json.NET will not set the required _underlying field.
+                throw new NotSupportedException("Attempted to create the extension data wrapper with its underlying object. See issue openstacknetsdk/openstack.net#419.");
+            }
+
+            public ExtensionDataDictionary(ExtensibleJsonObject extensibleJsonObject)
+            {
+                if (extensibleJsonObject == null)
+                    throw new ArgumentNullException("extensibleJsonObject");
+
+                _underlying = extensibleJsonObject;
+            }
+
+            public object this[string key]
+            {
+                get
+                {
+                    return _underlying.ExtensionData[key];
+                }
+
+                set
+                {
+                    GetOrCreateExtensionData()[key] = ToJToken(value);
+                }
+            }
+
+            public int Count
+            {
+                get
+                {
+                    return _underlying.ExtensionData.Count;
+                }
+            }
+
+            public bool IsReadOnly
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public ICollection<string> Keys
+            {
+                get
+                {
+                    return _underlying.ExtensionData.Keys;
+                }
+            }
+
+            public ICollection<object> Values
+            {
+                get
+                {
+                    return new ExtensionDataValues(_underlying.ExtensionData.Values);
+                }
+            }
+
+            public void Add(KeyValuePair<string, object> item)
+            {
+                IDictionary<string, JToken> extensionData = GetOrCreateExtensionData();
+                extensionData.Add(new KeyValuePair<string, JToken>(item.Key, ToJToken(item.Value)));
+            }
+
+            public void Add(string key, object value)
+            {
+                GetOrCreateExtensionData().Add(key, ToJToken(value));
+            }
+
+            public void Clear()
+            {
+                GetOrCreateExtensionData().Clear();
+            }
+
+            public bool Contains(KeyValuePair<string, object> item)
+            {
+                return _underlying.ExtensionData.Contains(new KeyValuePair<string, JToken>(item.Key, ToJToken(item.Value)));
+            }
+
+            public bool ContainsKey(string key)
+            {
+                return _underlying.ExtensionData.ContainsKey(key);
+            }
+
+            public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
+            {
+                IDictionary<string, object> intermediate = new Dictionary<string, object>(_underlying.ExtensionData.ToDictionary(i => i.Key, i => (object)i.Value));
+                intermediate.CopyTo(array, arrayIndex);
+            }
+
+            public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+            {
+                return _underlying.ExtensionData.Select(i => new KeyValuePair<string, object>(i.Key, i.Value)).GetEnumerator();
+            }
+
+            public bool Remove(KeyValuePair<string, object> item)
+            {
+                IDictionary<string, JToken> extensionData = _underlying._extensionData;
+                if (extensionData == null)
+                    return false;
+
+                return extensionData.Remove(new KeyValuePair<string, JToken>(item.Key, ToJToken(item.Value)));
+            }
+
+            public bool Remove(string key)
+            {
+                var extensionData = _underlying._extensionData;
+                if (extensionData == null)
+                    return false;
+
+                return extensionData.Remove(key);
+            }
+
+            public bool TryGetValue(string key, out object value)
+            {
+                JToken intermediate;
+                bool result = _underlying.ExtensionData.TryGetValue(key, out intermediate);
+                value = intermediate;
+                return result;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            private Dictionary<string, JToken> GetOrCreateExtensionData()
+            {
+                var result = _underlying._extensionData;
+                if (result == null)
+                {
+                    result = new Dictionary<string, JToken>();
+                    _underlying._extensionData = result;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// This class works around a known bug in Json.NET's handling of JSON extension data.
+        /// </summary>
+        /// <seealso cref="ExtensionDataWrapper"/>
+        private class ExtensionDataValues : ICollection<object>
+        {
+            private readonly ICollection<JToken> _values;
+
+            public ExtensionDataValues(ICollection<JToken> values)
+            {
+                if (values == null)
+                    throw new ArgumentNullException("values");
+
+                _values = values;
+            }
+
+            public int Count
+            {
+                get
+                {
+                    return _values.Count;
+                }
+            }
+
+            public bool IsReadOnly
+            {
+                get
+                {
+                    return _values.IsReadOnly;
+                }
+            }
+
+            public void Add(object item)
+            {
+                _values.Add(ToJToken(item));
+            }
+
+            public void Clear()
+            {
+                _values.Clear();
+            }
+
+            public bool Contains(object item)
+            {
+                return _values.Contains(ToJToken(item));
+            }
+
+            public void CopyTo(object[] array, int arrayIndex)
+            {
+                ICollection<object> intermediate = _values.ToArray();
+                intermediate.CopyTo(array, arrayIndex);
+            }
+
+            public IEnumerator<object> GetEnumerator()
+            {
+                return _values.Cast<object>().GetEnumerator();
+            }
+
+            public bool Remove(object item)
+            {
+                return _values.Remove(ToJToken(item));
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
             }
         }
     }
