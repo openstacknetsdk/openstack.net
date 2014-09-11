@@ -240,8 +240,8 @@ namespace net.openstack.Core.Domain
         /// <param name="imageId">The image to rebuild the server from. This is specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The new flavor for server. This is obtained from <see cref="Flavor.Id"/>.</param>
         /// <param name="adminPassword">The new admin password for the server.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
         /// <param name="metadata">The list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.</param>
         /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
         /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.</param>
@@ -260,9 +260,9 @@ namespace net.openstack.Core.Domain
         /// <para>-or-</para>
         /// <para>If <paramref name="adminPassword"/> is empty.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/></para>
+        /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+        /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="diskConfig"/>.
@@ -278,9 +278,9 @@ namespace net.openstack.Core.Domain
                 throw new ArgumentException("imageId cannot be empty");
             if (string.IsNullOrEmpty(flavor))
                 throw new ArgumentException("flavor cannot be empty");
-            if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+            if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-            if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+            if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
             if (diskConfig != null && diskConfig != DiskConfiguration.Auto && diskConfig != DiskConfiguration.Manual)
                 throw new NotSupportedException("The specified disk configuration is not supported.");
