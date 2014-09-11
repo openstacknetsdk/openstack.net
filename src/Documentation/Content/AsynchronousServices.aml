@@ -250,14 +250,17 @@
             <para>
               This library additionally ensures that exceptions thrown by asynchronous operations are not wrapped in
               multiple layers of <codeEntityReference>T:System.AggregateException</codeEntityReference>. In other words,
-              an <codeEntityReference>T:System.AggregateException</codeEntityReference> thrown during the asynchronous
+              an <codeEntityReference>T:System.ArgumentException</codeEntityReference> thrown during the asynchronous
               execution of a task will result in the
               <codeEntityReference>P:System.Threading.Tasks.Task.Exception</codeEntityReference> property returning an
-              <codeEntityReference>T:System.AggregateException</codeEntityReference> with exactly one inner exception,
-              which is the original <codeEntityReference>T:System.ArgumentException</codeEntityReference>. This
-              guarantee simplifies the use of the API is languages that support <token>AsyncAwait</token>, since those
-              operators automatically unwrap the first layer of
-              <codeEntityReference>T:System.AggregateException</codeEntityReference>.
+              <codeEntityReference>T:System.AggregateException</codeEntityReference>, and that exception will not
+              contain an nested instances of <codeEntityReference>T:System.AggregateException</codeEntityReference> in
+              the <codeEntityReference>P:System.AggregateException.InnerExceptions</codeEntityReference> collection. In
+              most cases, the <codeEntityReference>T:System.AggregateException</codeEntityReference> wraps exactly one
+              inner exception, which is the original
+              <codeEntityReference>T:System.ArgumentException</codeEntityReference>. This guarantee simplifies the use
+              of the API is languages that support <token>AsyncAwait</token>, since those operators automatically unwrap
+              the first layer of <codeEntityReference>T:System.AggregateException</codeEntityReference>.
             </para>
             <code language="cs" region="ExceptionDuringTaskExecution" source="..\Samples\CSharpCodeSamples\AsynchronousExceptionsExamples.cs"/>
             <code language="vb" region="ExceptionDuringTaskExecution" source="..\Samples\VBCodeSamples\AsynchronousExceptionsExamples.vb"/>
