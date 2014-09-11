@@ -8,8 +8,8 @@ Public Class AsynchronousExceptionsExamples
         Try
             Dim myTask As Task = SomeOperationAsync()
         Catch ex As ArgumentException
-            ' ex was thrown directly by SomeOperationAsync. If SomeOperationAsync Is marked with the `Async`
-            ' keyword, then ex was thrown prior to the first use of the `Await` keyword within the implementation.
+            ' ex was thrown directly by SomeOperationAsync. This cannot occur if SomeOperationAsync is an async method
+            ' (§10.1.3 - Visual Basic Language Specification Version 11.0).
         End Try
         ' #End Region
     End Sub
@@ -25,9 +25,8 @@ Public Class AsynchronousExceptionsExamples
                 Throw
             End If
 
-            ' ex was thrown during the asynchronous portion of SomeOperationAsync. If SomeOperationAsync Is marked
-            ' with the `Async` keyword, then ex was thrown after the first use of the `Await` keyword within the
-            ' method.
+            ' ex was thrown during the asynchronous portion of SomeOperationAsync. This is always the case if
+            ' SomeOperationAsync is an async method (§10.1.3 - Visual Basic Language Specification Version 11.0).
         End Try
         ' #End Region
     End Sub
