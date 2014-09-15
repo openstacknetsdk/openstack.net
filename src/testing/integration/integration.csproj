@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Providers\Rackspace\CloudFiles\DarkKnightRises.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

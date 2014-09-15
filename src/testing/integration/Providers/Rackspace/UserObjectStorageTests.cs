@@ -1606,7 +1606,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestCreateLargeObject()
         {
             IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
@@ -1648,7 +1648,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestVerifyLargeObjectETag()
         {
             IObjectStorageProvider provider = Bootstrapper.CreateObjectStorageProvider();
@@ -1698,7 +1698,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestExtractArchiveTar()
         {
             CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
@@ -1750,7 +1750,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestExtractArchiveTarGz()
         {
             CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
@@ -1807,7 +1807,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestExtractArchiveTarBz2()
         {
             CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
@@ -1863,7 +1863,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
-        [DeploymentItem("DarkKnightRises.jpg")]
+        [DeploymentItem("Providers/Rackspace/CloudFiles/DarkKnightRises.jpg")]
         public void TestExtractArchiveTarGzCreateContainer()
         {
             CloudFilesProvider provider = (CloudFilesProvider)Bootstrapper.CreateObjectStorageProvider();
