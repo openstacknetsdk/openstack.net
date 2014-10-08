@@ -16,7 +16,7 @@ namespace net.openstack.Providers.Rackspace.Objects.Response
         /// Gets additional information about the endpoints.
         /// </summary>
         /// <seealso cref="UserAccess"/>
-        [JsonProperty("endpoints")]
+        [JsonProperty("endpoints", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ExtendedEndpoint[] Endpoints { get; private set; }
     }
 }

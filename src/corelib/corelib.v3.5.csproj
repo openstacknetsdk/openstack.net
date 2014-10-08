@@ -83,6 +83,7 @@
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
     <Compile Include="Core\Domain\EndpointTemplate.cs" />
+    <Compile Include="Core\Domain\EndpointTemplateId.cs" />
     <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
     <Compile Include="Core\Domain\ExtensibleJsonObject.cs" />
     <Compile Include="Core\Domain\FlavorId.cs" />

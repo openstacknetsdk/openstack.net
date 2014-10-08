@@ -5,31 +5,71 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// This models the JSON request used for the Add Endpoint request.
+    /// This models the JSON request used for the <strong>Add endpoint</strong> HTTP API request in the OpenStack
+    /// Identity Service V2.
     /// </summary>
-    /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_addEndpoint__v2.0_tenants__tenantId__OS-KSCATALOG_endpoints_Endpoint_Operations_OS-KSCATALOG.html">Add Service Catalog Endpoint (OpenStack Identity Service API v2.0 Reference)</seealso>
+    /// <remarks>
+    /// <para>This object is part of the <c>OS-KSCATALOG</c> extension to the OpenStack Identity Service V2.</para>
+    /// </remarks>
+    /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#os-kscatalog-ext">OS-KSCATALOG admin extension (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
     /// <threadsafety static="true" instance="false"/>
+    /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
     internal class AddServiceCatalogEndpointRequest
     {
         /// <summary>
-        /// Gets additional information about the endpoint template to add.
+        /// This is the backing field for the <see cref="EndpointTemplateId"/> property.
         /// </summary>
-        [JsonProperty("OS-KSCATALOG:endpointTemplate")]
-        public EndpointTemplate EndpointTemplate { get; private set; }
+        /// <remarks>
+        /// <para>This API call wraps the endpoint template identifier inside an "EndpointTemplateWithOnlyId"
+        /// resource.</para>
+        /// </remarks>
+        [JsonProperty("OS-KSCATALOG:endpointTemplate", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private EndpointTemplate _endpointTemplate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddServiceCatalogEndpointRequest"/> class for the
-        /// specified <paramref name="endpointTemplate"/>.
+        /// Initializes a new instance of the <see cref="AddServiceCatalogEndpointRequest"/> class
+        /// during JSON deserialization.
         /// </summary>
-        /// <param name="endpointTemplate">The endpoint template.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="endpointTemplate"/> is <see langword="null"/>.</exception>
-        public AddServiceCatalogEndpointRequest(EndpointTemplate endpointTemplate)
+        [JsonConstructor]
+        protected AddServiceCatalogEndpointRequest()
         {
-            if (endpointTemplate == null)
-                throw new ArgumentNullException("endpointTemplate");
+        }
 
-            EndpointTemplate = endpointTemplate;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddServiceCatalogEndpointRequest"/> class with the specified
+        /// endpoint template identifier.
+        /// </summary>
+        /// <param name="endpointTemplateId">
+        /// The unique identifier of the endpoint template to use for the endpoint.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="endpointTemplateId"/> is <see langword="null"/>.
+        /// </exception>
+        public AddServiceCatalogEndpointRequest(EndpointTemplateId endpointTemplateId)
+        {
+            if (endpointTemplateId == null)
+                throw new ArgumentNullException("endpointTemplateId");
+
+            _endpointTemplate = new EndpointTemplate(endpointTemplateId);
+        }
+
+        /// <summary>
+        /// Gets the unique identifier of the endpoint template to use when creating the endpoint.
+        /// </summary>
+        /// <value>
+        /// <para>The unique identifier of the endpoint template to use when creating the endpoint.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
+        public EndpointTemplateId EndpointTemplateId
+        {
+            get
+            {
+                if (_endpointTemplate == null)
+                    return null;
+
+                return _endpointTemplate.Id;
+            }
         }
     }
 }
