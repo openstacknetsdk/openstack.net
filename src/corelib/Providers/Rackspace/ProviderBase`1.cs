@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -65,6 +66,11 @@ namespace net.openstack.Providers.Rackspace
         /// This is the backing field for the <see cref="BackoffPolicy"/> property.
         /// </summary>
         private IBackoffPolicy _backoffPolicy;
+
+        /// <summary>
+        /// This is the backing field for the <see cref="ServicePointResetTimeout"/> property.
+        /// </summary>
+        private TimeSpan _servicePointResetTimeout = TimeSpan.FromMilliseconds(1);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class using
@@ -179,6 +185,38 @@ namespace net.openstack.Providers.Rackspace
             get
             {
                 return net.openstack.Core.BackoffPolicy.Default;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the timeout value to use when attempting to reset the <see cref="ServicePoint"/> used for
+        /// streaming HTTP connections.
+        /// </summary>
+        /// <remarks>
+        /// <para>This property is used by <see cref="HandleProtocolViolation"/> when resetting a service point.</para>
+        /// <para>The default value is 1 millisecond.</para>
+        /// </remarks>
+        /// <returns>
+        /// The timeout value to use when attempting to reset the <see cref="ServicePoint"/> used for streaming HTTP
+        /// connections.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="value"/> is less than 1 millisecond.
+        /// </exception>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public TimeSpan ServicePointResetTimeout
+        {
+            get
+            {
+                return _servicePointResetTimeout;
+            }
+
+            set
+            {
+                if ((long)value.TotalMilliseconds <= 0)
+                    throw new ArgumentOutOfRangeException("value");
+
+                _servicePointResetTimeout = value;
             }
         }
 
@@ -555,17 +593,8 @@ namespace net.openstack.Providers.Rackspace
             }
             catch (ProtocolViolationException)
             {
-                ServicePoint servicePoint = ServicePointManager.FindServicePoint(absoluteUri);
-                if (servicePoint.ProtocolVersion < HttpVersion.Version11)
-                {
-                    // this is a workaround for issue #333
-                    // https://github.com/openstacknetsdk/openstack.net/issues/333
-                    // http://stackoverflow.com/a/22976809/138304
-                    int maxIdleTime = servicePoint.MaxIdleTime;
-                    servicePoint.MaxIdleTime = 0;
-                    Thread.Sleep(1);
-                    servicePoint.MaxIdleTime = maxIdleTime;
-                }
+                if (!HandleProtocolViolation(absoluteUri))
+                    throw;
 
                 response = RestService.Stream(absoluteUri, method, stream, chunkSize, maxReadLength, headers, queryStringParameter, requestSettings, progressUpdated);
             }
@@ -597,6 +626,40 @@ namespace net.openstack.Providers.Rackspace
             CheckResponse(response);
 
             return response;
+        }
+
+        /// <summary>
+        /// This method is called in response to a <see cref="ProtocolViolationException"/> which occurred during a
+        /// streaming HTTP operation.
+        /// </summary>
+        /// <remarks>
+        /// <para>The default implementation checks that the <see cref="ServicePoint.ProtocolVersion"/> is
+        /// <see cref="HttpVersion.Version11"/>, and if not it attempts to reset the <see cref="ServicePoint"/> used for
+        /// the connection.</para>
+        /// </remarks>
+        /// <param name="absoluteUri">The absolute URI used for the HTTP request which failed.</param>
+        /// <returns>
+        /// <para><see langword="true"/> if the operation should be reattempted.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> if the operation should not be reattempted.</para>
+        /// </returns>
+        /// <preliminary/>
+        protected virtual bool HandleProtocolViolation(Uri absoluteUri)
+        {
+            ServicePoint servicePoint = ServicePointManager.FindServicePoint(absoluteUri);
+            if (servicePoint.ProtocolVersion < HttpVersion.Version11)
+            {
+                // this is a workaround for issue #333
+                // https://github.com/openstacknetsdk/openstack.net/issues/333
+                // http://stackoverflow.com/a/22976809/138304
+                int maxIdleTime = servicePoint.MaxIdleTime;
+                servicePoint.MaxIdleTime = 0;
+                Thread.Sleep(ServicePointResetTimeout);
+                servicePoint.MaxIdleTime = maxIdleTime;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
