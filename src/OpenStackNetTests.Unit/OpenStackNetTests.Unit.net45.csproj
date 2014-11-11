@@ -134,12 +134,13 @@
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationHandler.cs" />
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationMiddleware.cs" />
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationOptions.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageController.cs" />
     <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ObjectStorageResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Simulator\ObjectStorageService\V1\SimulatedObjectStorageService.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageServiceConfiguration.cs" />
     <Compile Include="TestCategories.cs" />
   </ItemGroup>
   <ItemGroup>

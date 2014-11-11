@@ -1,6 +1,7 @@
 ﻿namespace OpenStackNetTests.Live
 {
-    using System.Threading;
+    using System;
+    using Microsoft.Owin.Hosting;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using OpenStackNetTests.Unit;
@@ -10,8 +11,8 @@
     [TestClass]
     public partial class ObjectStorageTests
     {
-        private SimulatedIdentityService _identityService;
-        private SimulatedObjectStorageService _objectStorageService;
+        private IDisposable _identityService;
+        private IDisposable _objectStorageService;
 
         internal TestCredentials Credentials
         {
@@ -24,11 +25,8 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            _identityService = new SimulatedIdentityService();
-            _identityService.StartAsync(CancellationToken.None);
-
-            _objectStorageService = new SimulatedObjectStorageService(_identityService);
-            _objectStorageService.StartAsync(CancellationToken.None);
+            _identityService = WebApp.Start<IdentityServiceConfiguration>("http://localhost:5000");
+            _objectStorageService = WebApp.Start<ObjectStorageServiceConfiguration>("http://localhost:8080");
         }
 
         [TestCleanup]
