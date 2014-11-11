@@ -1,6 +1,7 @@
 ﻿namespace OpenStackNetTests.Live
 {
-    using System.Threading;
+    using System;
+    using Microsoft.Owin.Hosting;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using OpenStackNetTests.Unit;
@@ -9,7 +10,7 @@
     [TestClass]
     public partial class IdentityV2Tests
     {
-        private SimulatedIdentityService _simulator;
+        private IDisposable _simulator;
 
         internal TestCredentials Credentials
         {
@@ -22,8 +23,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            _simulator = new SimulatedIdentityService();
-            _simulator.StartAsync(CancellationToken.None);
+            _simulator = WebApp.Start<IdentityServiceConfiguration>("http://localhost:5000");
         }
 
         [TestCleanup]
