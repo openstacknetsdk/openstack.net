@@ -54,7 +54,7 @@
 
             Uri result = requestUri;
             if (result.AbsoluteUri.IndexOf('?') >= 0)
-                result = new Uri(result.GetComponents(UriComponents.SchemeAndServer | UriComponents.Path, UriFormat.SafeUnescaped));
+                result = new Uri(result.GetComponents(UriComponents.SchemeAndServer | UriComponents.Path, UriFormat.UriEscaped));
 
             if (result.AbsoluteUri.EndsWith("/"))
                 result = RemoveTrailingSlash(result);
@@ -82,7 +82,10 @@
         {
             try
             {
-                Uri dispatchUri = GetDispatchUri(context.Request.Url);
+                if (!context.Request.RawUrl.StartsWith("/"))
+                    throw new NotSupportedException();
+
+                Uri dispatchUri = GetDispatchUri(new Uri(context.Request.Url.GetLeftPart(UriPartial.Authority) + context.Request.RawUrl));
                 HttpResponseMessage response = await ProcessRequestImplAsync(context, dispatchUri, cancellationToken).ConfigureAwait(false);
                 context.Response.StatusCode = (int)response.StatusCode;
                 foreach (var header in response.Headers)

@@ -104,6 +104,11 @@
     </Compile>
     <Compile Include="Simulator\IdentityService\SimulatedBaseIdentityService.cs" />
     <Compile Include="Simulator\IdentityService\V2\SimulatedIdentityService.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ObjectStorageResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Simulator\ObjectStorageService\V1\SimulatedObjectStorageService.cs" />
     <Compile Include="Simulator\SimulatedService.cs" />
     <Compile Include="TestCategories.cs" />
@@ -125,6 +130,7 @@
     <None Include="Simulator\IdentityService\ListApiVersionsResponse.json" />
     <None Include="Simulator\IdentityService\ListExtensionsResponse.json" />
     <None Include="Simulator\IdentityService\ListTenantsResponseTemplate.json" />
+    <None Include="Simulator\ObjectStorageService\V1\GetInfoResponse.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -134,6 +140,10 @@
     <EmbeddedResource Include="Simulator\IdentityService\IdentityServiceResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityServiceResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Simulator\ObjectStorageService\V1\ObjectStorageResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ObjectStorageResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

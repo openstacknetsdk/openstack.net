@@ -101,10 +101,13 @@
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            MediaTypeHeaderValue[] acceptTypes = Array.ConvertAll(request.AcceptTypes, MediaTypeHeaderValue.Parse);
-            MediaTypeHeaderValue contentType = new MediaTypeHeaderValue("application/json");
-            if (!acceptTypes.Any(acceptType => HttpApiCall.IsAcceptable(acceptType, contentType)))
-                throw new NotSupportedException();
+            if (request.AcceptTypes != null && request.AcceptTypes.Length > 0)
+            {
+                MediaTypeHeaderValue[] acceptTypes = Array.ConvertAll(request.AcceptTypes, MediaTypeHeaderValue.Parse);
+                MediaTypeHeaderValue contentType = new MediaTypeHeaderValue("application/json");
+                if (!acceptTypes.Any(acceptType => HttpApiCall.IsAcceptable(acceptType, contentType)))
+                    throw new NotSupportedException();
+            }
         }
     }
 }

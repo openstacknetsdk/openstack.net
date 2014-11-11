@@ -355,6 +355,19 @@
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
 
                 IObjectStorageService service = CreateService();
+
+                ContainerName containerName = new ContainerName(TestContainerPrefix + Path.GetRandomFileName());
+                await service.CreateContainerAsync(containerName, cancellationToken);
+
+                ObjectName objectName = new ObjectName(Path.GetRandomFileName());
+                // another random name counts as random content
+                string fileData = Path.GetRandomFileName();
+
+                using (MemoryStream uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
+                {
+                    await service.CreateObjectAsync(containerName, objectName, uploadStream, cancellationToken, null);
+                }
+
                 ReadOnlyCollection<Container> containers = await ListAllContainersAsync(service, cancellationToken);
                 if (!containers.Any())
                     Assert.Inconclusive("The account does not have any containers in the region.");
@@ -375,7 +388,7 @@
                     if (container.Size > 0)
                         nonEmptyBytesContainersTested++;
 
-                    long objectCount = 0;
+                    int? objectCount = 0;
                     long? objectSize = 0;
                     foreach (var obj in await ListAllObjectsAsync(service, container.Name, cancellationToken))
                     {
@@ -1566,7 +1579,7 @@
                     try
                     {
                         CreateObjectApiCall apiCall = await service.PrepareCreateObjectAsync(containerName, objectName, uploadStream, cancellationToken, progressMonitor);
-                        apiCall.RequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("*"));
+                        apiCall.RequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"*\""));
                         await apiCall.SendAsync(cancellationToken);
                         Assert.Fail("Expected a 412 (Precondition Failed)");
                     }
@@ -1580,7 +1593,7 @@
                     try
                     {
                         CreateObjectApiCall apiCall = await service.PrepareCreateObjectAsync(containerName, objectName, uploadStream, cancellationToken, progressMonitor);
-                        apiCall.RequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("*"));
+                        apiCall.RequestMessage.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"*\""));
                         await apiCall.SendAsync(cancellationToken);
                         Assert.Fail("Expected a 412 (Precondition Failed)");
                     }
