@@ -34,8 +34,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Rackspace.Threading">
       <HintPath>..\..\packages\Rackspace.Threading.1.1.0-beta001\lib\net45\Rackspace.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleRESTServices, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8965cea5c205d3a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SimpleRESTServices.1.3.0.1\lib\net40\SimpleRESTServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsynchronousExceptionsExamples.cs" />
+    <Compile Include="IdentityProviderExamples.cs" />
     <Compile Include="ObjectStorageProviderExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueingServiceExamples.cs" />
