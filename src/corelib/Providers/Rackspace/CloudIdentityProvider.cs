@@ -435,6 +435,36 @@ namespace net.openstack.Providers.Rackspace
             return cred;
         }
 
+        /// <summary>
+        /// Reset the API key credentials for a user.
+        /// </summary>
+        /// <param name="userId">The user ID. This is obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>A <see cref="UserCredential"/> object containing the new API key for the user.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="userId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the provider does not support the <see href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-d1e1357.html">OS-KSADM Admin Extension</see>.</para>
+        /// <para>-or-</para>
+        /// <para>If the provider does not support the given <paramref name="identity"/> type.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_resetUserAPIKeyCredentials__v2.0_users__userId__OS-KSADM_credentials_RAX-KSKEYapiKeyCredentials_RAX-AUTH_reset_User_Calls.html">Reset API key credentials (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
+        public virtual UserCredential ResetApiKey(string userId, CloudIdentity identity = null)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials/RAX-AUTH/reset", userId);
+            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, new Uri(UrlBase, urlPath), HttpMethod.POST);
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.UserCredential;
+        }
+
         /// <inheritdoc/>
         public new virtual CloudIdentity DefaultIdentity { get { return base.DefaultIdentity; } }
 
