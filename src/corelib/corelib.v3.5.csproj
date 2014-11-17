@@ -15,7 +15,6 @@
     <BaseIntermediateOutputPath>obj\v3.5\</BaseIntermediateOutputPath>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -651,7 +650,6 @@
     <None Include="Icons\openstack_net_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets" Condition="Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
