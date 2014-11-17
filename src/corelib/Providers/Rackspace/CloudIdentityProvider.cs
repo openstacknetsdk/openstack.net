@@ -53,6 +53,20 @@ namespace net.openstack.Providers.Rackspace
         /// implementation, and token cache.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method to create an identity provider that
+        /// authenticates using username and API key credentials.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="CreateProvider" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="CreateProvider" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="CreateProvider" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="CreateProvider" language="fs"/>
+        /// <para>The following example demonstrates the use of this method to create an identity provider that
+        /// authenticates using username and password credentials.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="CreateProviderWithPassword" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="CreateProviderWithPassword" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="CreateProviderWithPassword" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="CreateProviderWithPassword" language="fs"/>
+        /// </example>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null)
         { }
@@ -450,6 +464,14 @@ namespace net.openstack.Providers.Rackspace
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method. For more information about creating the
+        /// provider, see <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="ResetApiKey" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="ResetApiKey" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="ResetApiKey" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="ResetApiKey" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_resetUserAPIKeyCredentials__v2.0_users__userId__OS-KSADM_credentials_RAX-KSKEYapiKeyCredentials_RAX-AUTH_reset_User_Calls.html">Reset API key credentials (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
         public virtual UserCredential ResetApiKey(string userId, CloudIdentity identity = null)
         {

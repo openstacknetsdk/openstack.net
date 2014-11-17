@@ -35,6 +35,9 @@
     <ClCompile Include="ObjectStorageProviderExamples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IdentityProviderExamples.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

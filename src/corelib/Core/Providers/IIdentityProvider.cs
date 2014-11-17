@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
+using net.openstack.Providers.Rackspace;
 
 namespace net.openstack.Core.Providers
 {
@@ -89,6 +90,15 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="ListUsers" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="ListUsers" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="ListUsers" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="ListUsers" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_listUsers_v2.0_users_.html">List Users (OpenStack Identity Service API v2.0 Reference)</seealso>
         IEnumerable<User> ListUsers(CloudIdentity identity = null);
 
@@ -150,6 +160,15 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="ServiceConflictException">If a user with the specified <see cref="NewUser.Username"/> already exists.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="CreateUser" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="CreateUser" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="CreateUser" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="CreateUser" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_addUser_v2.0_users_.html">Add User (OpenStack Identity Service API v2.0 Reference)</seealso>
         NewUser AddUser(NewUser user, CloudIdentity identity = null);
 
@@ -174,6 +193,15 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="UpdateUser" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="UpdateUser" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="UpdateUser" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="UpdateUser" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUser_v2.0_users__userId__.html">Update User (OpenStack Identity Service API v2.0 Reference)</seealso>
         User UpdateUser(User user, CloudIdentity identity = null);
 
@@ -192,6 +220,15 @@ namespace net.openstack.Core.Providers
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="DeleteUser" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="DeleteUser" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="DeleteUser" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="DeleteUser" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/DELETE_deleteUser_v2.0_users__userId__.html">Delete User (OpenStack Identity Service API v2.0 Reference)</seealso>
         bool DeleteUser(string userId, CloudIdentity identity = null);
 
