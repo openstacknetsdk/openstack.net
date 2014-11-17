@@ -92,6 +92,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.0.1", "Docu
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.0.0", "Documentation.History\1.0.0\Documentation.1.0.0.shfbproj", "{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.3.3", "Documentation.History\1.3.3\Documentation.1.3.3.shfbproj", "{FC6B5322-98E9-49D4-BDE0-CF69847374DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -203,6 +205,9 @@ Global
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -231,6 +236,7 @@ Global
 		{55D69660-CC73-469A-94CE-A28405B7C13F} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{1A9A19DB-3244-4A7B-A346-AD3E6C06B49B} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = openstack.net.vsmdi
