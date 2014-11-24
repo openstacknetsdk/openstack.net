@@ -55,7 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE
 		..\build\build.ps1 = ..\build\build.ps1
 		..\build\check-key.ps1 = ..\build\check-key.ps1
 		..\build\keys.ps1 = ..\build\keys.ps1
-		..\build\push.ps1 = ..\build\push.ps1
+		..\build\push-v1.ps1 = ..\build\push-v1.ps1
+		..\build\push-v2.ps1 = ..\build\push-v2.ps1
 		..\build\version.ps1 = ..\build\version.ps1
 	EndProjectSection
 EndProject

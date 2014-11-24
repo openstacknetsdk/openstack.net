@@ -44,6 +44,15 @@ if (-not $SkipKeyCheck) {
 	. .\keys.ps1
 
 	foreach ($pair in $Keys.GetEnumerator()) {
+		$assembly = Resolve-FullPath -Path "..\src\corelib\bin\$($pair.Key)\$BuildConfig\openstacknet.dll"
+		# Run the actual check in a separate process or the current process will keep the assembly file locked
+		powershell -Command ".\check-key.ps1 -Assembly '$assembly' -ExpectedKey '$($pair.Value)' -Build '$($pair.Key)'"
+		if ($LASTEXITCODE -ne 0) {
+			Exit $p.ExitCode
+		}
+	}
+
+	foreach ($pair in $KeysV2.GetEnumerator()) {
 		$assembly = Resolve-FullPath -Path "..\src\OpenStack.Net\bin\$($pair.Key)\$BuildConfig\OpenStack.Net.dll"
 		# Run the actual check in a separate process or the current process will keep the assembly file locked
 		powershell -Command ".\check-key.ps1 -Assembly '$assembly' -ExpectedKey '$($pair.Value)' -Build '$($pair.Key)'"
@@ -57,4 +66,5 @@ if (-not (Test-Path 'nuget')) {
 	mkdir "nuget"
 }
 
-&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
+&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
+&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$VersionV2" '-Symbols'
