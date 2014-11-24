@@ -181,7 +181,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenStack.Net.nuspec" />
+    <None Include="OpenStack.Net.V2.nuspec" />
     <None Include="packages.OpenStack.Net.portable-net45.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

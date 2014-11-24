@@ -174,7 +174,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenStack.Net.nuspec" />
+    <None Include="OpenStack.Net.V2.nuspec" />
     <None Include="packages.OpenStack.Net.net45.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
