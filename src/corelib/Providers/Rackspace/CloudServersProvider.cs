@@ -248,9 +248,9 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentNullException("serverId");
             if (string.IsNullOrEmpty(serverId))
                 throw new ArgumentException("serverId cannot be empty");
-            if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+            if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-            if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+            if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
             CheckIdentity(identity);
 
@@ -545,9 +545,9 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("imageName cannot be empty");
             if (string.IsNullOrEmpty(flavor))
                 throw new ArgumentException("flavor cannot be empty");
-            if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+            if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-            if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+            if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
             if (diskConfig != null && diskConfig != DiskConfiguration.Auto && diskConfig != DiskConfiguration.Manual)
                 throw new NotSupportedException("The specified disk configuration is not supported.");

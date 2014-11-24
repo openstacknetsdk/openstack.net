@@ -15,7 +15,6 @@
     <BaseIntermediateOutputPath>obj\v3.5\</BaseIntermediateOutputPath>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,11 +76,14 @@
     <Compile Include="Core\CoreTaskExtensions.cs" />
     <Compile Include="Core\Domain\AuthenticationRequirement.cs" />
     <Compile Include="Core\Domain\CloudIdentityWithProject.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressNoneIsNullSimpleConverter.cs" />
     <Compile Include="Core\Domain\Converters\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\Converters\PhysicalAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
     <Compile Include="Core\Domain\DiskConfiguration.cs" />
+    <Compile Include="Core\Domain\EndpointTemplate.cs" />
+    <Compile Include="Core\Domain\EndpointTemplateId.cs" />
     <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
     <Compile Include="Core\Domain\ExtensibleJsonObject.cs" />
     <Compile Include="Core\Domain\FlavorId.cs" />
@@ -521,12 +523,14 @@
     <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
     <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddServiceCatalogEndpointRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveError.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetEndpointResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListEndpointsResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
@@ -646,8 +650,13 @@
     <None Include="Icons\openstack_net_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\..\build\KeyReporting.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets" Condition="Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

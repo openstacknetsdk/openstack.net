@@ -307,6 +307,39 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        public void TestResetApiKey()
+        {
+            string username = GenerateUsername();
+            NewUser newUser = new NewUser(username, username + "@example.com");
+
+            CloudIdentityProvider provider = (CloudIdentityProvider)Bootstrapper.CreateIdentityProvider();
+            NewUser user = provider.AddUser(newUser, null);
+
+            Assert.IsNotNull(user);
+            Assert.AreEqual(username, user.Username);
+            Assert.IsFalse(string.IsNullOrEmpty(user.Id));
+            Assert.IsFalse(string.IsNullOrEmpty(user.Password));
+
+            UserCredential credentials = provider.ResetApiKey(user.Id);
+            Assert.AreEqual(user.Username, credentials.Username);
+            Assert.IsNotNull(credentials.APIKey);
+            Assert.AreNotEqual(string.Empty, credentials.APIKey);
+            Console.WriteLine("API Key: {0}", credentials.APIKey);
+
+            UserCredential credentials2 = provider.ResetApiKey(user.Id);
+            Assert.AreEqual(user.Username, credentials2.Username);
+            Assert.IsNotNull(credentials2.APIKey);
+            Assert.AreNotEqual(string.Empty, credentials2.APIKey);
+            Assert.AreNotEqual(credentials.APIKey, credentials2.APIKey);
+            Console.WriteLine("API Key: {0}", credentials2.APIKey);
+
+            bool deleted = provider.DeleteUser(user.Id, null);
+            Assert.IsTrue(deleted);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
         public void TestAddUserUpdateUserDeleteUser()
         {
             string username = GenerateUsername();

@@ -606,10 +606,12 @@ namespace net.openstack.Providers.Rackspace
         /// The base implementation returns a <see cref="JsonRequestSettings"/> object initialized with the following values.
         ///
         /// <list type="bullet">
-        /// <item>The <see cref="RequestSettings.RetryCount"/> is 2.</item>
+        /// <item>The <see cref="RequestSettings.RetryCount"/> is 0.</item>
         /// <item>The <see cref="RequestSettings.RetryDelay"/> is 200 milliseconds.</item>
         /// <item>The <see cref="RequestSettings.Non200SuccessCodes"/> contains <see cref="HttpStatusCode.Unauthorized"/> and <see cref="HttpStatusCode.Conflict"/>, along with the values in <paramref name="non200SuccessCodes"/> (if any).</item>
         /// <item>The <see cref="RequestSettings.UserAgent"/> is set to <see cref="UserAgentGenerator.UserAgent"/>.</item>
+        /// <item>The <see cref="RequestSettings.AllowZeroContentLength"/> is set to <see langword="true"/>.</item>
+        /// <item>The <see cref="RequestSettings.ConnectionLimit"/> is set to <see cref="ConnectionLimit"/>.</item>
         /// <item>Other properties are set to the default values for <see cref="JsonRequestSettings"/>.</item>
         /// </list>
         ///
@@ -629,6 +631,7 @@ namespace net.openstack.Providers.Rackspace
                 RetryDelay = TimeSpan.FromMilliseconds(200),
                 Non200SuccessCodes = non200SuccessCodesAggregate,
                 UserAgent = UserAgentGenerator.UserAgent,
+                AllowZeroContentLength = true,
                 ConnectionLimit = ConnectionLimit,
             };
         }
