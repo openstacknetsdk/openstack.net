@@ -107,6 +107,7 @@
       <Link>TestProxy.cs</Link>
     </Compile>
     <Compile Include="BaseIdentityTests.cs" />
+    <Compile Include="ExplicitOwinReference.cs" />
     <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
