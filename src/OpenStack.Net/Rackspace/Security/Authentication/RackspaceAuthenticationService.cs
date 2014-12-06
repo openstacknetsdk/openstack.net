@@ -69,6 +69,10 @@
                     serviceType = "rax:queues";
                     serviceName = "cloudQueues";
                     break;
+
+                case "network":
+                    serviceName = "cloudNetworks";
+                    break;
                 }
             }
 

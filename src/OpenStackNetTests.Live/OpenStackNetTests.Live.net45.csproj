@@ -71,6 +71,8 @@
     <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="IdentityV2Tests.Shared.cs" />
     <Compile Include="LiveTestConfiguration.cs" />
+    <Compile Include="NetworkingV2Tests.cs" />
+    <Compile Include="NetworkingV2Tests.Shared.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />
