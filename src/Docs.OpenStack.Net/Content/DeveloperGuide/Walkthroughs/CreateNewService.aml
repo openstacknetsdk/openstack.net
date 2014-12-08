@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="448b47f0-a27a-44f0-87e4-fa7f5603b50e" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        This page describes the process for supporting a new service within the SDK. In addition to supporting existing
+        OpenStack services that are not yet implemented in the SDK, developers may want to create a new service to
+        support a new version of an SDK, or to implement support for a vendor-specific service using a similar coding
+        style to the one provided by this SDK.
+      </para>
+    </introduction>
+
+    <section>
+      <title>Introduction</title>
+      <content>
+        <para>
+          This example is centered around adding support for the OpenStack Compute Service V2. The service is
+          implemented within the <codeInline>OpenStack.Services.Compute.V2</codeInline> namespace. The general pattern
+          for services is
+          <placeholder>Vendor</placeholder>.Services.<placeholder>ServiceName</placeholder>.<placeholder>Version</placeholder>.
+        </para>
+      </content>
+    </section>
+
+    <section>
+      <title>Required New Types</title>
+      <content>
+      </content>
+      <sections>
+        <section>
+          <title>IComputeService Interface</title>
+          <content>
+            <para>
+              <codeInline>IComputeService</codeInline> interface. This interface will define the base functionality for
+              the Compute Service V2. Initially, the interface is empty, and likely resembles the following.
+            </para>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This is the base interface for the OpenStack Compute Service V2.
+              /// </summary>
+              /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.html">OpenStack Compute API V2 Reference</seealso>
+              /// <preliminary/>
+              public interface IComputeService : IHttpService, IExtensibleService<IComputeService>
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>ComputeServiceExtensions Class</title>
+          <content>
+            <para>
+              <codeInline>ComputeServiceExtensions</codeInline> class. This class will define extension methods
+              corresponding to each method defined in <codeInline>IComputeService</codeInline>; these methods combine
+              the "prepare" and "send" elements of an HTTP API call into a single asynchronous call which is appropriate
+              for the most common usage scenarios.
+            </para>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class defines extension methods for simplifying the use of the <seealso cref="IComputeService"/>
+              /// service in the "common" usage scenarios.
+              /// </summary>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public static class IdentityServiceExtensions
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>ComputeClient Class</title>
+          <content>
+            <para>
+              <codeInline>ComputeClient</codeInline> class. This class defines the default implementation of the
+              <codeInline>IComputeService</codeInline> interface.
+            </para>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class provides a default implementation of <see cref="IComputeService"/> suitable for connecting
+              /// to OpenStack-compatible installations of the Compute Service V2.
+              /// </summary>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public class ComputeClient : ServiceClient, IComputeService
+              {
+                  /// <summary>
+                  /// Initializes a new instance of the <see cref="ComputeClient"/> class with the specified
+                  /// authentication service, default region, and value indicating whether an internal or public
+                  /// endpoint should be used for communicating with the service.
+                  /// </summary>
+                  /// <param name="authenticationService">The authentication service to use for authenticating requests
+                  /// made to this service.</param>
+                  /// <param name="defaultRegion">The preferred region for the service. Unless otherwise specified for a
+                  /// specific client, derived service clients will not use a default region if this value is
+                  /// <see langword="null"/> (i.e. only region-less or "global" service endpoints will be considered
+                  /// acceptable).</param>
+                  /// <param name="internalUrl">
+                  /// <para><see langword="true"/> to access the service using an endpoint on the local network.</para>
+                  /// <para>-or-</para>
+                  /// <para><see langword="false"/> to access the service over a public network (the Internet).</para>
+                  /// </param>
+                  /// <exception cref="ArgumentNullException">
+                  /// If <paramref name="authenticationService"/> is <see langword="null"/>.
+                  /// </exception>
+                  public ComputeClient(IAuthenticationService authenticationService, string defaultRegion, bool internalUrl)
+                      : base(authenticationService, defaultRegion, internalUrl)
+                  {
+                  }
+
+                  /// <inheritdoc/>
+                  public virtual TExtension GetServiceExtension<TExtension>(ServiceExtensionDefinition<IObjectStorageService, TExtension> definition)
+                  {
+                      if (definition == null)
+                          throw new ArgumentNullException("definition");
+
+                      return definition.CreateDefaultInstance(this, this);
+                  }
+
+                  /// <inheritdoc/>
+                  /// <remarks>
+                  /// <para>This method calls <see cref="IAuthenticationService.GetBaseAddressAsync"/> to obtain a URI
+                  /// for the type <c>compute</c>. The preferred name is not specified.</para>
+                  /// </remarks>
+                  protected override Task<Uri> GetBaseUriAsyncImpl(CancellationToken cancellationToken)
+                  {
+                      const string serviceType = "compute";
+                      const string serviceName = null;
+                      return AuthenticationService.GetBaseAddressAsync(serviceType, serviceName, DefaultRegion, InternalUrl, cancellationToken);
+                  }
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+      </sections>
+    </section>
+
+    <section>
+      <title>Optional New Types</title>
+      <content>
+      </content>
+      <sections>
+        <section>
+          <title>ComputeServiceExtensionDefinition&lt;T&gt; Class</title>
+          <content>
+            <para>
+              <codeInline>ComputeServiceExtensionDefinition&lt;T&gt;</codeInline> class. This optional class simplifies
+              the creation of future service extensions for the Compute Service.
+            </para>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class serves as the base class for all service extension definitions for the
+              /// <see cref="IComputeService"/>.
+              /// </summary>
+              /// <typeparam name="TExtension">The service extension type.</typeparam>
+              /// <seealso cref="IExtensibleService{TService}.GetServiceExtension{TExtension}"/>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public abstract class ComputeServiceExtensionDefinition<TExtension>
+                  : ServiceExtensionDefinition<IComputeService, TExtension>
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>PredefinedComputeExtensions Class</title>
+          <content>
+            <para>
+              <codeInline>PredefinedComputeExtensions</codeInline> class. This optional class allows the implementation
+              to provide standard extension implementations alongside the base service. For example, the Compute Service
+              defines a "Server admin actions" extension, which is not part of the base Compute Service V2 API but is
+              defined by OpenStack. For now, the <codeInline>PredefinedComputeExtensions</codeInline> class is empty,
+              but made available for future use as the service is implemented.
+            </para>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class provides definitions for extensions to the Compute Service V2 which are defined by
+              /// OpenStack.
+              /// </summary>
+              /// <remarks>
+              /// <para>The service extension definitions provided here may be passed to
+              /// <see cref="IExtensibleService{TService}.GetServiceExtension{TExtension}"/> to get an instance of the
+              /// service extension.</para>
+              /// </remarks>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public static class PredefinedComputeExtensions
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+      </sections>
+    </section>
+
+    <section>
+      <title>Additional Considerations</title>
+      <content>
+      </content>
+      <sections>
+        <section>
+          <title>Vendor-Specific Service Names</title>
+          <content>
+            <para>
+              The default <codeInline>ComputeClient</codeInline> specifies a service type but does not specify a service
+              name in the implementation of
+              <codeEntityReference>M:OpenStack.Net.Services.ServiceClient.GetBaseUriAsync(System.Threading.CancellationToken)</codeEntityReference>.
+              In some cases, the service type alone is not enough to ensure the correct endpoint is chosen by the
+              authentication service. In these cases, it may be necessary to update a vendor-specific authentication
+              service, such as <codeEntityReference>T:Rackspace.Security.Authentication.RackspaceAuthenticationService</codeEntityReference>,
+              to choose the appropriate service name and/or type to obtain an endpoint matching the OpenStack service.
+              For the OpenStack Compute V2 service, the service type <codeInline>compute</codeInline> is correct, but
+              the service name <codeInline>cloudServersOpenStack</codeInline> must be specified to distinguish between
+              the Cloud Servers and Cloud First Gen Servers products. In particular, the Cloud First Gen Servers product
+              also has type <codeInline>compute</codeInline>, but it is not an implementation of the OpenStack Compute
+              Service V2.
+            </para>
+          </content>
+        </section>
+      </sections>
+    </section>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
