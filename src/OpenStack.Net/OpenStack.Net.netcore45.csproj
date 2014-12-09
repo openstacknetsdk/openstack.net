@@ -40,11 +40,13 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Net.UriTemplate">
-      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\portable-net40+sl4+wp7+win8\Rackspace.Net.UriTemplate.dll</HintPath>
+    <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e01bb0fde71f8e91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta003\lib\portable-net4+sl5+win+wpa81+wp8+MonoAndroid1+MonoTouch1\Rackspace.Net.UriTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Threading">
-      <HintPath>..\packages\Rackspace.Threading.1.1.0-beta001\lib\netcore45\Rackspace.Threading.dll</HintPath>
+    <Reference Include="Rackspace.Threading, Version=2.0.0.0, Culture=neutral, PublicKeyToken=2c5e0ae13bddb49e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Threading.2.0.0-alpha001\lib\netcore45\Rackspace.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\win8\System.Net.Http.Extensions.dll</HintPath>

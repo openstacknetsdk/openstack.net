@@ -40,11 +40,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Net.UriTemplate">
-      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net40-client\Rackspace.Net.UriTemplate.dll</HintPath>
+    <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75479e71486a8ef5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta003\lib\net20\Rackspace.Net.UriTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Threading">
-      <HintPath>..\packages\Rackspace.Threading.1.1.0-beta001\lib\net45\Rackspace.Threading.dll</HintPath>
+    <Reference Include="Rackspace.Threading, Version=2.0.0.0, Culture=neutral, PublicKeyToken=2c5e0ae13bddb49e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Threading.2.0.0-alpha001\lib\net45\Rackspace.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

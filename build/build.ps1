@@ -30,7 +30,12 @@ If ($NoDocs -and -not $Debug) {
 
 # build the main project
 $nuget = '..\src\.nuget\NuGet.exe'
-$msbuild = "$env:windir\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe"
+
+if ($VisualStudioVersion -eq '4.0') {
+	$msbuild = "$env:windir\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe"
+} Else {
+	$msbuild = "${env:ProgramFiles(x86)}\MSBuild\$VisualStudioVersion\Bin\MSBuild.exe"
+}
 
 &$nuget 'restore' $SolutionPath
 &$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath

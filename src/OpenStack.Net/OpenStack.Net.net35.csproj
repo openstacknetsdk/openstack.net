@@ -41,16 +41,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Net.UriTemplate">
-      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta002\lib\net35-client\Rackspace.Net.UriTemplate.dll</HintPath>
+    <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75479e71486a8ef5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta003\lib\net20\Rackspace.Net.UriTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="Rackspace.Threading">
-      <HintPath>..\packages\Rackspace.Threading.1.1.0-beta001\lib\net35-client\Rackspace.Threading.dll</HintPath>
+    <Reference Include="Rackspace.Threading, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bb62785d398726f0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.Threading.2.0.0-alpha001\lib\net35-client\Rackspace.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http">
-      <HintPath>..\packages\Rackspace.HttpClient35.1.0.0-beta002\lib\net35\System.Net.Http.dll</HintPath>
+    <Reference Include="System.Net.Http, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2814533e73a79ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rackspace.HttpClient35.1.0.0-beta003\lib\net35\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
