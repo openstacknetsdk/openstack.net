@@ -1,65 +1,68 @@
 ﻿namespace OpenStack.Services.Identity.V3.OAuth
 {
     using System;
-    using System.Collections.Generic;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using OpenStack.Net;
-    using Rackspace.Net;
+    using OpenStack.Collections;
     using Rackspace.Threading;
 
     public static class OAuthExtensions
     {
         #region Consumers API
 
-        public static Task<AddConsumerApiCall> PrepareAddConsumerAsync(this IIdentityService client, ConsumerRequest request, CancellationToken cancellationToken)
+        public static Task<Consumer> AddConsumerAsync(this IIdentityService service, ConsumerData consumerData, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/consumers");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Post, template, parameters, cancellationToken))
-                .Select(task => new AddConsumerApiCall(factory.CreateJsonApiCall<ConsumerResponse>(task.Result)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareAddConsumerAsync(new ConsumerRequest(consumerData), cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Consumer));
         }
 
-        public static Task<ListConsumersApiCall> PrepareListConsumersAsync(this IIdentityService client, CancellationToken cancellationToken)
+        public static Task<ReadOnlyCollectionPage<Consumer>> ListConsumersAsync(this IIdentityService service, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (service == null)
+                throw new ArgumentNullException("service");
+
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareListConsumersAsync(cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
-        public static Task<GetConsumerApiCall> PrepareGetConsumerAsync(this IIdentityService client, ConsumerId consumerId, CancellationToken cancellationToken)
+        public static Task<Consumer> GetConsumerAsync(this IIdentityService service, ConsumerId consumerId, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/consumers/{consumer_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "consumer_id", consumerId.Value } };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
-                .Select(task => new GetConsumerApiCall(factory.CreateJsonApiCall<ConsumerResponse>(task.Result)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareGetConsumerAsync(consumerId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Consumer));
         }
 
-        public static Task<UpdateConsumerApiCall> PrepareUpdateConsumerAsync(this IIdentityService client, ConsumerId consumerId, ConsumerData consumerData, CancellationToken cancellationToken)
+        public static Task<Consumer> UpdateConsumerAsync(this IIdentityService service, ConsumerId consumerId, ConsumerData consumerData, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/consumers/{consumer_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "consumer_id", consumerId.Value } };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(new HttpMethod("PATCH"), template, parameters, consumerData, cancellationToken))
-                .Select(task => new UpdateConsumerApiCall(factory.CreateJsonApiCall<ConsumerResponse>(task.Result)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareUpdateConsumerAsync(consumerId, consumerData, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Consumer));
         }
 
-        public static Task<RemoveConsumerApiCall> PrepareRemoveConsumerAsync(this IIdentityService client, ConsumerId consumerId, CancellationToken cancellationToken)
+        public static Task RemoveConsumerAsync(this IIdentityService service, ConsumerId consumerId, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/consumers/{consumer_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "consumer_id", consumerId.Value } };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Delete, template, parameters, cancellationToken))
-                .Select(task => new RemoveConsumerApiCall(factory.CreateBasicApiCall(task.Result, HttpCompletionOption.ResponseContentRead)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareRemoveConsumerAsync(consumerId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
         }
 
         #endregion
@@ -70,62 +73,69 @@
          * implementing it according to the spec alone will be nearly impossible.
          */
 
-        //public static Task<AddRequestTokenApiCall> PrepareAddRequestTokenAsync(this IIdentityService client, RequestTokenData requestTokenData, CancellationToken cancellationToken);
+        //public static Task<AddRequestTokenApiCall> AddRequestTokenAsync(this IIdentityService service, RequestTokenData requestTokenData, CancellationToken cancellationToken);
 
-        //public static Task<AuthorizeRequestTokenApiCall> PrepareAuthorizeRequestTokenAsync(this IIdentityService client, RequestTokenId requestTokenId, AuthorizeRequestTokenRequest request, CancellationToken cancellationToken);
+        //public static Task<AuthorizeRequestTokenApiCall> AuthorizeRequestTokenAsync(this IIdentityService service, RequestTokenId requestTokenId, AuthorizeRequestTokenRequest request, CancellationToken cancellationToken);
 
-        //public static Task<AddAccessTokenApiCall> PrepareAddAccessTokenAsync();
+        //public static Task<AddAccessTokenApiCall> AddAccessTokenAsync(this IIdentityService service);
 
         #endregion
 
         #region User Access Tokens API
 
-        public static Task<ListAccessTokensApiCall> PrepareListAccessTokensAsync(this IIdentityService client, UserId userId, CancellationToken cancellationToken)
+        public static Task<ReadOnlyCollectionPage<AccessToken>> ListAccessTokensAsync(this IIdentityService service, UserId userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (service == null)
+                throw new ArgumentNullException("service");
+
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareListAccessTokensAsync(userId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
-        public static Task<GetAccessTokenApiCall> PrepareGetAccessTokenAsync(this IIdentityService client, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
+        public static Task<AccessToken> GetAccessTokenAsync(this IIdentityService service, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/users/{user_id}/access_tokens/{access_token_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "user_id", userId.Value }, { "access_token_id", accessTokenId.Value } };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
-                .Select(task => new GetAccessTokenApiCall(factory.CreateJsonApiCall<AccessTokenResponse>(task.Result)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareGetAccessTokenAsync(userId, accessTokenId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.AccessToken));
         }
 
-        public static Task<RemoveAccessTokenApiCall> PrepareRemoveAccessTokenAsync(this IIdentityService client, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
+        public static Task RemoveAccessTokenAsync(this IIdentityService service, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/users/{user_id}/access_tokens/{access_token_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "user_id", userId.Value }, { "access_token_id", accessTokenId.Value } };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Delete, template, parameters, cancellationToken))
-                .Select(task => new RemoveAccessTokenApiCall(factory.CreateBasicApiCall(task.Result, HttpCompletionOption.ResponseContentRead)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareRemoveAccessTokenAsync(userId, accessTokenId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
         }
 
-        public static Task<ListAccessTokenRolesApiCall> PrepareListAccessTokenRolesAsync(this IIdentityService client, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
+        public static Task<ReadOnlyCollectionPage<Role>> ListAccessTokenRolesAsync(this IIdentityService service, UserId userId, AccessTokenId accessTokenId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (service == null)
+                throw new ArgumentNullException("service");
+
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareListAccessTokenRolesAsync(userId, accessTokenId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
-        public static Task<GetAccessTokenRoleApiCall> PrepareGetAccessTokenRoleAsync(this IIdentityService client, UserId userId, AccessTokenId accessTokenId, RoleId roleId, CancellationToken cancellationToken)
+        public static Task<Role> GetAccessTokenRoleAsync(this IIdentityService service, UserId userId, AccessTokenId accessTokenId, RoleId roleId, CancellationToken cancellationToken)
         {
-            UriTemplate template = new UriTemplate("v3/OS-OAUTH1/users/{user_id}/access_tokens/{access_token_id}/roles/{role_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string>
-            {
-                { "user_id", userId.Value },
-                { "access_token_id", accessTokenId.Value },
-                { "role_id", roleId.Value },
-            };
+            if (service == null)
+                throw new ArgumentNullException("service");
 
-            IHttpApiCallFactory factory = client.GetHttpApiCallFactory();
-            return client.GetBaseUriAsync(cancellationToken)
-                .Then(client.PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
-                .Select(task => new GetAccessTokenRoleApiCall(factory.CreateJsonApiCall<RoleResponse>(task.Result)));
+            IOAuthExtension extension = service.GetServiceExtension(PredefinedIdentityExtensions.OAuth);
+            return TaskBlocks.Using(
+                () => extension.PrepareGetAccessTokenRoleAsync(userId, accessTokenId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Role));
         }
 
         #endregion

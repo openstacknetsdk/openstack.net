@@ -195,6 +195,7 @@
     <Compile Include="OpenStack\Services\Identity\V3\GroupId.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityApiInfoApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityData.cs" />
+    <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IIdentityService.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ListCredentialsApiCall.cs" />
@@ -229,9 +230,11 @@
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\GetAccessTokenApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\GetAccessTokenRoleApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\GetConsumerApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V3\OAuth\IOAuthExtension.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\ListAccessTokenRolesApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\ListAccessTokensApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\ListConsumersApiCall.cs" />
+    <Compile Include="OpenStack\Services\Identity\V3\OAuth\OAuthExtension.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\OAuthExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\RemoveAccessTokenApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\RemoveConsumerApiCall.cs" />
@@ -241,6 +244,7 @@
     <Compile Include="OpenStack\Services\Identity\V3\Policy.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\PolicyData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\PolicyId.cs" />
+    <Compile Include="OpenStack\Services\Identity\V3\PredefinedIdentityExtensions.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\Project.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ProjectData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ProjectRequest.cs" />
