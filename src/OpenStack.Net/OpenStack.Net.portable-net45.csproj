@@ -160,9 +160,7 @@
     <Compile Include="OpenStack\Services\Identity\V3\AddPolicyApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AddProjectApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AddRoleApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\AddRoleToUserApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AddServiceApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\AddUserRoleInProjectApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateRequest.cs" />
@@ -256,11 +254,9 @@
     <Compile Include="OpenStack\Services\Identity\V3\RemovePolicyApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RemoveProjectApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RemoveRoleApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\RemoveRoleFromUserApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RemoveServiceApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RemoveTokenApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RemoveUserApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\RemoveUserRoleInProjectApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\Role.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RoleAssignment.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\RoleData.cs" />
@@ -288,9 +284,7 @@
     <Compile Include="OpenStack\Services\Identity\V3\UserResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ValidateDomainGroupRoleApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ValidateGroupUserApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ValidateRoleApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ValidateTokenApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ValidateUserRoleInProjectApiCall.cs" />
     <Compile Include="OpenStack\Services\IExtensibleService`1.cs" />
     <Compile Include="OpenStack\Services\IHttpService.cs" />
     <Compile Include="OpenStack\Services\NamespaceDoc.cs" />

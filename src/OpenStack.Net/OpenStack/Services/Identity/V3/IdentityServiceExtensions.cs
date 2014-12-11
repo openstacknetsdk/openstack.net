@@ -232,27 +232,6 @@
                 task => task.Result.SendAsync(cancellationToken));
         }
 
-        public static Task AddUserRoleInProjectAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareAddUserRoleInProjectAsync(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
-        }
-
-        public static Task ValidateUserRoleInProjectAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareValidateUserRoleInProjectAsync(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
-        }
-
-        public static Task RemoveUserRoleInProjectAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareRemoveUserRoleInProjectAsync(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
-        }
-
         public static Task<ReadOnlyCollectionPage<Role>> ListProjectGroupRolesAsync(this IIdentityService client, ProjectId projectId, GroupId groupId, CancellationToken cancellationToken)
         {
             return TaskBlocks.Using(
@@ -414,27 +393,6 @@
             return TaskBlocks.Using(
                 () => client.PrepareListRolesAsync(cancellationToken),
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
-        }
-
-        public static Task AddRoleToUserAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareAddRoleToUserAsync(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
-        }
-
-        public static Task ValidateRoleApiCall(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareValidateRoleApiCall(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
-        }
-
-        public static Task RemoveRoleFromUserAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareRemoveRoleFromUserAsync(projectId, userId, roleId, cancellationToken),
-                task => task.Result.SendAsync(cancellationToken));
         }
 
         public static Task<ReadOnlyCollectionPage<RoleAssignment>> ListRoleAssignmentsAsync(this IIdentityService client, CancellationToken cancellationToken)

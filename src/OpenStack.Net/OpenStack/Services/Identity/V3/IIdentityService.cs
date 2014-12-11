@@ -81,11 +81,8 @@
 
         Task<RemoveProjectApiCall> PrepareRemoveProjectAsync(ProjectId projectId, CancellationToken cancellationToken);
 
-        Task<AddUserRoleInProjectApiCall> PrepareAddUserRoleInProjectAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
-        Task<ValidateUserRoleInProjectApiCall> PrepareValidateUserRoleInProjectAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
-        Task<RemoveUserRoleInProjectApiCall> PrepareRemoveUserRoleInProjectAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
         Task<ListProjectGroupRolesApiCall> PrepareListProjectGroupRolesAsync(ProjectId projectId, GroupId groupId, CancellationToken cancellationToken);
 
@@ -144,12 +141,6 @@
         Task<RemoveRoleApiCall> PrepareRemoveRoleAsync(RoleId roleId, CancellationToken cancellationToken);
 
         Task<ListRolesApiCall> PrepareListRolesAsync(CancellationToken cancellationToken);
-
-        Task<AddRoleToUserApiCall> PrepareAddRoleToUserAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
-
-        Task<ValidateRoleApiCall> PrepareValidateRoleApiCall(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
-
-        Task<RemoveRoleFromUserApiCall> PrepareRemoveRoleFromUserAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
         Task<ListRoleAssignmentsApiCall> PrepareListRoleAssignmentsAsync(CancellationToken cancellationToken);
 
