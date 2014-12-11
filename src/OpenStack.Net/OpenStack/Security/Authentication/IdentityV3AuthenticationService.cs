@@ -18,7 +18,7 @@
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    public class IdentityV3AuthenticationClient : IAuthenticationService
+    public class IdentityV3AuthenticationService : IAuthenticationService
     {
         /// <summary>
         /// This is the backing field for the <see cref="IdentityService"/> property.
@@ -42,7 +42,7 @@
         private TimeSpan _expirationOverlap = TimeSpan.FromMinutes(5);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdentityV3AuthenticationClient"/> class with the specified
+        /// Initializes a new instance of the <see cref="IdentityV3AuthenticationService"/> class with the specified
         /// OpenStack Identity Service V3 client and prepared authentication request.
         /// </summary>
         /// <param name="identityService">The <see cref="IIdentityService"/> instance to use for authentication
@@ -54,7 +54,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="authenticateRequest"/> is <see langword="null"/>.</para>
         /// </exception>
-        public IdentityV3AuthenticationClient(IIdentityService identityService, AuthenticateRequest authenticateRequest)
+        public IdentityV3AuthenticationService(IIdentityService identityService, AuthenticateRequest authenticateRequest)
         {
             if (identityService == null)
                 throw new ArgumentNullException("identityService");
