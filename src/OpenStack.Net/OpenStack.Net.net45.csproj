@@ -159,10 +159,6 @@
     <Compile Include="OpenStack\Services\Identity\V3\AddRoleToUserApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AddServiceApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AddUserRoleInProjectApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ApiStatus.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ApiVersion.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ApiVersionId.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\ApiVersionResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\AuthenticateRequest.cs" />
@@ -194,7 +190,6 @@
     <Compile Include="OpenStack\Services\Identity\V3\GetUserApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\Group.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\GroupId.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\IdentityApiInfoApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensions.cs" />
@@ -214,7 +209,6 @@
     <Compile Include="OpenStack\Services\Identity\V3\ListUserGroupsApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ListUserProjectsApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ListUserRolesApiCall.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\MediaType.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\AccessToken.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\AccessTokenId.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\OAuth\AccessTokenResponse.cs" />
@@ -275,7 +269,6 @@
     <Compile Include="OpenStack\Services\Identity\V3\ServiceId.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\ServiceResponse.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\TokenData.cs" />
-    <Compile Include="OpenStack\Services\Identity\V3\TokenId.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\TokenIdentityData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\UpdateCredentialApiCall.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\UpdateDomainApiCall.cs" />

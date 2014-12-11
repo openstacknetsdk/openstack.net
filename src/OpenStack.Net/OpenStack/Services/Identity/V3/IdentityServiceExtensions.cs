@@ -11,17 +11,6 @@
 
     public static class IdentityServiceExtensions
     {
-        #region API Information
-
-        public static Task<ApiVersion> GetApiInfoAsync(this IIdentityService client, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareGetApiInfoAsync(cancellationToken),
-                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Version));
-        }
-
-        #endregion
-
         #region Tokens
 
         public static Task<Tuple<TokenId, AuthenticateResponse>> AuthenticateAsync(this IIdentityService client, AuthenticateData authenticateData, CancellationToken cancellationToken)

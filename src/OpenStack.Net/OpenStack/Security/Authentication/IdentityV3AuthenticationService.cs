@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using OpenStack.Collections;
     using OpenStack.Net;
+    using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V3;
     using Rackspace.Threading;
 

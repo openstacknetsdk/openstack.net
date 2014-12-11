@@ -5,12 +5,6 @@
 
     public interface IIdentityService : IBaseIdentityService, IExtensibleService<IIdentityService>
     {
-        #region API Information
-
-        Task<IdentityApiInfoApiCall> PrepareGetApiInfoAsync(CancellationToken cancellationToken);
-
-        #endregion
-
         #region Tokens
 
         Task<AuthenticateApiCall> PrepareAuthenticateAsync(AuthenticateRequest request, CancellationToken cancellationToken);
