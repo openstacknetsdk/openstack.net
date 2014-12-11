@@ -219,6 +219,7 @@
     <Compile Include="OpenStack\Services\Identity\V3\GroupId.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\GroupRequest.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\GroupResponse.cs" />
+    <Compile Include="OpenStack\Services\Identity\V3\IdentityClient.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityData.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensionDefinition`1.cs" />
     <Compile Include="OpenStack\Services\Identity\V3\IdentityServiceExtensions.cs" />
