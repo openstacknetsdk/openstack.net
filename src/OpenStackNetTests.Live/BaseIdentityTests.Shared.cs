@@ -146,6 +146,27 @@
             }
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
+        public async Task TestGetApiVersion3()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+
+                using (IBaseIdentityService service = CreateService())
+                {
+                    ApiVersionId version3 = new ApiVersionId("v3");
+
+                    // test using the simple extension method
+                    ApiVersion version = await service.GetApiVersionAsync(version3, cancellationTokenSource.Token);
+                    Assert.IsNotNull(version);
+                    Assert.AreEqual(version3, version.Id);
+                }
+            }
+        }
+
         protected TimeSpan TestTimeout(TimeSpan timeSpan)
         {
             if (Debugger.IsAttached)

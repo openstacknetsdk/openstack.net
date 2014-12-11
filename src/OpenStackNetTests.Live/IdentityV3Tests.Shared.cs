@@ -2,7 +2,12 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using OpenStack.Security.Authentication;
+    using OpenStack.Services.Identity;
     using OpenStack.Services.Identity.V3;
 
     partial class IdentityV3Tests
@@ -40,6 +45,43 @@
                     return "OpenStack";
 
                 return credentials.Vendor;
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.Identity)]
+        public async Task TestAuthenticate()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+
+                using (IIdentityService service = CreateService())
+                {
+                    TestCredentials credentials = Credentials;
+                    Assert.IsNotNull(credentials);
+
+                    AuthenticateRequest request = credentials.AuthenticateRequestV3;
+                    Assert.IsNotNull(request);
+
+                    AuthenticateApiCall apiCall = await service.PrepareAuthenticateAsync(request, cancellationTokenSource.Token);
+                    Tuple<HttpResponseMessage, Tuple<TokenId, AuthenticateResponse>> response = await apiCall.SendAsync(cancellationTokenSource.Token);
+
+                    Assert.IsNotNull(response);
+                    Assert.IsNotNull(response.Item2);
+
+                    TokenId tokenId = response.Item2.Item1;
+                    Assert.IsNotNull(tokenId);
+
+                    AuthenticateResponse authenticateResponse = response.Item2.Item2;
+                    Assert.IsNotNull(authenticateResponse);
+                    Assert.IsNotNull(authenticateResponse.Token);
+                    Assert.IsNotNull(authenticateResponse.Token.ExpiresAt);
+                    Assert.IsNotNull(authenticateResponse.Token.IssuedAt);
+                    Assert.IsNotNull(authenticateResponse.Token.Project);
+                    Assert.IsNotNull(authenticateResponse.Token.User);
+                }
             }
         }
 
