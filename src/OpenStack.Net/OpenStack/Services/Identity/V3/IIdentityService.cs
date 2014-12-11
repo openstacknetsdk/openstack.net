@@ -59,6 +59,12 @@
 
         Task<ListDomainUserRolesApiCall> PrepareListDomainUserRolesAsync(DomainId domainId, UserId userId, CancellationToken cancellationToken);
 
+        Task<AddDomainUserRoleApiCall> PrepareAddDomainUserRoleAsync(DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
+
+        Task<ValidateDomainUserRoleApiCall> PrepareValidateDomainUserRoleAsync(DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
+
+        Task<RemoveDomainUserRoleApiCall> PrepareRemoveDomainUserRoleAsync(DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
+
         Task<ListDomainGroupRolesApiCall> PrepareListDomainGroupRolesAsync(DomainId domainId, GroupId groupId, CancellationToken cancellationToken);
 
         Task<AddDomainGroupRoleApiCall> PrepareAddDomainGroupRoleAsync(DomainId domainId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken);
@@ -81,14 +87,29 @@
 
         Task<RemoveProjectApiCall> PrepareRemoveProjectAsync(ProjectId projectId, CancellationToken cancellationToken);
 
+        Task<ListProjectUserRolesApiCall> PrepareListProjectUserRolesAsync(ProjectId projectId, UserId userId, CancellationToken cancellationToken);
 
+        Task<AddProjectUserRoleApiCall> PrepareAddProjectUserRoleAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
+        Task<ValidateProjectUserRoleApiCall> PrepareValidateProjectUserRoleAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
+
+        Task<RemoveProjectUserRoleApiCall> PrepareRemoveProjectUserRoleAsync(ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken);
 
         Task<ListProjectGroupRolesApiCall> PrepareListProjectGroupRolesAsync(ProjectId projectId, GroupId groupId, CancellationToken cancellationToken);
+
+        Task<AddProjectGroupRoleApiCall> PrepareAddProjectGroupRoleAsync(ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken);
+
+        Task<ValidateProjectGroupRoleApiCall> PrepareValidateProjectGroupRoleAsync(ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken);
+
+        Task<RemoveProjectGroupRoleApiCall> PrepareRemoveProjectGroupRoleAsync(ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken);
 
         #endregion
 
         #region Users
+
+        Task<AddUserApiCall> PrepareAddUserAsync(UserRequest request, CancellationToken cancellationToken);
+
+        Task<ListUsersApiCall> PrepareListUsersAsync(CancellationToken cancellationToken);
 
         Task<GetUserApiCall> PrepareGetUserAsync(UserId userId, CancellationToken cancellationToken);
 
@@ -105,6 +126,16 @@
         #endregion
 
         #region Groups
+
+        Task<AddGroupApiCall> PrepareAddGroupAsync(GroupRequest request, CancellationToken cancellationToken);
+
+        Task<ListGroupsApiCall> PrepareListGroupsAsync(CancellationToken cancellationToken);
+
+        Task<GetGroupApiCall> PrepareGetGroupAsync(GroupId groupId, CancellationToken cancellationToken);
+
+        Task<UpdateGroupApiCall> PrepareUpdateGroupAsync(GroupId groupId, GroupRequest request, CancellationToken cancellationToken);
+
+        Task<RemoveGroupApiCall> PrepareRemoveGroupAsync(GroupId groupId, CancellationToken cancellationToken);
 
         Task<ListGroupUsersApiCall> PrepareListGroupUsersAsync(GroupId groupId, CancellationToken cancellationToken);
 
@@ -134,13 +165,13 @@
 
         Task<AddRoleApiCall> PrepareAddRoleAsync(RoleRequest request, CancellationToken cancellationToken);
 
+        Task<ListRolesApiCall> PrepareListRolesAsync(CancellationToken cancellationToken);
+
         Task<GetRoleApiCall> PrepareGetRoleAsync(RoleId roleId, CancellationToken cancellationToken);
 
         Task<UpdateRoleApiCall> PrepareUpdateRoleAsync(RoleId roleId, RoleRequest request, CancellationToken cancellationToken);
 
         Task<RemoveRoleApiCall> PrepareRemoveRoleAsync(RoleId roleId, CancellationToken cancellationToken);
-
-        Task<ListRolesApiCall> PrepareListRolesAsync(CancellationToken cancellationToken);
 
         Task<ListRoleAssignmentsApiCall> PrepareListRoleAssignmentsAsync(CancellationToken cancellationToken);
 

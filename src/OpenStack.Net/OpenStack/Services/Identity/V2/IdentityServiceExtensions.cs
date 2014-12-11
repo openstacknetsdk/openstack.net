@@ -7,7 +7,6 @@
     using OpenStack.Net;
     using Rackspace.Threading;
 
-
     /// <summary>
     /// This class defines extension methods for simplifying the use of the <seealso cref="IIdentityService"/> service
     /// in the "common" usage scenarios.

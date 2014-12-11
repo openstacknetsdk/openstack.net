@@ -165,6 +165,27 @@
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
+        public static Task AddDomainUserRoleAsync(this IIdentityService client, DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareAddDomainUserRoleAsync(domainId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task ValidateDomainUserRoleAsync(this IIdentityService client, DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareValidateDomainUserRoleAsync(domainId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task RemoveDomainUserRoleAsync(this IIdentityService client, DomainId domainId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareRemoveDomainUserRoleAsync(domainId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
         public static Task<ReadOnlyCollectionPage<Role>> ListDomainGroupRolesAsync(this IIdentityService client, DomainId domainId, GroupId groupId, CancellationToken cancellationToken)
         {
             return TaskBlocks.Using(
@@ -232,6 +253,34 @@
                 task => task.Result.SendAsync(cancellationToken));
         }
 
+        public static Task<ReadOnlyCollectionPage<Role>> PrepareListProjectUserRolesAsync(this IIdentityService client, ProjectId projectId, UserId userId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareListProjectUserRolesAsync(projectId, userId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
+        }
+
+        public static Task PrepareAddProjectUserRoleAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareAddProjectUserRoleAsync(projectId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task PrepareValidateProjectUserRoleAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareValidateProjectUserRoleAsync(projectId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task PrepareRemoveProjectUserRoleAsync(this IIdentityService client, ProjectId projectId, UserId userId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareRemoveProjectUserRoleAsync(projectId, userId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
         public static Task<ReadOnlyCollectionPage<Role>> ListProjectGroupRolesAsync(this IIdentityService client, ProjectId projectId, GroupId groupId, CancellationToken cancellationToken)
         {
             return TaskBlocks.Using(
@@ -239,9 +288,44 @@
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
+        public static Task PrepareAddProjectGroupRoleAsync(this IIdentityService client, ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareAddProjectGroupRoleAsync(projectId, groupId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task PrepareValidateProjectGroupRoleAsync(this IIdentityService client, ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareValidateProjectGroupRoleAsync(projectId, groupId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
+        public static Task PrepareRemoveProjectGroupRoleAsync(this IIdentityService client, ProjectId projectId, GroupId groupId, RoleId roleId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareRemoveProjectGroupRoleAsync(projectId, groupId, roleId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
+
         #endregion
 
         #region Users
+
+        public static Task<User> PrepareAddUserAsync(this IIdentityService client, UserData userData, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareAddUserAsync(new UserRequest(userData), cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.User));
+        }
+
+        public static Task<ReadOnlyCollectionPage<User>> PrepareListUsersAsync(this IIdentityService client, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareListUsersAsync(cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
+        }
 
         public static Task<User> GetUserAsync(this IIdentityService client, UserId userId, CancellationToken cancellationToken)
         {
@@ -288,6 +372,41 @@
         #endregion
 
         #region Groups
+
+        public static Task<Group> PrepareAddGroupAsync(this IIdentityService client, GroupData groupData, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareAddGroupAsync(new GroupRequest(groupData), cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Group));
+        }
+
+        public static Task<ReadOnlyCollectionPage<Group>> PrepareListGroupsAsync(this IIdentityService client, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareListGroupsAsync(cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
+        }
+
+        public static Task<Group> PrepareGetGroupAsync(this IIdentityService client, GroupId groupId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareGetGroupAsync(groupId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Group));
+        }
+
+        public static Task<Group> PrepareUpdateGroupAsync(this IIdentityService client, GroupId groupId, GroupData groupData, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareUpdateGroupAsync(groupId, new GroupRequest(groupData), cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2.Group));
+        }
+
+        public static Task PrepareRemoveGroupAsync(this IIdentityService client, GroupId groupId, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareRemoveGroupAsync(groupId, cancellationToken),
+                task => task.Result.SendAsync(cancellationToken));
+        }
 
         public static Task<ReadOnlyCollectionPage<User>> ListGroupUsersAsync(this IIdentityService client, GroupId groupId, CancellationToken cancellationToken)
         {
@@ -367,6 +486,13 @@
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
+        public static Task<ReadOnlyCollectionPage<Role>> ListRolesAsync(this IIdentityService client, CancellationToken cancellationToken)
+        {
+            return TaskBlocks.Using(
+                () => client.PrepareListRolesAsync(cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
+        }
+
         public static Task<Role> GetRoleAsync(this IIdentityService client, RoleId roleId, CancellationToken cancellationToken)
         {
             return TaskBlocks.Using(
@@ -386,13 +512,6 @@
             return TaskBlocks.Using(
                 () => client.PrepareRemoveRoleAsync(roleId, cancellationToken),
                 task => task.Result.SendAsync(cancellationToken));
-        }
-
-        public static Task<ReadOnlyCollectionPage<Role>> ListRolesAsync(this IIdentityService client, CancellationToken cancellationToken)
-        {
-            return TaskBlocks.Using(
-                () => client.PrepareListRolesAsync(cancellationToken),
-                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
         public static Task<ReadOnlyCollectionPage<RoleAssignment>> ListRoleAssignmentsAsync(this IIdentityService client, CancellationToken cancellationToken)
