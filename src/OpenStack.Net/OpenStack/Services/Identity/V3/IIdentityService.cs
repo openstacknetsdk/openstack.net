@@ -106,7 +106,7 @@
 
         #region Groups
 
-        Task<ListGroupUsersApiCall> PrepareListUsersInGroupAsync(GroupId groupId, CancellationToken cancellationToken);
+        Task<ListGroupUsersApiCall> PrepareListGroupUsersAsync(GroupId groupId, CancellationToken cancellationToken);
 
         Task<AddGroupUserApiCall> PrepareAddUserToGroupAsync(GroupId groupId, UserId userId, CancellationToken cancellationToken);
 

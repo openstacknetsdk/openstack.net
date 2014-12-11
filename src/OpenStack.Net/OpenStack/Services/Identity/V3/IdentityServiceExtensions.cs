@@ -289,10 +289,10 @@
 
         #region Groups
 
-        public static Task<ReadOnlyCollectionPage<User>> ListUsersInGroupAsync(this IIdentityService client, GroupId groupId, CancellationToken cancellationToken)
+        public static Task<ReadOnlyCollectionPage<User>> ListGroupUsersAsync(this IIdentityService client, GroupId groupId, CancellationToken cancellationToken)
         {
             return TaskBlocks.Using(
-                () => client.PrepareListUsersInGroupAsync(groupId, cancellationToken),
+                () => client.PrepareListGroupUsersAsync(groupId, cancellationToken),
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
