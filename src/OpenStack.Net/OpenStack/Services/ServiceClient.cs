@@ -29,22 +29,22 @@
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
+        /// <summary>
+        /// This is the backing field for the <see cref="DefaultRegion"/> property.
+        /// </summary>
+        private readonly string _defaultRegion;
+
+        /// <summary>
+        /// This is the backing field for the <see cref="InternalUrl"/> property.
+        /// </summary>
+        private readonly bool _internalUrl;
+
 #if !PORTABLE
         /// <summary>
         /// This is the backing field for the <see cref="ConnectionLimit"/> property.
         /// </summary>
         private int? _connectionLimit;
 #endif
-
-        /// <summary>
-        /// This is the backing field for the <see cref="DefaultRegion"/> property.
-        /// </summary>
-        private string _defaultRegion;
-
-        /// <summary>
-        /// This is the backing field for the <see cref="InternalUrl"/> property.
-        /// </summary>
-        private bool _internalUrl;
 
         /// <summary>
         /// This is the backing field for the <see cref="BackoffPolicy"/> property.
