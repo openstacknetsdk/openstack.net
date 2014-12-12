@@ -64,7 +64,7 @@
         /// If <paramref name="baseAddress"/> is not an absolute URI.
         /// </exception>
         protected BaseIdentityClient(IAuthenticationService authenticationService, Uri baseAddress)
-            : base(CreateAuthenticationService(authenticationService, baseAddress), null)
+            : base(CreateAuthenticationService(authenticationService, baseAddress), null, false)
         {
             _baseAddress = baseAddress;
         }
