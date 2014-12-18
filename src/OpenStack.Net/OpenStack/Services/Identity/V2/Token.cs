@@ -1,7 +1,7 @@
 namespace OpenStack.Services.Identity.V2
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -91,7 +91,7 @@ namespace OpenStack.Services.Identity.V2
         /// <param name="id">The unique ID of the token.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public Token(TokenId id, IDictionary<string, JToken> extensionData)
+        public Token(TokenId id, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _id = id;

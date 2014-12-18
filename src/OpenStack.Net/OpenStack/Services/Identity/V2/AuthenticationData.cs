@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -74,7 +75,7 @@
         /// </remarks>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public AuthenticationData(IDictionary<string, JToken> extensionData)
+        public AuthenticationData(ImmutableDictionary<string, JToken> extensionData)
             : this(default(string), default(ProjectId), default(PasswordCredentials), default(Token), extensionData)
         {
         }
@@ -179,7 +180,7 @@
         /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public AuthenticationData(string tenantName, ProjectId tenantId, PasswordCredentials passwordCredentials, Token token, IDictionary<string, JToken> extensionData)
+        public AuthenticationData(string tenantName, ProjectId tenantId, PasswordCredentials passwordCredentials, Token token, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _tenantName = tenantName;
