@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>OpenStack.Net.V2</id>
+    <version>0.0.0</version>
+    <title>OpenStack.Net.V2</title>
+    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc, sharwell</authors>
+    <owners>alanquillin, sharwell</owners>
+    <licenseUrl>http://openstacknetsdk.org/docs/html/8b286b82-7aaf-4e45-9ffc-adbd7dbcfaa6.htm</licenseUrl>
+    <projectUrl>https://github.com/openstacknetsdk/openstack.net</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>An OpenStack SDK for Microsoft .NET</description>
+    <releaseNotes>https://github.com/openstacknetsdk/openstack.net/releases/v$version$</releaseNotes>
+    <copyright></copyright>
+    <tags>openstack</tags>
+    <dependencies>
+      <group targetFramework="net35">
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <dependency id="Rackspace.HttpClient35" version="[1.0.0-beta003,1.1)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+        <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
+      </group>
+      <group targetFramework="net40">
+        <dependency id="Microsoft.Bcl" version="1.1.9" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
+        <dependency id="Microsoft.Net.Http" version="2.2.22" />
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+      </group>
+      <group targetFramework="net45">
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+      </group>
+      <group targetFramework="netcore45">
+        <dependency id="Microsoft.Bcl" version="1.1.9" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
+        <dependency id="Microsoft.Net.Http" version="2.2.22" />
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+      </group>
+      <group targetFramework="portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1">
+        <dependency id="Microsoft.Bcl" version="1.1.9" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
+        <dependency id="Microsoft.Net.Http" version="2.2.22" />
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+      </group>
+      <group targetFramework="portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1">
+        <dependency id="Microsoft.Bcl" version="1.1.9" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
+        <dependency id="Microsoft.Net.Http" version="2.2.22" />
+        <dependency id="Newtonsoft.Json" version="6.0" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
+        <!-- This dependency supports binding redirection for minor releases -->
+        <dependency id="Rackspace.Threading" version="[2.0.0-alpha001,2.0)" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+
+    <!-- Runtime libraries -->
+    <file src="bin\net35\$Configuration$\OpenStack.Net.dll" target="lib\net35"/>
+    <file src="bin\net35\$Configuration$\OpenStack.Net.pdb" target="lib\net35"/>
+    <file src="..\..\docs\Api\net35\OpenStack.Net.xml" target="lib\net35"/>
+
+    <file src="bin\net40\$Configuration$\OpenStack.Net.dll" target="lib\net40"/>
+    <file src="bin\net40\$Configuration$\OpenStack.Net.pdb" target="lib\net40"/>
+    <file src="..\..\docs\Api\net40\OpenStack.Net.xml" target="lib\net40"/>
+
+    <file src="bin\net45\$Configuration$\OpenStack.Net.dll" target="lib\net45"/>
+    <file src="bin\net45\$Configuration$\OpenStack.Net.pdb" target="lib\net45"/>
+    <file src="..\..\docs\Api\net45\OpenStack.Net.xml" target="lib\net45"/>
+
+    <file src="bin\netcore45\$Configuration$\OpenStack.Net.dll" target="lib\netcore45"/>
+    <file src="bin\netcore45\$Configuration$\OpenStack.Net.pdb" target="lib\netcore45"/>
+    <file src="..\..\docs\Api\netcore45\OpenStack.Net.xml" target="lib\netcore45"/>
+
+    <file src="bin\portable-net40\$Configuration$\OpenStack.Net.dll" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="bin\portable-net40\$Configuration$\OpenStack.Net.pdb" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="..\..\docs\Api\portable-net40\OpenStack.Net.xml" target="lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+
+    <file src="bin\portable-net45\$Configuration$\OpenStack.Net.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="bin\portable-net45\$Configuration$\OpenStack.Net.pdb" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+    <file src="..\..\docs\Api\portable-net45\OpenStack.Net.xml" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"/>
+
+    <!-- Source code -->
+    <file src="**\*.cs" target="src" />
+
+  </files>
+</package>

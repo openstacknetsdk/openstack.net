@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a1cb084b-0c57-4ed4-92b4-84995efcf6e2}</ProjectGuid>
+    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Docs.OpenStack.Net</AssemblyName>
+    <RootNamespace>Docs.OpenStack.Net</RootNamespace>
+    <Name>Docs.OpenStack.Net.Current</Name>
+    <!-- SHFB properties -->
+    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
+    <OutputPath>.\bin\Help</OutputPath>
+    <HtmlHelpName>API Reference Documentation</HtmlHelpName>
+    <Language>en-US</Language>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\..\OpenStack.Net\OpenStack.Net.net45.csproj" />
+    </DocumentationSources>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <HelpFileFormat>Website</HelpFileFormat>
+    <IndentHtml>False</IndentHtml>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <CleanIntermediates>True</CleanIntermediates>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <PresentationStyle>VS2013</PresentationStyle>
+    <Preliminary>False</Preliminary>
+    <NamingMethod>MemberName</NamingMethod>
+    <HelpTitle>OpenStack.Net API Reference Documentation</HelpTitle>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <RootNamespaceTitle>API Reference</RootNamespaceTitle>
+    <WebsiteSdkLinkType>Msdn</WebsiteSdkLinkType>
+    <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
+    <IncludeFavorites>True</IncludeFavorites>
+    <BinaryTOC>True</BinaryTOC>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
+    <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
+    <CopyrightText>
+    </CopyrightText>
+    <CopyrightHref>
+    </CopyrightHref>
+    <TransformComponentArguments>
+      <Argument Key="logoFile" Value="" />
+      <Argument Key="logoHeight" Value="" />
+      <Argument Key="logoWidth" Value="" />
+      <Argument Key="logoAltText" Value="" />
+      <Argument Key="logoPlacement" Value="left" />
+      <Argument Key="logoAlignment" Value="left" />
+    </TransformComponentArguments>
+    <ComponentConfigurations>
+    </ComponentConfigurations>
+    <CatalogName>VisualStudio11</CatalogName>
+    <TocParentId>-1</TocParentId>
+    <TocParentVersion>100</TocParentVersion>
+    <TopicVersion>100</TopicVersion>
+    <TocOrder>-1</TocOrder>
+    <ProductTitle>OpenStack.Net SDK</ProductTitle>
+    <VendorName>openstacknet</VendorName>
+    <MSHelpViewerSdkLinkType>Id</MSHelpViewerSdkLinkType>
+    <CatalogVersion>100</CatalogVersion>
+    <CatalogProductId>VS</CatalogProductId>
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="System" isExposed="True">
+        <Filter entryType="Class" fullName="System.Tuple" filterName="Tuple" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`8" filterName="Tuple`8" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`7" filterName="Tuple`7" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`6" filterName="Tuple`6" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`5" filterName="Tuple`5" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`4" filterName="Tuple`4" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`3" filterName="Tuple`3" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`2" filterName="Tuple`2" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Tuple`1" filterName="Tuple`1" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections" isExposed="True">
+        <Filter entryType="Interface" fullName="System.Collections.IStructuralComparable" filterName="IStructuralComparable" isExposed="False" />
+        <Filter entryType="Interface" fullName="System.Collections.IStructuralEquatable" filterName="IStructuralEquatable" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections.Generic" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.Generic.OpenStackListExtensions" filterName="OpenStackListExtensions" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System.Collections.ObjectModel" isExposed="True">
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.KeyCollection" filterName="ReadOnlyDictionary`2.KeyCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2.ValueCollection" filterName="ReadOnlyDictionary`2.ValueCollection" isExposed="False" />
+        <Filter entryType="Class" fullName="System.Collections.ObjectModel.ReadOnlyDictionary`2" filterName="ReadOnlyDictionary`2" isExposed="False" />
+      </Filter>
+    </ApiFilter>
+    <HelpAttributes />
+    <NamespaceSummaries />
+    <PlugInConfigurations>
+    </PlugInConfigurations>
+    <BuildLogFile />
+    <HtmlHelp1xCompilerPath />
+    <HtmlHelp2xCompilerPath />
+    <WorkingPath />
+    <ComponentPath />
+    <MaximumGroupParts>3</MaximumGroupParts>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <!-- There are no properties for these groups.  AnyCPU needs to appear in
+       order for Visual Studio to perform the build.  The others are optional
+       common platform types that may appear. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

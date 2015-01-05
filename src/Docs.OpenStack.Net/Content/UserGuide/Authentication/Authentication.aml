@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="92e2ae00-a53d-4efb-925f-2772495e9b6d" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <summary>
+      <para>
+        This section describes the various authentication methods which are supported by the
+        OpenStack.Net SDK.
+      </para>
+    </summary>
+
+    <introduction>
+      <para>
+        The services provided by the OpenStack.Net SDK require authentication with a cloud
+        services provider.
+      </para>
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

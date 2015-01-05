@@ -1,0 +1,63 @@
+﻿{
+  "extensions": {
+    "values": [
+      {
+        "updated": "2013-12-17T12:00:0-00:00",
+        "name": "OpenStack Federation APIs",
+        "links": [
+          {
+            "href": "https://github.com/openstack/identity-api",
+            "type": "text/html",
+            "rel": "describedby"
+          }
+        ],
+        "namespace": "http://docs.openstack.org/identity/api/ext/OS-FEDERATION/v1.0",
+        "alias": "OS-FEDERATION",
+        "description": "OpenStack Identity Providers Mechanism."
+      },
+      {
+        "updated": "2013-07-07T12:00:0-00:00",
+        "name": "OpenStack Keystone User CRUD",
+        "links": [
+          {
+            "href": "https://github.com/openstack/identity-api",
+            "type": "text/html",
+            "rel": "describedby"
+          }
+        ],
+        "namespace": "http://docs.openstack.org/identity/api/ext/OS-KSCRUD/v1.0",
+        "alias": "OS-KSCRUD",
+        "description": "OpenStack extensions to Keystone v2.0 API enabling User Operations."
+      },
+      {
+        "updated": "2013-07-07T12:00:0-00:00",
+        "name": "OpenStack EC2 API",
+        "links": [
+          {
+            "href": "https://github.com/openstack/identity-api",
+            "type": "text/html",
+            "rel": "describedby"
+          }
+        ],
+        "namespace": "http://docs.openstack.org/identity/api/ext/OS-EC2/v1.0",
+        "alias": "OS-EC2",
+        "description": "OpenStack EC2 Credentials backend."
+      },
+      {
+        "updated": "2014-01-20T12:00:0-00:00",
+        "name": "OpenStack Simple Certificate API",
+        "links": [
+          {
+            "href": "https://github.com/openstack/identity-api",
+            "type": "text/html",
+            "rel": "describedby"
+          }
+        ],
+        "namespace": "http://docs.openstack.org/identity/api/ext/OS-SIMPLE-CERT/v1.0",
+        "alias": "OS-SIMPLE-CERT",
+        "description": "OpenStack simple certificate retrieval extension"
+      }
+    ]
+  }
+}
+
