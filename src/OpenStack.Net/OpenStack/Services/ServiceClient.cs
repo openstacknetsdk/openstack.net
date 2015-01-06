@@ -29,17 +29,22 @@
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
+        /// <summary>
+        /// This is the backing field for the <see cref="DefaultRegion"/> property.
+        /// </summary>
+        private readonly string _defaultRegion;
+
+        /// <summary>
+        /// This is the backing field for the <see cref="InternalUrl"/> property.
+        /// </summary>
+        private readonly bool _internalUrl;
+
 #if !PORTABLE
         /// <summary>
         /// This is the backing field for the <see cref="ConnectionLimit"/> property.
         /// </summary>
         private int? _connectionLimit;
 #endif
-
-        /// <summary>
-        /// This is the backing field for the <see cref="DefaultRegion"/> property.
-        /// </summary>
-        private string _defaultRegion;
 
         /// <summary>
         /// This is the backing field for the <see cref="BackoffPolicy"/> property.
@@ -66,16 +71,22 @@
         /// <param name="defaultRegion">The preferred region for the service. Unless otherwise specified for a specific
         /// client, derived service clients will not use a default region if this value is <see langword="null"/> (i.e.
         /// only region-less or "global" service endpoints will be considered acceptable).</param>
+        /// <param name="internalUrl">
+        /// <para><see langword="true"/> to access the service using an endpoint on the local network.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> to access the service over a public network (the Internet).</para>
+        /// </param>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="authenticationService"/> is <see langword="null"/>.
         /// </exception>
-        protected ServiceClient(IAuthenticationService authenticationService, string defaultRegion)
+        protected ServiceClient(IAuthenticationService authenticationService, string defaultRegion, bool internalUrl)
         {
             if (authenticationService == null)
                 throw new ArgumentNullException("authenticationService");
 
             _authenticationService = authenticationService;
             _defaultRegion = defaultRegion;
+            _internalUrl = internalUrl;
             _httpClient = new HttpClient();
         }
 
@@ -127,6 +138,28 @@
             get
             {
                 return _defaultRegion;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether to use a local network connection or a public network connection for
+        /// accessing the service.
+        /// </summary>
+        /// <remarks>
+        /// <note type="note">
+        /// <para>Individual services may require a particular value be used for this property.</para>
+        /// </note>
+        /// </remarks>
+        /// <value>
+        /// <para><see langword="true"/> to access the service using an endpoint on the local network.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="false"/> to access the service over a public network (the Internet).</para>
+        /// </value>
+        public bool InternalUrl
+        {
+            get
+            {
+                return _internalUrl;
             }
         }
 

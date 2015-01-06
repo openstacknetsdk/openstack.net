@@ -15,8 +15,8 @@
             }
             catch (ArgumentException ex)
             {
-                // ex was thrown directly by SomeOperationAsync. If SomeOperationAsync is marked with the `async`
-                // keyword, then ex was thrown prior to the first use of the `await` keyword within the implementation.
+                // ex was thrown directly by SomeOperationAsync. This cannot occur if SomeOperationAsync is an async
+                // function (§10.15 - C# Language Specification Version 5.0).
             }
             #endregion
         }
@@ -35,9 +35,8 @@
                 if (ex == null)
                     throw;
 
-                // ex was thrown during the asynchronous portion of SomeOperationAsync. If SomeOperationAsync is marked
-                // with the `async` keyword, then ex was thrown after the first use of the `await` keyword within the
-                // method.
+                // ex was thrown during the asynchronous portion of SomeOperationAsync. This is always the case if
+                // SomeOperationAsync is an async function (§10.15 - C# Language Specification Version 5.0).
             }
             #endregion
         }

@@ -193,8 +193,8 @@ namespace net.openstack.Core.Providers
         /// </remarks>
         /// <param name="serverId">The server ID. This is obtained from <see cref="ServerBase.Id">ServerBase.Id</see>.</param>
         /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
         /// <returns><see langword="true"/> if the server was successfully updated; otherwise <see langword="false"/>.</returns>
@@ -202,9 +202,9 @@ namespace net.openstack.Core.Providers
         /// <exception cref="ArgumentException">
         /// If <paramref name="serverId"/> is empty.
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/></para>
+        /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+        /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="identity"/> type.
@@ -378,8 +378,8 @@ namespace net.openstack.Core.Providers
         /// <param name="imageName">The image to rebuild the server from. This is specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The new flavor for server. This is obtained from <see cref="Flavor.Id"/>.</param>
         /// <param name="adminPassword">The new admin password for the server.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
         /// <param name="metadata">The list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.</param>
         /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
         /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.</param>
@@ -404,9 +404,9 @@ namespace net.openstack.Core.Providers
         /// <para>-or-</para>
         /// <para>If <paramref name="adminPassword"/> is empty.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/></para>
+        /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+        /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If the provider does not support the given <paramref name="diskConfig"/>.

@@ -4,11 +4,6 @@
     using SeekOrigin = System.IO.SeekOrigin;
     using Stream = System.IO.Stream;
 
-#if !NET40PLUS
-    // Uses IProgress<T>
-    using Rackspace.Threading;
-#endif
-
 #if NET45PLUS
     // Uses CoreTaskExtensions.Select
     using Rackspace.Threading;

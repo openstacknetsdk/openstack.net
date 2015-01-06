@@ -1,5 +1,12 @@
 # Note: these values may only change during minor release
+# Also, if the values change, assembly binding redirection will not work between the affected releases.
+
 $Keys = @{
+	'v3.5' = '8965cea5c205d3a3'
+	'v4.0' = '8965cea5c205d3a3'
+}
+
+$KeysV2 = @{
 	'net35' = '60ee1d542341ddcd'
 	'net40' = '326b3de041f03d04'
 	'net45' = '829455f81ec6a05d'

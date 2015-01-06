@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -52,6 +53,20 @@ namespace net.openstack.Providers.Rackspace
         /// implementation, and token cache.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method to create an identity provider that
+        /// authenticates using username and API key credentials.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="CreateProvider" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="CreateProvider" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="CreateProvider" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="CreateProvider" language="fs"/>
+        /// <para>The following example demonstrates the use of this method to create an identity provider that
+        /// authenticates using username and password credentials.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="CreateProviderWithPassword" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="CreateProviderWithPassword" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="CreateProviderWithPassword" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="CreateProviderWithPassword" language="fs"/>
+        /// </example>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null)
         { }
@@ -434,6 +449,44 @@ namespace net.openstack.Providers.Rackspace
             return cred;
         }
 
+        /// <summary>
+        /// Reset the API key credentials for a user.
+        /// </summary>
+        /// <param name="userId">The user ID. This is obtained from <see cref="User.Id"/> or <see cref="NewUser.Id"/>.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>A <see cref="UserCredential"/> object containing the new API key for the user.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="userId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">
+        /// <para>If the provider does not support the <see href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-d1e1357.html">OS-KSADM Admin Extension</see>.</para>
+        /// <para>-or-</para>
+        /// <para>If the provider does not support the given <paramref name="identity"/> type.</para>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method. For more information about creating the
+        /// provider, see <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="ResetApiKey" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="ResetApiKey" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="ResetApiKey" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="ResetApiKey" language="fs"/>
+        /// </example>
+        /// <seealso href="http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/POST_resetUserAPIKeyCredentials__v2.0_users__userId__OS-KSADM_credentials_RAX-KSKEYapiKeyCredentials_RAX-AUTH_reset_User_Calls.html">Reset API key credentials (Rackspace Cloud Identity Client Developer Guide - API v2.0)</seealso>
+        public virtual UserCredential ResetApiKey(string userId, CloudIdentity identity = null)
+        {
+            if (userId == null)
+                throw new ArgumentNullException("userId");
+            CheckIdentity(identity);
+
+            var urlPath = string.Format("v2.0/users/{0}/OS-KSADM/credentials/RAX-KSKEY:apiKeyCredentials/RAX-AUTH/reset", userId);
+            var response = ExecuteRESTRequest<UserCredentialResponse>(identity, new Uri(UrlBase, urlPath), HttpMethod.POST);
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.UserCredential;
+        }
+
         /// <inheritdoc/>
         public new virtual CloudIdentity DefaultIdentity { get { return base.DefaultIdentity; } }
 
@@ -687,6 +740,172 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             return response.Data.Tenants;
+        }
+
+        /// <summary>
+        /// Lists the endpoints in a tenant's service catalog.
+        /// </summary>
+        /// <remarks>
+        /// <para>This call is part of the <c>OS-KSCATALOG</c> extension to the OpenStack Identity Service V2.</para>
+        /// </remarks>
+        /// <param name="tenantId">The tenant ID. This is obtained from <see cref="Tenant.Id"/></param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>A collection of <see cref="ExtendedEndpoint"/> objects containing endpoint details.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="tenantId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="tenantId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#os-kscatalog-ext">OS-KSCATALOG admin extension (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
+        /// <preliminary/>
+        public virtual ReadOnlyCollection<ExtendedEndpoint> ListServiceCatalogEndpoints(string tenantId, CloudIdentity identity)
+        {
+            if (tenantId == null)
+                throw new ArgumentNullException("tenantId");
+            if (string.IsNullOrEmpty(tenantId))
+                throw new ArgumentException("tenantId cannot be empty");
+
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest<ListEndpointsResponse>(identity, new Uri(UrlBase, string.Format("/v2.0/tenants/{0}/OS-KSCATALOG/endpoints", tenantId)), HttpMethod.GET);
+
+            if (response == null || response.Data == null || response.Data.Endpoints == null)
+                return null;
+
+            return new ReadOnlyCollection<ExtendedEndpoint>(response.Data.Endpoints);
+        }
+
+        /// <summary>
+        /// Gets an endpoint by ID from the service catalog for a tenant.
+        /// </summary>
+        /// <remarks>
+        /// <para>This call is part of the <c>OS-KSCATALOG</c> extension to the OpenStack Identity Service V2.</para>
+        /// </remarks>
+        /// <param name="tenantId">The tenant ID. This is obtained from <see cref="Tenant.Id"/></param>
+        /// <param name="endpointId">The endpoint ID. This is obtained from <see cref="ExtendedEndpoint.Id"/></param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>An <see cref="ExtendedEndpoint"/> object containing the endpoint details.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="tenantId"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="endpointId"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <para>If <paramref name="tenantId"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="endpointId"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#os-kscatalog-ext">OS-KSCATALOG admin extension (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
+        /// <preliminary/>
+        public virtual ExtendedEndpoint GetServiceCatalogEndpoint(string tenantId, string endpointId, CloudIdentity identity)
+        {
+            if (tenantId == null)
+                throw new ArgumentNullException("tenantId");
+            if (endpointId == null)
+                throw new ArgumentNullException("endpointId");
+            if (string.IsNullOrEmpty(tenantId))
+                throw new ArgumentException("tenantId cannot be empty");
+            if (string.IsNullOrEmpty(endpointId))
+                throw new ArgumentException("endpointId cannot be empty");
+
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest<GetEndpointResponse>(identity, new Uri(UrlBase, string.Format("/v2.0/tenants/{0}/OS-KSCATALOG/endpoints/{1}", tenantId, endpointId)), HttpMethod.GET);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Endpoint;
+        }
+
+        /// <summary>
+        /// Adds an endpoint to the service catalog for a tenant.
+        /// </summary>
+        /// <remarks>
+        /// <para>This call is part of the <c>OS-KSCATALOG</c> extension to the OpenStack Identity Service V2.</para>
+        /// </remarks>
+        /// <param name="tenantId">The tenant ID. This is obtained from <see cref="Tenant.Id"/></param>
+        /// <param name="endpointTemplateId">The endpoint template ID.</param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns>An <see cref="ExtendedEndpoint"/> object containing the endpoint details.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="tenantId"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="endpointTemplateId"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">If <paramref name="tenantId"/> is empty.</exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#os-kscatalog-ext">OS-KSCATALOG admin extension (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
+        /// <preliminary/>
+        public virtual ExtendedEndpoint AddServiceCatalogEndpoint(string tenantId, EndpointTemplateId endpointTemplateId, CloudIdentity identity)
+        {
+            if (tenantId == null)
+                throw new ArgumentNullException("tenantId");
+            if (endpointTemplateId == null)
+                throw new ArgumentNullException("endpointTemplateId");
+            if (string.IsNullOrEmpty(tenantId))
+                throw new ArgumentException("tenantId cannot be empty");
+
+            CheckIdentity(identity);
+
+            var request = new AddServiceCatalogEndpointRequest(endpointTemplateId);
+            var response = ExecuteRESTRequest<GetEndpointResponse>(identity, new Uri(UrlBase, string.Format("/v2.0/tenants/{0}/OS-KSCATALOG/endpoints", tenantId)), HttpMethod.POST, request);
+
+            if (response == null || response.Data == null)
+                return null;
+
+            return response.Data.Endpoint;
+        }
+
+        /// <summary>
+        /// Removes an endpoint from the service catalog for a tenant.
+        /// </summary>
+        /// <remarks>
+        /// <para>This call is part of the <c>OS-KSCATALOG</c> extension to the OpenStack Identity Service V2.</para>
+        /// </remarks>
+        /// <param name="tenantId">The tenant Id. This is obtained from <see cref="Tenant.Id"/></param>
+        /// <param name="endpointId">The endpoint Id. This is obtained from <see cref="ExtendedEndpoint.Id"/></param>
+        /// <param name="identity">The cloud identity to use for this request. If not specified, the <see cref="DefaultIdentity"/> for the current provider instance will be used.</param>
+        /// <returns><see langword="true"/> if the endpoint was successfully deleted; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="tenantId"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="endpointId"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <para>If <paramref name="tenantId"/> is empty.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="endpointId"/> is empty.</para>
+        /// </exception>
+        /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
+        /// <exception cref="ResponseException">If the authentication request failed or the token does not exist.</exception>
+        /// <seealso href="http://developer.openstack.org/api-ref-identity-v2.html#os-kscatalog-ext">OS-KSCATALOG admin extension (Identity API v2.0 - OpenStack Complete API Reference)</seealso>
+        /// <preliminary/>
+        public virtual bool DeleteServiceCatalogEndpoint(string tenantId, string endpointId, CloudIdentity identity)
+        {
+            if (tenantId == null)
+                throw new ArgumentNullException("tenantId");
+            if (endpointId == null)
+                throw new ArgumentNullException("endpointId");
+            if (string.IsNullOrEmpty(tenantId))
+                throw new ArgumentException("tenantId cannot be empty");
+            if (string.IsNullOrEmpty(endpointId))
+                throw new ArgumentException("endpointId cannot be empty");
+
+            CheckIdentity(identity);
+
+            var response = ExecuteRESTRequest(identity, new Uri(UrlBase, string.Format("/v2.0/tenants/{0}/OS-KSCATALOG/endpoints/{1}", tenantId, endpointId)), HttpMethod.DELETE);
+
+            if (response == null && response.StatusCode != HttpStatusCode.NoContent)
+                return false;
+
+            return true;
         }
 
         #endregion

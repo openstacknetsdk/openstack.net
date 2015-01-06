@@ -25,18 +25,18 @@
         /// with the specified name and access IP addresses.
         /// </summary>
         /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
         /// <exception cref="ArgumentException">
-        /// If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>
+        /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+        /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
         /// </exception>
         public UpdateServerRequest(string name, IPAddress accessIPv4, IPAddress accessIPv6)
         {
-            if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+            if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-            if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+            if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
 
             Server = new ServerUpdateDetails(name, accessIPv4, accessIPv6);
@@ -59,14 +59,14 @@
             /// Gets the IP v4 access address for the server, or <see langword="null"/> if the access address should not be changed by the update.
             /// </summary>
             [JsonProperty("accessIPv4", DefaultValueHandling = DefaultValueHandling.Include)]
-            [JsonConverter(typeof(IPAddressSimpleConverter))]
+            [JsonConverter(typeof(IPAddressNoneIsNullSimpleConverter))]
             public IPAddress AccessIPv4 { get; private set; }
 
             /// <summary>
             /// Gets the IP v6 access address for the server, or <see langword="null"/> if the access address should not be changed by the update.
             /// </summary>
             [JsonProperty("accessIPv6", DefaultValueHandling = DefaultValueHandling.Include)]
-            [JsonConverter(typeof(IPAddressSimpleConverter))]
+            [JsonConverter(typeof(IPAddressNoneIsNullSimpleConverter))]
             public IPAddress AccessIPv6 { get; private set; }
 
             /// <summary>
@@ -74,18 +74,18 @@
             /// with the specified name and access IP addresses.
             /// </summary>
             /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>
-            /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-            /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+            /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+            /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
             /// <exception cref="ArgumentException">
-            /// If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>
+            /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
             /// <para>-or-</para>
-            /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+            /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
             /// </exception>
             public ServerUpdateDetails(string name, IPAddress accessIPv4, IPAddress accessIPv6)
             {
-                if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+                if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                     throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-                if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+                if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                     throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
 
                 Name = name;

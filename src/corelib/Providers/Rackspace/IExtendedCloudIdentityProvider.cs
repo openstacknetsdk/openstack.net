@@ -27,6 +27,15 @@ namespace net.openstack.Providers.Rackspace
         /// <exception cref="NotSupportedException">If the provider does not support the given <paramref name="identity"/> type.</exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IExtendedCloudIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="ListRoles" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="ListRoles" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="ListRoles" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="ListRoles" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.rackspace.com/openstack-extensions/auth/OS-KSADM-admin-devguide/content/GET_listRoles_v2.0_OS-KSADM_roles_Admin_API_Service_Developer_Operations-d1e1357.html">List Roles (Rackspace OS-KSADM Extension - API v2.0)</seealso>
         IEnumerable<Role> ListRoles(string serviceId = null, int? marker = null, int? limit = null, CloudIdentity identity = null);
 
@@ -106,6 +115,15 @@ namespace net.openstack.Providers.Rackspace
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IExtendedCloudIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="AddRoleToUser" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="AddRoleToUser" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="AddRoleToUser" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="AddRoleToUser" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/PUT_addUserRole_v2.0_users__userId__roles_OS-KSADM__roleId__.html">Add Global Role to User (OpenStack Identity Service API v2.0 Reference)</seealso>
         bool AddRoleToUser(string userId, string roleId, CloudIdentity identity = null);
 
@@ -133,6 +151,15 @@ namespace net.openstack.Providers.Rackspace
         /// </exception>
         /// <exception cref="InvalidOperationException">If <paramref name="identity"/> is <see langword="null"/> and no default identity is available for the provider.</exception>
         /// <exception cref="ResponseException">If the REST API request failed.</exception>
+        /// <example>
+        /// <para>The following example demonstrates the use of this method using the <see cref="CloudIdentityProvider"/>
+        /// implementation of <see cref="IExtendedCloudIdentityProvider"/>. For more information about creating the provider, see
+        /// <see cref="CloudIdentityProvider(CloudIdentity)"/>.</para>
+        /// <code source="..\Samples\CSharpCodeSamples\IdentityProviderExamples.cs" region="DeleteRoleFromUser" language="cs"/>
+        /// <code source="..\Samples\VBCodeSamples\IdentityProviderExamples.vb" region="DeleteRoleFromUser" language="vbnet"/>
+        /// <code source="..\Samples\CPPCodeSamples\IdentityProviderExamples.cpp" region="DeleteRoleFromUser" language="cpp"/>
+        /// <code source="..\Samples\FSharpCodeSamples\IdentityProviderExamples.fs" region="DeleteRoleFromUser" language="fs"/>
+        /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/DELETE_deleteUserRole_v2.0_users__userId__roles_OS-KSADM__roleId__.html">Delete Global Role from User (OpenStack Identity Service API v2.0 Reference)</seealso>
         bool DeleteRoleFromUser(string userId, string roleId, CloudIdentity identity = null);
 

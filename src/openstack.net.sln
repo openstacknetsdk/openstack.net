@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{62B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "testing\unit\unit.csproj", "{FDFD92C2-75CF-4437-87B8-841EC3624CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{1C279666-B88A-4765-8A51-B352C85EFC28}"
-EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.v4.0", "Documentation\Documentation.v4.0.shfbproj", "{EA57BD15-3742-45B8-BDE2-263F7236BAFD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E49D9DC3-79D5-4C5E-8C38-FD5060B4E318} = {E49D9DC3-79D5-4C5E-8C38-FD5060B4E318}
@@ -36,7 +34,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{75DE60
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{49189605-C4D9-4DE1-A2CA-03774C69EC0A}"
@@ -55,9 +52,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE
 	ProjectSection(SolutionItems) = preProject
 		..\build\build.ps1 = ..\build\build.ps1
 		..\build\check-key.ps1 = ..\build\check-key.ps1
-		..\build\KeyReporting.targets = ..\build\KeyReporting.targets
 		..\build\keys.ps1 = ..\build\keys.ps1
-		..\build\push.ps1 = ..\build\push.ps1
+		..\build\push-v1.ps1 = ..\build\push-v1.ps1
+		..\build\push-v2.ps1 = ..\build\push-v2.ps1
 		..\build\version.ps1 = ..\build\version.ps1
 	EndProjectSection
 EndProject
@@ -93,6 +90,8 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.0.1", "Documentation.History\1.0.1\Documentation.1.0.1.shfbproj", "{1A9A19DB-3244-4A7B-A346-AD3E6C06B49B}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.0.0", "Documentation.History\1.0.0\Documentation.1.0.0.shfbproj", "{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.3.3", "Documentation.History\1.3.3\Documentation.1.3.3.shfbproj", "{FC6B5322-98E9-49D4-BDE0-CF69847374DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.Net.net35", "OpenStack.Net\OpenStack.Net.net35.csproj", "{F407F288-3E74-4704-9FFA-8B3597C15BA2}"
 EndProject
@@ -177,12 +176,6 @@ Global
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FDFD92C2-75CF-4437-87B8-841EC3624CE4}.ReleaseNoDocs|Mixed Platforms.Build.0 = Release|Any CPU
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.Release|Mixed Platforms.Build.0 = Release|x86
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|x86
-		{1C279666-B88A-4765-8A51-B352C85EFC28}.ReleaseNoDocs|Mixed Platforms.Build.0 = Release|x86
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -261,6 +254,9 @@ Global
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F407F288-3E74-4704-9FFA-8B3597C15BA2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{F407F288-3E74-4704-9FFA-8B3597C15BA2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{F407F288-3E74-4704-9FFA-8B3597C15BA2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -367,6 +363,7 @@ Global
 		{55D69660-CC73-469A-94CE-A28405B7C13F} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{1A9A19DB-3244-4A7B-A346-AD3E6C06B49B} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{03B2E018-1C97-4EA5-ABE4-B77DE03998BE} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
+		{FC6B5322-98E9-49D4-BDE0-CF69847374DD} = {98480338-49A3-410D-8A11-E7956AEF9ACA}
 		{478F1DA0-7AC7-4D45-B7F1-FE91DCF4B08D} = {5EB9C284-E943-4333-9F80-7C12475ACD00}
 		{5B0D2AD3-372C-45EF-87BB-BF1B60F639A0} = {5EB9C284-E943-4333-9F80-7C12475ACD00}
 		{FCA60A93-A329-4DAB-9F48-04B8AFD95062} = {5EB9C284-E943-4333-9F80-7C12475ACD00}

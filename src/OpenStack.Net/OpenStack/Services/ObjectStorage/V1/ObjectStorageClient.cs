@@ -29,12 +29,6 @@ namespace OpenStack.Services.ObjectStorage.V1
     public class ObjectStorageClient : ServiceClient, IObjectStorageService
     {
         /// <summary>
-        /// Specifies whether the public or internal base address should be used for accessing the Object Storage
-        /// Service.
-        /// </summary>
-        private readonly bool _internalUrl;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ObjectStorageClient"/> class with the specified authentication
         /// service, default region, and value indicating whether an internal or public endpoint should be used for
         /// communicating with the service.
@@ -50,9 +44,8 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// If <paramref name="authenticationService"/> is <see langword="null"/>.
         /// </exception>
         public ObjectStorageClient(IAuthenticationService authenticationService, string defaultRegion, bool internalUrl)
-            : base(authenticationService, defaultRegion)
+            : base(authenticationService, defaultRegion, internalUrl)
         {
-            _internalUrl = internalUrl;
         }
 
         #region IObjectStorageService Members
@@ -690,7 +683,7 @@ namespace OpenStack.Services.ObjectStorage.V1
         {
             const string serviceType = "object-store";
             const string serviceName = null;
-            return AuthenticationService.GetBaseAddressAsync(serviceType, serviceName, DefaultRegion, _internalUrl, cancellationToken);
+            return AuthenticationService.GetBaseAddressAsync(serviceType, serviceName, DefaultRegion, InternalUrl, cancellationToken);
         }
     }
 }

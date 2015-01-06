@@ -63,14 +63,14 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.
         /// </summary>
         [JsonProperty("accessIPv4", DefaultValueHandling = DefaultValueHandling.Include)]
-        [JsonConverter(typeof(IPAddressSimpleConverter))]
+        [JsonConverter(typeof(IPAddressNoneIsNullSimpleConverter))]
         public IPAddress AccessIPv4 { get; private set; }
 
         /// <summary>
         /// The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.
         /// </summary>
         [JsonProperty("accessIPv6", DefaultValueHandling = DefaultValueHandling.Include)]
-        [JsonConverter(typeof(IPAddressSimpleConverter))]
+        [JsonConverter(typeof(IPAddressNoneIsNullSimpleConverter))]
         public IPAddress AccessIPv6 { get; private set; }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <param name="imageName">The image to rebuild the server from. This is specified as an image ID (see <see cref="SimpleServerImage.Id"/>) or a full URL.</param>
         /// <param name="flavor">The new flavor for server. This is obtained from <see cref="net.openstack.Core.Domain.Flavor.Id"/>.</param>
         /// <param name="adminPassword">The new admin password for the server.</param>
-        /// <param name="accessIPv4">The new IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
-        /// <param name="accessIPv6">The new IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
+        /// <param name="accessIPv4">The new IP v4 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v4 address for the server. If the value is <see langword="null"/>, the server's IP v4 address is not updated.</param>
+        /// <param name="accessIPv6">The new IP v6 address for the server, or <see cref="IPAddress.None"/> to remove the configured IP v6 address for the server. If the value is <see langword="null"/>, the server's IP v6 address is not updated.</param>
         /// <param name="metadata">The list of metadata to associate with the server. If the value is <see langword="null"/>, the metadata associated with the server is not changed during the rebuild operation.</param>
         /// <param name="diskConfig">The disk configuration. If the value is <see langword="null"/>, the default configuration for the specified image is used.</param>
         /// <param name="personality">The path and contents of a file to inject in the target file system during the rebuild operation. If the value is <see langword="null"/>, no file is injected.</param>
@@ -99,9 +99,9 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
         /// <para>-or-</para>
         /// <para>If <paramref name="adminPassword"/> is empty.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/></para>
+        /// <para>If <paramref name="accessIPv4"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv4"/> is not <see cref="AddressFamily.InterNetwork"/>.</para>
         /// <para>-or-</para>
-        /// <para>If the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/></para>
+        /// <para>If <paramref name="accessIPv6"/> is not <see cref="IPAddress.None"/> and the <see cref="AddressFamily"/> of <paramref name="accessIPv6"/> is not <see cref="AddressFamily.InterNetworkV6"/>.</para>
         /// </exception>
         public ServerRebuildDetails(string name, string imageName, string flavor, string adminPassword, IPAddress accessIPv4, IPAddress accessIPv6, Metadata metadata, DiskConfiguration diskConfig, Personality personality)
         {
@@ -117,9 +117,9 @@ namespace net.openstack.Providers.Rackspace.Objects.Request
                 throw new ArgumentException("flavor cannot be empty");
             if (string.IsNullOrEmpty(adminPassword))
                 throw new ArgumentException("adminPassword cannot be empty");
-            if (accessIPv4 != null && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
+            if (accessIPv4 != null && !IPAddress.None.Equals(accessIPv4) && accessIPv4.AddressFamily != AddressFamily.InterNetwork)
                 throw new ArgumentException("The specified value for accessIPv4 is not an IP v4 address.", "accessIPv4");
-            if (accessIPv6 != null && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
+            if (accessIPv6 != null && !IPAddress.None.Equals(accessIPv6) && accessIPv6.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new ArgumentException("The specified value for accessIPv6 is not an IP v6 address.", "accessIPv6");
 
             Name = name;
