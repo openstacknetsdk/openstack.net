@@ -48,6 +48,11 @@
             {
                 switch (serviceType)
                 {
+                case "cdn":
+                    serviceName = "rackCDN";
+                    serviceType = "rax:cdn";
+                    break;
+
                 case "compute":
                     serviceName = "cloudServersOpenStack";
                     break;
