@@ -1,16 +1,16 @@
-﻿#if !PORTABLE || WINRT
-
-namespace OpenStack.Services.ObjectStorage.V1
+﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using OpenStack.Collections;
     using OpenStack.Net;
     using Rackspace.Threading;
+
+#if !PORTABLE || WINRT
+    using System.Collections.Generic;
+    using System.Text;
+    using OpenStack.Collections;
 
 #if WINRT
     using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,6 +20,7 @@ namespace OpenStack.Services.ObjectStorage.V1
 #else
     using CngAlgorithm = System.Security.Cryptography.CngAlgorithm;
     using HMAC = System.Security.Cryptography.HMAC;
+#endif
 #endif
 
     /// <summary>
@@ -69,6 +70,9 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <inheritdoc/>
         public virtual Task<Tuple<Uri, ReadOnlyDictionary<string, string>>> CreateFormPostUriAsync(ContainerName container, ObjectName objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, CancellationToken cancellationToken)
         {
+#if PORTABLE && !WINRT
+            throw new NotSupportedException("The Form POST extension is not supported on the current platform.");
+#else
             if (container == null)
                 throw new ArgumentNullException("container");
             if (objectPrefix == null)
@@ -130,6 +134,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 };
 
             return TaskBlocks.Using(resource, body);
+#endif
         }
 
         /// <summary>
@@ -151,5 +156,3 @@ namespace OpenStack.Services.ObjectStorage.V1
         }
     }
 }
-
-#endif

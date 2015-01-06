@@ -1,6 +1,5 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
-    using System;
     using OpenStack.Net;
 
     /// <summary>
@@ -150,11 +149,7 @@
             /// <inheritdoc/>
             public override IFormPostExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
             {
-#if !PORTABLE || WINRT
                 return new FormPostExtension(service, httpApiCallFactory);
-#else
-                throw new NotSupportedException("The Form POST extension is currently not supported on this platform.");
-#endif
             }
         }
 
@@ -224,11 +219,7 @@
             /// <inheritdoc/>
             public override ITemporaryUriExtension CreateDefaultInstance(IObjectStorageService service, IHttpApiCallFactory httpApiCallFactory)
             {
-#if !PORTABLE || WINRT
                 return new TemporaryUriExtension(service, httpApiCallFactory);
-#else
-                throw new NotSupportedException("The Temporary URL middleware extension is currently not supported on this platform.");
-#endif
             }
         }
     }

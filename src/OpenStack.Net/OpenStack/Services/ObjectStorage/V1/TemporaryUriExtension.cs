@@ -1,17 +1,17 @@
-#if !PORTABLE || WINRT
-
 namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.Generic;
     using System.Net.Http;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using OpenStack.Collections;
     using OpenStack.Net;
-    using Rackspace.Net;
     using Rackspace.Threading;
+
+#if !PORTABLE || WINRT
+    using System.Collections.Generic;
+    using System.Text;
+    using OpenStack.Collections;
+    using Rackspace.Net;
 
 #if WINRT
     using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,6 +21,7 @@ namespace OpenStack.Services.ObjectStorage.V1
 #else
     using CngAlgorithm = System.Security.Cryptography.CngAlgorithm;
     using HMAC = System.Security.Cryptography.HMAC;
+#endif
 #endif
 
     /// <summary>
@@ -70,6 +71,9 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <inheritdoc/>
         public Task<Uri> CreateTemporaryUriAsync(HttpMethod method, ContainerName container, ObjectName @object, string key, DateTimeOffset expiration, CancellationToken cancellationToken)
         {
+#if PORTABLE && !WINRT
+            throw new NotSupportedException("The Temp URL extension is not supported on the current platform.");
+#else
             if (method == null)
                 throw new ArgumentNullException("method");
             if (container == null)
@@ -123,6 +127,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 };
 
             return TaskBlocks.Using(resource, body);
+#endif
         }
 
         /// <summary>
@@ -144,5 +149,3 @@ namespace OpenStack.Services.ObjectStorage.V1
         }
     }
 }
-
-#endif
