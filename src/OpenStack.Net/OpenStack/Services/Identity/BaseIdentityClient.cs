@@ -132,9 +132,9 @@
 
                                 IList<ApiVersion> list = versionsArray.ToObject<ApiVersion[]>();
                                 // according to the available documentation, this call does not appear to be paginated
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<ApiVersion>>> getNextPageAsync = null;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<ApiVersion>>>> prepareGetNextPageAsync = null;
 
-                                ReadOnlyCollectionPage<ApiVersion> results = new BasicReadOnlyCollectionPage<ApiVersion>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<ApiVersion> results = new BasicReadOnlyCollectionPage<ApiVersion>(list, prepareGetNextPageAsync);
                                 return results;
                             });
                 };
