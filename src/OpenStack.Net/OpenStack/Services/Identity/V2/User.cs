@@ -1,6 +1,6 @@
 namespace OpenStack.Services.Identity.V2
 {
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -35,13 +35,13 @@ namespace OpenStack.Services.Identity.V2
         /// This is the backing field for the <see cref="Roles"/> property.
         /// </summary>
         [JsonProperty("roles", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Role[] _roles;
+        private ImmutableArray<Role> _roles;
 
         /// <summary>
         /// This is the backing field for the <see cref="RolesLinks"/> property.
         /// </summary>
         [JsonProperty("roles_links", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Link[] _rolesLinks;
+        private ImmutableArray<Link> _rolesLinks;
 #pragma warning restore 649
 
         /// <summary>
@@ -105,14 +105,11 @@ namespace OpenStack.Services.Identity.V2
         /// <para>A collection of roles assigned to the user.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<Role> Roles
+        public ImmutableArray<Role> Roles
         {
             get
             {
-                if (_roles == null)
-                    return null;
-
-                return new ReadOnlyCollection<Role>(_roles);
+                return _roles;
             }
         }
 
@@ -125,14 +122,11 @@ namespace OpenStack.Services.Identity.V2
         /// <see cref="Roles"/>.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<Link> RolesLinks
+        public ImmutableArray<Link> RolesLinks
         {
             get
             {
-                if (_rolesLinks == null)
-                    return null;
-
-                return new ReadOnlyCollection<Link>(_rolesLinks);
+                return _rolesLinks;
             }
         }
     }

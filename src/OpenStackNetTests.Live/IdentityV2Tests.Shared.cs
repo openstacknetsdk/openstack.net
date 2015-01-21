@@ -1,7 +1,7 @@
 ﻿namespace OpenStackNetTests.Live
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
@@ -198,7 +198,7 @@
                     Access access = response.Item2.Access;
                     Assert.IsNotNull(access);
                     Assert.IsNotNull(access.Token);
-                    Assert.IsNotNull(access.ServiceCatalog);
+                    Assert.IsFalse(access.ServiceCatalog.IsDefault);
                     Assert.IsNotNull(access.User);
 
                     // check the token
@@ -222,9 +222,9 @@
                     // this property.)
                     //Assert.IsNotNull(user.Username);
 
-                    Assert.IsNotNull(user.Roles);
+                    Assert.IsFalse(user.Roles.IsDefault);
 
-                    Assert.AreNotEqual(0, user.Roles.Count);
+                    Assert.AreNotEqual(0, user.Roles.Length);
                     foreach (Role role in user.Roles)
                     {
                         Assert.IsNotNull(role);
@@ -246,17 +246,17 @@
                     }
 
                     // check the service catalog
-                    ReadOnlyCollection<ServiceCatalogEntry> serviceCatalog = access.ServiceCatalog;
+                    ImmutableArray<ServiceCatalogEntry> serviceCatalog = access.ServiceCatalog;
                     Assert.IsNotNull(serviceCatalog);
-                    Assert.AreNotEqual(0, serviceCatalog.Count);
+                    Assert.AreNotEqual(0, serviceCatalog.Length);
                     foreach (ServiceCatalogEntry entry in serviceCatalog)
                     {
                         Assert.IsNotNull(entry);
                         Assert.IsNotNull(entry.Name);
                         Assert.IsNotNull(entry.Type);
-                        Assert.IsNotNull(entry.Endpoints);
+                        Assert.IsFalse(entry.Endpoints.IsDefault);
 
-                        Assert.AreNotEqual(0, entry.Endpoints.Count);
+                        Assert.AreNotEqual(0, entry.Endpoints.Length);
                         foreach (Endpoint endpoint in entry.Endpoints)
                         {
                             Assert.IsNotNull(endpoint);

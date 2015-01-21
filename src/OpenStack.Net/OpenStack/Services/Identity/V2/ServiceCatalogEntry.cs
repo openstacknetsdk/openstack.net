@@ -1,6 +1,6 @@
 namespace OpenStack.Services.Identity.V2
 {
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -31,13 +31,13 @@ namespace OpenStack.Services.Identity.V2
         /// This is the backing field for the <see cref="Endpoints"/> property.
         /// </summary>
         [JsonProperty("endpoints", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Endpoint[] _endpoints;
+        private ImmutableArray<Endpoint> _endpoints;
 
         /// <summary>
         /// This is the backing field for the <see cref="EndpointsLinks"/> property.
         /// </summary>
         [JsonProperty("endpoints_links", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Link[] _endpointsLinks;
+        private ImmutableArray<Link> _endpointsLinks;
 #pragma warning restore 649
 
         /// <summary>
@@ -87,14 +87,11 @@ namespace OpenStack.Services.Identity.V2
         /// service.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<Endpoint> Endpoints
+        public ImmutableArray<Endpoint> Endpoints
         {
             get
             {
-                if (_endpoints == null)
-                    return null;
-
-                return new ReadOnlyCollection<Endpoint>(_endpoints);
+                return _endpoints;
             }
         }
 
@@ -106,14 +103,11 @@ namespace OpenStack.Services.Identity.V2
         /// service.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<Link> EndpointsLinks
+        public ImmutableArray<Link> EndpointsLinks
         {
             get
             {
-                if (_endpointsLinks == null)
-                    return null;
-
-                return new ReadOnlyCollection<Link>(_endpointsLinks);
+                return _endpointsLinks;
             }
         }
     }

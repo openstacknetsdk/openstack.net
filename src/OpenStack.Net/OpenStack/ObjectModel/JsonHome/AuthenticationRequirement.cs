@@ -1,6 +1,6 @@
 ﻿namespace OpenStack.ObjectModel.JsonHome
 {
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -25,7 +25,7 @@
         /// This is the backing field for the <see cref="Realms"/> property.
         /// </summary>
         [JsonProperty("realms")]
-        private string[] _realms;
+        private ImmutableArray<string> _realms;
 #pragma warning restore 649
 
         /// <summary>
@@ -42,14 +42,11 @@
         /// <summary>
         /// Gets an optional collection of identity protection spaces the resource is a member of.
         /// </summary>
-        public ReadOnlyCollection<string> Realms
+        public ImmutableArray<string> Realms
         {
             get
             {
-                if (_realms == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_realms);
+                return _realms;
             }
         }
     }

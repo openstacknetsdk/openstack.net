@@ -76,11 +76,11 @@
                         Assert.IsNotNull(version);
                         Assert.IsNotNull(version.Id);
                         Assert.IsNotNull(version.LastModified);
-                        Assert.IsNotNull(version.MediaTypes);
-                        Assert.IsNotNull(version.Links);
+                        Assert.IsFalse(version.MediaTypes.IsDefault);
+                        Assert.IsFalse(version.Links.IsDefault);
                         Assert.IsNotNull(version.Status);
 
-                        Assert.AreNotEqual(0, version.MediaTypes.Count);
+                        Assert.AreNotEqual(0, version.MediaTypes.Length);
                         foreach (MediaType mediaType in version.MediaTypes)
                         {
                             Assert.IsNotNull(mediaType);
@@ -88,7 +88,7 @@
                             Assert.IsNotNull(mediaType.Type);
                         }
 
-                        Assert.AreNotEqual(0, version.Links.Count);
+                        Assert.AreNotEqual(0, version.Links.Length);
                         foreach (Link link in version.Links)
                         {
                             Assert.IsNotNull(link);
