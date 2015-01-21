@@ -218,6 +218,9 @@
                     Assert.IsNotNull(user.Id);
                     Assert.IsNotNull(user.Name);
 
+                    if (string.Equals(Credentials.Vendor, "rackspace", StringComparison.OrdinalIgnoreCase))
+                        Assert.IsNotNull(user.GetDefaultRegion());
+
                     // If the Username is null, it's presumed to be the same as the Name. (Rackspace does not return
                     // this property.)
                     //Assert.IsNotNull(user.Username);
