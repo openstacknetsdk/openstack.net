@@ -1,6 +1,7 @@
 ﻿namespace Rackspace.Security.Authentication
 {
     using System;
+    using System.Collections.Immutable;
     using Newtonsoft.Json.Linq;
     using OpenStack.Services.Identity.V2;
 
@@ -42,11 +43,11 @@
             if (string.IsNullOrEmpty(apiKey))
                 throw new ArgumentException("apiKey cannot be empty");
 
-            AuthenticationData authenticationData =
-                new AuthenticationData(
-                    new JProperty("RAX-KSKEY:apiKeyCredentials", new JObject(
-                        new JProperty("username", username),
-                        new JProperty("apiKey", apiKey))));
+            var extensionData = ImmutableDictionary<string, JToken>.Empty
+                .Add("RAX-KSKEY:apiKeyCredentials", new JObject(
+                    new JProperty("username", username),
+                    new JProperty("apiKey", apiKey)));
+            AuthenticationData authenticationData = new AuthenticationData(extensionData);
 
             AuthenticationRequest authenticationRequest = new AuthenticationRequest(authenticationData);
             return authenticationRequest;

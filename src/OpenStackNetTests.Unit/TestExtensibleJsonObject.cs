@@ -136,16 +136,6 @@
             {
             }
 
-            public BasicExtensibleJsonObject(params JProperty[] extensionData)
-                : base(extensionData)
-            {
-            }
-
-            public BasicExtensibleJsonObject(IEnumerable<JProperty> extensionData)
-                : base(extensionData)
-            {
-            }
-
             public BasicExtensibleJsonObject(ImmutableDictionary<string, JToken> extensionData)
                 : base(extensionData)
             {
