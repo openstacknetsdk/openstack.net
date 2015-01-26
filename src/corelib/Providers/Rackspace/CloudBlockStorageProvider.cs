@@ -61,7 +61,7 @@ namespace net.openstack.Providers.Rackspace
         private readonly IBlockStorageValidator _cloudBlockStorageValidator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// no default identity or region, and the default identity provider and REST
         /// service implementation.
         /// </summary>
@@ -69,7 +69,7 @@ namespace net.openstack.Providers.Rackspace
             : this(null, null, null, null) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity, no default region, and the default identity
         /// provider and REST service implementation.
         /// </summary>
@@ -78,7 +78,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, null, null, null) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// no default identity or region, the default identity provider, and the specified
         /// REST service implementation.
         /// </summary>
@@ -87,7 +87,7 @@ namespace net.openstack.Providers.Rackspace
             : this(null, null, null, restService) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// no default identity or region, the specified identity provider, and the default
         /// REST service implementation.
         /// </summary>
@@ -96,7 +96,7 @@ namespace net.openstack.Providers.Rackspace
             : this(null, null, identityProvider, null) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity and identity provider, no default region, and
         /// the default REST service implementation.
         /// </summary>
@@ -106,7 +106,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, null, identityProvider, null) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity and REST service implementation, no default region,
         /// and the default identity provider.
         /// </summary>
@@ -116,7 +116,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, null, null, restService) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity, no default region, and the specified identity
         /// provider and REST service implementation.
         /// </summary>
@@ -127,7 +127,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, null, identityProvider, restService) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity, default region, identity provider, and REST service implementation.
         /// </summary>
         /// <param name="identity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
@@ -138,7 +138,7 @@ namespace net.openstack.Providers.Rackspace
             : this(identity, defaultRegion, identityProvider, restService, CloudBlockStorageValidator.Default) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudBlockStorageProvider"/> class with
         /// the specified default identity, default region, identity provider, REST service
         /// implementation, and block storage validator.
         /// </summary>

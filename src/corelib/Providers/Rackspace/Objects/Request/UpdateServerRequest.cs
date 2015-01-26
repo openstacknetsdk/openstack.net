@@ -70,7 +70,7 @@
             public IPAddress AccessIPv6 { get; private set; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="UpdateServerRequest"/> class
+            /// Initializes a new instance of the <see cref="ServerUpdateDetails"/> class
             /// with the specified name and access IP addresses.
             /// </summary>
             /// <param name="name">The new name for the server. If the value is <see langword="null"/>, the server name is not changed.</param>

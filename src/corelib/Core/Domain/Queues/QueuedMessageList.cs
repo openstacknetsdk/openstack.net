@@ -23,7 +23,7 @@
         private QueuedMessageListId _nextPageId;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasicReadOnlyCollectionPage{T}"/> class
+        /// Initializes a new instance of the <see cref="QueuedMessageList"/> class
         /// that is a read-only wrapper around the specified list.
         /// </summary>
         /// <param name="list">The list to wrap.</param>

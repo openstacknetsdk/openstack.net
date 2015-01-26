@@ -69,7 +69,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomHttpApiCall{T}"/> class with
+        /// Initializes a new instance of the <see cref="HttpApiCall{T}"/> class with
         /// the specified <see cref="HttpClient"/>, request message, completion option, and
         /// user-defined function to implement the response validation behavior.
         /// </summary>
