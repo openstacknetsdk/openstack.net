@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SnapshotEnteredErrorStateException"/> with the
+        /// Initializes a new instance of the <see cref="SnapshotEnteredErrorStateException"/> class with the
         /// specified snapshot state.
         /// </summary>
         /// <param name="status">The erroneous snapshot state.</param>

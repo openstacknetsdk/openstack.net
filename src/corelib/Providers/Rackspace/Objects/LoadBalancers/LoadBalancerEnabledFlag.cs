@@ -29,7 +29,7 @@
         private bool _enabled;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBalancerEnabledFlag"/>
+        /// Initializes a new instance of the <see cref="LoadBalancerEnabledFlag"/> class
         /// during JSON deserialization.
         /// </summary>
         [JsonConstructor]
@@ -38,7 +38,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBalancerEnabledFlag"/>
+        /// Initializes a new instance of the <see cref="LoadBalancerEnabledFlag"/> class
         /// with the specified value.
         /// </summary>
         /// <param name="enabled"><see langword="true"/> if the option is enabled; otherwise, <see langword="false"/>.</param>

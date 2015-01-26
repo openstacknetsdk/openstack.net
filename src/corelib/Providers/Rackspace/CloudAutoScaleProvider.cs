@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudMonitoringProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudAutoScaleProvider"/> class with
         /// the specified values.
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>

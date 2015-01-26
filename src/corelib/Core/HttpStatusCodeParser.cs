@@ -28,7 +28,7 @@ namespace net.openstack.Core
         private readonly Regex _expression;
 
         /// <summary>
-        /// Constructs a new instance of <see cref="HttpStatusCodeParser"/> for the default regular
+        /// Initializes a new instance of the <see cref="HttpStatusCodeParser"/> class for the default regular
         /// expression.
         /// </summary>
         [Obsolete("Use HttpStatusCodeParser.Default instead.")]
@@ -38,7 +38,7 @@ namespace net.openstack.Core
         }
 
         /// <summary>
-        /// Constructs a new instance of <see cref="HttpStatusCodeParser"/> for the specified regular
+        /// Initializes a new instance of the <see cref="HttpStatusCodeParser"/> class for the specified regular
         /// expression.
         /// </summary>
         /// <param name="pattern">

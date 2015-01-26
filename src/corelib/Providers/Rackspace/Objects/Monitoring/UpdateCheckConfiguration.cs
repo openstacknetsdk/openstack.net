@@ -24,7 +24,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckConfiguration"/> class
+        /// Initializes a new instance of the <see cref="UpdateCheckConfiguration"/> class
         /// with the specified properties.
         /// </summary>
         /// <param name="label">The friendly name of the check. If this value is <see langword="null"/>, the existing value for the check is not changed.</param>

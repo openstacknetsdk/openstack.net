@@ -22,7 +22,7 @@
 #pragma warning restore 649
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadBalancerTimestamp"/> property
+        /// Initializes a new instance of the <see cref="LoadBalancerTimestamp"/> class
         /// during JSON deserialization.
         /// </summary>
         [JsonConstructor]

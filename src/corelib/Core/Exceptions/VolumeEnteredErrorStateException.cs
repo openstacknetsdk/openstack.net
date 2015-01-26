@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VolumeEnteredErrorStateException"/> with the
+        /// Initializes a new instance of the <see cref="VolumeEnteredErrorStateException"/> class with the
         /// specified volume state.
         /// </summary>
         /// <param name="status">The erroneous volume state.</param>

@@ -20,7 +20,7 @@
 #pragma warning restore 649
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListLoadBalancerThrottlesResponse"/>
+        /// Initializes a new instance of the <see cref="ListLoadBalancerThrottlesResponse"/> class
         /// during JSON deserialization.
         /// </summary>
         [JsonConstructor]
