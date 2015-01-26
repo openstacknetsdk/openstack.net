@@ -130,6 +130,44 @@
         }
 
         /// <summary>
+        /// Gets an <see cref="ExtensibleJsonObject"/> with the same type and properties from the current object and the
+        /// specified extension data.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method provides the implementation for
+        /// <see cref="O:OpenStack.ObjectModel.ExtensibleJsonObjectExtensions.WithExtensionData``2"/>.</para>
+        /// <note type="implement">
+        /// <para>This method is only intended to be overridden in cases where <see cref="object.MemberwiseClone"/>
+        /// cannot be used to clone the current instance. Any override should ensure that the return value has the same
+        /// type as the current instance, or throw a <see cref="NotSupportedException"/>.</para>
+        /// </note>
+        /// </remarks>
+        /// <param name="extensionData">The new extension data for the object.</param>
+        /// <returns>
+        /// An <see cref="ExtensibleJsonObject"/> which represents the current object with the specified extension data.
+        /// If <paramref name="extensionData"/> is the same as the existing <see cref="ExtensionData"/> for the current
+        /// object, the method may return the same instance.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="extensionData"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If a new object cannot be created from the current object in order to set the extension data.
+        /// </exception>
+        protected internal virtual ExtensibleJsonObject WithExtensionDataImpl(ImmutableDictionary<string, JToken> extensionData)
+        {
+            if (extensionData == null)
+                throw new ArgumentNullException("extensionData");
+
+            if (extensionData == _extensionData)
+                return this;
+
+            ExtensibleJsonObject result = (ExtensibleJsonObject)MemberwiseClone();
+            result._extensionData = extensionData.WithComparers(StringComparer.Ordinal);
+            return result;
+        }
+
+        /// <summary>
         /// Converts an object to a <see cref="JToken"/>.
         /// </summary>
         /// <remarks>
