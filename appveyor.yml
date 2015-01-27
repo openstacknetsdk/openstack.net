@@ -13,7 +13,7 @@ build_script:
 - '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net45.snk'
 # Remove -SkipKeyCheck once the signing keys are added to source control
 # Remove -NoDocs once the SHFB projects are compatible with AppVeyor builds
-- powershell -Command '.\build.ps1 -SkipKeyCheck -NoDocs'
+- powershell -Command .\build.ps1 -SkipKeyCheck -NoDocs
 - cd ..
 test:
   categories:
