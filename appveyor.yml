@@ -1,0 +1,17 @@
+version: 1.0.{build}
+init:
+- git config --global core.autocrlf true
+install:
+- cd src
+- nuget restore
+- cd ..
+build_script:
+- cd build
+- mkdir c:\projects\keys
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstacknetsdk.snk'
+- powershell -Command ".\build.ps1 -SkipKeyCheck -NoDocs`
+- cd ..
+test:
+  categories:
+    only:
+    - Unit
