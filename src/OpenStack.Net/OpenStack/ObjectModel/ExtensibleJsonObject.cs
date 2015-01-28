@@ -21,6 +21,12 @@
     public abstract class ExtensibleJsonObject
     {
         /// <summary>
+        /// Gets an immutable dictionary representing empty extension data.
+        /// </summary>
+        protected static readonly ImmutableDictionary<string, JToken> EmptyExtensionData =
+            ImmutableDictionary<string, JToken>.Empty;
+
+        /// <summary>
         /// This is the backing field for the <see cref="ExtensionData"/> property.
         /// </summary>
         private ImmutableDictionary<string, JToken> _extensionData = ImmutableDictionary<string, JToken>.Empty;
@@ -46,45 +52,6 @@
                 throw new ArgumentNullException("extensionData");
 
             _extensionData = extensionData.WithComparers(StringComparer.Ordinal);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensibleJsonObject"/> class
-        /// with the specified extension data.
-        /// </summary>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        protected ExtensibleJsonObject(IEnumerable<JProperty> extensionData)
-            : this(extensionData.ToArray())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensibleJsonObject"/> class
-        /// with the specified extension data.
-        /// </summary>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        protected ExtensibleJsonObject(params JProperty[] extensionData)
-        {
-            if (extensionData == null)
-                throw new ArgumentNullException("extensionData");
-
-            if (extensionData.Length > 0)
-            {
-                var builder = ImmutableDictionary.CreateBuilder<string, JToken>(StringComparer.Ordinal);
-                foreach (JProperty property in extensionData)
-                {
-                    if (property == null)
-                        throw new ArgumentException("extensionData cannot contain any null values");
-
-                    builder[property.Name] = property.Value;
-                }
-
-                _extensionData = builder.ToImmutable();
-            }
         }
 
         /// <summary>
@@ -127,6 +94,44 @@
                 // Json.NET will bypass the getter, resulting in a lost update.
                 throw new NotSupportedException("Attempted to set the extension data wrapper. See issue openstacknetsdk/openstack.net#419.");
             }
+        }
+
+        /// <summary>
+        /// Gets an <see cref="ExtensibleJsonObject"/> with the same type and properties from the current object and the
+        /// specified extension data.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method provides the implementation for
+        /// <see cref="O:OpenStack.ObjectModel.ExtensibleJsonObjectExtensions.WithExtensionData``2"/>.</para>
+        /// <note type="implement">
+        /// <para>This method is only intended to be overridden in cases where <see cref="object.MemberwiseClone"/>
+        /// cannot be used to clone the current instance. Any override should ensure that the return value has the same
+        /// type as the current instance, or throw a <see cref="NotSupportedException"/>.</para>
+        /// </note>
+        /// </remarks>
+        /// <param name="extensionData">The new extension data for the object.</param>
+        /// <returns>
+        /// An <see cref="ExtensibleJsonObject"/> which represents the current object with the specified extension data.
+        /// If <paramref name="extensionData"/> is the same as the existing <see cref="ExtensionData"/> for the current
+        /// object, the method may return the same instance.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="extensionData"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If a new object cannot be created from the current object in order to set the extension data.
+        /// </exception>
+        protected internal virtual ExtensibleJsonObject WithExtensionDataImpl(ImmutableDictionary<string, JToken> extensionData)
+        {
+            if (extensionData == null)
+                throw new ArgumentNullException("extensionData");
+
+            if (extensionData == _extensionData)
+                return this;
+
+            ExtensibleJsonObject result = (ExtensibleJsonObject)MemberwiseClone();
+            result._extensionData = extensionData.WithComparers(StringComparer.Ordinal);
+            return result;
         }
 
         /// <summary>

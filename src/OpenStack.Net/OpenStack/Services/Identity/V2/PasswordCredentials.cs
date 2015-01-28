@@ -56,22 +56,6 @@ namespace OpenStack.Services.Identity.V2
         /// <param name="password">The password.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        public PasswordCredentials(string username, string password, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _username = username;
-            _password = password;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PasswordCredentials"/> class with the specified credentials and
-        /// extension data.
-        /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
         public PasswordCredentials(string username, string password, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {

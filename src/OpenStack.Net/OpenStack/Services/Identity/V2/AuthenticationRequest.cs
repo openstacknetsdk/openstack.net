@@ -1,7 +1,6 @@
 namespace OpenStack.Services.Identity.V2
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -14,9 +13,8 @@ namespace OpenStack.Services.Identity.V2
     /// <remarks>
     /// <para>The representation used for authentication credentials frequently varies among vendors. When connecting to
     /// a vendor which uses a non-standard representation for the credentials, use the
-    /// <see cref="AuthenticationRequest(AuthenticationData, JProperty[])"/> or
-    /// <see cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/> constructor to manually
-    /// specify the complete set of properties for the JSON representation of the required credentials.</para>
+    /// <see cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/> constructor to
+    /// manually specify the complete set of properties for the JSON representation of the required credentials.</para>
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
@@ -38,12 +36,30 @@ namespace OpenStack.Services.Identity.V2
         {
         }
 
-        /// <inheritdoc cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="extensionData"/> contains any <see langword="null"/> values.
-        /// </exception>
-        public AuthenticationRequest(AuthenticationData auth, params JProperty[] extensionData)
-            : base(extensionData)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationRequest"/> class with the specified
+        /// authentication data.
+        /// </summary>
+        /// <param name="auth">An <see cref="AuthenticationData"/> which specifies the value for the <c>auth</c>
+        /// property in the JSON representation of an authentication request in the OpenStack Identity Service
+        /// V2.</param>
+        /// <remarks>
+        /// <para>
+        /// The default authentication request places credentials within an <c>auth</c> property in the JSON
+        /// representation. The following block shows an example representation.
+        /// </para>
+        /// <code language="none">
+        /// {
+        ///   "auth" : {AuthenticationData...}
+        /// }
+        /// </code>
+        /// <para>
+        /// To specify credentials for a vendor which uses a non-standard form of the request which does not include the
+        /// authentication credentials within an <c>auth</c> property in the JSON representation of the request, see
+        /// <see cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/>.
+        /// </para>
+        /// </remarks>
+        public AuthenticationRequest(AuthenticationData auth)
         {
             _auth = auth;
         }

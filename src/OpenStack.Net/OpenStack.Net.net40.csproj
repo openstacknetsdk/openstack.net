@@ -114,6 +114,7 @@
     <Compile Include="OpenStack\ObjectModel\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="OpenStack\ObjectModel\ExtensibleEnum`1.cs" />
     <Compile Include="OpenStack\ObjectModel\ExtensibleJsonObject.cs" />
+    <Compile Include="OpenStack\ObjectModel\ExtensibleJsonObjectExtensions.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\AuthenticationRequirement.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\HomeDocument.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\NamespaceDoc.cs" />

@@ -81,19 +81,58 @@
             JsonConvert.DeserializeObject<BasicExtensibleJsonObject>(@object);
         }
 
+        [TestMethod]
+        public void TestWithExtensionDataDictionary()
+        {
+            BasicExtensibleJsonObject input = new BasicExtensibleJsonObject();
+            BasicExtensibleJsonObject extended = input.WithExtensionData(input.ExtensionData.SetItem("property", 3));
+
+            Assert.AreEqual(0, input.ExtensionData.Count);
+            Assert.IsFalse(input.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(1, extended.ExtensionData.Count);
+            Assert.IsTrue(extended.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(3, extended.ExtensionData["property"]);
+        }
+
+        [TestMethod]
+        public void TestWithExtensionDataProperty()
+        {
+            BasicExtensibleJsonObject input = new BasicExtensibleJsonObject().WithExtensionData(new JProperty("initial", 1));
+            BasicExtensibleJsonObject extended = input.WithExtensionData(new JProperty("property", 3));
+
+            Assert.AreEqual(1, input.ExtensionData.Count);
+            Assert.IsTrue(input.ExtensionData.ContainsKey("initial"));
+            Assert.IsFalse(input.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(1, input.ExtensionData["initial"]);
+
+            Assert.AreEqual(2, extended.ExtensionData.Count);
+            Assert.IsTrue(extended.ExtensionData.ContainsKey("initial"));
+            Assert.IsTrue(extended.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(1, extended.ExtensionData["initial"]);
+            Assert.AreEqual(3, extended.ExtensionData["property"]);
+        }
+
+        [TestMethod]
+        public void TestWithExtensionDataNameValue()
+        {
+            BasicExtensibleJsonObject input = new BasicExtensibleJsonObject().WithExtensionData("initial", 1);
+            BasicExtensibleJsonObject extended = input.WithExtensionData("property", 3);
+
+            Assert.AreEqual(1, input.ExtensionData.Count);
+            Assert.IsTrue(input.ExtensionData.ContainsKey("initial"));
+            Assert.IsFalse(input.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(1, input.ExtensionData["initial"]);
+
+            Assert.AreEqual(2, extended.ExtensionData.Count);
+            Assert.IsTrue(extended.ExtensionData.ContainsKey("initial"));
+            Assert.IsTrue(extended.ExtensionData.ContainsKey("property"));
+            Assert.AreEqual(1, extended.ExtensionData["initial"]);
+            Assert.AreEqual(3, extended.ExtensionData["property"]);
+        }
+
         private class BasicExtensibleJsonObject : ExtensibleJsonObject
         {
             public BasicExtensibleJsonObject()
-            {
-            }
-
-            public BasicExtensibleJsonObject(params JProperty[] extensionData)
-                : base(extensionData)
-            {
-            }
-
-            public BasicExtensibleJsonObject(IEnumerable<JProperty> extensionData)
-                : base(extensionData)
             {
             }
 
