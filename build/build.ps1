@@ -2,7 +2,8 @@ param (
 	[switch]$Debug,
 	[string]$VisualStudioVersion = "12.0",
 	[switch]$SkipKeyCheck,
-	[switch]$NoDocs
+	[switch]$NoDocs,
+	[string]$Logger
 )
 
 # build the solution
@@ -43,7 +44,11 @@ if (-not $?) {
 	exit $LASTEXITCODE
 }
 
-&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
+If ($Logger) {
+	$LoggerArgument = "/logger:$Logger"
+}
+
+&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' $LoggerArgument "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
 if (-not $?) {
 	$host.ui.WriteErrorLine('Build failed, aborting!')
 	exit $LASTEXITCODE
