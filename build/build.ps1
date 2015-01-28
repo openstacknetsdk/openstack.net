@@ -38,6 +38,11 @@ if ($VisualStudioVersion -eq '4.0') {
 }
 
 &$nuget 'restore' $SolutionPath
+if (-not $?) {
+	$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
+	exit $LASTEXITCODE
+}
+
 &$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
 if (-not $?) {
 	$host.ui.WriteErrorLine('Build failed, aborting!')
