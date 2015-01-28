@@ -80,28 +80,25 @@ namespace OpenStack.Services.ObjectStorage.V1
                             innerTask =>
                             {
                                 IList<Container> list = JsonConvert.DeserializeObject<Container[]>(innerTask.Result);
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<Container>>> getNextPageAsync;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<Container>>>> prepareGetNextPageAsync;
                                 if (list.Count > 0)
                                 {
-                                    getNextPageAsync =
+                                    prepareGetNextPageAsync =
                                         innerCancellationToken2 =>
                                         {
                                             ContainerName marker = list.Last().Name;
-                                            return
-                                                TaskBlocks.Using(
-                                                    () => PrepareListContainersAsync(innerCancellationToken2)
-                                                        .WithUri(originalUri)
-                                                        .WithMarker(marker),
-                                                    _ => _.Result.SendAsync(innerCancellationToken2))
-                                                .Select(_ => _.Result.Item2.Item2);
+                                            return PrepareListContainersAsync(innerCancellationToken2)
+                                                .WithUri(originalUri)
+                                                .WithMarker(marker)
+                                                .Select(_ => _.Result.Select(result => result.Item2));
                                         };
                                 }
                                 else
                                 {
-                                    getNextPageAsync = null;
+                                    prepareGetNextPageAsync = null;
                                 }
 
-                                ReadOnlyCollectionPage<Container> results = new BasicReadOnlyCollectionPage<Container>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<Container> results = new BasicReadOnlyCollectionPage<Container>(list, prepareGetNextPageAsync);
                                 return Tuple.Create(metadata, results);
                             });
                 };
@@ -225,28 +222,25 @@ namespace OpenStack.Services.ObjectStorage.V1
                             innerTask =>
                             {
                                 IList<ContainerObject> list = JsonConvert.DeserializeObject<ContainerObject[]>(innerTask.Result);
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<ContainerObject>>> getNextPageAsync;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<ContainerObject>>>> prepareGetNextPageAsync;
                                 if (list.Count > 0)
                                 {
-                                    getNextPageAsync =
+                                    prepareGetNextPageAsync =
                                         innerCancellationToken2 =>
                                         {
                                             ObjectName marker = list.Last().Name;
-                                            return
-                                                TaskBlocks.Using(
-                                                    () => PrepareListObjectsAsync(container, innerCancellationToken2)
-                                                        .WithUri(originalUri)
-                                                        .WithMarker(marker),
-                                                    _ => _.Result.SendAsync(innerCancellationToken2))
-                                                .Select(_ => _.Result.Item2.Item2);
+                                            return PrepareListObjectsAsync(container, innerCancellationToken2)
+                                                .WithUri(originalUri)
+                                                .WithMarker(marker)
+                                                .Select(_ => _.Result.Select(result => result.Item2));
                                         };
                                 }
                                 else
                                 {
-                                    getNextPageAsync = null;
+                                    prepareGetNextPageAsync = null;
                                 }
 
-                                ReadOnlyCollectionPage<ContainerObject> results = new BasicReadOnlyCollectionPage<ContainerObject>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<ContainerObject> results = new BasicReadOnlyCollectionPage<ContainerObject>(list, prepareGetNextPageAsync);
                                 return Tuple.Create(metadata, results);
                             });
                 };
