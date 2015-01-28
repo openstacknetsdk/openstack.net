@@ -1702,8 +1702,8 @@
                     ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.Tar, cancellationToken, null);
                     Assert.IsNotNull(response);
                     Assert.AreEqual(1, response.CreatedFiles);
-                    Assert.IsNotNull(response.Errors);
-                    Assert.AreEqual(0, response.Errors.Count);
+                    Assert.IsFalse(response.Errors.IsDefault);
+                    Assert.AreEqual(0, response.Errors.Length);
                 }
 
                 using (MemoryStream downloadStream = new MemoryStream())
@@ -1767,8 +1767,8 @@
                     ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.TarGz, cancellationToken, null);
                     Assert.IsNotNull(response);
                     Assert.AreEqual(1, response.CreatedFiles);
-                    Assert.IsNotNull(response.Errors);
-                    Assert.AreEqual(0, response.Errors.Count);
+                    Assert.IsFalse(response.Errors.IsDefault);
+                    Assert.AreEqual(0, response.Errors.Length);
                 }
 
                 using (MemoryStream downloadStream = new MemoryStream())
@@ -1831,8 +1831,8 @@
                     ExtractArchiveResponse response = await service.ExtractArchiveAsync(containerName, outputStream, ArchiveFormat.TarBz2, cancellationToken, null);
                     Assert.IsNotNull(response);
                     Assert.AreEqual(1, response.CreatedFiles);
-                    Assert.IsNotNull(response.Errors);
-                    Assert.AreEqual(0, response.Errors.Count);
+                    Assert.IsFalse(response.Errors.IsDefault);
+                    Assert.AreEqual(0, response.Errors.Length);
                 }
 
                 using (MemoryStream downloadStream = new MemoryStream())
@@ -1898,8 +1898,8 @@
                     ExtractArchiveResponse response = await service.ExtractArchiveAsync(outputStream, ArchiveFormat.TarGz, cancellationToken, null);
                     Assert.IsNotNull(response);
                     Assert.AreEqual(1, response.CreatedFiles);
-                    Assert.IsNotNull(response.Errors);
-                    Assert.AreEqual(0, response.Errors.Count);
+                    Assert.IsFalse(response.Errors.IsDefault);
+                    Assert.AreEqual(0, response.Errors.Length);
                 }
 
                 using (MemoryStream downloadStream = new MemoryStream())

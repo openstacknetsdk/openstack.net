@@ -1,6 +1,7 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Collections.ObjectModel;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
@@ -42,7 +43,7 @@
         /// This is the backing field for the <see cref="CreatedFiles"/> property.
         /// </summary>
         [JsonProperty("Errors")]
-        private string[][] _errors;
+        private ImmutableArray<ImmutableArray<string>> _errors;
 #pragma warning restore 649
 
         /// <summary>
@@ -112,17 +113,17 @@
         /// <para>-or-</para>
         /// <para><see langword="null"/> if the JSON representation did not include the underlying property.</para>
         /// </value>
-        public ReadOnlyCollection<ExtractArchiveError> Errors
+        public ImmutableArray<ExtractArchiveError> Errors
         {
             get
             {
-                if (_errors == null)
-                    return null;
+                if (_errors.IsDefault)
+                    return default(ImmutableArray<ExtractArchiveError>);
 
-                List<ExtractArchiveError> errors = new List<ExtractArchiveError>();
-                foreach (string[] error in _errors)
+                ImmutableArray<ExtractArchiveError>.Builder errors = ImmutableArray.CreateBuilder<ExtractArchiveError>();
+                foreach (ImmutableArray<string> error in _errors)
                 {
-                    if (error == null)
+                    if (error.IsDefault)
                         continue;
 
                     if (error.Length >= 2)
@@ -133,7 +134,7 @@
                         errors.Add(new ExtractArchiveError("Unknown File", "Unknown Error"));
                 }
 
-                return errors.AsReadOnly();
+                return errors.ToImmutable();
             }
         }
     }
