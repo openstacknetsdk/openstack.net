@@ -2,7 +2,9 @@ param (
 	[switch]$Debug,
 	[string]$VisualStudioVersion = "12.0",
 	[switch]$SkipKeyCheck,
-	[switch]$NoDocs
+	[switch]$NoDocs,
+	[string]$Verbosity = "normal",
+	[string]$Logger
 )
 
 # build the solution
@@ -37,13 +39,23 @@ if ($VisualStudioVersion -eq '4.0') {
 	$msbuild = "${env:ProgramFiles(x86)}\MSBuild\$VisualStudioVersion\Bin\MSBuild.exe"
 }
 
-&$nuget 'restore' $SolutionPath
-if (-not $?) {
-	$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
-	exit $LASTEXITCODE
+# Attempt to restore packages up to 3 times, to improve resiliency to connection timeouts and access denied errors.
+$maxAttempts = 3
+For ($attempt = 0; $attempt -lt $maxAttempts; $attempt++) {
+	&$nuget 'restore' $SolutionPath
+	If ($?) {
+		Break
+	} ElseIf (($attempt + 1) -eq $maxAttempts) {
+		$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
+		exit $LASTEXITCODE
+	}
 }
 
-&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
+If ($Logger) {
+	$LoggerArgument = "/logger:$Logger"
+}
+
+&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' $LoggerArgument "/verbosity:$Verbosity" "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
 if (-not $?) {
 	$host.ui.WriteErrorLine('Build failed, aborting!')
 	exit $LASTEXITCODE
@@ -78,5 +90,9 @@ if (-not (Test-Path 'nuget')) {
 	mkdir "nuget"
 }
 
-&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
-&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.V2.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$VersionV2" '-Symbols'
+# The NuGet packages reference XML documentation which is post-processed by SHFB. If the -NoDocs flag is specified,
+# these files are not created so packaging will fail.
+If (-not $NoDocs) {
+	&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
+	&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.V2.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$VersionV2" '-Symbols'
+}
