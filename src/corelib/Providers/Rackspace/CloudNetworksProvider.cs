@@ -30,7 +30,7 @@ namespace net.openstack.Providers.Rackspace
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
+        /// Initializes a new instance of the <see cref="CloudNetworksProvider"/> class with
         /// no default identity or region, and the default identity provider and REST
         /// service implementation.
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿namespace OpenStackNetTests.Live
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
@@ -57,6 +57,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListExtensions()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -85,6 +86,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListExtensionsSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -107,6 +109,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestGetExtension()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -145,6 +148,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestGetExtensionSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -175,6 +179,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestAuthenticate()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -198,7 +203,7 @@
                     Access access = response.Item2.Access;
                     Assert.IsNotNull(access);
                     Assert.IsNotNull(access.Token);
-                    Assert.IsNotNull(access.ServiceCatalog);
+                    Assert.IsFalse(access.ServiceCatalog.IsDefault);
                     Assert.IsNotNull(access.User);
 
                     // check the token
@@ -218,13 +223,16 @@
                     Assert.IsNotNull(user.Id);
                     Assert.IsNotNull(user.Name);
 
+                    if (string.Equals(Credentials.Vendor, "rackspace", StringComparison.OrdinalIgnoreCase))
+                        Assert.IsNotNull(user.GetDefaultRegion());
+
                     // If the Username is null, it's presumed to be the same as the Name. (Rackspace does not return
                     // this property.)
                     //Assert.IsNotNull(user.Username);
 
-                    Assert.IsNotNull(user.Roles);
+                    Assert.IsFalse(user.Roles.IsDefault);
 
-                    Assert.AreNotEqual(0, user.Roles.Count);
+                    Assert.AreNotEqual(0, user.Roles.Length);
                     foreach (Role role in user.Roles)
                     {
                         Assert.IsNotNull(role);
@@ -246,17 +254,17 @@
                     }
 
                     // check the service catalog
-                    ReadOnlyCollection<ServiceCatalogEntry> serviceCatalog = access.ServiceCatalog;
+                    ImmutableArray<ServiceCatalogEntry> serviceCatalog = access.ServiceCatalog;
                     Assert.IsNotNull(serviceCatalog);
-                    Assert.AreNotEqual(0, serviceCatalog.Count);
+                    Assert.AreNotEqual(0, serviceCatalog.Length);
                     foreach (ServiceCatalogEntry entry in serviceCatalog)
                     {
                         Assert.IsNotNull(entry);
                         Assert.IsNotNull(entry.Name);
                         Assert.IsNotNull(entry.Type);
-                        Assert.IsNotNull(entry.Endpoints);
+                        Assert.IsFalse(entry.Endpoints.IsDefault);
 
-                        Assert.AreNotEqual(0, entry.Endpoints.Count);
+                        Assert.AreNotEqual(0, entry.Endpoints.Length);
                         foreach (Endpoint endpoint in entry.Endpoints)
                         {
                             Assert.IsNotNull(endpoint);
@@ -291,6 +299,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListTenants()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())

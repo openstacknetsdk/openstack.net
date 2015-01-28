@@ -1,8 +1,7 @@
 ﻿namespace OpenStack.ObjectModel.JsonHome
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using Newtonsoft.Json;
@@ -39,50 +38,50 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ResourceHints
+    public class ResourceHints : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
         /// This is the backing field for the <see cref="Allow"/> property.
         /// </summary>
         [JsonProperty("allow", DefaultValueHandling = DefaultValueHandling.Ignore, ItemConverterType = typeof(HttpMethodConverter))]
-        private HttpMethod[] _allow;
+        private ImmutableArray<HttpMethod> _allow;
 
         /// <summary>
         /// This is the backing field for the <see cref="Formats"/> property.
         /// </summary>
         [JsonProperty("formats", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Dictionary<string, JObject> _formats;
+        private ImmutableDictionary<string, JObject> _formats;
 
         /// <summary>
         /// This is the backing field for the <see cref="AcceptPatch"/> property.
         /// </summary>
         [JsonProperty("accept-patch", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _acceptPatch;
+        private ImmutableArray<string> _acceptPatch;
 
         /// <summary>
         /// This is the backing field for the <see cref="AcceptPost"/> property.
         /// </summary>
         [JsonProperty("accept-post", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _acceptPost;
+        private ImmutableArray<string> _acceptPost;
 
         /// <summary>
         /// This is the backing field for the <see cref="AcceptPut"/> property.
         /// </summary>
         [JsonProperty("accept-put", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _acceptPut;
+        private ImmutableArray<string> _acceptPut;
 
         /// <summary>
         /// This is the backing field for the <see cref="AcceptRanges"/> property.
         /// </summary>
         [JsonProperty("accept-ranges", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _acceptRanges;
+        private ImmutableArray<string> _acceptRanges;
 
         /// <summary>
         /// This is the backing field for the <see cref="Prefer"/> property.
         /// </summary>
         [JsonProperty("prefer", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _prefer;
+        private ImmutableArray<string> _prefer;
 
         /// <summary>
         /// This is the backing field for the <see cref="Docs"/> property.
@@ -94,13 +93,13 @@
         /// This is the backing field for the <see cref="Preconditions"/> property.
         /// </summary>
         [JsonProperty("precondition-req", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private string[] _preconditionReq;
+        private ImmutableArray<string> _preconditionReq;
 
         /// <summary>
         /// This is the backing field for the <see cref="AuthenticationRequirements"/> property.
         /// </summary>
         [JsonProperty("auth-req", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private AuthenticationRequirement[] _authReq;
+        private ImmutableArray<AuthenticationRequirement> _authReq;
 
         /// <summary>
         /// This is the backing field for the <see cref="Status"/> property.
@@ -114,14 +113,11 @@
         /// with the resource; equivalent to the <strong>Allow</strong> HTTP response
         /// header.
         /// </summary>
-        public ReadOnlyCollection<HttpMethod> Allow
+        public ImmutableArray<HttpMethod> Allow
         {
             get
             {
-                if (_allow == null)
-                    return null;
-
-                return new ReadOnlyCollection<HttpMethod>(_allow);
+                return _allow;
             }
         }
 
@@ -131,7 +127,7 @@
         /// keys of this collections are <see cref="MediaTypeHeaderValue">media types</see>,
         /// and the values are objects which have not yet been defined.
         /// </summary>
-        public Dictionary<string, JObject> Formats
+        public ImmutableDictionary<string, JObject> Formats
         {
             get
             {
@@ -144,28 +140,22 @@
         /// equivalent to the <strong>Accept-Patch</strong> HTTP response header.
         /// </summary>
         /// <seealso href="http://tools.ietf.org/html/rfc5789">RFC5789 (PATCH Method for HTTP)</seealso>
-        public ReadOnlyCollection<string> AcceptPatch
+        public ImmutableArray<string> AcceptPatch
         {
             get
             {
-                if (_acceptPatch == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_acceptPatch);
+                return _acceptPatch;
             }
         }
 
         /// <summary>
         /// Gets the POST request formats accepted by the resource for this client.
         /// </summary>
-        public ReadOnlyCollection<string> AcceptPost
+        public ImmutableArray<string> AcceptPost
         {
             get
             {
-                if (_acceptPost == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_acceptPost);
+                return _acceptPost;
             }
         }
 
@@ -176,14 +166,11 @@
         /// If this value is <see langword="null"/>, a client may assume that any format indicated by
         /// the <see cref="Formats"/> hint is acceptable in a PUT.
         /// </remarks>
-        public ReadOnlyCollection<string> AcceptPut
+        public ImmutableArray<string> AcceptPut
         {
             get
             {
-                if (_acceptPut == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_acceptPut);
+                return _acceptPut;
             }
         }
 
@@ -195,14 +182,11 @@
         /// The values are HTTP range specifiers.
         /// </remarks>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p5-range-24#section-2.3">Accept-Ranges (Hypertext Transfer Protocol (HTTP/1.1): Range Requests - draft-ietf-httpbis-p5-range-24)</seealso>
-        public ReadOnlyCollection<string> AcceptRanges
+        public ImmutableArray<string> AcceptRanges
         {
             get
             {
-                if (_acceptRanges == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_acceptRanges);
+                return _acceptRanges;
             }
         }
 
@@ -211,14 +195,11 @@
         /// specification, a preference can be ignored by the server.
         /// </summary>
         /// <seealso href="http://tools.ietf.org/html/draft-snell-http-prefer-12">Prefer Header for HTTP (draft-snell-http-prefer-12)</seealso>
-        public ReadOnlyCollection<string> Prefer
+        public ImmutableArray<string> Prefer
         {
             get
             {
-                if (_prefer == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_prefer);
+                return _prefer;
             }
         }
 
@@ -248,14 +229,11 @@
         /// expected.
         /// </remarks>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-24">Hypertext Transfer Protocol (HTTP/1.1): Conditional Requests (draft-ietf-httpbis-p4-conditional-24)</seealso>
-        public ReadOnlyCollection<string> Preconditions
+        public ImmutableArray<string> Preconditions
         {
             get
             {
-                if (_preconditionReq == null)
-                    return null;
-
-                return new ReadOnlyCollection<string>(_preconditionReq);
+                return _preconditionReq;
             }
         }
 
@@ -264,14 +242,11 @@
         /// </summary>
         /// <seealso cref="AuthenticationRequirement"/>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p7-auth-24">Hypertext Transfer Protocol (HTTP/1.1): Authentication (draft-ietf-httpbis-p7-auth-24)</seealso>
-        public ReadOnlyCollection<AuthenticationRequirement> AuthenticationRequirements
+        public ImmutableArray<AuthenticationRequirement> AuthenticationRequirements
         {
             get
             {
-                if (_authReq == null)
-                    return null;
-
-                return new ReadOnlyCollection<AuthenticationRequirement>(_authReq);
+                return _authReq;
             }
         }
 

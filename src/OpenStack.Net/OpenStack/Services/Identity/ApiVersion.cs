@@ -1,7 +1,7 @@
 namespace OpenStack.Services.Identity
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -38,13 +38,13 @@ namespace OpenStack.Services.Identity
         /// This is the backing field for the <see cref="MediaTypes"/> property.
         /// </summary>
         [JsonProperty("media-types", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private MediaType[] _mediaTypes;
+        private ImmutableArray<MediaType> _mediaTypes;
 
         /// <summary>
         /// This is the backing field for the <see cref="Links"/> property.
         /// </summary>
         [JsonProperty("links", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Link[] _links;
+        private ImmutableArray<Link> _links;
 #pragma warning restore 649
 
         /// <summary>
@@ -110,14 +110,11 @@ namespace OpenStack.Services.Identity
         /// version of the API.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<MediaType> MediaTypes
+        public ImmutableArray<MediaType> MediaTypes
         {
             get
             {
-                if (_mediaTypes == null)
-                    return null;
-
-                return new ReadOnlyCollection<MediaType>(_mediaTypes);
+                return _mediaTypes;
             }
         }
 
@@ -130,14 +127,11 @@ namespace OpenStack.Services.Identity
         /// the API.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<Link> Links
+        public ImmutableArray<Link> Links
         {
             get
             {
-                if (_links == null)
-                    return null;
-
-                return new ReadOnlyCollection<Link>(_links);
+                return _links;
             }
         }
     }

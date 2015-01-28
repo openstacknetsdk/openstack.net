@@ -1,0 +1,25 @@
+version: 1.0.{build}
+init:
+- git config --global core.autocrlf true
+build_script:
+- cd build
+- mkdir c:\projects\keys
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstacknetsdk.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net35.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net40.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net45.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.netcore45.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net40.snk'
+- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net45.snk'
+# Remove -SkipKeyCheck once the signing keys are added to source control
+# Remove -NoDocs once the SHFB projects are compatible with AppVeyor builds
+- powershell -Command .\build.ps1 -SkipKeyCheck -NoDocs -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- cd ..
+# Only run tests with the attribute [TestCategory("Unit")]. These tests are expected to
+# run consistently in an automated build environment ,and failure certainly indicates
+# a bug or regression in the codebase.
+test_script:
+- vstest.console /logger:Appveyor /TestCaseFilter:"TestCategory=Unit" "C:\projects\openstack-net\src\OpenStackNetTests.Live\bin\Release\OpenStackNetTests.Live.dll"
+- vstest.console /logger:Appveyor /TestCaseFilter:"TestCategory=Unit" "C:\projects\openstack-net\src\OpenStackNetTests.Unit\bin\Release\OpenStackNetTests.Unit.dll"
+- vstest.console /logger:Appveyor /TestCaseFilter:"TestCategory=Unit" "C:\projects\openstack-net\src\testing\integration\bin\Release\OpenStackNet.Testing.Integration.dll"
+- vstest.console /logger:Appveyor /TestCaseFilter:"TestCategory=Unit" "C:\projects\openstack-net\src\testing\unit\bin\Release\OpenStackNet.Testing.Unit.dll"

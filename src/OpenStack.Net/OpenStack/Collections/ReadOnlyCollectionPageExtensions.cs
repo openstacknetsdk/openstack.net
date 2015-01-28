@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using Rackspace.Threading;
@@ -14,6 +15,30 @@
     /// <preliminary/>
     public static class ReadOnlyCollectionPageExtensions
     {
+        /// <summary>
+        /// Gets the next page in the paginated collection.
+        /// </summary>
+        /// <param name="page">A page in the collection.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
+        /// <returns>
+        /// <para>A <see cref="Task"/> object representing the asynchronous operation. When the task
+        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain
+        /// a collection containing the next page of results.</para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="page"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If <see cref="ReadOnlyCollectionPage{T}.CanHaveNextPage"/> is
+        /// <see langword="false"/>.</exception>
+        /// <exception cref="WebException">If the HTTP request does not return successfully.</exception>
+        public static Task<ReadOnlyCollectionPage<T>> GetNextPageAsync<T>(this ReadOnlyCollectionPage<T> page, CancellationToken cancellationToken)
+        {
+            if (page == null)
+                throw new ArgumentNullException("page");
+
+            return TaskBlocks.Using(
+                () => page.PrepareGetNextPageAsync(cancellationToken),
+                task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
+        }
+
         /// <summary>
         /// Get all pages in a paginated collection.
         /// </summary>

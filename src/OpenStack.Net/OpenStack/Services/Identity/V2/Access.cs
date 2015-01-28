@@ -1,7 +1,6 @@
 namespace OpenStack.Services.Identity.V2
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -27,7 +26,7 @@ namespace OpenStack.Services.Identity.V2
         /// This is the backing field for the <see cref="ServiceCatalog"/> property.
         /// </summary>
         [JsonProperty("serviceCatalog", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private ServiceCatalogEntry[] _serviceCatalog;
+        private ImmutableArray<ServiceCatalogEntry> _serviceCatalog;
 
         /// <summary>
         /// This is the backing field for the <see cref="User"/> property.
@@ -39,7 +38,7 @@ namespace OpenStack.Services.Identity.V2
         /// This is the backing field for the <see cref="Metadata"/> property.
         /// </summary>
         [JsonProperty("metadata", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Dictionary<string, JToken> _metadata;
+        private ImmutableDictionary<string, JToken> _metadata;
 #pragma warning restore 649
 
         /// <summary>
@@ -77,14 +76,11 @@ namespace OpenStack.Services.Identity.V2
         /// endpoints available to an authenticated user.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyCollection<ServiceCatalogEntry> ServiceCatalog
+        public ImmutableArray<ServiceCatalogEntry> ServiceCatalog
         {
             get
             {
-                if (_serviceCatalog == null)
-                    return null;
-
-                return new ReadOnlyCollection<ServiceCatalogEntry>(_serviceCatalog);
+                return _serviceCatalog;
             }
         }
 
@@ -110,14 +106,11 @@ namespace OpenStack.Services.Identity.V2
         /// <para>A collection of additional vendor-specific metadata related to the authentication information.</para>
         /// <token>NullIfNotIncluded</token>
         /// </value>
-        public ReadOnlyDictionary<string, JToken> Metadata
+        public ImmutableDictionary<string, JToken> Metadata
         {
             get
             {
-                if (_metadata == null)
-                    return null;
-
-                return new ReadOnlyDictionary<string, JToken>(_metadata);
+                return _metadata;
             }
         }
     }

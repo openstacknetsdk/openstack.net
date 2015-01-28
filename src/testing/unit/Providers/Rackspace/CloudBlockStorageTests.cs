@@ -9,6 +9,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
     public class CloudBlockStorageTests
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Not_Throw_Exception_When_Size_Is_In_Range()
         {
             const int size = 900;
@@ -26,6 +27,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Size_Is_Less_Than_100()
         {
             const int size = 50;
@@ -43,6 +45,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Size_Is_Greater_Than_1000()
         {
             const int size = 1050;

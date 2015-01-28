@@ -25,7 +25,7 @@
         private ExceptionData _state;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpResponseMessage"/> class
+        /// Initializes a new instance of the <see cref="HttpWebException"/> class
         /// with the specified response message.
         /// </summary>
         /// <remarks>

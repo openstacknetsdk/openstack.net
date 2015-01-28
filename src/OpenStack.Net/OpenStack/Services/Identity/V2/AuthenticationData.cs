@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -58,23 +59,7 @@
         /// </remarks>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        public AuthenticationData(params JProperty[] extensionData)
-            : this(default(string), default(ProjectId), default(PasswordCredentials), default(Token), extensionData)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationData"/> class
-        /// with the specified extension data.
-        /// </summary>
-        /// <remarks>
-        /// <para>This constructor is typically used when authenticating with vendor-specific credentials that do not
-        /// use any of the properties which are present in the typical OpenStack authentication scenarios.</para>
-        /// </remarks>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public AuthenticationData(IDictionary<string, JToken> extensionData)
+        public AuthenticationData(ImmutableDictionary<string, JToken> extensionData)
             : this(default(string), default(ProjectId), default(PasswordCredentials), default(Token), extensionData)
         {
         }
@@ -84,7 +69,7 @@
         /// </summary>
         /// <param name="passwordCredentials">The credentials to use for authentication.</param>
         public AuthenticationData(PasswordCredentials passwordCredentials)
-            : this(default(string), default(ProjectId), passwordCredentials, default(Token))
+            : this(default(string), default(ProjectId), passwordCredentials, default(Token), EmptyExtensionData)
         {
         }
 
@@ -93,7 +78,7 @@
         /// </summary>
         /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
         public AuthenticationData(Token token)
-            : this(default(string), default(ProjectId), default(PasswordCredentials), token)
+            : this(default(string), default(ProjectId), default(PasswordCredentials), token, EmptyExtensionData)
         {
         }
 
@@ -104,7 +89,7 @@
         /// <param name="tenantName">The tenant name.</param>
         /// <param name="passwordCredentials">The credentials to use for authentication.</param>
         public AuthenticationData(string tenantName, PasswordCredentials passwordCredentials)
-            : this(tenantName, default(ProjectId), passwordCredentials, default(Token))
+            : this(tenantName, default(ProjectId), passwordCredentials, default(Token), EmptyExtensionData)
         {
         }
 
@@ -115,7 +100,7 @@
         /// <param name="tenantName">The tenant name.</param>
         /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
         public AuthenticationData(string tenantName, Token token)
-            : this(tenantName, default(ProjectId), default(PasswordCredentials), token)
+            : this(tenantName, default(ProjectId), default(PasswordCredentials), token, EmptyExtensionData)
         {
         }
 
@@ -126,7 +111,7 @@
         /// <param name="tenantId">The tenant ID.</param>
         /// <param name="passwordCredentials">The credentials to use for authentication.</param>
         public AuthenticationData(ProjectId tenantId, PasswordCredentials passwordCredentials)
-            : this(default(string), tenantId, passwordCredentials, default(Token))
+            : this(default(string), tenantId, passwordCredentials, default(Token), EmptyExtensionData)
         {
         }
 
@@ -137,7 +122,7 @@
         /// <param name="tenantId">The tenant ID.</param>
         /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
         public AuthenticationData(ProjectId tenantId, Token token)
-            : this(default(string), tenantId, default(PasswordCredentials), token)
+            : this(default(string), tenantId, default(PasswordCredentials), token, EmptyExtensionData)
         {
         }
 
@@ -155,31 +140,7 @@
         /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        public AuthenticationData(string tenantName, ProjectId tenantId, PasswordCredentials passwordCredentials, Token token, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _tenantName = tenantName;
-            _tenantId = tenantId;
-            _passwordCredentials = passwordCredentials;
-            _token = token;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationData"/> class with the specified values and
-        /// extension data.
-        /// </summary>
-        /// <remarks>
-        /// <para>This constructor is typically used when authenticating with vendor-specific credentials that require
-        /// additional properties which are not present in the typical OpenStack authentication scenarios.</para>
-        /// </remarks>
-        /// <param name="tenantName">The tenant name.</param>
-        /// <param name="tenantId">The tenant ID.</param>
-        /// <param name="passwordCredentials">The credentials to use for authentication.</param>
-        /// <param name="token">The <see cref="V2.Token"/> to use for authentication.</param>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public AuthenticationData(string tenantName, ProjectId tenantId, PasswordCredentials passwordCredentials, Token token, IDictionary<string, JToken> extensionData)
+        public AuthenticationData(string tenantName, ProjectId tenantId, PasswordCredentials passwordCredentials, Token token, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _tenantName = tenantName;

@@ -1,7 +1,7 @@
 namespace OpenStack.Services.Identity.V2
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -74,24 +74,7 @@ namespace OpenStack.Services.Identity.V2
         /// <param name="id">The unique ID of the token.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="extensionData"/> contains any <see langword="null"/> values.</exception>
-        public Token(TokenId id, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _id = id;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Token"/> class with the specified ID and extension data.
-        /// </summary>
-        /// <remarks>
-        /// <para>This constructor is typically used for authentication requests which specified a <see cref="Token"/>
-        /// as the credentials.</para>
-        /// </remarks>
-        /// <param name="id">The unique ID of the token.</param>
-        /// <param name="extensionData">The extension data.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public Token(TokenId id, IDictionary<string, JToken> extensionData)
+        public Token(TokenId id, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _id = id;

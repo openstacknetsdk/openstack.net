@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Net;
     using System.Net.Http;
     using System.Threading;
@@ -104,7 +105,7 @@
         public virtual Task<ListApiVersionsApiCall> PrepareListApiVersionsAsync(CancellationToken cancellationToken)
         {
             UriTemplate template = new UriTemplate(string.Empty);
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            IDictionary<string, string> parameters = ImmutableDictionary<string, string>.Empty;
 
             Func<HttpResponseMessage, CancellationToken, Task<ReadOnlyCollectionPage<ApiVersion>>> deserializeResult =
                 (responseMessage, innerCancellationToken) =>
@@ -132,9 +133,9 @@
 
                                 IList<ApiVersion> list = versionsArray.ToObject<ApiVersion[]>();
                                 // according to the available documentation, this call does not appear to be paginated
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<ApiVersion>>> getNextPageAsync = null;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<ApiVersion>>>> prepareGetNextPageAsync = null;
 
-                                ReadOnlyCollectionPage<ApiVersion> results = new BasicReadOnlyCollectionPage<ApiVersion>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<ApiVersion> results = new BasicReadOnlyCollectionPage<ApiVersion>(list, prepareGetNextPageAsync);
                                 return results;
                             });
                 };

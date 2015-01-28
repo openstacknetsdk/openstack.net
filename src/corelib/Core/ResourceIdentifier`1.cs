@@ -18,7 +18,7 @@
         private readonly string _id;
 
         /// <summary>
-        /// Initialized a new instance of the <see cref="ResourceIdentifier{T}"/> class
+        /// Initializes a new instance of the <see cref="ResourceIdentifier{T}"/> class
         /// with the specified identifier.
         /// </summary>
         /// <param name="id">The resource identifier value.</param>

@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rackspace.Collections.Immutable">
+      <HintPath>..\packages\Rackspace.Collections.Immutable.1.1.33-beta\lib\net35-client\Rackspace.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75479e71486a8ef5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rackspace.Net.UriTemplate.1.0.0-beta003\lib\net20\Rackspace.Net.UriTemplate.dll</HintPath>
@@ -70,7 +73,9 @@
     <Compile Include="OpenStack\IO\ProgressStream.cs" />
     <Compile Include="OpenStack\Net\CustomHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\DelegatingHttpApiCall`1.cs" />
+    <Compile Include="OpenStack\Net\DelegatingHttpApiCall`2.cs" />
     <Compile Include="OpenStack\Net\HttpApiCall.cs" />
+    <Compile Include="OpenStack\Net\HttpApiCallExtensions.cs" />
     <Compile Include="OpenStack\Net\HttpApiCallFactory.cs" />
     <Compile Include="OpenStack\Net\HttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\HttpApiRequestExtensions.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="OpenStack\ObjectModel\Converters\SimpleStringJsonConverter`1.cs" />
     <Compile Include="OpenStack\ObjectModel\ExtensibleEnum`1.cs" />
     <Compile Include="OpenStack\ObjectModel\ExtensibleJsonObject.cs" />
+    <Compile Include="OpenStack\ObjectModel\ExtensibleJsonObjectExtensions.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\AuthenticationRequirement.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\HomeDocument.cs" />
     <Compile Include="OpenStack\ObjectModel\JsonHome\NamespaceDoc.cs" />
@@ -222,9 +228,8 @@
     <Compile Include="System\Collections\Concurrent\CollectionDebuggerView`2.cs" />
     <Compile Include="System\Collections\Concurrent\ConcurrentDictionary`2.cs" />
     <Compile Include="System\Collections\Concurrent\SplitOrderedList`2.cs" />
+    <Compile Include="System\Collections\Generic\DictionaryDebugView`2.cs" />
     <Compile Include="System\Collections\Generic\OpenStackListExtensions.cs" />
-    <Compile Include="System\Collections\IStructuralComparable.cs" />
-    <Compile Include="System\Collections\IStructuralEquatable.cs" />
     <Compile Include="System\Collections\ObjectModel\ReadOnlyDictionary`2.cs" />
     <Compile Include="System\NonSerializedAttribute.cs" />
     <Compile Include="System\Runtime\Serialization\ISafeSerializationData.cs" />

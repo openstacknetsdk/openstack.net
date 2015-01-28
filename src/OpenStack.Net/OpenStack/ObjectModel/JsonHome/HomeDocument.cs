@@ -1,6 +1,6 @@
 ﻿namespace OpenStack.ObjectModel.JsonHome
 {
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -11,21 +11,21 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class HomeDocument
+    public class HomeDocument : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
         /// The backing field for the <see cref="Resources"/> property.
         /// </summary>
         [JsonProperty("resources")]
-        private Dictionary<string, ResourceObject> _resources;
+        private ImmutableDictionary<string, ResourceObject> _resources;
 #pragma warning restore 649
 
         /// <summary>
         /// Gets the resources. The keys of this dictionary are link relation types
         /// (as defined by <see href="http://tools.ietf.org/html/rfc5988">RFC5988</see>).
         /// </summary>
-        public Dictionary<string, ResourceObject> Resources
+        public ImmutableDictionary<string, ResourceObject> Resources
         {
             get
             {

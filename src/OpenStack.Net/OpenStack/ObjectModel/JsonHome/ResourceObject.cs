@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.ObjectModel.JsonHome
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -12,7 +12,7 @@
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
     [JsonObject(MemberSerialization.OptIn)]
-    public class ResourceObject
+    public class ResourceObject : ExtensibleJsonObject
     {
 #pragma warning disable 649 // Field 'fieldName' is never assigned to, and will always have its default value {value}
         /// <summary>
@@ -31,7 +31,7 @@
         /// This is the backing field for the <see cref="HrefVars"/> property.
         /// </summary>
         [JsonProperty("href-vars", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Dictionary<string, Uri> _hrefVars;
+        private ImmutableDictionary<string, Uri> _hrefVars;
 
         /// <summary>
         /// This is the backing field for the <see cref="Hints"/> property.
@@ -89,7 +89,7 @@
         /// <value>
         /// The template variable mapping, or <see langword="null"/> if this is a direct link.
         /// </value>
-        public IDictionary<string, Uri> HrefVars
+        public ImmutableDictionary<string, Uri> HrefVars
         {
             get
             {
