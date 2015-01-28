@@ -200,8 +200,14 @@
             Assert.AreEqual(standardItem, obj);
 
             // different case, predefined value
-            Assert.AreNotEqual(standardItem.ToString(), standardItem.ToString().ToLowerInvariant());
-            obj = JsonConvert.DeserializeObject<T>('"' + standardItem.ToString().ToLowerInvariant() + '"');
+            string caseDifference = standardItem.ToString().ToLowerInvariant();
+            if (standardItem.ToString() == caseDifference)
+            {
+                caseDifference = standardItem.ToString().ToUpperInvariant();
+                Assert.AreNotEqual(standardItem.ToString(), caseDifference);
+            }
+
+            obj = JsonConvert.DeserializeObject<T>('"' + caseDifference + '"');
             Assert.AreEqual(standardItem, obj);
 
             // new value
@@ -209,7 +215,14 @@
             Assert.AreEqual(fromName(nonStandardName), obj);
 
             // different case, same as value encountered before
-            Assert.AreNotEqual(nonStandardName, nonStandardName.ToLowerInvariant());
+            caseDifference = nonStandardName.ToLowerInvariant();
+            if (nonStandardName == caseDifference)
+            {
+                caseDifference = nonStandardName.ToUpperInvariant();
+                Assert.AreNotEqual(nonStandardName, caseDifference);
+            }
+
+            Assert.AreNotEqual(nonStandardName, caseDifference);
             obj = JsonConvert.DeserializeObject<T>('"' + nonStandardName.ToLowerInvariant() + '"');
             Assert.AreEqual(fromName(nonStandardName), obj);
 
