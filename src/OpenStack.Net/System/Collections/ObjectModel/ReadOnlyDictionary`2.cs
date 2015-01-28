@@ -7,687 +7,628 @@ using System.Runtime.CompilerServices;
 
 #else
 
+#pragma warning disable 1591 // Missing XML comment for publicly visible type or member 'name'
+
+// ==++==
+// 
+//   Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+// ==--==
+/*============================================================
+**
+** Class:  ReadOnlyDictionary<TKey, TValue>
+** 
+** <OWNER>gpaperin</OWNER>
+**
+** Purpose: Read-only wrapper for another generic dictionary.
+**
+===========================================================*/
+
 namespace System.Collections.ObjectModel
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using ArgumentException = System.ArgumentException;
-    using ArgumentNullException = System.ArgumentNullException;
-    using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
-    using Array = System.Array;
-    using DictionaryEntry = System.Collections.DictionaryEntry;
-    using ICollection = System.Collections.ICollection;
-    using IDictionary = System.Collections.IDictionary;
-    using IDictionaryEnumerator = System.Collections.IDictionaryEnumerator;
-    using IEnumerable = System.Collections.IEnumerable;
-    using IEnumerator = System.Collections.IEnumerator;
-    using NotImplementedException = System.NotImplementedException;
-    using NotSupportedException = System.NotSupportedException;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
 
-    /// <summary>
-    /// Represents a read-only, generic collection of key/value pairs.
-    /// </summary>
-    /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
-    /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
-    public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary
+    [Serializable]
+    [DebuggerTypeProxy(typeof(Mscorlib_DictionaryDebugView<,>))]
+    [DebuggerDisplay("Count = {Count}")]
+    public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary, IReadOnlyDictionary<TKey, TValue>
     {
-        /// <summary>
-        /// This is the backing field for the <see cref="Dictionary"/> property.
-        /// </summary>
-        private readonly IDictionary<TKey, TValue> _dictionary;
+        private readonly IDictionary<TKey, TValue> m_dictionary;
+        [NonSerialized]
+        private Object m_syncRoot;
+        [NonSerialized]
+        private KeyCollection m_keys;
+        [NonSerialized]
+        private ValueCollection m_values;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyDictionary{TKey, TValue}"/> class
-        /// that is a wrapper around the specified dictionary.
-        /// </summary>
-        /// <param name="dictionary">The dictionary to wrap.</param>
-        public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
-        {
-            if (dictionary == null)
+        public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary) {
+            if (dictionary == null) {
                 throw new ArgumentNullException("dictionary");
-
-            _dictionary = dictionary;
+            }
+            Contract.EndContractBlock();
+            m_dictionary = dictionary;
         }
 
-        /// <summary>
-        /// Gets the element that has the specified key.
-        /// </summary>
-        /// <param name="key">The key of the element to get.</param>
-        /// <returns>The element that has the specified key.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
-        /// <exception cref="KeyNotFoundException">If property is retrieved and <paramref name="key"/> is not found.</exception>
-        public TValue this[TKey key]
-        {
-            get
-            {
-                return _dictionary[key];
-            }
+        protected IDictionary<TKey, TValue> Dictionary {
+            get { return m_dictionary; }
         }
 
-        /// <inheritdoc/>
-        /// <summary>
-        /// Gets the element that has the specified key.
-        /// </summary>
-        /// <exception cref="NotSupportedException">If the property is set.</exception>
-        TValue IDictionary<TKey, TValue>.this[TKey key]
-        {
-            get
-            {
-                return this[key];
-            }
-
-            set
-            {
-                throw new NotSupportedException();
+        public KeyCollection Keys {
+            get {
+                Contract.Ensures(Contract.Result<KeyCollection>() != null);
+                if (m_keys == null) {
+                    m_keys = new KeyCollection(m_dictionary.Keys);
+                }
+                return m_keys;
             }
         }
 
-        /// <inheritdoc/>
-        /// <summary>
-        /// Gets the element that has the specified key.
-        /// </summary>
-        /// <exception cref="NotSupportedException">If the property is set.</exception>
-        object IDictionary.this[object key]
-        {
-            get
-            {
-                if (!(key is TKey))
-                    return null;
-
-                return this[(TKey)key];
-            }
-
-            set
-            {
-                throw new NotSupportedException();
+        public ValueCollection Values {
+            get {
+                Contract.Ensures(Contract.Result<ValueCollection>() != null);
+                if (m_values == null) {
+                    m_values = new ValueCollection(m_dictionary.Values);
+                }
+                return m_values;
             }
         }
 
-        /// <summary>
-        /// Gets the number of items in the dictionary.
-        /// </summary>
-        /// <value>
-        /// The number of items in the dictionary.
-        /// </value>
-        public int Count
-        {
-            get
-            {
-                return _dictionary.Count;
-            }
+        #region IDictionary<TKey, TValue> Members
+
+        public bool ContainsKey(TKey key) {
+            return m_dictionary.ContainsKey(key);
         }
 
-        /// <summary>
-        /// Gets a key collection that contains the keys of the dictionary.
-        /// </summary>
-        /// <value>
-        /// A key collection that contains the keys of the dictionary.
-        /// </value>
-        public KeyCollection Keys
-        {
-            get
-            {
-                return new KeyCollection(_dictionary.Keys);
-            }
-        }
-
-        /// <inheritdoc/>
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys
-        {
-            get
-            {
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys {
+            get {
                 return Keys;
             }
         }
 
-        /// <inheritdoc/>
-        ICollection IDictionary.Keys
-        {
-            get
-            {
-                return Keys;
-            }
+        public bool TryGetValue(TKey key, out TValue value) {
+            return m_dictionary.TryGetValue(key, out value);
         }
 
-        /// <summary>
-        /// Gets a collection that contains the values in the dictionary.
-        /// </summary>
-        /// <value>
-        /// A collection that contains the values in the object that implements <see cref="ReadOnlyDictionary{TKey, TValue}"/>.
-        /// </value>
-        public ValueCollection Values
-        {
-            get
-            {
-                return new ValueCollection(_dictionary.Values);
-            }
-        }
-
-        /// <inheritdoc/>
-        ICollection<TValue> IDictionary<TKey, TValue>.Values
-        {
-            get
-            {
+        ICollection<TValue> IDictionary<TKey, TValue>.Values {
+            get {
                 return Values;
             }
         }
 
-        /// <inheritdoc/>
-        ICollection IDictionary.Values
-        {
-            get
-            {
-                return Values;
+        public TValue this[TKey key] {
+            get {
+                return m_dictionary[key];
             }
         }
 
-        /// <inheritdoc/>
-        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
-        {
-            get
-            {
-                return true;
+        void IDictionary<TKey, TValue>.Add(TKey key, TValue value) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+        }
+
+        bool IDictionary<TKey, TValue>.Remove(TKey key) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+        }
+
+        TValue IDictionary<TKey, TValue>.this[TKey key] {
+            get {
+                return m_dictionary[key];
+            }
+            set {
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
             }
         }
 
-        /// <inheritdoc/>
-        bool IDictionary.IsFixedSize
-        {
-            get
-            {
-                return true;
-            }
+        #endregion
+
+        #region ICollection<KeyValuePair<TKey, TValue>> Members
+
+        public int Count {
+            get { return m_dictionary.Count; }
         }
 
-        /// <inheritdoc/>
-        bool IDictionary.IsReadOnly
-        {
-            get
-            {
-                return true;
-            }
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item) {
+            return m_dictionary.Contains(item);
         }
 
-        /// <inheritdoc/>
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
+            m_dictionary.CopyTo(array, arrayIndex);
         }
 
-        /// <inheritdoc/>
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                ICollection collection = this as ICollection;
-                if (collection == null)
-                    return collection.SyncRoot;
-
-                throw new NotSupportedException("The current object does not support the SyncRoot property.");
-            }
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly {
+            get { return true; }
         }
 
-        /// <summary>
-        /// Gets the dictionary that is wrapped by this <see cref="ReadOnlyDictionary{TKey, TValue}"/> object.
-        /// </summary>
-        /// <value>
-        /// The dictionary that is wrapped by this object.
-        /// </value>
-        protected IDictionary<TKey, TValue> Dictionary
-        {
-            get
-            {
-                return _dictionary;
-            }
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
         }
 
-        /// <summary>
-        /// Determines whether the dictionary contains an element that has the specified key.
-        /// </summary>
-        /// <param name="key">The key to locate in the dictionary.</param>
-        /// <returns><see langword="true"/> if the dictionary contains an element that has the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
+        void ICollection<KeyValuePair<TKey, TValue>>.Clear() {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
         }
 
-        /// <inheritdoc/>
-        bool IDictionary.Contains(object key)
-        {
-            if (key == null)
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+        }
+
+        #endregion
+
+        #region IEnumerable<KeyValuePair<TKey, TValue>> Members
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
+            return m_dictionary.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return ((IEnumerable)m_dictionary).GetEnumerator();
+        }
+
+        #endregion
+
+        #region IDictionary Members
+
+        private static bool IsCompatibleKey(object key) {
+            if (key == null) {
                 throw new ArgumentNullException("key");
-
-            if (key is TKey)
-                return ContainsKey((TKey)key);
-
-            return false;
+            }
+            return key is TKey;
         }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the <see cref="ReadOnlyDictionary{TKey, TValue}"/>.
-        /// </summary>
-        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return _dictionary.GetEnumerator();
+        void IDictionary.Add(object key, object value) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
         }
 
-        /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+        void IDictionary.Clear() {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
         }
 
-        /// <inheritdoc/>
-        IDictionaryEnumerator IDictionary.GetEnumerator()
-        {
-            IDictionary dictionary = _dictionary as IDictionary;
-            if (dictionary != null)
-                return dictionary.GetEnumerator();
-
-            return new DictionaryEnumerator(_dictionary);
+        bool IDictionary.Contains(object key) {
+            return IsCompatibleKey(key) && ContainsKey((TKey)key);
         }
 
-        /// <summary>
-        /// Retrieves the value that is associated with the specified key.
-        /// </summary>
-        /// <param name="key">The key whose value will be retrieved.</param>
-        /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param>
-        /// <returns><see langword="true"/> if the object that implements <see cref="ReadOnlyDictionary{TKey, TValue}"/> contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetValue(TKey key, out TValue value)
-        {
-            return _dictionary.TryGetValue(key, out value);
+        IDictionaryEnumerator IDictionary.GetEnumerator() {
+            IDictionary d = m_dictionary as IDictionary;
+            if (d != null) {
+                return d.GetEnumerator();
+            }
+            return new DictionaryEnumerator(m_dictionary);
         }
 
-        /// <inheritdoc/>
-        void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
-        {
-            throw new NotSupportedException();
+        bool IDictionary.IsFixedSize {
+            get { return true; }
         }
 
-        /// <inheritdoc/>
-        void IDictionary.Add(object key, object value)
-        {
-            throw new NotSupportedException();
+        bool IDictionary.IsReadOnly {
+            get { return true; }
         }
 
-        /// <inheritdoc/>
-        bool IDictionary<TKey, TValue>.Remove(TKey key)
-        {
-            throw new NotSupportedException();
+        ICollection IDictionary.Keys {
+            get {
+                return Keys;
+            }
         }
 
-        /// <inheritdoc/>
-        void IDictionary.Remove(object key)
-        {
-            throw new NotSupportedException();
+        void IDictionary.Remove(object key) {
+            throw new NotSupportedException("NotSupported_ReadOnlyCollection");
         }
 
-        /// <inheritdoc/>
-        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotSupportedException();
+        ICollection IDictionary.Values {
+            get {
+                return Values;
+            }
         }
 
-        /// <inheritdoc/>
-        void ICollection<KeyValuePair<TKey, TValue>>.Clear()
-        {
-            throw new NotSupportedException();
+        object IDictionary.this[object key] {
+            get {
+                if (IsCompatibleKey(key)) {
+                    return this[(TKey)key];
+                }
+                return null;
+            }
+            set {
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+            }
         }
 
-        /// <inheritdoc/>
-        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <inheritdoc/>
-        void IDictionary.Clear()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <inheritdoc/>
-        void ICollection.CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Represents a read-only collection of the keys of a <see cref="ReadOnlyDictionary{TKey, TValue}"/> object.
-        /// </summary>
-        public sealed class KeyCollection : ICollection<TKey>, ICollection
-        {
-            /// <summary>
-            /// The wrapped collection of keys.
-            /// </summary>
-            private readonly ICollection<TKey> _keys;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="KeyCollection"/> class
-            /// as a wrapper around the specified collection of keys.
-            /// </summary>
-            /// <param name="keys">The collection of keys to wrap.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="keys"/> is <see langword="null"/>.</exception>
-            internal KeyCollection(ICollection<TKey> keys)
-            {
-                if (keys == null)
-                    throw new ArgumentNullException("keys");
-
-                _keys = keys;
+        void ICollection.CopyTo(Array array, int index) {
+            if (array == null) {
+                throw new ArgumentNullException("array");
             }
 
-            /// <summary>
-            /// Gets the number of elements in the collection.
-            /// </summary>
-            /// <value>
-            /// The number of elements in the collection.
-            /// </value>
-            public int Count
-            {
-                get
-                {
-                    return _keys.Count;
+            if (array.Rank != 1) {
+                throw new ArgumentException("Arg_RankMultiDimNotSupported");
+            }
+
+            if (array.GetLowerBound(0) != 0) {
+                throw new ArgumentException("Arg_NonZeroLowerBound");
+            }
+
+            if (index < 0 || index > array.Length) {
+                throw new ArgumentOutOfRangeException("index", "ArgumentOutOfRange_NeedNonNegNum");
+            }
+
+            if (array.Length - index < Count) {
+                throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
+            }
+
+            KeyValuePair<TKey, TValue>[] pairs = array as KeyValuePair<TKey, TValue>[];
+            if (pairs != null) {
+                m_dictionary.CopyTo(pairs, index);
+            }
+            else {
+                DictionaryEntry[] dictEntryArray = array as DictionaryEntry[];
+                if (dictEntryArray != null) {
+                    foreach (var item in m_dictionary) {
+                        dictEntryArray[index++] = new DictionaryEntry(item.Key, item.Value);
+                    }
+                }
+                else {
+                    object[] objects = array as object[];
+                    if (objects == null) {
+                        throw new ArgumentException("Argument_InvalidArrayType");
+                    }
+
+                    try {
+                        foreach (var item in m_dictionary) {
+                            objects[index++] = new KeyValuePair<TKey, TValue>(item.Key, item.Value);
+                        }
+                    }
+                    catch (ArrayTypeMismatchException) {
+                        throw new ArgumentException("Argument_InvalidArrayType");
+                    }
                 }
             }
+        }
 
-            /// <inheritdoc/>
-            bool ICollection<TKey>.IsReadOnly
-            {
-                get
-                {
-                    return true;
+        bool ICollection.IsSynchronized {
+            get { return false; }
+        }
+
+        object ICollection.SyncRoot {
+            get {
+                if (m_syncRoot == null) {
+                    ICollection c = m_dictionary as ICollection;
+                    if (c != null) {
+                        m_syncRoot = c.SyncRoot;
+                    }
+                    else {
+                        System.Threading.Interlocked.CompareExchange<Object>(ref m_syncRoot, new Object(), null);
+                    }
                 }
+                return m_syncRoot;
+            }
+        }
+
+        [Serializable]
+        private struct DictionaryEnumerator : IDictionaryEnumerator {
+            private readonly IDictionary<TKey, TValue> m_dictionary;
+            private IEnumerator<KeyValuePair<TKey, TValue>> m_enumerator;
+
+            public DictionaryEnumerator(IDictionary<TKey, TValue> dictionary) {
+                m_dictionary = dictionary;
+                m_enumerator = m_dictionary.GetEnumerator();
             }
 
-            /// <inheritdoc/>
-            bool ICollection.IsSynchronized
+            public DictionaryEntry Entry {
+                get { return new DictionaryEntry(m_enumerator.Current.Key, m_enumerator.Current.Value); }
+            }
+
+            public object Key {
+                get { return m_enumerator.Current.Key; }
+            }
+
+            public object Value {
+                get { return m_enumerator.Current.Value; }
+            }
+
+            public object Current {
+                get { return Entry; }
+            }
+
+            public bool MoveNext() {
+                return m_enumerator.MoveNext();
+            }
+
+            public void Reset() {
+                m_enumerator.Reset();
+            }
+        }
+
+        #endregion
+
+        #region IReadOnlyDictionary members
+
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys {
+            get {
+                return Keys;
+            }
+        }
+
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values {
+            get {
+                return Values;
+            }
+        }
+
+        #endregion IReadOnlyDictionary members
+
+        [DebuggerTypeProxy(typeof(Mscorlib_CollectionDebugView<>))]
+        [DebuggerDisplay("Count = {Count}")]
+        [Serializable]
+        public sealed class KeyCollection : ICollection<TKey>, ICollection {
+            private readonly ICollection<TKey> m_collection;
+            [NonSerialized]
+            private Object m_syncRoot;
+
+            internal KeyCollection(ICollection<TKey> collection)
             {
-                get
-                {
-                    return false;
+                if (collection == null) {
+                    throw new ArgumentNullException("collection");
                 }
+                m_collection = collection;
             }
 
-            /// <inheritdoc/>
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
+            #region ICollection<T> Members
 
-            /// <summary>
-            /// Copies the elements of the collection to an array, starting at a specific array index.
-            /// </summary>
-            /// <param name="array">The one-dimensional array that is the destination of the elements copied from the collection. The array must have zero-based indexing.</param>
-            /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <see langword="null"/>.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">If <paramref name="arrayIndex"/> is less than 0.</exception>
-            /// <exception cref="ArgumentException">
-            /// If <paramref name="array"/> is multidimensional.
-            /// <para>-or-</para>
-            /// <para>If the number of elements in the source collection is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</para>
-            /// <para>-or-</para>
-            /// <para>If the type <typeparamref name="TKey"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</para>
-            /// </exception>
-            public void CopyTo(TKey[] array, int arrayIndex)
-            {
-                _keys.CopyTo(array, arrayIndex);
-            }
-
-            /// <inheritdoc/>
-            void ICollection.CopyTo(Array array, int index)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Returns an enumerator that iterates through the collection.
-            /// </summary>
-            /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-            public IEnumerator<TKey> GetEnumerator()
-            {
-                return _keys.GetEnumerator();
-            }
-
-            /// <inheritdoc/>
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            /// <inheritdoc/>
-            bool ICollection<TKey>.Contains(TKey item)
-            {
-                return _keys.Contains(item);
-            }
-
-            /// <inheritdoc/>
             void ICollection<TKey>.Add(TKey item)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
             }
 
-            /// <inheritdoc/>
-            bool ICollection<TKey>.Remove(TKey item)
-            {
-                throw new NotSupportedException();
-            }
-
-            /// <inheritdoc/>
             void ICollection<TKey>.Clear()
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
             }
+
+            bool ICollection<TKey>.Contains(TKey item)
+            {
+                return m_collection.Contains(item);
+            }
+
+            public void CopyTo(TKey[] array, int arrayIndex)
+            {
+                m_collection.CopyTo(array, arrayIndex);
+            }
+
+            public int Count {
+                get { return m_collection.Count; }
+            }
+
+            bool ICollection<TKey>.IsReadOnly {
+                get { return true; }
+            }
+
+            bool ICollection<TKey>.Remove(TKey item)
+            {
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+            }
+
+            #endregion
+
+            #region IEnumerable<T> Members
+
+            public IEnumerator<TKey> GetEnumerator()
+            {
+                return m_collection.GetEnumerator();
+            }
+
+            #endregion
+
+            #region IEnumerable Members
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+                return ((IEnumerable)m_collection).GetEnumerator();
+            }
+
+            #endregion
+
+            #region ICollection Members
+
+            void ICollection.CopyTo(Array array, int index) {
+                ReadOnlyDictionaryHelpers.CopyToNonGenericICollectionHelper<TKey>(m_collection, array, index);
+            }
+
+            bool ICollection.IsSynchronized {
+                get { return false; }
+            }
+
+            object ICollection.SyncRoot {
+                get {
+                    if (m_syncRoot == null) {
+                        ICollection c = m_collection as ICollection;
+                        if (c != null) {
+                            m_syncRoot = c.SyncRoot;
+                        }
+                        else {
+                            System.Threading.Interlocked.CompareExchange<Object>(ref m_syncRoot, new Object(), null);
+                        }
+                    }
+                    return m_syncRoot;
+                }
+            }
+
+            #endregion
         }
 
-        /// <summary>
-        /// Represents a read-only collection of the values of a <see cref="ReadOnlyDictionary{TKey, TValue}"/> object.
-        /// </summary>
-        public class ValueCollection : ICollection<TValue>, ICollection
-        {
-            /// <summary>
-            /// The wrapped collection of values.
-            /// </summary>
-            private readonly ICollection<TValue> _values;
+        [DebuggerTypeProxy(typeof(Mscorlib_CollectionDebugView<>))]
+        [DebuggerDisplay("Count = {Count}")]
+        [Serializable]
+        public sealed class ValueCollection : ICollection<TValue>, ICollection {
+            private readonly ICollection<TValue> m_collection;
+            [NonSerialized]
+            private Object m_syncRoot;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ValueCollection"/> class
-            /// as a wrapper around the specified collection of values.
-            /// </summary>
-            /// <param name="values">The collection of values to wrap.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="values"/> is <see langword="null"/>.</exception>
-            internal ValueCollection(ICollection<TValue> values)
+            internal ValueCollection(ICollection<TValue> collection)
             {
-                if (values == null)
-                    throw new ArgumentNullException("values");
-
-                _values = values;
-            }
-
-            /// <summary>
-            /// Gets the number of elements in the collection.
-            /// </summary>
-            /// <value>
-            /// The number of elements in the collection.
-            /// </value>
-            public int Count
-            {
-                get
-                {
-                    return _values.Count;
+                if (collection == null) {
+                    throw new ArgumentNullException("collection");
                 }
+                m_collection = collection;
             }
 
-            /// <inheritdoc/>
-            bool ICollection<TValue>.IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            #region ICollection<T> Members
 
-            /// <inheritdoc/>
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            /// <inheritdoc/>
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            /// <summary>
-            /// Copies the elements of the collection to an array, starting at a specific array index.
-            /// </summary>
-            /// <param name="array">The one-dimensional array that is the destination of the elements copied from the collection. The array must have zero-based indexing.</param>
-            /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">If <paramref name="array"/> is <see langword="null"/>.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">If <paramref name="arrayIndex"/> is less than 0.</exception>
-            /// <exception cref="ArgumentException">
-            /// If <paramref name="array"/> is multidimensional.
-            /// <para>-or-</para>
-            /// <para>If the number of elements in the source collection is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</para>
-            /// <para>-or-</para>
-            /// <para>If the type <typeparamref name="TValue"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</para>
-            /// </exception>
-            public void CopyTo(TValue[] array, int arrayIndex)
-            {
-                _values.CopyTo(array, arrayIndex);
-            }
-
-            /// <inheritdoc/>
-            void ICollection.CopyTo(Array array, int index)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Returns an enumerator that iterates through the collection.
-            /// </summary>
-            /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-            public IEnumerator<TValue> GetEnumerator()
-            {
-                return _values.GetEnumerator();
-            }
-
-            /// <inheritdoc/>
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            /// <inheritdoc/>
-            bool ICollection<TValue>.Contains(TValue item)
-            {
-                return _values.Contains(item);
-            }
-
-            /// <inheritdoc/>
             void ICollection<TValue>.Add(TValue item)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
             }
 
-            /// <inheritdoc/>
-            bool ICollection<TValue>.Remove(TValue item)
-            {
-                throw new NotSupportedException();
-            }
-
-            /// <inheritdoc/>
             void ICollection<TValue>.Clear()
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
             }
-        }
 
-        private class DictionaryEnumerator : IDictionaryEnumerator
+            bool ICollection<TValue>.Contains(TValue item)
+            {
+                return m_collection.Contains(item);
+            }
+
+            public void CopyTo(TValue[] array, int arrayIndex)
+            {
+                m_collection.CopyTo(array, arrayIndex);
+            }
+
+            public int Count {
+                get { return m_collection.Count; }
+            }
+
+            bool ICollection<TValue>.IsReadOnly {
+                get { return true; }
+            }
+
+            bool ICollection<TValue>.Remove(TValue item)
+            {
+                throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+            }
+
+            #endregion
+
+            #region IEnumerable<T> Members
+
+            public IEnumerator<TValue> GetEnumerator()
+            {
+                return m_collection.GetEnumerator();
+            }
+
+            #endregion
+
+            #region IEnumerable Members
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+                return ((IEnumerable)m_collection).GetEnumerator();
+            }
+
+            #endregion
+
+            #region ICollection Members
+
+            void ICollection.CopyTo(Array array, int index) {
+                ReadOnlyDictionaryHelpers.CopyToNonGenericICollectionHelper<TValue>(m_collection, array, index);
+            }
+
+            bool ICollection.IsSynchronized {
+                get { return false; }
+            }
+
+            object ICollection.SyncRoot {
+                get {
+                    if (m_syncRoot == null) {
+                        ICollection c = m_collection as ICollection;
+                        if (c != null) {
+                            m_syncRoot = c.SyncRoot;
+                        }
+                        else {
+                            System.Threading.Interlocked.CompareExchange<Object>(ref m_syncRoot, new Object(), null);
+                        }
+                    }
+                    return m_syncRoot;
+                }
+            }
+
+            #endregion ICollection Members
+        }
+    }
+
+    // To share code when possible, use a non-generic class to get rid of irrelevant type parameters.
+    internal static class ReadOnlyDictionaryHelpers
+    {
+        #region Helper method for our KeyCollection and ValueCollection
+
+        // Abstracted away to avoid redundant implementations.
+        internal static void CopyToNonGenericICollectionHelper<T>(ICollection<T> collection, Array array, int index)
         {
-            private readonly IEnumerator<KeyValuePair<TKey, TValue>> _enumerator;
-
-            public DictionaryEnumerator(IDictionary<TKey, TValue> dictionary)
-            {
-                if (dictionary == null)
-                    throw new ArgumentNullException("dictionary");
-
-                _enumerator = dictionary.GetEnumerator();
+            if (array == null) {
+                throw new ArgumentNullException("array");
             }
 
-            /// <inheritdoc/>
-            public DictionaryEntry Entry
-            {
-                get
-                {
-                    KeyValuePair<TKey, TValue> current = _enumerator.Current;
-                    return new DictionaryEntry(current.Key, current.Value);
+            if (array.Rank != 1) {
+                throw new ArgumentException("Arg_RankMultiDimNotSupported");
+            }
+
+            if (array.GetLowerBound(0) != 0) {
+                throw new ArgumentException("Arg_NonZeroLowerBound");
+            }
+
+            if (index < 0) {
+                throw new ArgumentOutOfRangeException("arrayIndex", "ArgumentOutOfRange_NeedNonNegNum");
+            }
+
+            if (array.Length - index < collection.Count) {
+                throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
+            }
+
+            // Easy out if the ICollection<T> implements the non-generic ICollection
+            ICollection nonGenericCollection = collection as ICollection;
+            if (nonGenericCollection != null) {
+                nonGenericCollection.CopyTo(array, index);
+                return;
+            }
+
+            T[] items = array as T[];
+            if (items != null) {
+                collection.CopyTo(items, index);
+            }
+            else {
+                //
+                // Catch the obvious case assignment will fail.
+                // We can found all possible problems by doing the check though.
+                // For example, if the element type of the Array is derived from T,
+                // we can't figure out if we can successfully copy the element beforehand.
+                //
+                Type targetType = array.GetType().GetElementType();
+                Type sourceType = typeof(T);
+                if (!(targetType.IsAssignableFrom(sourceType) || sourceType.IsAssignableFrom(targetType))) {
+                    throw new ArgumentException("Argument_InvalidArrayType");
                 }
-            }
 
-            /// <inheritdoc/>
-            public object Key
-            {
-                get
-                {
-                    return _enumerator.Current.Key;
+                //
+                // We can't cast array of value type to object[], so we don't support 
+                // widening of primitive types here.
+                //
+                object[] objects = array as object[];
+                if (objects == null) {
+                    throw new ArgumentException("Argument_InvalidArrayType");
                 }
-            }
 
-            /// <inheritdoc/>
-            public object Value
-            {
-                get
-                {
-                    return _enumerator.Current.Value;
+                try {
+                    foreach (var item in collection) {
+                        objects[index++] = item;
+                    }
                 }
-            }
-
-            /// <inheritdoc/>
-            public object Current
-            {
-                get
-                {
-                    return Entry;
+                catch (ArrayTypeMismatchException) {
+                    throw new ArgumentException("Argument_InvalidArrayType");
                 }
-            }
-
-            /// <inheritdoc/>
-            public bool MoveNext()
-            {
-                return _enumerator.MoveNext();
-            }
-
-            /// <inheritdoc/>
-            public void Reset()
-            {
-                _enumerator.Reset();
             }
         }
+
+        #endregion Helper method for our KeyCollection and ValueCollection
     }
 }
 
