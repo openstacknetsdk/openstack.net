@@ -30,13 +30,13 @@
 
         private static readonly ConcurrentDictionary<ContainerName, Container> _containers =
             new ConcurrentDictionary<ContainerName, Container>();
-        private static readonly ConditionalWeakTable<Container, ContainerMetadata> _containerMetadata =
-            new ConditionalWeakTable<Container, ContainerMetadata>();
+        private static readonly ConditionalWeakTable<Container, StrongBox<ContainerMetadata>> _containerMetadata =
+            new ConditionalWeakTable<Container, StrongBox<ContainerMetadata>>();
         private static readonly ConditionalWeakTable<Container, ConcurrentDictionary<ObjectName, ContainerObject>> _containerObjects =
             new ConditionalWeakTable<Container, ConcurrentDictionary<ObjectName, ContainerObject>>();
 
-        private static readonly ConditionalWeakTable<ContainerObject, ObjectMetadata> _objectMetadata =
-            new ConditionalWeakTable<ContainerObject, ObjectMetadata>();
+        private static readonly ConditionalWeakTable<ContainerObject, StrongBox<ObjectMetadata>> _objectMetadata =
+            new ConditionalWeakTable<ContainerObject, StrongBox<ObjectMetadata>>();
         private static readonly ConditionalWeakTable<ContainerObject, byte[]> _objectData =
             new ConditionalWeakTable<ContainerObject, byte[]>();
 
@@ -230,8 +230,11 @@
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.NoContent);
             result.Content = new ByteArrayContent(new byte[0]);
 
+            StrongBox<ContainerMetadata> containerMetadataBox;
             ContainerMetadata containerMetadata;
-            if (!_containerMetadata.TryGetValue(container, out containerMetadata))
+            if (_containerMetadata.TryGetValue(container, out containerMetadataBox))
+                containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+            else
                 containerMetadata = ContainerMetadata.Empty;
 
             ApplyMetadata(result, containerMetadata);
@@ -300,8 +303,11 @@
             string body = JsonConvert.SerializeObject(objects);
             result.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
+            StrongBox<ContainerMetadata> containerMetadataBox;
             ContainerMetadata containerMetadata;
-            if (!_containerMetadata.TryGetValue(container, out containerMetadata))
+            if (_containerMetadata.TryGetValue(container, out containerMetadataBox))
+                containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+            else
                 containerMetadata = ContainerMetadata.Empty;
 
             ApplyMetadata(result, containerMetadata);
@@ -373,8 +379,11 @@
             IDictionary<string, string> metadata;
             ExtractMetadata(Request, ContainerMetadata.ContainerMetadataPrefix, out headers, out metadata);
 
+            StrongBox<ContainerMetadata> previousBox;
             ContainerMetadata previous;
-            if (!_containerMetadata.TryGetValue(container, out previous))
+            if (_containerMetadata.TryGetValue(container, out previousBox))
+                previous = previousBox.Value ?? ContainerMetadata.Empty;
+            else
                 previous = ContainerMetadata.Empty;
 
             foreach (var pair in previous.Headers)
@@ -406,9 +415,7 @@
             }
 
             ContainerMetadata containerMetadata = new ContainerMetadata(headers, metadata);
-            // TODO: atomic update
-            _containerMetadata.Remove(container);
-            _containerMetadata.Add(container, containerMetadata);
+            _containerMetadata.GetOrCreateValue(container).Value = containerMetadata;
 
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
@@ -463,8 +470,11 @@
             result.Content = new ByteArrayContent(new byte[0]);
             result.Content.Headers.ContentLength = data.Length;
 
+            StrongBox<ObjectMetadata> objectMetadataBox;
             ObjectMetadata objectMetadata;
-            if (!_objectMetadata.TryGetValue(containerObject.Item2, out objectMetadata))
+            if (_objectMetadata.TryGetValue(containerObject.Item2, out objectMetadataBox))
+                objectMetadata = objectMetadataBox.Value ?? ObjectMetadata.Empty;
+            else
                 objectMetadata = ObjectMetadata.Empty;
 
             ApplyMetadata(result, objectMetadata);
@@ -493,8 +503,11 @@
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             result.Content = new StreamContent(new MemoryStream(data));
 
+            StrongBox<ObjectMetadata> objectMetadataBox;
             ObjectMetadata objectMetadata;
-            if (!_objectMetadata.TryGetValue(containerObject.Item2, out objectMetadata))
+            if (_objectMetadata.TryGetValue(containerObject.Item2, out objectMetadataBox))
+                objectMetadata = objectMetadataBox.Value ?? ObjectMetadata.Empty;
+            else
                 objectMetadata = ObjectMetadata.Empty;
 
             ApplyMetadata(result, objectMetadata);
@@ -548,8 +561,11 @@
                 if (container == null)
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
 
+                StrongBox<ContainerMetadata> containerMetadataBox;
                 ContainerMetadata containerMetadata;
-                if (!_containerMetadata.TryGetValue(container, out containerMetadata))
+                if (_containerMetadata.TryGetValue(container, out containerMetadataBox))
+                    containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+                else
                     containerMetadata = ContainerMetadata.Empty;
 
                 ConcurrentDictionary<ObjectName, ContainerObject> containerObjects;
@@ -600,9 +616,7 @@
             IDictionary<string, string> metadata;
             ExtractMetadata(Request, ObjectMetadata.ObjectMetadataPrefix, out headers, out metadata);
             ObjectMetadata objectMetadata = new ObjectMetadata(headers, metadata);
-            // TODO: atomic update
-            _objectMetadata.Remove(containerObject.Item2);
-            _objectMetadata.Add(containerObject.Item2, objectMetadata);
+            _objectMetadata.GetOrCreateValue(containerObject.Item2).Value = objectMetadata;
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
@@ -650,8 +664,11 @@
             if (container == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
+            StrongBox<ContainerMetadata> containerMetadataBox;
             ContainerMetadata containerMetadata;
-            if (!_containerMetadata.TryGetValue(container, out containerMetadata))
+            if (_containerMetadata.TryGetValue(container, out containerMetadataBox))
+                containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+            else
                 containerMetadata = ContainerMetadata.Empty;
 
             ContainerName versionsLocation = containerMetadata.GetVersionsLocation();
@@ -799,7 +816,7 @@
                     new JProperty("name", JValue.CreateString(containerName.Value)));
 
             Container container = jsonObject.ToObject<Container>();
-            _containerMetadata.Add(container, new ContainerMetadata(headers, metadata));
+            _containerMetadata.Add(container, new StrongBox<ContainerMetadata>(new ContainerMetadata(headers, metadata)));
             return container;
         }
 
@@ -809,8 +826,11 @@
             if (container == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
+            StrongBox<ContainerMetadata> containerMetadataBox;
             ContainerMetadata containerMetadata;
-            if (!_containerMetadata.TryGetValue(container, out containerMetadata))
+            if (_containerMetadata.TryGetValue(container, out containerMetadataBox))
+                containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+            else
                 containerMetadata = ContainerMetadata.Empty;
 
             ConcurrentDictionary<ObjectName, ContainerObject> containerObjects;
@@ -868,7 +888,7 @@
 
                     ContainerObject containerObject = jsonObject.ToObject<ContainerObject>();
                     _objectData.Add(containerObject, data);
-                    _objectMetadata.Add(containerObject, metadata);
+                    _objectMetadata.Add(containerObject, new StrongBox<ObjectMetadata>(metadata));
                     return containerObject;
                 };
 
@@ -892,8 +912,12 @@
             if (!_objectData.TryGetValue(sourceContainerObject.Item2, out objectData) || objectData == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            ObjectMetadata objectMetadata;
-            if (!_objectMetadata.TryGetValue(sourceContainerObject.Item2, out objectMetadata))
+            StrongBox<ObjectMetadata> objectMetadataBox;
+            if (!_objectMetadata.TryGetValue(sourceContainerObject.Item2, out objectMetadataBox))
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+
+            ObjectMetadata objectMetadata = objectMetadataBox.Value;
+            if (objectMetadata == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
             Container destinationContainer = TryGetContainer(destinationContainerName);
@@ -926,7 +950,7 @@
 
                     ContainerObject copiedObject = jsonContainerObject.ToObject<ContainerObject>();
                     _objectData.Add(copiedObject, objectData);
-                    _objectMetadata.Add(copiedObject, objectMetadata);
+                    _objectMetadata.Add(copiedObject, new StrongBox<ObjectMetadata>(objectMetadata));
                     return copiedObject;
                 };
 
@@ -978,8 +1002,11 @@
                     if (!_containerObjects.TryGetValue(existing, out containerObjects))
                         break;
 
+                    StrongBox<ContainerMetadata> containerMetadataBox;
                     ContainerMetadata containerMetadata;
-                    if (!_containerMetadata.TryGetValue(existing, out containerMetadata))
+                    if (_containerMetadata.TryGetValue(existing, out containerMetadataBox))
+                        containerMetadata = containerMetadataBox.Value ?? ContainerMetadata.Empty;
+                    else
                         containerMetadata = ContainerMetadata.Empty;
 
                     long objectCount = containerObjects.Count;
