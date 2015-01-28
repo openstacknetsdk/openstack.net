@@ -11,6 +11,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
     public class EncodeDecodeProviderTests
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Encode_Spaces()
         {
             const string stringToBeEncoded = "This is a test with spaces";
@@ -20,6 +21,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Decode_Spaces()
         {
             const string stringToBeDecoded = "This%20is%20a%20test%20with%20spaces";
@@ -29,6 +31,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Encode_Special_Characters()
         {
             const string stringToBeEncoded = "This $ is & a ? test * with @ spaces";
@@ -38,6 +41,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Decode_Special_Characters()
         {
             const string stringToBeEncoded = "This%20%24%20is%20%26%20a%20%3f%20test%20*%20with%20%40%20spaces";

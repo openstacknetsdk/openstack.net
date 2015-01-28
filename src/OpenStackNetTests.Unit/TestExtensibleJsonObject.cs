@@ -6,11 +6,13 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
+    using OpenStackNetTests.Live;
 
     [TestClass]
     public class TestExtensibleJsonObject
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestDeserializeEmptyString()
         {
             string @object = "";
@@ -19,6 +21,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestDeserializeEmptyObject()
         {
             string @object = "{}";
@@ -30,6 +33,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestUpdateExtensibleObject()
         {
             ExtensibleJsonObject originalObject = new BasicExtensibleJsonObject();
@@ -46,6 +50,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestDeserializeNullValue()
         {
             string @object = "{\"key\":null}";
@@ -59,6 +64,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestDeserializeMultipleValues()
         {
             string @object = "{\"key\":\"value\",\"key2\":\"value2\"}";
@@ -75,6 +81,7 @@
 
         [TestMethod]
         [ExpectedException(typeof(JsonSerializationException))]
+        [TestCategory(TestCategories.Unit)]
         public void TestDeserializeMultipleValuesSameKey()
         {
             string @object = "{\"key\":\"value\",\"key\":\"value2\"}";
@@ -82,6 +89,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestWithExtensionDataDictionary()
         {
             BasicExtensibleJsonObject input = new BasicExtensibleJsonObject();
@@ -95,6 +103,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestWithExtensionDataProperty()
         {
             BasicExtensibleJsonObject input = new BasicExtensibleJsonObject().WithExtensionData(new JProperty("initial", 1));
@@ -113,6 +122,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestWithExtensionDataNameValue()
         {
             BasicExtensibleJsonObject input = new BasicExtensibleJsonObject().WithExtensionData("initial", 1);

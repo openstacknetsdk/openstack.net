@@ -57,6 +57,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListExtensions()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -85,6 +86,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListExtensionsSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -107,6 +109,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestGetExtension()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -145,6 +148,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestGetExtensionSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -175,6 +179,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestAuthenticate()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -294,6 +299,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.Identity)]
+        [TestCategory(TestCategories.TestKind)]
         public async Task TestListTenants()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())

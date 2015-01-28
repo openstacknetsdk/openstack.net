@@ -16,6 +16,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
     public class IdentityProviderCacheTests
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Not_Hit_Cache_When_Authenticating_The_First_Time()
         {
             var cacheMock = new Mock<ICache<UserAccess>>();
@@ -32,6 +33,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Always_Request_Fresh_Data_From_Cache_When_Authenticating()
         {
             var cacheMock = new Mock<ICache<UserAccess>>();
