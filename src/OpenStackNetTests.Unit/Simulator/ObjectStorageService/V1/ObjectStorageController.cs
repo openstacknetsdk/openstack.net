@@ -929,18 +929,9 @@
             if (!_containerObjects.TryGetValue(destinationContainer, out destinationContainerObjects) || destinationContainerObjects == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            ImmutableDictionary<string, string>.Builder headers = objectMetadata.Headers.ToBuilder();
-            ImmutableDictionary<string, string>.Builder metadata = objectMetadata.Metadata.ToBuilder();
-
-            ImmutableDictionary<string, string> newHeaders = updatedMetadata.Headers;
-            ImmutableDictionary<string, string> newMetadata = updatedMetadata.Metadata;
-
-            foreach (var pair in newHeaders)
-                headers[pair.Key] = pair.Value;
-            foreach (var pair in newMetadata)
-                metadata[pair.Key] = pair.Value;
-
-            objectMetadata = new ObjectMetadata(headers.ToImmutable(), metadata.ToImmutable());
+            ImmutableDictionary<string, string> headers = objectMetadata.Headers.SetItems(updatedMetadata.Headers);
+            ImmutableDictionary<string, string> metadata = objectMetadata.Metadata.SetItems(updatedMetadata.Metadata);
+            objectMetadata = new ObjectMetadata(headers, metadata);
 
             Func<ObjectName, ContainerObject> addValue =
                 key =>
