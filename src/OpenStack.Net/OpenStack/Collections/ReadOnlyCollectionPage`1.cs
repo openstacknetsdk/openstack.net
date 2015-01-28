@@ -6,6 +6,7 @@
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+    using OpenStack.Net;
 
     /// <summary>
     /// Provides the base class for a generic read-only collection representing a
@@ -48,17 +49,13 @@
         }
 
         /// <summary>
-        /// Gets the next page in the paginated collection.
+        /// Prepare an HTTP API call to get the next page in the paginated collection.
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
-        /// <returns>
-        /// A <see cref="Task"/> object representing the asynchronous operation. When the task
-        /// completes successfully, the <see cref="Task{TResult}.Result"/> property will contain
-        /// a collection containing the next page of results.
-        /// </returns>
+        /// <returns><token>PrepareCallReturns</token></returns>
         /// <exception cref="InvalidOperationException">If <see cref="CanHaveNextPage"/> is <see langword="false"/>.</exception>
         /// <exception cref="WebException">If the HTTP request does not return successfully.</exception>
-        public abstract Task<ReadOnlyCollectionPage<T>> GetNextPageAsync(CancellationToken cancellationToken);
+        public abstract Task<IHttpApiCall<ReadOnlyCollectionPage<T>>> PrepareGetNextPageAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Represents an empty page from a paginated collection.
@@ -99,7 +96,7 @@
             }
 
             /// <inheritdoc/>
-            public override Task<ReadOnlyCollectionPage<T>> GetNextPageAsync(CancellationToken cancellationToken)
+            public override Task<IHttpApiCall<ReadOnlyCollectionPage<T>>> PrepareGetNextPageAsync(CancellationToken cancellationToken)
             {
                 throw new InvalidOperationException("Cannot obtain the next page when CanHaveNextPage is false.");
             }

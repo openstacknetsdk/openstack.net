@@ -103,7 +103,7 @@
 
                                 IList<Extension> list = extensionsArray.ToObject<Extension[]>();
                                 // http://docs.openstack.org/api/openstack-identity-service/2.0/content/Paginated_Collections-d1e325.html
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<Extension>>> getNextPageAsync = null;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<Extension>>>> prepareGetNextPageAsync = null;
                                 JArray extensionsLinksArray = responseObject["extensions_links"] as JArray;
                                 if (extensionsLinksArray != null)
                                 {
@@ -111,18 +111,17 @@
                                     Link nextLink = extensionsLinks.FirstOrDefault(i => string.Equals("next", i.Relation, StringComparison.OrdinalIgnoreCase));
                                     if (nextLink != null)
                                     {
-                                        getNextPageAsync =
+                                        prepareGetNextPageAsync =
                                             nextCancellationToken =>
                                             {
                                                 return PrepareListExtensionsAsync(nextCancellationToken)
                                                     .WithUri(nextLink.Target)
-                                                    .Then(nextApiCall => nextApiCall.Result.SendAsync(nextCancellationToken))
-                                                    .Select(nextApiCallResult => nextApiCallResult.Result.Item2);
+                                                    .Select(_ => _.Result.AsHttpApiCall());
                                             };
                                     }
                                 }
 
-                                ReadOnlyCollectionPage<Extension> results = new BasicReadOnlyCollectionPage<Extension>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<Extension> results = new BasicReadOnlyCollectionPage<Extension>(list, prepareGetNextPageAsync);
                                 return results;
                             });
                 };
@@ -185,7 +184,7 @@
 
                                 IList<Tenant> list = tenantsArray.ToObject<Tenant[]>();
                                 // http://docs.openstack.org/api/openstack-identity-service/2.0/content/Paginated_Collections-d1e325.html
-                                Func<CancellationToken, Task<ReadOnlyCollectionPage<Tenant>>> getNextPageAsync = null;
+                                Func<CancellationToken, Task<IHttpApiCall<ReadOnlyCollectionPage<Tenant>>>> prepareGetNextPageAsync = null;
                                 JArray tenantsLinksArray = responseObject["tenants_links"] as JArray;
                                 if (tenantsLinksArray != null)
                                 {
@@ -193,18 +192,17 @@
                                     Link nextLink = tenantsLinks.FirstOrDefault(i => string.Equals("next", i.Relation, StringComparison.OrdinalIgnoreCase));
                                     if (nextLink != null)
                                     {
-                                        getNextPageAsync =
+                                        prepareGetNextPageAsync =
                                             nextCancellationToken =>
                                             {
                                                 return PrepareListTenantsAsync(nextCancellationToken)
                                                     .WithUri(nextLink.Target)
-                                                    .Then(nextApiCall => nextApiCall.Result.SendAsync(nextCancellationToken))
-                                                    .Select(nextApiCallResult => nextApiCallResult.Result.Item2);
+                                                    .Select(_ => _.Result.AsHttpApiCall());
                                             };
                                     }
                                 }
 
-                                ReadOnlyCollectionPage<Tenant> results = new BasicReadOnlyCollectionPage<Tenant>(list, getNextPageAsync);
+                                ReadOnlyCollectionPage<Tenant> results = new BasicReadOnlyCollectionPage<Tenant>(list, prepareGetNextPageAsync);
                                 return results;
                             });
                 };
