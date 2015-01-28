@@ -2,6 +2,7 @@ namespace OpenStack.Services.Identity.V2
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -71,7 +72,7 @@ namespace OpenStack.Services.Identity.V2
         /// <param name="password">The password.</param>
         /// <param name="extensionData">The extension data.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="extensionData"/> is <see langword="null"/>.</exception>
-        public PasswordCredentials(string username, string password, IDictionary<string, JToken> extensionData)
+        public PasswordCredentials(string username, string password, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _username = username;

@@ -2,6 +2,7 @@ namespace OpenStack.Services.Identity.V2
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -14,7 +15,7 @@ namespace OpenStack.Services.Identity.V2
     /// <para>The representation used for authentication credentials frequently varies among vendors. When connecting to
     /// a vendor which uses a non-standard representation for the credentials, use the
     /// <see cref="AuthenticationRequest(AuthenticationData, JProperty[])"/> or
-    /// <see cref="AuthenticationRequest(AuthenticationData, IDictionary{string, JToken})"/> constructor to manually
+    /// <see cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/> constructor to manually
     /// specify the complete set of properties for the JSON representation of the required credentials.</para>
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
@@ -37,7 +38,7 @@ namespace OpenStack.Services.Identity.V2
         {
         }
 
-        /// <inheritdoc cref="AuthenticationRequest(AuthenticationData, IDictionary{string, JToken})"/>
+        /// <inheritdoc cref="AuthenticationRequest(AuthenticationData, ImmutableDictionary{string, JToken})"/>
         /// <exception cref="ArgumentException">
         /// If <paramref name="extensionData"/> contains any <see langword="null"/> values.
         /// </exception>
@@ -76,7 +77,7 @@ namespace OpenStack.Services.Identity.V2
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="extensionData"/> is <see langword="null"/>.
         /// </exception>
-        public AuthenticationRequest(AuthenticationData auth, IDictionary<string, JToken> extensionData)
+        public AuthenticationRequest(AuthenticationData auth, ImmutableDictionary<string, JToken> extensionData)
             : base(extensionData)
         {
             _auth = auth;
