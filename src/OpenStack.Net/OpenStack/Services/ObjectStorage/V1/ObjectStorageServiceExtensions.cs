@@ -6,7 +6,7 @@ namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Linq;
     using System.Net.Http.Headers;
     using System.Threading;
@@ -41,7 +41,7 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <seealso cref="GetObjectStorageInfoApiCall"/>
         /// <seealso cref="IObjectStorageService.PrepareGetObjectStorageInfoAsync"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/discoverability.html">Discoverability (OpenStack Object Storage API V1 Reference)</seealso>
-        public static Task<ReadOnlyDictionary<string, JToken>> GetObjectStorageInfoAsync(this IObjectStorageService service, CancellationToken cancellationToken)
+        public static Task<ImmutableDictionary<string, JToken>> GetObjectStorageInfoAsync(this IObjectStorageService service, CancellationToken cancellationToken)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -781,13 +781,13 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta__v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API V1 Reference)</seealso>
         public static Task RemoveObjectMetadataAsync(this IObjectStorageService service, ContainerName container, ObjectName @object, IEnumerable<string> keys, CancellationToken cancellationToken)
         {
-            ObjectMetadata updatedMetadata = new ObjectMetadata(new Dictionary<string, string>(), keys.ToDictionary(i => i, i => string.Empty));
+            ObjectMetadata updatedMetadata = new ObjectMetadata(ImmutableDictionary<string, string>.Empty, keys.ToImmutableDictionary(i => i, i => string.Empty, StringComparer.OrdinalIgnoreCase));
             return UpdateObjectMetadataAsync(service, container, @object, updatedMetadata, cancellationToken);
         }
 
         #endregion
 
-        /// <inheritdoc cref="MergeMetadata(IDictionary{string, string}, IDictionary{string, string})"/>
+        /// <inheritdoc cref="MergeMetadata(ImmutableDictionary{string, string}, ImmutableDictionary{string, string})"/>
         private static ObjectMetadata MergeMetadata(ObjectMetadata originalMetadata, ObjectMetadata updatedMetadata)
         {
             if (originalMetadata == null)
@@ -795,8 +795,8 @@ namespace OpenStack.Services.ObjectStorage.V1
             if (updatedMetadata == null)
                 throw new ArgumentNullException("updatedMetadata");
 
-            Dictionary<string, string> headers = MergeMetadata(originalMetadata.Headers, updatedMetadata.Headers);
-            Dictionary<string, string> metadata = MergeMetadata(originalMetadata.Metadata, updatedMetadata.Metadata);
+            ImmutableDictionary<string, string> headers = MergeMetadata(originalMetadata.Headers, updatedMetadata.Headers);
+            ImmutableDictionary<string, string> metadata = MergeMetadata(originalMetadata.Metadata, updatedMetadata.Metadata);
             return new ObjectMetadata(headers, metadata);
         }
 
@@ -829,18 +829,14 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <para>-or-</para>
         /// <para>If <paramref name="updatedMetadata"/> is <see langword="null"/>.</para>
         /// </exception>
-        private static Dictionary<string, string> MergeMetadata(IDictionary<string, string> originalMetadata, IDictionary<string, string> updatedMetadata)
+        private static ImmutableDictionary<string, string> MergeMetadata(ImmutableDictionary<string, string> originalMetadata, ImmutableDictionary<string, string> updatedMetadata)
         {
             if (originalMetadata == null)
                 throw new ArgumentNullException("originalMetadata");
             if (updatedMetadata == null)
                 throw new ArgumentNullException("updatedMetadata");
 
-            Dictionary<string, string> result = new Dictionary<string, string>(originalMetadata, StringComparer.OrdinalIgnoreCase);
-            foreach (var pair in updatedMetadata)
-                result[pair.Key] = pair.Value;
-
-            return result;
+            return originalMetadata.SetItems(updatedMetadata);
         }
     }
 }

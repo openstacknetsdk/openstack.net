@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Net.Http;
 
     /// <summary>
@@ -22,7 +22,7 @@
         /// field for the <see cref="Empty"/> property.
         /// </summary>
         private static readonly ContainerMetadata _emptyMetadata =
-            new ContainerMetadata(new Dictionary<string, string>(), new Dictionary<string, string>());
+            new ContainerMetadata(ImmutableDictionary<string, string>.Empty, ImmutableDictionary<string, string>.Empty);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContainerMetadata"/> class using the metadata present in the
@@ -48,7 +48,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
-        public ContainerMetadata(IDictionary<string, string> headers, IDictionary<string, string> metadata)
+        public ContainerMetadata(ImmutableDictionary<string, string> headers, ImmutableDictionary<string, string> metadata)
             : base(headers, metadata)
         {
         }

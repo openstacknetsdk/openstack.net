@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
@@ -83,7 +84,7 @@
 
                 IObjectStorageService service = CreateService();
                 var call = await service.PrepareGetObjectStorageInfoAsync(cancellationToken);
-                Tuple<HttpResponseMessage, ReadOnlyDictionary<string, JToken>> response = await call.SendAsync(cancellationToken);
+                Tuple<HttpResponseMessage, ImmutableDictionary<string, JToken>> response = await call.SendAsync(cancellationToken);
                 Assert.IsNotNull(response);
                 Assert.IsNotNull(response.Item2);
             }
@@ -116,8 +117,8 @@
                 foreach (Container container in containers)
                 {
                     ContainerMetadata existingMetadata = await service.GetContainerMetadataAsync(container.Name, cancellationToken);
-                    Dictionary<string, string> headers = existingMetadata.Headers.ToDictionary(pair => pair.Key, pair => string.Empty);
-                    Dictionary<string, string> metadata = existingMetadata.Headers.ToDictionary(pair => pair.Key, pair => string.Empty);
+                    ImmutableDictionary<string, string> headers = existingMetadata.Headers.ToImmutableDictionary(pair => pair.Key, pair => string.Empty, StringComparer.OrdinalIgnoreCase);
+                    ImmutableDictionary<string, string> metadata = existingMetadata.Headers.ToImmutableDictionary(pair => pair.Key, pair => string.Empty, StringComparer.OrdinalIgnoreCase);
                     await service.UpdateContainerMetadataAsync(container.Name, new ContainerMetadata(headers, metadata), cancellationToken);
                 }
             }
@@ -144,8 +145,8 @@
                         continue;
 
                     ContainerMetadata existingMetadata = await service.GetContainerMetadataAsync(container.Name, cancellationToken);
-                    Dictionary<string, string> headers = existingMetadata.Headers.ToDictionary(pair => pair.Key, pair => string.Empty);
-                    Dictionary<string, string> metadata = existingMetadata.Headers.ToDictionary(pair => pair.Key, pair => string.Empty);
+                    ImmutableDictionary<string, string> headers = existingMetadata.Headers.ToImmutableDictionary(pair => pair.Key, pair => string.Empty, StringComparer.OrdinalIgnoreCase);
+                    ImmutableDictionary<string, string> metadata = existingMetadata.Headers.ToImmutableDictionary(pair => pair.Key, pair => string.Empty, StringComparer.OrdinalIgnoreCase);
                     await service.UpdateContainerMetadataAsync(container.Name, new ContainerMetadata(headers, metadata), cancellationToken);
                 }
             }
@@ -611,21 +612,18 @@
 
                 await service.CreateContainerAsync(containerName, cancellationToken);
 
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
 
-
-                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, new Dictionary<string, string>(metadata, StringComparer.OrdinalIgnoreCase)), cancellationToken);
+                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
 
                 ContainerMetadata actualMetadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
                 Console.WriteLine("Container Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
             }
@@ -658,7 +656,7 @@
 
                 ContainerMetadata updatedMetadata = new ContainerMetadata(
                     ContainerMetadata.Empty.Headers,
-                    new Dictionary<string, string> { { key, "Value" } });
+                    ImmutableDictionary<string, string>.Empty.SetItem(key, "Value"));
                 await service.UpdateContainerMetadataAsync(containerName, updatedMetadata, cancellationToken);
 
                 ContainerMetadata metadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
@@ -671,7 +669,7 @@
 
                 updatedMetadata = new ContainerMetadata(
                     ContainerMetadata.Empty.Headers,
-                    new Dictionary<string, string> { { key, null } });
+                    ImmutableDictionary<string, string>.Empty.SetItem(key, null));
                 await service.UpdateContainerMetadataAsync(containerName, updatedMetadata, cancellationToken);
 
                 metadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
@@ -716,7 +714,7 @@
                     {
                         ContainerMetadata updatedMetadata = new ContainerMetadata(
                             ContainerMetadata.Empty.Headers,
-                            new Dictionary<string, string> { { invalidKey, "Value" } });
+                            ImmutableDictionary<string, string>.Empty.SetItem(invalidKey, "Value"));
                         await service.UpdateContainerMetadataAsync(containerName, updatedMetadata, cancellationToken);
                         Assert.Fail("Should throw an exception for invalid keys.");
                     }
@@ -750,34 +748,30 @@
 
                 await service.CreateContainerAsync(containerName, cancellationToken);
 
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
 
-                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, metadata), cancellationToken);
+                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
 
                 ContainerMetadata actualMetadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
                 Console.WriteLine("Container Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 metadata["Key2"] = "Value 2";
-                Dictionary<string, string> updatedMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key2", "Value 2" }
-                };
-                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, updatedMetadata), cancellationToken);
+                ImmutableDictionary<string, string>.Builder updatedMetadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                updatedMetadata.Add("Key2", "Value 2");
+                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, updatedMetadata.ToImmutable()), cancellationToken);
 
                 actualMetadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
                 Console.WriteLine("Container Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
             }
@@ -798,22 +792,20 @@
 
                 await service.CreateContainerAsync(containerName, cancellationToken);
 
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                    { "Key3", "Value 3" },
-                    { "Key4", "Value 4" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
+                metadata.Add("Key3", "Value 3");
+                metadata.Add("Key4", "Value 4");
 
-                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, metadata), cancellationToken);
+                await service.UpdateContainerMetadataAsync(containerName, new ContainerMetadata(ContainerMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
 
                 ContainerMetadata actualMetadata = await service.GetContainerMetadataAsync(containerName, cancellationToken);
                 Console.WriteLine("Container Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check the overload which takes a single key
                  */
@@ -826,7 +818,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check the overload which takes multiple keys
                  */
@@ -839,7 +831,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check that duplicate removal is a NOP
                  */
@@ -852,7 +844,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Cleanup
                  */
@@ -1266,20 +1258,18 @@
 
                 Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(objectData));
                 await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
 
-                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata), cancellationToken);
+                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
 
                 ObjectMetadata actualMetadata = await service.GetObjectMetadataAsync(containerName, objectName, cancellationToken);
                 Console.WriteLine("Object Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
             }
@@ -1310,13 +1300,11 @@
 
                 Assert.AreEqual(contentType, await GetObjectContentTypeAsync(service, containerName, objectName, cancellationToken));
 
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
 
-                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata), cancellationToken);
+                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
                 Assert.AreEqual(contentType, await GetObjectContentTypeAsync(service, containerName, objectName, cancellationToken));
 
                 ObjectMetadata actualMetadata = await service.GetObjectMetadataAsync(containerName, objectName, cancellationToken);
@@ -1324,14 +1312,12 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 metadata["Key2"] = "Value 2";
-                Dictionary<string, string> updatedMetadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key2", "Value 2" }
-                };
-                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, updatedMetadata), cancellationToken);
+                ImmutableDictionary<string, string>.Builder updatedMetadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                updatedMetadata.Add("Key2", "Value 2");
+                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, updatedMetadata.ToImmutable()), cancellationToken);
                 Assert.AreEqual(contentType, await GetObjectContentTypeAsync(service, containerName, objectName, cancellationToken));
 
                 actualMetadata = await service.GetObjectMetadataAsync(containerName, objectName, cancellationToken);
@@ -1339,7 +1325,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 await RemoveContainerWithObjectsAsync(service, containerName, cancellationToken);
             }
@@ -1364,22 +1350,20 @@
 
                 Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(objectData));
                 await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, null);
-                Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "Key1", "Value 1" },
-                    { "Key2", "Value ²" },
-                    { "Key3", "Value 3" },
-                    { "Key4", "Value 4" },
-                };
+                ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+                metadata.Add("Key1", "Value 1");
+                metadata.Add("Key2", "Value ²");
+                metadata.Add("Key3", "Value 3");
+                metadata.Add("Key4", "Value 4");
 
-                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata), cancellationToken);
+                await service.UpdateObjectMetadataAsync(containerName, objectName, new ObjectMetadata(ObjectMetadata.Empty.Headers, metadata.ToImmutable()), cancellationToken);
 
                 ObjectMetadata actualMetadata = await service.GetObjectMetadataAsync(containerName, objectName, cancellationToken);
                 Console.WriteLine("Object Metadata");
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check the overload which takes a single key
                  */
@@ -1392,7 +1376,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check the overload which takes multiple keys
                  */
@@ -1405,7 +1389,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Check that duplicate removal is a NOP
                  */
@@ -1418,7 +1402,7 @@
                 foreach (KeyValuePair<string, string> pair in actualMetadata.Metadata)
                     Console.WriteLine("    {0}: {1}", pair.Key, pair.Value);
 
-                CheckMetadataCollections(metadata, actualMetadata.Metadata);
+                CheckMetadataCollections(metadata.ToImmutable(), actualMetadata.Metadata);
 
                 /* Cleanup
                  */
@@ -2142,7 +2126,7 @@
 
                 IObjectStorageService service = CreateService();
                 AccountMetadata metadata = await service.GetAccountMetadataAsync(cancellationToken);
-                Dictionary<string, string> removedMetadata = metadata.Metadata.ToDictionary(i => i.Key, i => string.Empty);
+                ImmutableDictionary<string, string> removedMetadata = metadata.Metadata.ToImmutableDictionary(i => i.Key, i => string.Empty, StringComparer.OrdinalIgnoreCase);
                 await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, removedMetadata), cancellationToken);
             }
         }
@@ -2161,8 +2145,8 @@
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
 
                 IObjectStorageService service = CreateService();
-                IDictionary<string, string> metadata = await GetAccountMetadataWithPrefixAsync(service, TestKeyPrefix, cancellationToken);
-                Dictionary<string, string> removedMetadata = metadata.ToDictionary(i => i.Key, i => string.Empty);
+                ImmutableDictionary<string, string> metadata = await GetAccountMetadataWithPrefixAsync(service, TestKeyPrefix, cancellationToken);
+                ImmutableDictionary<string, string> removedMetadata = metadata.ToImmutableDictionary(i => i.Key, i => string.Empty, StringComparer.OrdinalIgnoreCase);
                 await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, removedMetadata), cancellationToken);
             }
         }
@@ -2264,7 +2248,7 @@
                 string key = TestKeyPrefix + new string(keyCharList.ToArray());
                 Console.WriteLine("Expected key: {0}", key);
 
-                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { key, "Value" } }), cancellationToken);
+                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { key, "Value" } }.ToImmutableDictionary()), cancellationToken);
 
                 AccountMetadata metadata = await service.GetAccountMetadataAsync(cancellationToken);
                 Assert.IsNotNull(metadata);
@@ -2274,7 +2258,7 @@
                 Assert.IsTrue(metadata.Metadata.TryGetValue(key, out value));
                 Assert.AreEqual("Value", value);
 
-                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { key, null } }), cancellationToken);
+                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { key, null } }.ToImmutableDictionary()), cancellationToken);
 
                 metadata = await service.GetAccountMetadataAsync(cancellationToken);
                 Assert.IsNotNull(metadata);
@@ -2311,7 +2295,7 @@
 
                     try
                     {
-                        await service.PrepareUpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { invalidKey, "Value" } }), cancellationToken).ConfigureAwait(false);
+                        await service.PrepareUpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { invalidKey, "Value" } }.ToImmutableDictionary()), cancellationToken).ConfigureAwait(false);
                         Assert.Fail("Should throw an exception during preparation of the request for invalid keys.");
                     }
                     catch (FormatException)
@@ -2347,36 +2331,36 @@
 
                 // test add metadata
                 await TestGetAccountMetadata();
-                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", "Value ĳ" }, { TestKeyPrefix + "2", "Value ²" }, }), cancellationToken);
+                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", "Value ĳ" }, { TestKeyPrefix + "2", "Value ²" }, }.ToImmutableDictionary()), cancellationToken);
                 await TestGetAccountMetadata();
 
-                Dictionary<string, string> expected =
+                ImmutableDictionary<string, string> expected =
                     new Dictionary<string, string>
                     {
                         { TestKeyPrefix + "1", "Value ĳ" },
                         { TestKeyPrefix + "2", "Value ²" },
-                    };
+                    }.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
                 CheckMetadataCollections(expected, await GetAccountMetadataWithPrefixAsync(service, TestKeyPrefix, cancellationToken));
 
                 // test update metadata
-                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", "Value 1" }, }), cancellationToken);
+                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", "Value 1" }, }.ToImmutableDictionary()), cancellationToken);
 
                 expected = new Dictionary<string, string>
                 {
                     { TestKeyPrefix + "1", "Value 1" },
                     { TestKeyPrefix + "2", "Value ²" },
-                };
+                }.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
                 CheckMetadataCollections(expected, await GetAccountMetadataWithPrefixAsync(service, TestKeyPrefix, cancellationToken));
 
                 // test remove metadata
-                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", null }, { TestKeyPrefix + "2", string.Empty }, }), cancellationToken);
+                await service.UpdateAccountMetadataAsync(new AccountMetadata(AccountMetadata.Empty.Headers, new Dictionary<string, string> { { TestKeyPrefix + "1", null }, { TestKeyPrefix + "2", string.Empty }, }.ToImmutableDictionary()), cancellationToken);
 
-                expected = new Dictionary<string, string>();
+                expected = ImmutableDictionary<string, string>.Empty.WithComparers(StringComparer.OrdinalIgnoreCase);
                 CheckMetadataCollections(expected, await GetAccountMetadataWithPrefixAsync(service, TestKeyPrefix, cancellationToken));
             }
         }
 
-        private static async Task<IDictionary<string, string>> GetAccountMetadataWithPrefixAsync(IObjectStorageService service, string prefix, CancellationToken cancellationToken)
+        private static async Task<ImmutableDictionary<string, string>> GetAccountMetadataWithPrefixAsync(IObjectStorageService service, string prefix, CancellationToken cancellationToken)
         {
             AccountMetadata accountMetadata = await service.GetAccountMetadataAsync(cancellationToken);
             return FilterMetadataPrefix(accountMetadata.Metadata, prefix);
@@ -2384,25 +2368,25 @@
 
         #endregion
 
-        private static IDictionary<string, string> FilterMetadataPrefix(IDictionary<string, string> metadata, string prefix)
+        private static ImmutableDictionary<string, string> FilterMetadataPrefix(ImmutableDictionary<string, string> metadata, string prefix)
         {
-            Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder result = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, string> pair in metadata)
             {
                 if (pair.Key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                     result.Add(pair.Key, pair.Value);
             }
 
-            return result;
+            return result.ToImmutable();
         }
 
-        private static void CheckMetadataCollections(IDictionary<string, string> expected, IDictionary<string, string> actual)
+        private static void CheckMetadataCollections(ImmutableDictionary<string, string> expected, ImmutableDictionary<string, string> actual)
         {
             Assert.AreEqual(expected.Count, actual.Count);
             CheckMetadataSubset(expected, actual);
         }
 
-        private static void CheckMetadataSubset(IDictionary<string, string> expected, IDictionary<string, string> actual)
+        private static void CheckMetadataSubset(ImmutableDictionary<string, string> expected, ImmutableDictionary<string, string> actual)
         {
             foreach (var pair in expected)
                 Assert.IsTrue(actual.Contains(pair), "Expected metadata item {{ {0} : {1} }} not found.", pair.Key, pair.Value);

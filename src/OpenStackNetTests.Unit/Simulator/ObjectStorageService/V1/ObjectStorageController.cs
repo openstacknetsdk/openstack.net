@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -172,8 +173,8 @@
             if (Request.GetQueryNameValuePairs().Any())
                 throw new NotImplementedException();
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, AccountMetadata.AccountMetadataPrefix, out headers, out metadata);
 
             AccountMetadata previous = _accountMetadata ?? AccountMetadata.Empty;
@@ -206,7 +207,7 @@
                     metadata.Remove(pair.Key);
             }
 
-            _accountMetadata = new AccountMetadata(headers, metadata);
+            _accountMetadata = new AccountMetadata(headers.ToImmutable(), metadata.ToImmutable());
 
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
@@ -345,10 +346,10 @@
 
             ContainerName containerName = new ContainerName(containerString);
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, ContainerMetadata.ContainerMetadataPrefix, out headers, out metadata);
-            ContainerMetadata containerMetadata = new ContainerMetadata(headers, metadata);
+            ContainerMetadata containerMetadata = new ContainerMetadata(headers.ToImmutable(), metadata.ToImmutable());
 
             HttpResponseMessage response = CreateContainerImpl(containerName, containerMetadata, CancellationToken.None);
 
@@ -375,8 +376,8 @@
             if (container == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, ContainerMetadata.ContainerMetadataPrefix, out headers, out metadata);
 
             StrongBox<ContainerMetadata> previousBox;
@@ -414,7 +415,7 @@
                     metadata.Remove(pair.Key);
             }
 
-            ContainerMetadata containerMetadata = new ContainerMetadata(headers, metadata);
+            ContainerMetadata containerMetadata = new ContainerMetadata(headers.ToImmutable(), metadata.ToImmutable());
             _containerMetadata.GetOrCreateValue(container).Value = containerMetadata;
 
             return new HttpResponseMessage(HttpStatusCode.NoContent);
@@ -579,8 +580,8 @@
             if (Request.Headers.Contains("X-Copy-From"))
                 throw new NotImplementedException();
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, ObjectMetadata.ObjectMetadataPrefix, out headers, out metadata);
 
             string contentType = "application/octet-stream";
@@ -594,7 +595,7 @@
             await (await Request.Content.ReadAsStreamAsync()).CopyToAsync(buffer);
             byte[] data = buffer.ToArray();
 
-            return CreateObjectImpl(data, containerName, objectName, new ObjectMetadata(headers, metadata), CancellationToken.None);
+            return CreateObjectImpl(data, containerName, objectName, new ObjectMetadata(headers.ToImmutable(), metadata.ToImmutable()), CancellationToken.None);
         }
 
         [HttpPost]
@@ -612,10 +613,10 @@
             if (containerObject == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, ObjectMetadata.ObjectMetadataPrefix, out headers, out metadata);
-            ObjectMetadata objectMetadata = new ObjectMetadata(headers, metadata);
+            ObjectMetadata objectMetadata = new ObjectMetadata(headers.ToImmutable(), metadata.ToImmutable());
             _objectMetadata.GetOrCreateValue(containerObject.Item2).Value = objectMetadata;
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
@@ -642,11 +643,11 @@
             ContainerName containerName = new ContainerName(containerString);
             ObjectName objectName = new ObjectName(objectString);
 
-            IDictionary<string, string> headers;
-            IDictionary<string, string> metadata;
+            ImmutableDictionary<string, string>.Builder headers;
+            ImmutableDictionary<string, string>.Builder metadata;
             ExtractMetadata(Request, ObjectMetadata.ObjectMetadataPrefix, out headers, out metadata);
 
-            return CopyObjectImpl(containerName, objectName, destinationContainerName, destinationObjectName, new ObjectMetadata(headers, metadata), CancellationToken.None);
+            return CopyObjectImpl(containerName, objectName, destinationContainerName, destinationObjectName, new ObjectMetadata(headers.ToImmutable(), metadata.ToImmutable()), CancellationToken.None);
         }
 
         [HttpDelete]
@@ -807,7 +808,7 @@
             return response;
         }
 
-        private static Container CreateContainer(ContainerName containerName, IDictionary<string, string> headers, IDictionary<string, string> metadata, long objectCount, long objectSize)
+        private static Container CreateContainer(ContainerName containerName, ImmutableDictionary<string, string> headers, ImmutableDictionary<string, string> metadata, long objectCount, long objectSize)
         {
             JObject jsonObject =
                 new JObject(
@@ -848,7 +849,7 @@
                     return backup;
             }
 
-            Dictionary<string, string> headers = new Dictionary<string, string>(objectMetadata.Headers, StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder headers = objectMetadata.Headers.ToBuilder();
 
             string contentType;
             if (!headers.TryGetValue("Content-Type", out contentType))
@@ -873,7 +874,7 @@
 
             headers["ETag"] = "\"" + hashText + "\"";
 
-            ObjectMetadata metadata = new ObjectMetadata(headers, objectMetadata.Metadata);
+            ObjectMetadata metadata = new ObjectMetadata(headers.ToImmutable(), objectMetadata.Metadata);
 
             Func<ObjectName, ContainerObject> addValue =
                 key =>
@@ -928,18 +929,18 @@
             if (!_containerObjects.TryGetValue(destinationContainer, out destinationContainerObjects) || destinationContainerObjects == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            Dictionary<string, string> headers = new Dictionary<string, string>(objectMetadata.Headers, StringComparer.OrdinalIgnoreCase);
-            Dictionary<string, string> metadata = new Dictionary<string, string>(objectMetadata.Metadata, StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder headers = objectMetadata.Headers.ToBuilder();
+            ImmutableDictionary<string, string>.Builder metadata = objectMetadata.Metadata.ToBuilder();
 
-            IDictionary<string, string> newHeaders = updatedMetadata.Headers;
-            IDictionary<string, string> newMetadata = updatedMetadata.Metadata;
+            ImmutableDictionary<string, string> newHeaders = updatedMetadata.Headers;
+            ImmutableDictionary<string, string> newMetadata = updatedMetadata.Metadata;
 
             foreach (var pair in newHeaders)
                 headers[pair.Key] = pair.Value;
             foreach (var pair in newMetadata)
                 metadata[pair.Key] = pair.Value;
 
-            objectMetadata = new ObjectMetadata(headers, metadata);
+            objectMetadata = new ObjectMetadata(headers.ToImmutable(), metadata.ToImmutable());
 
             Func<ObjectName, ContainerObject> addValue =
                 key =>
@@ -1028,20 +1029,20 @@
             long objectCount = containers.Sum(i => i.ObjectCount ?? 0);
             long containerSize = containers.Sum(i => i.Size ?? 0);
 
-            IDictionary<string, string> headers = new Dictionary<string, string>(accountMetadata.Headers, StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder headers = accountMetadata.Headers.ToBuilder();
             headers.Add(AccountMetadataExtensions.AccountContainerCount, containerCount.ToString());
             headers.Add(AccountMetadataExtensions.AccountObjectCount, objectCount.ToString());
             headers.Add(AccountMetadataExtensions.AccountBytesUsed, containerSize.ToString());
 
-            IDictionary<string, string> metadata = accountMetadata.Metadata;
+            ImmutableDictionary<string, string> metadata = accountMetadata.Metadata;
 
-            return new AccountMetadata(headers, metadata);
+            return new AccountMetadata(headers.ToImmutable(), metadata);
         }
 
-        private static void ExtractMetadata(HttpRequestMessage request, string metadataPrefix, out IDictionary<string, string> headers, out IDictionary<string, string> metadata)
+        private static void ExtractMetadata(HttpRequestMessage request, string metadataPrefix, out ImmutableDictionary<string, string>.Builder headers, out ImmutableDictionary<string, string>.Builder metadata)
         {
-            headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+            metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var pair in request.Headers)
             {

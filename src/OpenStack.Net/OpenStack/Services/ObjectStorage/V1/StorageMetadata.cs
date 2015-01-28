@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Linq;
     using System.Net.Http;
     using System.Text;
@@ -18,12 +18,12 @@
         /// <summary>
         /// This is the backing field for the <see cref="Headers"/> property.
         /// </summary>
-        private readonly IDictionary<string, string> _headers;
+        private readonly ImmutableDictionary<string, string> _headers;
 
         /// <summary>
         /// This is the backing field for the <see cref="Metadata"/> property.
         /// </summary>
-        private readonly IDictionary<string, string> _metadata;
+        private readonly ImmutableDictionary<string, string> _metadata;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StorageMetadata"/> class using the metadata present in the
@@ -48,8 +48,8 @@
             if (string.IsNullOrEmpty(metadataPrefix))
                 throw new ArgumentException("metadataPrefix cannot be empty");
 
-            IDictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            IDictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder headers = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (KeyValuePair<string, IEnumerable<string>> header in responseMessage.Headers)
             {
                 if (header.Key.StartsWith(metadataPrefix))
@@ -69,8 +69,8 @@
                 }
             }
 
-            _headers = headers;
-            _metadata = metadata;
+            _headers = headers.ToImmutable();
+            _metadata = metadata.ToImmutable();
         }
 
         /// <summary>
@@ -84,15 +84,15 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
         /// </exception>
-        protected StorageMetadata(IDictionary<string, string> headers, IDictionary<string, string> metadata)
+        protected StorageMetadata(ImmutableDictionary<string, string> headers, ImmutableDictionary<string, string> metadata)
         {
             if (headers == null)
                 throw new ArgumentNullException("headers");
             if (metadata == null)
                 throw new ArgumentNullException("metadata");
 
-            _headers = headers;
-            _metadata = metadata;
+            _headers = headers.WithComparers(StringComparer.OrdinalIgnoreCase);
+            _metadata = metadata.WithComparers(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -113,11 +113,11 @@
         /// <value>
         /// The non-metadata HTTP headers associated with the resource.
         /// </value>
-        public ReadOnlyDictionary<string, string> Headers
+        public ImmutableDictionary<string, string> Headers
         {
             get
             {
-                return new ReadOnlyDictionary<string, string>(_headers);
+                return _headers;
             }
         }
 
@@ -133,11 +133,11 @@
         /// <value>
         /// The custom metadata headers associated with the resource.
         /// </value>
-        public ReadOnlyDictionary<string, string> Metadata
+        public ImmutableDictionary<string, string> Metadata
         {
             get
             {
-                return new ReadOnlyDictionary<string, string>(_metadata);
+                return _metadata;
             }
         }
 

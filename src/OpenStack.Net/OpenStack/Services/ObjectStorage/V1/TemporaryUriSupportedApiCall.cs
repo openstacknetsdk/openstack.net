@@ -1,8 +1,7 @@
 namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Net.Http;
     using System.Threading;
     using Newtonsoft.Json.Linq;
@@ -65,7 +64,7 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> that the task will observe.</param>
         /// <returns><see langword="true"/> if the Object Storage Service reports that the Temporary URL middleware is
         /// supported; otherwise, <see langword="false"/>.</returns>
-        protected static bool SelectResult(HttpResponseMessage response, IDictionary<string, JToken> result, CancellationToken cancellationToken)
+        protected static bool SelectResult(HttpResponseMessage response, ImmutableDictionary<string, JToken> result, CancellationToken cancellationToken)
         {
             return result != null && result.ContainsKey("tempurl");
         }
@@ -84,7 +83,7 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// </exception>
         protected static IHttpApiCall<bool> WrapGetObjectStorageInfoCall(GetObjectStorageInfoApiCall httpApiCall)
         {
-            return new TransformHttpApiCall<ReadOnlyDictionary<string, JToken>, bool>(httpApiCall, SelectResult);
+            return new TransformHttpApiCall<ImmutableDictionary<string, JToken>, bool>(httpApiCall, SelectResult);
         }
     }
 }

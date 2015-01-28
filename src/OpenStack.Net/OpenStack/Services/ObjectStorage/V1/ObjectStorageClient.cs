@@ -6,7 +6,7 @@ namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Linq;
     using System.Net.Http;
     using System.Threading;
@@ -57,7 +57,7 @@ namespace OpenStack.Services.ObjectStorage.V1
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
                 .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
-                .Select(task => new GetObjectStorageInfoApiCall(CreateJsonApiCall<ReadOnlyDictionary<string, JToken>>(task.Result)));
+                .Select(task => new GetObjectStorageInfoApiCall(CreateJsonApiCall<ImmutableDictionary<string, JToken>>(task.Result)));
         }
 
         /// <inheritdoc/>
@@ -159,7 +159,7 @@ namespace OpenStack.Services.ObjectStorage.V1
             if (keys == null)
                 throw new ArgumentNullException("keys");
 
-            Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var key in keys)
             {
                 if (string.IsNullOrEmpty(key))
@@ -168,7 +168,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 metadata.Add(key, string.Empty);
             }
 
-            return PrepareUpdateAccountMetadataAsync(new AccountMetadata(new Dictionary<string, string>(), metadata), cancellationToken);
+            return PrepareUpdateAccountMetadataAsync(new AccountMetadata(ImmutableDictionary<string, string>.Empty, metadata.ToImmutable()), cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -307,7 +307,7 @@ namespace OpenStack.Services.ObjectStorage.V1
             if (keys == null)
                 throw new ArgumentNullException("keys");
 
-            Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ImmutableDictionary<string, string>.Builder metadata = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var key in keys)
             {
                 if (string.IsNullOrEmpty(key))
@@ -316,7 +316,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 metadata.Add(key, string.Empty);
             }
 
-            return PrepareUpdateContainerMetadataAsync(container, new ContainerMetadata(new Dictionary<string, string>(), metadata), cancellationToken);
+            return PrepareUpdateContainerMetadataAsync(container, new ContainerMetadata(ImmutableDictionary<string, string>.Empty, metadata.ToImmutable()), cancellationToken);
         }
 
         /// <inheritdoc/>

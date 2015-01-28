@@ -1,14 +1,13 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenStack.Net;
     using Rackspace.Threading;
 
 #if !PORTABLE || WINRT
-    using System.Collections.Generic;
     using System.Text;
     using OpenStack.Collections;
 
@@ -68,7 +67,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual Task<Tuple<Uri, ReadOnlyDictionary<string, string>>> CreateFormPostUriAsync(ContainerName container, ObjectName objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, CancellationToken cancellationToken)
+        public virtual Task<Tuple<Uri, ImmutableDictionary<string, string>>> CreateFormPostUriAsync(ContainerName container, ObjectName objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, CancellationToken cancellationToken)
         {
 #if PORTABLE && !WINRT
             throw new NotSupportedException("The Form POST extension is not supported on the current platform.");
@@ -89,7 +88,7 @@
                 throw new ArgumentException("key cannot be empty");
 
             Func<Task<GetObjectMetadataApiCall>> resource = () => Service.PrepareGetObjectMetadataAsync(container, objectPrefix, cancellationToken);
-            Func<Task<GetObjectMetadataApiCall>, Task<Tuple<Uri, ReadOnlyDictionary<string, string>>>> body =
+            Func<Task<GetObjectMetadataApiCall>, Task<Tuple<Uri, ImmutableDictionary<string, string>>>> body =
                 resourceTask =>
                 {
                     Uri resourceAddress = resourceTask.Result.RequestMessage.RequestUri;
@@ -121,16 +120,14 @@
 
                     string sig = string.Join(string.Empty, hash.ConvertAll(i => i.ToString("x2")));
 
-                    Dictionary<string, string> fields = new Dictionary<string, string>
-                    {
-                        { "expires", ToTimestamp(expiration).ToString() },
-                        { "redirect", redirectUri.AbsoluteUri },
-                        { "max_file_size", maxFileSize.ToString() },
-                        { "max_file_count", maxFileCount.ToString() },
-                        { "signature", sig },
-                    };
+                    ImmutableDictionary<string, string>.Builder fields = ImmutableDictionary.CreateBuilder<string, string>();
+                    fields.Add("expires", ToTimestamp(expiration).ToString());
+                    fields.Add("redirect", redirectUri.AbsoluteUri);
+                    fields.Add("max_file_size", maxFileSize.ToString());
+                    fields.Add("max_file_count", maxFileCount.ToString());
+                    fields.Add("signature", sig);
 
-                    return CompletedTask.FromResult(Tuple.Create(resourceAddress, new ReadOnlyDictionary<string, string>(fields)));
+                    return CompletedTask.FromResult(Tuple.Create(resourceAddress, fields.ToImmutable()));
                 };
 
             return TaskBlocks.Using(resource, body);

@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenStack.Net;
@@ -101,6 +101,6 @@
         /// </exception>
         /// <seealso cref="AccountMetadataExtensions.AccountSecretKey"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/form-post.html">Form POST middleware (OpenStack Object Storage API v1 Reference)</seealso>
-        Task<Tuple<Uri, ReadOnlyDictionary<string, string>>> CreateFormPostUriAsync(ContainerName container, ObjectName objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, CancellationToken cancellationToken);
+        Task<Tuple<Uri, ImmutableDictionary<string, string>>> CreateFormPostUriAsync(ContainerName container, ObjectName objectPrefix, string key, DateTimeOffset expiration, Uri redirectUri, long maxFileSize, int maxFileCount, CancellationToken cancellationToken);
     }
 }

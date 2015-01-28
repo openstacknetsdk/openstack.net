@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Immutable;
 
     /// <summary>
     /// This class provides extension methods for obtaining specific account information from the account metadata
@@ -257,8 +257,7 @@
         /// <seealso cref="AccountSecretKey"/>
         public static AccountMetadata WithSecretKey(this AccountMetadata metadata, string key)
         {
-            IDictionary<string, string> updatedMetadata = new Dictionary<string, string>(metadata.Metadata, StringComparer.OrdinalIgnoreCase);
-            updatedMetadata[AccountSecretKey] = key ?? string.Empty;
+            ImmutableDictionary<string, string> updatedMetadata = metadata.Metadata.SetItem(AccountSecretKey, key ?? string.Empty);
             return new AccountMetadata(metadata.Headers, updatedMetadata);
         }
 
@@ -285,8 +284,7 @@
         /// <seealso cref="AccountSecretKey"/>
         public static AccountMetadata WithSecretKey2(this AccountMetadata metadata, string key)
         {
-            IDictionary<string, string> updatedMetadata = new Dictionary<string, string>(metadata.Metadata, StringComparer.OrdinalIgnoreCase);
-            updatedMetadata[AccountSecretKey2] = key ?? string.Empty;
+            ImmutableDictionary<string, string> updatedMetadata = metadata.Metadata.SetItem(AccountSecretKey2, key ?? string.Empty);
             return new AccountMetadata(metadata.Headers, updatedMetadata);
         }
     }

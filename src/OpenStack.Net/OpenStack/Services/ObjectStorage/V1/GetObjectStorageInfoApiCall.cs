@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json.Linq;
     using OpenStack.Net;
 
@@ -13,7 +13,7 @@
     /// <seealso cref="ObjectStorageServiceExtensions.GetObjectStorageInfoAsync"/>
     /// <threadsafety static="true" instance="false"/>
     /// <preliminary/>
-    public class GetObjectStorageInfoApiCall : DelegatingHttpApiCall<ReadOnlyDictionary<string, JToken>>
+    public class GetObjectStorageInfoApiCall : DelegatingHttpApiCall<ImmutableDictionary<string, JToken>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetObjectStorageInfoApiCall"/> class
@@ -23,7 +23,7 @@
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="httpApiCall"/> is <see langword="null"/>.
         /// </exception>
-        public GetObjectStorageInfoApiCall(IHttpApiCall<ReadOnlyDictionary<string, JToken>> httpApiCall)
+        public GetObjectStorageInfoApiCall(IHttpApiCall<ImmutableDictionary<string, JToken>> httpApiCall)
             : base(httpApiCall)
         {
         }
