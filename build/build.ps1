@@ -39,10 +39,16 @@ if ($VisualStudioVersion -eq '4.0') {
 	$msbuild = "${env:ProgramFiles(x86)}\MSBuild\$VisualStudioVersion\Bin\MSBuild.exe"
 }
 
-&$nuget 'restore' $SolutionPath
-if (-not $?) {
-	$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
-	exit $LASTEXITCODE
+# Attempt to restore packages up to 3 times, to improve resiliency to connection timeouts and access denied errors.
+$maxAttempts = 3
+For ($attempt = 0; $attempt -lt $maxAttempts; $attempt++) {
+	&$nuget 'restore' $SolutionPath
+	If ($?) {
+		Break
+	} ElseIf (($attempt + 1) -eq $maxAttempts) {
+		$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
+		exit $LASTEXITCODE
+	}
 }
 
 If ($Logger) {
