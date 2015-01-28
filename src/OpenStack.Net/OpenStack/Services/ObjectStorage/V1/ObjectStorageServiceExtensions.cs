@@ -781,7 +781,7 @@ namespace OpenStack.Services.ObjectStorage.V1
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/POST_updateObjectMeta__v1__account___container___object__storage_object_services.html">Create or update object metadata (OpenStack Object Storage API V1 Reference)</seealso>
         public static Task RemoveObjectMetadataAsync(this IObjectStorageService service, ContainerName container, ObjectName @object, IEnumerable<string> keys, CancellationToken cancellationToken)
         {
-            ObjectMetadata updatedMetadata = new ObjectMetadata(ImmutableDictionary<string, string>.Empty, keys.ToImmutableDictionary(i => i, i => string.Empty, StringComparer.OrdinalIgnoreCase));
+            ObjectMetadata updatedMetadata = ObjectMetadata.Empty.WithMetadata(keys.ToImmutableDictionary(i => i, i => string.Empty, StringComparer.OrdinalIgnoreCase));
             return UpdateObjectMetadataAsync(service, container, @object, updatedMetadata, cancellationToken);
         }
 

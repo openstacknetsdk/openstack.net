@@ -202,6 +202,7 @@
     <Compile Include="OpenStack\Services\ObjectStorage\V1\SetObjectMetadataApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\SetVersionsLocationApiCall.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\StorageMetadata.cs" />
+    <Compile Include="OpenStack\Services\ObjectStorage\V1\StorageMetadataExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriExtension.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriExtensions.cs" />
     <Compile Include="OpenStack\Services\ObjectStorage\V1\TemporaryUriSupportedApiCall.cs" />

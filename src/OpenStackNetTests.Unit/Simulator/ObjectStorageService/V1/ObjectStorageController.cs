@@ -874,7 +874,7 @@
 
             headers["ETag"] = "\"" + hashText + "\"";
 
-            ObjectMetadata metadata = new ObjectMetadata(headers.ToImmutable(), objectMetadata.Metadata);
+            ObjectMetadata metadata = objectMetadata.WithHeaders(headers.ToImmutable());
 
             Func<ObjectName, ContainerObject> addValue =
                 key =>
@@ -1034,9 +1034,7 @@
             headers.Add(AccountMetadataExtensions.AccountObjectCount, objectCount.ToString());
             headers.Add(AccountMetadataExtensions.AccountBytesUsed, containerSize.ToString());
 
-            ImmutableDictionary<string, string> metadata = accountMetadata.Metadata;
-
-            return new AccountMetadata(headers.ToImmutable(), metadata);
+            return accountMetadata.WithHeaders(headers.ToImmutable());
         }
 
         private static void ExtractMetadata(HttpRequestMessage request, string metadataPrefix, out ImmutableDictionary<string, string>.Builder headers, out ImmutableDictionary<string, string>.Builder metadata)

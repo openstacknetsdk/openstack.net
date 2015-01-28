@@ -168,7 +168,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 metadata.Add(key, string.Empty);
             }
 
-            return PrepareUpdateAccountMetadataAsync(new AccountMetadata(ImmutableDictionary<string, string>.Empty, metadata.ToImmutable()), cancellationToken);
+            return PrepareUpdateAccountMetadataAsync(AccountMetadata.Empty.WithMetadata(metadata.ToImmutable()), cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -316,7 +316,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                 metadata.Add(key, string.Empty);
             }
 
-            return PrepareUpdateContainerMetadataAsync(container, new ContainerMetadata(ImmutableDictionary<string, string>.Empty, metadata.ToImmutable()), cancellationToken);
+            return PrepareUpdateContainerMetadataAsync(container, ContainerMetadata.Empty.WithMetadata(metadata.ToImmutable()), cancellationToken);
         }
 
         /// <inheritdoc/>

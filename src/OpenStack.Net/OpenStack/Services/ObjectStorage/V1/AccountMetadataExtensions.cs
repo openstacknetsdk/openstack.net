@@ -258,7 +258,7 @@
         public static AccountMetadata WithSecretKey(this AccountMetadata metadata, string key)
         {
             ImmutableDictionary<string, string> updatedMetadata = metadata.Metadata.SetItem(AccountSecretKey, key ?? string.Empty);
-            return new AccountMetadata(metadata.Headers, updatedMetadata);
+            return metadata.WithMetadata(updatedMetadata);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@
         public static AccountMetadata WithSecretKey2(this AccountMetadata metadata, string key)
         {
             ImmutableDictionary<string, string> updatedMetadata = metadata.Metadata.SetItem(AccountSecretKey2, key ?? string.Empty);
-            return new AccountMetadata(metadata.Headers, updatedMetadata);
+            return metadata.WithMetadata(updatedMetadata);
         }
     }
 }

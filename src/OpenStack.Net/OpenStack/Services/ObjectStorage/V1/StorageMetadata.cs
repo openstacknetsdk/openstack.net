@@ -18,12 +18,12 @@
         /// <summary>
         /// This is the backing field for the <see cref="Headers"/> property.
         /// </summary>
-        private readonly ImmutableDictionary<string, string> _headers;
+        private ImmutableDictionary<string, string> _headers;
 
         /// <summary>
         /// This is the backing field for the <see cref="Metadata"/> property.
         /// </summary>
-        private readonly ImmutableDictionary<string, string> _metadata;
+        private ImmutableDictionary<string, string> _metadata;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StorageMetadata"/> class using the metadata present in the
@@ -182,6 +182,74 @@
 
             byte[] encodedBytes = value.ToCharArray().ConvertAll(i => (byte)i);
             return Encoding.UTF8.GetString(encodedBytes, 0, encodedBytes.Length);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StorageMetadata"/> with the same type and metadata from the current object and the
+        /// specified headers.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method provides the implementation for
+        /// <see cref="StorageMetadataExtensions.WithHeaders{TMetadata}"/>.</para>
+        /// </remarks>
+        /// <param name="headers">The new headers for the object.</param>
+        /// <returns>
+        /// A <see cref="StorageMetadata"/> which represents the current object with the specified headers. If
+        /// <paramref name="headers"/> is the same as the existing <see cref="Headers"/> for the current object, the
+        /// method may return the same instance.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="headers"/> contains two keys which are equivalent using the
+        /// <see cref="StringComparer.OrdinalIgnoreCase"/> comparer, but the associated values are different.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="headers"/> is <see langword="null"/>.
+        /// </exception>
+        protected internal StorageMetadata WithHeadersImpl(ImmutableDictionary<string, string> headers)
+        {
+            if (headers == null)
+                throw new ArgumentNullException("headers");
+
+            if (_headers == headers)
+                return this;
+
+            StorageMetadata updated = (StorageMetadata)MemberwiseClone();
+            updated._headers = headers.WithComparers(StringComparer.OrdinalIgnoreCase);
+            return updated;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StorageMetadata"/> with the same type and headers from the current object and the
+        /// specified metadata.
+        /// </summary>
+        /// <remarks>
+        /// <para>This method provides the implementation for
+        /// <see cref="StorageMetadataExtensions.WithMetadata{TMetadata}"/>.</para>
+        /// </remarks>
+        /// <param name="metadata">The new metadata for the object.</param>
+        /// <returns>
+        /// A <see cref="StorageMetadata"/> which represents the current object with the specified metadata. If
+        /// <paramref name="metadata"/> is the same as the existing <see cref="Metadata"/> for the current object, the
+        /// method may return the same instance.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="metadata"/> contains two keys which are equivalent using the
+        /// <see cref="StringComparer.OrdinalIgnoreCase"/> comparer, but the associated values are different.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="metadata"/> is <see langword="null"/>.
+        /// </exception>
+        protected internal StorageMetadata WithMetadataImpl(ImmutableDictionary<string, string> metadata)
+        {
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+
+            if (_metadata == metadata)
+                return this;
+
+            StorageMetadata updated = (StorageMetadata)MemberwiseClone();
+            updated._metadata = metadata.WithComparers(StringComparer.OrdinalIgnoreCase);
+            return updated;
         }
     }
 }
