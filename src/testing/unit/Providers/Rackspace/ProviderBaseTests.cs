@@ -21,6 +21,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         private const string _testService = "test";
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -37,6 +38,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Different_Than_Default_Region()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -53,6 +55,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Set_On_Provider_And_Region_Is_Different_Than_Default_Region()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -69,6 +72,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -85,6 +89,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -101,6 +106,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -117,6 +123,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -133,6 +140,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_Set_And_Region_Is_NOT_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -149,6 +157,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -165,6 +174,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Set_On_Provider_And_Region_Is_NOT_Explicitly_Declared()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -181,6 +191,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Correct_LON_Endpoint_When_Identity_Is_Explicitly_And_Region_Is_Always_Empty()
         {
             UserAccess userAccess = JsonConvert.DeserializeObject<UserAccess>(
@@ -197,6 +208,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_While_Building_Optional_Parameter_List_When_A_Null_Value_Is_Passed()
         {
             var providerBase = new MockProvider(null, null, null);
@@ -207,6 +219,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_While_Building_Optional_Parameter_List_When_An_Empty_Value_Is_Passed()
         {
             var providerBase = new MockProvider(null, null, null);
@@ -217,6 +230,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_While_Building_Optional_Parameter_List_When_All_Values_In_List_Are_InValid()
         {
             var providerBase = new MockProvider(null, null, null);
@@ -233,6 +247,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_All_Parameters_While_Building_Optional_Parameter_List_When_All_Values_In_List_Are_Valid()
         {
             var providerBase = new MockProvider(null, null, null);
@@ -253,6 +268,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Only_Valid_Parameters_While_Building_Optional_Parameter_List_When_Some_Values_In_List_Are_Valid()
         {
             var providerBase = new MockProvider(null, null, null);

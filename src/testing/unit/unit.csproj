@@ -73,6 +73,7 @@
     <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
     <Compile Include="Providers\Rackspace\ProviderBaseTests.cs" />
     <Compile Include="Providers\Rackspace\SerializationTests.cs" />
+    <Compile Include="TestCategories.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SDKTestingKey.snk">

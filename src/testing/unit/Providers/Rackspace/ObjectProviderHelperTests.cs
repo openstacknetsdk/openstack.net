@@ -13,6 +13,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
     public class ObjectProviderHelperTests
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Pass_Validation_For_Container_Name()
         {
             const string containerName = "DarkKnight";
@@ -27,6 +28,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
         //[ExpectedException(typeof(ArgumentNullException),"ERROR: Container Name cannot be Null.")]
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Passing_Empty_Container_Name()
         {
             const string containerName = "";
@@ -47,6 +49,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod] 
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Passing_Null_Container_Name()
         {
             const string containerName = null;
@@ -67,6 +70,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Passing_256_Characters_In_Container_Name()
         {
             string containerName = "AaAaAaAaAa";
@@ -93,6 +97,7 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Throw_Exception_When_Passing_Forwar_Slash_In_Container_Name()
         {
             const string containerName = "/";

@@ -11,6 +11,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
     public class NetworkAddressDeserializationTests
     {
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_When_Null_String_Is_Mapped()
         {
             string obj = "null";
@@ -20,6 +21,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_When_Empty_String_Is_Mapped()
         {
             string obj = "";
@@ -29,6 +31,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Null_When_Whitespace_String_Is_Mapped()
         {
             string obj = "   ";
@@ -38,6 +41,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Network_With_No_Addresses()
         {
             string obj = "{\"public\": []}";
@@ -48,6 +52,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Network_With_Single_Addresses()
         {
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}]}";
@@ -61,6 +66,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Network_With_2_Addresseses()
         {
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}, {\"version\": 6, \"addr\": \"2001:4800:7812:0514:95e4:7f4d:ff04:d1eb\"}]}";
@@ -76,6 +82,7 @@ namespace OpenStackNet.Testing.Unit.Domain.Mapping
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void Should_Return_Network_With_Both_v4_And_v6_Addresseses()
         {
             string obj = "{\"public\": [{\"version\": 4, \"addr\": \"166.78.156.150\"}, {\"version\": 6, \"addr\": \"2001:4800:7812:0514:95e4:7f4d:ff04:d1eb\"}]}";

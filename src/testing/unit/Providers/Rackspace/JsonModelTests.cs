@@ -18,6 +18,7 @@
         /// <seealso cref="PasswordCredential"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUserCredential_v2.0_users__userId__OS-KSADM_credentials__credential-type__.html">Update User Credentials (OpenStack Identity Service API v2.0 Reference)</seealso>
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestPasswordCredential()
         {
             string json = @"{ ""username"" : ""test_user"", ""password"" : ""mypass"" }";
@@ -30,6 +31,7 @@
         /// <seealso cref="PasswordCredentialResponse"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_updateUserCredential_v2.0_users__userId__OS-KSADM_credentials__credential-type__.html">Update User Credentials (OpenStack Identity Service API v2.0 Reference)</seealso>
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestPasswordCredentialResponse()
         {
             string json = @"{ ""passwordCredentials"" : { username : ""test_user"", password : ""mypass"" } }";
@@ -42,6 +44,7 @@
 
         /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/ServerUpdate.html">Update Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestUpdateServerRequest()
         {
             UpdateServerRequest request = new UpdateServerRequest("new-name", IPAddress.Parse("10.0.0.1"), IPAddress.Parse("2607:f0d0:1002:51::4"));
@@ -51,6 +54,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestIPAddressDetailsConverter()
         {
             IPAddressDetailsConverter converter = new IPAddressDetailsConverter();
@@ -71,6 +75,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestIPAddressSimpleConverter()
         {
             IPAddressSimpleConverter converter = new IPAddressSimpleConverter();
@@ -91,6 +96,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestPersonalityJsonModel()
         {
             string expectedPath = "/usr/lib/stuff";
@@ -113,6 +119,7 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestImpersonationRequest()
         {
             CloudIdentityProviderWrapper provider = new CloudIdentityProviderWrapper();
@@ -129,42 +136,49 @@
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestDiskConfigurationConversions()
         {
             TestExtensibleEnumSerialization(DiskConfiguration.Auto, "OTHER", DiskConfiguration.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestImageState()
         {
             TestExtensibleEnumSerialization(ImageState.Active, "OTHER", ImageState.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestImageType()
         {
             TestExtensibleEnumSerialization(ImageType.Base, "OTHER", ImageType.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestRebootType()
         {
             TestExtensibleEnumSerialization(RebootType.Hard, "OTHER", RebootType.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestServerState()
         {
             TestExtensibleEnumSerialization(ServerState.Build, "OTHER", ServerState.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestSnapshotState()
         {
             TestExtensibleEnumSerialization(SnapshotState.Available, "OTHER", SnapshotState.FromName);
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestVolumeState()
         {
             TestExtensibleEnumSerialization(VolumeState.Creating, "OTHER", VolumeState.FromName);

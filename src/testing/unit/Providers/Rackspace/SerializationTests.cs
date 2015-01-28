@@ -23,6 +23,7 @@
         /// which is included as a member of the exception class <see cref="BulkDeletionException"/>.
         /// </summary>
         [TestMethod]
+        [TestCategory(TestCategories.Unit)]
         public void TestBulkDeletionResultsSerializable()
         {
             var successfulObjects = new[] { "/container/object1", "/container/object2" };

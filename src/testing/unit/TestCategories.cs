@@ -1,13 +1,7 @@
-﻿namespace OpenStackNetTests.Live
+﻿namespace OpenStackNet.Testing.Unit
 {
     internal static class TestCategories
     {
-        public const string Cleanup = "Cleanup (Simulated)";
-
-        public const string User = "User (Simulated)";
-
-        public const string Identity = "Identity (Simulated)";
-
         /// <summary>
         /// This test category should be applied to tests which should run in the automated build environment as part of
         /// validating a pull request or other change.
