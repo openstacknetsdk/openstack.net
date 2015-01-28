@@ -75,6 +75,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetObjectStorageInfoAsync()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -348,6 +349,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestContainerProperties()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -420,6 +422,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestCreateContainer()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -448,6 +451,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestCreateContainerSimple()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -469,6 +473,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestVersionedContainer()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -538,6 +543,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestRemoveContainer()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -573,6 +579,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetContainerHeader()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -600,6 +607,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetContainerMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -680,6 +688,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestContainerInvalidHeaderKeyCharacters()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -730,6 +739,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestUpdateContainerMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -774,6 +784,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestDeleteContainerMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1203,6 +1214,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetObjectHeaders()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1236,6 +1248,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetObjectMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1272,6 +1285,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestUpdateObjectMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1328,6 +1342,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestRemoveObjectMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1407,6 +1422,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestListObjects()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1491,6 +1507,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestCreateObject()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1595,6 +1612,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestCreateObjectWithMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1636,6 +1654,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestSupportsExtractArchive()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1652,6 +1671,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         [DeploymentItem("DarkKnightRises.jpg")]
         public async Task TestExtractArchiveTar()
         {
@@ -1712,6 +1732,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         [DeploymentItem("DarkKnightRises.jpg")]
         public async Task TestExtractArchiveTarGz()
         {
@@ -1777,6 +1798,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         [DeploymentItem("DarkKnightRises.jpg")]
         public async Task TestExtractArchiveTarBz2()
         {
@@ -1841,6 +1863,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         [DeploymentItem("DarkKnightRises.jpg")]
         public async Task TestExtractArchiveTarGzCreateContainer()
         {
@@ -1941,6 +1964,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestCopyObject()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -1991,6 +2015,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestMoveObject()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2051,6 +2076,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestRemoveObject()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2131,6 +2157,7 @@
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Cleanup)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task CleanupTestAccountMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2264,6 +2291,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestAccountInvalidHeaderKeyCharacters()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2308,6 +2336,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestUpdateAccountMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
