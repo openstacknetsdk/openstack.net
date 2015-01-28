@@ -78,5 +78,9 @@ if (-not (Test-Path 'nuget')) {
 	mkdir "nuget"
 }
 
-&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
-&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.V2.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$VersionV2" '-Symbols'
+# The NuGet packages reference XML documentation which is post-processed by SHFB. If the -NoDocs flag is specified,
+# these files are not created so packaging will fail.
+If (-not $NoDocs) {
+	&$nuget 'pack' '..\src\corelib\corelib.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$Version" '-Symbols'
+	&$nuget 'pack' '..\src\OpenStack.Net\OpenStack.Net.V2.nuspec' '-OutputDirectory' 'nuget' '-Prop' "Configuration=$BuildConfig" '-Version' "$VersionV2" '-Symbols'
+}
