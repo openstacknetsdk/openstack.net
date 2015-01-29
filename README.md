@@ -11,4 +11,10 @@ The openstack.net SDK contains:
 * Release Notes
 * Sample code
 
+## Contributing
+
+We welcome and encourage contributions from the developer community. For an overview of the contribution process,
+including an explanation of our issue labels and common emoji used in discussions, please see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
 #### This is not an official OpenStack project
