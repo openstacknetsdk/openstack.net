@@ -1804,7 +1804,7 @@
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
             {
-                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(30)));
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
 
                 IObjectStorageService service = CreateService();
