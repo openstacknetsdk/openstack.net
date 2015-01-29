@@ -131,6 +131,7 @@
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Cleanup)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task CleanupTestContainerMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -159,6 +160,7 @@
         /// </summary>
         [TestMethod]
         [TestCategory(TestCategories.Cleanup)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task CleanupTestContainers()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -945,6 +947,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestTempUrlExpired()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2175,6 +2178,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetAccountHeaders()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -2220,6 +2224,7 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ObjectStorage)]
+        [TestCategory(TestCategories.UnitTestKind)]
         public async Task TestGetAccountMetadata()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
