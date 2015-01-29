@@ -134,21 +134,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                     task =>
                     {
                         var call = CreateBasicApiCall(task.Result);
-                        var requestHeaders = call.RequestMessage.Headers;
-                        foreach (var pair in metadata.Headers)
-                        {
-                            requestHeaders.Remove(pair.Key);
-                            requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                            ValidateAccountMetadataValue(true, pair.Key, pair.Value);
-                        }
-
-                        foreach (var pair in metadata.Metadata)
-                        {
-                            requestHeaders.Remove(AccountMetadata.AccountMetadataPrefix + pair.Key);
-                            requestHeaders.Add(AccountMetadata.AccountMetadataPrefix + pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                            ValidateAccountMetadataValue(false, pair.Key, pair.Value);
-                        }
-
+                        SetMetadataForRequest(call, metadata, true, ValidateAccountMetadataValue);
                         return new UpdateAccountMetadataApiCall(call);
                     });
         }
@@ -282,21 +268,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                     task =>
                     {
                         var call = CreateBasicApiCall(task.Result);
-                        var requestHeaders = call.RequestMessage.Headers;
-                        foreach (var pair in metadata.Headers)
-                        {
-                            requestHeaders.Remove(pair.Key);
-                            requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                            ValidateContainerMetadataValue(true, pair.Key, pair.Value);
-                        }
-
-                        foreach (var pair in metadata.Metadata)
-                        {
-                            requestHeaders.Remove(ContainerMetadata.ContainerMetadataPrefix + pair.Key);
-                            requestHeaders.Add(ContainerMetadata.ContainerMetadataPrefix + pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                            ValidateContainerMetadataValue(false, pair.Key, pair.Value);
-                        }
-
+                        SetMetadataForRequest(call, metadata, true, ValidateContainerMetadataValue);
                         return new UpdateContainerMetadataApiCall(call);
                     });
         }
@@ -467,66 +439,7 @@ namespace OpenStack.Services.ObjectStorage.V1
                     task =>
                     {
                         var call = CreateBasicApiCall(task.Result);
-                        if (call.RequestMessage.Content == null)
-                            call.RequestMessage.Content = new ByteArrayContent(new byte[0]);
-
-                        var requestHeaders = call.RequestMessage.Headers;
-                        var contentHeaders = call.RequestMessage.Content.Headers;
-                        foreach (var pair in metadata.Headers)
-                        {
-                            switch (pair.Key.ToLowerInvariant())
-                            {
-                            case "content-length":
-                            case "etag":
-                            case "accept-ranges":
-                            //case "x-trans-id":
-                            case "x-timestamp":
-                            case "date":
-                                continue;
-
-                            case "allow":
-                            case "last-modified":
-                                //contentHeaders.Remove(pair.Key);
-                                //contentHeaders.Add(pair.Key, pair.Value);
-                                break;
-
-                            default:
-                                if (pair.Key.ToLowerInvariant().StartsWith("content-"))
-                                {
-                                    contentHeaders.Remove(pair.Key);
-                                    if (!string.IsNullOrEmpty(pair.Value))
-                                    {
-                                        contentHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                                        ValidateObjectMetadataValue(true, pair.Key, pair.Value);
-                                    }
-                                }
-                                else
-                                {
-                                    requestHeaders.Remove(pair.Key);
-                                    if (!string.IsNullOrEmpty(pair.Value))
-                                    {
-                                        requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
-                                        ValidateObjectMetadataValue(true, pair.Key, pair.Value);
-                                    }
-                                }
-
-                                break;
-                            }
-                        }
-
-                        foreach (var pair in metadata.Metadata)
-                        {
-                            string prefix = ObjectMetadata.ObjectMetadataPrefix;
-                            string key = prefix + pair.Key;
-                            string value = pair.Value;
-                            requestHeaders.Remove(key);
-                            if (!string.IsNullOrEmpty(value))
-                            {
-                                requestHeaders.Add(key, StorageMetadata.EncodeHeaderValue(value));
-                                ValidateObjectMetadataValue(false, pair.Key, value);
-                            }
-                        }
-
+                        SetMetadataForRequest(call, metadata, false, ValidateObjectMetadataValue);
                         return new SetObjectMetadataApiCall(call);
                     });
         }
@@ -541,6 +454,92 @@ namespace OpenStack.Services.ObjectStorage.V1
         }
 
         #endregion
+
+        /// <summary>
+        /// Applies a set of <see cref="StorageMetadata"/> to an HTTP API request.
+        /// </summary>
+        /// <param name="request">The HTTP API request.</param>
+        /// <param name="metadata">The metadata to apply to the request.</param>
+        /// <param name="includeEmpty"><see langword="true"/> to include headers when the value is empty; otherwise,
+        /// <see langword="false"/> to omit headers when the value is empty.</param>
+        /// <param name="validateValue">The validation method to call for HTTP header values added to the request. This
+        /// method should match the signature of <see cref="ValidateMetadataValue"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="request"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="metadata"/> is <see langword="null"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="validateValue"/> is <see langword="null"/>.</para>
+        /// </exception>
+        protected virtual void SetMetadataForRequest(IHttpApiRequest request, StorageMetadata metadata, bool includeEmpty, Action<bool, string, string> validateValue)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+            if (metadata == null)
+                throw new ArgumentNullException("metadata");
+            if (validateValue == null)
+                throw new ArgumentNullException("validateValue");
+
+            if (request.RequestMessage.Content == null)
+                request.RequestMessage.Content = new ByteArrayContent(new byte[0]);
+
+            var requestHeaders = request.RequestMessage.Headers;
+            var contentHeaders = request.RequestMessage.Content.Headers;
+            foreach (var pair in metadata.Headers)
+            {
+                switch (pair.Key.ToLowerInvariant())
+                {
+                case "content-length":
+                case "etag":
+                case "accept-ranges":
+                //case "x-trans-id":
+                case "x-timestamp":
+                case "date":
+                    continue;
+
+                case "allow":
+                case "last-modified":
+                    //contentHeaders.Remove(pair.Key);
+                    //contentHeaders.Add(pair.Key, pair.Value);
+                    break;
+
+                default:
+                    if (pair.Key.ToLowerInvariant().StartsWith("content-"))
+                    {
+                        contentHeaders.Remove(pair.Key);
+                        if (includeEmpty || !string.IsNullOrEmpty(pair.Value))
+                        {
+                            contentHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            validateValue(true, pair.Key, pair.Value);
+                        }
+                    }
+                    else
+                    {
+                        requestHeaders.Remove(pair.Key);
+                        if (includeEmpty || !string.IsNullOrEmpty(pair.Value))
+                        {
+                            requestHeaders.Add(pair.Key, StorageMetadata.EncodeHeaderValue(pair.Value));
+                            validateValue(true, pair.Key, pair.Value);
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            foreach (var pair in metadata.Metadata)
+            {
+                string prefix = metadata.MetadataPrefix;
+                string key = prefix + pair.Key;
+                string value = pair.Value;
+                requestHeaders.Remove(key);
+                if (includeEmpty || !string.IsNullOrEmpty(pair.Value))
+                {
+                    requestHeaders.Add(key, StorageMetadata.EncodeHeaderValue(value));
+                    validateValue(false, pair.Key, value);
+                }
+            }
+        }
 
         /// <summary>
         /// Validate a header or metadata item associated with an account in the Object Storage Service.
