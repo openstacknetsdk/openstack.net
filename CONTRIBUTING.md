@@ -3,12 +3,12 @@
 ## Open Discussion
 
 The most important part of an open source project is *open discussion*. If a developer, user, or other contributor has
-a question, comment, suggestion, or concern about any part of this project, **please "speak up"** (create an issue or
-add a comment to an existing issue or pull request).
+a question, comment, suggestion, or concern about any part of this project, **please speak up**: create an issue or add
+a comment to an existing issue or pull request.
 
 This policy especially affects the emoji described below. Any user or contributor may freely use these symbols to
-clarify intent during discussions. Questions and concerns from first-time contributors are considered just as important
-as questions and concerns from the original project developers.
+clarify intent during discussions. Questions and concerns from first-time contributors matter just as much as questions
+and concerns from the original project developers.
 
 ## License
 
@@ -40,8 +40,7 @@ This project uses many labels for categorizing issues and pull requests.
 ## Emoji
 
 GitHub provides several emoji which can be included in many areas of the site, especially including comments on issues
-and pull requests. To reduce confusion during evaluation of a pull request, the following emoji can be used to convey
-special intent.
+and pull requests. To reduce confusion during evaluation of a pull request, the following emoji convey special intent.
 
 * :question: (`:question:`) Indicates a question. This emoji comes with **no strings attached**, which means it's fine to simply answer
   the question in another comment without making any changes to code.
@@ -65,12 +64,12 @@ special intent.
 
     * The rationale is fully and clearly explained
     * The code corrects an issue that is likely to affect users
-    * All other proposed solutions are either too time consuming to implement or are equally (or more) problematic
+    * All other proposed solutions are either too time-consuming to implement or are equally (or more) problematic
 
 * :bulb: (`:bulb:`) Indicates an idea or suggestion regarding a potential change in the code. These items will not necessarily
   block the inclusion of code into the `master` branch, especially in cases where suggestions are trivial and no other
   issues were found during code review.
 
   In certain trivial cases (e.g. a simple formatting change), a core contributor on the project may make the suggested
-  change themselves in the process of merging a pull request. Like the :exclamation: emoji, any suggestion included with
-  the :bulb: is open for discussion regarding alternative solutions by any contributor.
+  change themselves in the process of merging a pull request. Like the :exclamation: emoji, :bulb: suggestions invite
+  open discussion about alternative solutions from any contributor.
