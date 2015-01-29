@@ -1,16 +1,14 @@
-openstack.net
-=============
-### An OpenStack SDK for Microsoft .NET
+# openstack.net: An OpenStack SDK for Microsoft .NET
 
-<p>openstack.net is an SDK written for the Microsoft .NET platform, designed to enable developers to seamlessly work with the many services provided by the openstack cloud operating system.</p>  
-<p>The openstack.net SDK contains:
-	<ul>
-		<li>A language API</li>
-		<li>Getting Started Guide</li>
-		<li>API Reference Manual</li>
-		<li>Release Notes</li>
-		<li>Sample code.</li>
-	</ul>
-</p>
+openstack.net is an SDK written for the Microsoft .NET platform, designed to enable developers to seamlessly work with
+the many services provided by the OpenStack cloud operating system.
 
-*This is not an official OpenStack project*
+The openstack.net SDK contains:
+
+* A language API
+* Getting Started Guide
+* API Reference Manual
+* Release Notes
+* Sample code
+
+#### This is not an official OpenStack project

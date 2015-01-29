@@ -10,7 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD863CE0-64D7-43AC-9DDD-C745B36CCD2C}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
+		..\LICENSE.md = ..\LICENSE.md
 		openstack.net.vsmdi = openstack.net.vsmdi
+		..\README.md = ..\README.md
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
