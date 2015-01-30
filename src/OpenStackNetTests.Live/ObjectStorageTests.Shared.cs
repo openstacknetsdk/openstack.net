@@ -2443,7 +2443,7 @@
 
         private IObjectStorageService CreateService()
         {
-            IAuthenticationService authenticationService = IdentityV2Tests.CreateAuthenticationService(Credentials);
+            IAuthenticationService authenticationService = IdentityV2Tests.CreateAuthenticationService(Credentials, logRequests: false);
             return CreateService(authenticationService, Credentials);
         }
 
