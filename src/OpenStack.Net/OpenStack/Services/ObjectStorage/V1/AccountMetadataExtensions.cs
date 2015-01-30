@@ -20,21 +20,21 @@
         /// Object Storage Service for the account.
         /// </summary>
         /// <seealso cref="GetBytesUsed(AccountMetadata)"/>
-        public const string AccountBytesUsed = "X-Account-Bytes-Used";
+        public static readonly string AccountBytesUsed = "X-Account-Bytes-Used";
 
         /// <summary>
         /// Gets the name of the <c>X-Account-Container-Count</c> HTTP header, which the Object Storage Service may
         /// include with the <see cref="AccountMetadata"/> to specify the number of containers in the account.
         /// </summary>
         /// <seealso cref="GetContainerCount(AccountMetadata)"/>
-        public const string AccountContainerCount = "X-Account-Container-Count";
+        public static readonly string AccountContainerCount = "X-Account-Container-Count";
 
         /// <summary>
         /// Gets the name of the <c>X-Account-Object-Count</c> HTTP header, which the Object Storage Service may
         /// include with the <see cref="AccountMetadata"/> to specify the number of objects in the account.
         /// </summary>
         /// <seealso cref="GetObjectCount(AccountMetadata)"/>
-        public const string AccountObjectCount = "X-Account-Object-Count";
+        public static readonly string AccountObjectCount = "X-Account-Object-Count";
 
         /// <summary>
         /// Gets the key for the <c>Temp-URL-Key</c> metadata value, which specifies the first of two account secret
@@ -43,7 +43,7 @@
         /// </summary>
         /// <seealso cref="GetSecretKey(AccountMetadata)"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/tempurl.html#account-secret-keys-temp-url">Account secret keys - Temporary URL middleware (OpenStack Object Storage API V1 Reference)</seealso>
-        public const string AccountSecretKey = "Temp-URL-Key";
+        public static readonly string AccountSecretKey = "Temp-URL-Key";
 
         /// <summary>
         /// Gets the key for the <c>Temp-URL-Key-2</c> metadata value, which specifies the second of two account secret
@@ -52,7 +52,7 @@
         /// </summary>
         /// <seealso cref="GetSecretKey2(AccountMetadata)"/>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/tempurl.html#account-secret-keys-temp-url">Account secret keys - Temporary URL middleware (OpenStack Object Storage API V1 Reference)</seealso>
-        public const string AccountSecretKey2 = "Temp-URL-Key-2";
+        public static readonly string AccountSecretKey2 = "Temp-URL-Key-2";
 
         /// <summary>
         /// Gets the total size of objects stored in the account.
