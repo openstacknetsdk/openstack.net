@@ -8,7 +8,7 @@
     /// This class extends <see cref="StorageMetadata"/> to represent metadata associated with an object in the Object
     /// Storage service.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <threadsafety static="true" instance="true"/>
     /// <preliminary/>
     public class ObjectMetadata : StorageMetadata
     {

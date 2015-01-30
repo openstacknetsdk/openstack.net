@@ -11,7 +11,7 @@
     /// <summary>
     /// This is the base class for representing metadata associated with resources in the Object Storage Service.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <threadsafety static="true" instance="true"/>
     /// <preliminary/>
     public abstract class StorageMetadata
     {
