@@ -59,7 +59,7 @@ namespace OpenStackNetTests.Live
                 }
                 else
                 {
-                    LogResult(e.Response.Result, "[STREAMING CONTENT]", false);
+                    LogResult(e.Response.Result, "[NO CONTENT]", false);
                 }
             }
             else

@@ -376,7 +376,7 @@
             return timeSpan;
         }
 
-        internal static IIdentityService CreateService(TestCredentials credentials)
+        internal static IIdentityService CreateService(TestCredentials credentials, bool logRequests = true)
         {
             if (credentials == null)
                 throw new ArgumentNullException("credentials");
@@ -399,18 +399,21 @@
             }
 
             TestProxy.ConfigureService(client, credentials.Proxy);
-            client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
-            client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
+            if (logRequests)
+            {
+                client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
+                client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
+            }
 
             return client;
         }
 
-        internal static IAuthenticationService CreateAuthenticationService(TestCredentials credentials)
+        internal static IAuthenticationService CreateAuthenticationService(TestCredentials credentials, bool logRequests = true)
         {
             if (credentials == null)
                 throw new ArgumentNullException("credentials");
 
-            IIdentityService identityService = CreateService(credentials);
+            IIdentityService identityService = CreateService(credentials, logRequests);
             IAuthenticationService authenticationService;
             switch (credentials.Vendor)
             {
@@ -433,10 +436,10 @@
 
         protected IIdentityService CreateService()
         {
-            return CreateService(Credentials);
+            return CreateService(Credentials, true);
         }
 
-        protected IIdentityService CreateService(IAuthenticationService authenticationService)
+        protected IIdentityService CreateService(IAuthenticationService authenticationService, bool logRequests = true)
         {
             IdentityClient client;
             switch (Vendor)
@@ -456,8 +459,11 @@
             }
 
             TestProxy.ConfigureService(client, Proxy);
-            client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
-            client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
+            if (logRequests)
+            {
+                client.BeforeAsyncWebRequest += TestHelpers.HandleBeforeAsyncWebRequest;
+                client.AfterAsyncWebResponse += TestHelpers.HandleAfterAsyncWebResponse;
+            }
 
             return client;
         }

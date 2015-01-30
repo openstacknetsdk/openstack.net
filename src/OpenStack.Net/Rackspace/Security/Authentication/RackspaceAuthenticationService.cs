@@ -44,7 +44,7 @@
         /// </remarks>
         protected override Uri GetBaseAddressImpl(Access access, string serviceType, string serviceName, string region, bool internalAddress)
         {
-            if (serviceName == string.Empty)
+            if (string.IsNullOrEmpty(serviceName))
             {
                 switch (serviceType)
                 {
