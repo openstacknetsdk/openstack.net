@@ -1,7 +1,3 @@
-// Intentionally placed in the outer scope so IProgress<T> resolves to System.IProgress<T> instead of
-// Rackspace.Threading.IProgress<T> in the .NET 4.0 build.
-using Rackspace.Threading;
-
 namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
@@ -9,6 +5,7 @@ namespace OpenStack.Services.ObjectStorage.V1
     using System.Threading;
     using System.Threading.Tasks;
     using OpenStack.Net;
+    using Rackspace.Threading;
 
     /// <summary>
     /// This class provides the default implementation of the Extract Archive extension to the OpenStack Object Storage

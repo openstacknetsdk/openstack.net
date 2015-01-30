@@ -1,8 +1,4 @@
-﻿// Intentionally placed in the outer scope so IProgress<T> resolves to System.IProgress<T> instead of
-// Rackspace.Threading.IProgress<T> in the .NET 4.0 build.
-using Rackspace.Threading;
-
-namespace OpenStack.Services.ObjectStorage.V1
+﻿namespace OpenStack.Services.ObjectStorage.V1
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +14,7 @@ namespace OpenStack.Services.ObjectStorage.V1
     using OpenStack.Net;
     using OpenStack.Security.Authentication;
     using Rackspace.Net;
+    using Rackspace.Threading;
     using Stream = System.IO.Stream;
 
     /// <summary>
