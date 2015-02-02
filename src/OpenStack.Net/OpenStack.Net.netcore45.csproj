@@ -82,6 +82,7 @@
     <Compile Include="OpenStack\Net\IHttpApiCallFactory.cs" />
     <Compile Include="OpenStack\Net\IHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\IHttpApiRequest.cs" />
+    <Compile Include="OpenStack\Net\IPAddress.cs" />
     <Compile Include="OpenStack\Net\JsonHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\NamespaceDoc.cs" />
     <Compile Include="OpenStack\Net\StreamingHttpApiCall.cs" />
