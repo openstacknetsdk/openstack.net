@@ -1,8 +1,7 @@
 ﻿namespace OpenStack.Services.Identity.V3.OAuth
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -25,7 +24,7 @@
         private DateTimeOffset? _expiresAt;
 
         [JsonProperty("links", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Dictionary<string, string> _links;
+        private ImmutableDictionary<string, string> _links;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessToken"/> class
@@ -76,14 +75,11 @@
             }
         }
 
-        public ReadOnlyDictionary<string, string> Links
+        public ImmutableDictionary<string, string> Links
         {
             get
             {
-                if (_links == null)
-                    return null;
-
-                return new ReadOnlyDictionary<string, string>(_links);
+                return _links;
             }
         }
     }
