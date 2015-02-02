@@ -87,6 +87,7 @@
     <Compile Include="OpenStack\IO\DelegatingStream.cs" />
     <Compile Include="OpenStack\IO\NamespaceDoc.cs" />
     <Compile Include="OpenStack\IO\ProgressStream.cs" />
+    <Compile Include="OpenStack\Net\AddressFamily.cs" />
     <Compile Include="OpenStack\Net\CustomHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\DelegatingHttpApiCall`1.cs" />
     <Compile Include="OpenStack\Net\DelegatingHttpApiCall`2.cs" />
