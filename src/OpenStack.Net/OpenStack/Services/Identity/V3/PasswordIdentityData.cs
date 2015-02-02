@@ -1,5 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -19,7 +20,7 @@
         }
 
         public PasswordIdentityData(UserData user)
-            : base(new[] { AuthenticationMethod.Password })
+            : base(ImmutableArray.Create(AuthenticationMethod.Password))
         {
             _user = user;
         }

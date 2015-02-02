@@ -1,7 +1,7 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -19,7 +19,7 @@
         private DateTimeOffset? _issuedAt;
 
         [JsonProperty("methods", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private AuthenticationMethod[] _methods;
+        private ImmutableArray<AuthenticationMethod> _methods;
 
         [JsonProperty("domain", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private Domain _domain;
@@ -28,7 +28,7 @@
         private Project _project;
 
         [JsonProperty("roles", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private Role[] _roles;
+        private ImmutableArray<Role> _roles;
 
         [JsonProperty("user", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private User _user;
@@ -66,14 +66,11 @@
             }
         }
 
-        public ReadOnlyCollection<AuthenticationMethod> Methods
+        public ImmutableArray<AuthenticationMethod> Methods
         {
             get
             {
-                if (_methods == null)
-                    return null;
-
-                return new ReadOnlyCollection<AuthenticationMethod>(_methods);
+                return _methods;
             }
         }
 
@@ -93,14 +90,11 @@
             }
         }
 
-        public ReadOnlyCollection<Role> Roles
+        public ImmutableArray<Role> Roles
         {
             get
             {
-                if (_roles == null)
-                    return null;
-
-                return new ReadOnlyCollection<Role>(_roles);
+                return _roles;
             }
         }
 

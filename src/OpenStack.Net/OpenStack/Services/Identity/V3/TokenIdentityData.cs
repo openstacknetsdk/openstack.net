@@ -1,5 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -19,7 +20,7 @@
         }
 
         public TokenIdentityData(TokenData token)
-            : base(new[] { AuthenticationMethod.Token })
+            : base(ImmutableArray.Create(AuthenticationMethod.Token))
         {
             _token = token;
         }

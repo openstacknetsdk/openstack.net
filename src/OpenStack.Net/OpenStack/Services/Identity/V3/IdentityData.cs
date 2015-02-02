@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
+    using System.Collections.Immutable;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
 
@@ -10,7 +8,7 @@
     public class IdentityData : ExtensibleJsonObject
     {
         [JsonProperty("methods", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        private AuthenticationMethod[] _methods;
+        private ImmutableArray<AuthenticationMethod> _methods;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityData"/> class
@@ -21,20 +19,16 @@
         {
         }
 
-        public IdentityData(IEnumerable<AuthenticationMethod> methods)
+        public IdentityData(ImmutableArray<AuthenticationMethod> methods)
         {
-            if (methods != null)
-                _methods = methods.ToArray();
+            _methods = methods;
         }
 
-        public ReadOnlyCollection<AuthenticationMethod> Methods
+        public ImmutableArray<AuthenticationMethod> Methods
         {
             get
             {
-                if (_methods == null)
-                    return null;
-
-                return new ReadOnlyCollection<AuthenticationMethod>(_methods);
+                return _methods;
             }
         }
     }
