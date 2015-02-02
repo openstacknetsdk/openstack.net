@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -24,20 +22,6 @@
         }
 
         public AuthenticateData(IdentityData identity, AuthenticationScope scope)
-        {
-            _identity = identity;
-            _scope = scope;
-        }
-
-        public AuthenticateData(IdentityData identity, AuthenticationScope scope, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _identity = identity;
-            _scope = scope;
-        }
-
-        public AuthenticateData(IdentityData identity, AuthenticationScope scope, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _identity = identity;
             _scope = scope;

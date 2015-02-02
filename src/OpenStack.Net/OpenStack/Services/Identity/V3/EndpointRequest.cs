@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -21,18 +19,6 @@
         }
 
         public EndpointRequest(EndpointData data)
-        {
-            _endpoint = data;
-        }
-
-        public EndpointRequest(EndpointData data, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _endpoint = data;
-        }
-
-        public EndpointRequest(EndpointData data, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _endpoint = data;
         }

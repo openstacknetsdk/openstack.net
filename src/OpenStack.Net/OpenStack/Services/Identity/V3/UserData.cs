@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -30,24 +28,6 @@
         }
 
         public UserData(string description, string email, ProjectId defaultProjectId, bool? enabled)
-        {
-            _description = description;
-            _email = email;
-            _defaultProjectId = defaultProjectId;
-            _enabled = enabled;
-        }
-
-        public UserData(string description, string email, ProjectId defaultProjectId, bool? enabled, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _description = description;
-            _email = email;
-            _defaultProjectId = defaultProjectId;
-            _enabled = enabled;
-        }
-
-        public UserData(string description, string email, ProjectId defaultProjectId, bool? enabled, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _description = description;
             _email = email;

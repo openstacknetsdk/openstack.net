@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -33,15 +31,7 @@
             _domain = domain;
         }
 
-        public AuthenticationScope(ProjectData project, DomainData domain, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _project = project;
-            _domain = domain;
-        }
-
-        public AuthenticationScope(ProjectData project, DomainData domain, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
+        public AuthenticationScope(ProjectData project, DomainData domain)
         {
             _project = project;
             _domain = domain;
@@ -95,16 +85,7 @@
                 _domain = domain;
             }
 
-            public ProjectData(ProjectId id, string projectName, DomainData domain, params JProperty[] extensionData)
-                : base(extensionData)
-            {
-                _projectId = id;
-                _projectName = projectName;
-                _domain = domain;
-            }
-
-            public ProjectData(ProjectId id, string projectName, DomainData domain, IDictionary<string, JToken> extensionData)
-                : base(extensionData)
+            public ProjectData(ProjectId id, string projectName, DomainData domain)
             {
                 _projectId = id;
                 _projectName = projectName;
@@ -152,18 +133,6 @@
             }
 
             public DomainData(DomainId domainId)
-            {
-                _domainId = domainId;
-            }
-
-            public DomainData(DomainId domainId, params JProperty[] extensionData)
-                : base(extensionData)
-            {
-                _domainId = domainId;
-            }
-
-            public DomainData(DomainId domainId, IDictionary<string, JToken> extensionData)
-                : base(extensionData)
             {
                 _domainId = domainId;
             }

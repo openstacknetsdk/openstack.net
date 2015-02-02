@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -22,18 +20,6 @@
 
         public PasswordIdentityData(UserData user)
             : base(new[] { AuthenticationMethod.Password })
-        {
-            _user = user;
-        }
-
-        public PasswordIdentityData(UserData user, params JProperty[] extensionData)
-            : base(new[] { AuthenticationMethod.Password }, extensionData)
-        {
-            _user = user;
-        }
-
-        public PasswordIdentityData(UserData user, IDictionary<string, JToken> extensionData)
-            : base(new[] { AuthenticationMethod.Password }, extensionData)
         {
             _user = user;
         }
@@ -100,18 +86,6 @@
             }
 
             public DomainData(string name)
-            {
-                _name = name;
-            }
-
-            public DomainData(string name, params JProperty[] extensionData)
-                : base(extensionData)
-            {
-                _name = name;
-            }
-
-            public DomainData(string name, IDictionary<string, JToken> extensionData)
-                : base(extensionData)
             {
                 _name = name;
             }

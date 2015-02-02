@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -21,18 +19,6 @@
         }
 
         public RoleRequest(RoleData role)
-        {
-            _role = role;
-        }
-
-        public RoleRequest(RoleData role, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _role = role;
-        }
-
-        public RoleRequest(RoleData role, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _role = role;
         }

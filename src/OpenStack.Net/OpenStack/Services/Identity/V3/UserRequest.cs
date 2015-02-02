@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -21,16 +19,6 @@
         }
 
         public UserRequest(UserData user)
-        {
-        }
-
-        public UserRequest(UserData user, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-        }
-
-        public UserRequest(UserData user, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
         }
 

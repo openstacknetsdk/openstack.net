@@ -4,7 +4,6 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -23,20 +22,6 @@
         }
 
         public IdentityData(IEnumerable<AuthenticationMethod> methods)
-        {
-            if (methods != null)
-                _methods = methods.ToArray();
-        }
-
-        public IdentityData(IEnumerable<AuthenticationMethod> methods, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            if (methods != null)
-                _methods = methods.ToArray();
-        }
-
-        public IdentityData(IEnumerable<AuthenticationMethod> methods, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             if (methods != null)
                 _methods = methods.ToArray();

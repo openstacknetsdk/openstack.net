@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -27,22 +25,6 @@
         }
 
         public DomainData(string name, string description, bool? enabled)
-        {
-            _name = name;
-            _description = description;
-            _enabled = enabled;
-        }
-
-        public DomainData(string name, string description, bool? enabled, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _name = name;
-            _description = description;
-            _enabled = enabled;
-        }
-
-        public DomainData(string name, string description, bool? enabled, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _name = name;
             _description = description;

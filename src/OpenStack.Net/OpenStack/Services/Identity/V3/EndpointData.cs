@@ -1,9 +1,7 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
     using System;
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -34,26 +32,6 @@
         }
 
         public EndpointData(ServiceId serviceId, string name, string region, Uri uri, EndpointInterface @interface)
-        {
-            _serviceId = serviceId;
-            _name = name;
-            _region = region;
-            _url = uri.AbsoluteUri;
-            _interface = @interface;
-        }
-
-        public EndpointData(ServiceId serviceId, string name, string region, Uri uri, EndpointInterface @interface, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _serviceId = serviceId;
-            _name = name;
-            _region = region;
-            _url = uri.AbsoluteUri;
-            _interface = @interface;
-        }
-
-        public EndpointData(ServiceId serviceId, string name, string region, Uri uri, EndpointInterface @interface, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _serviceId = serviceId;
             _name = name;

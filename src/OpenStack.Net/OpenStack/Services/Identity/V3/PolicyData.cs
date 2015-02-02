@@ -1,6 +1,5 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
@@ -30,24 +29,6 @@
         }
 
         public PolicyData(JObject blob, string type, ProjectId projectId, UserId userId)
-        {
-            _blob = blob;
-            _type = type;
-            _projectId = projectId;
-            _userId = userId;
-        }
-
-        public PolicyData(JObject blob, string type, ProjectId projectId, UserId userId, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _blob = blob;
-            _type = type;
-            _projectId = projectId;
-            _userId = userId;
-        }
-
-        public PolicyData(JObject blob, string type, ProjectId projectId, UserId userId, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
             _blob = blob;
             _type = type;

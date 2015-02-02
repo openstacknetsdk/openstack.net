@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -21,16 +19,6 @@
         }
 
         public GroupRequest(GroupData group)
-        {
-        }
-
-        public GroupRequest(GroupData group, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-        }
-
-        public GroupRequest(GroupData group, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
         {
         }
 

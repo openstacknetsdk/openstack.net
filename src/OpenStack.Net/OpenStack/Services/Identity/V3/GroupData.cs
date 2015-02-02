@@ -1,8 +1,6 @@
 ﻿namespace OpenStack.Services.Identity.V3
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using OpenStack.ObjectModel;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -31,16 +29,7 @@
         {
         }
 
-        public GroupData(string name, DomainId domainId, string description, params JProperty[] extensionData)
-            : base(extensionData)
-        {
-            _name = name;
-            _domainId = domainId;
-            _description = description;
-        }
-
-        public GroupData(string name, DomainId domainId, string description, IDictionary<string, JToken> extensionData)
-            : base(extensionData)
+        public GroupData(string name, DomainId domainId, string description)
         {
             _name = name;
             _domainId = domainId;
