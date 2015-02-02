@@ -8,6 +8,7 @@
     {
         public void ExceptionPriorToTaskCreation()
         {
+#pragma warning disable 168 // The variable 'var' is assigned but its value is never used
             #region ExceptionPriorToTaskCreation
             try
             {
@@ -19,6 +20,7 @@
                 // function (§10.15 - C# Language Specification Version 5.0).
             }
             #endregion
+#pragma warning restore 168
         }
 
         public void ExceptionDuringTaskExecution()
