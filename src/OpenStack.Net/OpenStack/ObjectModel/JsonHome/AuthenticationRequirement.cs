@@ -31,6 +31,10 @@
         /// <summary>
         /// Gets the HTTP authentication scheme.
         /// </summary>
+        /// <value>
+        /// <para>The HTTP authentication scheme.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public string Scheme
         {
             get
@@ -42,6 +46,10 @@
         /// <summary>
         /// Gets an optional collection of identity protection spaces the resource is a member of.
         /// </summary>
+        /// <value>
+        /// <para>An collection of identity protection spaces the resource is a member of.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> Realms
         {
             get
