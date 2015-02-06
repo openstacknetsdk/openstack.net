@@ -93,6 +93,9 @@
     <None Include="LiveTestConfigurationTemplate.json" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha001\tools\analyzers\OpenStackNetAnalyzers.dll" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

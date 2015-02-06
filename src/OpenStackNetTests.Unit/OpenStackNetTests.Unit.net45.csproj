@@ -163,6 +163,9 @@
       <LastGenOutput>IdentityServiceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha001\tools\analyzers\OpenStackNetAnalyzers.dll" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
