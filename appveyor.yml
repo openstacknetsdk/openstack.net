@@ -1,4 +1,5 @@
 version: 1.0.{build}
+os: Visual Studio 2015 CTP
 init:
 - git config --global core.autocrlf true
 build_script:
@@ -13,7 +14,7 @@ build_script:
 - '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net45.snk'
 # Remove -SkipKeyCheck once the signing keys are added to source control
 # Remove -NoDocs once the SHFB projects are compatible with AppVeyor builds
-- powershell -Command .\build.ps1 -SkipKeyCheck -NoDocs -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- powershell -Command .\build.ps1 -SkipKeyCheck -NoDocs -VisualStudioVersion "14.0" -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - cd ..
 # Only run tests with the attribute [TestCategory("Unit")]. These tests are expected to
 # run consistently in an automated build environment ,and failure certainly indicates
