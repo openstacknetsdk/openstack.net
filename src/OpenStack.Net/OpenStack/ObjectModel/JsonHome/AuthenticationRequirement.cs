@@ -18,13 +18,13 @@
         /// <summary>
         /// This is the backing field for the <see cref="Scheme"/> property.
         /// </summary>
-        [JsonProperty("scheme")]
+        [JsonProperty("scheme", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _scheme;
 
         /// <summary>
         /// This is the backing field for the <see cref="Realms"/> property.
         /// </summary>
-        [JsonProperty("realms")]
+        [JsonProperty("realms", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ImmutableArray<string> _realms;
 #pragma warning restore 649
 

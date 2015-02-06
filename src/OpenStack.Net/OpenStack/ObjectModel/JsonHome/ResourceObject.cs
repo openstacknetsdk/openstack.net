@@ -37,7 +37,7 @@
         /// <summary>
         /// This is the backing field for the <see cref="Hints"/> property.
         /// </summary>
-        [JsonProperty("hints")]
+        [JsonProperty("hints", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ResourceHints _hints;
 #pragma warning restore 649
 

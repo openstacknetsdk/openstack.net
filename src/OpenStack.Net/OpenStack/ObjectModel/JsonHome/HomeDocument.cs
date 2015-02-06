@@ -17,7 +17,7 @@
         /// <summary>
         /// The backing field for the <see cref="Resources"/> property.
         /// </summary>
-        [JsonProperty("resources")]
+        [JsonProperty("resources", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ImmutableDictionary<string, ResourceObject> _resources;
 #pragma warning restore 649
 
