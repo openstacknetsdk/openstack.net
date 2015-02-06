@@ -32,6 +32,11 @@
     <para><see langword="null"/> if the underlying property was not included in the JSON representation of the object.</para>
   </item>
 
+  <item id="DefaultArrayIfNotIncluded">
+    <para>-or-</para>
+    <para>A default <see cref="ImmutableArray{T}"/> if the underlying property was not included in the JSON representation of the object.</para>
+  </item>
+
   <item id="OpenStackNotDefined">
     <note type="warning">
       <para>

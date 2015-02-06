@@ -108,7 +108,7 @@ namespace OpenStack.Services.Identity
         /// <value>
         /// <para>A collection of <seealso cref="MediaType"/> objects describing the media types supported by this
         /// version of the API.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<MediaType> MediaTypes
         {
@@ -125,7 +125,7 @@ namespace OpenStack.Services.Identity
         /// <value>
         /// <para>A collection of <seealso cref="Link"/> objects describing external resources related to this version of
         /// the API.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<Link> Links
         {

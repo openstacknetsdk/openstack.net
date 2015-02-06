@@ -74,7 +74,7 @@ namespace OpenStack.Services.Identity.V2
         /// <value>
         /// <para>A collection of <see cref="ServiceCatalogEntry"/> objects describing the services, regions, and
         /// endpoints available to an authenticated user.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<ServiceCatalogEntry> ServiceCatalog
         {
