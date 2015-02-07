@@ -24,6 +24,18 @@ If ($Debug) {
 	$BuildConfig = 'Release'
 }
 
+If ($Version.Contains('-')) {
+	$KeyConfiguration = 'Dev'
+} Else {
+	$KeyConfiguration = 'Final'
+}
+
+If ($VersionV2.Contains('-')) {
+	$KeyConfigurationV2 = 'Dev'
+} Else {
+	$KeyConfigurationV2 = 'Final'
+}
+
 If ($NoDocs -and -not $Debug) {
 	$SolutionBuildConfig = $BuildConfig + 'NoDocs'
 } Else {
@@ -55,16 +67,16 @@ If ($Logger) {
 	$LoggerArgument = "/logger:$Logger"
 }
 
-&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' $LoggerArgument "/verbosity:$Verbosity" "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" $SolutionPath
+&$msbuild '/nologo' '/m' '/nr:false' '/t:rebuild' $LoggerArgument "/verbosity:$Verbosity" "/p:Configuration=$SolutionBuildConfig" "/p:Platform=Mixed Platforms" "/p:VisualStudioVersion=$VisualStudioVersion" "/p:KeyConfiguration=$KeyConfiguration" "/p:KeyConfigurationV2=$KeyConfigurationV2" $SolutionPath
 if (-not $?) {
 	$host.ui.WriteErrorLine('Build failed, aborting!')
 	exit $LASTEXITCODE
 }
 
 # By default, do not create a NuGet package unless the expected strong name key files were used
-if (-not $SkipKeyCheck) {
-	. .\keys.ps1
+. .\keys.ps1
 
+if (-not $SkipKeyCheck) {
 	foreach ($pair in $Keys.GetEnumerator()) {
 		$assembly = Resolve-FullPath -Path "..\src\corelib\bin\$($pair.Key)\$BuildConfig\openstacknet.dll"
 		# Run the actual check in a separate process or the current process will keep the assembly file locked
@@ -74,15 +86,16 @@ if (-not $SkipKeyCheck) {
 			Exit $LASTEXITCODE
 		}
 	}
+}
 
-	foreach ($pair in $KeysV2.GetEnumerator()) {
-		$assembly = Resolve-FullPath -Path "..\src\OpenStack.Net\bin\$($pair.Key)\$BuildConfig\OpenStack.Net.dll"
-		# Run the actual check in a separate process or the current process will keep the assembly file locked
-		powershell -Command ".\check-key.ps1 -Assembly '$assembly' -ExpectedKey '$($pair.Value)' -Build '$($pair.Key)'"
-		if (-not $?) {
-			$host.ui.WriteErrorLine("Failed to verify strong name key for build $($pair.Key).")
-			Exit $LASTEXITCODE
-		}
+# Never skip the key check for V2 assemblies. The keys are in source control so this should always be correct.
+foreach ($pair in $KeysV2.GetEnumerator()) {
+	$assembly = Resolve-FullPath -Path "..\src\OpenStack.Net\bin\$($pair.Key)\$BuildConfig\OpenStack.Net.dll"
+	# Run the actual check in a separate process or the current process will keep the assembly file locked
+	powershell -Command ".\check-key.ps1 -Assembly '$assembly' -ExpectedKey '$($pair.Value)' -Build '$($pair.Key)'"
+	if (-not $?) {
+		$host.ui.WriteErrorLine("Failed to verify strong name key for build $($pair.Key).")
+		Exit $LASTEXITCODE
 	}
 }
 

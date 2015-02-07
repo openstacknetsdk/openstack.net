@@ -12,7 +12,8 @@
     <AssemblyName>OpenStack.Net</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\keys\openstack.net.netcore45.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' == 'Final'">..\..\build\keys\OpenStackNetV2.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' != 'Final'">..\..\build\keys\OpenStackNetV2.dev.snk</AssemblyOriginatorKeyFile>
     <DefaultLanguage>en-US</DefaultLanguage>
     <BaseIntermediateOutputPath>obj\netcore45\</BaseIntermediateOutputPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -188,8 +189,11 @@
     <Compile Include="System\Tuples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\keys\openstack.net.netcore45.snk">
-      <Link>openstack.net.netcore45.snk</Link>
+    <None Include="..\..\build\keys\OpenStackNetV2.dev.snk">
+      <Link>OpenStackNetV2.dev.snk</Link>
+    </None>
+    <None Include="..\..\build\keys\OpenStackNetV2.snk">
+      <Link>OpenStackNetV2.snk</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -204,13 +208,6 @@
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <Import Project="..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets" Condition="Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

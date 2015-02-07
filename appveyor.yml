@@ -6,12 +6,6 @@ build_script:
 - cd build
 - mkdir c:\projects\keys
 - '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstacknetsdk.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net35.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net40.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.net45.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.netcore45.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net40.snk'
-- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\sn.exe" -k c:\projects\keys\openstack.net.portable-net45.snk'
 # Remove -SkipKeyCheck once the signing keys are added to source control
 # Remove -NoDocs once the SHFB projects are compatible with AppVeyor builds
 - powershell -Command .\build.ps1 -SkipKeyCheck -NoDocs -VisualStudioVersion "14.0" -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
