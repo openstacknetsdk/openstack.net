@@ -12,7 +12,8 @@
     <AssemblyName>OpenStack.Net</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\keys\openstack.net.netcore45.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' == 'Final'">..\..\build\keys\OpenStackNetV2.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' != 'Final'">..\..\build\keys\OpenStackNetV2.dev.snk</AssemblyOriginatorKeyFile>
     <DefaultLanguage>en-US</DefaultLanguage>
     <BaseIntermediateOutputPath>obj\netcore45\</BaseIntermediateOutputPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -186,8 +187,11 @@
     <Compile Include="System\Tuples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\keys\openstack.net.netcore45.snk">
-      <Link>openstack.net.netcore45.snk</Link>
+    <None Include="..\..\build\keys\OpenStackNetV2.dev.snk">
+      <Link>OpenStackNetV2.dev.snk</Link>
+    </None>
+    <None Include="..\..\build\keys\OpenStackNetV2.snk">
+      <Link>OpenStackNetV2.snk</Link>
     </None>
   </ItemGroup>
   <ItemGroup>

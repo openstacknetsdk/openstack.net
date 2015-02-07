@@ -39,7 +39,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\testing\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\build\keys\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -141,7 +141,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\testing\SDKTestingKey.snk">
+    <None Include="..\..\build\keys\SDKTestingKey.snk">
       <Link>SDKTestingKey.snk</Link>
     </None>
     <None Include="app.config" />
