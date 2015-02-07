@@ -39,12 +39,10 @@
         /// </summary>
         private readonly bool _internalUrl;
 
-#if !PORTABLE
         /// <summary>
         /// This is the backing field for the <see cref="ConnectionLimit"/> property.
         /// </summary>
         private int? _connectionLimit;
-#endif
 
         /// <summary>
         /// This is the backing field for the <see cref="BackoffPolicy"/> property.
@@ -100,7 +98,6 @@
         /// </summary>
         public event EventHandler<HttpResponseEventArgs> AfterAsyncWebResponse;
 
-#if !PORTABLE
         /// <summary>
         /// Gets or sets the maximum number of connections allowed on the <see cref="ServicePoint"/> objects used for
         /// requests. If the value is <see langword="null"/>, the connection limit value for the
@@ -124,7 +121,6 @@
                 _connectionLimit = value;
             }
         }
-#endif
 
         /// <summary>
         /// Gets the default region for this provider instance, if one was specified.
