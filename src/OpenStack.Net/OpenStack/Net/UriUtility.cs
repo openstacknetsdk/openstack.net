@@ -21,11 +21,7 @@
     /// <preliminary/>
     public static class UriUtility
     {
-#if PORTABLE
-        private const RegexOptions DefaultRegexOptions = RegexOptions.None;
-#else
-        private const RegexOptions DefaultRegexOptions = RegexOptions.Compiled;
-#endif
+        private static readonly RegexOptions DefaultRegexOptions;
 
         /// <summary>
         /// A regular expression pattern for the RFC 6570 <c>pct-encoded</c> rule.
@@ -63,6 +59,13 @@
 
         static UriUtility()
         {
+#if PORTABLE
+            if (!Enum.TryParse("Compiled", out DefaultRegexOptions))
+                DefaultRegexOptions = RegexOptions.None;
+#else
+            DefaultRegexOptions = RegexOptions.Compiled;
+#endif
+
             _unreservedCharacters = new BitArray(256);
             for (char i = 'a'; i <= 'z'; i++)
                 _unreservedCharacters.Set(i, true);
