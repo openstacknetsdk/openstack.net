@@ -133,6 +133,7 @@
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationOptions.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestExtensibleJsonObject.cs" />
+    <Compile Include="TestIPAddress.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenStack.Net\OpenStack.Net.net45.csproj">
