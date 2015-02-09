@@ -42,6 +42,9 @@
     <AssemblyOriginatorKeyFile>..\testing\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -101,6 +104,9 @@
     <Compile Include="..\OpenStackNetTests.Live\IdentityV2Tests.Shared.cs">
       <Link>IdentityV2Tests.Shared.cs</Link>
     </Compile>
+    <Compile Include="..\OpenStackNetTests.Live\ObjectStorageTests.Shared.cs">
+      <Link>ObjectStorageTests.Shared.cs</Link>
+    </Compile>
     <Compile Include="..\OpenStackNetTests.Live\TestCredentials.cs">
       <Link>TestCredentials.cs</Link>
     </Compile>
@@ -113,6 +119,7 @@
     <Compile Include="BaseIdentityTests.cs" />
     <Compile Include="ExplicitOwinReference.cs" />
     <Compile Include="IdentityV2Tests.cs" />
+    <Compile Include="ObjectStorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -131,6 +138,13 @@
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationHandler.cs" />
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationMiddleware.cs" />
     <Compile Include="Simulator\IdentityService\V2\IdentityV2AuthenticationOptions.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageController.cs" />
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ObjectStorageResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\ObjectStorageService\V1\ObjectStorageServiceConfiguration.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestExtensibleJsonObject.cs" />
     <Compile Include="TestIPAddress.cs" />
@@ -153,6 +167,7 @@
     <None Include="Simulator\IdentityService\ListApiVersionsResponse.json" />
     <None Include="Simulator\IdentityService\ListExtensionsResponse.json" />
     <None Include="Simulator\IdentityService\ListTenantsResponseTemplate.json" />
+    <None Include="Simulator\ObjectStorageService\V1\GetInfoResponse.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -163,6 +178,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityServiceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Simulator\ObjectStorageService\V1\ObjectStorageResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ObjectStorageResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\testing\integration\Providers\Rackspace\CloudFiles\DarkKnightRises.jpg">
+      <Link>DarkKnightRises.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

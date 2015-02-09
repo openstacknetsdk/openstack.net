@@ -1,0 +1,73 @@
+﻿{
+    "formpost": { },
+    "bulk_delete": {
+        "max_failed_deletes": 1000,
+        "max_deletes_per_request": 10000
+    },
+    "container_quotas": { },
+    "tempurl": {
+        "methods": [
+            "GET",
+            "HEAD",
+            "PUT",
+            "DELETE"
+        ]
+    },
+    "bulk_upload": {
+        "max_failed_extractions": 1000,
+        "max_containers_per_extraction": 10000
+    },
+    "container_sync": {
+        "realms": {
+            "RACKSPACE": {
+                "clusters": {
+                    "IAD3": { },
+                    "SYD2": { },
+                    "DFW1": { },
+                    "ORD1": { },
+                    "HKG1": { }
+                }
+            }
+        }
+    },
+    "ratelimit": {
+        "account_ratelimit": 200000.0,
+        "max_sleep_time_seconds": 60.0,
+        "container_ratelimits": [
+            [
+                0,
+                100.0
+            ]
+        ],
+        "container_listing_ratelimits": [ ]
+    },
+    "slo": {
+        "max_manifest_segments": 1000,
+        "min_segment_size": 1048576,
+        "max_manifest_size": 2097152
+    },
+    "staticweb": { },
+    "swift": {
+        "max_file_size": 5368709122,
+        "account_listing_limit": 10000,
+        "account_autocreate": true,
+        "max_meta_count": 90,
+        "max_meta_value_length": 256,
+        "container_listing_limit": 10000,
+        "max_meta_overall_size": 4096,
+        "version": "2.1.0",
+        "max_meta_name_length": 128,
+        "max_header_size": 8192,
+        "policies": [
+            {
+                "default": true,
+                "name": "Policy-0"
+            }
+        ],
+        "max_object_name_length": 1024,
+        "max_account_name_length": 256,
+        "strict_cors_mode": false,
+        "allow_account_management": false,
+        "max_container_name_length": 256
+    }
+}

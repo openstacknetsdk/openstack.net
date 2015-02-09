@@ -64,6 +64,7 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>T:OpenStack.Services.ObjectStorage.V1.IObjectStorageService</codeEntityReference>
               </para>
             </entry>
           </row>
@@ -74,6 +75,7 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>T:OpenStack.Services.ObjectStorage.V1.ObjectStorageClient</codeEntityReference>
               </para>
             </entry>
           </row>
@@ -84,6 +86,7 @@
             </entry>
             <entry>
               <para>
+                <codeEntityReference>N:OpenStack.Services.ObjectStorage.V1</codeEntityReference>
               </para>
             </entry>
           </row>

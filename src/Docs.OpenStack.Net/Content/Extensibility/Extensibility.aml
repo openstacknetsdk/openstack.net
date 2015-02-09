@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cf9b20de-b869-456b-9528-401ac4c0859b" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        This SDK is designed around two fundamental goals which we believe are critical for ensuring the long-term
+        success of an SDK targeting services across multiple vendors, where each vendor can extend and/or customize the
+        underlying service offerings. First, the SDK cleanly distinguishes between functionality which applies to
+        OpenStack installations as a whole, and those which are unique to specific vendors. Second, the SDK defines a
+        domain-specific extensibility model to ensure that the needs of all vendors are met, whether or not their needs
+        were specially considered during the development of the SDK.
+      </para>
+    </introduction>
+
+    <section address="DomainSpecificExtensibility">
+      <title>Domain-Specific Extensibility</title>
+      <content>
+        <para>
+          A <newTerm>domain-specific extensibility model</newTerm> is one that specifies extensibility in terms of the
+          customizable aspects of a specific problem domain. These models are ideal for supporting an overall goal of
+          "easy things should be easy, and complicated things should be possible". For the openstack.net SDK, the
+          problem domain is API calls made using HTTP requests, leading to an extensibility model based on the various
+          ways HTTP requests can be modified. Applications should be able to accommodate these differences with as
+          little overhead as possible. Application support for a single change on this list must not require the
+          application developer wait for a new release of the SDK.
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              <link xlink:href="#HttpRequestHeaders">HTTP headers can be added to the HTTP requests</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <link xlink:href="#HttpResponseHeaders">HTTP headers can be added to the HTTP responses</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <link xlink:href="#QueryParameters">Query parameters can be added to the URI</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The body of a request can be modified (see below)
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The meaning of HTTP status codes can change
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              Optional and/or extension behavior may be implemented at additional endpoints within the service
+            </para>
+          </listItem>
+        </list>
+        <para>
+          In addition, when a JSON representation is used for the HTTP requests and responses, the following apply to
+          the HTTP request and response bodies.
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              <link xlink:href="#JsonRequestBody">Properties may be added to any JSON object in the HTTP request body</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <link xlink:href="#JsonResponseBody">Properties may be added to any JSON object in the HTTP response body</link>
+            </para>
+          </listItem>
+        </list>
+        <para>
+          The sections below show several approaches for implementing each of the items above.
+        </para>
+      </content>
+
+      <sections>
+
+        <section address="HttpRequestHeaders">
+          <title>Adding HTTP headers to a request</title>
+          <content>
+            <para>
+              HTTP headers may be easily modified by separating the "prepare" and "send" portions of an HTTP API call.
+              For example, the following code demonstrates setting the <codeInline>Content-Type</codeInline> header as
+              well as a custom metadata item in when creating an object in the Object Storage Service.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              CreateObjectApiCall apiCall = await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, progress);
+              apiCall.RequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/plain");
+              apiCall.RequestMessage.Headers.Add(ObjectMetadata.ObjectMetadataPrefix + "Metadata-Item", "Value");
+              await apiCall.SendAsync(cancellationToken);
+              ]]>
+            </code>
+            <para>
+              For well-known headers, an extension method may be created which simplifies code which needs to include
+              that header. For example, the Create Object API supports setting the
+              <codeInline>X-Detect-Content-Type</codeInline> header to <literal>true</literal>, instructing the Object
+              Storage Service to automatically assign a content type according to the object name and/or contents.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              public static CreateObjectApiCall WithDetectContentType(this CreateObjectApiCall apiCall, bool value = true)
+              {
+                apiCall.RequestMessage.Headers.Remove("X-Detect-Content-Type");
+                if (value)
+                  apiCall.RequestMessage.Headers.Add("X-Detect-Content-Type", "true");
+
+                return apiCall;
+              }
+              ]]>
+            </code>
+            <alert class="tip">
+              <para>
+                An implementation of <codeEntityReference>T:OpenStack.Net.IHttpApiCall`1</codeEntityReference> is
+                provided for each HTTP API call to improve the ability of extension methods like the above to target
+                <legacyItalic>specific</legacyItalic> API calls. The
+                <codeEntityReference>T:OpenStack.Net.DelegatingHttpApiCall`1</codeEntityReference> class allows these to
+                be easily defined as wrappers around another
+                <codeEntityReference>T:OpenStack.Net.IHttpApiCall`1</codeEntityReference> which implements the request.
+              </para>
+            </alert>
+            <para>
+              With this extension method available, code may include this header using the following.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              CreateObjectApiCall apiCall = await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, progress);
+              await apiCall.WithDetectContentType().SendAsync(cancellationToken);
+              ]]>
+            </code>
+          </content>
+        </section>
+
+        <section address="HttpResponseHeaders">
+          <title>Adding HTTP headers to a response</title>
+          <content>
+            <para>
+              All headers included in the response to an HTTP API call are available through the
+              <codeEntityReference>T:System.Net.Http.HttpResponseMessage</codeEntityReference> representing the result.
+              While the <codeEntityReference>T:System.Net.Http.HttpResponseMessage</codeEntityReference> is omitted from
+              the return value from basic-use-case methods like
+              <codeEntityReference>M:OpenStack.Services.ObjectStorage.V1.ObjectStorageServiceExtensions.CreateObjectAsync(OpenStack.Services.ObjectStorage.V1.IObjectStorageService,OpenStack.Services.ObjectStorage.V1.ContainerName,OpenStack.Services.ObjectStorage.V1.ObjectName,System.IO.Stream,System.Threading.CancellationToken,System.IProgress{System.Int64})</codeEntityReference>,
+              it is always available when code prepares and sends the HTTP request in separate steps. The following
+              example shows the extraction of the <codeInline>X-Trans-Id</codeInline> header from the response to the
+              Create Object API.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              CreateObjectApiCall apiCall = await service.CreateObjectAsync(containerName, objectName, stream, cancellationToken, progress);
+              Tuple<HttpResponseMessage, string> response = await apiCall.SendAsync(cancellationToken);
+              IEnumerable<string> values;
+              if (response.Item1.Headers.TryGetValues("X-Trans-Id", out values) && values.Any()) {
+                Console.WriteLine("X-Trans-Id: {0}", values.First());
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+
+        <section address="QueryParameters">
+          <title>Adding query parameters to a request URI</title>
+          <content>
+            <para>
+              The URI for an HTTP API call may be accessed and/or modified when code separates the prepare and send
+              portions of the call. The <codeEntityReference>T:OpenStack.Net.UriUtility</codeEntityReference> class
+              includes several methods to simplify changes which only affect the query string.
+            </para>
+            <list class="bullet">
+              <listItem>
+                <para>
+                  <codeEntityReference>M:OpenStack.Net.UriUtility.AddQueryParameter(System.Uri,System.String,System.String)</codeEntityReference>:
+                  This method adds a query parameter to a <codeEntityReference>T:System.Uri</codeEntityReference>.
+                </para>
+              </listItem>
+              <listItem>
+                <para>
+                  <codeEntityReference>M:OpenStack.Net.UriUtility.RemoveQueryParameter(System.Uri,System.String)</codeEntityReference>:
+                  This method removes all query parameter matching a particular name from a
+                  <codeEntityReference>T:System.Uri</codeEntityReference>.
+                </para>
+              </listItem>
+              <listItem>
+                <para>
+                  <codeEntityReference>M:OpenStack.Net.UriUtility.SetQueryParameter(System.Uri,System.String,System.String)</codeEntityReference>:
+                  This method sets a query parameter in a <codeEntityReference>T:System.Uri</codeEntityReference>,
+                  adding or replacing the value as appropriate.
+                </para>
+              </listItem>
+            </list>
+            <para>
+              The following code shows the modification of a List Containers API call to include the
+              <codeInline>limit</codeInline> query parameter.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              ListContainersApiCall apiCall = await service.PrepareListContainersAsync(cancellationToken);
+              apiCall.RequestMessage.RequestUri = UriUtility.SetQueryParameter(apiCall.RequestMessage.RequestUri, "limit", "3");
+              var result = await apiCall.SendAsync(cancellationToken);
+              ]]>
+            </code>
+            <alert class="tip">
+              <para>
+                In many instances, the SDK provides extension methods for optional query parameters rather than include
+                them in the service interface methods. For example, the <codeInline>limit</codeInline> query parameter
+                is intentionally omitted from the
+                <codeEntityReference>M:OpenStack.Services.ObjectStorage.V1.IObjectStorageService.PrepareListContainersAsync(System.Threading.CancellationToken)</codeEntityReference>
+                method as a simplification of the call it most cases. Rather than resort to the code above, the
+                <codeEntityReference>Overload:OpenStack.Services.ObjectStorage.V1.ListContainersExtensions.WithPageSize</codeEntityReference>
+                methods allow the parameter to be easily included when necessary. Other extension methods for this API
+                can be seen on the
+                <codeEntityReference>T:OpenStack.Services.ObjectStorage.V1.ListContainersApiCall</codeEntityReference> page.
+              </para>
+            </alert>
+          </content>
+        </section>
+
+        <section address="JsonResponseBody">
+          <title>Adding properties to a JSON object within an HTTP response</title>
+          <content>
+            <para>
+              The <codeEntityReference>T:OpenStack.ObjectModel.ExtensibleJsonObject</codeEntityReference> class is used
+              as the base class (directly or indirectly) for all objects in the SDK which serve as the model for a JSON
+              object. This class provides the
+              <codeEntityReference>P:OpenStack.ObjectModel.ExtensibleJsonObject.ExtensionData</codeEntityReference>
+              property to ensure that JSON properties are never lost during deserialization. The following example shows
+              how the <codeInline>RAX-AUTH:defaultRegion</codeInline> property can be retrieved from the response to an
+              Authenticate API call for the Rackspace vendor. Note that the code does not require any additional classes
+              or methods be defined.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              IIdentityService service;
+              Access access = await service.AuthenticateAsync(request, cancellationToken);
+              User user = access.User;
+              JToken defaultRegionToken;
+              if (user.ExtensionData.TryGetValue("RAX-AUTH:defaultRegion", out defaultRegionToken)) {
+                Console.WriteLine("The default region for the user is '{0}'", defaultRegionToken.ToObject<string>());
+              }
+              ]]>
+            </code>
+            <para>
+              For even easier access to this Rackspace-specific extension to the authentication response, an extension
+              method to read it is defined in the
+              <codeEntityReference>N:Rackspace.Services.Identity.V2</codeEntityReference> namespace. This method only
+              appears as a method on a <codeEntityReference>T:OpenStack.Services.Identity.V2.User</codeEntityReference>
+              object when a <codeInline>using</codeInline> declaration for the
+              <codeEntityReference>N:Rackspace.Services.Identity.V2</codeEntityReference> namespace is used.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              public static string GetDefaultRegion(this User user)
+              {
+                  JToken value;
+                  if (!user.ExtensionData.TryGetValue(DefaultRegionProperty, out value))
+                      return null;
+
+                  return value.ToObject<string>();
+              }
+              ]]>
+            </code>
+            <para>
+              Using this extension method, the code to access this property is simplified to the following.
+            </para>
+            <code language="cs">
+              <![CDATA[
+              IIdentityService service;
+              Access access = await service.AuthenticateAsync(request, cancellationToken);
+              User user = access.User;
+              string defaultRegion = user.GetDefaultRegion();
+              if (!string.IsNullOrEmpty(defaultRegion)) {
+                Console.WriteLine("The default region for the user is '{0}'", defaultRegion);
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+
+        <section address="JsonRequestBody">
+          <title>Adding properties to a JSON object within an HTTP request</title>
+          <content>
+            <para>
+              Since the model objects defined by this SDK are immutable where possible, the only way to define
+              additional properties for a JSON object which is part of a request is by providing the properties when the
+              constructor is called. All model objects which are known to be used in an HTTP API request include at
+              least two additional constructors used for specifying additional properties. One constructor includes a
+              <codeInline>params JProperty[]</codeInline> parameter which forwards the extension data to the
+              <codeEntityReference>M:OpenStack.ObjectModel.ExtensibleJsonObject.#ctor(Newtonsoft.Json.Linq.JProperty[])</codeEntityReference>
+              constructor. The other includes a <codeInline>IDictionary&lt;string, JToken&gt;</codeInline> parameter
+              which forwards to the
+              <codeEntityReference>M:OpenStack.ObjectModel.ExtensibleJsonObject.#ctor(System.Collections.Generic.IDictionary{System.String,Newtonsoft.Json.Linq.JToken})</codeEntityReference>
+              constructor.
+            </para>
+            <para>
+              Even though additional properties are only specified in constructors, extension methods may still be
+              defined which behave as though they are adding properties to an object. These methods construct a new
+              instance of the object using the properties of the input object along with any relevant extension data or
+              alterations, and return the new object.
+            </para>
+          </content>
+        </section>
+
+      </sections>
+    </section>
+
+    <section>
+      <title>Abstraction Layers</title>
+      <content>
+        <para>
+          This SDK contains fewer abstraction layers than are typically exhibited in an SDK. By defining the core
+          extensibility model of the SDK in terms of the HTTP protocol over which it operates, we can ensure that the
+          diverse needs of application developers are fully covered without introducing unnecessary complexity.
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              The HTTP transport layer is implemented by
+              <codeEntityReference>T:System.Net.Http.HttpClient</codeEntityReference>. This API is standard in .NET 4.5,
+              and provided as an official library for users of .NET 4.0 and Windows Phone 8. In addition, we ported a
+              copy of the library to fully support .NET 3.5 users. The
+              <codeEntityReference>T:System.Net.Http.HttpClient</codeEntityReference> class is a standard abstraction
+              layer for HTTP calls, and the implementation details can be fully altered by implementing and providing an
+              instance of <codeEntityReference>T:System.Net.Http.HttpMessageHandler</codeEntityReference>.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The JSON serialization and deserialization is provided by JSON.NET. In exchange for coupling the
+              OpenStack.Net SDK to this external dependency, we gain the ability to trivially support the requirement of
+              additional properties on arbitrary JSON objects throughout the SDK object model.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              The SDK does not use a dedicated "REST" layer. This simplifies the design of the SDK as well as prevents
+              inconsistencies in the definition of "RESTful" from causing implementation problems (in fact, the term
+              "REST" is intentionally avoided throughout the SDK). Also, the addition of a layer which further isolates
+              the client application from the HTTP API calls would increase the difficulty of supporting the
+              extensibility options described above.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              Object composition is performed through object construction and/or transformation. Dependency injection
+              and/or composition is an application-specific detail which lies outside the scope of the SDK, and was
+              intentionally avoided in order to eliminate the chance of assembly version compatibility problems in
+              future releases.
+            </para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section>
+      <title>Additional Considerations</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            <para>
+              Support as many .NET platforms as reasonably possible. In our case, the creation of the
+              <token>RackspaceThreadingLibrary</token>  along with a port of the System.Net.Http assembly to .NET 3.5
+              allows us to support all versions of .NET from 3.5 forward.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              "Async all-the-way-down". The SDK itself should not contain any blocking calls to methods with
+              non-deterministic completion time.
+            </para>
+          </listItem>
+          <listItem>
+            <para>Improved .NET naming practices</para>
+            <list class="bullet">
+              <listItem>
+                <para>
+                  OpenStack features are located in the top-level namespace <codeInline>OpenStack.*</codeInline>
+                </para>
+              </listItem>
+              <listItem>
+                <para>
+                  Vendor-specific features are in located in namespaces with the form
+                  <codeInline>{Vendor}.*</codeInline>, such as <codeInline>Rackspace.*</codeInline> or
+                  <codeInline>Hp.*</codeInline>
+                </para>
+              </listItem>
+            </list>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

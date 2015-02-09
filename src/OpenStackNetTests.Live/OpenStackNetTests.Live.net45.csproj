@@ -42,6 +42,9 @@
     <AssemblyOriginatorKeyFile>..\testing\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -71,6 +74,8 @@
     <Compile Include="IdentityV2Tests.cs" />
     <Compile Include="IdentityV2Tests.Shared.cs" />
     <Compile Include="LiveTestConfiguration.cs" />
+    <Compile Include="ObjectStorageTests.cs" />
+    <Compile Include="ObjectStorageTests.Shared.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestCredentials.cs" />
     <Compile Include="TestHelpers.cs" />
@@ -92,6 +97,12 @@
     </None>
     <None Include="LiveTestConfigurationTemplate.json" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\testing\integration\Providers\Rackspace\CloudFiles\DarkKnightRises.jpg">
+      <Link>DarkKnightRises.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
