@@ -85,7 +85,7 @@ namespace OpenStack.Services.Identity.V2
         /// <value>
         /// <para>A collection of <seealso cref="Endpoint"/> objects describing the available endpoints for the
         /// service.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<Endpoint> Endpoints
         {
@@ -101,7 +101,7 @@ namespace OpenStack.Services.Identity.V2
         /// <value>
         /// <para>A collection of <seealso cref="Link"/> objects describing external resources associated with the
         /// service.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<Link> EndpointsLinks
         {

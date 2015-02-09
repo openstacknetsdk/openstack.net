@@ -1,6 +1,7 @@
 ﻿namespace OpenStackNetTests.Unit.Simulator.IdentityService.V2
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Microsoft.Owin.Security;
@@ -9,6 +10,7 @@
 
     public class IdentityV2AuthenticationHandler : AuthenticationHandler<IdentityV2AuthenticationOptions>
     {
+        [SuppressMessage("OpenStack.Maintainability", "CancellationToken", Justification = "Overrides a base method from an external library.")]
         protected override Task<AuthenticationTicket> AuthenticateCoreAsync()
         {
             if (IdentityController.TokenId == null || IdentityController.TokenExpires < DateTimeOffset.Now)

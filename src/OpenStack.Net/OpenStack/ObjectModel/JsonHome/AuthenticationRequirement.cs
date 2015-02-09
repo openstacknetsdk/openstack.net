@@ -18,19 +18,23 @@
         /// <summary>
         /// This is the backing field for the <see cref="Scheme"/> property.
         /// </summary>
-        [JsonProperty("scheme")]
+        [JsonProperty("scheme", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _scheme;
 
         /// <summary>
         /// This is the backing field for the <see cref="Realms"/> property.
         /// </summary>
-        [JsonProperty("realms")]
+        [JsonProperty("realms", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ImmutableArray<string> _realms;
 #pragma warning restore 649
 
         /// <summary>
         /// Gets the HTTP authentication scheme.
         /// </summary>
+        /// <value>
+        /// <para>The HTTP authentication scheme.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public string Scheme
         {
             get
@@ -42,6 +46,10 @@
         /// <summary>
         /// Gets an optional collection of identity protection spaces the resource is a member of.
         /// </summary>
+        /// <value>
+        /// <para>An collection of identity protection spaces the resource is a member of.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> Realms
         {
             get

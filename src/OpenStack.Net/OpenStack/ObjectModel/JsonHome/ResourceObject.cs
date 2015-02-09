@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -36,7 +37,7 @@
         /// <summary>
         /// This is the backing field for the <see cref="Hints"/> property.
         /// </summary>
-        [JsonProperty("hints")]
+        [JsonProperty("hints", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ResourceHints _hints;
 #pragma warning restore 649
 
@@ -69,6 +70,7 @@
         /// a direct link.
         /// </value>
         /// <seealso href="http://tools.ietf.org/html/rfc6570">RFC6570 (URI Template)</seealso>
+        [SuppressMessage("OpenStack.Documentation", "DocumentNullJsonValue", Justification = "The meaning of null is documented.")]
         public string HrefTemplate
         {
             get
@@ -89,6 +91,7 @@
         /// <value>
         /// The template variable mapping, or <see langword="null"/> if this is a direct link.
         /// </value>
+        [SuppressMessage("OpenStack.Documentation", "DocumentNullJsonValue", Justification = "The meaning of null is documented.")]
         public ImmutableDictionary<string, Uri> HrefVars
         {
             get

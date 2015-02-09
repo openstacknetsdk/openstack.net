@@ -255,7 +255,7 @@
 
                     // check the service catalog
                     ImmutableArray<ServiceCatalogEntry> serviceCatalog = access.ServiceCatalog;
-                    Assert.IsNotNull(serviceCatalog);
+                    Assert.IsFalse(serviceCatalog.IsDefault);
                     Assert.AreNotEqual(0, serviceCatalog.Length);
                     foreach (ServiceCatalogEntry entry in serviceCatalog)
                     {

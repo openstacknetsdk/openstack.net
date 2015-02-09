@@ -103,7 +103,7 @@ namespace OpenStack.Services.Identity.V2
         /// </summary>
         /// <value>
         /// <para>A collection of roles assigned to the user.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<Role> Roles
         {
@@ -120,7 +120,7 @@ namespace OpenStack.Services.Identity.V2
         /// <value>
         /// <para>A collection of <see cref="Link"/> objects describing resources related to the collection of
         /// <see cref="Roles"/>.</para>
-        /// <token>NullIfNotIncluded</token>
+        /// <token>DefaultArrayIfNotIncluded</token>
         /// </value>
         public ImmutableArray<Link> RolesLinks
         {
