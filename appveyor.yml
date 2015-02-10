@@ -8,7 +8,7 @@ build_script:
 - powershell -Command .\build.ps1 -NoDocs -VisualStudioVersion "14.0" -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - cd ..
 # Only run tests with the attribute [TestCategory("Unit")]. These tests are expected to
-# run consistently in an automated build environment ,and failure certainly indicates
+# run consistently in an automated build environment, and failure certainly indicates
 # a bug or regression in the codebase.
 test_script:
 - vstest.console /logger:Appveyor /TestCaseFilter:"TestCategory=Unit" "C:\projects\openstack-net\src\OpenStackNetTests.Live\bin\Release\OpenStackNetTests.Live.dll"
