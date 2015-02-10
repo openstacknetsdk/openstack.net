@@ -1,11 +1,4 @@
-﻿#if !NET35 && !PORTABLE
-
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-
-[assembly: TypeForwardedTo(typeof(ISafeSerializationData))]
-
-#else
+﻿#if NET35 || PORTABLE
 
 namespace System.Runtime.Serialization
 {

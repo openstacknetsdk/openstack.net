@@ -13,7 +13,8 @@
     <TargetFrameworkProfile />
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\keys\openstack.net.net40.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' == 'Final'">..\..\build\keys\OpenStackNetV2.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfigurationV2)' != 'Final'">..\..\build\keys\OpenStackNetV2.dev.snk</AssemblyOriginatorKeyFile>
     <BaseIntermediateOutputPath>obj\net40\</BaseIntermediateOutputPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
@@ -201,8 +202,11 @@
     <Compile Include="System\Tuples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\keys\openstack.net.net40.snk">
-      <Link>openstack.net.net40.snk</Link>
+    <None Include="..\..\build\keys\OpenStackNetV2.dev.snk">
+      <Link>OpenStackNetV2.dev.snk</Link>
+    </None>
+    <None Include="..\..\build\keys\OpenStackNetV2.snk">
+      <Link>OpenStackNetV2.snk</Link>
     </None>
   </ItemGroup>
   <ItemGroup>

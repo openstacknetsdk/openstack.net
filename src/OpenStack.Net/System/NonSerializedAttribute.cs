@@ -1,11 +1,4 @@
-﻿#if !PORTABLE
-
-using System;
-using System.Runtime.CompilerServices;
-
-[assembly: TypeForwardedTo(typeof(NonSerializedAttribute))]
-
-#else
+﻿#if PORTABLE
 
 namespace System
 {
