@@ -39,7 +39,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\keys\openstacknetsdk.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfiguration)' == 'Final'">..\..\build\keys\OpenStackNetV1.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfiguration)' != 'Final'">..\..\build\keys\OpenStackNetV1.dev.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -640,8 +641,11 @@
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\keys\openstacknetsdk.snk">
-      <Link>openstacknetsdk.snk</Link>
+    <None Include="..\..\build\keys\OpenStackNetV1.dev.snk">
+      <Link>OpenStackNetV1.dev.snk</Link>
+    </None>
+    <None Include="..\..\build\keys\OpenStackNetV1.snk">
+      <Link>OpenStackNetV1.snk</Link>
     </None>
     <None Include="corelib.nuspec" />
     <None Include="packages.corelib.v3.5.config" />
@@ -650,13 +654,6 @@
     <None Include="Icons\openstack_net_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets" Condition="Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Rackspace.KeyReporting.1.0.0\build\Rackspace.KeyReporting.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

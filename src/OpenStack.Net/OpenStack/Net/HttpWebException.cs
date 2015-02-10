@@ -15,14 +15,20 @@
     [Serializable]
     public class HttpWebException : WebException
     {
-#if !PORTABLE
-        private const WebExceptionStatus ProtocolError = WebExceptionStatus.ProtocolError;
-#else
-        private const WebExceptionStatus ProtocolError = WebExceptionStatus.UnknownError;
-#endif
+        private static readonly WebExceptionStatus ProtocolError;
 
         [NonSerialized]
         private ExceptionData _state;
+
+        static HttpWebException()
+        {
+#if PORTABLE
+            if (!Enum.TryParse("ProtocolError", out ProtocolError))
+                ProtocolError = WebExceptionStatus.UnknownError;
+#else
+            ProtocolError = WebExceptionStatus.ProtocolError;
+#endif
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpWebException"/> class

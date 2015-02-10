@@ -39,7 +39,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\testing\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\build\keys\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -87,7 +87,7 @@
     <None Include="..\..\..\LiveTestConfiguration.json">
       <Link>LiveTestConfiguration.json</Link>
     </None>
-    <None Include="..\testing\SDKTestingKey.snk">
+    <None Include="..\..\build\keys\SDKTestingKey.snk">
       <Link>SDKTestingKey.snk</Link>
     </None>
     <None Include="LiveTestConfigurationTemplate.json" />

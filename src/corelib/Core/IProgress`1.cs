@@ -5,13 +5,7 @@
     /// </summary>
     /// <typeparam name="T">The type of progress update value.</typeparam>
     /// <preliminary/>
-    public interface IProgress<
-#if NET35
-        T
-#else
-        in T
-#endif
-        >
+    public interface IProgress<in T>
     {
         /// <summary>
         /// Reports a progress update.
