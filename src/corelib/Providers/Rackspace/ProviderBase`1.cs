@@ -1336,11 +1336,7 @@ namespace net.openstack.Providers.Rackspace
         /// <preliminary/>
         protected virtual Task<T> ParseJsonResultImplAsync<T>(Task<Tuple<HttpWebResponse, string>> task, CancellationToken cancellationToken)
         {
-#if NET35
             return Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(task.Result.Item2));
-#else
-            return JsonConvert.DeserializeObjectAsync<T>(task.Result.Item2);
-#endif
         }
     }
 }
