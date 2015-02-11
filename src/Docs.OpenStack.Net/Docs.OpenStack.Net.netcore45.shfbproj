@@ -103,6 +103,9 @@
           </targets>
         </configuration>
       </PlugInConfig>
+      <PlugInConfig id="IntelliSense Only" enabled="True">
+        <configuration />
+      </PlugInConfig>
     </PlugInConfigurations>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
