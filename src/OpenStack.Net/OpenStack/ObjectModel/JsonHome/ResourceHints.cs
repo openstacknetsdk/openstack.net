@@ -113,6 +113,11 @@
         /// with the resource; equivalent to the <strong>Allow</strong> HTTP response
         /// header.
         /// </summary>
+        /// <value>
+        /// <para>The HTTP methods that the current client will be able to use to interact
+        /// with the resource.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<HttpMethod> Allow
         {
             get
@@ -127,6 +132,13 @@
         /// keys of this collections are <see cref="MediaTypeHeaderValue">media types</see>,
         /// and the values are objects which have not yet been defined.
         /// </summary>
+        /// <value>
+        /// <para>The representation types that the resource produces and consumes, using the
+        /// GET and PUT methods respectively, subject to the <see cref="Allow"/> hint. The
+        /// keys of this collections are <see cref="MediaTypeHeaderValue">media types</see>,
+        /// and the values are objects which have not yet been defined.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public ImmutableDictionary<string, JObject> Formats
         {
             get
@@ -140,6 +152,10 @@
         /// equivalent to the <strong>Accept-Patch</strong> HTTP response header.
         /// </summary>
         /// <seealso href="http://tools.ietf.org/html/rfc5789">RFC5789 (PATCH Method for HTTP)</seealso>
+        /// <value>
+        /// <para>The PATCH request formats accepted by the resource for this client.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> AcceptPatch
         {
             get
@@ -151,6 +167,10 @@
         /// <summary>
         /// Gets the POST request formats accepted by the resource for this client.
         /// </summary>
+        /// <value>
+        /// <para>The POST request formats accepted by the resource for this client.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> AcceptPost
         {
             get
@@ -166,6 +186,10 @@
         /// If this value is <see langword="null"/>, a client may assume that any format indicated by
         /// the <see cref="Formats"/> hint is acceptable in a PUT.
         /// </remarks>
+        /// <value>
+        /// <para>The PUT request formats accepted by the resource for this client.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> AcceptPut
         {
             get
@@ -182,6 +206,10 @@
         /// The values are HTTP range specifiers.
         /// </remarks>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p5-range-24#section-2.3">Accept-Ranges (Hypertext Transfer Protocol (HTTP/1.1): Range Requests - draft-ietf-httpbis-p5-range-24)</seealso>
+        /// <value>
+        /// <para>The range-specifiers available to the client for this resource.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> AcceptRanges
         {
             get
@@ -195,6 +223,10 @@
         /// specification, a preference can be ignored by the server.
         /// </summary>
         /// <seealso href="http://tools.ietf.org/html/draft-snell-http-prefer-12">Prefer Header for HTTP (draft-snell-http-prefer-12)</seealso>
+        /// <value>
+        /// <para>The preferences supported by the resource.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<string> Prefer
         {
             get
@@ -207,6 +239,11 @@
         /// Gets the location for human-readable documentation for the relation type
         /// of the resource.
         /// </summary>
+        /// <value>
+        /// <para>The location for human-readable documentation for the relation type
+        /// of the resource.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public Uri Docs
         {
             get
@@ -219,15 +256,19 @@
         }
 
         /// <summary>
-        /// Gets a collection of preconditions that the resource may require for
-        /// state-changing requests (e.g., PUT, PATCH) to include a precondition,
-        /// to avoid conflicts due to concurrent updates.
+        /// Gets a collection of preconditions that the resource requires for state-changing requests (e.g., PUT,
+        /// PATCH), to avoid conflicts due to concurrent updates.
         /// </summary>
         /// <remarks>
         /// This collection may contain the values <literal>"etag"</literal> and
         /// <literal>"last-modified"</literal> indicating the type of precondition
         /// expected.
         /// </remarks>
+        /// <value>
+        /// <para>A collection of preconditions that the resource requires for state-changing requests (e.g., PUT,
+        /// PATCH), to avoid conflicts due to concurrent updates.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-24">Hypertext Transfer Protocol (HTTP/1.1): Conditional Requests (draft-ietf-httpbis-p4-conditional-24)</seealso>
         public ImmutableArray<string> Preconditions
         {
@@ -242,6 +283,10 @@
         /// </summary>
         /// <seealso cref="AuthenticationRequirement"/>
         /// <seealso href="http://tools.ietf.org/html/draft-ietf-httpbis-p7-auth-24">Hypertext Transfer Protocol (HTTP/1.1): Authentication (draft-ietf-httpbis-p7-auth-24)</seealso>
+        /// <value>
+        /// <para>A collection of requirements for authentication using the HTTP Authentication Framework.</para>
+        /// <token>DefaultArrayIfNotIncluded</token>
+        /// </value>
         public ImmutableArray<AuthenticationRequirement> AuthenticationRequirements
         {
             get
@@ -262,6 +307,10 @@
         /// <item><c>gone</c>: indicates that the resource is no longer available; i.e. it will return a 410 Gone HTTP status code if accessed.</item>
         /// </list>
         /// </remarks>
+        /// <value>
+        /// <para>The status of the resource.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public string Status
         {
             get

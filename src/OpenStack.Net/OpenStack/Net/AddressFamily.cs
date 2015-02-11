@@ -52,9 +52,9 @@
         }
 
         /// <inheritdoc/>
-        public bool Equals(AddressFamily addressFamily)
+        public bool Equals(AddressFamily other)
         {
-            return _value == addressFamily._value;
+            return _value == other._value;
         }
 
         /// <summary>
@@ -109,6 +109,8 @@
         /// <param name="addressFamily">The <see cref="AddressFamily"/> to convert.</param>
         /// <exception cref="NotSupportedException">If the specified <paramref name="addressFamily"/> does not have an
         /// equivalent <see cref="Windows.Networking.HostNameType"/> representation.</exception>
+        /// <returns>A <see cref="Windows.Networking.HostNameType"/> which is equivalent to this
+        /// <see cref="AddressFamily"/>.</returns>
         public static implicit operator Windows.Networking.HostNameType(AddressFamily addressFamily)
         {
             if (addressFamily == Ipv4)
@@ -123,6 +125,8 @@
         /// Converts a <see cref="Windows.Networking.HostNameType"/> to an <see cref="AddressFamily"/>.
         /// </summary>
         /// <param name="addressFamily">The <see cref="Windows.Networking.HostNameType"/> to convert.</param>
+        /// <returns>An <see cref="AddressFamily"/> which is equivalent to the specified
+        /// <see cref="Windows.Networking.HostNameType"/>.</returns>
         /// <exception cref="NotSupportedException">If the specified <paramref name="addressFamily"/> does not have an
         /// equivalent <see cref="AddressFamily"/> representation.</exception>
         public static implicit operator AddressFamily(Windows.Networking.HostNameType addressFamily)
@@ -139,6 +143,8 @@
         /// Converts an <see cref="AddressFamily"/> to an <see cref="System.Net.Sockets.AddressFamily"/>.
         /// </summary>
         /// <param name="addressFamily">The <see cref="AddressFamily"/> to convert.</param>
+        /// <returns>An <see cref="System.Net.Sockets.AddressFamily"/> which is equivalent to this
+        /// <see cref="AddressFamily"/>.</returns>
         public static implicit operator System.Net.Sockets.AddressFamily(AddressFamily addressFamily)
         {
             if (addressFamily == Ipv4)
@@ -153,6 +159,8 @@
         /// Converts an <see cref="System.Net.Sockets.AddressFamily"/> to an <see cref="AddressFamily"/>.
         /// </summary>
         /// <param name="addressFamily">The <see cref="System.Net.Sockets.AddressFamily"/> to convert.</param>
+        /// <returns>An <see cref="AddressFamily"/> which is equivalent to the specified
+        /// <see cref="System.Net.Sockets.AddressFamily"/>.</returns>
         /// <exception cref="NotSupportedException">If the specified <paramref name="addressFamily"/> does not have an
         /// equivalent <see cref="AddressFamily"/> representation.</exception>
         public static implicit operator AddressFamily(System.Net.Sockets.AddressFamily addressFamily)

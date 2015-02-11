@@ -121,8 +121,6 @@ namespace OpenStack.Services.Identity.V2
         /// <note type="note">
         /// <para>Authentication tokens may be invalidated at any time. Client applications should be prepared for calls
         /// to return an error due to an authentication token expiring, and retry the call if necessary.
-        /// <placeholder>TODO: Explain the process for forcing an <see cref="IAuthenticationService"/> instance to
-        /// invalidate a cached authentication token.</placeholder>
         /// </para>
         /// </note>
         /// </remarks>

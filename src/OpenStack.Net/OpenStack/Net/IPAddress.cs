@@ -436,6 +436,8 @@
         /// Converts an <see cref="IPAddress"/> to a <see cref="Windows.Networking.HostName"/>.
         /// </summary>
         /// <param name="ipAddress">The <see cref="IPAddress"/> to convert.</param>
+        /// <returns>A <see cref="Windows.Networking.HostName"/> which is equivalent to this
+        /// <see cref="IPAddress"/>.</returns>
         public static implicit operator Windows.Networking.HostName(IPAddress ipAddress)
         {
             if (ipAddress == null)
@@ -448,6 +450,8 @@
         /// Converts a <see cref="Windows.Networking.HostName"/> to an <see cref="IPAddress"/>.
         /// </summary>
         /// <param name="hostName">The <see cref="Windows.Networking.HostName"/> to convert.</param>
+        /// <returns>An <see cref="IPAddress"/> which is equivalent to the specified
+        /// <see cref="Windows.Networking.HostName"/>.</returns>
         /// <exception cref="NotSupportedException">If the specified <paramref name="hostName"/> does not have an
         /// equivalent <see cref="IPAddress"/> representation.</exception>
         public static implicit operator IPAddress(Windows.Networking.HostName hostName)
@@ -467,6 +471,8 @@
         /// Converts an <see cref="IPAddress"/> to an <see cref="System.Net.IPAddress"/>.
         /// </summary>
         /// <param name="ipAddress">The <see cref="IPAddress"/> to convert.</param>
+        /// <returns>An <see cref="System.Net.IPAddress"/> which is equivalent to this
+        /// <see cref="IPAddress"/>.</returns>
         public static implicit operator System.Net.IPAddress(IPAddress ipAddress)
         {
             if (ipAddress == null)
@@ -482,6 +488,8 @@
         /// Converts an <see cref="System.Net.IPAddress"/> to an <see cref="IPAddress"/>.
         /// </summary>
         /// <param name="ipAddress">The <see cref="System.Net.IPAddress"/> to convert.</param>
+        /// <returns>An <see cref="IPAddress"/> which is equivalent to the specified
+        /// <see cref="System.Net.IPAddress"/>.</returns>
         /// <exception cref="NotSupportedException">If the specified <paramref name="ipAddress"/> does not have an
         /// equivalent <see cref="IPAddress"/> representation.</exception>
         public static implicit operator IPAddress(System.Net.IPAddress ipAddress)
