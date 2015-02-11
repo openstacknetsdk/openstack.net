@@ -64,6 +64,7 @@ CommandLineHooks.xml
 TestResults
 
 # Sandcastle Per-User File
+.shfb/
 *.shfbproj_*
 
 # Sandcastle Output
