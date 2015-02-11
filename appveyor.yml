@@ -6,6 +6,10 @@ build_script:
 - cd build
 - powershell -Command .\build.ps1 -VisualStudioVersion "14.0" -InstallSHFB -Verbosity minimal -Logger "${env:ProgramFiles}\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - cd ..
+after_build:
+- cd build
+- powershell -Command .\appveyor-deploy-docs.ps1
+- cd ..
 # Only run tests with the attribute [TestCategory("Unit")]. These tests are expected to
 # run consistently in an automated build environment, and failure certainly indicates
 # a bug or regression in the codebase.
