@@ -25,6 +25,11 @@
         /// Gets the resources. The keys of this dictionary are link relation types
         /// (as defined by <see href="http://tools.ietf.org/html/rfc5988">RFC5988</see>).
         /// </summary>
+        /// <value>
+        /// <para>The resources. The keys of this dictionary are link relation types
+        /// (as defined by <see href="http://tools.ietf.org/html/rfc5988">RFC5988</see>).</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         public ImmutableDictionary<string, ResourceObject> Resources
         {
             get

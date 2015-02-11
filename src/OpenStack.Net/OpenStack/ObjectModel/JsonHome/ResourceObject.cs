@@ -103,6 +103,10 @@
         /// <summary>
         /// Gets the additional Resource Hints describing the resource.
         /// </summary>
+        /// <value>
+        /// <para>The additional Resource Hints describing the resource.</para>
+        /// <token>NullIfNotIncluded</token>
+        /// </value>
         /// <seealso cref="ResourceHints"/>
         public ResourceHints Hints
         {
