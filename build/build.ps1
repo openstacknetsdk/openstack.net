@@ -3,7 +3,8 @@ param (
 	[string]$VisualStudioVersion = "12.0",
 	[switch]$NoDocs,
 	[string]$Verbosity = "normal",
-	[string]$Logger
+	[string]$Logger,
+	[switch]$InstallSHFB
 )
 
 # build the solution
@@ -59,6 +60,48 @@ For ($attempt = 0; $attempt -lt $maxAttempts; $attempt++) {
 	} ElseIf (($attempt + 1) -eq $maxAttempts) {
 		$host.ui.WriteErrorLine('Failed to restore required NuGet packages, aborting!')
 		exit $LASTEXITCODE
+	}
+}
+
+If ($InstallSHFB) {
+	# This is the NuGet package name for the SHFB package
+	$SHFBPackageName = 'EWSoftware.SHFB'
+	# This is the version according to the NuGet package itself
+	$SHFBVersion = '2014.11.22.0'
+
+	$SHFBPackagePath = "..\.shfb\$SHFBPackageName.$SHFBVersion.nupkg"
+	If (-not (Test-Path $SHFBPackagePath)) {
+		If (-not (Test-Path '..\.shfb')) {
+			mkdir '..\.shfb'
+		}
+
+		# This is the release name on GitHub where the NuGet package is attached
+		$SHFBRelease = 'v2014.11.22.0-beta'
+
+		$SHFBInstallerSource = "https://github.com/tunnelvisionlabs/SHFB/releases/download/$SHFBRelease/$SHFBPackageName.$SHFBVersion.nupkg"
+		Invoke-WebRequest $SHFBInstallerSource -OutFile $SHFBPackagePath
+		If (-not $?) {
+			$host.ui.WriteErrorLine('Failed to download the SHFB NuGet package')
+			Exit $LASTEXITCODE
+		}
+	}
+
+	$SHFBPackages = [System.IO.Path]::GetFullPath((Join-Path (pwd) '..\.shfb'))
+	$SHFBPackagesUri = [System.Uri]$SHFBPackages
+	Echo "$nuget 'install' 'EWSoftware.SHFB' -Version $SHFBVersion -OutputDirectory '..\src\packages' -Source $SHFBPackagesUri"
+	&$nuget 'install' $SHFBPackageName -Version $SHFBVersion -OutputDirectory '..\src\packages' -Source $SHFBPackagesUri
+	If (-not $?) {
+		$host.ui.WriteErrorLine('Failed to install the SHFB NuGet package')
+		Exit $LASTEXITCODE
+	}
+
+	$env:SHFBROOT = [System.IO.Path]::GetFullPath((Join-Path (pwd) "..\src\packages\$SHFBPackageName.$SHFBVersion\tools"))
+}
+
+If (-not $NoDocs) {
+	If ((-not $env:SHFBROOT) -or (-not (Test-Path $env:SHFBROOT))) {
+		$host.ui.WriteErrorLine('Could not locate Sandcastle Help File Builder')
+		Exit 1
 	}
 }
 

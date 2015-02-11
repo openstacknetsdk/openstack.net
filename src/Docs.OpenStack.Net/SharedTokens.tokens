@@ -34,7 +34,7 @@
 
   <item id="DefaultArrayIfNotIncluded">
     <para>-or-</para>
-    <para>A default <see cref="ImmutableArray{T}"/> if the underlying property was not included in the JSON representation of the object.</para>
+    <para>A default <see cref="T:System.Collections.Immutable.ImmutableArray`1"/> if the underlying property was not included in the JSON representation of the object.</para>
   </item>
 
   <item id="OpenStackNotDefined">
