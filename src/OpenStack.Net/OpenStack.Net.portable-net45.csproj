@@ -195,7 +195,7 @@
     <None Include="packages.OpenStack.Net.portable-net45.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha001\tools\analyzers\OpenStackNetAnalyzers.dll" />
+    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha002\tools\analyzers\OpenStackNetAnalyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
