@@ -200,7 +200,7 @@
     <None Include="packages.OpenStack.Net.netcore45.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha001\tools\analyzers\OpenStackNetAnalyzers.dll" />
+    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha002\tools\analyzers\OpenStackNetAnalyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
