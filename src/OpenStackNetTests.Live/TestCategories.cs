@@ -10,6 +10,8 @@
 
         public const string ObjectStorage = "Object Storage";
 
+        public const string ContentDelivery = "Content Delivery";
+
         /// <summary>
         /// This test category evaluates to <c>Live</c> for live integration tests, and <c>Simulated</c> for simulated
         /// tests.
