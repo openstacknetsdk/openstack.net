@@ -85,13 +85,13 @@
                 task => task.Result.SendAsync(cancellationToken).Select(innerTask => innerTask.Result.Item2));
         }
 
-        public static Task UpdateServiceAsync(this IContentDeliveryService service, ServiceId serviceId, ServiceData serviceData, CancellationToken cancellationToken)
+        public static Task UpdateServiceAsync(this IContentDeliveryService service, ServiceId serviceId, ServiceData updatedServiceData, CancellationToken cancellationToken)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
             return TaskBlocks.Using(
-                () => service.PrepareUpdateServiceAsync(serviceId, serviceData, cancellationToken),
+                () => service.PrepareUpdateServiceAsync(serviceId, updatedServiceData, cancellationToken),
                 task => task.Result.SendAsync(cancellationToken));
         }
 

@@ -26,7 +26,7 @@
         [JsonProperty("rules", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private ImmutableArray<ServiceCacheRule> _rules;
 
-        protected ServiceCache(string name, TimeSpan? timeToLive, ImmutableArray<ServiceCacheRule> rules)
+        public ServiceCache(string name, TimeSpan? timeToLive, ImmutableArray<ServiceCacheRule> rules)
         {
             _name = name;
             if (timeToLive.HasValue)

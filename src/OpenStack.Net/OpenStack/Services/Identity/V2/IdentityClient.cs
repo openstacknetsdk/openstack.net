@@ -127,7 +127,7 @@
                 };
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
                 .Select(task => new ListExtensionsApiCall(CreateCustomApiCall(task.Result, HttpCompletionOption.ResponseContentRead, deserializeResult)));
         }
 
@@ -141,7 +141,7 @@
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "alias", alias.Value } };
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
                 .Select(task => new GetExtensionApiCall(CreateJsonApiCall<ExtensionResponse>(task.Result)));
         }
 
@@ -152,7 +152,7 @@
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Post, template, parameters, request, cancellationToken))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Post, template, parameters, request, cancellationToken, "application/json"))
                 .Select(task => new AuthenticateApiCall(CreateJsonApiCall<AccessResponse>(task.Result)));
         }
 
@@ -208,7 +208,7 @@
                 };
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
                 .Select(task => new ListTenantsApiCall(CreateCustomApiCall(task.Result, HttpCompletionOption.ResponseContentRead, deserializeResult)));
         }
 

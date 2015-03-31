@@ -1,6 +1,7 @@
 ﻿namespace OpenStack.Services.ContentDelivery.V1
 {
     using System;
+    using System.IO;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
@@ -16,6 +17,9 @@
     using OpenStack.Services.Identity;
     using Rackspace.Net;
     using Rackspace.Threading;
+
+    using System.Diagnostics;
+
 
     /// <summary>
     /// This class provides a default implementation of <see cref="IContentDeliveryService"/> suitable for connecting to
@@ -53,7 +57,7 @@
             UriTemplate template = new UriTemplate(string.Empty);
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
                 .Select(task => new GetHomeApiCall(CreateJsonApiCall<HomeDocument>(task.Result)));
         }
 
@@ -75,8 +79,8 @@
             UriTemplate template = new UriTemplate("ping");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
-                .Select(RemoveAcceptHeader)
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                //.Select(RemoveAcceptHeader) **DLS**
                 .Select(task => new PingApiCall(CreateBasicApiCall(task.Result)));
         }
 
@@ -165,9 +169,49 @@
         }
 
         /// <inheritdoc/>
-        public virtual Task<UpdateServiceApiCall> PrepareUpdateServiceAsync(ServiceId serviceId, ServiceData serviceData, CancellationToken cancellationToken)
+        public virtual Task<UpdateServiceApiCall> PrepareUpdateServiceAsync(ServiceId serviceId, ServiceData updatedServiceData, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (serviceId == null)
+                throw new ArgumentNullException("serviceId");
+
+
+
+            // At this point, the serviceData parameter contains the NEW (AFTER) version
+            // of the service data. Now, we need to retrieve the current (BEFORE) version,
+            // then use those to calculate the difference, i.e. the JSON Patch document.
+            CancellationToken cn = new CancellationToken();
+            var getServiceTask = ContentDeliveryServiceExtensions.GetServiceAsync(this, serviceId, cn);
+            getServiceTask.Wait();
+            ServiceData originalServiceData = getServiceTask.Result;
+
+
+
+            // Here's a serious HACK: Because the current ServiceData includes properties
+            // that are not part of a new instance of ServiceData (such as "Id", "Status" and others)
+            // we need to create a new instance using the data from the current ServiceData object.
+            // That way, when we perform the "DIFF" operation to calculate the JSon Patch object,
+            // the extra properties won't interfere.
+            ServiceData tempServiceData = new ServiceData(originalServiceData.Name, originalServiceData.FlavorId, originalServiceData.Domains, originalServiceData.Origins, originalServiceData.CachingRules, originalServiceData.Restrictions);
+
+
+
+            // Calculate the Json Patch document
+            var beforeUpdate = JToken.Parse(JsonConvert.SerializeObject(tempServiceData));
+            var afterUpdate = JToken.Parse(JsonConvert.SerializeObject(updatedServiceData));
+            var patchDoc = new JsonDiffer().Diff(beforeUpdate, afterUpdate);
+
+
+            // Another Hack: For some reason (TODO: which needs to be investigated and fixed),
+            // we need to deserialize the document in order for it to render a proper Json object.
+            var jsonPatchDocument = JsonConvert.DeserializeObject(patchDoc.ToString());
+
+
+            // Now we can call the PATCH method to update the ServiceData on the server.
+            UriTemplate template = new UriTemplate("services/{service_id}");
+            Dictionary<string, string> parameters = new Dictionary<string, string> { { "service_id", serviceId.Value } };
+            return GetBaseUriAsync(cancellationToken)
+                .Then(PrepareRequestAsyncFunc(new HttpMethod("PATCH"), "application/json-patch+json", template, parameters, jsonPatchDocument, cancellationToken))
+                .Select(task => new UpdateServiceApiCall(CreateBasicApiCall(task.Result)));
         }
 
         /// <inheritdoc/>
@@ -186,7 +230,14 @@
         /// <inheritdoc/>
         public virtual Task<RemoveAssetApiCall> PrepareRemoveAssetAsync(ServiceId serviceId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (serviceId == null)
+                throw new ArgumentNullException("serviceId");
+
+            UriTemplate template = new UriTemplate("services/{service_id}");
+            Dictionary<string, string> parameters = new Dictionary<string, string> { { "service_id", serviceId.Value } };
+            return GetBaseUriAsync(cancellationToken)
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Delete, template, parameters, cancellationToken))
+                .Select(task => new RemoveAssetApiCall(CreateBasicApiCall(task.Result)));
         }
 
         /// <inheritdoc/>
@@ -198,7 +249,7 @@
             Func<HttpResponseMessage, CancellationToken, Task<ReadOnlyCollectionPage<Flavor>>> deserializeResult =
                 (responseMessage, innerCancellationToken) =>
                 {
-                    if (!HttpApiCall.IsAcceptable(responseMessage))
+                    if (!HttpApiCall.IsAcceptable(responseMessage)) 
                         throw new HttpWebException(responseMessage);
 
                     return responseMessage.Content.ReadAsStringAsync()
@@ -244,7 +295,14 @@
         /// <inheritdoc/>
         public virtual Task<GetFlavorApiCall> PrepareGetFlavorAsync(FlavorId flavorId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (flavorId == null)
+                throw new ArgumentNullException("flavorId");
+
+            UriTemplate template = new UriTemplate("flavors/{flavor_id}");
+            Dictionary<string, string> parameters = new Dictionary<string, string> { { "flavor_id", flavorId.Value } };
+            return GetBaseUriAsync(cancellationToken)
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
+                .Select(task => new GetFlavorApiCall(CreateJsonApiCall<Flavor>(task.Result)));
         }
 
         /// <inheritdoc/>

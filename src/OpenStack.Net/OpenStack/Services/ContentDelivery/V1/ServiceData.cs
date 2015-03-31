@@ -68,6 +68,8 @@
             {
                 return _name;
             }
+            set { _name = value; }
+
         }
 
         public FlavorId FlavorId
