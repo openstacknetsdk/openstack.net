@@ -228,13 +228,17 @@
         }
 
         /// <inheritdoc/>
-        public virtual Task<RemoveAssetApiCall> PrepareRemoveAssetAsync(ServiceId serviceId, CancellationToken cancellationToken)
+        public virtual Task<RemoveAssetApiCall> PrepareRemoveAssetAsync(ServiceId serviceId, CancellationToken cancellationToken, string urlOfAsset = null, bool deleteAll = false)
         {
             if (serviceId == null)
                 throw new ArgumentNullException("serviceId");
 
-            UriTemplate template = new UriTemplate("services/{service_id}");
-            Dictionary<string, string> parameters = new Dictionary<string, string> { { "service_id", serviceId.Value } };
+            UriTemplate template = new UriTemplate("services/{service_id}/assets?url={url_of_asset}&all={delete_all}");
+            Dictionary<string, string> parameters = new Dictionary<string, string> { 
+                { "service_id", serviceId.Value },
+                { "url_of_asset", urlOfAsset },
+                { "delete_all", deleteAll.ToString() }
+                };
             return GetBaseUriAsync(cancellationToken)
                 .Then(PrepareRequestAsyncFunc(HttpMethod.Delete, template, parameters, cancellationToken))
                 .Select(task => new RemoveAssetApiCall(CreateBasicApiCall(task.Result)));

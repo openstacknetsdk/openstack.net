@@ -105,13 +105,13 @@
                 task => task.Result.SendAsync(cancellationToken));
         }
 
-        public static Task RemoveAssetAsync(this IContentDeliveryService service, ServiceId serviceId, CancellationToken cancellationToken)
+        public static Task RemoveAssetAsync(this IContentDeliveryService service, ServiceId serviceId, CancellationToken cancellationToken, string urlOfAsset = null, bool deleteAll = false)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
 
             return TaskBlocks.Using(
-                () => service.PrepareRemoveAssetAsync(serviceId, cancellationToken),
+                () => service.PrepareRemoveAssetAsync(serviceId, cancellationToken, urlOfAsset, deleteAll),
                 task => task.Result.SendAsync(cancellationToken));
         }
 
