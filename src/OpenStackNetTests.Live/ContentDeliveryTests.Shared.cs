@@ -34,6 +34,109 @@
         [TestMethod]
         [TestCategory(TestCategories.User)]
         [TestCategory(TestCategories.ContentDelivery)]
+        public async Task TestCreateService()
+        {
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
+            {
+                string domainName = "www.mywebsite.com";
+                string ruleName = "mywebsite.com";
+                string ruleUri = "www.mywebsite.com";
+                string serviceOriginName = "example.com";
+                string cacheRuleName = "default";
+                string cacheRuleUri = "www.mywebsite.com";
+                string restrictionRuleName = "mywebsite.com";
+                string restrictionRuleReferrer = "www.mywebsite.com";
+                string serviceRestrictionName = "website only";
+                string serviceName = "testService";
+                FlavorId flavorId = new FlavorId("cdn");
+
+
+                cancellationTokenSource.CancelAfter(TestTimeout(TimeSpan.FromSeconds(10)));
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                ServiceProtocol serviceProtocol = ServiceProtocol.Http;
+                ServiceDomain sd = new ServiceDomain(domainName, serviceProtocol);
+                ImmutableArray<ServiceDomain>.Builder sdbuilder = ImmutableArray.CreateBuilder<ServiceDomain>();
+                sdbuilder.Add(sd);
+                ImmutableArray<ServiceDomain> domains = sdbuilder.ToImmutable();
+
+                ServiceOriginRule sor = new ServiceOriginRule(ruleName, ruleUri);
+                ImmutableArray<ServiceOriginRule>.Builder sorbuilder = ImmutableArray.CreateBuilder<ServiceOriginRule>();
+                sorbuilder.Add(sor);
+                ImmutableArray<ServiceOriginRule> rules = sorbuilder.ToImmutable();
+
+
+                ServiceOrigin so = new ServiceOrigin(serviceOriginName, 80, false, rules);
+                ImmutableArray<ServiceOrigin>.Builder sobuilder = ImmutableArray.CreateBuilder<ServiceOrigin>();
+                sobuilder.Add(so);
+                ImmutableArray<ServiceOrigin> origins = sobuilder.ToImmutable();
+
+            
+                ServiceCacheRule scr = new ServiceCacheRule(cacheRuleName, cacheRuleUri);
+                ImmutableArray<ServiceCacheRule>.Builder scrbuilder = ImmutableArray.CreateBuilder<ServiceCacheRule>();
+                scrbuilder.Add(scr);
+                ImmutableArray<ServiceCacheRule> scrules = scrbuilder.ToImmutable();
+
+
+                ImmutableArray<ServiceCache>.Builder scbuilder = ImmutableArray.CreateBuilder<ServiceCache>();
+                ServiceCache sc = new ServiceCache(cacheRuleName, new TimeSpan(0, 0, 3600), scrules);
+                scbuilder.Add(sc);
+                ImmutableArray<ServiceCache> caching = scbuilder.ToImmutable();
+                caching = new ImmutableArray<ServiceCache>();
+
+
+
+                ImmutableArray<ServiceRestrictionRule>.Builder srrbuilder = ImmutableArray.CreateBuilder<ServiceRestrictionRule>();
+                ServiceRestrictionRule srr = new ServiceRestrictionRule(restrictionRuleName, restrictionRuleReferrer);
+                srrbuilder.Add(srr);
+                ImmutableArray<ServiceRestrictionRule> srrules = srrbuilder.ToImmutable();
+                srrules = new ImmutableArray<ServiceRestrictionRule>();
+
+
+
+                ImmutableArray<ServiceRestriction>.Builder rbuilder = ImmutableArray.CreateBuilder<ServiceRestriction>();
+                ServiceRestriction sr = new ServiceRestriction(serviceRestrictionName, srrules);
+                rbuilder.Add(sr);
+                ImmutableArray<ServiceRestriction> restrictions = rbuilder.ToImmutable();
+                restrictions = new ImmutableArray<ServiceRestriction>();
+
+
+                ServiceData serviceData = new ServiceData(serviceName, flavorId, domains, origins, caching, restrictions);
+
+
+                IContentDeliveryService service = CreateService();
+                using (AddServiceApiCall apiCall = await service.PrepareAddServiceAsync(serviceData, cancellationToken))
+                {
+                    Tuple<HttpResponseMessage, ServiceId> response = await apiCall.SendAsync(cancellationToken);
+                    Assert.IsNotNull(response);
+
+                    var responseMessage = response.Item1;
+                    Assert.IsNotNull(responseMessage);
+                    Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+
+                    ServiceId serviceID = response.Item2;
+                    Assert.IsNotNull(serviceID);
+                }
+
+
+                using (GetHomeApiCall apiCall = await service.PrepareGetHomeAsync(cancellationToken))
+                {
+                    Tuple<HttpResponseMessage, HomeDocument> response = await apiCall.SendAsync(cancellationToken);
+                    Assert.IsNotNull(response);
+
+                    var responseMessage = response.Item1;
+                    Assert.IsNotNull(responseMessage);
+                    Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+
+                    HomeDocument homeDocument = response.Item2;
+                    CheckHomeDocument(homeDocument);
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.User)]
+        [TestCategory(TestCategories.ContentDelivery)]
         public async Task TestGetHome()
         {
             using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
@@ -381,18 +484,18 @@
             ContentDeliveryClient client;
             switch (credentials.Vendor)
             {
-            case "HP":
-                // currently HP does not have a vendor-specific IContentDeliveryService
-                goto default;
+                case "HP":
+                    // currently HP does not have a vendor-specific IContentDeliveryService
+                    goto default;
 
-            case "Rackspace":
-                // currently Rackspace does not have a vendor-specific IContentDeliveryService
-                goto default;
+                case "Rackspace":
+                    // currently Rackspace does not have a vendor-specific IContentDeliveryService
+                    goto default;
 
-            case "OpenStack":
-            default:
-                client = new ContentDeliveryClient(authenticationService, credentials.DefaultRegion, false);
-                break;
+                case "OpenStack":
+                default:
+                    client = new ContentDeliveryClient(authenticationService, credentials.DefaultRegion, false);
+                    break;
             }
 
             TestProxy.ConfigureService(client, credentials.Proxy);
