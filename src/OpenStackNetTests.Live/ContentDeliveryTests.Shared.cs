@@ -15,6 +15,8 @@
     using OpenStack.ObjectModel.JsonHome;
     using OpenStack.Security.Authentication;
     using OpenStack.Services.ContentDelivery.V1;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Path = System.IO.Path;
 
     partial class ContentDeliveryTests
@@ -102,7 +104,11 @@
 
 
                 ServiceData serviceData = new ServiceData(serviceName, flavorId, domains, origins, caching, restrictions);
-
+//
+                //ServiceData sed = new ServiceData(serviceName, flavorId, domains, origins, caching, restrictions);
+                //CancellationToken cn = new CancellationToken();
+                //ServiceId x = await cdc.AddServiceAsync(serviceData, cn);
+//
 
                 IContentDeliveryService service = CreateService();
                 using (AddServiceApiCall apiCall = await service.PrepareAddServiceAsync(serviceData, cancellationToken))
