@@ -800,6 +800,70 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
+        public void UpdateObjectHeaders(string container, string objectName, Dictionary<string,string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (headers == null)
+                throw new ArgumentNullException("headers");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+
+            var hdrs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (KeyValuePair<string, string> m in headers)
+            {
+                if (string.IsNullOrEmpty(m.Key))
+                    throw new ArgumentException("cors cannot contain any empty keys");
+
+                hdrs.Add(m.Key, EncodeUnicodeValue(m.Value));
+            }
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
+
+            RequestSettings settings = BuildDefaultRequestSettings();
+            // make sure the content type is not changed by the metadata operation
+            settings.ContentType = null;
+
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: hdrs, settings: settings);
+           
+        }
+
+        /// <inheritdoc />
+        public void UpdateObjectContentType(string container, string objectName, string contentType, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            if (objectName == null)
+                throw new ArgumentNullException("objectName");
+            if (contentType == null)
+                throw new ArgumentNullException("contentType");
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("container cannot be empty");
+            if (string.IsNullOrEmpty(objectName))
+                throw new ArgumentException("objectName cannot be empty");
+            CheckIdentity(identity);
+
+            _cloudFilesValidator.ValidateContainerName(container);
+            _cloudFilesValidator.ValidateObjectName(objectName);
+
+            var hdrs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            var urlPath = new Uri(string.Format("{0}/{1}/{2}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container), _encodeDecodeProvider.UrlEncode(objectName)));
+
+            RequestSettings settings = BuildDefaultRequestSettings();
+            settings.ContentType = contentType;
+            CopyObject(container, objectName, container, objectName, contentType, region: region);
+        }
+
+        /// <inheritdoc />
         public void UpdateObjectMetadata(string container, string objectName, Dictionary<string, string> metadata, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
