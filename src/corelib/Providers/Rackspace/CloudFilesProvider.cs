@@ -832,7 +832,8 @@ namespace net.openstack.Providers.Rackspace
             // make sure the content type is not changed by the metadata operation
             settings.ContentType = null;
 
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, headers: hdrs, settings: settings);
+            ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: hdrs, settings: settings);
+           
         }
 
         /// <inheritdoc />
@@ -859,7 +860,7 @@ namespace net.openstack.Providers.Rackspace
 
             RequestSettings settings = BuildDefaultRequestSettings();
             settings.ContentType = contentType;
-            ExecuteRESTRequest(identity, urlPath, HttpMethod.PUT, settings: settings);
+            CopyObject(container, objectName, container, objectName, contentType, region: region);
         }
 
         /// <inheritdoc />
