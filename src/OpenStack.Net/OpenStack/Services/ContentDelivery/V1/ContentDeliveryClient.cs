@@ -179,8 +179,7 @@
             // At this point, the serviceData parameter contains the NEW (AFTER) version
             // of the service data. Now, we need to retrieve the current (BEFORE) version,
             // then use those to calculate the difference, i.e. the JSON Patch document.
-            CancellationToken cn = new CancellationToken();
-            var getServiceTask = ContentDeliveryServiceExtensions.GetServiceAsync(this, serviceId, cn);
+            var getServiceTask = ContentDeliveryServiceExtensions.GetServiceAsync(this, serviceId, cancellationToken);
             getServiceTask.Wait();
             ServiceData originalServiceData = getServiceTask.Result;
 
