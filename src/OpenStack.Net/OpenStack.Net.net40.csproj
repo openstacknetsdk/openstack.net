@@ -43,7 +43,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Rackspace.Collections.Immutable">
-      <HintPath>..\packages\Rackspace.Collections.Immutable.1.1.33-beta\lib\net40-client\Rackspace.Collections.Immutable.dll</HintPath>
+      <HintPath>..\packages\Rackspace.Collections.Immutable.1.1.34-rc\lib\net40-client\Rackspace.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="Rackspace.Net.UriTemplate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75479e71486a8ef5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
