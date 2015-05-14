@@ -57,7 +57,7 @@
             UriTemplate template = new UriTemplate(string.Empty);
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 .Select(task => new GetHomeApiCall(CreateJsonApiCall<HomeDocument>(task.Result)));
         }
 
@@ -79,7 +79,7 @@
             UriTemplate template = new UriTemplate("ping");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 //.Select(RemoveAcceptHeader) **DLS**
                 .Select(task => new PingApiCall(CreateBasicApiCall(task.Result)));
         }
@@ -209,8 +209,14 @@
             UriTemplate template = new UriTemplate("services/{service_id}");
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "service_id", serviceId.Value } };
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(new HttpMethod("PATCH"), "application/json-patch+json", template, parameters, jsonPatchDocument, cancellationToken))
-                .Select(task => new UpdateServiceApiCall(CreateBasicApiCall(task.Result)));
+                .Then(PrepareRequestAsyncFunc(new HttpMethod("PATCH"), template, parameters, jsonPatchDocument, cancellationToken))
+                .Select(
+                    task =>
+                    {
+                        HttpRequestMessage requestMessage = task.Result;
+                        requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json-patch+json");
+                        return new UpdateServiceApiCall(CreateBasicApiCall(requestMessage));
+                    });
         }
 
         /// <inheritdoc/>
