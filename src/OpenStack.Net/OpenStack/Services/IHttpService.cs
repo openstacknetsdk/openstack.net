@@ -38,7 +38,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken, string mediaType);
+        Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a task continuation function responsible for creating an <see cref="HttpRequestMessage"/> for use in
@@ -66,7 +66,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken, string mediaType);
+        Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the base absolute URI to use for making asynchronous HTTP API calls to this service.

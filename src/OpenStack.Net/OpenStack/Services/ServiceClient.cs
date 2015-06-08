@@ -301,9 +301,9 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken, Func<Uri, Uri> uriTransform, string mediaType = "application/json")
+        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken, Func<Uri, Uri> uriTransform)
         {
-            var prepared = PrepareRequestAsyncFunc(method, template, parameters, cancellationToken, mediaType);
+            var prepared = PrepareRequestAsyncFunc(method, template, parameters, cancellationToken);
             if (uriTransform == null)
                 return prepared;
 
@@ -343,7 +343,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken, string mediaType = "application/json")
+        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, CancellationToken cancellationToken)
         {
             if (template == null)
                 throw new ArgumentNullException("template");
@@ -354,7 +354,7 @@
                 task =>
                 {
                     Uri baseUri = task.Result;
-                    HttpRequestMessage request = PrepareRequestImpl(method, template, baseUri, parameters, mediaType);
+                    HttpRequestMessage request = PrepareRequestImpl(method, template, baseUri, parameters);
 
                     Func<Task<HttpRequestMessage>, Task<HttpRequestMessage>> authenticateRequest =
                         task2 => AuthenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
@@ -393,7 +393,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken, Func<Uri, Uri> uriTransform, string mediaType = "application/json")
+        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken, Func<Uri, Uri> uriTransform)
         {
             var prepared = PrepareRequestAsyncFunc(method, template, parameters, body, cancellationToken);
             if (uriTransform == null)
@@ -439,7 +439,7 @@
         /// <para>-or-</para>
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
-        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken, string mediaType = "application/json")
+        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken)
         {
             return
                 task =>
@@ -454,20 +454,6 @@
                 };
         }
 
-        public Func<Task<Uri>, Task<HttpRequestMessage>> PrepareRequestAsyncFunc<T, TBody>(HttpMethod method, string mediaType, UriTemplate template, IDictionary<string, T> parameters, TBody body, CancellationToken cancellationToken) 
-        {
-            return
-                task =>
-                {
-                    Uri baseUri = task.Result;
-                    HttpRequestMessage request = PrepareRequestImpl(method, template, baseUri, parameters);
-                    request.Content = EncodeRequestBodyImpl(request, body, mediaType);
-
-                    Func<Task<HttpRequestMessage>, Task<HttpRequestMessage>> authenticateRequest =
-                        task2 => AuthenticationService.AuthenticateRequestAsync(task2.Result, cancellationToken).Select(_ => task2.Result);
-                    return CompletedTask.FromResult(request).Then(authenticateRequest);
-                };
-        }
         /// <summary>
         /// Encode the body of a request, and update the <see cref="HttpRequestMessage"/> properties as necessary to
         /// support the encoded body.
@@ -485,7 +471,7 @@
         /// <returns>An <see cref="HttpContent"/> object representing the body of the
         /// <see cref="HttpRequestMessage"/>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="request"/> is <see langword="null"/>.</exception>
-        protected virtual HttpContent EncodeRequestBodyImpl<TBody>(HttpRequestMessage request, TBody body, string mediaType = "application/json")
+        protected virtual HttpContent EncodeRequestBodyImpl<TBody>(HttpRequestMessage request, TBody body)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -493,7 +479,7 @@
             string bodyText = JsonConvert.SerializeObject(body);
             byte[] encodedBody = Encoding.UTF8.GetBytes(bodyText);
             ByteArrayContent content = new ByteArrayContent(encodedBody);
-            content.Headers.ContentType = new MediaTypeHeaderValue(mediaType) { CharSet = "UTF-8" };
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "UTF-8" };
 
             content.Headers.ContentLength = encodedBody.Length;
 
@@ -547,12 +533,12 @@
         /// <para>If <paramref name="parameters"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentException">If <paramref name="baseUri"/> is not an absolute URI.</exception>
-        protected virtual HttpRequestMessage PrepareRequestImpl<T>(HttpMethod method, UriTemplate template, Uri baseUri, IDictionary<string, T> parameters, string mediaType = "application/json")
+        protected virtual HttpRequestMessage PrepareRequestImpl<T>(HttpMethod method, UriTemplate template, Uri baseUri, IDictionary<string, T> parameters)
         {
             Uri boundUri = template.BindByName(baseUri, parameters);
 
             HttpRequestMessage request = new HttpRequestMessage(method, boundUri);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.UserAgent.Add(new ProductInfoHeaderValue(AssemblyInfo.AssemblyProduct, AssemblyInfo.AssemblyInformationalVersion));
 #if !PORTABLE
             if (ConnectionLimit.HasValue)

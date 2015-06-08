@@ -57,7 +57,7 @@
             UriTemplate template = new UriTemplate(string.Empty);
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 .Select(task => new GetHomeApiCall(CreateJsonApiCall<HomeDocument>(task.Result)));
         }
 
@@ -79,7 +79,7 @@
             UriTemplate template = new UriTemplate("ping");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 //.Select(RemoveAcceptHeader) **DLS**
                 .Select(task => new PingApiCall(CreateBasicApiCall(task.Result)));
         }
@@ -174,18 +174,15 @@
             if (serviceId == null)
                 throw new ArgumentNullException("serviceId");
 
-
-
             // At this point, the serviceData parameter contains the NEW (AFTER) version
             // of the service data. Now, we need to retrieve the current (BEFORE) version,
             // then use those to calculate the difference, i.e. the JSON Patch document.
-            CancellationToken cn = new CancellationToken();
-            var getServiceTask = ContentDeliveryServiceExtensions.GetServiceAsync(this, serviceId, cn);
-            getServiceTask.Wait();
-            ServiceData originalServiceData = getServiceTask.Result;
+            return this.GetServiceAsync(serviceId, cancellationToken)
+                .Then(task => PrepareUpdateServiceFromExistingAsync(serviceId, updatedServiceData, task.Result, cancellationToken));
+        }
 
-
-
+        protected virtual Task<UpdateServiceApiCall> PrepareUpdateServiceFromExistingAsync(ServiceId serviceId, ServiceData updatedServiceData, ServiceData originalServiceData, CancellationToken cancellationToken)
+        {
             // Here's a serious HACK: Because the current ServiceData includes properties
             // that are not part of a new instance of ServiceData (such as "Id", "Status" and others)
             // we need to create a new instance using the data from the current ServiceData object.
@@ -193,25 +190,28 @@
             // the extra properties won't interfere.
             ServiceData tempServiceData = new ServiceData(originalServiceData.Name, originalServiceData.FlavorId, originalServiceData.Domains, originalServiceData.Origins, originalServiceData.CachingRules, originalServiceData.Restrictions);
 
-
-
             // Calculate the Json Patch document
             var beforeUpdate = JToken.Parse(JsonConvert.SerializeObject(tempServiceData));
             var afterUpdate = JToken.Parse(JsonConvert.SerializeObject(updatedServiceData));
             var patchDoc = new JsonDiffer().Diff(beforeUpdate, afterUpdate);
 
-
             // Another Hack: For some reason (TODO: which needs to be investigated and fixed),
             // we need to deserialize the document in order for it to render a proper Json object.
             var jsonPatchDocument = JsonConvert.DeserializeObject(patchDoc.ToString());
 
-
             // Now we can call the PATCH method to update the ServiceData on the server.
             UriTemplate template = new UriTemplate("services/{service_id}");
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "service_id", serviceId.Value } };
+
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(new HttpMethod("PATCH"), "application/json-patch+json", template, parameters, jsonPatchDocument, cancellationToken))
-                .Select(task => new UpdateServiceApiCall(CreateBasicApiCall(task.Result)));
+                .Then(PrepareRequestAsyncFunc(new HttpMethod("PATCH"), template, parameters, jsonPatchDocument, cancellationToken))
+                .Select(
+                    task =>
+                    {
+                        HttpRequestMessage requestMessage = task.Result;
+                        requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json-patch+json");
+                        return new UpdateServiceApiCall(CreateBasicApiCall(requestMessage));
+                    });
         }
 
         /// <inheritdoc/>

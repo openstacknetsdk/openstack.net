@@ -141,7 +141,7 @@
                 };
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 .Select(task => new ListApiVersionsApiCall(CreateCustomApiCall(task.Result, HttpCompletionOption.ResponseContentRead, deserializeResult)));
         }
 
@@ -152,7 +152,7 @@
             Dictionary<string, string> parameters = new Dictionary<string, string> { { "version_id", apiVersionId.Value } };
 
             return GetBaseUriAsync(cancellationToken)
-                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken, "application/json"))
+                .Then(PrepareRequestAsyncFunc(HttpMethod.Get, template, parameters, cancellationToken))
                 .Select(task => new GetApiVersionApiCall(CreateJsonApiCall<ApiVersionResponse>(task.Result)));
         }
 
