@@ -54,6 +54,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocument
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE-1829-4783-92CF-390CFCE22E43}"
 	ProjectSection(SolutionItems) = preProject
+		..\build\appveyor-deploy-docs.ps1 = ..\build\appveyor-deploy-docs.ps1
 		..\build\build.ps1 = ..\build\build.ps1
 		..\build\check-key.ps1 = ..\build\check-key.ps1
 		..\build\keys.ps1 = ..\build\keys.ps1
@@ -207,6 +208,7 @@ Global
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.ReleaseNoDocs|Any CPU.ActiveCfg = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.ReleaseNoDocs|Any CPU.Build.0 = Release|Any CPU
 		{EA57BD15-3742-45B8-BDE2-263F7236BAFD}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -228,6 +230,7 @@ Global
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.ReleaseNoDocs|Any CPU.ActiveCfg = Release|Any CPU
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.ReleaseNoDocs|Any CPU.Build.0 = Release|Any CPU
 		{60B1668C-4331-4E3D-86F6-954FFCE0CD36}.ReleaseNoDocs|Mixed Platforms.ActiveCfg = Release|Any CPU
