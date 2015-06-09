@@ -1,5 +1,7 @@
 # openstack.net: An OpenStack SDK for Microsoft .NET
 
+[![Join the chat at https://gitter.im/openstacknetsdk/openstack.net](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openstacknetsdk/openstack.net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The openstack.net SDK, written for the Microsoft .NET platform, is designed to enable developers to seamlessly work with
 the many services provided by the OpenStack cloud operating system.
 
