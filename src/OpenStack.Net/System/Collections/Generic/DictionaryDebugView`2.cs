@@ -114,7 +114,6 @@ namespace System.Collections.Generic {
             if (keyedCollection == null) {
                 throw new ArgumentNullException("keyedCollection");
             }
-            Contract.EndContractBlock();
 
             kc = keyedCollection;
         }
