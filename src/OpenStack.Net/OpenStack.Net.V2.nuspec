@@ -17,7 +17,7 @@
       <group targetFramework="net35">
         <dependency id="Newtonsoft.Json" version="6.0" />
         <dependency id="Rackspace.HttpClient35" version="[1.0.0-beta003,1.1)" />
-        <dependency id="Rackspace.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="Rackspace.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
@@ -29,7 +29,7 @@
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
-        <dependency id="Rackspace.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="Rackspace.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
@@ -37,7 +37,7 @@
       </group>
       <group targetFramework="net45">
         <dependency id="Newtonsoft.Json" version="6.0" />
-        <dependency id="System.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="System.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
@@ -48,7 +48,7 @@
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
-        <dependency id="System.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="System.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
@@ -59,7 +59,7 @@
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
-        <dependency id="Rackspace.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="Rackspace.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
@@ -70,7 +70,7 @@
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
         <dependency id="Newtonsoft.Json" version="6.0" />
-        <dependency id="System.Collections.Immutable" version="1.1.33-beta" />
+        <dependency id="System.Collections.Immutable" version="1.1.36" />
         <!-- This dependency supports binding redirection for minor releases -->
         <dependency id="Rackspace.Net.UriTemplate" version="[1.0.0-beta003,2.0)" />
         <!-- This dependency supports binding redirection for minor releases -->
