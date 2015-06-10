@@ -96,7 +96,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha002\tools\analyzers\OpenStackNetAnalyzers.dll" />
+    <Analyzer Include="..\packages\OpenStackNetAnalyzers.1.0.0-alpha003\tools\analyzers\C#\OpenStackNetAnalyzers.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
