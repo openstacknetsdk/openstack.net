@@ -67,6 +67,11 @@ namespace net.openstack.Providers.Rackspace
         private IBackoffPolicy _backoffPolicy;
 
         /// <summary>
+        /// This is the backing field for the <see cref="ApplicationUserAgent"/> property.
+        /// </summary>
+        private string _applicationUserAgent;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TProvider}"/> class using
         /// the specified default identity, default region, identity provider, and REST service
         /// implementation, and the default HTTP response code validator.
@@ -167,6 +172,36 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <summary>
+        /// Gets or sets the application-specific user agent for the provider instance.
+        /// </summary>
+        /// <remarks>
+        /// <para>This value is used for determining the <see cref="DefaultUserAgent"/> value. The documentation for
+        /// that property includes specific information.</para>
+        /// <para>The default value is <see langword="null"/>.</para>
+        /// </remarks>
+        /// <value>
+        /// <para>The application-specific user agent, as a string. This string should be a valid
+        /// <strong>User-Agent</strong> header value according to RFC 7231.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="null"/> (or <see cref="string.Empty"/>) if the provider should not include an
+        /// application-specific user agent in HTTP requests, or if the user agent is customized in another manner (such
+        /// as overriding the <see cref="BuildDefaultRequestSettings"/> method.</para>
+        /// </value>
+        /// <preliminary/>
+        public string ApplicationUserAgent
+        {
+            get
+            {
+                return _applicationUserAgent;
+            }
+
+            set
+            {
+                _applicationUserAgent = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the default back-off policy for the current provider.
         /// </summary>
         /// <remarks>
@@ -179,6 +214,32 @@ namespace net.openstack.Providers.Rackspace
             get
             {
                 return net.openstack.Core.BackoffPolicy.Default;
+            }
+        }
+
+        /// <summary>
+        /// Gets the default value for the <strong>User-Agent</strong> header for HTTP requests sent by this provider.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="ApplicationUserAgent"/> property is not set, this property simply returns
+        /// <see cref="UserAgentGenerator.UserAgent"/>.</para>
+        /// <para>If the <see cref="ApplicationUserAgent"/> property is set, this property returns a two-part user agent
+        /// starting with the <see cref="ApplicationUserAgent"/> value, followed by the
+        /// <see cref="UserAgentGenerator.UserAgent"/> value.</para>
+        /// </remarks>
+        /// <value>
+        /// The default value for the <strong>User-Agent</strong> header for HTTP requests sent by this provider.
+        /// </value>
+        protected string DefaultUserAgent
+        {
+            get
+            {
+                string userAgent = UserAgentGenerator.UserAgent;
+                string applicationUserAgent = ApplicationUserAgent;
+                if (!string.IsNullOrEmpty(applicationUserAgent))
+                    return applicationUserAgent + " " + userAgent;
+
+                return userAgent;
             }
         }
 
@@ -439,7 +500,7 @@ namespace net.openstack.Providers.Rackspace
             }
 
             if (string.IsNullOrEmpty(requestSettings.UserAgent))
-                requestSettings.UserAgent = UserAgentGenerator.UserAgent;
+                requestSettings.UserAgent = DefaultUserAgent;
 
             var response = callback(absoluteUri, method, bodyStr, headers, queryStringParameter, requestSettings);
 
@@ -536,7 +597,7 @@ namespace net.openstack.Providers.Rackspace
             headers["X-Auth-Token"] = IdentityProvider.GetToken(identity, isRetry).Id;
 
             if (string.IsNullOrEmpty(requestSettings.UserAgent))
-                requestSettings.UserAgent = UserAgentGenerator.UserAgent;
+                requestSettings.UserAgent = DefaultUserAgent;
 
             long? initialPosition;
             try
@@ -609,7 +670,7 @@ namespace net.openstack.Providers.Rackspace
         /// <item>The <see cref="RequestSettings.RetryCount"/> is 0.</item>
         /// <item>The <see cref="RequestSettings.RetryDelay"/> is 200 milliseconds.</item>
         /// <item>The <see cref="RequestSettings.Non200SuccessCodes"/> contains <see cref="HttpStatusCode.Unauthorized"/> and <see cref="HttpStatusCode.Conflict"/>, along with the values in <paramref name="non200SuccessCodes"/> (if any).</item>
-        /// <item>The <see cref="RequestSettings.UserAgent"/> is set to <see cref="UserAgentGenerator.UserAgent"/>.</item>
+        /// <item>The <see cref="RequestSettings.UserAgent"/> is set to <see cref="DefaultUserAgent"/>.</item>
         /// <item>The <see cref="RequestSettings.AllowZeroContentLength"/> is set to <see langword="true"/>.</item>
         /// <item>The <see cref="RequestSettings.ConnectionLimit"/> is set to <see cref="ConnectionLimit"/>.</item>
         /// <item>Other properties are set to the default values for <see cref="JsonRequestSettings"/>.</item>
@@ -630,7 +691,7 @@ namespace net.openstack.Providers.Rackspace
                 RetryCount = 0,
                 RetryDelay = TimeSpan.FromMilliseconds(200),
                 Non200SuccessCodes = non200SuccessCodesAggregate,
-                UserAgent = UserAgentGenerator.UserAgent,
+                UserAgent = DefaultUserAgent,
                 AllowZeroContentLength = true,
                 ConnectionLimit = ConnectionLimit,
             };
@@ -1045,7 +1106,7 @@ namespace net.openstack.Providers.Rackspace
         /// </item>
         /// <item>
         /// <description><see cref="HttpWebRequest.UserAgent"/></description>
-        /// <description><see cref="UserAgentGenerator.UserAgent"/></description>
+        /// <description><see cref="DefaultUserAgent"/></description>
         /// </item>
         /// <item>
         /// <description><see cref="WebRequest.Timeout"/></description>
@@ -1085,7 +1146,7 @@ namespace net.openstack.Providers.Rackspace
             request.Method = method.ToString().ToUpperInvariant();
             request.Accept = JsonRequestSettings.JsonContentType;
             request.Headers["X-Auth-Token"] = identityToken.Id;
-            request.UserAgent = UserAgentGenerator.UserAgent;
+            request.UserAgent = DefaultUserAgent;
             request.Timeout = (int)TimeSpan.FromSeconds(14400).TotalMilliseconds;
             if (ConnectionLimit.HasValue)
                 request.ServicePoint.ConnectionLimit = ConnectionLimit.Value;

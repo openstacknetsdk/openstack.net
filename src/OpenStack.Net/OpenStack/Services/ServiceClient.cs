@@ -61,6 +61,11 @@
         private Uri _baseUri;
 
         /// <summary>
+        /// This is the backing field for the <see cref="ApplicationUserAgent"/> property.
+        /// </summary>
+        private ProductHeaderValue _applicationUserAgent;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ServiceClient"/> class using the specified authentication
         /// service and default region, and the default <see cref="System.Net.Http.HttpClient"/>.
         /// </summary>
@@ -99,9 +104,9 @@
         public event EventHandler<HttpResponseEventArgs> AfterAsyncWebResponse;
 
         /// <summary>
-        /// Gets or sets the maximum number of connections allowed on the <see cref="ServicePoint"/> objects used for
-        /// requests. If the value is <see langword="null"/>, the connection limit value for the
-        /// <see cref="ServicePoint"/> object is not altered.
+        /// Gets or sets the maximum number of connections allowed on the <see cref="T:System.Net.ServicePoint"/>
+        /// objects used for requests. If the value is <see langword="null"/>, the connection limit value for the
+        /// <see cref="T:System.Net.ServicePoint"/> object is not altered.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="value"/> is less than or equal to 0.
@@ -248,6 +253,34 @@
                     throw new ArgumentNullException("value");
 
                 _httpClient = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the application-specific user agent for the provider instance.
+        /// </summary>
+        /// <remarks>
+        /// <para>If this value is set, it is prepended to the <strong>User-Agent</strong> HTTP header for API requests
+        /// made by this provider.</para>
+        /// <para>The default value is <see langword="null"/>.</para>
+        /// </remarks>
+        /// <value>
+        /// <para>The application-specific user agent.</para>
+        /// <para>-or-</para>
+        /// <para><see langword="null"/> if the service client should send the SDK-provided default user agent as the
+        /// only user agent value, or if the user agent is customized another manner (such as overriding the
+        /// <see cref="PrepareRequestImpl"/> method.</para>
+        /// </value>
+        public ProductHeaderValue ApplicationUserAgent
+        {
+            get
+            {
+                return _applicationUserAgent;
+            }
+
+            set
+            {
+                _applicationUserAgent = value;
             }
         }
 
@@ -509,7 +542,8 @@
         /// <description><see cref="HttpRequestHeaders.UserAgent"/></description>
         /// <description>
         /// A <see cref="ProductInfoHeaderValue"/> constructed from the <see cref="AssemblyProductAttribute"/> and
-        /// <see cref="AssemblyInformationalVersionAttribute"/> values
+        /// <see cref="AssemblyInformationalVersionAttribute"/> values. If the <see cref="ApplicationUserAgent"/>
+        /// property is set, the header also includes this value as the first element of the list of user agents.
         /// </description>
         /// </item>
         /// <item>
@@ -539,7 +573,12 @@
 
             HttpRequestMessage request = new HttpRequestMessage(method, boundUri);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (ApplicationUserAgent != null)
+                request.Headers.UserAgent.Add(new ProductInfoHeaderValue(ApplicationUserAgent));
+
             request.Headers.UserAgent.Add(new ProductInfoHeaderValue(AssemblyInfo.AssemblyProduct, AssemblyInfo.AssemblyInformationalVersion));
+
 #if !PORTABLE
             if (ConnectionLimit.HasValue)
             {
