@@ -99,6 +99,9 @@ namespace OpenStackNetTests.Live
         {
             foreach (KeyValuePair<string, IEnumerable<string>> header in response.Headers)
             {
+                if ("X-Subject-Token".Equals(header.Key, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 Console.Error.WriteLine(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
             }
 

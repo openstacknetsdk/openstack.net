@@ -3,7 +3,8 @@
     using System;
     using Newtonsoft.Json;
     using OpenStack.ObjectModel;
-    using OpenStack.Services.Identity.V2;
+    using AuthenticationRequest = OpenStack.Services.Identity.V2.AuthenticationRequest;
+    using AuthenticateRequest = OpenStack.Services.Identity.V3.AuthenticateRequest;
 
     [JsonObject(MemberSerialization.OptIn)]
     internal class TestCredentials : ExtensibleJsonObject
@@ -26,6 +27,9 @@
 
         [JsonProperty("authRequest", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private AuthenticationRequest _authRequest;
+
+        [JsonProperty("authRequestV3", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private AuthenticateRequest _authRequestV3;
 
         [JsonProperty("proxy", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private TestProxy _proxy;
@@ -88,6 +92,14 @@
             get
             {
                 return _authRequest;
+            }
+        }
+
+        public AuthenticateRequest AuthenticateRequestV3
+        {
+            get
+            {
+                return _authRequestV3;
             }
         }
 
