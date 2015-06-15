@@ -135,6 +135,13 @@
   <ItemGroup>
     <None Include="Content\AsynchronousServices.aml" />
     <None Include="Content\BreakingChangesPolicy.aml" />
+    <None Include="Content\DeveloperGuide\DeveloperGuide.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\AddCallToExtension.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\AddCallToService.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\AddJsonProperty.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\CreateNewExtension.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\CreateNewService.aml" />
+    <None Include="Content\DeveloperGuide\Walkthroughs\Walkthroughs.aml" />
     <None Include="Content\License.aml" />
     <None Include="Content\MSHelpViewerRoot.aml" />
     <None Include="Content\UserGuide\Authentication\Authentication.aml" />
@@ -149,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content" />
+    <Folder Include="Content\DeveloperGuide" />
+    <Folder Include="Content\DeveloperGuide\Walkthroughs\" />
     <Folder Include="Content\UserGuide\" />
     <Folder Include="Content\UserGuide\Authentication\" />
   </ItemGroup>

@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7df06d75-757a-43d0-93a6-c6585949632a" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        This page describes the process for supporting a new extension to an existing service within the SDK.
+      </para>
+    </introduction>
+
+    <section>
+      <title>Introduction</title>
+      <content>
+        <para>This example is centered around adding support for the <externalLink>
+          <linkText>Server diagnostics</linkText>
+          <linkUri>http://developer.openstack.org/api-ref-compute-v2-ext.html#ext-diagnostics</linkUri>
+        </externalLink>
+        extension to the OpenStack Compute Service V2.</para>
+      </content>
+    </section>
+
+    <section>
+      <title>Required New Types</title>
+      <content>
+      </content>
+      <sections>
+        <section>
+          <title>IServerDiagnosticsExtension Interface</title>
+          <content>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This interface defines the primary operations for the Server Diagnostics extension to the OpenStack
+              /// Compute Service V2.
+              /// </summary>
+              /// <remarks>
+              /// <para>To obtain an instance of this extension, use the
+              /// <see cref="IExtensibleService{TService}.GetServiceExtension{TExtension}"/> method to create an
+              /// instance of the <see cref="PredefinedComputeExtensions.ServerDiagnostics"/> extension.</para>
+              /// </remarks>
+              /// <seealso href="http://developer.openstack.org/api-ref-compute-v2-ext.html#ext-diagnostics">Server diagnostics (OpenStack Compute API V2 Extensions)</seealso>
+              /// <preliminary/>
+              public interface IServerDiagnosticsExtension
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>ServerDiagnosticsExtension Class</title>
+          <content>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class provides the default implementation of the Server Diagnostics extension to the OpenStack
+              /// Compute Service V2.
+              /// </summary>
+              /// <remarks>
+              /// <note type="note">
+              /// <para>This class should not be instantiated directly. It should be obtained by passing
+              /// <see cref="PredefinedComputeExtensions.ServerDiagnostics"/> to
+              /// <see cref="IExtensibleService{TService}.GetServiceExtension{TExtension}"/>.</para>
+              /// </note>
+              /// </remarks>
+              /// <seealso href="http://developer.openstack.org/api-ref-compute-v2-ext.html#ext-diagnostics">Server diagnostics (OpenStack Compute API V2 Extensions)</seealso>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public class ServerDiagnosticsExtension : ServiceExtension<IComputeService>, IServerDiagnosticsExtension
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>ServerDiagnosticsExtensions Class</title>
+          <content>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class provides extension methods for using the optional Server Diagnostics functionality provided
+              /// by the OpenStack Compute Service V2.
+              /// </summary>
+              /// <seealso href="http://developer.openstack.org/api-ref-compute-v2-ext.html#ext-diagnostics">Server diagnostics (OpenStack Compute API V2 Extensions)</seealso>
+              /// <threadsafety static="true" instance="false"/>
+              /// <preliminary/>
+              public static class ExtractArchiveExtensions
+              {
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+      </sections>
+    </section>
+
+    <section>
+      <title>Additional Considerations</title>
+      <content>
+        <para>
+        </para>
+      </content>
+      <sections>
+        <section>
+          <title>ServerDiagnostics Property</title>
+          <content>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// Gets a service definition for the Server Diagnostics extension to the OpenStack Compute Service.
+              /// </summary>
+              /// <value>
+              /// A <see cref="NetworkingServiceExtensionDefinition{TExtension}"/> representing the Server Diagnostics
+              /// extension.
+              /// </value>
+              /// <seealso cref="IServerDiagnosticsExtension"/>
+              /// <seealso cref="ServerDiagnosticsExtension"/>
+              /// <preliminary/>
+              public static ComputeServiceExtensionDefinition<IServerDiagnosticsExtension> ServerDiagnostics
+              {
+                  get
+                  {
+                      return ServerDiagnosticsExtensionDefinition.Instance;
+                  }
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+        <section>
+          <title>ServerDiagnosticsExtensionDefinition Class</title>
+          <content>
+            <code language="csharp">
+              <![CDATA[
+              /// <summary>
+              /// This class provides the internal definition for the <see cref="ServerDiagnostics"/> property.
+              /// </summary>
+              /// <threadsafety static="true" instance="true"/>
+              /// <preliminary/>
+              private class ServerDiagnosticsExtensionDefinition
+                  : ComputeServiceExtensionDefinition<IServerDiagnosticsExtension>
+              {
+                  /// <summary>
+                  /// A singleton instance of the Server Diagnostics service extension definition.
+                  /// </summary>
+                  public static readonly ServerDiagnosticsExtensionDefinition Instance =
+                      new ServerDiagnosticsExtensionDefinition();
+
+                  /// <summary>
+                  /// Initializes a new instance of the <see cref="ServerDiagnosticsExtensionDefinition"/> class.
+                  /// </summary>
+                  private Layer3ExtensionDefinition()
+                  {
+                  }
+
+                  /// <inheritdoc/>
+                  public override string Name
+                  {
+                      get
+                      {
+                          return "Server Diagnostics";
+                      }
+                  }
+
+                  /// <inheritdoc/>
+                  public override IServerDiagnosticsExtension CreateDefaultInstance(IComputeService service, IHttpApiCallFactory httpApiCallFactory)
+                  {
+                      return new ServerDiagnosticsExtension(service, httpApiCallFactory);
+                  }
+              }
+              ]]>
+            </code>
+          </content>
+        </section>
+      </sections>
+    </section>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

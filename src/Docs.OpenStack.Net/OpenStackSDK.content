@@ -24,4 +24,13 @@
       <Topic id="9135e7f8-b287-44ca-9faf-802a50dbad1a" visible="True" title="Rackspace Authentication" />
     </Topic>
   </Topic>
+  <Topic id="af11df12-86d0-41c6-9e5c-fd5fdd613001" visible="True" isExpanded="true" title="Developer Guide">
+    <Topic id="68373f17-07bf-4f65-af55-30577c5348c3" visible="True" isExpanded="true" title="Walkthroughs">
+      <Topic id="448b47f0-a27a-44f0-87e4-fa7f5603b50e" visible="True" title="Creating a New Service" />
+      <Topic id="37e023c8-88cf-44ec-8f4f-1ac2f938841e" visible="True" title="Adding an API Call to a Service" />
+      <Topic id="7df06d75-757a-43d0-93a6-c6585949632a" visible="True" title="Creating a Service Extension" />
+      <Topic id="6f17475b-2b94-4641-b330-a294931a5538" visible="True" title="Add API Call to Extension" />
+      <Topic id="ffe6502a-e2d0-440e-a1c3-83ac515bffe7" visible="True" title="Add JSON Property" />
+    </Topic>
+  </Topic>
 </Topics>
