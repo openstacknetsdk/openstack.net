@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <Version>1.3.5.0-dev</Version>
+
+    <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
+    <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
+  </PropertyGroup>
+
+  <Target Name="CI">
+    <PropertyGroup>
+      <Configuration>Release</Configuration>
+    </PropertyGroup>
+
+    <CallTarget Targets="Build" />
+    <CallTarget Targets="UnitTest" />
+    <CallTarget Targets="Package" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="RestorePackages">
+    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /clp:errorsonly" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+  <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
+    <Exec Command="$(NuGet) restore ..\src\openstack.net.sln" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+  <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
+    <MakeDir Directories="$(LocalAppData)\NuGet" />
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '$(NuGet)'&quot;" />
+  </Target>
+
+  <Target Name="UnitTest" DependsOnTargets="Build">
+    <PropertyGroup>
+      <MSTest Condition=" '$(VS140COMNTOOLS)' != '' ">&quot;$(VS140COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
+      <MSTest Condition=" '$(VS120COMNTOOLS)' != '' ">&quot;$(VS120COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
+    </PropertyGroup>
+
+    <MakeDir Directories="..\artifacts\TestResults\" />
+    <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Build">
+    <MakeDir Directories="..\artifacts\packages\" />
+    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+</Project>

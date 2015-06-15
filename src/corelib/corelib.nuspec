@@ -32,11 +32,11 @@
     <!-- Runtime libraries -->
     <file src="bin\v3.5\$Configuration$\openstacknet.dll" target="lib\net35"/>
     <file src="bin\v3.5\$Configuration$\openstacknet.pdb" target="lib\net35"/>
-    <file src="..\..\docs\Api\v3.5\openstacknet.xml" target="lib\net35"/>
+    <file src="..\..\artifacts\docs\Api\v3.5\openstacknet.xml" target="lib\net35"/>
 
     <file src="bin\v4.0\$Configuration$\openstacknet.dll" target="lib\net40"/>
     <file src="bin\v4.0\$Configuration$\openstacknet.pdb" target="lib\net40"/>
-    <file src="..\..\docs\Api\v4.0\openstacknet.xml" target="lib\net40"/>
+    <file src="..\..\artifacts\docs\Api\v4.0\openstacknet.xml" target="lib\net40"/>
 
     <!-- Source code -->
     <file src="**\*.cs" target="src" />

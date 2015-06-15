@@ -47,13 +47,6 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocumentation", "Documentation\AdditionalReferenceDocumentation.shfbproj", "{1D084AB3-E5DB-4A72-9DAF-E51D225D5FCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE-1829-4783-92CF-390CFCE22E43}"
-	ProjectSection(SolutionItems) = preProject
-		..\build\build.ps1 = ..\build\build.ps1
-		..\build\check-key.ps1 = ..\build\check-key.ps1
-		..\build\keys.ps1 = ..\build\keys.ps1
-		..\build\push-v1.ps1 = ..\build\push-v1.ps1
-		..\build\version.ps1 = ..\build\version.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{5EB9C284-E943-4333-9F80-7C12475ACD00}"
 EndProject
