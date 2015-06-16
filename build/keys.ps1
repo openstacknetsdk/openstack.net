@@ -19,32 +19,6 @@ If ($Version.Contains('-')) {
 
 }
 
-If ($VersionV2.Contains('-')) {
-
-	# Use the development keys
-	$KeysV2 = @{
-		'net35' = 'adcdb5032b31c0fa'
-		'net40' = 'adcdb5032b31c0fa'
-		'net45' = 'adcdb5032b31c0fa'
-		'netcore45' = 'adcdb5032b31c0fa'
-		'portable-net40' = 'adcdb5032b31c0fa'
-		'portable-net45' = 'adcdb5032b31c0fa'
-	}
-
-} Else {
-
-	# Use the final release keys
-	$KeysV2 = @{
-		'net35' = 'e6ea8e3f398d7b2e'
-		'net40' = 'e6ea8e3f398d7b2e'
-		'net45' = 'e6ea8e3f398d7b2e'
-		'netcore45' = 'e6ea8e3f398d7b2e'
-		'portable-net40' = 'e6ea8e3f398d7b2e'
-		'portable-net45' = 'e6ea8e3f398d7b2e'
-	}
-
-}
-
 function Resolve-FullPath() {
 	param([string]$Path)
 	[System.IO.Path]::GetFullPath((Join-Path (pwd) $Path))
