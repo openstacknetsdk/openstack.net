@@ -54,6 +54,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocument
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EFFA0DAE-1829-4783-92CF-390CFCE22E43}"
 	ProjectSection(SolutionItems) = preProject
+		..\build\appveyor-deploy-docs.ps1 = ..\build\appveyor-deploy-docs.ps1
 		..\build\build.ps1 = ..\build\build.ps1
 		..\build\check-key.ps1 = ..\build\check-key.ps1
 		..\build\keys.ps1 = ..\build\keys.ps1
