@@ -1,4 +1,4 @@
-$DocsPath = "..\docs\html"
+$DocsPath = "..\artifacts\docs\html"
 
 # make sure the script was run from the expected path
 If (!(Test-Path $DocsPath)) {
@@ -15,4 +15,3 @@ function Upload-Folder() {
 }
 
 Upload-Folder -LocalPath "$DocsPath\v4.0" -ArtifactName "docs-v1.zip"
-Upload-Folder -LocalPath "$DocsPath\net45" -ArtifactName "docs-v2.zip"
