@@ -1,5 +1,7 @@
+* text=auto
+
 # Source code files
-*.cs text
+.cs text diff=csharp
 *.vsixmanifest text
 *.config text
 *.resx text
@@ -10,15 +12,9 @@
 *.ps1 text
 LICENSE text
 
-# SHFB Content Files
-*.aml text
-*.content text
-*.tokens text
-
 # Projects and solutions
-*.sln text
-*.csproj text
-*.shfbproj text
+*.sln text merge=union eol=crlf
+*.csproj text merge=union eol=crlf 
 
 # Certainly binary files
 *.png binary
