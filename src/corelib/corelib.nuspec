@@ -4,7 +4,7 @@
     <id>openstack.net</id>
     <version>0.0.0</version>
     <title>openstack.net</title>
-    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc, sharwell</authors>
+    <authors>alanquillin, kravi, ejwebb, jasonmitschke, bretmc, sharwell, carolynvs</authors>
     <owners>alanquillin, sharwell</owners>
     <licenseUrl>http://openstacknetsdk.org/docs/html/8b286b82-7aaf-4e45-9ffc-adbd7dbcfaa6.htm</licenseUrl>
     <projectUrl>https://github.com/openstacknetsdk/openstack.net</projectUrl>
@@ -19,21 +19,11 @@
         <dependency id="SimpleRESTServices" version="1.3.0.1" />
         <dependency id="Newtonsoft.Json" version="5.0.8" />
       </group>
-      <group targetFramework="3.5">
-        <!-- Version 1.3.0.1 introduced strong naming for SimpleRESTServices 1.3.x -->
-        <dependency id="SimpleRESTServices" version="1.3.0.1" />
-        <dependency id="Newtonsoft.Json" version="5.0.8" />
-        <dependency id="TaskParallelLibrary" version="1.0.2856.0" />
-      </group>
     </dependencies>
   </metadata>
   <files>
 
     <!-- Runtime libraries -->
-    <file src="bin\v3.5\$Configuration$\openstacknet.dll" target="lib\net35"/>
-    <file src="bin\v3.5\$Configuration$\openstacknet.pdb" target="lib\net35"/>
-    <file src="..\..\artifacts\docs\Api\v3.5\openstacknet.xml" target="lib\net35"/>
-
     <file src="bin\v4.0\$Configuration$\openstacknet.dll" target="lib\net40"/>
     <file src="bin\v4.0\$Configuration$\openstacknet.pdb" target="lib\net40"/>
     <file src="..\..\artifacts\docs\Api\v4.0\openstacknet.xml" target="lib\net40"/>

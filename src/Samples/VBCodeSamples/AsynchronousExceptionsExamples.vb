@@ -1,5 +1,4 @@
 ﻿Imports System.Threading.Tasks
-Imports Rackspace.Threading
 
 Public Class AsynchronousExceptionsExamples
 
@@ -37,7 +36,7 @@ Public Class AsynchronousExceptionsExamples
         Dim task1 = SomeOperationAsync()
 
         ' method invocation treated as a continuation
-        Dim task2 = CompletedTask.Default.Then(Function(task) SomeOperationAsync())
+        Dim task2 = task1.ContinueWith(Function(task) SomeOperationAsync())
         ' #End Region
     End Sub
 
