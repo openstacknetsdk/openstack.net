@@ -55,27 +55,43 @@ namespace Net.OpenStack.Testing.Integration
 
         public static IIdentityProvider CreateIdentityProvider(CloudIdentity identity)
         {
-            return new CloudIdentityProvider(identity);
+            var provider = new CloudIdentityProvider(identity);
+            SetUserAgent(provider);
+            return provider;
         }
 
         public static IComputeProvider CreateComputeProvider()
         {
-            return new CloudServersProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new CloudServersProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, CreateIdentityProvider(), null);
+            SetUserAgent(provider);
+            return provider;
         }
 
         public static INetworksProvider CreateNetworksProvider()
         {
-            return new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new CloudNetworksProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, CreateIdentityProvider(), null);
+            SetUserAgent(provider);
+            return provider;
         }
 
         public static IBlockStorageProvider CreateBlockStorageProvider()
         {
-            return new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new CloudBlockStorageProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, CreateIdentityProvider(), null);
+            SetUserAgent(provider);
+            return provider;
         }
 
         public static IObjectStorageProvider CreateObjectStorageProvider()
         {
-            return new CloudFilesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, null, null);
+            var provider = new CloudFilesProvider(Bootstrapper.Settings.TestIdentity, Bootstrapper.Settings.DefaultRegion, CreateIdentityProvider(), null);
+            SetUserAgent(provider);
+            return provider;
+        }
+
+        private static void SetUserAgent<T>(ProviderBase<T> provider)
+            where T : class
+        {
+            provider.ApplicationUserAgent = "CI-BOT";
         }
     }
 
