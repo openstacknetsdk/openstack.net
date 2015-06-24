@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace net.openstack.Core
 {
@@ -8,17 +10,27 @@ namespace net.openstack.Core
     /// <threadsafety static="true" instance="false"/>
     public static class UserAgentGenerator
     {
-        private static readonly Version _currentVersion = typeof(UserAgentGenerator).Assembly.GetName().Version;
-        private static readonly string _userAgent = string.Format("openstack.net/{0}", _currentVersion);
-
         /// <summary>
         /// Gets the User-Agent value for this SDK.
         /// </summary>
-        public static string UserAgent
+        public static readonly string UserAgent = GetUserAgent();
+
+        private static string GetUserAgent()
         {
-            get
+            return string.Format("openstack.net/{0}", GetVersion());
+        }
+
+        private static string GetVersion()
+        {
+            Assembly sdkAssembly = typeof(UserAgentGenerator).Assembly;
+            try
             {
-                return _userAgent;
+                var fileVersionInfo = FileVersionInfo.GetVersionInfo(sdkAssembly.Location);
+                return fileVersionInfo.FileVersion;
+            }
+            catch
+            {
+                return sdkAssembly.GetName().Version.ToString();
             }
         }
     }
