@@ -60,7 +60,7 @@
 
   <Target Name="Publish" DependsOnTargets="DownloadNuGet">
     <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the openstack.net plan in Bamboo -->
-    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %BAMBOO_NUGET_PASSWORD%" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 
 </Project>
