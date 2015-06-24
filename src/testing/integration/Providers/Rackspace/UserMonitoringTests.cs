@@ -2732,7 +2732,7 @@
                 Console.WriteLine("    {0}: {1}", agentCheckTarget.Id, agentCheckTarget.Label);
         }
 
-        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2740,7 +2740,7 @@
             return await (await service.ListAlarmChangelogsAsync(null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, EntityId entityId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmChangelog>> ListAllAlarmChangelogsAsync(IMonitoringService service, EntityId entityId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmChangelog>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2748,7 +2748,7 @@
             return await (await service.ListAlarmChangelogsAsync(entityId, null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<AlarmExample>> ListAllAlarmExamplesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmExample>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmExample>> ListAllAlarmExamplesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmExample>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2756,7 +2756,7 @@
             return await (await service.ListAlarmExamplesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<AlarmNotificationHistoryItem>> ListAllAlarmNotificationHistoryAsync(IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AlarmNotificationHistoryItem>> progress = null)
+        protected static async Task<ReadOnlyCollection<AlarmNotificationHistoryItem>> ListAllAlarmNotificationHistoryAsync(IMonitoringService service, EntityId entityId, AlarmId alarmId, CheckId checkId, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AlarmNotificationHistoryItem>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2764,7 +2764,7 @@
             return await (await service.ListAlarmNotificationHistoryAsync(entityId, alarmId, checkId, null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Audit>> ListAllAuditsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Audit>> progress = null)
+        protected static async Task<ReadOnlyCollection<Audit>> ListAllAuditsAsync(IMonitoringService service, int? blockSize, DateTimeOffset? from, DateTimeOffset? to, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Audit>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2772,7 +2772,7 @@
             return await (await service.ListAuditsAsync(null, blockSize, from, to, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Entity>> ListAllEntitiesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Entity>> progress = null)
+        protected static async Task<ReadOnlyCollection<Entity>> ListAllEntitiesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Entity>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2780,7 +2780,7 @@
             return await (await service.ListEntitiesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
+        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2788,7 +2788,7 @@
             return await (await service.ListEntityOverviewsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, IEnumerable<EntityId> entityIdFilter, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
+        protected static async Task<ReadOnlyCollection<EntityOverview>> ListAllEntityOverviewsAsync(IMonitoringService service, int? blockSize, IEnumerable<EntityId> entityIdFilter, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<EntityOverview>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2796,7 +2796,7 @@
             return await (await service.ListEntityOverviewsAsync(null, blockSize, entityIdFilter, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Alarm>> ListAllAlarmsAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Alarm>> progress = null)
+        protected static async Task<ReadOnlyCollection<Alarm>> ListAllAlarmsAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Alarm>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2804,7 +2804,7 @@
             return await (await service.ListAlarmsAsync(entityId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Check>> ListAllChecksAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Check>> progress = null)
+        protected static async Task<ReadOnlyCollection<Check>> ListAllChecksAsync(IMonitoringService service, EntityId entityId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Check>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2814,7 +2814,7 @@
             return await (await service.ListChecksAsync(entityId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<CheckType>> ListAllCheckTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CheckType>> progress = null)
+        protected static async Task<ReadOnlyCollection<CheckType>> ListAllCheckTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<CheckType>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2822,7 +2822,7 @@
             return await (await service.ListCheckTypesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Metric>> ListAllMetricsAsync(IMonitoringService service, EntityId entityId, CheckId checkId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Metric>> progress = null)
+        protected static async Task<ReadOnlyCollection<Metric>> ListAllMetricsAsync(IMonitoringService service, EntityId entityId, CheckId checkId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Metric>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2830,7 +2830,7 @@
             return await (await service.ListMetricsAsync(entityId, checkId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<MonitoringZone>> ListAllMonitoringZonesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<MonitoringZone>> progress = null)
+        protected static async Task<ReadOnlyCollection<MonitoringZone>> ListAllMonitoringZonesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<MonitoringZone>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2838,7 +2838,7 @@
             return await (await service.ListMonitoringZonesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<NotificationPlan>> ListAllNotificationPlansAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NotificationPlan>> progress = null)
+        protected static async Task<ReadOnlyCollection<NotificationPlan>> ListAllNotificationPlansAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<NotificationPlan>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2846,7 +2846,7 @@
             return await (await service.ListNotificationPlansAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Notification>> ListAllNotificationsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Notification>> progress = null)
+        protected static async Task<ReadOnlyCollection<Notification>> ListAllNotificationsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Notification>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2854,7 +2854,7 @@
             return await (await service.ListNotificationsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<NotificationType>> ListAllNotificationTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NotificationType>> progress = null)
+        protected static async Task<ReadOnlyCollection<NotificationType>> ListAllNotificationTypesAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<NotificationType>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2862,7 +2862,7 @@
             return await (await service.ListNotificationTypesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Agent>> ListAllAgentsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Agent>> progress = null)
+        protected static async Task<ReadOnlyCollection<Agent>> ListAllAgentsAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Agent>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2870,7 +2870,7 @@
             return await (await service.ListAgentsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<AgentConnection>> ListAllAgentConnectionsAsync(IMonitoringService service, AgentId agentId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AgentConnection>> progress = null)
+        protected static async Task<ReadOnlyCollection<AgentConnection>> ListAllAgentConnectionsAsync(IMonitoringService service, AgentId agentId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AgentConnection>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2878,7 +2878,7 @@
             return await (await service.ListAgentConnectionsAsync(agentId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<AgentToken>> ListAllAgentTokensAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<AgentToken>> progress = null)
+        protected static async Task<ReadOnlyCollection<AgentToken>> ListAllAgentTokensAsync(IMonitoringService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<AgentToken>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -2886,7 +2886,7 @@
             return await (await service.ListAgentTokensAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<CheckTarget>> ListAllAgentCheckTargetsAsync(IMonitoringService service, EntityId entityId, CheckTypeId agentCheckType, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CheckTarget>> progress = null)
+        protected static async Task<ReadOnlyCollection<CheckTarget>> ListAllAgentCheckTargetsAsync(IMonitoringService service, EntityId entityId, CheckTypeId agentCheckType, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<CheckTarget>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

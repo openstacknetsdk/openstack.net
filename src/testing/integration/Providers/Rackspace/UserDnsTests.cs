@@ -764,7 +764,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static async Task<ReadOnlyCollection<DnsDomain>> ListAllDomainsAsync(IDnsService provider, string domainName, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DnsDomain>> progress = null)
+        private static async Task<ReadOnlyCollection<DnsDomain>> ListAllDomainsAsync(IDnsService provider, string domainName, int? limit, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<DnsDomain>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -790,7 +790,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static async Task<ReadOnlyCollection<DnsSubdomain>> ListAllSubdomainsAsync(IDnsService provider, DomainId domainId, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DnsSubdomain>> progress = null)
+        private static async Task<ReadOnlyCollection<DnsSubdomain>> ListAllSubdomainsAsync(IDnsService provider, DomainId domainId, int? limit, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<DnsSubdomain>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");

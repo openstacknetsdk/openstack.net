@@ -14,7 +14,7 @@
     <copyright></copyright>
     <tags>openstack</tags>
     <dependencies>
-      <group targetFramework="4.0">
+      <group targetFramework="4.5">
         <!-- Version 1.3.0.1 introduced strong naming for SimpleRESTServices 1.3.x -->
         <dependency id="SimpleRESTServices" version="1.3.0.1" />
         <dependency id="Newtonsoft.Json" version="5.0.8" />

@@ -1,4 +1,6 @@
-﻿namespace net.openstack.Providers.Rackspace.Objects.AutoScale
+﻿using System.Collections.ObjectModel;
+
+namespace net.openstack.Providers.Rackspace.Objects.AutoScale
 {
     using System;
     using System.Collections.Generic;

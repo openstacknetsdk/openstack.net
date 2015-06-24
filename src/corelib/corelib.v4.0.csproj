@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>net.openstack</RootNamespace>
     <AssemblyName>openstacknet</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseIntermediateOutputPath>obj\v4.0\</BaseIntermediateOutputPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\v4.0\Release\openstacknet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -72,7 +75,6 @@
     <Compile Include="Core\Collections\BasicReadOnlyCollectionPage`1.cs" />
     <Compile Include="Core\Collections\NamespaceDoc.cs" />
     <Compile Include="Core\Collections\ReadOnlyCollectionPage`1.cs" />
-    <Compile Include="Core\Collections\ReadOnlyDictionary`2.cs" />
     <Compile Include="Core\BackoffPolicy.cs" />
     <Compile Include="Core\CoreTaskExtensions.cs" />
     <Compile Include="Core\Domain\AuthenticationRequirement.cs" />
@@ -146,7 +148,6 @@
     <Compile Include="Core\ExtensibleEnum`1.cs" />
     <Compile Include="Core\IBackoffPolicy.cs" />
     <Compile Include="Core\InternalTaskExtensions.cs" />
-    <Compile Include="Core\IProgress`1.cs" />
     <Compile Include="Core\NamespaceDoc.cs" />
     <Compile Include="Core\Domain\HomeDocument.cs" />
     <Compile Include="Core\ParallelExtensionsExtras\TaskCompletionSourceExtensions.cs" />
@@ -648,7 +649,7 @@
       <Link>OpenStackNetV1.snk</Link>
     </None>
     <None Include="corelib.nuspec" />
-    <None Include="packages.corelib.v4.0.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\openstack_net_logo.png" />

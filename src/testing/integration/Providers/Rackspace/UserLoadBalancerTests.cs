@@ -1973,7 +1973,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static async Task<ReadOnlyCollection<LoadBalancer>> ListAllLoadBalancersAsync(ILoadBalancerService provider, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<LoadBalancer>> progress = null)
+        private static async Task<ReadOnlyCollection<LoadBalancer>> ListAllLoadBalancersAsync(ILoadBalancerService provider, int? limit, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<LoadBalancer>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -1983,7 +1983,7 @@
             return await (await provider.ListLoadBalancersAsync(null, limit, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        private static async Task<ReadOnlyCollection<NodeServiceEvent>> ListAllNodeServiceEventsAsync(ILoadBalancerService provider, LoadBalancerId loadBalancerId, int? limit, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<NodeServiceEvent>> progress = null)
+        private static async Task<ReadOnlyCollection<NodeServiceEvent>> ListAllNodeServiceEventsAsync(ILoadBalancerService provider, LoadBalancerId loadBalancerId, int? limit, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<NodeServiceEvent>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");

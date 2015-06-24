@@ -371,7 +371,7 @@
             }
         }
 
-        protected async Task<ReadOnlyCollection<DatabaseInstance>> ListAllDatabaseInstancesAsync(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<DatabaseInstance>> progress = null)
+        protected async Task<ReadOnlyCollection<DatabaseInstance>> ListAllDatabaseInstancesAsync(IDatabaseService provider, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<DatabaseInstance>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -381,7 +381,7 @@
             return await (await provider.ListDatabaseInstancesAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected async Task<ReadOnlyCollection<Database>> ListAllDatabasesAsync(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<Database>> progress = null)
+        protected async Task<ReadOnlyCollection<Database>> ListAllDatabasesAsync(IDatabaseService provider, DatabaseInstanceId instanceId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<Database>> progress = null)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");

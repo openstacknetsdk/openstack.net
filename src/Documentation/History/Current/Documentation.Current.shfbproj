@@ -15,7 +15,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation.v4.0</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>.\bin\Help</OutputPath>
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
