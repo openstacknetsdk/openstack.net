@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
+    <Platform>&quot;Any CPU&quot;</Platform>
     <Version>1.3.6.0</Version>
 
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
@@ -12,6 +13,7 @@
   <Target Name="CI">
     <PropertyGroup>
       <Configuration>Release</Configuration>
+      <Platform>&quot;Any CPU&quot;</Platform>
     </PropertyGroup>
 
     <CallTarget Targets="Build" />
@@ -21,7 +23,7 @@
   </Target>
 
   <Target Name="Build" DependsOnTargets="RestorePackages">
-    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /p:Platform=$(Platform) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 
   <Target Name="Documentation" DependsOnTargets="Build">
@@ -30,7 +32,7 @@
     </PropertyGroup>
 
     <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" WorkingDirectory="$(MSBuildThisFileDirectory)" />
-    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /p:Platform=$(Platform) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
