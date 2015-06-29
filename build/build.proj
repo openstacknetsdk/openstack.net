@@ -44,11 +44,13 @@
 
   <Target Name="UnitTest" DependsOnTargets="Build">
     <PropertyGroup>
+      <XUnit>..\src\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
       <MSTest Condition=" '$(VS140COMNTOOLS)' != '' ">&quot;$(VS140COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
       <MSTest Condition=" '$(VS120COMNTOOLS)' != '' ">&quot;$(VS120COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
     </PropertyGroup>
 
     <MakeDir Directories="..\artifacts\TestResults\" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts/TestResults/xunit-results.xml" />
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" />
     <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
   </Target>

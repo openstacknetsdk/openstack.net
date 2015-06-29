@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsynchronousExceptionsExamples.cs" />
+    <Compile Include="ContentDeliveryNetworkExample.cs" />
     <Compile Include="IdentityProviderExamples.cs" />
     <Compile Include="ObjectStorageProviderExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +65,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.CSharpCodeSamples.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

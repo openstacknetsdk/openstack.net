@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,6 +17,10 @@ using net.openstack.Providers.Rackspace.Objects.Request;
 using net.openstack.Providers.Rackspace.Objects.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack;
+using OpenStack.Authentication;
+using OpenStack.Core;
+using OpenStack.Serialization;
 using CancellationToken = System.Threading.CancellationToken;
 
 namespace net.openstack.Providers.Rackspace
@@ -149,6 +154,12 @@ namespace net.openstack.Providers.Rackspace
         {
             _userAccessCache = tokenCache ?? UserAccessCache.Instance;
             _urlBase = urlBase ?? new Uri("https://identity.api.rackspacecloud.com");
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new EmptyEnumerableResolver()
+            };
         }
 
         /// <summary>
@@ -1126,6 +1137,37 @@ namespace net.openstack.Providers.Rackspace
                         new JProperty("username", userName),
                         new JProperty("expire-in-seconds", expirationInSeconds))))));
         }
+
+        #endregion
+
+        #region IAuthenticationProvider
+        /* Provides compatibility with the new services until the old providers are deprecated */
+
+        async Task<string> IAuthenticationProvider.GetEndpoint(ServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken)
+        {
+            string rackspaceServiceType = RackspaceServiceTypes[serviceType];
+            
+            if(DefaultIdentity == null)
+                throw new IdentityRequiredException();
+
+            UserAccess userAccess = await GetUserAccessAsync(DefaultIdentity, false, cancellationToken);
+
+            string requestedRegion = region ?? DefaultRegion;
+            return LegacyAuthenticationProviderHelper.GetEndpoint(rackspaceServiceType, userAccess, DefaultIdentity, requestedRegion, useInternalUrl);
+        }
+
+        async Task<string> IAuthenticationProvider.GetToken(CancellationToken cancellationToken)
+        {
+            // todo: this is a race. we need to retry if the token has expired between when we grabbed it from the cache and when we used it
+            IdentityToken identityToken = await GetTokenAsync(DefaultIdentity, cancellationToken);
+            return identityToken.Id;
+        }
+
+        // We only need to list service types for any services which are using the new service model instead of the old provider model.
+        private static readonly ConcurrentDictionary<ServiceType, string> RackspaceServiceTypes = new ConcurrentDictionary<ServiceType, string>(new KeyValuePair<ServiceType, string>[]
+        {
+            new KeyValuePair<ServiceType, string>(ServiceType.ContentDeliveryNetwork, "rax:cdn")
+        });
 
         #endregion
     }

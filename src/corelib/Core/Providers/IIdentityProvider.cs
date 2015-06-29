@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Exceptions.Response;
 using net.openstack.Providers.Rackspace;
+using OpenStack.Authentication;
 
 namespace net.openstack.Core.Providers
 {
@@ -10,7 +11,7 @@ namespace net.openstack.Core.Providers
     /// Represents a provider for the OpenStack Identity Service.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/">OpenStack Identity Service API v2.0 Reference</seealso>
-    public interface IIdentityProvider
+    public interface IIdentityProvider : IAuthenticationProvider
     {
         /// <summary>
         /// Authenticates the user for the specified identity.
