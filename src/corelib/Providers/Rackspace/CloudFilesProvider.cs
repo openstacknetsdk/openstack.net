@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -459,7 +459,7 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public Dictionary<string, string> EnableCDNOnContainer(string container, long timeToLive, string region = null, CloudIdentity identity = null)
         {
-            return EnableCDNOnContainer(container, timeToLive, false, region, identity);
+            return EnableCDNOnContainer(container, timeToLive, false, identity: identity);
         }
 
         /// <inheritdoc />

@@ -2,26 +2,78 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <Configuration>Debug</Configuration>
+    <Platform>Mixed Platforms</Platform>
+    <DocumentationPlatform>Any CPU</DocumentationPlatform>
     <Version>1.3.6.0</Version>
 
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
   </PropertyGroup>
+  
+  <!-- ========================== -->  
+  <!-- MAIN EXECUTABLE TARGETS    -->
+  <!-- ========================== -->  
+  <Target Name="BuildDebug">
+    <CallTarget Targets="SetDebugConfiguration" />
+    <CallTarget Targets="ExecuteBuild" />
+  </Target>
 
-  <Target Name="CI">
+  <Target Name="BuildRelease">
+    <CallTarget Targets="SetReleaseConfiguration" />
+    <CallTarget Targets="ExecuteBuild" />
+  </Target>
+  
+  <Target Name="BuildDebugAndPackage">
+    <CallTarget Targets="SetDebugConfiguration" />
+    <CallTarget Targets="ExecuteBuildAndPackage" />
+  </Target>
+  
+  <Target Name="BuildReleaseAndPackage">
+    <CallTarget Targets="SetReleaseConfiguration" />
+    <CallTarget Targets="ExecuteBuildAndPackage" />
+  </Target>
+  
+  <Target Name="BuildReleaseAndPackageAndPublish">
+    <CallTarget Targets="SetReleaseConfiguration" />
+    <CallTarget Targets="ExecuteBuildAndPackageAndPublish" />
+  </Target>
+  
+  <!-- ========================== -->  
+  <!-- SUPPORTING TARGETS         -->
+  <!-- ========================== -->  
+  <Target Name="SetDebugConfiguration">
+    <PropertyGroup>
+      <Configuration>Debug</Configuration>
+    </PropertyGroup>
+  </Target>
+  
+  <Target Name="SetReleaseConfiguration">
     <PropertyGroup>
       <Configuration>Release</Configuration>
     </PropertyGroup>
-
+  </Target>
+  
+  <Target Name="ExecuteBuild">
     <CallTarget Targets="Build" />
-    <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
+  </Target>
+  
+  <Target Name="ExecuteBuildAndPackage">
+    <CallTarget Targets="ExecuteBuild" />
+    <CallTarget Targets="Documentation" />
     <CallTarget Targets="Package" />
   </Target>
-
+  
+  <Target Name="ExecuteBuildAndPackageAndPublish">
+    <CallTarget Targets="ExecuteBuildAndPackage" />
+    <CallTarget Targets="Publish" />
+  </Target>
+  
+  <!-- ========================== -->  
+  <!-- WORKING TARGETS            -->
+  <!-- ========================== -->    
   <Target Name="Build" DependsOnTargets="RestorePackages">
-    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /p:Platform=&quot;$(Platform)&quot; /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 
   <Target Name="Documentation" DependsOnTargets="Build">
@@ -30,7 +82,7 @@
     </PropertyGroup>
 
     <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" WorkingDirectory="$(MSBuildThisFileDirectory)" />
-    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /p:Platform=&quot;$(DocumentationPlatform)&quot; /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
