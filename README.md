@@ -29,7 +29,23 @@ which uses static analysis to identify common mistakes, and in many cases is abl
 
 ### Build script
 
-Execute `build.cmd` (or `build.sh` if you are using Git Bash).
+Execute `build.cmd` to download all dependencies and build. Use `build.cmd help` or `build.cmd /?` to view the available command line arguments.
+
+```bash
+build.cmd [Build|UnitTest|Documentation|Package] [/Configuration Debug|Release]
+
+# Execute Build target in Debug mode
+build.cmd
+
+# Execute UnitTest target in Debug mode
+build.cmd UnitTest
+
+# Execute Build target in Release mode
+build.cmd /Configuration Release
+
+# Execute Package target in Release mode
+build.cmd Package /Configuration Release
+```
 
 See the [Documentation README](src/Documentation/README.md) if you would like to build the Sandcastle documentation which is published to http://openstacknetsdk.org/docs.
 

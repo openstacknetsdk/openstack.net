@@ -53,7 +53,7 @@
     <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Build">
+  <Target Name="Package" DependsOnTargets="Build;Documentation">
     <MakeDir Directories="..\artifacts\packages\" />
     <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
