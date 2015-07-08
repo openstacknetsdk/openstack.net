@@ -26,6 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\v4.0\Release\openstacknet.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
