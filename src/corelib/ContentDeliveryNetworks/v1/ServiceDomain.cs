@@ -6,7 +6,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a service domain resource of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class ServiceDomain
     {
         /// <summary>

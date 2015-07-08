@@ -9,7 +9,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a flavor resource of the <see cref="IContentDeliveryNetworkService"/>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class Flavor
     {
         /// <summary>

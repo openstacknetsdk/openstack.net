@@ -76,9 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
+    <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\NamespaceDoc.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Provider.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Service.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceCache.cs" />
@@ -96,9 +98,10 @@
     <Compile Include="ContentDeliveryNetworks\v1\ServiceRestriction.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceRestrictionRule.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceStatus.cs" />
-    <Compile Include="ContentDeliveryNetworks\v1\Synchronous\ContentDeliveryNetworkServiceExtensions.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceExtensions.cs" />
     <Compile Include="Core\LegacyAuthenticationProviderHelper.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="PageExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Core\AsyncCompletionOption.cs" />

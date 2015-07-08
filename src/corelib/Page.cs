@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace OpenStack
 {
     /// <summary>
-    /// A page of <typeparamref name="T"/> instances.
+    /// A page of resources.
     /// </summary>
     /// <typeparam name="T">The item type.</typeparam>
     public interface IPage<T> : IEnumerable<T>
@@ -24,7 +24,7 @@ namespace OpenStack
         Task<IPage<T>> GetNextPageAsync(CancellationToken cancellation = default(CancellationToken));
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IPage{T}" />
     [JsonObject] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
     public abstract class Page<T> : ResourceCollection<T>, IPage<T>
     {

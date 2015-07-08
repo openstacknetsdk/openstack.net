@@ -7,7 +7,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// <summary>
     /// Protocol used to access the assets on a domain.
     /// </summary>
-    /// <preliminary/>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ServiceProtocol
     {

@@ -12,7 +12,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// </para>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class ServiceCache
     {
         /// <summary>
@@ -20,7 +19,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// </summary>
         /// <param name="name">The name of the cache.</param>
         /// <param name="timeToLive">The time to live (in seconds).</param>
-        /// <param name="rules">Additional rules defining if this TTL should be applied to an asset..</param>
         public ServiceCache(string name, TimeSpan timeToLive)
         {
             Name = name;

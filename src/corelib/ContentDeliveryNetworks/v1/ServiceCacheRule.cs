@@ -6,7 +6,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a caching rule resource of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class ServiceCacheRule
     {
         /// <summary>

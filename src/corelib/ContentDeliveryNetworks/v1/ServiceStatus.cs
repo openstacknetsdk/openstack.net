@@ -7,7 +7,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// <summary>
     /// Content Delivery Network (CDN) service status
     /// </summary>
-    /// <preliminary/>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ServiceStatus
     {

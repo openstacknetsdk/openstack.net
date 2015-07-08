@@ -4,8 +4,10 @@ using System.Net;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Marvin.JsonPatch;
+using OpenStack.ContentDeliveryNetworks.v1;
 
-namespace OpenStack.ContentDeliveryNetworks.v1.Synchronous
+// ReSharper disable once CheckNamespace
+namespace OpenStack.Synchronous
 {
     /// <summary>
     /// Provides synchronous extention methods for an <see cref="IContentDeliveryNetworkService"/> instance.
@@ -37,7 +39,10 @@ namespace OpenStack.ContentDeliveryNetworks.v1.Synchronous
         }
 
         /// <summary>
-        /// Pings the service. If no exception is thrown, the service is considered up/healthy.
+        /// Pings the service.
+        /// <para>
+        /// If no exception is thrown, the service is considered up/healthy.
+        /// </para>
         /// </summary>
         /// <param name="cdnService">The <see cref="IContentDeliveryNetworkService"/> service instance.</param>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode" />.</exception>

@@ -6,7 +6,7 @@ using Flurl.Http;
 using Marvin.JsonPatch;
 using net.openstack.Providers.Rackspace;
 using Newtonsoft.Json;
-using OpenStack.ContentDeliveryNetworks.v1.Synchronous;
+using OpenStack.Synchronous;
 using Xunit;
 using Xunit.Abstractions;
 

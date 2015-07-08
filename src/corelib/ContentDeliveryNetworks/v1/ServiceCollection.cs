@@ -12,14 +12,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a collection of service resources of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class ServiceCollection : Page<Service>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCollection"/> class.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <param name="links">Any API navigation links.</param>
         public ServiceCollection(IEnumerable<Service> services)
             : base(services)
         {

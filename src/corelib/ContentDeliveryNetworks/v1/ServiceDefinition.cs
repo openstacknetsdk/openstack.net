@@ -7,7 +7,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents the definition of a service resource of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class ServiceDefinition
     {
         /// <summary>

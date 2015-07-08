@@ -48,6 +48,70 @@
           </definition>
         </definitionTable>
         <table>
+          
+          <row>
+            <entry address="CDN">
+              <para>
+                <legacyBold>ContentDeliveryNetwork</legacyBold>
+              </para>
+            </entry>
+            <entry/>
+            <entry/>
+          </row>
+          <row>
+            <entry/>
+            <entry>
+              <para>Service interfaces</para>
+            </entry>
+            <entry>
+              <para>
+                <codeEntityReference>T:OpenStack.ContentDeliveryNetworks.v1.IContentDeliveryNetworkService</codeEntityReference>
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry/>
+            <entry>
+              <para>Service clients</para>
+            </entry>
+            <entry>
+              <para>
+                <codeEntityReference>T:OpenStack.ContentDeliveryNetworks.v1.ContentDeliveryNetworkService</codeEntityReference>
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry/>
+            <entry>
+              <para>Domain objects namespaces</para>
+            </entry>
+            <entry>
+              <para>
+                <codeEntityReference>N:OpenStack.ContentDeliveryNetworks.v1</codeEntityReference>
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry/>
+            <entry>
+              <para>API references</para>
+            </entry>
+            <entry>
+              <para>
+                <externalLink>
+                  <linkText>OpenStack (Poppy) Content Delivery Network Service API v1 Reference</linkText>
+                  <linkUri>http://docs.cloudcdn.apiary.io/</linkUri>
+                </externalLink>
+              </para>
+              <para>
+                <externalLink>
+                  <linkText>Rackspace CDN Developer Guide - API V1</linkText>
+                  <linkUri>http://docs.rackspace.com/cdn/api/v1.0/cdn-devguide/content/Overview.html</linkUri>
+                </externalLink>
+              </para>
+            </entry>
+          </row>
+          
           <row>
             <entry address="ObjectStorage">
               <para>

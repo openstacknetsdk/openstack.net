@@ -8,7 +8,6 @@ using Flurl;
 using Flurl.Http.Testing;
 using Marvin.JsonPatch;
 using net.openstack.Core.Domain;
-using OpenStack.ContentDeliveryNetworks.v1.Synchronous;
 using OpenStack.Synchronous;
 using Xunit;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using net.openstack.Core.Domain;
 using Newtonsoft.Json;
 
@@ -9,7 +8,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a service resource of the <see cref="IContentDeliveryNetworkService"/>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    /// <preliminary/>
     public class Service
     {
         /// <summary>

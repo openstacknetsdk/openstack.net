@@ -5,7 +5,7 @@ using net.openstack.Core.Providers;
 using net.openstack.Providers.Rackspace;
 using OpenStack;
 using OpenStack.ContentDeliveryNetworks.v1;
-using OpenStack.ContentDeliveryNetworks.v1.Synchronous;
+using OpenStack.Synchronous;
 using OpenStack.Synchronous;
 
 namespace CSharpCodeSamples

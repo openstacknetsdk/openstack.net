@@ -18,7 +18,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Gets the specified flavor.
         /// </summary>
-        /// <preliminary/>
         /// <param name="flavorId">The flavor identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="flavorId"/> is <see langword="null"/>.</exception>
@@ -31,7 +30,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Lists basic information for all available flavors.
         /// </summary>
-        /// <preliminary/>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="FlurlHttpException">If the service call returns a bad <see cref="HttpStatusCode"/>.</exception>
         /// <returns>
@@ -40,9 +38,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         Task<IEnumerable<Flavor>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Pings the service. If no exception is thrown, the service is considered up/healthy.
+        /// Pings the service.
+        /// <para>
+        /// If no exception is thrown, the service is considered up/healthy.
+        /// </para>
         /// </summary>
-        /// <preliminary/>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
         Task PingAsync(CancellationToken cancellationToken = default(CancellationToken));
@@ -50,7 +50,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Lists all Content Delivery Network services associated with the account.
         /// </summary>
-        /// <preliminary/>
         /// <param name="startServiceId">The id of the first service from which to start paging the results.</param>
         /// <param name="pageSize">The numer of services to return per page.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -63,7 +62,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Gets the specified Content Delivery Network service.
         /// </summary>
-        /// <preliminary/>
         /// <param name="serviceId">The service identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceId"/> is <see langword="null"/>.</exception>
@@ -76,7 +74,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Creates a Content Delivery Network service.
         /// </summary>
-        /// <preliminary/>
         /// <param name="service">The service definition.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
@@ -89,7 +86,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Deletes the specified Content Delivery Network service.
         /// </summary>
-        /// <preliminary/>
         /// <param name="serviceId">The service identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceId"/> is <see langword="null"/>.</exception>
@@ -99,7 +95,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Updates the specified Content DeliveryNetwork service
         /// </summary>
-        /// <preliminary/>
         /// <param name="serviceId">The service identifier.</param>
         /// <param name="patch">The patch containing updated properties.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -110,7 +105,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Removes the current version of the specified asset that has been cached at the edge.
         /// </summary>
-        /// <preliminary/>
         /// <param name="serviceId">The service identifier.</param>
         /// <param name="url">The asset URL.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -121,7 +115,6 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <summary>
         /// Removes the current version of all assets that has been cached at the edge.
         /// </summary>
-        /// <preliminary/>
         /// <param name="serviceId">The service identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceId"/> is <see langword="null"/>.</exception>

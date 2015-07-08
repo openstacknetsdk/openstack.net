@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Flurl.Http.Testing;
-using OpenStack.ContentDeliveryNetworks.v1.Synchronous;
+using OpenStack.Synchronous;
 using Xunit;
 
 namespace OpenStack.ContentDeliveryNetworks.v1

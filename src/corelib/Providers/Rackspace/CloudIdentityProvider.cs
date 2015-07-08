@@ -1150,7 +1150,7 @@ namespace net.openstack.Providers.Rackspace
             if(DefaultIdentity == null)
                 throw new IdentityRequiredException();
 
-            UserAccess userAccess = await GetUserAccessAsync(DefaultIdentity, false, cancellationToken);
+            UserAccess userAccess = await GetUserAccessAsync(DefaultIdentity, false, cancellationToken).ConfigureAwait(false);
 
             string requestedRegion = region ?? DefaultRegion;
             return LegacyAuthenticationProviderHelper.GetEndpoint(rackspaceServiceType, userAccess, DefaultIdentity, requestedRegion, useInternalUrl);
@@ -1159,7 +1159,7 @@ namespace net.openstack.Providers.Rackspace
         async Task<string> IAuthenticationProvider.GetToken(CancellationToken cancellationToken)
         {
             // todo: this is a race. we need to retry if the token has expired between when we grabbed it from the cache and when we used it
-            IdentityToken identityToken = await GetTokenAsync(DefaultIdentity, cancellationToken);
+            IdentityToken identityToken = await GetTokenAsync(DefaultIdentity, cancellationToken).ConfigureAwait(false);
             return identityToken.Id;
         }
 
