@@ -74,8 +74,7 @@
       <ComponentConfig id="API Token Resolution" enabled="True">
         <component id="API Token Resolution">
           {@TokenFiles}
-          <replace elements="/*//token" item="string(.)" />
-        </component>
+          <replace elements="/*//token" item="string(.)" /></component>
       </ComponentConfig>
     </ComponentConfigurations>
     <CatalogName>VisualStudio11</CatalogName>
@@ -94,6 +93,7 @@
           <currentProject label=".NET Framework" version="4.5" ripOldApis="False" />
           <versions>
             <version label="openstack.net" version="1.4.0" helpFileProject="History\Current\Documentation.Current.shfbproj" />
+            <version label="openstack.net" version="1.3.6" ripOldApis="True" helpFileProject="History\1.3.6\Documentation.1.3.6.shfbproj" />
             <version label="openstack.net" version="1.3.5" ripOldApis="True" helpFileProject="History\1.3.5\Documentation.1.3.5.shfbproj" />
             <version label="openstack.net" version="1.3.4" ripOldApis="True" helpFileProject="History\1.3.4\Documentation.1.3.4.shfbproj" />
             <version label="openstack.net" version="1.3.3" ripOldApis="True" helpFileProject="History\1.3.3\Documentation.1.3.3.shfbproj" />
