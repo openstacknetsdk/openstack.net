@@ -1040,7 +1040,7 @@
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static async Task<ReadOnlyCollection<CloudQueue>> ListAllQueuesAsync(IQueueingService provider, int? limit, bool detailed, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<CloudQueue>> progress)
+        private static async Task<ReadOnlyCollection<CloudQueue>> ListAllQueuesAsync(IQueueingService provider, int? limit, bool detailed, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<CloudQueue>> progress)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");
@@ -1072,7 +1072,7 @@
         /// <para>If <paramref name="queueName"/> is <see langword="null"/>.</para>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="limit"/> is less than or equal to 0.</exception>
-        private static async Task<ReadOnlyCollection<QueuedMessage>> ListAllMessagesAsync(IQueueingService provider, QueueName queueName, int? limit, bool echo, bool includeClaimed, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollectionPage<QueuedMessage>> progress)
+        private static async Task<ReadOnlyCollection<QueuedMessage>> ListAllMessagesAsync(IQueueingService provider, QueueName queueName, int? limit, bool echo, bool includeClaimed, CancellationToken cancellationToken, IProgress<ReadOnlyCollectionPage<QueuedMessage>> progress)
         {
             if (provider == null)
                 throw new ArgumentNullException("provider");

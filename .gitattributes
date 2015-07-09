@@ -13,8 +13,9 @@
 LICENSE text
 
 # Projects and solutions
-*.sln text merge=union eol=crlf
-*.csproj text merge=union eol=crlf 
+*.sln text merge=binary eol=crlf
+*.csproj text merge=binary eol=crlf 
+*.shfbproj text merge=binary eol=crlf
 
 # Certainly binary files
 *.png binary

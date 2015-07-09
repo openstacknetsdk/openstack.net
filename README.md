@@ -49,4 +49,12 @@ build.cmd Package /Configuration Release
 
 See the [Documentation README](src/Documentation/README.md) if you would like to build the Sandcastle documentation which is published to http://openstacknetsdk.org/docs.
 
+### Integration Tests
+You must have a real account (e.g. on Rackspace) in order to run the integration tests. The tests look for your credentials in environment variables, OPENSTACKNET_USER and OPENSTACKNET_APIKEY. After you have set the environment variables you will need to log out then log back in.
+
+```batchfile
+setx OPENSTACKNET_USER secretusername
+setx OPENSTACKNET_APIKEY secretapikey
+```
+
 #### This is not an official OpenStack project

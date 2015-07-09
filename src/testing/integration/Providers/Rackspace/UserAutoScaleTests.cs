@@ -982,7 +982,7 @@
             }
         }
 
-        protected static async Task<ReadOnlyCollection<ScalingGroup>> ListAllScalingGroupsAsync(IAutoScaleService service, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<ScalingGroup>> progress = null)
+        protected static async Task<ReadOnlyCollection<ScalingGroup>> ListAllScalingGroupsAsync(IAutoScaleService service, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollection<ScalingGroup>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -990,7 +990,7 @@
             return await (await service.ListScalingGroupsAsync(null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Policy>> ListAllPoliciesAsync(IAutoScaleService service, ScalingGroupId groupId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Policy>> progress = null)
+        protected static async Task<ReadOnlyCollection<Policy>> ListAllPoliciesAsync(IAutoScaleService service, ScalingGroupId groupId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollection<Policy>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");
@@ -998,7 +998,7 @@
             return await (await service.ListPoliciesAsync(groupId, null, blockSize, cancellationToken)).GetAllPagesAsync(cancellationToken, progress);
         }
 
-        protected static async Task<ReadOnlyCollection<Webhook>> ListAllWebhooksAsync(IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, int? blockSize, CancellationToken cancellationToken, net.openstack.Core.IProgress<ReadOnlyCollection<Webhook>> progress = null)
+        protected static async Task<ReadOnlyCollection<Webhook>> ListAllWebhooksAsync(IAutoScaleService service, ScalingGroupId groupId, PolicyId policyId, int? blockSize, CancellationToken cancellationToken, IProgress<ReadOnlyCollection<Webhook>> progress = null)
         {
             if (service == null)
                 throw new ArgumentNullException("service");

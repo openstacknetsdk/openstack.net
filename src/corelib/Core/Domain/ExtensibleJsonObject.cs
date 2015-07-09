@@ -1,4 +1,6 @@
-﻿namespace net.openstack.Core.Domain
+﻿using System.Collections.ObjectModel;
+
+namespace net.openstack.Core.Domain
 {
     using System;
     using System.Collections.Generic;

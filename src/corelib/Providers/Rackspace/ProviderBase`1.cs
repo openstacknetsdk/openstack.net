@@ -27,7 +27,7 @@ namespace net.openstack.Providers.Rackspace
     /// </summary>
     /// <typeparam name="TProvider">The service provider interface this object implements.</typeparam>
     /// <threadsafety static="true" instance="false"/>
-    public abstract class ProviderBase<TProvider>
+    public abstract class ProviderBase<TProvider> : IRackspaceProvider 
         where TProvider : class
     {
         /// <summary>
@@ -1398,6 +1398,16 @@ namespace net.openstack.Providers.Rackspace
         protected virtual Task<T> ParseJsonResultImplAsync<T>(Task<Tuple<HttpWebResponse, string>> task, CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(task.Result.Item2));
+        }
+
+        IIdentityProvider IRackspaceProvider.IdentityProvider
+        {
+            get { return IdentityProvider; }
+        }
+
+        CloudIdentity IRackspaceProvider.DefaultIdentity
+        {
+            get { return DefaultIdentity; }
         }
     }
 }

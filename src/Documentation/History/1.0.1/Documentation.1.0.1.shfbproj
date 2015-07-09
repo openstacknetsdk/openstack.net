@@ -42,7 +42,7 @@
     <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
     <IncludeFavorites>True</IncludeFavorites>
     <BinaryTOC>True</BinaryTOC>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, ProtectedInternalAsProtected</VisibleItems>
     <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
     <CopyrightText>
     </CopyrightText>

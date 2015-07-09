@@ -67,7 +67,7 @@ public:
 	generic<class T>
 	static Task<ReadOnlyCollection<T>^>^ GetAllPagesContinuationAsync(Task<ReadOnlyCollectionPage<T>^>^ pageTask)
 	{
-		return ReadOnlyCollectionPageExtensions::GetAllPagesAsync(pageTask->Result, CancellationToken::None, static_cast<net::openstack::Core::IProgress<ReadOnlyCollectionPage<T>^>^>(nullptr));
+		return ReadOnlyCollectionPageExtensions::GetAllPagesAsync(pageTask->Result, CancellationToken::None, static_cast<IProgress<ReadOnlyCollectionPage<T>^>^>(nullptr));
 	}
 #pragma endregion
 

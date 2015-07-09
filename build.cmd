@@ -37,7 +37,7 @@ msbuild build\build.proj %TargetArg% %ConfigArg% /nologo
 exit /b %ERRORLEVEL%
 
 :help
-echo build.cmd [Build^|UnitTest^|Documentation^|Package] [/Configuration Debug^|Release]
+echo build.cmd [Build^|UnitTest^|IntegrationTest^|Documentation^|Package] [/Configuration Debug^|Release]
 echo.
 echo Examples:
 echo build.cmd

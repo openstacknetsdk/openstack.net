@@ -1,9 +1,8 @@
-﻿namespace CSharpCodeSamples
-{
-    using System;
-    using System.Threading.Tasks;
-    using Rackspace.Threading;
+﻿using System;
+using System.Threading.Tasks;
 
+namespace CSharpCodeSamples
+{
     public class AsynchronousExceptionsExamples
     {
         public void ExceptionPriorToTaskCreation()
@@ -50,7 +49,7 @@
             Task task1 = SomeOperationAsync();
 
             // method invocation treated as a continuation
-            Task task2 = CompletedTask.Default.Then(_ => SomeOperationAsync());
+            Task task2 = task1.ContinueWith(_ => SomeOperationAsync());
             #endregion
         }
 

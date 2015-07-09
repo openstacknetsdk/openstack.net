@@ -3,10 +3,11 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-    <Version>1.3.6.1</Version>
+    <Version>1.4.0-beta</Version>
 
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
+    <XUnit>..\src\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
   </PropertyGroup>
 
   <Target Name="CI">
@@ -49,8 +50,14 @@
     </PropertyGroup>
 
     <MakeDir Directories="..\artifacts\TestResults\" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" />
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" />
     <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
+  </Target>
+
+  <Target Name="IntegrationTest" DependsOnTargets="Build">
+    <Error Condition=" '$(OPENSTACKNET_USER)' == '' OR '$(OPENSTACKNET_APIKEY)' == '' " Text="You must set the OPENSTACKNET_USER and OPENSTACKNET_APIKEY environment variables, logout then login in order to run the integration tests." />
+    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">

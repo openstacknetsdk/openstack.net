@@ -1,4 +1,6 @@
-﻿namespace net.openstack.Providers.Rackspace.Objects.LoadBalancers
+﻿using System.Collections.ObjectModel;
+
+namespace net.openstack.Providers.Rackspace.Objects.LoadBalancers
 {
     using System;
     using System.Collections.Generic;

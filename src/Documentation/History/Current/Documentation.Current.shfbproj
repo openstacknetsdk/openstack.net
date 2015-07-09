@@ -13,14 +13,14 @@
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
     <RootNamespace>Documentation</RootNamespace>
-    <Name>Documentation.v3.5</Name>
+    <Name>Documentation.v4.0</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>.\bin\Help</OutputPath>
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\corelib\corelib.v3.5.csproj" />
+      <DocumentationSource sourceFile="..\..\..\corelib\corelib.v4.0.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -42,7 +42,7 @@
     <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
     <IncludeFavorites>True</IncludeFavorites>
     <BinaryTOC>True</BinaryTOC>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, ProtectedInternalAsProtected</VisibleItems>
     <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
     <CopyrightText>
     </CopyrightText>

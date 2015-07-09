@@ -15,7 +15,7 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation.v4.0</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>..\..\artifacts\docs\html\v4.0</OutputPath>
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
@@ -42,7 +42,7 @@
     <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
     <IncludeFavorites>True</IncludeFavorites>
     <BinaryTOC>True</BinaryTOC>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, InheritedMembers, ProtectedInternalAsProtected</VisibleItems>
     <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
     <CopyrightText>
     </CopyrightText>
@@ -74,8 +74,7 @@
       <ComponentConfig id="API Token Resolution" enabled="True">
         <component id="API Token Resolution">
           {@TokenFiles}
-          <replace elements="/*//token" item="string(.)" />
-        </component>
+          <replace elements="/*//token" item="string(.)" /></component>
       </ComponentConfig>
     </ComponentConfigurations>
     <CatalogName>VisualStudio11</CatalogName>
@@ -91,9 +90,13 @@
     <PlugInConfigurations>
       <PlugInConfig id="Version Builder" enabled="True">
         <configuration>
-          <currentProject label=".NET Framework" version="4.0" ripOldApis="False" />
+          <currentProject label=".NET Framework" version="4.5" ripOldApis="False" />
           <versions>
-            <version label="openstack.net" version="1.3.3" helpFileProject="History\Current\Documentation.Current.shfbproj" />
+            <version label="openstack.net" version="1.4.0" helpFileProject="History\Current\Documentation.Current.shfbproj" />
+            <version label="openstack.net" version="1.3.6" ripOldApis="True" helpFileProject="History\1.3.6\Documentation.1.3.6.shfbproj" />
+            <version label="openstack.net" version="1.3.5" ripOldApis="True" helpFileProject="History\1.3.5\Documentation.1.3.5.shfbproj" />
+            <version label="openstack.net" version="1.3.4" ripOldApis="True" helpFileProject="History\1.3.4\Documentation.1.3.4.shfbproj" />
+            <version label="openstack.net" version="1.3.3" ripOldApis="True" helpFileProject="History\1.3.3\Documentation.1.3.3.shfbproj" />
             <version label="openstack.net" version="1.3.2" ripOldApis="True" helpFileProject="History\1.3.2\Documentation.1.3.2.shfbproj" />
             <version label="openstack.net" version="1.3.1" ripOldApis="True" helpFileProject="History\1.3.1\Documentation.1.3.1.shfbproj" />
             <version label="openstack.net" version="1.3.0" ripOldApis="True" helpFileProject="History\1.3.0\Documentation.1.3.0.shfbproj" />
@@ -106,7 +109,6 @@
             <version label="openstack.net" version="1.0.2" ripOldApis="True" helpFileProject="History\1.0.2\Documentation.1.0.2.shfbproj" />
             <version label="openstack.net" version="1.0.1" ripOldApis="True" helpFileProject="History\1.0.1\Documentation.1.0.1.shfbproj" />
             <version label="openstack.net" version="1.0.0" ripOldApis="True" helpFileProject="History\1.0.0\Documentation.1.0.0.shfbproj" />
-            <version label=".NET Framework" version="3.5" helpFileProject="Documentation.v3.5.shfbproj" />
           </versions>
         </configuration>
       </PlugInConfig>
