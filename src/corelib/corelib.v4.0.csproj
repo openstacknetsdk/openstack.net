@@ -75,9 +75,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticatedHttpClientFactory.cs" />
+    <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\NamespaceDoc.cs" />
@@ -101,6 +104,8 @@
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceExtensions.cs" />
     <Compile Include="Core\LegacyAuthenticationProviderHelper.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\HttpHeadersExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="PageExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />

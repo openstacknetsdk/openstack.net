@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using Flurl.Http;
 
 namespace OpenStack.Authentication
 {
@@ -24,17 +23,6 @@ namespace OpenStack.Authentication
         {
             string endpoint = await _authenticationProvider.GetEndpoint(_serviceType, _region, _useInternalUrl, cancellationToken).ConfigureAwait(false);
             return new Url(endpoint);
-        }
-
-        public async Task<string> GetToken(CancellationToken cancellationToken)
-        {
-            return await _authenticationProvider.GetToken(cancellationToken).ConfigureAwait(false);
-        }
-
-        public async Task<FlurlClient> Authenticate(FlurlClient client, CancellationToken cancellationToken)
-        {
-            string token = await GetToken(cancellationToken).ConfigureAwait(false);
-            return client.Authenticate(token);
         }
     }
 }

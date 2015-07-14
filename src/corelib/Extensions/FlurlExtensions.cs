@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Flurl.Http;
+using OpenStack.Authentication;
 
 namespace Flurl
 {
@@ -46,20 +46,25 @@ namespace Flurl
             return url;
         }
 
-        public static FlurlClient Authenticate(this string url, string token)
+        public static FlurlClient Authenticate(this string url, IAuthenticationProvider authenticationProvider)
         {
-            return new Url(url).Authenticate(token);
+            return new Url(url).Authenticate(authenticationProvider);
         }
 
-        public static FlurlClient Authenticate(this Url url, string token)
+        public static FlurlClient Authenticate(this Url url, IAuthenticationProvider authenticationProvider)
         {
             var client = new FlurlClient(url, autoDispose: true);
-            return client.Authenticate(token);
+            return client.Authenticate(authenticationProvider);
         }
 
-        public static FlurlClient Authenticate(this FlurlClient client, string token)
+        public static FlurlClient Authenticate(this FlurlClient client, IAuthenticationProvider authenticationProvider)
         {
-            return client.WithHeader("X-Auth-Token", token);            
+            var authenticatedMessageHandler = client.HttpMessageHandler as AuthenticatedMessageHandler;
+            if (authenticatedMessageHandler != null)
+            {
+                authenticatedMessageHandler.AuthenticationProvider = authenticationProvider;
+            }
+            return client;
         }
     }
 }
