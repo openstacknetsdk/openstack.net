@@ -71,16 +71,8 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 response.Headers.Location = "http://api.com".AppendPathSegments("services", "service-id").ToUri();
                 httpTest.ResponseQueue.Enqueue(response);
 
-                var service = new ServiceDefinition("service-name", "flavor-id", null, null)
+                var service = new ServiceDefinition("service-name", "flavor-id", "www.example.com", "example.com")
                 {
-                    Domains =
-                    {
-                        new ServiceDomain("example.com")
-                    },
-                    Origins =
-                    {
-                        new ServiceOrigin("assets.example.com")
-                    },
                     Caches =
                     {
                         new ServiceCache("keep-one-day", TimeSpan.FromDays(1))

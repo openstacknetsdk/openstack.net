@@ -14,6 +14,18 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// </summary>
         /// <param name="name">The service name.</param>
         /// <param name="flavorId">The flavor identifier.</param>
+        /// <param name="domain">The service domain.</param>
+        /// <param name="origin">The service asset origin.</param>
+        public ServiceDefinition(string name, string flavorId, string domain, string origin)
+            : this(name, flavorId, new[] {new ServiceDomain(domain)}, new[] {new ServiceOrigin(origin)})
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceDefinition"/> class.
+        /// </summary>
+        /// <param name="name">The service name.</param>
+        /// <param name="flavorId">The flavor identifier.</param>
         /// <param name="domains">The service domains.</param>
         /// <param name="origins">The service asset origins.</param>
         public ServiceDefinition(string name, string flavorId, IEnumerable<ServiceDomain> domains, IEnumerable<ServiceOrigin> origins)
