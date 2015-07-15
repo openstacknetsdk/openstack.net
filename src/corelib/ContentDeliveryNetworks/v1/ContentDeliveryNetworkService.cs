@@ -18,7 +18,8 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// <seealso href="http://docs.cloudcdn.apiary.io/">OpenStack (Poppy) Content Delivery Network Service API v1 Reference</seealso>
     public class ContentDeliveryNetworkService : IContentDeliveryNetworkService
     {
-        private readonly ServiceUrlBuilder _serviceAuth;
+        private readonly IAuthenticationProvider _authenticationProvider;
+        private readonly ServiceUrlBuilder _urlBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentDeliveryNetworkService"/> class.
@@ -35,7 +36,8 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(region))
                 throw new ArgumentException("region cannot be null or empty", "region");
 
-            _serviceAuth = new ServiceUrlBuilder(ServiceType.ContentDeliveryNetwork, authenticationProvider, region, useInternalUrl);
+            _authenticationProvider = authenticationProvider;
+            _urlBuilder = new ServiceUrlBuilder(ServiceType.ContentDeliveryNetwork, authenticationProvider, region, useInternalUrl);
         }
 
         /// <inheritdoc />
@@ -44,12 +46,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(flavorId))
                 throw new ArgumentNullException("flavorId");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("flavors", flavorId)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .GetJsonAsync<Flavor>(cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -57,12 +58,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task<IEnumerable<Flavor>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("flavors")
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .GetJsonAsync<FlavorCollection>(cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -70,12 +70,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task PingAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("ping")
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .GetAsync(cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -83,7 +82,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task<IPage<Service>> ListServicesAsync(string startServiceId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
             string url = endpoint
                 .AppendPathSegments("services")
                 .SetQueryParams(new
@@ -92,16 +91,14 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                     limit = pageSize
                 });
 
-            return await ListServicesAsync(url, cancellationToken);
+            return await ListServicesAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
         // TODO: move into a class that we can use via composition so that we aren't implementing this for everything that is paged?
         private async Task<IPage<Service>> ListServicesAsync(Url url, CancellationToken cancellationToken)
         {
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
-
             ServiceCollection result = await url
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .GetJsonAsync<ServiceCollection>(cancellationToken)
                 .ConfigureAwait(false);
 
@@ -115,12 +112,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("services", serviceId)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .GetJsonAsync<Service>(cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -131,12 +127,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             var response = await endpoint
                 .AppendPathSegments("services")
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .PostJsonAsync(service, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -150,12 +145,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .AllowHttpStatus(HttpStatusCode.NotFound)
                 .DeleteAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -169,12 +163,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (patch == null)
                 throw new ArgumentNullException("patch");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .PatchJsonAsync(patch, cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -187,13 +180,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException("url");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId, "assets")
                 .SetQueryParam("url", url)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .AllowHttpStatus(HttpStatusCode.NotFound)
                 .DeleteAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -205,13 +197,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _serviceAuth.GetEndpoint(cancellationToken).ConfigureAwait(false);
-            string token = await _serviceAuth.GetToken(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId, "assets")
                 .SetQueryParam("all", true)
-                .Authenticate(token)
+                .Authenticate(_authenticationProvider)
                 .DeleteAsync(cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -230,7 +221,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             {
                 while (true)
                 {
-                    var service = await GetServiceAsync(serviceId, cancellationToken);
+                    var service = await GetServiceAsync(serviceId, cancellationToken).ConfigureAwait(false);
                     if (service.Status == ServiceStatus.Failed)
                         throw new ServiceOperationFailedException(service.Errors);
 
@@ -244,12 +235,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
 
                     try
                     {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token);
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
                     }
-                    catch (OperationCanceledException)
+                    catch (OperationCanceledException ex)
                     {
                         if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException(string.Format("The requested timeout of {0} seconds has been reached while waiting for the service ({1}) to be deployed.", timeout.Value.TotalSeconds, serviceId));
+                            throw new TimeoutException(string.Format("The requested timeout of {0} seconds has been reached while waiting for the service ({1}) to be deployed.", timeout.Value.TotalSeconds, serviceId), ex);
 
                         throw;
                     }
@@ -274,7 +265,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                     bool complete = false;
                     try
                     {
-                        var service = await GetServiceAsync(serviceId, cancellationToken);
+                        var service = await GetServiceAsync(serviceId, cancellationToken).ConfigureAwait(false);
                         if (service.Status == ServiceStatus.Failed)
                             throw new ServiceOperationFailedException(service.Errors);
                     }
@@ -294,12 +285,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
 
                     try
                     {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token);
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
                     }
-                    catch (OperationCanceledException)
+                    catch (OperationCanceledException ex)
                     {
                         if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException(string.Format("The requested timeout of {0} seconds has been reached while waiting for the service ({1}) to be deleted.", timeout.Value.TotalSeconds, serviceId));
+                            throw new TimeoutException(string.Format("The requested timeout of {0} seconds has been reached while waiting for the service ({1}) to be deleted.", timeout.Value.TotalSeconds, serviceId), ex);
 
                         throw;
                     }

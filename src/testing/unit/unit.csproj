@@ -97,12 +97,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncWebRequestTests.cs" />
+    <Compile Include="AuthenticationTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedExceptionTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceCacheTests.cs" />
     <Compile Include="Domain\Mapping\NetworkAddressDeserializationTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
+    <Compile Include="HttpTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksValidatorTests.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />

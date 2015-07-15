@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using JSIStudios.SimpleRESTServices.Client;
 using JSIStudios.SimpleRESTServices.Client.Json;
@@ -20,8 +21,6 @@ using Newtonsoft.Json.Linq;
 using OpenStack;
 using OpenStack.Authentication;
 using OpenStack.Core;
-using OpenStack.Serialization;
-using CancellationToken = System.Threading.CancellationToken;
 
 namespace net.openstack.Providers.Rackspace
 {
@@ -154,12 +153,9 @@ namespace net.openstack.Providers.Rackspace
         {
             _userAccessCache = tokenCache ?? UserAccessCache.Instance;
             _urlBase = urlBase ?? new Uri("https://identity.api.rackspacecloud.com");
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                DefaultValueHandling = DefaultValueHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new EmptyEnumerableResolver()
-            };
+
+            // If the consuming application doesn't configure this itself, this ensures that our dependencies are configured appropriately before calling any APIs
+            OpenStackNet.Configure();
         }
 
         /// <summary>
