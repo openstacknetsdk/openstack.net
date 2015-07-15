@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -1141,7 +1140,7 @@ namespace net.openstack.Providers.Rackspace
 
         async Task<string> IAuthenticationProvider.GetEndpoint(ServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken)
         {
-            string rackspaceServiceType = RackspaceServiceTypes[serviceType];
+            string serviceTypeKey = LookupServiceTypeKey(serviceType);
             
             if(DefaultIdentity == null)
                 throw new IdentityRequiredException();
@@ -1149,21 +1148,28 @@ namespace net.openstack.Providers.Rackspace
             UserAccess userAccess = await GetUserAccessAsync(DefaultIdentity, false, cancellationToken).ConfigureAwait(false);
 
             string requestedRegion = region ?? DefaultRegion;
-            return LegacyAuthenticationProviderHelper.GetEndpoint(rackspaceServiceType, userAccess, DefaultIdentity, requestedRegion, useInternalUrl);
+            return LegacyAuthenticationProviderHelper.GetEndpoint(serviceTypeKey, userAccess, DefaultIdentity, requestedRegion, useInternalUrl);
         }
 
         async Task<string> IAuthenticationProvider.GetToken(CancellationToken cancellationToken)
         {
-            // todo: this is a race. we need to retry if the token has expired between when we grabbed it from the cache and when we used it
             IdentityToken identityToken = await GetTokenAsync(DefaultIdentity, cancellationToken).ConfigureAwait(false);
             return identityToken.Id;
         }
 
         // We only need to list service types for any services which are using the new service model instead of the old provider model.
-        private static readonly ConcurrentDictionary<ServiceType, string> RackspaceServiceTypes = new ConcurrentDictionary<ServiceType, string>(new KeyValuePair<ServiceType, string>[]
+        private static readonly Dictionary<ServiceType, string> RackspaceServiceTypes = new Dictionary<ServiceType, string>
         {
-            new KeyValuePair<ServiceType, string>(ServiceType.ContentDeliveryNetwork, "rax:cdn")
-        });
+            {ServiceType.ContentDeliveryNetwork, "rax:cdn"}
+        };
+
+        /// <summary>
+        /// Looksup the type key to use when searching for an endpoing in the service catalog for a particular service.
+        /// </summary>
+        protected virtual string LookupServiceTypeKey(ServiceType serviceType)
+        {
+            return RackspaceServiceTypes[serviceType];
+        }
 
         #endregion
     }
