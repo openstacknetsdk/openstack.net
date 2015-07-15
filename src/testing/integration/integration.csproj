@@ -108,6 +108,7 @@
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="Identity\v2\IdentityTests.cs" />
+    <Compile Include="Networking\v1\NetworkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\CloudServersTests.cs" />

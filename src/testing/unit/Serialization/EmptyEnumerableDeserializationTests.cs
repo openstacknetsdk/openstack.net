@@ -15,7 +15,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenDeserializingNullCollection_ItShouldUseAnEmptyCollection()
         {
-            var settings = new JsonSerializerSettings {ContractResolver = new EmptyEnumerableResolver()};
+            var settings = new JsonSerializerSettings {ContractResolver = new OpenStackContractResolver()};
             string json = JsonConvert.SerializeObject(new ExampleThing{Messages = null});
             var result = JsonConvert.DeserializeObject<ExampleThing>(json, settings);
             Assert.NotNull(result.Messages);

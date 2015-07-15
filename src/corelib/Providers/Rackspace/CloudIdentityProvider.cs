@@ -1160,7 +1160,8 @@ namespace net.openstack.Providers.Rackspace
         // We only need to list service types for any services which are using the new service model instead of the old provider model.
         private static readonly Dictionary<ServiceType, string> RackspaceServiceTypes = new Dictionary<ServiceType, string>
         {
-            {ServiceType.ContentDeliveryNetwork, "rax:cdn"}
+            {ServiceType.ContentDeliveryNetwork, "rax:cdn"},
+            {ServiceType.Networking, "network"}
         };
 
         /// <summary>

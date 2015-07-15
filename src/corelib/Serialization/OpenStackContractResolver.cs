@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace OpenStack.Serialization
 {
     /// <summary>
-    /// Provides the same serialization capabilities as json.net but ensures that when an enumerable property is deserialized, it is never null and is always an empty collection
-    /// This makes it safe for users to iterate without checking for null
+    /// Provides the same serialization capabilities as json.net with some additions:
+    /// <para>* Ensures that when an enumerable property is deserialized, it is never null and is always an empty collection.</para>
+    /// <para>* Handles adding/unwrapping superfluous root containers.</para>
     /// </summary>
-    internal class EmptyEnumerableResolver : DefaultContractResolver
+    internal class OpenStackContractResolver : DefaultContractResolver
     {
         protected override IValueProvider CreateMemberValueProvider(MemberInfo member)
         {
@@ -25,6 +27,17 @@ namespace OpenStack.Serialization
             }
 
             return provider;
+        }
+
+        protected override JsonConverter ResolveContractConverter(Type objectType)
+        {
+            var converter =  base.ResolveContractConverter(objectType);
+
+            var jsonConverterAttr = objectType.GetCustomAttribute<JsonConverterWithConstructorAttribute>(inherit:true);
+            if (jsonConverterAttr != null)
+                return jsonConverterAttr.CreateJsonConverterInstance();
+
+            return converter;
         }
 
         private class EmptyEnumerableValueProvider : IValueProvider

@@ -108,6 +108,7 @@
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="HP\Authentication\ServiceCatalogTests.cs" />
     <Compile Include="HttpTest.cs" />
+    <Compile Include="Networking\v2\NetworkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksValidatorTests.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />
@@ -119,6 +120,8 @@
     <Compile Include="Providers\Rackspace\SerializationTests.cs" />
     <Compile Include="Rackspace\Authentication\ServiceCatalogTests.cs" />
     <Compile Include="Serialization\EmptyEnumerableDeserializationTests.cs" />
+    <Compile Include="Serialization\TolerantEnumConverterTests.cs" />
+    <Compile Include="Serialization\RootWrapperConverterTests.cs" />
     <Compile Include="Stubs.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />

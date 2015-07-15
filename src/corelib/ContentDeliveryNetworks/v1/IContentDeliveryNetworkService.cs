@@ -55,7 +55,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="FlurlHttpException">If the service call returns a bad <see cref="HttpStatusCode"/>.</exception>
         /// <returns>
-        /// A collection of <see cref="Service" /> associated wit the acccount./>
+        /// A collection of <see cref="Service" /> resources associated with the acccount./>
         /// </returns>
         Task<IPage<Service>> ListServicesAsync(string startServiceId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken));
 

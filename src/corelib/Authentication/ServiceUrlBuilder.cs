@@ -11,7 +11,7 @@ namespace OpenStack.Authentication
         private readonly string _region;
         private readonly bool _useInternalUrl;
 
-        public ServiceUrlBuilder(ServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
+        public ServiceUrlBuilder(ServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
             _serviceType = serviceType;
             _authenticationProvider = authenticationProvider;

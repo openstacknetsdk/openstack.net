@@ -189,7 +189,8 @@ namespace net.openstack.Providers.Hp
         // We only need to list service types for any services which are using the new service model instead of the old provider model.
         private static readonly Dictionary<ServiceType, string> HpServiceTypes = new Dictionary<ServiceType, string>
         {
-            {ServiceType.ContentDeliveryNetwork, "hpext:cdn"}
+            {ServiceType.ContentDeliveryNetwork, "hpext:cdn"},
+            {ServiceType.Networking, "network"}
         };
 
         /// <inheritdoc/>

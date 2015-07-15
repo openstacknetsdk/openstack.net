@@ -1,5 +1,4 @@
-﻿using net.openstack.Providers.Rackspace;
-using OpenStack.Synchronous;
+﻿using OpenStack.Synchronous;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,11 +13,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         {
             OpenStackNet.Tracing.Http.Listeners.Add(new XunitTraceListener(testLog));
 
-            var identity = TestIdentityProvider.GetIdentityFromEnvironment();
-            var authenticationProvider = new CloudIdentityProvider(identity)
-            {
-                ApplicationUserAgent = "CI-BOT"
-            };
+            var authenticationProvider = TestIdentityProvider.GetIdentityProvider();
             _cdnService = new ContentDeliveryNetworkService(authenticationProvider, "DFW");
         }
 

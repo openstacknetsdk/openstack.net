@@ -106,7 +106,7 @@ namespace OpenStack.HP.Authentication
           {
             ""publicURL"": """",
             ""publicURL2"": """",
-            ""region"": ""az-2.region-a.geo-1"",
+            ""region"": ""region-a.geo-1"",
             ""tenantId"": ""TENANT_ID"",
             ""versionId"": """",
             ""versionInfo"": """",

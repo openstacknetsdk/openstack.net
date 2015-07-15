@@ -10,6 +10,11 @@ namespace OpenStack
         /// <summary>
         /// The Content Delivery Network (CDN) service
         /// </summary>
-        ContentDeliveryNetwork 
+        ContentDeliveryNetwork,
+
+        /// <summary>
+        /// The Networking service
+        /// </summary>
+        Networking
     }
 }

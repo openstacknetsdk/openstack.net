@@ -80,6 +80,13 @@
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
+    <Compile Include="Networking\v2\NetworkCollection.cs" />
+    <Compile Include="Networking\v2\NetworkDefinition.cs" />
+    <Compile Include="Networking\v2\NetworkDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\NetworkingService.cs" />
+    <Compile Include="Networking\v2\NetworkingServiceExtensions.cs" />
+    <Compile Include="Networking\v2\INetworkingService.cs" />
+    <Compile Include="Networking\v2\Network.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
@@ -108,6 +115,7 @@
     <Compile Include="Extensions\HttpHeadersExtensions.cs" />
     <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
     <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\NetworkStatus.cs" />
     <Compile Include="PageExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Core\AsyncCompletionOption.cs" />
@@ -688,8 +696,11 @@
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
     <Compile Include="Exceptions\RegionRequiredException.cs" />
     <Compile Include="ResourceCollection.cs" />
-    <Compile Include="Serialization\EmptyEnumerableResolver.cs" />
+    <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
+    <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
+    <Compile Include="Serialization\TolerantEnumConverter.cs" />
+    <Compile Include="Serialization\RootWrapperConverter.cs" />
     <Compile Include="ServiceType.cs" />
   </ItemGroup>
   <ItemGroup>

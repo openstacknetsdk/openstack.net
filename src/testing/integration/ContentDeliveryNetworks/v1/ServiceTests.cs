@@ -23,12 +23,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             var testOutput = new XunitTraceListener(testLog);
             OpenStackNet.Tracing.Http.Listeners.Add(testOutput);
             Trace.Listeners.Add(testOutput);
-
-            var identity = TestIdentityProvider.GetIdentityFromEnvironment();
-            var authenticationProvider = new CloudIdentityProvider(identity)
+            OpenStackNet.Configure(flurl =>
             {
-                ApplicationUserAgent = "CI-BOT"
-            };
+                flurl.OnError = call => { throw new FlurlHttpException(call, new Exception(call.ErrorResponseBody)); };
+            });
+            var authenticationProvider = TestIdentityProvider.GetIdentityProvider();
             _cdnService = new ContentDeliveryNetworkService(authenticationProvider, "DFW");
         }
 
@@ -109,7 +108,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 var create2 = CreateService("ci-test2", "mirror.example2.com", "example2.com").ContinueWith(t => serviceIds.Add(t.Result));
                 var create3 = CreateService("ci-test3", "mirror.example3.com", "example3.com").ContinueWith(t => serviceIds.Add(t.Result));
 
-                Task.WaitAll(create1, create2, create3);
+                await Task.WhenAll(create1, create2, create3);
 
                 var currentPage = await _cdnService.ListServicesAsync(pageSize: 1);
                 while (currentPage.Any())

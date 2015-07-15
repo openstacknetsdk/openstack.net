@@ -1,0 +1,28 @@
+﻿using System.Collections.Generic;
+using OpenStack.Serialization;
+
+namespace OpenStack.Networking.v2
+{
+    /// <summary>
+    /// Represents a collection of network resources of the <see cref="INetworkingService"/>.
+    /// </summary>
+    /// <threadsafety static="true" instance="false"/>
+    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "networks")]
+    public class NetworkCollection : List<Network>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkCollection"/> class.
+        /// </summary>
+        public NetworkCollection()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkCollection"/> class.
+        /// </summary>
+        /// <param name="collection">The networks.</param>
+        public NetworkCollection(IEnumerable<Network> networks) : base(networks)
+        {
+        }
+    }
+}
