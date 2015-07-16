@@ -103,6 +103,7 @@
     <Compile Include="ContentDeliveryNetworks\v1\ServiceStatus.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceExtensions.cs" />
     <Compile Include="Core\LegacyAuthenticationProviderHelper.cs" />
+    <Compile Include="Exceptions\UnsupportedServiceException.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\HttpHeadersExtensions.cs" />
     <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />

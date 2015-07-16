@@ -1,4 +1,7 @@
-﻿namespace net.openstack.Core.Providers
+﻿using System.Collections.Generic;
+using OpenStack;
+
+namespace net.openstack.Core.Providers
 {
     using System;
     using net.openstack.Core.Caching;
@@ -116,6 +119,24 @@
             var userAccess = TokenCache.Get(key, refreshCallback, forceCacheRefresh);
 
             return userAccess;
+        }
+
+        // We only need to list service types for any services which are using the new service model instead of the old provider model.
+        private static readonly Dictionary<ServiceType, string> OpenStackServiceTypes = new Dictionary<ServiceType, string>
+        {
+            {ServiceType.ContentDeliveryNetwork, "cdn"}
+        };
+
+        protected override string LookupServiceTypeKey(ServiceType serviceType)
+        {
+            try
+            {
+                return OpenStackServiceTypes[serviceType];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new UnsupportedServiceException(serviceType, "OpenStack (Generic)");
+            }
         }
     }
 }
