@@ -22,7 +22,7 @@
   </Target>
 
   <Target Name="Build" DependsOnTargets="RestorePackages">
-    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
   </Target>
 
   <Target Name="Documentation" DependsOnTargets="Build">
@@ -30,12 +30,12 @@
       <SHFBROOT>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\EWSoftware.SHFB.2014.11.22-beta\tools</SHFBROOT>
     </PropertyGroup>
 
-    <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" WorkingDirectory="$(MSBuildThisFileDirectory)" />
-    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" />
+    <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
-    <Exec Command="$(NuGet) restore ..\src\openstack.net.sln" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(NuGet) restore ..\src\openstack.net.sln" />
   </Target>
 
   <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
@@ -50,24 +50,24 @@
     </PropertyGroup>
 
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" />
-    <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" ContinueOnError="true" />
+    <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
     <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
   </Target>
 
   <Target Name="IntegrationTest" DependsOnTargets="Build">
     <Error Condition=" '$(OPENSTACKNET_USER)' == '' OR '$(OPENSTACKNET_APIKEY)' == '' " Text="You must set the OPENSTACKNET_USER and OPENSTACKNET_APIKEY environment variables, logout then login in order to run the integration tests." />
-    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml" />
+    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml" ContinueOnError="true" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">
     <MakeDir Directories="..\artifacts\packages\" />
-    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" />
   </Target>
 
   <Target Name="Publish" DependsOnTargets="DownloadNuGet">
     <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the openstack.net plan in Bamboo -->
-    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_NUGET_PASSWORD%25" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_NUGET_PASSWORD%25" />
   </Target>
 
 </Project>
