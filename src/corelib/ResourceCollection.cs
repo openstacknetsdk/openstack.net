@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace OpenStack
@@ -8,22 +7,30 @@ namespace OpenStack
     /// Represents a collection of resources.
     /// </summary>
     /// <typeparam name="T">The resource type.</typeparam>
-    [JsonObject] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
-    public abstract class ResourceCollection<T> : IEnumerable<T>
+    [JsonObject(MemberSerialization.OptIn)] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
+    public class ResourceCollection<T> : IEnumerable<T>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceCollection{T}"/> class.
         /// </summary>
-        /// <param name="items">The requested items.</param>
-        protected ResourceCollection(IEnumerable<T> items)
+        public ResourceCollection()
         {
-            Items = items ?? Enumerable.Empty<T>();
+            Items = new List<T>();
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceCollection{T}"/> class.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        public ResourceCollection(IEnumerable<T> items)
+        {
+            Items = items.ToNonNullList();
+        } 
 
         /// <summary>
         /// The requested items.
         /// </summary>
-        protected IEnumerable<T> Items { get; private set; }
+        public IList<T> Items { get; set; }
 
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()

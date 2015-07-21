@@ -73,9 +73,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\..\corelib\corelib.v4.0.csproj">
-      <Name>corelib.v4.0</Name>
-      <Project>{7dba11eb-dba7-4d3a-8d42-b5312e74b9c0}</Project>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\corelib\OpenStack.csproj">
+      <Name>OpenStack</Name>
+      <Project>{1a4fb67f-8642-4402-b931-118955ae7538}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

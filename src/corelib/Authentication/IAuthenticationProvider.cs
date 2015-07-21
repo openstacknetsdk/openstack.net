@@ -18,14 +18,14 @@ namespace OpenStack.Authentication
         /// <param name="region">The region.</param>
         /// <param name="useInternalUrl">if set to <c>true</c> [use internal URL].</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="OpenStack.UserAuthenticationException">
+        /// <exception cref="UserAuthenticationException">
         /// The user does not have access to the service or it does not exist.
         /// or
         /// The user does not have access to the service endpoint in the specified region.
         /// </exception>
         /// <exception cref="RegionRequiredException">No region was specified and the {0} service does not provide a region-independent endpoint.</exception>
         /// <returns>The requested endpoint.</returns>
-        Task<string> GetEndpoint(ServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken);
+        Task<string> GetEndpoint(IServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken);
         
         /// <summary>
         /// Gets an authentication token for the user.

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents a network resource of the <see cref="INetworkingService"/>
+    /// Represents a network resource of the <see cref="NetworkingService"/>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class Network : NetworkDefinition

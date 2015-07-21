@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Flurl.Http;
 using OpenStack.ContentDeliveryNetworks.v1;
+using OpenStack.Testing;
 using Xunit;
 
 namespace OpenStack

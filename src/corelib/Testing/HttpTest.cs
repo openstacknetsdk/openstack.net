@@ -4,7 +4,7 @@ using Flurl.Http;
 using Flurl.Http.Configuration;
 using OpenStack.Authentication;
 
-namespace OpenStack
+namespace OpenStack.Testing
 {
     /// <summary>
     /// Use this instead of <see cref="Flurl.Http.Testing.HttpTest"/> for any OpenStack.NET unit tests.

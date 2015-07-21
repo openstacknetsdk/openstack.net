@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using OpenStack.Serialization;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -7,24 +7,22 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a collection of flavor resources of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class FlavorCollection : ResourceCollection<Flavor>
+    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "flavors")]
+    public class FlavorCollection : List<Flavor>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FlavorCollection"/> class.
         /// </summary>
-        /// <param name="flavors">The availabe flavors.</param>
-        public FlavorCollection(IEnumerable<Flavor> flavors)
-            : base(flavors)
+        public FlavorCollection()
         {
         }
 
         /// <summary>
-        /// The available flavors.
+        /// Initializes a new instance of the <see cref="FlavorCollection"/> class.
         /// </summary>
-        [JsonProperty("flavors")]
-        protected IEnumerable<Flavor> Flavors
+        /// <param name="flavors">The flavors.</param>
+        public FlavorCollection(IEnumerable<Flavor> flavors) : base(flavors)
         {
-            get { return Items; }
         }
     }
 }

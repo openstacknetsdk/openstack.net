@@ -48,7 +48,8 @@ namespace net.openstack.Providers.Rackspace
         /// and token cache.
         /// </summary>
         public CloudIdentityProvider() : this(null, null, null, null)
-        {}
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -72,7 +73,8 @@ namespace net.openstack.Providers.Rackspace
         /// </example>
         public CloudIdentityProvider(CloudIdentity defaultIdentity)
             : this(defaultIdentity, null, null, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -82,7 +84,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(Uri urlBase)
             : this(null, null, null, urlBase)
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -93,7 +96,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(CloudIdentity defaultIdentity, Uri urlBase)
             : this(defaultIdentity, null, null, urlBase)
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -105,7 +109,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="urlBase">The base URL for the cloud instance. If this value is <see langword="null"/>, the provider will use <c>https://identity.api.rackspacecloud.com</c>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache, Uri urlBase)
             : this(null, restService, tokenCache, urlBase)
-        {}
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -114,8 +119,9 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(ICache<UserAccess> tokenCache)
-            : this( null, tokenCache)
-        { }
+            : this(null, tokenCache)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -126,7 +132,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudIdentityProvider(IRestService restService)
             : this(restService, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -137,7 +144,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="tokenCache">The cache to use for caching user access tokens. If this value is <see langword="null"/>, the provider will use <see cref="UserAccessCache.Instance"/>.</param>
         public CloudIdentityProvider(IRestService restService, ICache<UserAccess> tokenCache)
             : this(null, restService, tokenCache, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudIdentityProvider"/> class
@@ -162,10 +170,7 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         protected ICache<UserAccess> TokenCache
         {
-            get
-            {
-                return _userAccessCache;
-            }
+            get { return _userAccessCache; }
         }
 
         /// <summary>
@@ -173,10 +178,7 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         protected Uri UrlBase
         {
-            get
-            {
-                return _urlBase;
-            }
+            get { return _urlBase; }
         }
 
         #region Roles
@@ -189,11 +191,11 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var parameters = BuildOptionalParameterList(new Dictionary<string, string>
-                {
-                    {"serviceId", serviceId},
-                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
-                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
-                });
+            {
+                {"serviceId", serviceId},
+                {"marker", !marker.HasValue ? null : marker.Value.ToString()},
+                {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+            });
 
             var response = ExecuteRESTRequest<RolesResponse>(identity, new Uri(UrlBase, "/v2.0/OS-KSADM/roles"), HttpMethod.GET, queryStringParameter: parameters);
 
@@ -310,11 +312,11 @@ namespace net.openstack.Providers.Rackspace
             CheckIdentity(identity);
 
             var parameters = BuildOptionalParameterList(new Dictionary<string, string>
-                {
-                    {"enabled", !enabled.HasValue ? null : enabled.Value ? "true" : "false"},
-                    {"marker", !marker.HasValue ? null : marker.Value.ToString()},
-                    {"limit", !limit.HasValue ? null : limit.Value.ToString()},
-                });
+            {
+                {"enabled", !enabled.HasValue ? null : enabled.Value ? "true" : "false"},
+                {"marker", !marker.HasValue ? null : marker.Value.ToString()},
+                {"limit", !limit.HasValue ? null : limit.Value.ToString()},
+            });
 
             var urlPath = string.Format("/v2.0/OS-KSADM/roles/{0}/RAX-AUTH/users", roleId);
             var response = ExecuteRESTRequest<UsersResponse>(identity, new Uri(UrlBase, urlPath), HttpMethod.GET, queryStringParameter: parameters);
@@ -330,7 +332,7 @@ namespace net.openstack.Providers.Rackspace
                 if (response == null || response.Data == null)
                     return null;
 
-                return new[] { userResponse.User };
+                return new[] {userResponse.User};
             }
 
             return response.Data.Users;
@@ -419,19 +421,19 @@ namespace net.openstack.Providers.Rackspace
                 return null;
 
             var jObject = JObject.Parse(response.RawBody);
-            var credsArray = (JArray)jObject["credentials"];
+            var credsArray = (JArray) jObject["credentials"];
             var creds = new List<UserCredential>();
 
             foreach (JObject jToken in credsArray)
             {
                 foreach (JProperty property in jToken.Properties())
                 {
-                    var cred = (JObject)property.Value;
-                    creds.Add(new UserCredential(property.Name, cred["username"].ToString(), cred["apiKey"].ToString())); 
+                    var cred = (JObject) property.Value;
+                    creds.Add(new UserCredential(property.Name, cred["username"].ToString(), cred["apiKey"].ToString()));
                 }
-                   
+
             }
-            
+
             return creds.ToArray();
         }
 
@@ -494,7 +496,10 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public new virtual CloudIdentity DefaultIdentity { get { return base.DefaultIdentity; } }
+        public new virtual CloudIdentity DefaultIdentity
+        {
+            get { return base.DefaultIdentity; }
+        }
 
         /// <inheritdoc/>
         public virtual UserCredential UpdateUserCredentials(string userId, string apiKey, CloudIdentity identity)
@@ -593,7 +598,7 @@ namespace net.openstack.Providers.Rackspace
 
             // Due to the fact the sometimes the API returns a JSON array of users and sometimes it returns a single JSON user object.  
             // Therefore if we get a null data object (which indicates that the deserializer could not parse to an array) we need to try and parse as a single User object.
-            if(response.Data.Users == null)
+            if (response.Data.Users == null)
             {
                 var userResponse = JsonConvert.DeserializeObject<UserResponse>(response.RawBody);
 
@@ -970,16 +975,16 @@ namespace net.openstack.Providers.Rackspace
                 rackspaceCloudIdentity = new RackspaceCloudIdentity(identity);
 
             var userAccess = TokenCache.Get(string.Format("{0}:{1}/{2}", UrlBase, rackspaceCloudIdentity.Domain, rackspaceCloudIdentity.Username), () =>
-                            {
-                                var auth = new AuthRequest(identity);
-                                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(UrlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
+            {
+                var auth = new AuthRequest(identity);
+                var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(UrlBase, "/v2.0/tokens"), HttpMethod.POST, auth, isTokenRequest: true);
 
 
-                                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
-                                    return null;
+                if (response == null || response.Data == null || response.Data.UserAccess == null || response.Data.UserAccess.Token == null)
+                    return null;
 
-                                return response.Data.UserAccess;
-                            }, forceCacheRefresh);
+                return response.Data.UserAccess;
+            }, forceCacheRefresh);
 
             return userAccess;
         }
@@ -1078,10 +1083,10 @@ namespace net.openstack.Providers.Rackspace
                 throw new ArgumentException("token cannot be empty");
 
             var queryStringParameters = BuildOptionalParameterList(new Dictionary<string, string>
-                {
-                    {"belongsTo", tenantId}
-                });
-            
+            {
+                {"belongsTo", tenantId}
+            });
+
             var response = ExecuteRESTRequest<AuthenticationResponse>(identity, new Uri(UrlBase, string.Format("/v2.0/tokens/{0}", token)), HttpMethod.GET, queryStringParameter: queryStringParameters);
 
 
@@ -1136,13 +1141,13 @@ namespace net.openstack.Providers.Rackspace
         #endregion
 
         #region IAuthenticationProvider
+
         /* Provides compatibility with the new services until the old providers are deprecated */
 
-        async Task<string> IAuthenticationProvider.GetEndpoint(ServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken)
+        async Task<string> IAuthenticationProvider.GetEndpoint(IServiceType serviceType, string region, bool useInternalUrl, CancellationToken cancellationToken)
         {
             string serviceTypeKey = LookupServiceTypeKey(serviceType);
-            
-            if(DefaultIdentity == null)
+            if (DefaultIdentity == null)
                 throw new IdentityRequiredException();
 
             UserAccess userAccess = await GetUserAccessAsync(DefaultIdentity, false, cancellationToken).ConfigureAwait(false);
@@ -1156,22 +1161,16 @@ namespace net.openstack.Providers.Rackspace
             IdentityToken identityToken = await GetTokenAsync(DefaultIdentity, cancellationToken).ConfigureAwait(false);
             return identityToken.Id;
         }
-
-        // We only need to list service types for any services which are using the new service model instead of the old provider model.
-        private static readonly Dictionary<ServiceType, string> RackspaceServiceTypes = new Dictionary<ServiceType, string>
-        {
-            {ServiceType.ContentDeliveryNetwork, "rax:cdn"},
-            {ServiceType.Networking, "network"}
-        };
-
+        
         /// <summary>
-        /// Looksup the type key to use when searching for an endpoing in the service catalog for a particular service.
+        /// Looks up the type key to use when searching for an endpoint in the service catalog for a particular service.
         /// </summary>
-        protected virtual string LookupServiceTypeKey(ServiceType serviceType)
+        protected virtual string LookupServiceTypeKey(IServiceType serviceType)
         {
-            return RackspaceServiceTypes[serviceType];
+            if (ServiceType.ContentDeliveryNetwork.Equals(serviceType))
+                return "rax:cdn";
+            return serviceType.Type;
         }
-
         #endregion
     }
 }

@@ -4,7 +4,8 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents a collection of network resources of the <see cref="INetworkingService"/>.
+    /// Represents a collection of network resources returned by the <see cref="NetworkingService"/>.
+    /// <para>Intended for custom implementations and stubbing responses in unit tests.</para>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "networks")]
@@ -20,7 +21,7 @@ namespace OpenStack.Networking.v2
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkCollection"/> class.
         /// </summary>
-        /// <param name="collection">The networks.</param>
+        /// <param name="networks">The networks.</param>
         public NetworkCollection(IEnumerable<Network> networks) : base(networks)
         {
         }

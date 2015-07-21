@@ -4,7 +4,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents a collection of network definition resources of the <see cref="INetworkingService"/>.
+    /// Represents a collection of network definition resources of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "networks")]

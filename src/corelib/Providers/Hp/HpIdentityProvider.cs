@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OpenStack;
+using OpenStack.Authentication;
 
 namespace net.openstack.Providers.Hp
 {
@@ -186,24 +187,12 @@ namespace net.openstack.Providers.Hp
             return userAccess;
         }
 
-        // We only need to list service types for any services which are using the new service model instead of the old provider model.
-        private static readonly Dictionary<ServiceType, string> HpServiceTypes = new Dictionary<ServiceType, string>
+        /// <inheritdoc />
+        protected override string LookupServiceTypeKey(IServiceType serviceType)
         {
-            {ServiceType.ContentDeliveryNetwork, "hpext:cdn"},
-            {ServiceType.Networking, "network"}
-        };
-
-        /// <inheritdoc/>
-        protected override string LookupServiceTypeKey(ServiceType serviceType)
-        {
-            try
-            {
-                return HpServiceTypes[serviceType];
-            }
-            catch(KeyNotFoundException)
-            {
-                throw new UnsupportedServiceException(serviceType, "HP");
-            }
+            if (ServiceType.ContentDeliveryNetwork.Equals(serviceType))
+                return "hpext:cdn";
+            return serviceType.Type;
         }
     }
 }

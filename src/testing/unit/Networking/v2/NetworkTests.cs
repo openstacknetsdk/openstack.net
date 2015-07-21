@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using System.Net;
 using OpenStack.Synchronous;
+using OpenStack.Testing;
 using Xunit;
 
 namespace OpenStack.Networking.v2
 {
     public class NetworkTests
     {
-        private readonly INetworkingService _networkingService;
+        private readonly NetworkingService _networkingService;
 
         public NetworkTests()
         {

@@ -11,8 +11,9 @@ namespace OpenStack.Serialization
     /// <para>* Ensures that when an enumerable property is deserialized, it is never null and is always an empty collection.</para>
     /// <para>* Handles adding/unwrapping superfluous root containers.</para>
     /// </summary>
-    internal class OpenStackContractResolver : DefaultContractResolver
+    public class OpenStackContractResolver : DefaultContractResolver
     {
+        /// <inheritdoc/>
         protected override IValueProvider CreateMemberValueProvider(MemberInfo member)
         {
             IValueProvider provider = base.CreateMemberValueProvider(member);
@@ -29,6 +30,7 @@ namespace OpenStack.Serialization
             return provider;
         }
 
+        /// <inheritdoc/>
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
             var converter =  base.ResolveContractConverter(objectType);

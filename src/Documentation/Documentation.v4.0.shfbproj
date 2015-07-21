@@ -20,7 +20,7 @@
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\corelib\corelib.v4.0.csproj" subFolders="True" />
+      <DocumentationSource sourceFile="..\corelib\OpenStack.csproj" subFolders="True" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>

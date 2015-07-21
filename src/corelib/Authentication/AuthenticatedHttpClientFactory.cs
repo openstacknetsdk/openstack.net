@@ -6,10 +6,11 @@ using Flurl.Http.Configuration;
 namespace OpenStack.Authentication
 {
     /// <summary>
-    /// Instructs Flurl to use our <see cref="AuthenticatedMessageHandler"/> for all requests.
+    /// Instructs Flurl to use an <see cref="AuthenticatedMessageHandler"/> for all requests.
     /// </summary>
-    internal class AuthenticatedHttpClientFactory : DefaultHttpClientFactory
+    public class AuthenticatedHttpClientFactory : DefaultHttpClientFactory
     {
+        /// <inheritdoc/>
         public override HttpClient CreateClient(Url url, HttpMessageHandler handler)
         {
             return new HttpClient(handler)
@@ -18,6 +19,7 @@ namespace OpenStack.Authentication
             };
         }
 
+        /// <inheritdoc/>
         public override HttpMessageHandler CreateMessageHandler()
         {
             return new AuthenticatedMessageHandler(base.CreateMessageHandler());
