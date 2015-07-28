@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Newtonsoft.Json;
@@ -54,6 +55,8 @@ namespace OpenStack
                 {
                     // Apply our default settings
                     c.HttpClientFactory = new AuthenticatedHttpClientFactory();
+                    c.AfterCall = Tracing.TraceHttpCall;
+                    c.OnError = Tracing.TraceFailedHttpCall;
 
                     // Apply application's default settings
                     if (configureFlurl != null)
@@ -61,6 +64,22 @@ namespace OpenStack
                 });
 
                 _isConfigured = true;
+            }
+        }
+
+        public static class Tracing
+        {
+            public static readonly TraceSource Http = new TraceSource("Flurl.Http");
+
+            public static void TraceFailedHttpCall(HttpCall httpCall)
+            {
+                Http.TraceData(TraceEventType.Error, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
+                Http.Flush();
+            }
+
+            public static void TraceHttpCall(HttpCall httpCall)
+            {
+                Http.TraceData(TraceEventType.Information, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
             }
         }
     }
