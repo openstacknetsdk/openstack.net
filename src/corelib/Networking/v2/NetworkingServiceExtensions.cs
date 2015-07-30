@@ -10,6 +10,7 @@ namespace OpenStack.Synchronous
     /// </summary>
     public static class NetworkingServiceExtensions
     {
+        #region Networks
         /// <summary>
         /// Lists all networks associated with the account.
         /// </summary>
@@ -34,7 +35,7 @@ namespace OpenStack.Synchronous
         }
 
         /// <summary>
-        /// Creates a network.
+        /// Bulk creates multiple networks.
         /// </summary>
         /// <param name="networks">The network definitions.</param>
         /// <returns>
@@ -46,11 +47,11 @@ namespace OpenStack.Synchronous
         }
 
         /// <summary>
-        /// Bulk creates multiple networks.
+        /// Creates a network.
         /// </summary>
         /// <param name="network">The network definition.</param>
         /// <returns>
-        /// The created networks.
+        /// The created network.
         /// </returns>
         public static Network CreateNetwork(this NetworkingService networkingService, NetworkDefinition network)
         {
@@ -78,5 +79,77 @@ namespace OpenStack.Synchronous
         {
             networkingService.DeleteNetworkAsync(networkId).ForceSynchronous();
         }
+        #endregion
+
+        #region Subnets
+        /// <summary>
+        /// Lists all subnets associated with the account.
+        /// </summary>
+        /// <returns>
+        /// A collection of subnet resources associated with the account.
+        /// </returns>
+        public static IEnumerable<Subnet> ListSubnets(this NetworkingService networkingService)
+        {
+            return networkingService.ListSubnetsAsync().ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Creates a subnet.
+        /// </summary>
+        /// <param name="subnet">The subnet definition.</param>
+        /// <returns>
+        /// The created subnet.
+        /// </returns>
+        public static Subnet CreateSubnet(this NetworkingService networkingService, SubnetCreateDefinition subnet)
+        {
+            return networkingService.CreateSubnetAsync(subnet).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Bulk creates multiple subnets.
+        /// </summary>
+        /// <param name="subnets">The subnet definitions.</param>
+        /// <returns>
+        /// The created subnets.
+        /// </returns>
+        public static IEnumerable<Subnet> CreateSubnets(this NetworkingService networkingService, IEnumerable<SubnetCreateDefinition> subnets)
+        {
+            return networkingService.CreateSubnetsAsync(subnets).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Gets the specified subnet.
+        /// </summary>
+        /// <param name="subnetId">The subnet identifier.</param>
+        /// <returns>
+        /// The subnet associated with the specified identifier.
+        /// </returns>
+        public static Subnet GetSubnet(this NetworkingService networkingService, string subnetId)
+        {
+            return networkingService.GetSubnetAsync(subnetId).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Updates the specified subnet.
+        /// </summary>
+        /// <param name="subnetId"></param>
+        /// <param name="subnet">The updated subnet definition.</param>
+        /// <returns>
+        /// The updated network.
+        /// </returns>
+        public static Subnet UpdateSubnet(this NetworkingService networkingService, string subnetId, SubnetUpdateDefinition subnet)
+        {
+            return networkingService.UpdateSubnetAsync(subnetId, subnet).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Deletes the specified subnet.
+        /// </summary>
+        /// <param name="subnetId">The subnet identifier.</param>
+        public static void DeleteSubnet(this NetworkingService networkingService, string subnetId)
+        {
+            networkingService.DeleteSubnetAsync(subnetId).ForceSynchronous();
+        }
+        #endregion
     }
 }

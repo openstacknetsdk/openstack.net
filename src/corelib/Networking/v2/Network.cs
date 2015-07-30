@@ -31,7 +31,13 @@ namespace OpenStack.Networking.v2
         /// Indicates whether this network is shared across all tenants.
         /// </summary>
         [JsonProperty("shared")]
-        public static bool IsShared { get; set; }
+        public bool IsShared { get; set; }
+
+        /// <summary>
+        /// The network status.
+        /// </summary>
+        [JsonProperty("status")]
+        public NetworkStatus Status { get; set; }
 
         /// <summary>
         /// The associated subnet identifiers.

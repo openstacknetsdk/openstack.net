@@ -105,5 +105,21 @@ namespace OpenStack.Networking.v2
                 httpTest.ShouldHaveCalled("*/networks/network-id");
             }
         }
+
+        [Fact]
+        public void UpdateNetwork()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new Network {Id = "network-id"});
+
+                var definition = new NetworkDefinition { Name = "new network name" };
+                var network = _networkingService.UpdateNetwork("network-id", definition);
+
+                httpTest.ShouldHaveCalled("*/networks/network-id");
+                Assert.NotNull(network);
+                Assert.Equal("network-id", network.Id);
+            }
+        }
     }
 }

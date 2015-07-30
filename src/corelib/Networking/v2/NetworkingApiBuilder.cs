@@ -42,6 +42,7 @@ namespace OpenStack.Networking.v2
             UrlBuilder = new ServiceUrlBuilder(serviceType, authenticationProvider, region);
         }
 
+        #region Networks
         /// <summary>
         /// Lists all networks associated with the account.
         /// </summary>
@@ -110,7 +111,7 @@ namespace OpenStack.Networking.v2
             return endpoint
                 .AppendPathSegments("networks")
                 .Authenticate(AuthenticationProvider)
-                .PreparePostJson(networks, cancellationToken);
+                .PreparePostJson(new NetworkDefinitionCollection(networks), cancellationToken);
         }
 
         /// <summary>
@@ -147,5 +148,115 @@ namespace OpenStack.Networking.v2
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
+        #endregion
+
+        #region Subnets
+
+        /// <summary>
+        /// Lists all subnets associated with the account.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// A collection of subnet resources associated with the account.
+        /// </returns>
+        public virtual async Task<PreparedRequest> ListSubnetsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("subnets")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a subnet.
+        /// </summary>
+        /// <param name="subnet">The subnet definition.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The created subnet.
+        /// </returns>
+        public virtual async Task<PreparedRequest> CreateSubnetAsync(SubnetCreateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("subnets")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(subnet, cancellationToken);
+        }
+
+        /// <summary>
+        /// Bulk creates multiple subnets.
+        /// </summary>
+        /// <param name="subnets">The subnet definitions.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The created subnets.
+        /// </returns>
+        public virtual async Task<PreparedRequest> CreateSubnetsAsync(IEnumerable<SubnetCreateDefinition> subnets, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("subnets")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(new SubnetDefinitionCollection(subnets), cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the specified subnet.
+        /// </summary>
+        /// <param name="subnetId">The subnet identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The subnet associated with the specified identifier.
+        /// </returns>
+        public virtual async Task<PreparedRequest> GetSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("subnets", subnetId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary>
+        /// Updates the specified subnet.
+        /// </summary>
+        /// <param name="subnetId"></param>
+        /// <param name="subnet">The updated subnet definition.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The updated subnet.
+        /// </returns>
+        public virtual async Task<PreparedRequest> UpdateSubnetAsync(string subnetId, SubnetUpdateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("subnets", subnetId)
+                .Authenticate(AuthenticationProvider)
+                .PreparePutJson(subnet, cancellationToken);
+        }
+
+        /// <summary>
+        /// Deletes the specified subnet.
+        /// </summary>
+        /// <param name="subnetId">The subnet identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<PreparedRequest> DeleteSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegments("subnets", subnetId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+        #endregion
     }
 }
