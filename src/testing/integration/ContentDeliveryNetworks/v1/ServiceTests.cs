@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
@@ -14,12 +15,13 @@ namespace OpenStack.ContentDeliveryNetworks.v1
 {
     public class ServiceTests
     {
-        private readonly ITestOutputHelper _log;
         private readonly ContentDeliveryNetworkService _cdnService;
 
-        public ServiceTests(ITestOutputHelper log)
+        public ServiceTests(ITestOutputHelper testLog)
         {
-            _log = log;
+            var testOutput = new XunitTraceListener(testLog);
+            OpenStackNet.Tracing.Http.Listeners.Add(testOutput);
+            Trace.Listeners.Add(testOutput);
 
             var identity = TestIdentityProvider.GetIdentityFromEnvironment();
             var authenticationProvider = new CloudIdentityProvider(identity)
@@ -34,26 +36,26 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         {
             try
             {
-                _log.WriteLine("Looking for a CDN flavor provided by Akamai...");
+                Trace.WriteLine("Looking for a CDN flavor provided by Akamai...");
                 var flavors = await _cdnService.ListFlavorsAsync();
                 var flavor = flavors.FirstOrDefault(x => x.Providers.Any(p => string.Equals(p.Name, "Akamai", StringComparison.OrdinalIgnoreCase)));
                 Assert.NotNull(flavor);
                 var akamaiFlavor = flavor.Id;
-                _log.WriteLine("Found the {0} flavor", akamaiFlavor);
+                Trace.WriteLine(string.Format("Found the {0} flavor", akamaiFlavor));
 
-                _log.WriteLine("Creating a CDN service using defaults for anything I can omit...");
+                Trace.WriteLine("Creating a CDN service using defaults for anything I can omit...");
                 var domains = new[] {new ServiceDomain("mirror.example.com")};
                 var origins = new[] {new ServiceOrigin("example.com")};
                 var serviceDefinition = new ServiceDefinition("ci-test", akamaiFlavor, domains, origins);
                 var serviceId = await _cdnService.CreateServiceAsync(serviceDefinition);
-                _log.WriteLine("Service was created: {0}", serviceId);
+                Trace.WriteLine(string.Format("Service was created: {0}", serviceId));
 
                 try
                 {
-                    _log.WriteLine("Waiting for the service to be deployed...");
-                    var service = await _cdnService.WaitForServiceDeployedAsync(serviceId, progress: new Progress<bool>(x => _log.WriteLine("...")));
+                    Trace.WriteLine("Waiting for the service to be deployed...");
+                    var service = await _cdnService.WaitForServiceDeployedAsync(serviceId, progress: new Progress<bool>(x => Trace.WriteLine("...")));
 
-                    _log.WriteLine("Verifying service matches the requested definition...");
+                    Trace.WriteLine("Verifying service matches the requested definition...");
                     Assert.Equal("ci-test", service.Name);
                     Assert.Equal(serviceDefinition.FlavorId, service.FlavorId);
                     
@@ -63,31 +65,31 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                     Assert.Equal(serviceDefinition.Domains.Count, service.Domains.Count());
                     Assert.Equal(serviceDefinition.Domains.First().Domain, service.Domains.First().Domain);
 
-                    _log.WriteLine("Updating the service...");
+                    Trace.WriteLine("Updating the service...");
                     var patch = new JsonPatchDocument<ServiceDefinition>();
                     patch.Replace(x => x.Name, "ci-test2");
                     var intranetOnly = new ServiceRestriction("intranet", new[] {new ServiceRestrictionRule("intranet", "intranet.example.com")});
                     patch.Add(x => x.Restrictions, intranetOnly, 0);
                     await _cdnService.UpdateServiceAsync(serviceId, patch);
 
-                    _log.WriteLine("Waiting for the service changes to be deployed...");
-                    service = await _cdnService.WaitForServiceDeployedAsync(serviceId, progress: new Progress<bool>(x => _log.WriteLine("...")));
+                    Trace.WriteLine("Waiting for the service changes to be deployed...");
+                    service = await _cdnService.WaitForServiceDeployedAsync(serviceId, progress: new Progress<bool>(x => Trace.WriteLine("...")));
 
-                    _log.WriteLine("Verifying service matches updated definition...");
+                    Trace.WriteLine("Verifying service matches updated definition...");
                     Assert.Equal("ci-test2", service.Name);
                     Assert.Equal(JsonConvert.SerializeObject(intranetOnly), JsonConvert.SerializeObject(service.Restrictions.First()));
 
-                    _log.WriteLine("Purging all assets on service");
+                    Trace.WriteLine("Purging all assets on service");
                     await _cdnService.PurgeCachedAssetsAsync(serviceId);
                 }
                 finally
                 {
-                    _log.WriteLine("Cleaning up any test data...");
+                    Trace.WriteLine("Cleaning up any test data...");
 
-                    _log.WriteLine("Removing the service...");
+                    Trace.WriteLine("Removing the service...");
                     _cdnService.DeleteService(serviceId);
                     _cdnService.WaitForServiceDeleted(serviceId);
-                    _log.WriteLine("The service was cleaned up sucessfully.");
+                    Trace.WriteLine("The service was cleaned up sucessfully.");
                 }
             }
             catch (FlurlHttpException ex)
@@ -113,7 +115,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 {
                     if (currentPage.Any(x => x.Name == "ci-test3"))
                     {
-                        _log.WriteLine("Found the desired service");
+                        Trace.WriteLine("Found the desired service");
                         break;
                     }
 
@@ -126,17 +128,17 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             }
             finally
             {
-                _log.WriteLine("Cleaning up any test data...");
+                Trace.WriteLine("Cleaning up any test data...");
 
-                _log.WriteLine("Removing the services...");
+                Trace.WriteLine("Removing the services...");
                 var deletes = serviceIds.Select(serviceId => _cdnService
                     .DeleteServiceAsync(serviceId)
                     .ContinueWith(t => _cdnService.WaitForServiceDeletedAsync(serviceId))
-                    .ContinueWith(t => _log.WriteLine("Service was deleted: {0}", serviceId)))
+                    .ContinueWith(t => Trace.WriteLine(string.Format("Service was deleted: {0}", serviceId))))
                     .ToArray();
 
                 Task.WaitAll(deletes);
-                _log.WriteLine("The services were cleaned up sucessfully.");
+                Trace.WriteLine("The services were cleaned up sucessfully.");
 
             }
         }
@@ -146,12 +148,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             var flavors = await _cdnService.ListFlavorsAsync();
             var flavor = flavors.First();
 
-            _log.WriteLine("Creating CDN Service: {0} for {1} originating from {2}", name, domain, origin);
+            Trace.WriteLine(string.Format("Creating CDN Service: {0} for {1} originating from {2}", name, domain, origin));
             var domains = new[] { new ServiceDomain(domain) };
             var origins = new[] { new ServiceOrigin(origin) };
             var serviceDefinition = new ServiceDefinition(name, flavor.Id, domains, origins);
             var serviceId = await _cdnService.CreateServiceAsync(serviceDefinition);
-            _log.WriteLine("Service was created: {0}", serviceId);
+            Trace.WriteLine("Service was created: {0}", serviceId);
             return serviceId;
         }
     }

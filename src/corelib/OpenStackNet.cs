@@ -67,16 +67,33 @@ namespace OpenStack
             }
         }
 
+        /// <summary>
+        /// Provides global point for programmatically configuraing tracing
+        /// </summary>
         public static class Tracing
         {
-            public static readonly TraceSource Http = new TraceSource("Flurl.Http");
+            /// <summary>
+            /// Trace source for all HTTP requests. Default level is Error.
+            /// <para>
+            /// In your app or web.config the trace soruce name is "Flurl.Http".
+            /// </para>
+            /// </summary>
+            public static readonly TraceSource Http = new TraceSource("Flurl.Http", SourceLevels.Error);
 
+            /// <summary>
+            /// Traces a failed HTTP request
+            /// </summary>
+            /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
             public static void TraceFailedHttpCall(HttpCall httpCall)
             {
                 Http.TraceData(TraceEventType.Error, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
                 Http.Flush();
             }
 
+            /// <summary>
+            /// Traces an HTTP request
+            /// </summary>
+            /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
             public static void TraceHttpCall(HttpCall httpCall)
             {
                 Http.TraceData(TraceEventType.Information, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
