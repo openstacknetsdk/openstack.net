@@ -130,6 +130,7 @@
     <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
     <Compile Include="Providers\Rackspace\UserQueuesTests.cs" />
     <Compile Include="Providers\Rackspace\UserServerTests.cs" />
+    <Compile Include="XunitTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\corelib\corelib.v4.0.csproj">

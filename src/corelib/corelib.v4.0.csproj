@@ -80,7 +80,7 @@
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
-    <Compile Include="Configuration.cs" />
+    <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\NamespaceDoc.cs" />
