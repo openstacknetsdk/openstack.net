@@ -81,6 +81,8 @@ namespace net.openstack.Core.Providers
         /// <inheritdoc/>
         public override UserAccess GetUserAccess(CloudIdentity identity, bool forceCacheRefresh = false)
         {
+            identity = identity ?? DefaultIdentity;
+
             CloudIdentityWithProject identityWithProject = identity as CloudIdentityWithProject;
             if (identityWithProject == null)
                 return base.GetUserAccess(identityWithProject, forceCacheRefresh);
