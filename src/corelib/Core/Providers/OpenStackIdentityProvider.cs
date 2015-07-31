@@ -95,13 +95,14 @@ namespace net.openstack.Core.Providers
             Func<UserAccess> refreshCallback =
                 () =>
                 {
+                    var projectId = identityWithProject.ProjectId != null ? JToken.FromObject(identityWithProject.ProjectId) : string.Empty;
                     JObject requestBody = new JObject(
                         new JProperty("auth", new JObject(
                             new JProperty("passwordCredentials", new JObject(
                                 new JProperty("username", JValue.CreateString(identityWithProject.Username)),
                                 new JProperty("password", JValue.CreateString(identityWithProject.Password)))),
                             new JProperty("tenantName", JToken.FromObject(identityWithProject.ProjectName)),
-                            new JProperty("tenantId", JToken.FromObject(identityWithProject.ProjectId)))));
+                            new JProperty("tenantId", projectId))));
 
                     var response = ExecuteRESTRequest<JObject>(identity, new Uri(UrlBase, "/v2.0/tokens"), HttpMethod.POST, requestBody, isTokenRequest: true);
                     if (response == null || response.Data == null)
