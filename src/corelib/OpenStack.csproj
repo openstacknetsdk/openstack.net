@@ -82,6 +82,7 @@
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
+    <Compile Include="Identifier.cs" />
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\v2\AllocationPool.cs" />
     <Compile Include="Networking\v2\HostRoute.cs" />
@@ -706,6 +707,7 @@
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
     <Compile Include="Exceptions\RegionRequiredException.cs" />
     <Compile Include="ResourceCollection.cs" />
+    <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />

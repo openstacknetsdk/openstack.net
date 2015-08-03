@@ -107,6 +107,7 @@
     <Compile Include="Domain\Mapping\NetworkAddressDeserializationTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="HP\Authentication\ServiceCatalogTests.cs" />
+    <Compile Include="IdentifierTests.cs" />
     <Compile Include="Networking\v2\SubnetTests.cs" />
     <Compile Include="Networking\v2\NetworkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
