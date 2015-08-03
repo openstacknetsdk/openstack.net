@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Flurl.Http;
-using OpenStack.Synchronous;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,8 +11,8 @@ namespace OpenStack.Networking.v2
     public class NetworkingServiceTests : IDisposable
     {
         private readonly NetworkingService _networkingService;
-        private readonly HashSet<object> _testData;
-         
+        private readonly NetworkingTestDataManager _testData;
+
         public NetworkingServiceTests(ITestOutputHelper testLog)
         {
             var testOutput = new XunitTraceListener(testLog);
@@ -25,20 +22,7 @@ namespace OpenStack.Networking.v2
             var authenticationProvider = TestIdentityProvider.GetIdentityProvider();
             _networkingService = new NetworkingService(authenticationProvider, "RegionOne");
 
-            _testData = new HashSet<object>();
-        }
-
-        private void RegisterTestData(IEnumerable<object> testItems)
-        {
-            foreach (var testItem in testItems)
-            {
-                RegisterTestData(testItem);
-            }
-        }
-
-        private void RegisterTestData(object testItem)
-        {
-            _testData.Add(testItem);
+            _testData = new NetworkingTestDataManager(_networkingService);
         }
 
         public void Dispose()
@@ -46,36 +30,7 @@ namespace OpenStack.Networking.v2
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();
 
-            //
-            // Remove all test data
-            //
-            var errors = new List<Exception>();
-            foreach (var subnet in _testData.OfType<Subnet>())
-            {
-                try
-                {
-                    _networkingService.DeleteSubnet(subnet.Id);
-                }
-                catch (Exception ex)
-                {
-                    errors.Add(ex);
-                }
-            }
-
-            foreach (var network in _testData.OfType<Network>())
-            {
-                try
-                {
-                    _networkingService.DeleteNetwork(network.Id);
-                }
-                catch (Exception ex)
-                {
-                    errors.Add(ex);
-                }
-            }
-
-            if (errors.Any())
-                throw new AggregateException("Unable to remove all test data!", errors);
+            _testData.Dispose();
         }
 
         #region Networks
@@ -83,10 +38,10 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void CreateNetworkTest()
         {
-            var definition = BuildNetwork();
+            var definition = _testData.BuildNetwork();
 
             Trace.WriteLine(string.Format("Creating network named: {0}", definition.Name));
-            var network = await _networkingService.CreateNetworkAsync(definition);
+            var network = await _testData.CreateNetwork(definition);
 
             Trace.WriteLine("Verifying network matches requested definition...");
             Assert.NotNull(network);
@@ -99,10 +54,10 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void BulkCreateNetworksTest()
         {
-            var definitions = new[] {BuildNetwork(), BuildNetwork(), BuildNetwork()};
+            var definitions = new[] { _testData.BuildNetwork(), _testData.BuildNetwork(), _testData.BuildNetwork() };
 
             Trace.WriteLine(string.Format("Creating networks: {0}", string.Join(", ", definitions.Select(d => d.Name))));
-            var networks = await CreateNetworks(definitions);
+            var networks = await _testData.CreateNetworks(definitions);
 
             Trace.WriteLine("Verifying networks matches requested definitions...");
 
@@ -115,7 +70,7 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void UpdateNetworkTest()
         {
-            Network network = await CreateNetwork();
+            Network network = await _testData.CreateNetwork();
 
             var networkUpdate = new NetworkDefinition
             {
@@ -133,7 +88,7 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void ListNetworksTest()
         {
-            var networks = await CreateNetworks();
+            var networks = await _testData.CreateNetworks();
 
             Trace.WriteLine("Listing networks...");
             var results = await _networkingService.ListNetworksAsync();
@@ -146,7 +101,7 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void GetNetworkTest()
         {
-            var network = await CreateNetwork();
+            var network = await _testData.CreateNetwork();
 
             Trace.WriteLine("Retrieving network...");
             var result = await _networkingService.GetNetworkAsync(network.Id);
@@ -155,51 +110,16 @@ namespace OpenStack.Networking.v2
             Assert.NotNull(result);
             Assert.Equal(network.Id, result.Id);
         }
-
-        public static NetworkDefinition BuildNetwork()
-        {
-            return new NetworkDefinition
-            {
-                Name = string.Format("ci-test-{0}", Guid.NewGuid())
-            };
-        }
-
-        public async Task<Network> CreateNetwork()
-        {
-            var definition = BuildNetwork();
-            var network = await _networkingService.CreateNetworkAsync(definition);
-            RegisterTestData(network);
-            return network;
-        }
-
-        public async Task<IEnumerable<Network>> CreateNetworks()
-        {
-            var definitions = new[] { BuildNetwork(), BuildNetwork(), BuildNetwork() };
-            return await CreateNetworks(definitions);
-        }
-
-        public async Task<IEnumerable<Network>> CreateNetworks(IEnumerable<NetworkDefinition> definitions)
-        {
-            var networks = await _networkingService.CreateNetworksAsync(definitions);
-            RegisterTestData(networks);
-            return networks;
-        }
-
-        public void DeleteNetworks(IEnumerable<Network> networks)
-        {
-            Task[] deletes = networks.Select(n => _networkingService.DeleteNetworkAsync(n.Id)).ToArray();
-            Task.WaitAll(deletes);
-        }
         #endregion
 
         #region Subnets
         [Fact]
         public async void CreateSubnetTest()
         {
-            var network = await CreateNetwork();
+            var network = await _testData.CreateNetwork();
             var definition = new SubnetCreateDefinition(network.Id, IPVersion.IP, "192.168.3.0/24")
             {
-                Name = string.Format("ci-test-{0}", Guid.NewGuid()),
+                Name = TestData.GenerateName(),
                 IsDHCPEnabled = true,
                 GatewayIP = "192.168.3.1",
                 AllocationPools =
@@ -217,7 +137,7 @@ namespace OpenStack.Networking.v2
             };
 
             Trace.WriteLine(string.Format("Creating subnet named: {0}", definition.Name));
-            var subnet = await CreateSubnet(definition);
+            var subnet = await _testData.CreateSubnet(definition);
 
             Trace.WriteLine("Verifying subnet matches requested definition...");
             Assert.NotNull(subnet);
@@ -235,11 +155,11 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void BulkCreateSubnetsTest()
         {
-            var network = await CreateNetwork();
-            var definitions = new[] {BuildSubnet(network), BuildSubnet(network), BuildSubnet(network)};
+            var network = await _testData.CreateNetwork();
+            var definitions = new[] {_testData.BuildSubnet(network), _testData.BuildSubnet(network), _testData.BuildSubnet(network) };
 
             Trace.WriteLine(string.Format("Creating subnets: {0}", string.Join(", ", definitions.Select(d => d.Name))));
-            var subnets = await CreateSubnets(definitions);
+            var subnets = await _testData.CreateSubnets(definitions);
 
             Trace.WriteLine("Verifying subnets matches requested definitions...");
             Assert.NotNull(subnets);
@@ -249,8 +169,8 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void UpdateSubnetTest()
         {
-            Network network = await CreateNetwork();
-            Subnet subnet = await CreateSubnet(network);
+            Network network = await _testData.CreateNetwork();
+            Subnet subnet = await _testData.CreateSubnet(network);
 
             var networkUpdate = new SubnetUpdateDefinition
             {
@@ -268,8 +188,8 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void ListSubnetsTest()
         {
-            var network = await CreateNetwork();
-            var subnets = await CreateSubnets(network);
+            var network = await _testData.CreateNetwork();
+            var subnets = await _testData.CreateSubnets(network);
 
             Trace.WriteLine("Listing subnets...");
             var results = await _networkingService.ListSubnetsAsync();
@@ -282,8 +202,8 @@ namespace OpenStack.Networking.v2
         [Fact]
         public async void GetSubnetTest()
         {
-            var network = await CreateNetwork();
-            var subnet = await CreateSubnet(network);
+            var network = await _testData.CreateNetwork();
+            var subnet = await _testData.CreateSubnet(network);
 
             Trace.WriteLine("Retrieving subnet...");
             var result = await _networkingService.GetSubnetAsync(subnet.Id);
@@ -293,47 +213,108 @@ namespace OpenStack.Networking.v2
             Assert.Equal(subnet.Id, result.Id);
 
         }
+        #endregion
 
-        private static int _subnetCounter = 0;
-        public static SubnetCreateDefinition BuildSubnet(Network network)
+        #region Ports
+        [Fact]
+        public async void CreatePortTests()
         {
-            var cidr = string.Format("192.168.{0}.0/24", _subnetCounter++);
-            return new SubnetCreateDefinition(network.Id, IPVersion.IP, cidr)
+            var network = await _testData.CreateNetwork();
+            var subnet = await _testData.CreateSubnet(network);
+
+            var portIdAddress = subnet.CIDR.Replace("0/24", "2");
+            var definition = new PortCreateDefinition((Identifier)network.Id)
             {
-                Name = string.Format("ci-test-{0}", Guid.NewGuid())
+                Name = TestData.GenerateName(),
+                DHCPOptions =
+                {
+                    {"server-ip-address", "192.168.1.1"}
+                },
+                AllowedAddresses =
+                {
+                    new AllowedAddress("10.0.0.1") { MACAddress = "24:a0:74:f0:1c:66" }
+                },
+                MACAddress = "24:a0:74:f0:1c:66",
+                FixedIPs =
+                {
+                    new IPAddressAssociation((Identifier)subnet.Id, portIdAddress)
+                }
             };
+
+            Trace.WriteLine(string.Format("Creating port named: {0}", definition.Name));
+            var port = await _testData.CreatePort(definition);
+
+            Trace.WriteLine("Verifying port matches requested definition...");
+            Assert.NotNull(port);
+            Assert.NotNull(port.Id);
+            Assert.Equal(definition.Name, port.Name);
+            Assert.Equal(definition.NetworkId, port.NetworkId);
+            Assert.Equal(definition.DHCPOptions, port.DHCPOptions);
+            Assert.Equal(definition.AllowedAddresses, port.AllowedAddresses);
+            Assert.Equal(subnet.Id, port.FixedIPs.Single().SubnetId);
+            Assert.Equal(portIdAddress, port.FixedIPs.Single().IPAddress);
         }
 
-        public async Task<Subnet> CreateSubnet(Network network)
+        [Fact]
+        public async void BulkCreatePortsTest()
         {
-            var definition = BuildSubnet(network);
-            return await CreateSubnet(definition);
+            var network = await _testData.CreateNetwork();
+            var definitions = new[] { _testData.BuildPort(network), _testData.BuildPort(network), _testData.BuildPort(network) };
+
+            Trace.WriteLine(string.Format("Creating ports: {0}", string.Join(", ", definitions.Select(d => d.Name))));
+            var subnets = await _testData.CreatePorts(definitions);
+
+            Trace.WriteLine("Verifying ports matches requested definitions...");
+            Assert.NotNull(subnets);
+            Assert.Equal(3, subnets.Count());
         }
 
-        public async Task<Subnet> CreateSubnet(SubnetCreateDefinition definition)
+        [Fact]
+        public async void UpdatePortTest()
         {
-            var subnet = await _networkingService.CreateSubnetAsync(definition);
-            RegisterTestData(subnet);
-            return subnet;
+            Network network = await _testData.CreateNetwork();
+            Port port = await _testData.CreatePort(network);
+
+            var portUpdate = new PortUpdateDefinition
+            {
+                Name = string.Format("{0}-updated", port.Name)
+            };
+
+            Trace.WriteLine("Updating the port...");
+            port = await _networkingService.UpdatePortAsync(port.Id, portUpdate);
+
+            Trace.WriteLine("Verifying port was updated as requested...");
+            Assert.NotNull(port);
+            Assert.Equal(portUpdate.Name, port.Name);
         }
 
-        public async Task<IEnumerable<Subnet>> CreateSubnets(Network network)
+        [Fact]
+        public async void ListPortsTest()
         {
-            var definitions = new[] { BuildSubnet(network), BuildSubnet(network), BuildSubnet(network) };
-            return await CreateSubnets(definitions);
+            var network = await _testData.CreateNetwork();
+            var ports = await _testData.CreatePorts(network);
+
+            Trace.WriteLine("Listing ports...");
+            var results = await _networkingService.ListPortsAsync();
+
+            Trace.WriteLine("Verifying list of ports...");
+            Assert.NotNull(results);
+            Assert.All(ports, port => Assert.True(results.Any(x => x.Id == port.Id)));
         }
 
-        public async Task<IEnumerable<Subnet>> CreateSubnets(IEnumerable<SubnetCreateDefinition> definitions)
+        [Fact]
+        public async void GetPortTest()
         {
-            var subnets = await _networkingService.CreateSubnetsAsync(definitions);
-            RegisterTestData(subnets);
-            return subnets;
-        }
+            var network = await _testData.CreateNetwork();
+            var port = await _testData.CreatePort(network);
 
-        public void DeleteSubnets(IEnumerable<Subnet> networks)
-        {
-            Task[] deletes = networks.Select(n => _networkingService.DeleteSubnetAsync(n.Id)).ToArray();
-            Task.WaitAll(deletes);
+            Trace.WriteLine("Retrieving port...");
+            var result = await _networkingService.GetPortAsync(port.Id);
+
+            Trace.WriteLine("Verifying port...");
+            Assert.NotNull(result);
+            Assert.Equal(port.Id, result.Id);
+
         }
         #endregion
     }

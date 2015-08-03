@@ -108,6 +108,7 @@
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="Identity\v2\IdentityTests.cs" />
+    <Compile Include="Networking\v2\NetworkingTestDataManager.cs" />
     <Compile Include="Networking\v2\NetworkingServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
     <Compile Include="Providers\Rackspace\UserQueuesTests.cs" />
     <Compile Include="Providers\Rackspace\UserServerTests.cs" />
+    <Compile Include="TestData.cs" />
     <Compile Include="TestIdentityProvider.cs" />
     <Compile Include="XunitTraceListener.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
+using OpenStack.Networking.v2.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;

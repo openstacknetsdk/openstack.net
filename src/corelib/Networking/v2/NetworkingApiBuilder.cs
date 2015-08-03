@@ -7,6 +7,7 @@ using Flurl;
 using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
+using OpenStack.Networking.v2.Serialization;
 
 namespace OpenStack.Networking.v2
 {
@@ -253,6 +254,114 @@ namespace OpenStack.Networking.v2
 
             return (PreparedRequest)endpoint
                 .AppendPathSegments("subnets", subnetId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+        #endregion
+
+        #region Ports
+        /// <summary>
+        /// Lists all ports associated with the account.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// A collection of port resources associated with the account.
+        /// </returns>
+        public virtual async Task<PreparedRequest> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("ports")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a port.
+        /// </summary>
+        /// <param name="port">The port definition.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The created port.
+        /// </returns>
+        public virtual async Task<PreparedRequest> CreatePortAsync(PortCreateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("ports")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(port, cancellationToken);
+        }
+
+        /// <summary>
+        /// Bulk creates multiple ports.
+        /// </summary>
+        /// <param name="ports">The port definitions.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The created subnets.
+        /// </returns>
+        public virtual async Task<PreparedRequest> CreatePortsAsync(IEnumerable<PortCreateDefinition> ports, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("ports")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(new PortDefinitionCollection(ports), cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the specified port.
+        /// </summary>
+        /// <param name="portId">The port identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The port associated with the specified identifier.
+        /// </returns>
+        public virtual async Task<PreparedRequest> GetPortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("ports", portId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary>
+        /// Updates the specified port.
+        /// </summary>
+        /// <param name="portId">The port identifier.</param>
+        /// <param name="port">The updated port definition.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// The updated port.
+        /// </returns>
+        public virtual async Task<PreparedRequest> UpdatePortAsync(Identifier portId, PortUpdateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("ports", portId)
+                .Authenticate(AuthenticationProvider)
+                .PreparePutJson(port, cancellationToken);
+        }
+
+        /// <summary>
+        /// Deletes the specified port.
+        /// </summary>
+        /// <param name="portId">The port identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<PreparedRequest> DeletePortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegments("ports", portId)
                 .Authenticate(AuthenticationProvider)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);

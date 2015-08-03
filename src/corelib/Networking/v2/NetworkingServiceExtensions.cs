@@ -135,7 +135,7 @@ namespace OpenStack.Synchronous
         /// <param name="subnetId"></param>
         /// <param name="subnet">The updated subnet definition.</param>
         /// <returns>
-        /// The updated network.
+        /// The updated port.
         /// </returns>
         public static Subnet UpdateSubnet(this NetworkingService networkingService, string subnetId, SubnetUpdateDefinition subnet)
         {
@@ -149,6 +149,77 @@ namespace OpenStack.Synchronous
         public static void DeleteSubnet(this NetworkingService networkingService, string subnetId)
         {
             networkingService.DeleteSubnetAsync(subnetId).ForceSynchronous();
+        }
+        #endregion
+
+        #region Ports
+        /// <summary>
+        /// Lists all ports associated with the account.
+        /// </summary>
+        /// <returns>
+        /// A collection of port resources associated with the account.
+        /// </returns>
+        public static IEnumerable<Port> ListPorts(this NetworkingService networkingService)
+        {
+            return networkingService.ListPortsAsync().ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Creates a port.
+        /// </summary>
+        /// <param name="port">The port definition.</param>
+        /// <returns>
+        /// The created port.
+        /// </returns>
+        public static Port CreatePort(this NetworkingService networkingService, PortCreateDefinition port)
+        {
+            return networkingService.CreatePortAsync(port).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Bulk creates multiple ports.
+        /// </summary>
+        /// <param name="ports">The port definitions.</param>
+        /// <returns>
+        /// The created ports.
+        /// </returns>
+        public static IEnumerable<Port> CreatePorts(this NetworkingService networkingService, IEnumerable<PortCreateDefinition> ports)
+        {
+            return networkingService.CreatePortsAsync(ports).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Gets the specified port.
+        /// </summary>
+        /// <param name="portId">The port identifier.</param>
+        /// <returns>
+        /// The port associated with the specified identifier.
+        /// </returns>
+        public static Port GetPort(this NetworkingService networkingService, Identifier portId)
+        {
+            return networkingService.GetPortAsync(portId).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Updates the specified port.
+        /// </summary>
+        /// <param name="portId"></param>
+        /// <param name="port">The updated port definition.</param>
+        /// <returns>
+        /// The updated port.
+        /// </returns>
+        public static Port UpdatePort(this NetworkingService networkingService, Identifier portId, PortUpdateDefinition port)
+        {
+            return networkingService.UpdatePortAsync(portId, port).ForceSynchronous();
+        }
+
+        /// <summary>
+        /// Deletes the specified port.
+        /// </summary>
+        /// <param name="portId">The port identifier.</param>
+        public static void DeletePort(this NetworkingService networkingService, Identifier portId)
+        {
+            networkingService.DeletePortAsync(portId).ForceSynchronous();
         }
         #endregion
     }

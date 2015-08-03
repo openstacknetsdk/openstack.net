@@ -5,6 +5,9 @@ namespace OpenStack.Networking.v2
 {
     /// <summary>
     /// Represents a network resource of the <see cref="NetworkingService"/>
+    /// <para>
+    /// Isolated virtual Layer-2 domains; a network can also be regarded as a virtual (or logical) switch.
+    /// </para>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class Network : NetworkDefinition
@@ -16,10 +19,10 @@ namespace OpenStack.Networking.v2
         public string Id { get; set; }
 
         /// <summary>
-        /// The administrative state of the network, which is up (<see langword="true"/>) or down (<see langword="false"/>).
+        /// The administrative state of the network.
         /// </summary>
         [JsonProperty("admin_state_up")]
-        public bool? IsUp { get; set; }
+        public bool IsUp { get; set; }
 
         /// <summary>
         /// The tenant identifier.

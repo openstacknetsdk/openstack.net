@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using OpenStack.Serialization;
 
-namespace OpenStack.Networking.v2
+namespace OpenStack.Networking.v2.Serialization
 {
     /// <summary>
     /// Represents a collection of subnet definition resources of the <see cref="NetworkingService"/>.
