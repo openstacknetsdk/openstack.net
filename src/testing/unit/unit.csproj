@@ -98,7 +98,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncWebRequestTests.cs" />
     <Compile Include="AuthenticationTests.cs" />
     <Compile Include="Authentication\ServiceCatalogTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedExceptionTests.cs" />
