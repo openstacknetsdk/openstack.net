@@ -21,7 +21,7 @@ namespace OpenStack.Networking.v2
         /// <param name="networkId">The network identifier.</param>
         /// <param name="ipVersion">The ip version.</param>
         /// <param name="cidr">The cidr.</param>
-        public SubnetCreateDefinition(string networkId, IPVersion ipVersion, string cidr)
+        public SubnetCreateDefinition(Identifier networkId, IPVersion ipVersion, string cidr)
         {
             NetworkId = networkId;
             IPVersion = ipVersion;
@@ -32,7 +32,7 @@ namespace OpenStack.Networking.v2
         /// The ID of the attached network.
         /// </summary>
         [JsonProperty("network_id")]
-        public string NetworkId { get; set; }
+        public Identifier NetworkId { get; set; }
 
         /// <summary>
         /// The IP version.

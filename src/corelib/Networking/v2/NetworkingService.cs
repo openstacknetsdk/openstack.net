@@ -40,7 +40,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.GetNetworkAsync" />
-        public Task<Network> GetNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Network> GetNetworkAsync(Identifier networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .GetNetworkAsync(networkId, cancellationToken)
@@ -68,7 +68,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.UpdateNetworkAsync" />
-        public Task<Network> UpdateNetworkAsync(string networkId, NetworkDefinition network, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Network> UpdateNetworkAsync(Identifier networkId, NetworkDefinition network, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .UpdateNetworkAsync(networkId, network, cancellationToken)
@@ -77,7 +77,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.DeleteNetworkAsync" />
-        public Task DeleteNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeleteNetworkAsync(Identifier networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .DeleteNetworkAsync(networkId, cancellationToken)
@@ -117,7 +117,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.GetSubnetAsync" />
-        public Task<Subnet> GetSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Subnet> GetSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .GetSubnetAsync(subnetId, cancellationToken)
@@ -126,7 +126,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.UpdateSubnetAsync" />
-        public Task<Subnet> UpdateSubnetAsync(string subnetId, SubnetUpdateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Subnet> UpdateSubnetAsync(Identifier subnetId, SubnetUpdateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .UpdateSubnetAsync(subnetId, subnet, cancellationToken)
@@ -135,7 +135,7 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.DeleteSubnetAsync" />
-        public Task DeleteSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeleteSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _networkingApiBuilder
                 .DeleteSubnetAsync(subnetId, cancellationToken)

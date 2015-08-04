@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using OpenStack.Networking.v2.Serialization;
 using OpenStack.Synchronous;
@@ -21,14 +22,15 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new SubnetCollection(new[] {new Subnet {Id = "subnet-id"}}));
+                Identifier subnetId = Guid.NewGuid();
+                httpTest.RespondWithJson(new SubnetCollection(new[] {new Subnet {Id = subnetId}}));
 
                 var subnets = _networkingService.ListSubnets();
 
                 httpTest.ShouldHaveCalled("*/subnets");
                 Assert.NotNull(subnets);
                 Assert.Equal(1, subnets.Count());
-                Assert.Equal("subnet-id", subnets.First().Id);
+                Assert.Equal(subnetId, subnets.First().Id);
             }
         }
 
@@ -37,14 +39,16 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Subnet { Id = "subnet-id" });
+                Identifier networkId = Guid.NewGuid();
+                Identifier subnetId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Subnet { Id = subnetId });
 
-                var definition = new SubnetCreateDefinition("network-id", IPVersion.IP, "10.0.0.0/24");
+                var definition = new SubnetCreateDefinition(networkId, IPVersion.IPv4, "10.0.0.0/24");
                 var subnet = _networkingService.CreateSubnet(definition);
                 
                 httpTest.ShouldHaveCalled("*/subnets");
                 Assert.NotNull(subnet);
-                Assert.Equal("subnet-id", subnet.Id);
+                Assert.Equal(subnetId, subnet.Id);
             }
         }
 
@@ -53,16 +57,21 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new SubnetCollection(new[] { new Subnet { Id = "subnet-id1" }, new Subnet { Id = "subnet-id2" } }));
+                Identifier networkId = Guid.NewGuid();
+                httpTest.RespondWithJson(new SubnetCollection(new[] { new Subnet { Name = "subnet-1" }, new Subnet { Name = "subnet-2" } }));
 
-                var definitions = new[] { new SubnetCreateDefinition("network-id", IPVersion.IP, "{cidr-1}"), new SubnetCreateDefinition("network-id", IPVersion.IPv6, "{cidr-2}") };
+                var definitions = new[]
+                {
+                    new SubnetCreateDefinition(networkId, IPVersion.IPv4, "{cidr-1}"),
+                    new SubnetCreateDefinition(networkId, IPVersion.IPv6, "{cidr-2}")
+                };
                 var subnets = _networkingService.CreateSubnets(definitions);
 
                 httpTest.ShouldHaveCalled("*/subnets");
                 Assert.NotNull(subnets);
                 Assert.Equal(2, subnets.Count());
-                Assert.Equal("subnet-id1", subnets.First().Id);
-                Assert.Equal("subnet-id2", subnets.Last().Id);
+                Assert.Equal("subnet-1", subnets.First().Name);
+                Assert.Equal("subnet-2", subnets.Last().Name);
             }
         }
 
@@ -71,13 +80,14 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Subnet { Id = "subnet-id" });
+                Identifier subnetId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Subnet { Id = subnetId });
 
-                var subnet = _networkingService.GetSubnet("subnet-id");
+                var subnet = _networkingService.GetSubnet(subnetId);
 
-                httpTest.ShouldHaveCalled("*/subnets/subnet-id");
+                httpTest.ShouldHaveCalled("*/subnets/" + subnetId);
                 Assert.NotNull(subnet);
-                Assert.Equal("subnet-id", subnet.Id);
+                Assert.Equal(subnetId, subnet.Id);
             }
         }
 
@@ -86,11 +96,12 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
+                Identifier subnetId = Guid.NewGuid();
                 httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
 
-                _networkingService.DeleteSubnet("subnet-id");
+                _networkingService.DeleteSubnet(subnetId);
 
-                httpTest.ShouldHaveCalled("*/subnets/subnet-id");
+                httpTest.ShouldHaveCalled("*/subnets/" + subnetId);
             }
         }
 
@@ -99,11 +110,12 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
+                Identifier subnetId = Guid.NewGuid();
                 httpTest.RespondWith((int)HttpStatusCode.NotFound, "Not here, boss...");
 
-                _networkingService.DeleteSubnet("subnet-id");
+                _networkingService.DeleteSubnet(subnetId);
 
-                httpTest.ShouldHaveCalled("*/subnets/subnet-id");
+                httpTest.ShouldHaveCalled("*/subnets/" + subnetId);
             }
         }
 
@@ -112,14 +124,15 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Subnet { Id = "subnet-id" });
+                Identifier subnetId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Subnet { Id = subnetId });
 
                 var definition = new SubnetUpdateDefinition { Name = "new subnet name" };
-                var subnet = _networkingService.UpdateSubnet("subnet-id", definition);
+                var subnet = _networkingService.UpdateSubnet(subnetId, definition);
 
-                httpTest.ShouldHaveCalled("*/subnets/subnet-id");
+                httpTest.ShouldHaveCalled("*/subnets/" + subnetId);
                 Assert.NotNull(subnet);
-                Assert.Equal("subnet-id", subnet.Id);
+                Assert.Equal(subnetId, subnet.Id);
             }
         }
     }

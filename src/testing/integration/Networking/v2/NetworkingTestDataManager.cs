@@ -103,7 +103,7 @@ namespace OpenStack.Networking.v2
         public SubnetCreateDefinition BuildSubnet(Network network)
         {
             var cidr = string.Format("192.168.{0}.0/24", _subnetCounter++);
-            return new SubnetCreateDefinition(network.Id, IPVersion.IP, cidr)
+            return new SubnetCreateDefinition(network.Id, IPVersion.IPv4, cidr)
             {
                 Name = TestData.GenerateName()
             };

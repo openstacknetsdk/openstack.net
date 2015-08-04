@@ -16,7 +16,7 @@ namespace OpenStack.Networking.v2
         /// The network identifier.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// The administrative state of the network.

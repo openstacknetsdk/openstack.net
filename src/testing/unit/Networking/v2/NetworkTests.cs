@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using OpenStack.Networking.v2.Serialization;
 using OpenStack.Synchronous;
@@ -21,14 +22,15 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new NetworkCollection(new[] {new Network {Id = "network-id"}}));
+                Identifier networkId = Guid.NewGuid();
+                httpTest.RespondWithJson(new NetworkCollection(new[] {new Network {Id = networkId}}));
 
                 var networks = _networkingService.ListNetworks();
 
                 httpTest.ShouldHaveCalled("*/networks");
                 Assert.NotNull(networks);
                 Assert.Equal(1, networks.Count());
-                Assert.Equal("network-id", networks.First().Id);
+                Assert.Equal(networkId, networks.First().Id);
             }
         }
 
@@ -37,14 +39,15 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Network{Id = "network-id"});
+                Identifier networkId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Network{Id = networkId});
 
                 var definition = new NetworkDefinition();
                 var network = _networkingService.CreateNetwork(definition);
 
                 httpTest.ShouldHaveCalled("*/networks");
                 Assert.NotNull(network);
-                Assert.Equal("network-id", network.Id);
+                Assert.Equal(networkId, network.Id);
             }
         }
 
@@ -53,7 +56,7 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new NetworkCollection(new[] { new Network { Id = "network-id1" }, new Network{Id = "network-id2"} }));
+                httpTest.RespondWithJson(new NetworkCollection(new[] { new Network { Name = "network-1"}, new Network{Name = "network-2"} }));
 
                 var definitions = new[] {new NetworkDefinition(), new NetworkDefinition()};
                 var networks = _networkingService.CreateNetworks(definitions);
@@ -61,8 +64,8 @@ namespace OpenStack.Networking.v2
                 httpTest.ShouldHaveCalled("*/networks");
                 Assert.NotNull(networks);
                 Assert.Equal(2, networks.Count());
-                Assert.Equal("network-id1", networks.First().Id);
-                Assert.Equal("network-id2", networks.Last().Id);
+                Assert.Equal("network-1", networks.First().Name);
+                Assert.Equal("network-2", networks.Last().Name);
             }
         }
 
@@ -71,13 +74,14 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Network { Id = "network-id" });
+                Identifier networkId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Network { Id = networkId });
 
-                var network = _networkingService.GetNetwork("network-id");
+                var network = _networkingService.GetNetwork(networkId);
 
-                httpTest.ShouldHaveCalled("*/networks/network-id");
+                httpTest.ShouldHaveCalled("*/networks/" + networkId);
                 Assert.NotNull(network);
-                Assert.Equal("network-id", network.Id);
+                Assert.Equal(networkId, network.Id);
             }
         }
 
@@ -86,11 +90,12 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
+                Identifier networkId = Guid.NewGuid();
                 httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
 
-                _networkingService.DeleteNetwork("network-id");
+                _networkingService.DeleteNetwork(networkId);
 
-                httpTest.ShouldHaveCalled("*/networks/network-id");
+                httpTest.ShouldHaveCalled("*/networks/" + networkId);
             }
         }
 
@@ -99,11 +104,12 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
+                Identifier networkId = Guid.NewGuid();
                 httpTest.RespondWith((int)HttpStatusCode.NotFound, "Not here, boss...");
 
-                _networkingService.DeleteNetwork("network-id");
+                _networkingService.DeleteNetwork(networkId);
 
-                httpTest.ShouldHaveCalled("*/networks/network-id");
+                httpTest.ShouldHaveCalled("*/networks/" + networkId);
             }
         }
 
@@ -112,14 +118,15 @@ namespace OpenStack.Networking.v2
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new Network {Id = "network-id"});
+                Identifier networkId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Network {Id = networkId});
 
                 var definition = new NetworkDefinition { Name = "new network name" };
-                var network = _networkingService.UpdateNetwork("network-id", definition);
+                var network = _networkingService.UpdateNetwork(networkId, definition);
 
-                httpTest.ShouldHaveCalled("*/networks/network-id");
+                httpTest.ShouldHaveCalled("*/networks/" + networkId);
                 Assert.NotNull(network);
-                Assert.Equal("network-id", network.Id);
+                Assert.Equal(networkId, network.Id);
             }
         }
     }

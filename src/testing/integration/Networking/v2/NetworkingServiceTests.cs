@@ -117,7 +117,7 @@ namespace OpenStack.Networking.v2
         public async void CreateSubnetTest()
         {
             var network = await _testData.CreateNetwork();
-            var definition = new SubnetCreateDefinition(network.Id, IPVersion.IP, "192.168.3.0/24")
+            var definition = new SubnetCreateDefinition(network.Id, IPVersion.IPv4, "192.168.3.0/24")
             {
                 Name = TestData.GenerateName(),
                 IsDHCPEnabled = true,
@@ -223,7 +223,7 @@ namespace OpenStack.Networking.v2
             var subnet = await _testData.CreateSubnet(network);
 
             var portIdAddress = subnet.CIDR.Replace("0/24", "2");
-            var definition = new PortCreateDefinition((Identifier)network.Id)
+            var definition = new PortCreateDefinition(network.Id)
             {
                 Name = TestData.GenerateName(),
                 DHCPOptions =
@@ -237,7 +237,7 @@ namespace OpenStack.Networking.v2
                 MACAddress = "24:a0:74:f0:1c:66",
                 FixedIPs =
                 {
-                    new IPAddressAssociation((Identifier)subnet.Id, portIdAddress)
+                    new IPAddressAssociation(subnet.Id, portIdAddress)
                 }
             };
 

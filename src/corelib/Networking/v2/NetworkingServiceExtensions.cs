@@ -25,11 +25,12 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Gets the specified network.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="networkId">The network identifier.</param>
         /// <returns>
         /// The network associated with the specified identifier.
         /// </returns>
-        public static Network GetNetwork(this NetworkingService networkingService, string networkId)
+        public static Network GetNetwork(this NetworkingService networkingService, Identifier networkId)
         {
             return networkingService.GetNetworkAsync(networkId).ForceSynchronous();
         }
@@ -37,6 +38,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Bulk creates multiple networks.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="networks">The network definitions.</param>
         /// <returns>
         /// The created networks.
@@ -49,6 +51,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Creates a network.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="network">The network definition.</param>
         /// <returns>
         /// The created network.
@@ -61,12 +64,13 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Updates the specified network.
         /// </summary>
-        /// <param name="networkId"></param>
+        /// <param name="networkingService">The networking service.</param>
+        /// <param name="networkId">The network identifier.</param>
         /// <param name="network">The updated network definition.</param>
         /// <returns>
         /// The updated network.
         /// </returns>
-        public static Network UpdateNetwork(this NetworkingService networkingService, string networkId, NetworkDefinition network)
+        public static Network UpdateNetwork(this NetworkingService networkingService, Identifier networkId, NetworkDefinition network)
         {
             return networkingService.UpdateNetworkAsync(networkId, network).ForceSynchronous();
         }
@@ -74,8 +78,9 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Deletes the specified network.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="networkId">The network identifier.</param>
-        public static void DeleteNetwork(this NetworkingService networkingService, string networkId)
+        public static void DeleteNetwork(this NetworkingService networkingService, Identifier networkId)
         {
             networkingService.DeleteNetworkAsync(networkId).ForceSynchronous();
         }
@@ -96,6 +101,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Creates a subnet.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="subnet">The subnet definition.</param>
         /// <returns>
         /// The created subnet.
@@ -108,6 +114,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Bulk creates multiple subnets.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="subnets">The subnet definitions.</param>
         /// <returns>
         /// The created subnets.
@@ -120,11 +127,12 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Gets the specified subnet.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="subnetId">The subnet identifier.</param>
         /// <returns>
         /// The subnet associated with the specified identifier.
         /// </returns>
-        public static Subnet GetSubnet(this NetworkingService networkingService, string subnetId)
+        public static Subnet GetSubnet(this NetworkingService networkingService, Identifier subnetId)
         {
             return networkingService.GetSubnetAsync(subnetId).ForceSynchronous();
         }
@@ -132,12 +140,13 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Updates the specified subnet.
         /// </summary>
-        /// <param name="subnetId"></param>
+        /// <param name="networkingService">The networking service.</param>
+        /// <param name="subnetId">The subnet identifier.</param>
         /// <param name="subnet">The updated subnet definition.</param>
         /// <returns>
         /// The updated port.
         /// </returns>
-        public static Subnet UpdateSubnet(this NetworkingService networkingService, string subnetId, SubnetUpdateDefinition subnet)
+        public static Subnet UpdateSubnet(this NetworkingService networkingService, Identifier subnetId, SubnetUpdateDefinition subnet)
         {
             return networkingService.UpdateSubnetAsync(subnetId, subnet).ForceSynchronous();
         }
@@ -145,8 +154,9 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Deletes the specified subnet.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="subnetId">The subnet identifier.</param>
-        public static void DeleteSubnet(this NetworkingService networkingService, string subnetId)
+        public static void DeleteSubnet(this NetworkingService networkingService, Identifier subnetId)
         {
             networkingService.DeleteSubnetAsync(subnetId).ForceSynchronous();
         }
@@ -167,6 +177,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Creates a port.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="port">The port definition.</param>
         /// <returns>
         /// The created port.
@@ -179,6 +190,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Bulk creates multiple ports.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="ports">The port definitions.</param>
         /// <returns>
         /// The created ports.
@@ -191,6 +203,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Gets the specified port.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="portId">The port identifier.</param>
         /// <returns>
         /// The port associated with the specified identifier.
@@ -203,7 +216,8 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Updates the specified port.
         /// </summary>
-        /// <param name="portId"></param>
+        /// <param name="networkingService">The networking service.</param>
+        /// <param name="portId">The port identifier.</param>
         /// <param name="port">The updated port definition.</param>
         /// <returns>
         /// The updated port.
@@ -216,6 +230,7 @@ namespace OpenStack.Synchronous
         /// <summary>
         /// Deletes the specified port.
         /// </summary>
+        /// <param name="networkingService">The networking service.</param>
         /// <param name="portId">The port identifier.</param>
         public static void DeletePort(this NetworkingService networkingService, Identifier portId)
         {
