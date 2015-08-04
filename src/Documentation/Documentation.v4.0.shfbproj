@@ -120,7 +120,12 @@
         </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
-    <ApiFilter />
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="Flurl.Extensions" isExposed="False" />
+<Filter entryType="Namespace" fullName="Flurl.Http" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Networking.v2.Serialization" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Serialization" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Synchronous.Extensions" isExposed="False" /></ApiFilter>
     <HelpAttributes />
     <NamespaceSummaries />
     <BuildLogFile />

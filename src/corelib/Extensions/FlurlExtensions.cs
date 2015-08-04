@@ -14,6 +14,7 @@ namespace Flurl.Extensions
     /// <summary>
     /// Useful Flurl extension methods for custom implementations.
     /// </summary>
+    /// <exclude/>
     public static class FlurlExtensions
     {
         /// <summary>
