@@ -127,6 +127,7 @@ namespace net.openstack.Core.Providers
             {ServiceType.ContentDeliveryNetwork, "cdn"}
         };
 
+        /// <inheritdoc/>
         protected override string LookupServiceTypeKey(ServiceType serviceType)
         {
             try

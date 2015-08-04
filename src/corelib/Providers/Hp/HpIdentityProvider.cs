@@ -192,6 +192,7 @@ namespace net.openstack.Providers.Hp
             {ServiceType.ContentDeliveryNetwork, "hpext:cdn"}
         };
 
+        /// <inheritdoc/>
         protected override string LookupServiceTypeKey(ServiceType serviceType)
         {
             try
