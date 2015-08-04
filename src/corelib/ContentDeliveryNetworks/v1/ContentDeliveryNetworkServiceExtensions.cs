@@ -173,7 +173,7 @@ namespace OpenStack.Synchronous
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
         public static void WaitForServiceDeleted(this IContentDeliveryNetworkService cdnService, string serviceId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
-            cdnService.WaitForServiceDeletedAsync(serviceId).ForceSynchronous();
+            cdnService.WaitForServiceDeletedAsync(serviceId, refreshDelay, timeout, progress).ForceSynchronous();
         }
     }
 }
