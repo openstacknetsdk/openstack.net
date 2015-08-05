@@ -69,7 +69,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The network associated with the specified identifier.
         /// </returns>
-        public virtual async Task<PreparedRequest> GetNetworkAsync(Identifier networkId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> GetNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -87,7 +87,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created network.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreateNetworkAsync(NetworkDefinition network, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreateNetworkAsync(object network, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -105,7 +105,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created networks.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreateNetworksAsync(IEnumerable<NetworkDefinition> networks, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreateNetworksAsync(IEnumerable<object> networks, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -124,7 +124,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The updated network.
         /// </returns>
-        public virtual async Task<PreparedRequest> UpdateNetworkAsync(Identifier networkId, NetworkDefinition network, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> UpdateNetworkAsync(string networkId, object network, CancellationToken cancellationToken = default(CancellationToken))
         {
             string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -139,7 +139,7 @@ namespace OpenStack.Networking.v2
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<PreparedRequest> DeleteNetworkAsync(Identifier networkId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> DeleteNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -178,7 +178,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created subnet.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreateSubnetAsync(SubnetCreateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreateSubnetAsync(object subnet, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -196,7 +196,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created subnets.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreateSubnetsAsync(IEnumerable<SubnetCreateDefinition> subnets, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreateSubnetsAsync(IEnumerable<object> subnets, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -214,7 +214,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The subnet associated with the specified identifier.
         /// </returns>
-        public virtual async Task<PreparedRequest> GetSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> GetSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -233,7 +233,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The updated subnet.
         /// </returns>
-        public virtual async Task<PreparedRequest> UpdateSubnetAsync(Identifier subnetId, SubnetUpdateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> UpdateSubnetAsync(string subnetId, object subnet, CancellationToken cancellationToken = default(CancellationToken))
         {
             string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -248,7 +248,7 @@ namespace OpenStack.Networking.v2
         /// </summary>
         /// <param name="subnetId">The subnet identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<PreparedRequest> DeleteSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> DeleteSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -286,7 +286,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created port.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreatePortAsync(PortCreateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreatePortAsync(object port, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -304,7 +304,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The created subnets.
         /// </returns>
-        public virtual async Task<PreparedRequest> CreatePortsAsync(IEnumerable<PortCreateDefinition> ports, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> CreatePortsAsync(IEnumerable<object> ports, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -322,7 +322,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The port associated with the specified identifier.
         /// </returns>
-        public virtual async Task<PreparedRequest> GetPortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> GetPortAsync(string portId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -341,7 +341,7 @@ namespace OpenStack.Networking.v2
         /// <returns>
         /// The updated port.
         /// </returns>
-        public virtual async Task<PreparedRequest> UpdatePortAsync(Identifier portId, PortUpdateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> UpdatePortAsync(string portId, object port, CancellationToken cancellationToken = default(CancellationToken))
         {
             string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -356,7 +356,7 @@ namespace OpenStack.Networking.v2
         /// </summary>
         /// <param name="portId">The port identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<PreparedRequest> DeletePortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> DeletePortAsync(string portId, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 

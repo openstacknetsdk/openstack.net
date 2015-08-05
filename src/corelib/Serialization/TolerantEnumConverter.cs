@@ -12,14 +12,16 @@ namespace OpenStack.Serialization
     /// <para>4. Use the first enum value.</para>
     /// </summary>
     /// <seealso href="http://stackoverflow.com/a/22755077/808818"/>
-    internal class TolerantEnumConverter : JsonConverter
+    public class TolerantEnumConverter : JsonConverter
     {
+        /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {
             Type type = IsNullableType(objectType) ? Nullable.GetUnderlyingType(objectType) : objectType;
             return type.IsEnum;
         }
 
+        /// <inheritdoc/>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             bool isNullable = IsNullableType(objectType);
@@ -48,6 +50,7 @@ namespace OpenStack.Serialization
             return null;
         }
 
+        /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             writer.WriteValue(value.ToString());

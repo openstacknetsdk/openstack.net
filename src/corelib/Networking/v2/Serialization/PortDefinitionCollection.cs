@@ -8,9 +8,9 @@ namespace OpenStack.Networking.v2.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "ports")]
-    internal class PortDefinitionCollection : List<PortCreateDefinition>
+    internal class PortDefinitionCollection : List<object>
     {
-        public PortDefinitionCollection(IEnumerable<PortCreateDefinition> ports) : base(ports)
+        public PortDefinitionCollection(IEnumerable<object> ports) : base(ports)
         {
         }
     }

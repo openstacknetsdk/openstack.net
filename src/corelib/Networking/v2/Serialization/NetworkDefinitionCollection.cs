@@ -8,9 +8,9 @@ namespace OpenStack.Networking.v2.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "networks")]
-    internal class NetworkDefinitionCollection : List<NetworkDefinition>
+    internal class NetworkDefinitionCollection : List<object>
     {
-        public NetworkDefinitionCollection(IEnumerable<NetworkDefinition> networks) : base(networks)
+        public NetworkDefinitionCollection(IEnumerable<object> networks) : base(networks)
         {
         }
     }

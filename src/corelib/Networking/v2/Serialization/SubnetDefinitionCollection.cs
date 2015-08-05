@@ -8,9 +8,9 @@ namespace OpenStack.Networking.v2.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "subnets")]
-    internal class SubnetDefinitionCollection : List<SubnetCreateDefinition>
+    internal class SubnetDefinitionCollection : List<object>
     {
-        public SubnetDefinitionCollection(IEnumerable<SubnetCreateDefinition> subnets) : base(subnets)
+        public SubnetDefinitionCollection(IEnumerable<object> subnets) : base(subnets)
         {
         }
     }
