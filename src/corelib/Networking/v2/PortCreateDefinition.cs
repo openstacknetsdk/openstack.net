@@ -5,7 +5,7 @@ using OpenStack.Networking.v2.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents defintion of a port resource of the <see cref="NetworkingService"/>
+    /// Represents the set of properties which can be initialized when creating a <see cref="Port"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class PortCreateDefinition : PortUpdateDefinition

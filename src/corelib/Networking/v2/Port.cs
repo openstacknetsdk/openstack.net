@@ -3,7 +3,7 @@
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents a port resource of the <see cref="NetworkingService"/>
+    /// Represents a port resource of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <para>
     /// Virtual (or logical) switch ports on a given network.

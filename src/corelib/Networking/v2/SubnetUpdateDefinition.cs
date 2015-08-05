@@ -5,7 +5,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents the definition of a subnet resource when updating a subnet.
+    /// Represents the set of properties which can be modified when updating a <see cref="Subnet"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "subnet")]

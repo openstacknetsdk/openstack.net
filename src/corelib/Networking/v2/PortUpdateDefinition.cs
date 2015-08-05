@@ -5,7 +5,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents the definition of a port resource when updating a port.
+    /// Represents the set of properties which can be modified when updating a <see cref="Port"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "port")]

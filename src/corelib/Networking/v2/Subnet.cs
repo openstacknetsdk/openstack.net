@@ -4,7 +4,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents a subnet resource of the <see cref="NetworkingService"/>
+    /// Represents a subnet resource of the <see cref="NetworkingService"/>.
     /// <para>
     /// IPv4 or IPv6 address blocks from which IPs to be assigned to VMs on a given network are selected.
     /// </para>

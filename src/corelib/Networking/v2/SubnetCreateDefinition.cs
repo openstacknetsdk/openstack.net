@@ -3,7 +3,7 @@
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Represents the definition of a subnet resource when creating a new subnet.
+    /// Represents the set of properties which can be initialized when creating a <see cref="Subnet"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class SubnetCreateDefinition : SubnetUpdateDefinition
