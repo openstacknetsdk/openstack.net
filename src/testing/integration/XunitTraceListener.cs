@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Xunit.Abstractions;
 
 namespace OpenStack
@@ -17,12 +18,24 @@ namespace OpenStack
             if (message.StartsWith(OpenStackNet.Tracing.Http.Name))
                 return;
 
-            _testLog.WriteLine(message);
+            TryLog(message);
         }
 
         public override void WriteLine(string message)
         {
-            _testLog.WriteLine(message);
+            TryLog(message);
+        }
+
+        private void TryLog(string message)
+        {
+            try
+            {
+                _testLog.WriteLine(message);
+            }
+            catch (InvalidOperationException)
+            {
+                // Unable to log to xunit because it thinks no test is active...
+            }
         }
     }
 }
