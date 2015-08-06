@@ -8,6 +8,7 @@
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
     <XUnit>..\src\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
+    <XUnitXslt>..\src\packages\xunit.runner.console.2.0.0\tools\NUnitXml.xslt</XUnitXslt>
   </PropertyGroup>
 
   <Target Name="CI">
@@ -53,12 +54,19 @@
     <MakeDir Directories="..\artifacts\TestResults\" />
     <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" ContinueOnError="true" />
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
-    <!--<Exec Command="$(MSTest) /testcontainer:..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll /resultsfile:..\artifacts\TestResults\integration.trx" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)" /> -->
+
+    <!-- Convert test results to the NUnit format for easier reporting -->
+    <XslTransformation XmlInputPaths="..\artifacts\TestResults\unit-tests.xml"  XslInputPath="$(XUnitXslt)"
+      OutputPaths="..\artifacts\TestResults\unit-tests.nunit.xml" />
   </Target>
 
   <Target Name="IntegrationTest" DependsOnTargets="Build">
     <MakeDir Directories="..\artifacts\TestResults\" />
     <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml -notrait ci=false" ContinueOnError="true" />
+
+    <!-- Convert test results to the NUnit format for easier reporting -->
+    <XslTransformation XmlInputPaths="..\artifacts\TestResults\integration-tests.xml"  XslInputPath="$(XUnitXslt)"
+      OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">
