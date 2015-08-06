@@ -117,7 +117,7 @@
     <Compile Include="Providers\Rackspace\ObjectProviderHelperTests.cs" />
     <Compile Include="Providers\Rackspace\ProviderBaseTests.cs" />
     <Compile Include="Providers\Rackspace\SerializationTests.cs" />
-    <Compile Include="Serialization\EmptyEnumerableDeserializationTests.cs" />
+    <Compile Include="Serialization\EmptyEnumerableTests.cs" />
     <Compile Include="Serialization\TolerantEnumConverterTests.cs" />
     <Compile Include="Serialization\RootWrapperConverterTests.cs" />
     <Compile Include="Stubs.cs" />

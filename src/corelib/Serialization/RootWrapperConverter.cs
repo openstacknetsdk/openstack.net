@@ -7,16 +7,9 @@ namespace OpenStack.Serialization
     /// Some of the OpenStack API's like to return a wrapper around the real object requested. This will deal with that root level wrapper.
     /// <para>Note that it only affects the root, if there are nested objects that also use this converter, it is assumed that they don't have a wrapper.</para>
     /// </summary>
-    public class RootWrapperConverter : JsonConverter
+    public class RootWrapperConverter : DefaultJsonConverter
     {
         private readonly string _name;
-
-        /// These are on by default so that the converter is picked up and used. 
-        /// Once we have wrapped/unwrapped, we set to false so tha the default serialization/deserialization logic is used.
-        private static bool _canRead = true;
-        private static bool _canWrite = true;
-        private static readonly object ReadLock = new object();
-        private static readonly object WriteLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RootWrapperConverter"/> class.
@@ -28,43 +21,22 @@ namespace OpenStack.Serialization
         }
 
         /// <inheritdoc/>
-        public override bool CanRead
-        {
-            get
-            {
-                lock (ReadLock)
-                {
-                    return _canRead;
-                }
-            }
-        }
-
-        /// <inheritdoc/>
-        public override bool CanWrite
-        {
-            get
-            {
-                lock (WriteLock)
-                {
-                    return _canWrite;
-                }
-            }
-        }
-
-        /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            lock (WriteLock)
+            bool isRoot = writer.WriteState == WriteState.Start;
+
+            if (isRoot)
             {
                 // Wrap
                 writer.WriteStartObject();
                 writer.WritePropertyName(_name);
+            }
 
-                // Regular Serialization
-                _canWrite = false;
-                serializer.Serialize(writer, value);
-                _canWrite = true;
+            // Default serialization
+            base.WriteJson(writer, value, serializer);
 
+            if (isRoot)
+            {
                 writer.WriteEndObject();
             }
         }
@@ -72,29 +44,31 @@ namespace OpenStack.Serialization
         /// <inheritdoc/>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            lock (ReadLock)
+            bool isRoot = reader.Depth == 0;
+
+            if (isRoot)
             {
-                // Unwrap
-                reader.Read(); // Advance past the initial start object token
-                reader.Read(); // Advance past the property token
+                // Skip to the desired property
+                while (reader.Read())
+                {
+                    if (reader.TokenType != JsonToken.PropertyName || reader.Value.ToString() != _name)
+                        continue;
 
-                // Regular Deserialization
-
-                _canRead = false;
-                var result = serializer.Deserialize(reader, objectType);
-                _canRead = true;
-
-                // Finish Unwrapping, otherwise json.net complains that the entire stream has not been read
-                while (reader.Read()) { }
-
-                return result;
+                    // Advance to the contained value
+                    reader.Read();
+                    break;
+                }
             }
-        }
 
-        /// <inheritdoc/>
-        public override bool CanConvert(Type objectType)
-        {
-            return true;
+            // Default Deserialization
+            object result = base.ReadJson(reader, objectType, existingValue, serializer);
+
+            if (isRoot)
+            {
+                while (reader.Read()) { } // Advance to end
+            }
+
+            return result;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -8,26 +9,30 @@ namespace OpenStack.Serialization
 {
     /// <summary>
     /// Provides the same serialization capabilities as json.net with some additions:
-    /// <para>* Ensures that when an enumerable property is deserialized, it is never null and is always an empty collection.</para>
-    /// <para>* Handles adding/unwrapping superfluous root containers.</para>
+    /// <para>* Ensures that empty enumerables are not serialized.</para>
     /// </summary>
     public class OpenStackContractResolver : DefaultContractResolver
     {
         /// <inheritdoc/>
-        protected override IValueProvider CreateMemberValueProvider(MemberInfo member)
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
-            IValueProvider provider = base.CreateMemberValueProvider(member);
+            JsonProperty property = base.CreateProperty(member, memberSerialization);
 
-            if (member.MemberType != MemberTypes.Property)
-                return provider;
+            DoNotSerializeEmptyLists(property);
 
-            Type propType = ((PropertyInfo)member).PropertyType;
-            if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            return property;
+        }
+
+        private static void DoNotSerializeEmptyLists(JsonProperty property)
+        {
+            if (IsEnumerable(property))
             {
-                return new EmptyEnumerableValueProvider(provider, propType);
+                property.ShouldSerialize = containerInstance =>
+                {
+                    var propertyValue = property.DeclaringType.GetProperty(property.UnderlyingName).GetValue(containerInstance);
+                    return propertyValue != null && ((IEnumerable) propertyValue).OfType<object>().Any();
+                };
             }
-
-            return provider;
         }
 
         /// <inheritdoc/>
@@ -42,27 +47,13 @@ namespace OpenStack.Serialization
             return converter;
         }
 
-        private class EmptyEnumerableValueProvider : IValueProvider
+        /// <summary>
+        /// Check if a property implements IEnumerable and IEnumerable&lt;&gt;
+        /// </summary>
+        private static bool IsEnumerable(JsonProperty property)
         {
-            private readonly IValueProvider _innerProvider;
-            private readonly object _emptyEnumerable;
-
-            public EmptyEnumerableValueProvider(IValueProvider innerProvider, Type enumerableType)
-            {
-                _innerProvider = innerProvider;
-                Type t = enumerableType.GetGenericArguments()[0];
-                _emptyEnumerable = Array.CreateInstance(t, 0);
-            }
-
-            public void SetValue(object target, object value)
-            {
-                _innerProvider.SetValue(target, value ?? _emptyEnumerable);
-            }
-
-            public object GetValue(object target)
-            {
-                return _innerProvider.GetValue(target) ?? _emptyEnumerable;
-            }
+            var interfaces = property.PropertyType.GetInterfaces();
+            return interfaces.Any(i => i == typeof(IEnumerable));
         }
     }
 }

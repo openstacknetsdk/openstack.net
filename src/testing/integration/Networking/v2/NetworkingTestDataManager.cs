@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using OpenStack.Synchronous;
 
 namespace OpenStack.Networking.v2
 {

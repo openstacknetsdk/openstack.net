@@ -41,6 +41,7 @@ namespace OpenStack
                     var settings = new JsonSerializerSettings
                     {
                         DefaultValueHandling = DefaultValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
                         NullValueHandling = NullValueHandling.Ignore,
                         ContractResolver = new OpenStackContractResolver()
                     };

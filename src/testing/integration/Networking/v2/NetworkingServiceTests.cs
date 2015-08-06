@@ -217,7 +217,7 @@ namespace OpenStack.Networking.v2
 
         #region Ports
         [Fact]
-        public async void CreatePortTests()
+        public async void CreatePortTest()
         {
             var network = await _testData.CreateNetwork();
             var subnet = await _testData.CreateSubnet(network);
