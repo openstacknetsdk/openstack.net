@@ -7,9 +7,11 @@ using net.openstack.Core.Exceptions.Response;
 namespace net.openstack.Core.Providers
 {
     /// <summary>
+    /// <para>DEPRECATED. Use <see cref="OpenStack.Networking.v2.NetworkingService"/> or Rackspace.CloudNetworks.v2.CloudNetworkService (from the Rackspace NuGet package).</para>
     /// Represents a provider for the OpenStack Networking service.
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-network/2.0/content/">OpenStack Networking API v2.0 Reference</seealso>
+    [Obsolete("This will be removed in v2.0. Use OpenStack.Networking.v2.NetworkingService or Rackspace.CloudNetworks.v2.CloudNetworkService (from the Rackspace NuGet package).")]
     public interface INetworksProvider
     {
         /// <summary>

@@ -14,6 +14,7 @@ using net.openstack.Providers.Rackspace.Objects.Response;
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
+    /// <para>DEPRECATED. Use <see cref="OpenStack.Networking.v2.NetworkingService"/> or Rackspace.CloudNetworks.v2.CloudNetworkService (from the Rackspace NuGet package).</para>
     /// <para>The Cloud Networks Provider enable simple access to the Rackspace Cloud Network Services.
     /// Cloud Networks lets you create a virtual Layer 2 network, known as an isolated network, 
     /// which gives you greater control and security when you deploy web applications.</para>
@@ -23,6 +24,7 @@ namespace net.openstack.Providers.Rackspace
     /// <see cref="INetworksProvider"/>
     /// <inheritdoc />
     /// <threadsafety static="true" instance="false"/>
+    [Obsolete("This will be removed in v2.0. Use OpenStack.Networking.v2.NetworkingService or Rackspace.CloudNetworks.v2.CloudNetworkService (from the Rackspace NuGet package).")]
     public class CloudNetworksProvider : ProviderBase<INetworksProvider>, INetworksProvider
     {
         private readonly HttpStatusCode[] _validResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Created, HttpStatusCode.Accepted };
