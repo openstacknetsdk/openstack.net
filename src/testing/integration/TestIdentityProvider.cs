@@ -7,7 +7,7 @@ namespace OpenStack
     public class TestIdentityProvider
     {
         private static readonly string EnvironmentVariablesNotFoundErrorMessage = 
-            "No identity environemnt variables found. Make sure the following environment variables exist: " + Environment.NewLine +
+            "No identity environment variables found. Make sure the following environment variables exist: " + Environment.NewLine +
                             "OPENSTACKNET_IDENTITY_URL" + Environment.NewLine +
                             "OPENSTACKNET_USER" + Environment.NewLine +
                             "OPENSTACKNET_PASSWORD" + Environment.NewLine +
