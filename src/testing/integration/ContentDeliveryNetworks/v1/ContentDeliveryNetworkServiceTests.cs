@@ -5,6 +5,7 @@ using Xunit.Abstractions;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
+    [Trait("ci","false")]
     public class ContentDeliveryNetworkServiceTests
     {
         private readonly ContentDeliveryNetworkService _cdnService;
