@@ -11,14 +11,20 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// <threadsafety static="true" instance="false"/>
     public class ServiceCollection : Page<Service>
     {
+        /// <summary>
+        /// The requested services.
+        /// </summary>
         [JsonProperty("services")]
-        internal IList<Service> Services
+        public IList<Service> Services
         {
             get { return Items; }
         }
         
+        /// <summary>
+        /// The paging navigation links.
+        /// </summary>
         [JsonProperty("links")]
-        internal IList<Link> ServiceLinks
+        public IList<Link> ServiceLinks
         {
             get { return Links; }
         }

@@ -31,6 +31,7 @@ namespace OpenStack.Serialization
         public delegate Task<IPage<T>> GetNextPageCallback(Url url, CancellationToken cancellation);
 
         /// <inheritdoc />
+        [JsonIgnore]
         public bool HasNextPage
         {
             get { return GetNextLink() != null; }
