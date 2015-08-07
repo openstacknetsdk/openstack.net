@@ -27,9 +27,13 @@ namespace OpenStack.Serialization
         {
             if (IsEnumerable(property))
             {
+                PropertyInfo propertyInfo = property.DeclaringType.GetProperty(property.UnderlyingName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (propertyInfo == null) // We can't figure out what it's bound to, so don't modify it's serialization settings
+                    return;
+
                 property.ShouldSerialize = containerInstance =>
                 {
-                    var propertyValue = property.DeclaringType.GetProperty(property.UnderlyingName).GetValue(containerInstance);
+                    var propertyValue = propertyInfo.GetValue(containerInstance);
                     return propertyValue != null && ((IEnumerable) propertyValue).OfType<object>().Any();
                 };
             }
@@ -52,6 +56,9 @@ namespace OpenStack.Serialization
         /// </summary>
         private static bool IsEnumerable(JsonProperty property)
         {
+            if (property.PropertyType == typeof (string))
+                return false;
+
             var interfaces = property.PropertyType.GetInterfaces();
             return interfaces.Any(i => i == typeof(IEnumerable));
         }
