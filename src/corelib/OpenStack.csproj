@@ -717,12 +717,12 @@
     <Compile Include="Providers\Rackspace\WebRequestEventArgs.cs" />
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
     <Compile Include="Exceptions\RegionRequiredException.cs" />
-    <Compile Include="ResourceCollection.cs" />
     <Compile Include="Serialization\DefaultJsonConverter.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\Page.cs" />
+    <Compile Include="Serialization\ResourceCollection.cs" />
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />

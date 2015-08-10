@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace OpenStack
+namespace OpenStack.Serialization
 {
     /// <summary>
     /// Represents a collection of resources.
     /// </summary>
     /// <typeparam name="T">The resource type.</typeparam>
+    /// <exclude />
     [JsonObject(MemberSerialization.OptIn)] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
     public class ResourceCollection<T> : IEnumerable<T>
     {
