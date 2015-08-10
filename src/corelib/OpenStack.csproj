@@ -100,7 +100,6 @@
     <Compile Include="Networking\v2\Port.cs" />
     <Compile Include="Networking\v2\PortStatus.cs" />
     <Compile Include="Networking\v2\Serialization\DHCPOptionsConverter.cs" />
-    <Compile Include="Networking\v2\Serialization\NamespaceDoc.cs" />
     <Compile Include="Networking\v2\Serialization\NetworkCollection.cs" />
     <Compile Include="Networking\v2\Serialization\NetworkDefinitionCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortCollection.cs" />
@@ -727,6 +726,7 @@
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />
     <Compile Include="Testing\HttpTest.cs" />
+    <Compile Include="Testing\NamespaceDoc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\build\keys\OpenStackNetV1.dev.snk">

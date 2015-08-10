@@ -7,6 +7,7 @@ namespace OpenStack.Authentication
     /// <summary>
     /// Creates urls
     /// </summary>
+    /// <exclude />
     public class ServiceUrlBuilder
     {
         private readonly IServiceType _serviceType;

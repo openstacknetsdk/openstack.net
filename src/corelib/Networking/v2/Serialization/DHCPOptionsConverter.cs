@@ -8,6 +8,7 @@ namespace OpenStack.Networking.v2.Serialization
     /// Handles serialization/deserialization for <see cref="PortCreateDefinition.DHCPOptions"/>.
     /// </summary>
     /// <seealso href="http://specs.openstack.org/openstack/neutron-specs/specs/api/extra_dhcp_options__extra-dhcp-opt_.html"/>
+    /// <exclude />
     public class DHCPOptionsConverter : JsonConverter
     {
         /// <summary>

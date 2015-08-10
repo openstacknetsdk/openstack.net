@@ -3,6 +3,7 @@ using System;
 namespace OpenStack.Authentication
 {
     /// <inheritdoc />
+    /// <exclude />
     public class ServiceType : IServiceType
     {
         /// <summary>

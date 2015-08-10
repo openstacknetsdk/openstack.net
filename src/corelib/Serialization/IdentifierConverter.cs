@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace OpenStack.Serialization
 {
-    /// <summary/>
+    /// <exclude />
     public class IdentifierConverter : JsonConverter
     {
         /// <inheritdoc/>

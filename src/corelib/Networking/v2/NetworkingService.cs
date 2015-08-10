@@ -10,7 +10,7 @@ using OpenStack.Synchronous.Extensions;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// The default implementation of the OpenStack Networking Service.
+    /// The OpenStack Networking Service.
     /// </summary>
     /// <seealso href="https://wiki.openstack.org/wiki/Neutron/APIv2-specification">OpenStack Networking API v2 Overview</seealso>
     /// <seealso href="http://developer.openstack.org/api-ref-networking-v2.html">OpenStack Networking API v2 Reference</seealso>

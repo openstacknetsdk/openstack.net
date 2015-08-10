@@ -10,6 +10,7 @@ namespace OpenStack.Authentication
     /// <summary>
     /// Used by Flurl for all requests. Understands how to authenticate and retry when a token expires.
     /// </summary>
+    /// <exclude />
     internal class AuthenticatedMessageHandler : FlurlMessageHandler
     {
         public AuthenticatedMessageHandler(HttpMessageHandler innerHandler) 

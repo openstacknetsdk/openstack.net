@@ -7,6 +7,7 @@ namespace OpenStack.Networking.v2.Serialization
     /// Represents a collection of port definition resources of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "ports")]
     internal class PortDefinitionCollection : List<object>
     {

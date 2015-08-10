@@ -6,6 +6,7 @@ namespace OpenStack.Synchronous.Extensions
     /// <summary>
     /// Extensions to <see cref="Task"/>.
     /// </summary>
+    /// <exclude />
     public static class TaskExtensions
     {
         /// <summary>

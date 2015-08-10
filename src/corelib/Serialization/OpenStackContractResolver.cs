@@ -11,6 +11,7 @@ namespace OpenStack.Serialization
     /// Provides the same serialization capabilities as json.net with some additions:
     /// <para>* Ensures that empty enumerables are not serialized.</para>
     /// </summary>
+    /// <exclude />
     public class OpenStackContractResolver : DefaultContractResolver
     {
         /// <inheritdoc/>

@@ -7,6 +7,7 @@ namespace OpenStack.Serialization
     /// Some of the OpenStack API's like to return a wrapper around the real object requested. This will deal with that root level wrapper.
     /// <para>Note that it only affects the root, if there are nested objects that also use this converter, it is assumed that they don't have a wrapper.</para>
     /// </summary>
+    /// <exclude />
     public class RootWrapperConverter : DefaultJsonConverter
     {
         private readonly string _name;

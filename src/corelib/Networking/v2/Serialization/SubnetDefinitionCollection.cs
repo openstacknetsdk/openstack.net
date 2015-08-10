@@ -7,6 +7,7 @@ namespace OpenStack.Networking.v2.Serialization
     /// Represents a collection of subnet definition resources of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "subnets")]
     internal class SubnetDefinitionCollection : List<object>
     {

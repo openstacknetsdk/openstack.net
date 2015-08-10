@@ -7,6 +7,7 @@ namespace OpenStack.Serialization
     /// <summary>
     /// Acts like Json.NET's [JsonConverter] but allows for constructor arguments
     /// </summary>
+    /// <exclude />
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Parameter)]
     public sealed class JsonConverterWithConstructorAttribute : Attribute
     {

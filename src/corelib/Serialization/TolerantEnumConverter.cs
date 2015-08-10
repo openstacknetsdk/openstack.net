@@ -12,6 +12,7 @@ namespace OpenStack.Serialization
     /// <para>4. Use the first enum value.</para>
     /// </summary>
     /// <seealso href="http://stackoverflow.com/a/22755077/808818"/>
+    /// <exclude />
     public class TolerantEnumConverter : JsonConverter
     {
         /// <inheritdoc/>

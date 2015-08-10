@@ -8,6 +8,7 @@ namespace OpenStack.Networking.v2.Serialization
     /// <para>Intended for custom implementations and stubbing responses in unit tests.</para>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "subnets")]
     public class SubnetCollection : List<Subnet>
     {

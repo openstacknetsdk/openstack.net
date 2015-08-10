@@ -6,6 +6,7 @@ namespace OpenStack.Serialization
     /// <summary>
     /// Converter which uses the default serialization/deserialization.
     /// </summary>
+    /// <exclude />
     public abstract class DefaultJsonConverter : JsonConverter
     {
         /// These are on by default so that the converter is picked up and used. 

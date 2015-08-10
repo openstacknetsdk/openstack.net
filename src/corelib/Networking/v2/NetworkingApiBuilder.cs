@@ -12,7 +12,7 @@ using OpenStack.Networking.v2.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// The default implementation of the OpenStack Networking API.
+    /// Builds requests to the Networking API which can be further customized and then executed.
     /// <para>Intended for custom implementations.</para>
     /// </summary>
     /// <seealso href="http://developer.openstack.org/api-ref-networking-v2.html">OpenStack Networking API v2 Reference</seealso>

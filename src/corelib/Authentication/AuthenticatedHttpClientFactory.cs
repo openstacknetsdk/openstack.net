@@ -8,6 +8,7 @@ namespace OpenStack.Authentication
     /// <summary>
     /// Instructs Flurl to use an <see cref="AuthenticatedMessageHandler"/> for all requests.
     /// </summary>
+    /// <exclude />
     public class AuthenticatedHttpClientFactory : DefaultHttpClientFactory
     {
         /// <inheritdoc/>

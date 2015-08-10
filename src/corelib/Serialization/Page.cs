@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 namespace OpenStack.Serialization
 {
     /// <inheritdoc cref="IPage{T}" />
+    /// <exclude />
     [JsonObject(MemberSerialization.OptIn)]
     public class Page<T> : ResourceCollection<T>, IPage<T>
     {
