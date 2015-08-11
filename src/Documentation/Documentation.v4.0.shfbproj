@@ -20,7 +20,7 @@
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\corelib\corelib.v4.0.csproj" subFolders="True" />
+      <DocumentationSource sourceFile="..\corelib\OpenStack.csproj" subFolders="True" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -106,7 +106,12 @@
         </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
-    <ApiFilter />
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="Flurl.Extensions" isExposed="False" />
+<Filter entryType="Namespace" fullName="Flurl.Http" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Networking.v2.Serialization" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Serialization" isExposed="False" />
+<Filter entryType="Namespace" fullName="OpenStack.Synchronous.Extensions" isExposed="False" /></ApiFilter>
     <HelpAttributes />
     <NamespaceSummaries />
     <BuildLogFile />

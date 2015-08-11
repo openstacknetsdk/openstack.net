@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Flurl.Http;
 using Marvin.JsonPatch;
 using OpenStack.ContentDeliveryNetworks.v1;
+using OpenStack.Synchronous.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous

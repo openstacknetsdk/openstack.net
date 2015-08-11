@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Flurl;
 using net.openstack.Core.Domain;
 using Newtonsoft.Json;
+using OpenStack.Serialization;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -15,46 +12,21 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     public class ServiceCollection : Page<Service>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceCollection"/> class.
-        /// </summary>
-        /// <param name="services">The services.</param>
-        public ServiceCollection(IEnumerable<Service> services)
-            : base(services)
-        {
-        }
-
-        /// <summary>
-        /// The services.
+        /// The requested services.
         /// </summary>
         [JsonProperty("services")]
-        protected IEnumerable<Service> Services
+        public IList<Service> Services
         {
             get { return Items; }
         }
-
+        
         /// <summary>
-        /// Any API navigation links.
+        /// The paging navigation links.
         /// </summary>
         [JsonProperty("links")]
-        public IEnumerable<Link> Links { get; set; }
-
-        internal GetNextPageCallback NextPageHandler { get; set; }
-
-        /// <inheritdoc />
-        public override bool HasNextPage
+        public IList<Link> ServiceLinks
         {
-            // TODO: Extract "next" link logic into a separate generic class that we can use via composition        
-            get { return Links != null && Links.Any(link => link.Rel == "next"); }
-        }
-
-        /// <inheritdoc />
-        public override async Task<IPage<Service>> GetNextPageAsync(CancellationToken cancellationToken)
-        {
-            if (!HasNextPage)
-                return Empty();
-
-            var nextPageLink = Links.First(link => link.Rel == "next").Href;
-            return await NextPageHandler(new Url(nextPageLink), cancellationToken);
+            get { return Links; }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace OpenStack.Core
         /// or
         /// The user does not have access to the service endpoint in the specified region.
         /// </exception>
-        /// <exception cref="RegionRequiredException">No region was specified and the {0} service does not provide a region-independent endpoint.</exception>
+        /// <exception cref="RegionRequiredException">No region was specified and the service does not provide a region-independent endpoint.</exception>
         public static string GetEndpoint(string serviceType, UserAccess userAccess, CloudIdentity defaultIdentity, string region, bool useInternalUrl)
         {
             ServiceCatalog service = userAccess.ServiceCatalog.FirstOrDefault(sc => string.Equals(sc.Type, serviceType, StringComparison.OrdinalIgnoreCase));
@@ -41,7 +41,7 @@ namespace OpenStack.Core
                 throw new RegionRequiredException("No region was specified and the {0} service does not provide a region-independent endpoint.", serviceType);
 
             if (endpoint == null)
-                throw new UserAuthenticationException("The user does not have access to the {0} endpoint in the {1}.");
+                throw new UserAuthenticationException("The user does not have access to the {0} endpoint in the {1} region.", serviceType, region);
 
             return useInternalUrl ? endpoint.InternalURL : endpoint.PublicURL;
         }

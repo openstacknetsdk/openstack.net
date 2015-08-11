@@ -1,4 +1,4 @@
-﻿using net.openstack.Providers.Rackspace;
+﻿using System;
 using OpenStack.Synchronous;
 using Xunit;
 using Xunit.Abstractions;
@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
     [Trait("ci","false")]
-    public class ContentDeliveryNetworkServiceTests
+    public class ContentDeliveryNetworkServiceTests : IDisposable
     {
         private readonly ContentDeliveryNetworkService _cdnService;
 
@@ -14,12 +14,13 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         {
             OpenStackNet.Tracing.Http.Listeners.Add(new XunitTraceListener(testLog));
 
-            var identity = TestIdentityProvider.GetIdentityFromEnvironment();
-            var authenticationProvider = new CloudIdentityProvider(identity)
-            {
-                ApplicationUserAgent = "CI-BOT"
-            };
+            var authenticationProvider = TestIdentityProvider.GetIdentityProvider();
             _cdnService = new ContentDeliveryNetworkService(authenticationProvider, "DFW");
+        }
+
+        public void Dispose()
+        {
+            OpenStackNet.Tracing.Http.Listeners.Clear();
         }
 
         [Fact]

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
+using Flurl.Extensions;
 using Flurl.Http;
 using Marvin.JsonPatch;
 using OpenStack.Authentication;
@@ -27,8 +28,8 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="region">The cloud region.</param>
         /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
-        /// <exception cref="System.ArgumentNullException">If the <paramref name="authenticationProvider"/> is <see langref="null"/>.</exception>
-        /// <exception cref="System.ArgumentException">If the <paramref name="region"/> is <see langref="null"/> or empty.</exception>
+        /// <exception cref="ArgumentNullException">If the <paramref name="authenticationProvider"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the <paramref name="region"/> is <see langword="null"/> or empty.</exception>
         public ContentDeliveryNetworkService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
             if (authenticationProvider == null)

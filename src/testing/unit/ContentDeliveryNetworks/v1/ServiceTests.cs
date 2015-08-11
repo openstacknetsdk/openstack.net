@@ -5,10 +5,12 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using Flurl.Http.Testing;
+using Flurl.Extensions;
 using Marvin.JsonPatch;
 using net.openstack.Core.Domain;
+using Newtonsoft.Json;
 using OpenStack.Synchronous;
+using OpenStack.Testing;
 using Xunit;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
@@ -23,15 +25,38 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
+        public void SerializeServiceCollection()
+        {
+            var services = new ServiceCollection
+            {
+                Services = {new Service {Id = "service-id"}},
+                ServiceLinks = {new Link("next", "http://api.com/next")}
+            };
+            string json = JsonConvert.SerializeObject(services, Formatting.None);
+            Assert.Contains("\"services\"", json);
+            Assert.DoesNotContain("\"service\"", json);
+
+            var result = JsonConvert.DeserializeObject<ServiceCollection>(json);
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Count());
+            Assert.Equal(1, result.Services.Count());
+            Assert.Equal(1, result.ServiceLinks.Count());
+        }
+
+        [Fact]
         public void FindServiceOnAPage()
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new ServiceCollection(new[] {new Service()})
+                httpTest.RespondWithJson(new ServiceCollection
                 {
-                    Links = new[] {new Link("next", "http://api.com/next")}
+                    Services = {new Service()},
+                    ServiceLinks = {new Link("next", "http://api.com/next")}
                 });
-                httpTest.RespondWithJson(new ServiceCollection(new[] {new Service {Name = "MyService"}}));
+                httpTest.RespondWithJson(new ServiceCollection
+                {
+                    Services = {new Service {Name = "MyService"}}
+                });
 
                 var currentPage = _cdnService.ListServices();
                 Service myService;
@@ -170,7 +195,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public void WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
+        public async void WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
         {
             using (var httpTest = new HttpTest())
             {
@@ -178,7 +203,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
 
                 var timedToken = new CancellationTokenSource(TimeSpan.FromSeconds(1));
 
-                Assert.ThrowsAsync<TaskCanceledException>(() => _cdnService.WaitForServiceDeletedAsync("service-id", Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan, null, timedToken.Token));
+                await Assert.ThrowsAsync<TaskCanceledException>(() => _cdnService.WaitForServiceDeletedAsync("service-id", Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan, null, timedToken.Token));
             }
         }
 

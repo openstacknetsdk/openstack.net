@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using OpenStack.Synchronous.Extensions;
 
 namespace OpenStack.Synchronous
 {

@@ -15,7 +15,7 @@ namespace OpenStack
     public static class OpenStackNet
     {
         private static readonly object ConfigureLock = new object();
-        private static bool _isConfigured = false;
+        private static bool _isConfigured;
 
         /// <summary>
         /// Provides thread-safe accesss to OpenStack.NET's global configuration options.
@@ -41,10 +41,11 @@ namespace OpenStack
                     var settings = new JsonSerializerSettings
                     {
                         DefaultValueHandling = DefaultValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = new EmptyEnumerableResolver()
+                        ContractResolver = new OpenStackContractResolver()
                     };
-
+                    
                     // Apply application's default settings
                     if (configureJson != null)
                         configureJson(settings);

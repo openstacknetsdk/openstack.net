@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OpenStack;
+using OpenStack.Authentication;
 
 namespace net.openstack.Core.Providers
 {
@@ -124,23 +125,10 @@ namespace net.openstack.Core.Providers
             return userAccess;
         }
 
-        // We only need to list service types for any services which are using the new service model instead of the old provider model.
-        private static readonly Dictionary<ServiceType, string> OpenStackServiceTypes = new Dictionary<ServiceType, string>
-        {
-            {ServiceType.ContentDeliveryNetwork, "cdn"}
-        };
-
         /// <inheritdoc/>
-        protected override string LookupServiceTypeKey(ServiceType serviceType)
+        protected override string LookupServiceTypeKey(IServiceType serviceType)
         {
-            try
-            {
-                return OpenStackServiceTypes[serviceType];
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new UnsupportedServiceException(serviceType, "OpenStack (Generic)");
-            }
+            return serviceType.Type;
         }
     }
 }

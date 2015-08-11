@@ -12,8 +12,13 @@ namespace net.openstack.Core.Domain
     [DebuggerDisplay("{Rel,nq}: {Href,nq}")]
     public class Link : ExtensibleJsonObject
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Link"/> class.
+        /// </summary>
+        /// <param name="rel">The link type.</param>
+        /// <param name="href">The link.</param>
         [JsonConstructor]
-        internal Link(string rel, string href)
+        public Link(string rel, string href)
         {
             Rel = rel;
             Href = href;
