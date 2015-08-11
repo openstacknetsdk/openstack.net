@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Newtonsoft.Json;
@@ -54,6 +55,8 @@ namespace OpenStack
                 {
                     // Apply our default settings
                     c.HttpClientFactory = new AuthenticatedHttpClientFactory();
+                    c.AfterCall = Tracing.TraceHttpCall;
+                    c.OnError = Tracing.TraceFailedHttpCall;
 
                     // Apply application's default settings
                     if (configureFlurl != null)
@@ -61,6 +64,39 @@ namespace OpenStack
                 });
 
                 _isConfigured = true;
+            }
+        }
+
+        /// <summary>
+        /// Provides global point for programmatically configuraing tracing
+        /// </summary>
+        public static class Tracing
+        {
+            /// <summary>
+            /// Trace source for all HTTP requests. Default level is Error.
+            /// <para>
+            /// In your app or web.config the trace soruce name is "Flurl.Http".
+            /// </para>
+            /// </summary>
+            public static readonly TraceSource Http = new TraceSource("Flurl.Http", SourceLevels.Error);
+
+            /// <summary>
+            /// Traces a failed HTTP request
+            /// </summary>
+            /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
+            public static void TraceFailedHttpCall(HttpCall httpCall)
+            {
+                Http.TraceData(TraceEventType.Error, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
+                Http.Flush();
+            }
+
+            /// <summary>
+            /// Traces an HTTP request
+            /// </summary>
+            /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
+            public static void TraceHttpCall(HttpCall httpCall)
+            {
+                Http.TraceData(TraceEventType.Information, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using net.openstack.Providers.Rackspace;
 using OpenStack.Synchronous;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -8,8 +9,10 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     {
         private readonly ContentDeliveryNetworkService _cdnService;
 
-        public ContentDeliveryNetworkServiceTests()
+        public ContentDeliveryNetworkServiceTests(ITestOutputHelper testLog)
         {
+            OpenStackNet.Tracing.Http.Listeners.Add(new XunitTraceListener(testLog));
+
             var identity = TestIdentityProvider.GetIdentityFromEnvironment();
             var authenticationProvider = new CloudIdentityProvider(identity)
             {

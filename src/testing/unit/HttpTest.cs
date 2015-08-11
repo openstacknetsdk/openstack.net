@@ -23,6 +23,11 @@ namespace OpenStack
             FlurlHttp.Configure(opts =>
             {
                 opts.HttpClientFactory = new TestHttpClientFactory(this);
+                opts.AfterCall = call => // Restore handler which was nuked by the base HttpTest
+                {
+                    CallLog.Add(call);
+                    OpenStackNet.Tracing.TraceHttpCall(call); 
+                };
             });
         }
 
