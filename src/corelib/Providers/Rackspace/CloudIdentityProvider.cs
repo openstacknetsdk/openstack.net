@@ -939,7 +939,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc/>
-        public virtual UserAccess Authenticate(CloudIdentity identity)
+        public virtual UserAccess Authenticate(CloudIdentity identity = null)
         {
             CheckIdentity(identity);
 
