@@ -96,7 +96,7 @@
                 Assert.IsNotNull(limits.RateLimits);
                 Assert.IsNotNull(limits.AbsoluteLimits);
 
-                Console.WriteLine(await JsonConvert.SerializeObjectAsync(limits, Formatting.Indented));
+                Console.WriteLine(JsonConvert.SerializeObject(limits, Formatting.Indented));
             }
         }
 
@@ -143,7 +143,7 @@
                     Console.WriteLine("Limit Type: {0}", limitType);
                     Console.WriteLine();
                     DnsServiceLimits limits = await provider.ListLimitsAsync(limitType, cancellationTokenSource.Token);
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(limits, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(limits, Formatting.Indented));
                 }
             }
         }
@@ -167,7 +167,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Domain: {0} ({1})", domain.Name, domain.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(domain, Formatting.Indented));
                 }
             }
         }
@@ -220,7 +220,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Domain: {0} ({1})", domain.Name, domain.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(domain, Formatting.Indented));
                 }
 
                 DnsJob deleteResponse = await provider.RemoveDomainsAsync(createdDomains.Select(i => i.Id), false, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
@@ -502,7 +502,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Domain: {0} ({1})", domain.Name, domain.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(domain, Formatting.Indented));
                 }
 
                 DomainId domainId = createResponse.Response.Domains[0].Id;
@@ -514,7 +514,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Subdomain: {0} ({1})", subdomain.Name, subdomain.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(subdomain, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(subdomain, Formatting.Indented));
                 }
 
                 DnsJob deleteResponse = await provider.RemoveDomainsAsync(createdDomains.Select(i => i.Id), true, AsyncCompletionOption.RequestCompleted, cancellationTokenSource.Token, null);
@@ -567,7 +567,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Domain: {0} ({1})", domain.Name, domain.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(domain, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(domain, Formatting.Indented));
                 }
 
                 string originalData = "127.0.0.1";
@@ -605,7 +605,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Record: {0} ({1})", record.Name, record.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(record, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(record, Formatting.Indented));
                 }
 
                 DnsDomainRecordUpdateConfiguration recordUpdateConfiguration = new DnsDomainRecordUpdateConfiguration(records[0], records[0].Name, comment: updatedCommentValue);
@@ -705,7 +705,7 @@
                     Console.WriteLine();
                     Console.WriteLine("Record: {0} ({1})", record.Name, record.Id);
                     Console.WriteLine();
-                    Console.WriteLine(await JsonConvert.SerializeObjectAsync(record, Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(record, Formatting.Indented));
                 }
 
                 // update the comment and verify nothing else changed

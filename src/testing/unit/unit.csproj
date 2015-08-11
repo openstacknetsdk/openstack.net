@@ -29,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -97,7 +98,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncWebRequestTests.cs" />
     <Compile Include="AuthenticationTests.cs" />
     <Compile Include="Authentication\ServiceCatalogTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedExceptionTests.cs" />
