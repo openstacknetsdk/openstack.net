@@ -21,6 +21,9 @@ namespace OpenStack.Authentication
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            if(AuthenticationProvider == null)
+                return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
             string token = await AuthenticationProvider.GetToken(cancellationToken).ConfigureAwait(false);
             request.Headers.SetAuthToken(token);
 
