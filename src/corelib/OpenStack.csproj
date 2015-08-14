@@ -82,6 +82,7 @@
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="Networking\IPVersion.cs" />
@@ -293,7 +294,6 @@
     <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
     <Compile Include="Core\Providers\INetworksProvider.cs" />
     <Compile Include="Core\Validators\INetworksValidator.cs" />
-    <Compile Include="Core\UserAgentGenerator.cs" />
     <Compile Include="Core\Validators\IHttpResponseCodeValidator.cs" />
     <Compile Include="Core\WebRequestExtensions.cs" />
     <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />

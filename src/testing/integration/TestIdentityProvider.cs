@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using net.openstack.Core.Domain;
 using net.openstack.Core.Providers;
 
@@ -19,7 +20,7 @@ namespace OpenStack
             var identityEndpoint = GetIdentityEndpointFromEnvironment();
             return new OpenStackIdentityProvider(identityEndpoint, identity)
             {
-                ApplicationUserAgent = "CI-BOT"
+                ApplicationUserAgent = new ProductInfoHeaderValue("(CI-BOT)").ToString()
             };
         }
 

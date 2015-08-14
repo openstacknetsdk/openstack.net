@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using JSIStudios.SimpleRESTServices.Client;
@@ -220,13 +221,6 @@ namespace net.openstack.Providers.Rackspace
         /// <summary>
         /// Gets the default value for the <strong>User-Agent</strong> header for HTTP requests sent by this provider.
         /// </summary>
-        /// <remarks>
-        /// <para>If the <see cref="ApplicationUserAgent"/> property is not set, this property simply returns
-        /// <see cref="UserAgentGenerator.UserAgent"/>.</para>
-        /// <para>If the <see cref="ApplicationUserAgent"/> property is set, this property returns a two-part user agent
-        /// starting with the <see cref="ApplicationUserAgent"/> value, followed by the
-        /// <see cref="UserAgentGenerator.UserAgent"/> value.</para>
-        /// </remarks>
         /// <value>
         /// The default value for the <strong>User-Agent</strong> header for HTTP requests sent by this provider.
         /// </value>
@@ -234,12 +228,10 @@ namespace net.openstack.Providers.Rackspace
         {
             get
             {
-                string userAgent = UserAgentGenerator.UserAgent;
-                string applicationUserAgent = ApplicationUserAgent;
-                if (!string.IsNullOrEmpty(applicationUserAgent))
-                    return applicationUserAgent + " " + userAgent;
-
-                return userAgent;
+                List<string> userAgents = OpenStack.OpenStackNet.Configuration.UserAgents.Select(x => x.ToString()).ToList();
+                if(!string.IsNullOrEmpty(ApplicationUserAgent))
+                    userAgents.Add(ApplicationUserAgent);
+                return string.Join(" ", userAgents);
             }
         }
 
