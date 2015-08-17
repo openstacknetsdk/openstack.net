@@ -27,7 +27,6 @@ namespace OpenStack
         {
             using (var httpTest = new HttpTest())
             {
-                var x = FlurlHttp.Configuration.HttpClientFactory.CreateClient(null, FlurlHttp.Configuration.HttpClientFactory.CreateMessageHandler());
                 httpTest.RespondWith((int)HttpStatusCode.Unauthorized, "Your token has expired");
                 httpTest.RespondWith((int)HttpStatusCode.Unauthorized, "Your token has expired");
 

@@ -27,7 +27,7 @@ namespace OpenStack
                 .Returns(Task.FromResult("mock-token"));
 
             stub.Setup(provider => provider.GetEndpoint(It.IsAny<IServiceType>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult("http://api.com"));
+                .Returns(Task.FromResult("http://example.com/api"));
 
             return stub;
         }

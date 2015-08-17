@@ -60,13 +60,14 @@ namespace OpenStack
                 
                 FlurlHttp.Configure(c =>
                 {
+                    // Apply our default settings
+                    c.HttpClientFactory = new AuthenticatedHttpClientFactory();
+
                     // Apply the application's default settings
                     if (configureFlurl != null)
                         configureFlurl(c);
 
-                    // Apply our default settings
-                    c.HttpClientFactory = new AuthenticatedHttpClientFactory();
-
+                    // Apply our event handling without clobbering any application level handlers
                     var applicationBeforeCall = c.BeforeCall;
                     c.BeforeCall = call =>
                     {
