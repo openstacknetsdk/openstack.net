@@ -1,17 +1,15 @@
-# openstack.net: An OpenStack SDK for Microsoft .NET
+# OpenStack.NET
 
 [![Join the chat at https://gitter.im/openstacknetsdk/openstack.net](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openstacknetsdk/openstack.net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-The openstack.net SDK, written for the Microsoft .NET platform, is designed to enable developers to seamlessly work with
+OpenStack.NET is an OpenStack .NET SDK, written for the Microsoft .NET platform, is designed to enable developers to seamlessly work with
 the many services provided by the OpenStack cloud operating system.
 
-The openstack.net SDK contains:
+# NEW! Vendor Support
+We have decided to make it easier for vendors, such as Rackspace or HP, to build their own package on top of OpenStack.NET, rather than directly supporting them. Read more about the ongoing effort:
 
-* A language API
-* Getting Started Guide
-* API Reference Manual
-* Release Notes
-* Sample code
+* [Rackspace.NET and OpenStack.NET: Peas and Carrots](https://github.com/openstacknetsdk/openstack.net/wiki/Rackspace-and-OpenStack.NET)
+* [Introducing Rackspace.NET](https://developer.rackspace.com/blog/2015-introducing-rackspace.net)
 
 ## Contributing
 
