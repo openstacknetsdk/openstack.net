@@ -5,10 +5,11 @@
     <Configuration>Debug</Configuration>
     <Version>1.5.0.0</Version>
 
+    <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
-    <XUnit>..\src\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
-    <XUnitXslt>..\src\packages\xunit.runner.console.2.0.0\tools\NUnitXml.xslt</XUnitXslt>
+    <XUnit>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
+    <XUnitXslt>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\xunit.runner.console.2.0.0\tools\NUnitXml.xslt</XUnitXslt>
   </PropertyGroup>
 
   <Target Name="CI">
@@ -70,6 +71,10 @@
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">
+    <MakeDir Directories="..\src\corelib\bin\v4.0\$(Configuration)\deploy" />
+    <Exec Command="$(ILMerge) /t:library /v4 /out:deploy/openstacknet.dll openstacknet.dll SimpleRESTServices.dll"
+          WorkingDirectory="..\src\corelib\bin\v4.0\$(Configuration)" />
+
     <MakeDir Directories="..\artifacts\packages\" />
     <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" />
   </Target>
