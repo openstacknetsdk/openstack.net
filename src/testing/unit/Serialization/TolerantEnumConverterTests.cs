@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace OpenStack.Serialization
@@ -9,7 +10,9 @@ namespace OpenStack.Serialization
         enum ThingStatus
         {
             Active,
-            Unknown
+            Unknown,
+            [EnumMember(Value = "REMOVE_FAILED")]
+            RemoveFailed
         }
 
         [JsonConverter(typeof(TolerantEnumConverter))]
@@ -22,9 +25,17 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenValueIsRecognized_MatchToValue()
         {
-            var result = JsonConvert.DeserializeObject<ThingStatus>("\"Active\"");
+            var result = JsonConvert.DeserializeObject<ThingStatus>("\"ACTIVE\"");
 
             Assert.Equal(ThingStatus.Active, result);
+        }
+
+        [Fact]
+        public void WhenAttributedValueIsRecognized_MatchToValue()
+        {
+            var result = JsonConvert.DeserializeObject<ThingStatus>("\"REMOVE_FAILED\"");
+
+            Assert.Equal(ThingStatus.RemoveFailed, result);
         }
 
         [Fact]
