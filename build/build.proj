@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-    <Version>1.5.0.0</Version>
+    <Version>1.5.0.1-beta1</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
