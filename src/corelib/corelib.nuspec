@@ -28,8 +28,5 @@
     <file src="bin\v4.0\$Configuration$\deploy\openstacknet.pdb" target="lib\net45"/>
     <file src="..\..\artifacts\docs\Api\v4.0\openstacknet.xml" target="lib\net45"/>
 
-    <!-- Source code -->
-    <file src="**\*.cs" target="src" />
-
   </files>
 </package>
