@@ -76,7 +76,7 @@
           WorkingDirectory="..\src\corelib\bin\v4.0\$(Configuration)" />
 
     <MakeDir Directories="..\artifacts\packages\" />
-    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version) -Symbols" />
+    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version)" />
   </Target>
 
   <!-- The publish targets don't depend upon Package because of how they are used on the CI server. At this point the code has been packaged and all that needs
