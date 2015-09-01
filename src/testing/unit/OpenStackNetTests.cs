@@ -10,7 +10,7 @@ namespace OpenStack
     {
         public void Dispose()
         {
-            OpenStackNet.Configuration.ResetDefaults();
+            OpenStackNet.ResetDefaults();
         }
 
         [Fact]
@@ -19,6 +19,21 @@ namespace OpenStack
             using (var httpTest = new HttpTest())
             {
                 OpenStackNet.Configure();
+
+                await "http://api.com".GetAsync();
+
+                var userAgent = httpTest.CallLog[0].Request.Headers.UserAgent.ToString();
+                Assert.Contains("openstack.net", userAgent);
+            }
+        }
+
+        [Fact]
+        public async void UserAgentOnlyListOnceTest()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                OpenStackNet.Configure();
+                OpenStackNet.Configure(); // Duplicate call to Configure should be ignored
 
                 await "http://api.com".GetAsync();
 

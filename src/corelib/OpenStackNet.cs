@@ -24,6 +24,7 @@ namespace OpenStack
         /// </summary>
         public static readonly OpenStackNetConfigurationOptions Configuration = new OpenStackNetConfigurationOptions();
         private static readonly object ConfigureLock = new object();
+        private static bool _isConfigured;
 
         /// <summary>
         /// Provides thread-safe accesss to OpenStack.NET's global configuration options.
@@ -38,64 +39,99 @@ namespace OpenStack
         {
             lock (ConfigureLock)
             {
+                if (_isConfigured)
+                    return;
+
                 if(configure != null)
                     configure(Configuration);
 
-                JsonConvert.DefaultSettings = () =>
-                {
-                    // Apply our default settings
-                    var settings = new JsonSerializerSettings
-                    {
-                        DefaultValueHandling = DefaultValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = new OpenStackContractResolver()
-                    };
-                    
-                    // Apply application's default settings
-                    if (configureJson != null)
-                        configureJson(settings);
-                    return settings;
-                };
-                
-                FlurlHttp.Configure(c =>
-                {
-                    // Apply the application's default settings
-                    if (configureFlurl != null)
-                        configureFlurl(c);
+                ConfigureJson(configureJson);
+                ConfigureFlurl(configureFlurl);
 
-                    //
-                    // Apply our default settings
-                    //
-                    if(c.HttpClientFactory is DefaultHttpClientFactory)
-                        c.HttpClientFactory = new AuthenticatedHttpClientFactory();
-
-                    // Apply our event handling without clobbering any application level handlers
-                    var applicationBeforeCall = c.BeforeCall;
-                    c.BeforeCall = call =>
-                    {
-                        SetUserAgentHeader(call);
-                        if (applicationBeforeCall != null)
-                            applicationBeforeCall(call);
-                    };
-
-                    var applicationAfterCall = c.AfterCall;
-                    c.AfterCall = call =>
-                    {
-                        Tracing.TraceHttpCall(call);
-                        if (applicationAfterCall != null)
-                            applicationAfterCall(call);
-                    };
-
-                    var applicationOnError = c.OnError;
-                    c.OnError = call =>
-                    {
-                        Tracing.TraceFailedHttpCall(call);
-                        if (applicationOnError != null)
-                            applicationOnError(call);
-                    };
-                });
+                _isConfigured = true;
             }
+        }
+
+        /// <summary>
+        /// Resets all configuration (OpenStack.NET, Flurl and Json.NET) so that <see cref="Configure"/> can be called again.
+        /// </summary>
+        public static void ResetDefaults()
+        {
+            lock (ConfigureLock)
+            {
+                if (!_isConfigured)
+                    return;
+
+                Configuration.ResetDefaults();
+
+                ConfigureJson();
+
+                FlurlHttp.Configuration.ResetDefaults();
+                ConfigureFlurl();
+
+                _isConfigured = false;
+            }
+        }
+
+        private static void ConfigureJson(Action<JsonSerializerSettings> configureJson = null)
+        {
+            JsonConvert.DefaultSettings = () =>
+            {
+                // Apply our default settings
+                var settings = new JsonSerializerSettings
+                {
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new OpenStackContractResolver()
+                };
+
+                // Apply application's default settings
+                if (configureJson != null)
+                    configureJson(settings);
+                return settings;
+            };
+        }
+
+        private static void ConfigureFlurl(Action<FlurlHttpConfigurationOptions> configureFlurl = null)
+        {
+            FlurlHttp.Configure(c =>
+            {
+                // Apply the application's default settings
+                if (configureFlurl != null)
+                    configureFlurl(c);
+
+                //
+                // Apply our default settings
+                //
+                if (c.HttpClientFactory is DefaultHttpClientFactory)
+                    c.HttpClientFactory = new AuthenticatedHttpClientFactory();
+
+                // Apply our event handling without clobbering any application level handlers
+                var applicationBeforeCall = c.BeforeCall;
+                c.BeforeCall = call =>
+                {
+                    SetUserAgentHeader(call);
+                    if (applicationBeforeCall != null)
+                        applicationBeforeCall(call);
+                };
+
+                var applicationAfterCall = c.AfterCall;
+                c.AfterCall = call =>
+                {
+                    Tracing.TraceHttpCall(call);
+                    if (applicationAfterCall != null)
+                        applicationAfterCall(call);
+                };
+
+                var applicationOnError = c.OnError;
+                c.OnError = call =>
+                {
+                    Tracing.TraceFailedHttpCall(call);
+                    if (applicationOnError != null)
+                        applicationOnError(call);
+                };
+            });
         }
 
         private static void SetUserAgentHeader(HttpCall call)
