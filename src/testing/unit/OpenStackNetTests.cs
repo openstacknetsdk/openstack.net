@@ -8,6 +8,11 @@ namespace OpenStack
 {
     public class OpenStackNetTests : IDisposable
     {
+        public OpenStackNetTests()
+        {
+            OpenStackNet.ResetDefaults();
+        }
+
         public void Dispose()
         {
             OpenStackNet.ResetDefaults();
