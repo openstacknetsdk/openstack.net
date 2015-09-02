@@ -59,15 +59,9 @@ namespace OpenStack
         {
             lock (ConfigureLock)
             {
-                if (!_isConfigured)
-                    return;
-
                 Configuration.ResetDefaults();
-
-                ConfigureJson();
-
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings();
                 FlurlHttp.Configuration.ResetDefaults();
-                ConfigureFlurl();
 
                 _isConfigured = false;
             }

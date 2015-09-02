@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using Flurl.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using OpenStack.Serialization;
 using OpenStack.Testing;
 using Xunit;
 
@@ -16,6 +19,24 @@ namespace OpenStack
         public void Dispose()
         {
             OpenStackNet.ResetDefaults();
+        }
+
+        [Fact]
+        public void ResetDefaults_ResetsJsonNetConfiguration()
+        {
+            OpenStackNet.Configure();
+            Assert.IsType<OpenStackContractResolver>(JsonSerializer.CreateDefault().ContractResolver);
+            OpenStackNet.ResetDefaults();
+            Assert.IsType<DefaultContractResolver>(JsonSerializer.CreateDefault().ContractResolver);
+        }
+
+        [Fact]
+        public void ResetDefaults_ResetsFlurlConfiguration()
+        {
+            OpenStackNet.Configure();
+            Assert.NotNull(FlurlHttp.Configuration.BeforeCall);
+            OpenStackNet.ResetDefaults();
+            Assert.Null(FlurlHttp.Configuration.BeforeCall);
         }
 
         [Fact]
