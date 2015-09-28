@@ -2,8 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl;
-using Flurl.Http;
 using Flurl.Http.Content;
 
 // ReSharper disable once CheckNamespace
@@ -97,7 +95,7 @@ namespace Flurl.Http
         public PreparedRequest PreparePatchJson(object data, CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = new HttpMethod("PATCH");
-            Content = new CapturedJsonContent(data);
+            Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
             CancellationToken = cancellationToken;
             return this;
         }
@@ -108,7 +106,7 @@ namespace Flurl.Http
         public PreparedRequest PreparePostJson(object data, CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = HttpMethod.Post;
-            Content = new CapturedJsonContent(data);
+            Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
             CancellationToken = cancellationToken;
             return this;
         }
@@ -119,7 +117,7 @@ namespace Flurl.Http
         public PreparedRequest PreparePutJson(object data, CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = HttpMethod.Put;
-            Content = new CapturedJsonContent(data);
+            Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
             CancellationToken = cancellationToken;
             return this;
         }

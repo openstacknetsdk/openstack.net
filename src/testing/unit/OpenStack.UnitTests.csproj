@@ -47,12 +47,12 @@
     <AssemblyOriginatorKeyFile>..\..\..\build\keys\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flurl, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Flurl.Signed.1.0.8\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    <Reference Include="Flurl, Version=1.0.10.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Flurl.Signed.1.0.10\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl.Http, Version=0.6.2.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Flurl.Http.Signed.0.6.2.2015062601\lib\net45\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http, Version=0.7.0.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Flurl.Http.Signed.0.7.0\lib\net45\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Marvin.JsonPatch, Version=0.7.0.0, Culture=neutral, PublicKeyToken=686c63b2d045ab44, processorArchitecture=MSIL">

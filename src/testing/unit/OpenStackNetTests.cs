@@ -35,9 +35,9 @@ namespace OpenStack
         public void ResetDefaults_ResetsFlurlConfiguration()
         {
             OpenStackNet.Configure();
-            Assert.NotNull(FlurlHttp.Configuration.BeforeCall);
+            Assert.NotNull(FlurlHttp.GlobalSettings.BeforeCall);
             OpenStackNet.ResetDefaults();
-            Assert.Null(FlurlHttp.Configuration.BeforeCall);
+            Assert.Null(FlurlHttp.GlobalSettings.BeforeCall);
         }
 
         [Fact]
