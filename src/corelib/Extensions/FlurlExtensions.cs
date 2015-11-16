@@ -128,6 +128,13 @@ namespace Flurl.Extensions
             return request;
         }
 
+        /// <inheritdoc cref="ClientConfigExtensions.WithHeader(FlurlClient,string,object)" />
+        public static PreparedRequest WithHeader(this PreparedRequest request, string key, object value)
+        {
+            ((FlurlClient)request).WithHeader(key, value);
+            return request;
+        }
+
         /// <summary>
         /// Sends the <see cref="PreparedRequest"/>.
         /// </summary>

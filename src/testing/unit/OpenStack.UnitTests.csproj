@@ -59,6 +59,7 @@
       <HintPath>..\..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -97,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationTests.cs" />
+    <Compile Include="Compute\v2_1\KeyPairTests.cs" />
+    <Compile Include="Compute\v2_6\ServerTests.cs" />
+    <Compile Include="Compute\v2_1\ServerTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedExceptionTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorTests.cs" />
