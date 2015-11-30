@@ -45,7 +45,7 @@ build.cmd /Configuration Release
 build.cmd Package /Configuration Release
 ```
 
-See the [Documentation README](src/Documentation/README.md) if you would like to build the Sandcastle documentation which is published to http://docs.openstacknetsdk.org.
+See the [Documentation README](src/Documentation/README.md) if you would like to build the Sandcastle documentation which is published to http://www.openstacknetsdk.org/docs/.
 
 ### Integration Tests
 You must have an OpenStack environment to test against in order to run the integration tests. We use the [all-in-one OpenStack Ansible Deployment](https://github.com/stackforge/os-ansible-deployment/blob/master/development-stack.rst) to set everything up on a single server. The tests look for the identity endpoint and credentials in environment variables: OPENSTACKNET_USER, OPENSTACKNET_PASSWORD, OPENSTACKNET_PROJECT and OPENSTACKNET_IDENTITY_URL. After you have set the environment variables you will need to log out then log back in.
