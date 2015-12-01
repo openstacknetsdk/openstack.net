@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using net.openstack.Core.Domain;
 using Newtonsoft.Json;
 using OpenStack.Serialization;
 
@@ -9,18 +8,18 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a collection of service resources of the <see cref="IContentDeliveryNetworkService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class ServiceCollection : Page<Service>
+    public class ServiceCollection : Page<ServiceCollection, Service, PageLink>
     {
         /// <summary>
         /// The requested services.
         /// </summary>
         [JsonProperty("services")]
-        public IList<Service> Services => Items;
+        protected IList<Service> Services => Items;
 
         /// <summary>
         /// The paging navigation links.
         /// </summary>
         [JsonProperty("links")]
-        public IList<ResourceLink> ServiceLinks => Links;
+        protected IList<PageLink> ServiceLinks => Links;
     }
 }

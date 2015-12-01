@@ -5,10 +5,15 @@ using Newtonsoft.Json.Linq;
 namespace OpenStack.Serialization
 {
     /// <summary />
-    public class ResourceLink : IHaveExtraData
+    public class PageLink : IPageLink, IHaveExtraData
     {
         /// <summary />
-        public ResourceLink(string relationship, string url)
+        [JsonConstructor]
+        protected PageLink()
+        { }
+
+        /// <summary />
+        public PageLink(string relationship, string url)
         {
             Relationship = relationship;
             Url = url;
@@ -17,6 +22,10 @@ namespace OpenStack.Serialization
         /// <summary />
         [JsonProperty("href")]
         public string Url { get; private set; }
+
+        /// <summary />
+        [JsonIgnore]
+        public bool IsNextPage => Relationship == "next";
 
         /// <summary />
         [JsonProperty("rel")]

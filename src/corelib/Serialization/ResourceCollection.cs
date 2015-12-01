@@ -26,7 +26,7 @@ namespace OpenStack.Serialization
         public ResourceCollection(IEnumerable<T> items)
         {
             Items = items.ToNonNullList();
-        } 
+        }
 
         /// <summary>
         /// The requested items.

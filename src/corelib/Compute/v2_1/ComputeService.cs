@@ -26,10 +26,10 @@ namespace OpenStack.Compute.v2_1
         }
     
         #region Servers
-        /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage,TItem}(IQueryStringBuilder,CancellationToken)" />
-        public virtual Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
+        public virtual async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.ListServersAsync<ServerCollection, ServerReference>(options, cancellationToken);
+            return await _computeApi.ListServersAsync<ServerCollection>(options, cancellationToken);
         }
         
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />

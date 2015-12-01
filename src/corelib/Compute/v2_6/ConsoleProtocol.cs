@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_6

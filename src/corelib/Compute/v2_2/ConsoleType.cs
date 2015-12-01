@@ -6,10 +6,6 @@ namespace OpenStack.Compute.v2_2
     public class ConsoleType : v2_1.ConsoleType
     {
         /// <summary />
-        protected ConsoleType()
-        { }
-
-        /// <summary />
         protected ConsoleType(string displayName) : base(displayName)
         { }
 

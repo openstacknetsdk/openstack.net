@@ -8,10 +8,6 @@ namespace OpenStack.Compute.v2_1
     public class ConsoleType : StringEnumeration
     {
         /// <summary />
-        protected ConsoleType()
-        { }
-
-        /// <summary />
         protected ConsoleType(string displayName) : base(displayName)
         { }
 

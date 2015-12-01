@@ -59,16 +59,16 @@ namespace OpenStack.Compute.v2_1
         #region Servers
 
         /// <summary />
-        public virtual async Task<IPage<TItem>>  ListServersAsync<TPage, TItem>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : Page<TItem>
+        public virtual async Task<TPage>  ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>
         {
             Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
-            return await ListServersAsync<TPage, TItem>(initialRequestUrl, cancellationToken);
+            return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
         }
 
         /// <summary />
-        public virtual async Task<IPage<TItem>> ListServersAsync<TPage, TItem>(Url url, CancellationToken cancellationToken)
-            where TPage : Page<TItem>
+        public virtual async Task<TPage> ListServersAsync<TPage>(Url url, CancellationToken cancellationToken)
+            where TPage : IPageBuilder<TPage>
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -77,7 +77,7 @@ namespace OpenStack.Compute.v2_1
                 .SendAsync()
                 .ReceiveJson<TPage>();
 
-            results.NextPageHandler = ListServersAsync<TPage, TItem>;
+            results.SetNextPageHandler(ListServersAsync<TPage>);
 
             return results;
         }

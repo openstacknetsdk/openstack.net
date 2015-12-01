@@ -26,8 +26,8 @@ namespace OpenStack.Compute.v2_1
                 Identifier serverId = Guid.NewGuid();
                 httpTest.RespondWithJson(new ServerCollection
                 {
-                   Servers = { new ServerReference {Id = serverId}},
-                   ServerLinks = { new ResourceLink("next", "http://api.com/next") }
+                   Items = { new ServerReference {Id = serverId}},
+                   Links = { new PageLink("next", "http://api.com/next") }
                 });
 
                 var results = _computeService.ListServers();

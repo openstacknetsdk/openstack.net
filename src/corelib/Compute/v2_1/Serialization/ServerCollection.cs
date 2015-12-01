@@ -8,23 +8,24 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// Represents a collection of server resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class ServerCollection<T> : Page<T>
+    public class ServerCollection<TPage, TItem> : Page<TPage, TItem, PageLink>
+        where TPage : ServerCollection<TPage, TItem>
     {
         /// <summary>
         /// The requested servers.
         /// </summary>
         [JsonProperty("servers")]
-        public IList<T> Servers => Items;
+        protected IList<TItem> Servers => Items;
 
         /// <summary>
         /// The paging navigation links.
         /// </summary>
         [JsonProperty("servers_links")]
-        public IList<ResourceLink> ServerLinks => Links;
+        protected IList<PageLink> ServerLinks => Links;
     }
 
-    /// <inheritdoc cref="ServerCollection{T}" />
-    public class ServerCollection : ServerCollection<ServerReference>
+    /// <inheritdoc cref="ServerCollection{TPage, TItem}" />
+    public class ServerCollection : ServerCollection<ServerCollection, ServerReference>
     {
         
     }

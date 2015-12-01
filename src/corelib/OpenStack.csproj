@@ -60,6 +60,7 @@
       <HintPath>..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -759,6 +760,8 @@
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
     <Compile Include="Exceptions\RegionRequiredException.cs" />
     <Compile Include="Serialization\DefaultJsonConverter.cs" />
+    <Compile Include="Serialization\IPageBuilder.cs" />
+    <Compile Include="Serialization\IPageLink.cs" />
     <Compile Include="Serialization\StringEnumeration.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />
@@ -768,7 +771,7 @@
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\Page.cs" />
     <Compile Include="Serialization\ResourceCollection.cs" />
-    <Compile Include="Serialization\ResourceLink.cs" />
+    <Compile Include="Serialization\PageLink.cs" />
     <Compile Include="Serialization\StringEnumerationConverter.cs" />
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
