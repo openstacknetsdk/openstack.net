@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using net.openstack.Core.Domain;
 using Newtonsoft.Json;
 
 namespace OpenStack.Serialization
@@ -18,7 +17,7 @@ namespace OpenStack.Serialization
         /// </summary>
         public Page()
         {
-            Links = new List<Link>();    
+            Links = new List<ResourceLink>();    
         }
 
         /// <summary>
@@ -33,10 +32,7 @@ namespace OpenStack.Serialization
 
         /// <inheritdoc />
         [JsonIgnore]
-        public bool HasNextPage
-        {
-            get { return GetNextLink() != null; }
-        }
+        public bool HasNextPage => GetNextLink() != null;
 
         /// <inheritdoc />
         public GetNextPageCallback NextPageHandler { get; set; }
@@ -48,7 +44,7 @@ namespace OpenStack.Serialization
             if (nextPageLink == null)
                 return Empty();
 
-            return await NextPageHandler(new Url(nextPageLink.Href), cancellationToken);
+            return await NextPageHandler(new Url(nextPageLink.Url), cancellationToken);
         }
 
         /// <summary>
@@ -62,14 +58,14 @@ namespace OpenStack.Serialization
         /// <summary>
         /// The paging navigation links.
         /// </summary>
-        public IList<Link> Links { get; set; }
+        public IList<ResourceLink> Links { get; set; }
 
         /// <summary>
         /// Finds the next link.
         /// </summary>
-        protected virtual Link GetNextLink()
+        protected virtual ResourceLink GetNextLink()
         {
-            return Links.FirstOrDefault(x => x.Rel == "next");
+            return Links.FirstOrDefault(x => x.Relationship == "next");
         }
 
         private sealed class EmptyPage : Page<T>

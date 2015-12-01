@@ -1,6 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
@@ -16,24 +14,19 @@ namespace OpenStack.Compute.v2_6
             _computeService = new ComputeService(Stubs.AuthenticationProvider, "region");
         }
 
-        [Theory]
-        [InlineData(ConsoleProtocol.VNC, ConsoleType.NoVnc)]
-        [InlineData(ConsoleProtocol.VNC, ConsoleType.XpVnc)]
-        [InlineData(ConsoleProtocol.RDP, ConsoleType.RdpHtml5)]
-        [InlineData(ConsoleProtocol.Serial, ConsoleType.Serial)]
-        [InlineData(ConsoleProtocol.Spice, ConsoleType.SpiceHtml5)]
-        public void GetConsole(ConsoleProtocol protocol, ConsoleType type)
+        [Fact]
+        public void GetConsole()
         {
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new Console {Type = type});
+                httpTest.RespondWithJson(new Console {Type = ConsoleType.NoVnc});
 
-                Console result = _computeService.GetConsole(serverId, protocol, type);
+                Console result = _computeService.GetConsole(serverId, ConsoleProtocol.VNC, ConsoleType.NoVnc);
                 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/remote-consoles");
                 Assert.NotNull(result);
-                Assert.Equal(type, result.Type);
+                Assert.Equal(ConsoleType.NoVnc, result.Type);
             }
         }
     }

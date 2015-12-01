@@ -2,25 +2,26 @@
 using System.Threading.Tasks;
 using OpenStack.Authentication;
 using OpenStack.Compute.v2_2.Serialization;
+using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_2
 {
-    /// <inheritdoc />
+    /// <summary />
     public class ComputeService
     {
         private readonly ComputeApiBuilder _computeApiBuilder;
 
-        /// <inheritdoc />
+        /// <summary />
         public ComputeService(IAuthenticationProvider authenticationProvider, string region)
         {
             _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
         }
 
         #region Servers
-        /// <inheritdoc cref="v2_1.ComputeApiBuilder.ListServersAsync{TPage,TItem}(string,int?,CancellationToken)" />
-        public virtual Task<IPage<ServerReference>> ListServersAsync(Identifier startServerId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="v2_1.ComputeApiBuilder.ListServersAsync{TPage,TItem}(IQueryStringBuilder,CancellationToken)" />
+        public virtual Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApiBuilder.ListServersAsync<ServerCollection, ServerReference>(startServerId, pageSize, cancellationToken);
+            return _computeApiBuilder.ListServersAsync<ServerCollection, ServerReference>(options, cancellationToken);
         }
 
         /// <summary />

@@ -5,21 +5,13 @@ namespace OpenStack.Compute.v2_2
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "keypair")]
-    public class KeyPairDefinition
+    public class KeyPairDefinition : v2_1.KeyPairDefinition
     {
         /// <summary />
-        public KeyPairDefinition(string name)
+        public KeyPairDefinition(string name) : base(name)
         {
             Name = name;
         }
-
-        /// <summary />
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        /// <summary />
-        [JsonProperty("public_key")]
-        public string PublicKey { get; set; }
 
         /// <summary />
         [JsonProperty("type")]

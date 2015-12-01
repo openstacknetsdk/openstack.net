@@ -17,15 +17,15 @@ namespace OpenStack.Compute.v2_6
         /// <param name="region">The region.</param>
         public ComputeService(IAuthenticationProvider authenticationProvider, string region)
         {
-            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Networking, authenticationProvider, region);
+            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
         }
 
         #region Servers
 
         /// <summary />
-        public virtual Task<IPage<ServerReference>> ListServersAsync(Identifier startServerId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApiBuilder.ListServersAsync<ServerCollection, ServerReference>(startServerId, pageSize, cancellationToken);
+            return _computeApiBuilder.ListServersAsync<ServerCollection, ServerReference>(options, cancellationToken);
         }
 
         /// <summary />

@@ -9,13 +9,13 @@ namespace OpenStack.Synchronous
     /// </summary>
     public static class ComputeServiceExtensions_v2_2
     {
-        /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
-        public static Console GetVncConsoleAync(this ComputeService service, Identifier serverId, ConsoleType type)
+        /// <inheritdoc cref="OpenStack.Compute.v2_1.ComputeService.GetVncConsoleAync" />
+        public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {
             return service.GetVncConsoleAync(serverId, type).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.CreateKeyPairAsync" />
+        /// <inheritdoc cref="OpenStack.Compute.v2_1.ComputeService.CreateKeyPairAsync" />
         public static KeyPair CreateKeyPair(this ComputeService service, string name, KeyPairType? type = null)
         {
             return service.CreateKeyPairAsync(name, type).ForceSynchronous();

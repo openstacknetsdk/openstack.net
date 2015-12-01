@@ -6,9 +6,14 @@ namespace OpenStack.Compute.v2_2
     /// <seealso href="https://github.com/openstack/nova/blob/master/nova/api/openstack/rest_api_version_history.rst#22">Compute Microversion 2.6</seealso>
     public class ComputeApiBuilder : v2_1.ComputeApiBuilder
     {
-        /// <inheritdoc />
+        /// <summary />
         public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
-            : base(serviceType, authenticationProvider, region, "2.2")
+            : this(serviceType, authenticationProvider, region, "2.2")
+        { }
+
+        /// <summary />
+        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, string microversion)
+            : base(serviceType, authenticationProvider, region, microversion)
         { }
     }
 }

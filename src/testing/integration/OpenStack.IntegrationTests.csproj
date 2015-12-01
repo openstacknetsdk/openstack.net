@@ -106,6 +106,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Compute\v2_1\ComputeTestDataManager.cs" />
+    <Compile Include="Compute\v2_1\ServerTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="Identity\v2\IdentityTests.cs" />

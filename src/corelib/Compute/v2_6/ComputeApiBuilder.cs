@@ -11,11 +11,16 @@ namespace OpenStack.Compute.v2_6
 {
     /// <inheritdoc />
     /// <seealso href="https://github.com/openstack/nova/blob/master/nova/api/openstack/rest_api_version_history.rst#26">Compute Microversion 2.6</seealso>
-    public class ComputeApiBuilder : v2_1.ComputeApiBuilder
+    public class ComputeApiBuilder : v2_2.ComputeApiBuilder
     {
         /// <inheritdoc />
         public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
-            : base(serviceType, authenticationProvider, region, "2.6")
+            : this(serviceType, authenticationProvider, region, "2.6")
+        { }
+
+        /// <inheritdoc />
+        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, string microversion)
+            : base(serviceType, authenticationProvider, region, microversion)
         { }
 
 #pragma warning disable 809

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using net.openstack.Core.Domain;
 using Newtonsoft.Json;
 using OpenStack.Serialization;
 
@@ -21,7 +20,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// The paging navigation links.
         /// </summary>
         [JsonProperty("servers_links")]
-        public IList<Link> ServerLinks => Links;
+        public IList<ResourceLink> ServerLinks => Links;
     }
 
     /// <inheritdoc cref="ServerCollection{T}" />

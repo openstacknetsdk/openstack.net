@@ -24,6 +24,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         protected readonly ServiceUrlBuilder UrlBuilder;
 
+        /// <summary />
+        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
+            : this(serviceType, authenticationProvider, region, "2.1")
+        { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputeApiBuilder"/> class.
         /// </summary>
@@ -44,11 +49,6 @@ namespace OpenStack.Compute.v2_1
             UrlBuilder = new ServiceUrlBuilder(serviceType, authenticationProvider, region);
             Microversion = microversion;
         }
-        
-        /// <summary />
-        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
-            : this(serviceType, authenticationProvider, region, "2.1")
-        {}
 
         /// <summary />
         string ISupportMicroversions.MicroversionHeader => "X-OpenStack-Nova-API-Version";
@@ -59,10 +59,10 @@ namespace OpenStack.Compute.v2_1
         #region Servers
 
         /// <summary />
-        public virtual async Task<IPage<TItem>>  ListServersAsync<TPage, TItem>(string startServerId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IPage<TItem>>  ListServersAsync<TPage, TItem>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : Page<TItem>
         {
-            Url initialRequestUrl = await BuildListServersUrlAsync(startServerId, pageSize, cancellationToken);
+            Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
             return await ListServersAsync<TPage, TItem>(initialRequestUrl, cancellationToken);
         }
 
@@ -73,6 +73,7 @@ namespace OpenStack.Compute.v2_1
             var results = await url
                 .Authenticate(AuthenticationProvider)
                 .SetMicroversion(this)
+                .PrepareGet(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<TPage>();
 
@@ -82,18 +83,13 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<Url> BuildListServersUrlAsync(string startServerId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListServersUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("servers")
-                .SetQueryParams(
-                    new
-                    {
-                        marker = startServerId,
-                        limit = pageSize
-                    });
+                .SetQueryParams(queryString?.Build());
         }
 
         /// <summary />

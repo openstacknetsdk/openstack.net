@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using OpenStack.Authentication;
 using OpenStack.Compute.v2_1.Serialization;
+using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
@@ -11,7 +12,8 @@ namespace OpenStack.Compute.v2_1
     /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.1.html">OpenStack Compute API v2.1 Overview</seealso>
     public class ComputeService
     {
-        private readonly ComputeApiBuilder _computeApiBuilder;
+        /// <summary />
+        private readonly ComputeApiBuilder _computeApi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputeService"/> class.
@@ -20,20 +22,20 @@ namespace OpenStack.Compute.v2_1
         /// <param name="region">The region.</param>
         public ComputeService(IAuthenticationProvider authenticationProvider, string region)
         {
-            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Networking, authenticationProvider, region);
+            _computeApi = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
         }
-
+    
         #region Servers
-        /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage,TItem}(string,int?,CancellationToken)" />
-        public virtual Task<IPage<ServerReference>> ListServersAsync(Identifier startServerId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage,TItem}(IQueryStringBuilder,CancellationToken)" />
+        public virtual Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApiBuilder.ListServersAsync<ServerCollection, ServerReference>(startServerId, pageSize, cancellationToken);
+            return _computeApi.ListServersAsync<ServerCollection, ServerReference>(options, cancellationToken);
         }
-
+        
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApiBuilder.GetVncConsoleAsync<Console>(serverId, type, cancellationToken);
+            return _computeApi.GetVncConsoleAsync<Console>(serverId, type, cancellationToken);
         }
         #endregion
 
@@ -43,7 +45,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task<KeyPair> CreateKeyPairAsync(string name, CancellationToken cancellationToken = default(CancellationToken))
         {
             var keyPair = new KeyPairDefinition(name);
-            return _computeApiBuilder.CreateKeyPairAsync<KeyPair>(keyPair, cancellationToken);
+            return _computeApi.CreateKeyPairAsync<KeyPair>(keyPair, cancellationToken);
         }
 
         #endregion

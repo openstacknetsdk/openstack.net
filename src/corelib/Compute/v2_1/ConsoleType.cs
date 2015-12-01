@@ -1,25 +1,28 @@
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
     /// <summary>
-    /// The VNC type
+    /// The remote console type
     /// </summary>
-    [JsonConverter(typeof (TolerantEnumConverter))]
-    public enum ConsoleType
+    public class ConsoleType : StringEnumeration
     {
+        /// <summary />
+        protected ConsoleType()
+        { }
+
+        /// <summary />
+        protected ConsoleType(string displayName) : base(displayName)
+        { }
+
         /// <summary>
         /// noVNC
         /// </summary>
-        [EnumMember(Value = "novnc")]
-        NoVnc,
+        public static readonly ConsoleType NoVnc = new ConsoleType("novnc");
 
         /// <summary>
         /// XP VNC
         /// </summary>
-        [EnumMember(Value = "xpvnc")]
-        XpVnc
+        public static readonly ConsoleType XpVnc = new ConsoleType("xpvnc");
     }
 }

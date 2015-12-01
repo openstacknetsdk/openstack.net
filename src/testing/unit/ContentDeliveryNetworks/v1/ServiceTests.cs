@@ -9,6 +9,7 @@ using Flurl.Extensions;
 using Marvin.JsonPatch;
 using net.openstack.Core.Domain;
 using Newtonsoft.Json;
+using OpenStack.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
@@ -30,7 +31,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             var services = new ServiceCollection
             {
                 Services = {new Service {Id = "service-id"}},
-                ServiceLinks = {new Link("next", "http://api.com/next")}
+                ServiceLinks = {new ResourceLink("next", "http://api.com/next")}
             };
             string json = JsonConvert.SerializeObject(services, Formatting.None);
             Assert.Contains("\"services\"", json);
@@ -51,7 +52,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 httpTest.RespondWithJson(new ServiceCollection
                 {
                     Services = {new Service()},
-                    ServiceLinks = {new Link("next", "http://api.com/next")}
+                    ServiceLinks = {new ResourceLink("next", "http://api.com/next")}
                 });
                 httpTest.RespondWithJson(new ServiceCollection
                 {

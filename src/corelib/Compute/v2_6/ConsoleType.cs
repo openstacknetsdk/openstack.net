@@ -1,43 +1,39 @@
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using OpenStack.Serialization;
-
 namespace OpenStack.Compute.v2_6
 {
-    /// <summary>
-    /// The remote console type
-    /// </summary>
-    [JsonConverter(typeof (TolerantEnumConverter))]
-    public enum ConsoleType
+    /// <inheritdoc />
+    public class ConsoleType : v2_2.ConsoleType
     {
+        /// <summary />
+        protected ConsoleType()
+        { }
+
+        /// <summary />
+        protected ConsoleType(string displayName) : base(displayName)
+        { }
+
         /// <summary>
         /// noVNC
         /// </summary>
-        [EnumMember(Value = "novnc")]
-        NoVnc,
+        public new static ConsoleType NoVnc = new ConsoleType("novnc");
 
         /// <summary>
         /// XP VNC
         /// </summary>
-        [EnumMember(Value = "xpvnc")]
-        XpVnc,
+        public new static ConsoleType XpVnc = new ConsoleType("xpvnc");
 
         /// <summary>
         /// RDP
         /// </summary>
-        [EnumMember(Value = "rdp-html5")]
-        RdpHtml5,
+        public new static ConsoleType RdpHtml5 = new ConsoleType("rdp-html5");
 
         /// <summary>
         /// Serial
         /// </summary>
-        [EnumMember(Value = "serial")]
-        Serial,
+        public new static ConsoleType Serial = new ConsoleType("serial");
 
         /// <summary>
         /// Spice HTML5
         /// </summary>
-        [EnumMember(Value = "spice-html5")]
-        SpiceHtml5,
+        public new static ConsoleType SpiceHtml5 = new ConsoleType("spice-html5");
     }
 }

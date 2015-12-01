@@ -15,18 +15,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// The requested services.
         /// </summary>
         [JsonProperty("services")]
-        public IList<Service> Services
-        {
-            get { return Items; }
-        }
-        
+        public IList<Service> Services => Items;
+
         /// <summary>
         /// The paging navigation links.
         /// </summary>
         [JsonProperty("links")]
-        public IList<Link> ServiceLinks
-        {
-            get { return Links; }
-        }
+        public IList<ResourceLink> ServiceLinks => Links;
     }
 }

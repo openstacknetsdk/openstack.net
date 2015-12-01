@@ -7,31 +7,35 @@ namespace OpenStack.Compute.v2_6
     /// <summary>
     /// The remote console protocol
     /// </summary>
-    [JsonConverter(typeof(TolerantEnumConverter))]
-    public enum ConsoleProtocol
+    public class ConsoleProtocol : StringEnumeration
     {
+        /// <summary />
+        protected ConsoleProtocol()
+        { }
+
+        /// <summary />
+        protected ConsoleProtocol(string displayName)
+            : base(displayName)
+        { }
+
         /// <summary>
         /// VNC
         /// </summary>
-        [EnumMember(Value = "vnc")]
-        VNC,
+        public static readonly ConsoleProtocol VNC = new ConsoleProtocol("vnc");
 
         /// <summary>
         /// RDP
         /// </summary>
-        [EnumMember(Value = "rdp-html5")]
-        RDP,
+        public static readonly ConsoleProtocol RDP = new ConsoleProtocol("rdp-html5");
 
         /// <summary>
         /// Serial
         /// </summary>
-        [EnumMember(Value = "serial")]
-        Serial,
+        public static readonly ConsoleProtocol Serial = new ConsoleProtocol("serial");
 
         /// <summary>
         /// Spice
         /// </summary>
-        [EnumMember(Value = "spice-html5")]
-        Spice,
+        public static readonly ConsoleProtocol Spice = new ConsoleProtocol("spice-html5");
     }
 }
