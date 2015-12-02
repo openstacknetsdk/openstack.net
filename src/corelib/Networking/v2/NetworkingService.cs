@@ -5,7 +5,6 @@ using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Networking.v2.Serialization;
-using OpenStack.Synchronous.Extensions;
 
 namespace OpenStack.Networking.v2
 {
@@ -30,13 +29,12 @@ namespace OpenStack.Networking.v2
 
         #region Networks
         /// <inheritdoc cref="NetworkingApiBuilder.ListNetworksAsync" />
-        public Task<IEnumerable<Network>> ListNetworksAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Network>> ListNetworksAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .ListNetworksAsync(cancellationToken)
                 .SendAsync()
-                .ReceiveJson<NetworkCollection>()
-                .AsEnumerable<NetworkCollection, Network>();
+                .ReceiveJson<NetworkCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.GetNetworkAsync" />
@@ -58,13 +56,12 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreateNetworksAsync" />
-        public Task<IEnumerable<Network>> CreateNetworksAsync(IEnumerable<NetworkDefinition> networks, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Network>> CreateNetworksAsync(IEnumerable<NetworkDefinition> networks, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .CreateNetworksAsync(networks, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<NetworkCollection>()
-                .AsEnumerable<NetworkCollection, Network>();
+                .ReceiveJson<NetworkCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.UpdateNetworkAsync" />
@@ -88,13 +85,12 @@ namespace OpenStack.Networking.v2
         #region Subnets
 
         /// <inheritdoc cref="NetworkingApiBuilder.ListSubnetsAsync" />
-        public Task<IEnumerable<Subnet>> ListSubnetsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Subnet>> ListSubnetsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .ListSubnetsAsync(cancellationToken)
                 .SendAsync()
-                .ReceiveJson<SubnetCollection>()
-                .AsEnumerable<SubnetCollection, Subnet>();
+                .ReceiveJson<SubnetCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreateSubnetAsync" />
@@ -107,13 +103,12 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreateSubnetsAsync" />
-        public Task<IEnumerable<Subnet>> CreateSubnetsAsync(IEnumerable<SubnetCreateDefinition> subnets, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Subnet>> CreateSubnetsAsync(IEnumerable<SubnetCreateDefinition> subnets, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .CreateSubnetsAsync(subnets, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<SubnetCollection>()
-                .AsEnumerable<SubnetCollection, Subnet>();
+                .ReceiveJson<SubnetCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.GetSubnetAsync" />
@@ -146,13 +141,12 @@ namespace OpenStack.Networking.v2
         #region Ports
 
         /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync" />
-        public Task<IEnumerable<Port>> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Port>> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .ListPortsAsync(cancellationToken)
                 .SendAsync()
-                .ReceiveJson<PortCollection>()
-                .AsEnumerable<PortCollection, Port>();
+                .ReceiveJson<PortCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreatePortAsync" />
@@ -165,13 +159,12 @@ namespace OpenStack.Networking.v2
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreatePortsAsync" />
-        public Task<IEnumerable<Port>> CreatePortsAsync(IEnumerable<PortCreateDefinition> ports, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Port>> CreatePortsAsync(IEnumerable<PortCreateDefinition> ports, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _networkingApiBuilder
+            return await _networkingApiBuilder
                 .CreatePortsAsync(ports, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<PortCollection>()
-                .AsEnumerable<PortCollection, Port>();
+                .ReceiveJson<PortCollection>();
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.GetPortAsync" />
