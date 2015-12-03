@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
@@ -56,7 +57,103 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public string Microversion { get; }
 
+        private void SetOwner(IServiceResource<ComputeApiBuilder> resource)
+        {
+            resource.Owner = this;
+        }
+
         #region Servers
+
+        /// <summary />
+        public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource<ComputeApiBuilder>
+        {
+            PreparedRequest request = await BuildGetServerAsync(serverId, cancellationToken);
+            var result = await request.SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"servers/{serverId}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateServerAsync(object server, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("servers")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(server, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateServerAsync<T>(object server, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource<ComputeApiBuilder>
+        {
+            PreparedRequest request = await BuildCreateServerAsync(server, cancellationToken);
+            var result = await request.SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary>
+        /// Waits for the server to become active.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<Server> WaitUntilServerIsActiveAsync(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(serverId))
+                throw new ArgumentNullException("serverId");
+
+            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
+            timeout = timeout ?? TimeSpan.FromMinutes(5);
+
+            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
+            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
+            {
+                while (true)
+                {
+                    Server server = await GetServerAsync<Server>(serverId, cancellationToken).ConfigureAwait(false);
+                    if (server.Status == ServerStatus.Error)
+                        throw new ComputeOperationFailedException("TODO");
+
+                    bool complete = server.Status == ServerStatus.Active;
+
+                    progress?.Report(complete);
+
+                    if (complete)
+                        return server;
+
+                    try
+                    {
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        if (timeoutSource.IsCancellationRequested)
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to become active.", ex);
+
+                        throw;
+                    }
+                }
+            }
+        }
 
         /// <summary />
         public virtual async Task<TPage>  ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))

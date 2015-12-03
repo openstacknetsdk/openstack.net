@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Extensions;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OpenStack.Serialization;
 
@@ -7,7 +11,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
-    public class Server : ServerReference
+    public class Server : ServerReference, IServiceResource<ComputeApiBuilder>
     {
         /// <summary />
         [JsonProperty("addresses")]
@@ -108,5 +112,25 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonProperty("updated")]
         public DateTimeOffset? LastModified { get; set; }
+
+        ComputeApiBuilder IServiceResource<ComputeApiBuilder>.Owner { get; set; }
+
+        private ComputeApiBuilder GetOwner([CallerMemberName]string callerName = "")
+        {
+            var owner = ((IServiceResource<ComputeApiBuilder>)this).Owner;
+            if (owner == null)
+                throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
+
+            return owner;
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = GetOwner();
+            var result = await owner.WaitUntilServerIsActiveAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            result.CopyProperties(this);
+        }
     }
 }

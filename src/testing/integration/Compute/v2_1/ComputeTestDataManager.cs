@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OpenStack.Compute.v2_1
 {
@@ -42,26 +43,26 @@ namespace OpenStack.Compute.v2_1
         }
 
         #region Servers
-        //public ServerDefinition BuildServer()
-        //{
-        //    return new ServerDefinition
-        //    {
-        //        Name = TestData.GenerateName()
-        //    };
-        //}
+        public ServerCreateDefinition BuildServer()
+        {
+            string name = TestData.GenerateName();
+            const string flavor = "1"; // m1.tiny
+            Identifier image = new Identifier("74382d40-c0c0-49b0-bacd-42eb3fbaf271"); // cirros
+            return new ServerCreateDefinition(name, image, flavor);
+        }
 
-        //public async Task<Server> CreateServer()
-        //{
-        //    var definition = BuildServer();
-        //    return await CreateServer(definition);
-        //}
+        public async Task<Server> CreateServer()
+        {
+            var definition = BuildServer();
+            return await CreateServer(definition);
+        }
 
-        //public async Task<Server> CreateServer(ServerDefinition definition)
-        //{
-        //    var server = await _compute.CreateServerAsync(definition);
-        //    Register(server);
-        //    return server;
-        //}
+        public async Task<Server> CreateServer(ServerCreateDefinition definition)
+        {
+            var server = await _compute.CreateServerAsync(definition);
+            Register(server);
+            return server;
+        }
 
         //public async Task<IEnumerable<Server>> CreateServers()
         //{

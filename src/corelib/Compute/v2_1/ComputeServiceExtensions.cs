@@ -1,5 +1,7 @@
-﻿using OpenStack.Compute.v2_1;
+﻿using System;
+using OpenStack.Compute.v2_1;
 using OpenStack.Synchronous.Extensions;
+using Console = OpenStack.Compute.v2_1.Console;
 
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
@@ -9,6 +11,24 @@ namespace OpenStack.Synchronous
     /// </summary>
     public static class ComputeServiceExtensions_v2_1
     {
+        /// <inheritdoc cref="ComputeService.GetServerAsync" />
+        public static Server GetServer(this ComputeService service, Identifier serverId)
+        {
+            return service.GetServerAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateServerAsync" />
+        public static Server CreateServer(this ComputeService service, ServerCreateDefinition server)
+        {
+            return service.CreateServerAsync(server).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.WaitUntilServerIsActiveAsync" />
+        public static Server WaitUntilServerIsActive(this ComputeService service, Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            return service.WaitUntilServerIsActiveAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.ListServersAsync" />
         public static IPage<ServerReference> ListServers(this ComputeService service, ListServersOptions options = null)
         {

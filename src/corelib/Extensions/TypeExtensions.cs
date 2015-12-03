@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace System.Extensions
@@ -6,7 +7,6 @@ namespace System.Extensions
     /// <summary>
     /// Useful System.Type extension methods for custom implementations.
     /// </summary>
-    /// <exclude />
     public static class TypeExtensions
     {
         /// <summary>
@@ -24,6 +24,15 @@ namespace System.Extensions
             catch
             {
                 return assembly.GetName().Version.ToString();
+            }
+        }
+
+        /// <summary />
+        public static void CopyProperties<T>(this T src, T dest)
+        {
+            foreach (PropertyDescriptor item in TypeDescriptor.GetProperties(src))
+            {
+                item.SetValue(dest, item.GetValue(src));
             }
         }
     }

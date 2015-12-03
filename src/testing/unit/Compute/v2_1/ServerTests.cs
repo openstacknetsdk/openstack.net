@@ -10,11 +10,47 @@ namespace OpenStack.Compute.v2_1
 {
     public class ServerTests
     {
-        private readonly ComputeService _computeService;
+        private readonly ComputeService _compute;
 
         public ServerTests()
         {
-            _computeService = new ComputeService(Stubs.AuthenticationProvider, "region");
+            _compute = new ComputeService(Stubs.AuthenticationProvider, "region");
+        }
+
+        [Fact]
+        public void CreateServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId});
+
+                var definition = new ServerCreateDefinition("{name}", Guid.NewGuid(), "{flavor-id}");
+                var result = _compute.CreateServer(definition);
+
+                httpTest.ShouldHaveCalled("*/servers");
+                Assert.NotNull(result);
+                Assert.Equal(serverId,result.Id);
+            }
+        }
+
+        [Fact]
+        public void WaitForServerActive()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Building});
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Active });
+
+                var result = _compute.GetServer(serverId);
+                result.WaitUntilActive();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+                Assert.NotNull(result);
+                Assert.Equal(serverId, result.Id);
+                Assert.Equal(ServerStatus.Active, result.Status);
+            }
         }
 
         [Fact]
@@ -29,7 +65,7 @@ namespace OpenStack.Compute.v2_1
                    Links = { new PageLink("next", "http://api.com/next") }
                 });
 
-                var results = _computeService.ListServers();
+                var results = _compute.ListServers();
 
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.Equal(1, results.Count());
@@ -50,7 +86,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 ServerStatus status = ServerStatus.Active;
 
-                _computeService.ListServers(new ListServersOptions { Name = name, FlavorId = flavorId, ImageId = imageId, LastModified = lastModified, Status = status});
+                _compute.ListServers(new ListServersOptions { Name = name, FlavorId = flavorId, ImageId = imageId, LastModified = lastModified, Status = status});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*flavor={flavorId}");
@@ -69,7 +105,7 @@ namespace OpenStack.Compute.v2_1
 
                 Identifier startingAt = Guid.NewGuid();
                 const int pageSize = 10;
-                _computeService.ListServers(new ListServersOptions { PageSize = pageSize, StartingAt = startingAt });
+                _compute.ListServers(new ListServersOptions { PageSize = pageSize, StartingAt = startingAt });
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");
@@ -84,7 +120,7 @@ namespace OpenStack.Compute.v2_1
                 Identifier serverId = Guid.NewGuid();
                 httpTest.RespondWithJson(new Console {Type = ConsoleType.NoVnc});
 
-                Console result = _computeService.GetVncConsole(serverId, ConsoleType.NoVnc);
+                Console result = _compute.GetVncConsole(serverId, ConsoleType.NoVnc);
                 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
                 Assert.NotNull(result);

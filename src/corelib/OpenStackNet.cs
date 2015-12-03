@@ -5,7 +5,6 @@ using System.Extensions;
 using System.Net.Http.Headers;
 using Flurl.Http;
 using Flurl.Http.Configuration;
-using net.openstack.Core;
 using Newtonsoft.Json;
 using OpenStack.Authentication;
 using OpenStack.Serialization;

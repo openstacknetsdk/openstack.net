@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
@@ -24,8 +27,27 @@ namespace OpenStack.Compute.v2_1
         {
             _computeApi = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
         }
-    
+
         #region Servers
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetServerAsync{T}" />
+        public async Task<Server> GetServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.GetServerAsync<Server>(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateServerAsync{TPage}" />
+        public async Task<Server> CreateServerAsync(ServerCreateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.CreateServerAsync<Server>(server, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        public async Task<Server> WaitUntilServerIsActiveAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.WaitUntilServerIsActiveAsync(serverId, refreshDelay, timeout, progress, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
         public virtual async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
