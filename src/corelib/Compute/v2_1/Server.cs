@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -13,6 +14,8 @@ namespace OpenStack.Compute.v2_1
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
     public class Server : ServerReference, IServiceResource<ComputeApiBuilder>
     {
+        private string _adminPassword;
+
         /// <summary />
         [JsonProperty("addresses")]
         public IDictionary<string, IList<ServerAddress>> Addresses { get; set; }
@@ -28,6 +31,18 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonProperty("image")]
         public ImageReference Image { get; set; }
+
+        /// <summary /> // null if this isn't a newly created server. You only get this value once
+        [JsonProperty("adminPass")]
+        public string AdminPassword
+        {
+            get { return _adminPassword; }
+            set
+            {
+                // This is only set once, then never again. Capture it for safekeeping
+                _adminPassword = value ?? _adminPassword;
+            }
+        }
 
         /// <summary />
         [JsonProperty("key_name")]

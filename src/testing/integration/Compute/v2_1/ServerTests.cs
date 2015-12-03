@@ -45,8 +45,17 @@ namespace OpenStack.Compute.v2_1
             Trace.WriteLine("Verifying server matches requested definition...");
             Assert.NotNull(server);
             Assert.Equal(definition.Name, server.Name);
+            Assert.NotNull(server.Flavor);
             Assert.Equal(definition.FlavorId, server.Flavor.Id);
+            Assert.NotNull(server.AdminPassword);
+            Assert.NotNull(server.Image);
             Assert.Equal(definition.ImageId, server.Image.Id);
+            Assert.Equal(server.Status, ServerStatus.Active);
+            Assert.NotNull(server.AvailabilityZone);
+            Assert.NotNull(server.Created);
+            Assert.NotNull(server.LastModified);
+            Assert.NotNull(server.Launched);
+            Assert.NotNull(server.DiskConfig);
         }
 
         [Fact]
