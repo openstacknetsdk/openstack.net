@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -24,7 +23,7 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new ServerCollection
+                httpTest.RespondWithJson(new ServerReferenceCollection
                 {
                    Items = { new ServerReference {Id = serverId}},
                    Links = { new PageLink("next", "http://api.com/next") }

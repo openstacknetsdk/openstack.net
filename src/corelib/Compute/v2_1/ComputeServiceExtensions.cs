@@ -15,6 +15,12 @@ namespace OpenStack.Synchronous
             return service.ListServersAsync(options).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.ListServerDetailsAsync" />
+        public static IPage<Server> ListServerDetails(this ComputeService service, ListServersOptions options = null)
+        {
+            return service.ListServerDetailsAsync(options).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {

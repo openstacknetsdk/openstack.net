@@ -93,6 +93,40 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<TPage> ListServerDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>
+        {
+            Url initialRequestUrl = await BuildListServerDetailsUrlAsync(queryString, cancellationToken);
+            return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<TPage> ListServerDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
+            where TPage : IPageBuilder<TPage>
+        {
+            var results = await url
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<TPage>();
+
+            results.SetNextPageHandler(ListServerDetailsAsync<TPage>);
+
+            return results;
+        }
+
+        /// <summary />
+        public virtual async Task<Url> BuildListServerDetailsUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("servers/detail")
+                .SetQueryParams(queryString?.Build());
+        }
+
+        /// <summary />
         public virtual async Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             PreparedRequest request = await BuildGetVncConsoleRequestAsync(serverId, type, cancellationToken);

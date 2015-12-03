@@ -29,9 +29,15 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
         public virtual async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServersAsync<ServerCollection>(options, cancellationToken);
+            return await _computeApi.ListServersAsync<ServerReferenceCollection>(options, cancellationToken);
         }
-        
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerDetailsAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
+        public virtual async Task<IPage<Server>> ListServerDetailsAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerDetailsAsync<ServerCollection>(options, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {

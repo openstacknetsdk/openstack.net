@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
@@ -6,15 +6,13 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class ServerReference : IHaveExtraData
+    public class ImageReference : IHaveExtraData
     {
         /// <summary />
-        [JsonProperty("id")]
-        public Identifier Id { get; set; }
+        public string Id { get; set; }
 
-        /// <summary />
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        // todo: implement
+        //public Image GetImage();
 
         /// <summary />
         [JsonExtensionData]

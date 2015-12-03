@@ -39,6 +39,22 @@ namespace OpenStack.Compute.v2_1
 
             while (results.Any())
             {
+                var result = results.First();
+                Assert.NotNull(result.Name);
+                results = await results.GetNextPageAsync();
+            }
+            Assert.NotNull(results);
+        }
+
+        [Fact]
+        public async Task ListServerDetailsTest()
+        {
+            var results = await _compute.ListServerDetailsAsync(new ListServersOptions { PageSize = 1 });
+
+            while (results.Any())
+            {
+                var result = results.First();
+                Assert.NotNull(result.Image);
                 results = await results.GetNextPageAsync();
             }
             Assert.NotNull(results);

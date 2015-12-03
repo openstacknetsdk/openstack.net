@@ -24,9 +24,18 @@ namespace OpenStack.Compute.v2_1.Serialization
         protected IList<PageLink> ServerLinks => Links;
     }
 
-    /// <inheritdoc cref="ServerCollection{TPage, TItem}" />
-    public class ServerCollection : ServerCollection<ServerCollection, ServerReference>
+    /// <summary>
+    /// Represents a collection of references to server resources of the <see cref="ComputeService"/>.
+    /// </summary>
+    /// <threadsafety static="true" instance="false"/>
+    public class ServerReferenceCollection : ServerCollection<ServerReferenceCollection, ServerReference>
     {
         
+    }
+
+    /// <inheritdoc cref="ServerCollection{TPage, TItem}" />
+    public class ServerCollection : ServerCollection<ServerCollection, Server>
+    {
+
     }
 }

@@ -1,19 +1,112 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
-    public class Server : IHaveExtraData
+    public class Server : ServerReference
     {
         /// <summary />
-        public string Id { get; set; }
+        [JsonProperty("addresses")]
+        public IDictionary<string, IList<ServerAddress>> Addresses { get; set; }
 
         /// <summary />
-        [JsonExtensionData]
-        IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
+        [JsonProperty("flavor")]
+        public FlavorReference Flavor { get; set; }
+
+        /// <summary />
+        [JsonProperty("created")]
+        public DateTimeOffset? Created { get; set; }
+
+        /// <summary />
+        [JsonProperty("image")]
+        public ImageReference Image { get; set; }
+
+        /// <summary />
+        [JsonProperty("key_name")]
+        public string KeyPairName { get; set; }
+
+        /// <summary />
+        [JsonProperty("metadata")]
+        public IDictionary<string, string> Metadata { get; set; }
+
+        /// <summary />
+        [JsonProperty("accessIPv4")]
+        public string IPv4Address { get; set; }
+
+        /// <summary />
+        [JsonProperty("accessIPv6")]
+        public string IPv6Address { get; set; }
+
+        /// <summary />
+        [JsonProperty("config_drive")]
+        public string ConfigDrive { get; set; }
+
+        /// <summary />
+        [JsonProperty("hostId")]
+        public string HostId { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-DCF:diskConfig")]
+        public DiskConfiguration DiskConfig { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-AZ:availability_zone")]
+        public string AvailabilityZone { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-SRV-ATTR:host")]
+        public string HostName { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-SRV-ATTR:hypervisor_hostname")]
+        public string HypervisorHostName { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-SRV-ATTR:instance_name")]
+        public string InstanceName { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-STS:power_state")]
+        public string PowerState { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-STS:task_state")]
+        public string TaskState { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-EXT-STS:vm_state")]
+        public string VMState { get; set; }
+        
+        /// <summary />
+        [JsonProperty("OS-SRV-USG:launched_at")]
+        public DateTimeOffset? Launched { get; set; }
+
+        /// <summary />
+        [JsonProperty("OS-SRV-USG:terminated_at")]
+        public DateTimeOffset? Terminated { get; set; }
+
+        /// <summary />
+        [JsonProperty("progress")]
+        public int Progress { get; set; }
+
+        /// <summary />
+        [JsonProperty("os-extended-volumes:volumes_attached")]
+        public IList<VolumeReference> AttachedVolumes { get; set; }
+
+        /// <summary />
+        [JsonProperty("security_groups")]
+        public IList<SecurityGroupReference> SecurityGroups { get; set; }
+
+        /// <summary />
+        [JsonProperty("status")]
+        public ServerStatus Status { get; set; }
+
+        /// <summary />
+        [JsonProperty("updated")]
+        public DateTimeOffset? LastModified { get; set; }
     }
 }

@@ -5,13 +5,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
-    public class ServerReference : IHaveExtraData
+    /// <summary />   
+    public class SecurityGroupReference : IHaveExtraData
     {
-        /// <summary />
-        [JsonProperty("id")]
-        public Identifier Id { get; set; }
-
         /// <summary />
         [JsonProperty("name")]
         public string Name { get; set; }
