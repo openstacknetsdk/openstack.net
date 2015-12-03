@@ -41,6 +41,12 @@ namespace OpenStack.Synchronous
             return service.ListServerDetailsAsync(options).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.DeleteServerAsync" />
+        public static void DeleteServer(this ComputeService service, Identifier serverId)
+        {
+            service.DeleteServerAsync(serverId).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {

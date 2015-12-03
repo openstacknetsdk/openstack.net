@@ -34,7 +34,7 @@ namespace OpenStack.Compute.v2_1
             var errors = new List<Exception>();
             try
             {
-                //DeleteServers(_testData.OfType<Server>());
+                DeleteServers(_testData.OfType<Server>());
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
 
@@ -77,11 +77,11 @@ namespace OpenStack.Compute.v2_1
         //    return servers;
         //}
 
-        //public void DeleteServers(IEnumerable<Server> networks)
-        //{
-        //    var deletes = networks.Select(x => _compute.DeleteServerAsync(x.Id)).ToArray();
-        //    Task.WaitAll(deletes);
-        //}
+        public void DeleteServers(IEnumerable<Server> servers)
+        {
+            var deletes = servers.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
         #endregion
     }
 }

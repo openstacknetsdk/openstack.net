@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Flurl.Http;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -46,6 +47,18 @@ namespace OpenStack.Compute.v2_1
             Assert.Equal(definition.Name, server.Name);
             Assert.Equal(definition.FlavorId, server.Flavor.Id);
             Assert.Equal(definition.ImageId, server.Image.Id);
+        }
+
+        [Fact]
+        public async void DeleteServerTest()
+        {
+            var server = await _testData.CreateServer();
+            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
+
+            await server.DeleteAsync();
+            await server.WaitUntilDeletedAsync();
+
+            await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetServerAsync(server.Id));
         }
 
         [Fact]

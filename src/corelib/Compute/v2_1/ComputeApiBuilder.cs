@@ -68,8 +68,9 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource<ComputeApiBuilder>
         {
-            PreparedRequest request = await BuildGetServerAsync(serverId, cancellationToken);
-            var result = await request.SendAsync().ReceiveJson<T>();
+            var result = await BuildGetServerAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
             SetOwner(result);
             return result;
         }
@@ -100,8 +101,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> CreateServerAsync<T>(object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource<ComputeApiBuilder>
         {
-            PreparedRequest request = await BuildCreateServerAsync(server, cancellationToken);
-            var result = await request.SendAsync().ReceiveJson<T>();
+            var result = await BuildCreateServerAsync(server, cancellationToken).SendAsync().ReceiveJson<T>();
             SetOwner(result);
             return result;
         }
@@ -131,7 +131,7 @@ namespace OpenStack.Compute.v2_1
                 {
                     Server server = await GetServerAsync<Server>(serverId, cancellationToken).ConfigureAwait(false);
                     if (server.Status == ServerStatus.Error)
-                        throw new ComputeOperationFailedException("TODO");
+                        throw new ComputeOperationFailedException();
 
                     bool complete = server.Status == ServerStatus.Active;
 
@@ -139,6 +139,66 @@ namespace OpenStack.Compute.v2_1
 
                     if (complete)
                         return server;
+
+                    try
+                    {
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        if (timeoutSource.IsCancellationRequested)
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to be deleted.", ex);
+
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Waits for the server to be deleted.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task WaitUntilServerIsDeletedAsync(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(serverId))
+                throw new ArgumentNullException("serverId");
+
+            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
+            timeout = timeout ?? TimeSpan.FromMinutes(5);
+
+            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
+            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
+            {
+                while (true)
+                {
+                    bool complete;
+                    try
+                    {
+                        Server server = await GetServerAsync<Server>(serverId, cancellationToken).ConfigureAwait(false);
+                        if (server.Status == ServerStatus.Error)
+                            throw new ComputeOperationFailedException();
+
+                        complete = server.Status == ServerStatus.Deleted;
+                    }
+                    catch (FlurlHttpException httpError)
+                    {
+                        if (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
+                            complete = true;
+                        else
+                            throw;
+                    }
+                    
+                    progress?.Report(complete);
+
+                    if (complete)
+                        return;
 
                     try
                     {
@@ -224,10 +284,31 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task DeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            PreparedRequest request = await BuildGetVncConsoleRequestAsync(serverId, type, cancellationToken);
-            return await request.SendAsync().ReceiveJson<T>();
+            return BuildDeleteServerAsync(serverId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegments("servers", serverId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        /// <summary />
+        public virtual Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetVncConsoleRequestAsync(serverId, type, cancellationToken)
+                .SendAsync().ReceiveJson<T>();
         }
 
         /// <summary />

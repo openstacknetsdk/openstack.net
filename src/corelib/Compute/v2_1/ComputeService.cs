@@ -31,33 +31,39 @@ namespace OpenStack.Compute.v2_1
         #region Servers
 
         /// <inheritdoc cref="ComputeApiBuilder.GetServerAsync{T}" />
-        public async Task<Server> GetServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Server> GetServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.GetServerAsync<Server>(serverId, cancellationToken);
+            return _computeApi.GetServerAsync<Server>(serverId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateServerAsync{TPage}" />
-        public async Task<Server> CreateServerAsync(ServerCreateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Server> CreateServerAsync(ServerCreateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.CreateServerAsync<Server>(server, cancellationToken);
+            return _computeApi.CreateServerAsync<Server>(server, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
-        public async Task<Server> WaitUntilServerIsActiveAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Server> WaitUntilServerIsActiveAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.WaitUntilServerIsActiveAsync(serverId, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitUntilServerIsActiveAsync(serverId, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
-        public virtual async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _computeApi.ListServersAsync<ServerReferenceCollection>(options, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServerDetailsAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
-        public virtual async Task<IPage<Server>> ListServerDetailsAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IPage<Server>> ListServerDetailsAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _computeApi.ListServerDetailsAsync<ServerCollection>(options, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />
+        public Task DeleteServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteServerAsync(serverId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />

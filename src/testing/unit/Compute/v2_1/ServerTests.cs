@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -31,6 +32,44 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.NotNull(result);
                 Assert.Equal(serverId,result.Id);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+
+                var result = _compute.GetServer(serverId);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+                Assert.NotNull(result);
+                Assert.Equal(serverId, result.Id);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetServerExtension()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new ServerReferenceCollection
+                {
+                    Items = { new ServerReference { Id = serverId } }
+                });
+                httpTest.RespondWithJson(new Server { Id = serverId });
+
+                var serverRef = _compute.ListServers().First();
+                var result = serverRef.GetServer();
+                
+                Assert.NotNull(result);
+                Assert.Equal(serverId, result.Id);
             }
         }
 
@@ -109,6 +148,53 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");
+            }
+        }
+
+        [Fact]
+        public void DeleteServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+
+                _compute.DeleteServer(serverId);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+            }
+        }
+
+        [Fact]
+        public void DeleteServerExtension()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId});
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Deleted});
+
+                var server =_compute.GetServer(serverId);
+                server.Delete();
+                Assert.NotEqual(server.Status, ServerStatus.Deleted);
+
+                server.WaitUntilDeleted();
+                Assert.Equal(server.Status, ServerStatus.Deleted);
+            }
+        }
+
+        [Fact]
+        public void WhenDeleteServer_Returns404NotFound_ShouldConsiderRequestSuccessful()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWith((int)HttpStatusCode.NotFound, "Not here, boss...");
+
+                _compute.DeleteServer(serverId);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}");
             }
         }
 
