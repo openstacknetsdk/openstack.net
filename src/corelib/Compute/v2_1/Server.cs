@@ -46,10 +46,6 @@ namespace OpenStack.Compute.v2_1
         public string IPv6Address { get; set; }
 
         /// <summary />
-        [JsonProperty("config_drive")]
-        public string ConfigDrive { get; set; }
-
-        /// <summary />
         [JsonProperty("hostId")]
         public string HostId { get; set; }
 
