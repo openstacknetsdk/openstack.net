@@ -65,18 +65,6 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void DeleteServerTest()
-        {
-            var server = await _testData.CreateServer();
-            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
-
-            await server.DeleteAsync();
-            await server.WaitUntilDeletedAsync();
-
-            await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetServerAsync(server.Id));
-        }
-
-        [Fact]
         public async Task ListServersTest()
         {
             var results = await _compute.ListServersAsync(new ListServersOptions {PageSize = 1});
@@ -115,6 +103,39 @@ namespace OpenStack.Compute.v2_1
                 results = await results.GetNextPageAsync();
             }
             Assert.NotNull(results);
+        }
+
+        [Fact]
+        public async void UpdateServerTest()
+        {
+            var server = await _testData.CreateServer();
+            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
+            await server.WaitUntilActiveAsync();
+
+            var desiredName = server.Name + "UPDATED";
+            server.Name = desiredName;
+            Trace.WriteLine(string.Format("Updating server name to: {0}...", server.Name));
+            await server.UpdateAsync();
+
+            Trace.WriteLine("Verifying server instance was updated...");
+            Assert.NotNull(server);
+            Assert.Equal(desiredName, server.Name);
+
+            Trace.WriteLine("Verifying server matches updated definition...");
+            server = await _compute.GetServerAsync(server.Id);
+            Assert.Equal(desiredName, server.Name);
+        }
+
+        [Fact]
+        public async void DeleteServerTest()
+        {
+            var server = await _testData.CreateServer();
+            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
+
+            await server.DeleteAsync();
+            await server.WaitUntilDeletedAsync();
+
+            await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetServerAsync(server.Id));
         }
     }
 }

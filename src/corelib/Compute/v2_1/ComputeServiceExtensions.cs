@@ -41,6 +41,12 @@ namespace OpenStack.Synchronous
             return service.ListServerDetailsAsync(options).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.UpdateServerAsync" />
+        public static Server UpdateServer(this ComputeService service, Identifier serverid, ServerUpdateDefinition server)
+        {
+            return service.UpdateServerAsync(serverid, server).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.DeleteServerAsync" />
         public static void DeleteServer(this ComputeService service, Identifier serverId)
         {

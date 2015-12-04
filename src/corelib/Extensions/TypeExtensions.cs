@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using net.openstack.Providers.Rackspace.Objects.Response;
 
 namespace System.Extensions
 {
@@ -30,9 +33,20 @@ namespace System.Extensions
         /// <summary />
         public static void CopyProperties<T>(this T src, T dest)
         {
-            foreach (PropertyDescriptor item in TypeDescriptor.GetProperties(src))
+            foreach (PropertyDescriptor srcProp in TypeDescriptor.GetProperties(src))
             {
-                item.SetValue(dest, item.GetValue(src));
+                srcProp.SetValue(dest, srcProp.GetValue(src));
+            }
+        }
+
+        /// <summary />
+        public static void CopyProperties(this object src, object dest)
+        {
+            var destProps = TypeDescriptor.GetProperties(dest).Cast<PropertyDescriptor>();
+            foreach (PropertyDescriptor srcProp in TypeDescriptor.GetProperties(src))
+            {
+                var destProp = destProps.FirstOrDefault(x => x.Name == srcProp.Name && x.PropertyType == srcProp.PropertyType);
+                destProp?.SetValue(dest, srcProp.GetValue(src));
             }
         }
     }

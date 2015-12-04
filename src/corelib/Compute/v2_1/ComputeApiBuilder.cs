@@ -285,6 +285,26 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<PreparedRequest> BuildUpdateServerAsync(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"servers/{serverId}")
+                .Authenticate(AuthenticationProvider)
+                .PreparePutJson(server, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> UpdateServerAsync<T>(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildUpdateServerAsync(serverId, server, cancellationToken).SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
         public virtual Task DeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteServerAsync(serverId, cancellationToken).SendAsync();

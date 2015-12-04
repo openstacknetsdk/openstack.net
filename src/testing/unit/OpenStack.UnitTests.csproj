@@ -108,6 +108,7 @@
     <Compile Include="ContentDeliveryNetworks\v1\ServiceCacheTests.cs" />
     <Compile Include="Domain\Mapping\NetworkAddressDeserializationTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
+    <Compile Include="Extensions\TypeExtensionsTests.cs" />
     <Compile Include="IdentifierTests.cs" />
     <Compile Include="Networking\v2\DHCPOptionConverterTests.cs" />
     <Compile Include="Networking\v2\PortTests.cs" />

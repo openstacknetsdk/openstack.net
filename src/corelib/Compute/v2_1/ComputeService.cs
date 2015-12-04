@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
@@ -58,6 +56,12 @@ namespace OpenStack.Compute.v2_1
         public async Task<IPage<Server>> ListServerDetailsAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _computeApi.ListServerDetailsAsync<ServerCollection>(options, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{TPage}" />
+        public Task<Server> UpdateServerAsync(Identifier serverid, ServerUpdateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.UpdateServerAsync<Server>(serverid, server, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />

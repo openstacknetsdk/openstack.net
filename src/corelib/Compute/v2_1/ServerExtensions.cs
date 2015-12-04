@@ -20,7 +20,13 @@ namespace OpenStack.Synchronous
             server.WaitUntilDeletedAsync(refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="Server.DeleteAsync"/>
+        /// <inheritdoc cref="Server.UpdateAsync"/>
+        public static void Update(this Server server)
+        {
+            server.UpdateAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.DeleteAsync"/>
         public static void Delete(this Server server)
         {
             server.DeleteAsync().ForceSynchronous();

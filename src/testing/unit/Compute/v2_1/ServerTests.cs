@@ -155,6 +155,46 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void UpdateServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId, Name = "{new-name}"});
+
+                var request = new ServerUpdateDefinition {Name = "{new-name}"};
+                var result = _compute.UpdateServer(serverId, request);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+                Assert.NotNull(result);
+                Assert.Equal(serverId, result.Id);
+                Assert.Equal(request.Name, result.Name);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void UpdateServerExtension()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId, Name = "{old-name}" });
+                var lastModified = DateTimeOffset.Now;
+                httpTest.RespondWithJson(new Server { Id = serverId, Name = "{new-name}", LastModified = lastModified});
+
+                var server = _compute.GetServer(serverId);
+                server.Name = "{new-name}";
+                server.Update();
+
+                Assert.Equal(serverId, server.Id);
+                Assert.Equal("{new-name}", server.Name);
+                Assert.Equal(lastModified, server.LastModified);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)server).Owner);
+            }
+        }
+
+        [Fact]
         public void DeleteServer()
         {
             using (var httpTest = new HttpTest())

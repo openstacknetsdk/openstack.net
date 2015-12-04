@@ -142,13 +142,16 @@ namespace OpenStack.Compute.v2_1
             Status = ServerStatus.Deleted;
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{T}" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task UpdateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
-            await owner.DeleteServerAsync(Id, cancellationToken);
-            Status = ServerStatus.Unknown;
+            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var request = new ServerUpdateDefinition();
+            this.CopyProperties(request);
+
+            var result = await compute.UpdateServerAsync<Server>(Id, request, cancellationToken);
+            result.CopyProperties(this);
         }
     }
 }

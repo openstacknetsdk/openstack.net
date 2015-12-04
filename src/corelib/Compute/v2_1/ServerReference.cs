@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -30,5 +31,13 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.GetServerAsync<Server>(Id, cancellationToken).ConfigureAwait(false);
         }  
+        
+		/// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            await owner.DeleteServerAsync(Id, cancellationToken);
+        }
     }
 }
