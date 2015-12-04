@@ -64,18 +64,19 @@ namespace OpenStack.Compute.v2_1
             return server;
         }
 
-        //public async Task<IEnumerable<Server>> CreateServers()
-        //{
-        //    var definitions = new[] { BuildServer(), BuildServer(), BuildServer() };
-        //    return await CreateServers(definitions);
-        //}
+        public async Task<IEnumerable<Server>> CreateServers()
+        {
+            var definitions = new[] { BuildServer(), BuildServer(), BuildServer() };
+            return await CreateServers(definitions);
+        }
 
-        //public async Task<IEnumerable<Server>> CreateServers(IEnumerable<ServerDefinition> definitions)
-        //{
-        //    var servers = await _compute.CreateServersAsync(definitions);
-        //    Register(servers);
-        //    return servers;
-        //}
+        public async Task<IEnumerable<Server>> CreateServers(IEnumerable<ServerCreateDefinition> definitions)
+        {
+            var creates = definitions.Select(definition => _compute.CreateServerAsync(definition)).ToArray();
+            var servers = await Task.WhenAll(creates);
+            Register(servers);
+            return servers;
+        }
 
         public void DeleteServers(IEnumerable<Server> servers)
         {

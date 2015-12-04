@@ -9,7 +9,8 @@ namespace OpenStack.Serialization
     /// <typeparam name="T">The resource type.</typeparam>
     /// <exclude />
     [JsonObject(MemberSerialization.OptIn)] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
-    public class ResourceCollection<T> : IEnumerable<T>
+    public class ResourceCollection<T> : IEnumerable<T>, IServiceResource
+        where T : IServiceResource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceCollection{T}"/> class.
@@ -42,6 +43,22 @@ namespace OpenStack.Serialization
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private object _owner;
+
+        /// <summary />
+        object IServiceResource.Owner
+        {
+            get { return _owner; }
+            set
+            {
+                _owner = value;
+                foreach (var item in this)
+                {
+                    item.Owner = _owner;
+                }
+            }
         }
     }
 }

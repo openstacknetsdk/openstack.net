@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +57,11 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(server.LastModified);
             Assert.NotNull(server.Launched);
             Assert.NotNull(server.DiskConfig);
+            Assert.NotNull(server.HostId);
+            Assert.NotNull(server.HostName);
+            Assert.NotNull(server.PowerState);
+            Assert.NotNull(server.VMState);
+            Assert.NotNull(server.SecurityGroups);
         }
 
         [Fact]
@@ -82,6 +88,19 @@ namespace OpenStack.Compute.v2_1
                 results = await results.GetNextPageAsync();
             }
             Assert.NotNull(results);
+        }
+
+        [Fact]
+        public async void FindServersTest()
+        {
+            var servers = await _testData.CreateServers();
+            await Task.WhenAll(servers.Select(x => x.WaitUntilActiveAsync()));
+            var serversNames = new HashSet<string>(servers.Select(s => s.Name));
+
+            var results = await _compute.ListServersAsync(new ListServersOptions {Name = "ci-*"});
+            var resultNames = new HashSet<string>(results.Select(s => s.Name));
+
+            Assert.Subset(resultNames, serversNames);
         }
 
         [Fact]

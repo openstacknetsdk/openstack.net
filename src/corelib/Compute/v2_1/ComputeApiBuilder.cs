@@ -57,7 +57,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public string Microversion { get; }
 
-        private void SetOwner(IServiceResource<ComputeApiBuilder> resource)
+        private void SetOwner(IServiceResource resource)
         {
             resource.Owner = this;
         }
@@ -66,7 +66,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource<ComputeApiBuilder>
+            where T : IServiceResource
         {
             var result = await BuildGetServerAsync(serverId, cancellationToken)
                 .SendAsync()
@@ -99,7 +99,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> CreateServerAsync<T>(object server, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource<ComputeApiBuilder>
+            where T : IServiceResource
         {
             var result = await BuildCreateServerAsync(server, cancellationToken).SendAsync().ReceiveJson<T>();
             SetOwner(result);
@@ -217,7 +217,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage>  ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>
+            where TPage : IPageBuilder<TPage>, IServiceResource
         {
             Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
             return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -225,7 +225,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServersAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>
+            where TPage : IPageBuilder<TPage>, IServiceResource
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -235,6 +235,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListServersAsync<TPage>);
+            SetOwner(results);
 
             return results;
         }
@@ -251,7 +252,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServerDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>
+            where TPage : IPageBuilder<TPage>, IServiceResource
         {
             Url initialRequestUrl = await BuildListServerDetailsUrlAsync(queryString, cancellationToken);
             return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -259,7 +260,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServerDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>
+            where TPage : IPageBuilder<TPage>, IServiceResource
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -269,7 +270,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListServerDetailsAsync<TPage>);
-
+            SetOwner(results);
             return results;
         }
 

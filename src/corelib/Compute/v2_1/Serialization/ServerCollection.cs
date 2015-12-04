@@ -10,6 +10,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <threadsafety static="true" instance="false"/>
     public class ServerCollection<TPage, TItem> : Page<TPage, TItem, PageLink>
         where TPage : ServerCollection<TPage, TItem>
+        where TItem : IServiceResource
     {
         /// <summary>
         /// The requested servers.
@@ -29,13 +30,9 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     public class ServerReferenceCollection : ServerCollection<ServerReferenceCollection, ServerReference>
-    {
-        
-    }
+    { }
 
     /// <inheritdoc cref="ServerCollection{TPage, TItem}" />
     public class ServerCollection : ServerCollection<ServerCollection, Server>
-    {
-
-    }
+    { }
 }

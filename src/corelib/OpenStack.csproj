@@ -97,6 +97,7 @@
     <Compile Include="Compute\v2_1\ListServersOptions.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
+    <Compile Include="Compute\v2_1\ServerReferenceExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReference.cs" />
     <Compile Include="Compute\v2_1\ServerStatus.cs" />

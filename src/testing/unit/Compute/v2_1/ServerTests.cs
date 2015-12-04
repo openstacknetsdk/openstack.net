@@ -89,6 +89,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
                 Assert.Equal(ServerStatus.Active, result.Status);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
             }
         }
 
@@ -108,8 +109,10 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.Equal(1, results.Count());
-                Assert.Equal(serverId, results.First().Id);
-            }   
+                var result = results.First();
+                Assert.Equal(serverId, result.Id);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
         }
 
         [Fact]
