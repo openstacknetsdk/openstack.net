@@ -108,6 +108,17 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetImageAsync<Image>(imageId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.ListImagesAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
+        public async Task<IPage<ImageReference>> ListImagesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListImagesAsync<ImageReferenceCollection>(options, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListImageDetailsAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
+        public async Task<IPage<Image>> ListImageDetailsAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListImageDetailsAsync<ImageCollection>(options, cancellationToken);
+        }
         #endregion
 
         #region Keypairs

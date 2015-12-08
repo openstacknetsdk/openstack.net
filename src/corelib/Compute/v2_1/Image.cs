@@ -38,7 +38,25 @@ namespace OpenStack.Compute.v2_1
         public int? Size { get; set; }
 
         /// <summary />
+        [JsonProperty("server")]
+        public ServerReference Server { get; set; }
+
+        /// <summary />
         [JsonProperty("metadata")]
         public IDictionary<string, string> Metadata { get; set; }
+
+        /// <summary />
+        [JsonIgnore]
+        public ImageType Type
+        {
+            get
+            {
+                string type;
+                if (Metadata != null && Metadata.TryGetValue("image_type", out type))
+                    return StringEnumeration.FromDisplayName<ImageType>(type);
+
+                return ImageType.Base;
+            }
+        }
     }
 }

@@ -439,6 +439,74 @@ namespace OpenStack.Compute.v2_1
                 .PrepareGet(cancellationToken);
         }
 
+        /// <summary />
+        public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>, IServiceResource
+        {
+            Url initialRequestUrl = await BuildListImagesUrlAsync(queryString, cancellationToken);
+            return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<TPage> ListImagesAsync<TPage>(Url url, CancellationToken cancellationToken)
+            where TPage : IPageBuilder<TPage>, IServiceResource
+        {
+            var results = await url
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<TPage>();
+
+            results.SetNextPageHandler(ListImagesAsync<TPage>);
+            SetOwner(results);
+
+            return results;
+        }
+
+        /// <summary />
+        public virtual async Task<Url> BuildListImagesUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("images")
+                .SetQueryParams(queryString?.Build());
+        }
+
+        /// <summary />
+        public virtual async Task<TPage> ListImageDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>, IServiceResource
+        {
+            Url initialRequestUrl = await BuildListImageDetailsUrlAsync(queryString, cancellationToken);
+            return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<TPage> ListImageDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
+            where TPage : IPageBuilder<TPage>, IServiceResource
+        {
+            var results = await url
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<TPage>();
+
+            results.SetNextPageHandler(ListImageDetailsAsync<TPage>);
+            SetOwner(results);
+            return results;
+        }
+
+        /// <summary />
+        public virtual async Task<Url> BuildListImageDetailsUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("images/detail")
+                .SetQueryParams(queryString?.Build());
+        }
         #endregion
 
         #region Keypairs

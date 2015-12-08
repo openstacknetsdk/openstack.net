@@ -34,68 +34,88 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        //[Fact]
-        //public void GetImageExtension()
-        //{
-        //    using (var httpTest = new HttpTest())
-        //    {
-        //        Identifier imageId = Guid.NewGuid();
-        //        httpTest.RespondWithJson(new ImageReferenceCollection
-        //        {
-        //            new ImageReference {Id = imageId}
-        //        });
-        //        httpTest.RespondWithJson(new Image { Id = imageId });
+        [Fact]
+        public void GetImageExtension()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new ImageReferenceCollection
+                {
+                    new ImageReference {Id = imageId}
+                });
+                httpTest.RespondWithJson(new Image { Id = imageId });
 
-        //        var results = _compute.ListImages();
-        //        var flavorRef = results.First();
-        //        var result = flavorRef.GetImage();
+                var results = _compute.ListImages();
+                var flavorRef = results.First();
+                var result = flavorRef.GetImage();
 
-        //        Assert.NotNull(result);
-        //        Assert.Equal(imageId, result.Id);
-        //    }
-        //}
+                Assert.NotNull(result);
+                Assert.Equal(imageId, result.Id);
+            }
+        }
 
-        //[Fact]
-        //public void ListFlavors()
-        //{
-        //    using (var httpTest = new HttpTest())
-        //    {
-        //        const string flavorId = "1";
-        //        httpTest.RespondWithJson(new FlavorReferenceCollection
-        //        {
-        //            Items = { new FlavorReference { Id = flavorId } }
-        //        });
+        [Fact]
+        public void ListImages()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new ImageReferenceCollection
+                {
+                    Items = { new ImageReference { Id = imageId } },
+                    Links = { new PageLink("next", "http://api.com/next") }
+                });
 
-        //        var results = _compute.ListFlavors();
+                var results = _compute.ListImages();
 
-        //        httpTest.ShouldHaveCalled("*/flavors");
-        //        Assert.Equal(1, results.Count());
-        //        var result = results.First();
-        //        Assert.Equal(flavorId, result.Id);
-        //        Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
-        //    }
-        //}
+                httpTest.ShouldHaveCalled("*/images");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                Assert.Equal(imageId, result.Id);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
 
-        //[Fact]
-        //public void ListFlavorDetails()
-        //{
-        //    using (var httpTest = new HttpTest())
-        //    {
-        //        const string flavorId = "1";
-        //        httpTest.RespondWithJson(new FlavorCollection
-        //        {
-        //            Items = { new Flavor { Id = flavorId } }
-        //        });
-        //        httpTest.RespondWithJson(new Flavor { Id = flavorId });
+        [Fact]
+        public void ListImagesWithFilter()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new ImageCollection());
 
-        //        var results = _compute.ListFlavorDetails();
+                const string name = "foo";
+                const int minRam = 2;
+                const int minDisk = 1;
+                Identifier serverId = Guid.NewGuid();
+                var lastModified = DateTimeOffset.Now.AddDays(-1);
+                var imageType = ImageType.Snapshot;
+                
+                _compute.ListImages(new ImageListOptions { Name = name, ServerId = serverId, LastModified = lastModified, MininumDiskSize = minDisk, MininumMemorySize = minRam, Type = imageType});
 
-        //        httpTest.ShouldHaveCalled("*/flavors");
-        //        Assert.Equal(1, results.Count());
-        //        var result = results.First();
-        //        Assert.Equal(flavorId, result.Id);
-        //        Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
-        //    }
-        //}
+                httpTest.ShouldHaveCalled($"*name={name}");
+                httpTest.ShouldHaveCalled($"*server={serverId}");
+                httpTest.ShouldHaveCalled($"*minRam={minRam}");
+                httpTest.ShouldHaveCalled($"*minDisk={minDisk}");
+                httpTest.ShouldHaveCalled($"*type={imageType}");
+                httpTest.ShouldHaveCalled("*changes-since=");
+            }
+        }
+
+        [Fact]
+        public void ListImagesWithPaging()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new ImageCollection());
+
+                Identifier startingAt = Guid.NewGuid();
+                const int pageSize = 10;
+                _compute.ListImages(new ImageListOptions { PageSize = pageSize, StartingAt = startingAt });
+
+                httpTest.ShouldHaveCalled($"*marker={startingAt}*");
+                httpTest.ShouldHaveCalled($"*limit={pageSize}*");
+            }
+        }
     }
 }
