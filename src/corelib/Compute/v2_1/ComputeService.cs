@@ -100,6 +100,16 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Flavors
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetImageAsync{T}" />
+        public Task<Image> GetImageAsync(Identifier imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetImageAsync<Image>(imageId, cancellationToken);
+        }
+
+        #endregion
+
         #region Keypairs
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateKeyPairAsync{T}" />

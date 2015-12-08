@@ -416,6 +416,31 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Images
+        /// <summary />
+        public virtual async Task<T> GetImageAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetImageAsync(imageId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"images/{imageId}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        #endregion
+
         #region Keypairs
 
         /// <summary />

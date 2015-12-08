@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
@@ -6,7 +9,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class ImageReference : IHaveExtraData
+    public class ImageReference : IHaveExtraData, IServiceResource
     {
         /// <summary />
         public Identifier Id { get; set; }
@@ -14,11 +17,18 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public string Name { get; set; }
 
-        // todo: implement
-        //public Image GetImage();
-
         /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
+
+        object IServiceResource.Owner { get; set; }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetImageAsync{T}" />
+        /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task<Image> GetImageAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            return owner.GetImageAsync<Image>(Id, cancellationToken);
+        }
     }
 }
