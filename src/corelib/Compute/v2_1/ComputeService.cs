@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenStack.Authentication;
@@ -75,6 +76,28 @@ namespace OpenStack.Compute.v2_1
         {
             return _computeApi.GetVncConsoleAsync<Console>(serverId, type, cancellationToken);
         }
+        #endregion
+
+        #region Flavors
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetFlavorAsync{T}" />
+        public Task<Flavor> GetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetFlavorAsync<Flavor>(flavorId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorsAsync{T}" />
+        public async Task<IEnumerable<FlavorReference>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListFlavorsAsync<FlavorReferenceCollection>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorDetailsAsync{T}" />
+        public async Task<IEnumerable<Flavor>> ListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListFlavorDetailsAsync<FlavorCollection>(cancellationToken);
+        }
+
         #endregion
 
         #region Keypairs

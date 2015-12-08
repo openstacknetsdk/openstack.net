@@ -34,6 +34,15 @@ namespace OpenStack.Serialization
         /// </summary>
         public IList<T> Items { get; set; }
 
+        /// <summary>
+        /// Adds an item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        public void Add(T item)
+        {
+            Items.Add(item);
+        }
+
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
         {

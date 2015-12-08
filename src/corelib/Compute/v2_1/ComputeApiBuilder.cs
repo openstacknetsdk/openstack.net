@@ -347,6 +347,75 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Flavors
+        /// <summary />
+        public virtual async Task<T> GetFlavorAsync<T>(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetFlavorAsync(flavorId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"flavors/{flavorId}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildListFlavorsAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("flavors")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListFlavorDetailsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildListFlavorDetailsAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("flavors/detail")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        #endregion
+
         #region Keypairs
 
         /// <summary />

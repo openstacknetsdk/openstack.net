@@ -85,8 +85,10 @@
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\v2_1\AddressType.cs" />
+    <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
     <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
     <Compile Include="Compute\v2_1\ServerCreateDefinition.cs" />
     <Compile Include="Compute\v2_1\DiskConfiguration.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Compute\v2_1\ListServersOptions.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
+    <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReferenceExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReference.cs" />

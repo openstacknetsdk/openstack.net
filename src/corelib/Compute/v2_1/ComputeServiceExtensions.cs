@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenStack.Compute.v2_1;
 using OpenStack.Synchronous.Extensions;
 using Console = OpenStack.Compute.v2_1.Console;
@@ -11,6 +12,7 @@ namespace OpenStack.Synchronous
     /// </summary>
     public static class ComputeServiceExtensions_v2_1
     {
+        #region Servers
         /// <inheritdoc cref="ComputeService.GetServerAsync" />
         public static Server GetServer(this ComputeService service, Identifier serverId)
         {
@@ -58,11 +60,34 @@ namespace OpenStack.Synchronous
         {
             return service.GetVncConsoleAync(serverId, type).ForceSynchronous();
         }
+        #endregion
 
+        #region Flavors
+        /// <inheritdoc cref="ComputeService.GetFlavorAsync" />
+        public static Flavor GetFlavor(this ComputeService service, string flavorId)
+        {
+            return service.GetFlavorAsync(flavorId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListFlavorsAsync" />
+        public static IEnumerable<FlavorReference> ListFlavors(this ComputeService service)
+        {
+            return service.ListFlavorsAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListFlavorDetailsAsync" />
+        public static IEnumerable<Flavor> ListFlavorDetails(this ComputeService service)
+        {
+            return service.ListFlavorDetailsAsync().ForceSynchronous();
+        }
+        #endregion
+
+        #region KeyPairs
         /// <inheritdoc cref="ComputeService.CreateKeyPairAsync" />
         public static KeyPair CreateKeyPair(this ComputeService service, string name)
         {
             return service.CreateKeyPairAsync(name).ForceSynchronous();
         }
+        #endregion
     }
 }
