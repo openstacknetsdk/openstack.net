@@ -13,7 +13,7 @@ namespace OpenStack
     [JsonConverter(typeof(IdentifierConverter))]
     public class Identifier
     {
-        private readonly Guid _id;
+        private readonly string _id;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Identifier"/> class.
@@ -21,14 +21,7 @@ namespace OpenStack
         /// <param name="id">The identifier.</param>
         public Identifier(string id)
         {
-            try
-            {
-                _id = new Guid(id);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException(string.Format("Invalid identifier: {0}", id), "id", ex);
-            }
+            _id = id;
         }
 
         /// <summary>
@@ -37,7 +30,7 @@ namespace OpenStack
         /// <param name="id">The identifier.</param>
         public Identifier(Guid id)
         {
-            _id = id;
+            _id = id.ToString("D");
         }
 
         /// <summary>
@@ -48,7 +41,7 @@ namespace OpenStack
         /// </returns>
         public override string ToString()
         {
-            return _id.ToString("D");
+            return _id;
         }
 
         #region Conversions
@@ -77,13 +70,13 @@ namespace OpenStack
         }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="System.String"/> to <see cref="Identifier"/>.
+        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="Identifier"/>.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static explicit operator Identifier(string id)
+        public static implicit operator Identifier(string id)
         {
             return new Identifier(id);
         }

@@ -15,7 +15,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// The service identifier.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// The service name.

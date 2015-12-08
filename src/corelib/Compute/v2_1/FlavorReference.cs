@@ -13,7 +13,7 @@ namespace OpenStack.Compute.v2_1
     {
         /// <summary />
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary /> // In some cases, only the id is populated. Use GetFlavor if Name is null.
         [JsonProperty("name")]

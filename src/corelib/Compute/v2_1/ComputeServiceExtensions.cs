@@ -64,7 +64,7 @@ namespace OpenStack.Synchronous
 
         #region Flavors
         /// <inheritdoc cref="ComputeService.GetFlavorAsync" />
-        public static Flavor GetFlavor(this ComputeService service, string flavorId)
+        public static Flavor GetFlavor(this ComputeService service, Identifier flavorId)
         {
             return service.GetFlavorAsync(flavorId).ForceSynchronous();
         }
@@ -79,6 +79,26 @@ namespace OpenStack.Synchronous
         public static IEnumerable<Flavor> ListFlavorDetails(this ComputeService service)
         {
             return service.ListFlavorDetailsAsync().ForceSynchronous();
+        }
+        #endregion
+
+        #region Flavors
+        /// <inheritdoc cref="ComputeService.GetImageAsync" />
+        public static Image GetImage(this ComputeService service, Identifier imageId)
+        {
+            return service.GetImageAsync(imageId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListImagesAsync" />
+        public static IPage<ImageReference> ListImages(this ComputeService service, ImageListOptions options = null)
+        {
+            return service.ListImagesAsync(options).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListImageDetailsAsync" />
+        public static IPage<Image> ListImageDetails(this ComputeService service, ImageListOptions options = null)
+        {
+            return service.ListImageDetailsAsync(options).ForceSynchronous();
         }
         #endregion
 

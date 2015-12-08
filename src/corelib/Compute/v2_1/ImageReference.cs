@@ -9,7 +9,10 @@ namespace OpenStack.Compute.v2_1
     public class ImageReference : IHaveExtraData
     {
         /// <summary />
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
+
+        /// <summary />
+        public string Name { get; set; }
 
         // todo: implement
         //public Image GetImage();

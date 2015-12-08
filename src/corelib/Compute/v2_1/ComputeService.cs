@@ -81,7 +81,7 @@ namespace OpenStack.Compute.v2_1
         #region Flavors
 
         /// <inheritdoc cref="ComputeApiBuilder.GetFlavorAsync{T}" />
-        public Task<Flavor> GetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Flavor> GetFlavorAsync(Identifier flavorId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetFlavorAsync<Flavor>(flavorId, cancellationToken);
         }
