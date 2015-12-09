@@ -55,6 +55,19 @@ namespace OpenStack.Synchronous
             service.DeleteServerAsync(serverId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.WaitUntilServerIsDeletedAsync" />
+        public static void WaitUntilServerIsDeleted(this ComputeService service, Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            service.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
+
+        /// <inheritdoc cref="ComputeService.CreateSnapshotAsync" />
+        public static Image CreateSnapshot(this ComputeService service, Identifier serverId, SnapshotRequest request)
+        {
+            return service.CreateSnapshotAsync(serverId, request).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {
@@ -82,11 +95,17 @@ namespace OpenStack.Synchronous
         }
         #endregion
 
-        #region Flavors
+        #region Images
         /// <inheritdoc cref="ComputeService.GetImageAsync" />
         public static Image GetImage(this ComputeService service, Identifier imageId)
         {
             return service.GetImageAsync(imageId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.WaitUntilImageIsActiveAsync" />
+        public static void WaitUntilImageIsActive(this ComputeService service, Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            service.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListImagesAsync" />
@@ -99,6 +118,18 @@ namespace OpenStack.Synchronous
         public static IPage<Image> ListImageDetails(this ComputeService service, ImageListOptions options = null)
         {
             return service.ListImageDetailsAsync(options).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteImageAsync" />
+        public static void DeleteImage(this ComputeService service, Identifier imageId)
+        {
+            service.DeleteImageAsync(imageId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.WaitUntilImageIsDeletedAsync" />
+        public static void WaitUntilImageIsDeleted(this ComputeService service, Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            service.WaitUntilImageIsDeletedAsync(imageId, refreshDelay, timeout, progress).ForceSynchronous();
         }
         #endregion
 

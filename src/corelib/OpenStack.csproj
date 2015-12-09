@@ -89,6 +89,7 @@
     <Compile Include="Compute\v2_1\ImageExtensions.cs" />
     <Compile Include="Compute\v2_1\Image.cs" />
     <Compile Include="Compute\v2_1\ImageListOptions.cs" />
+    <Compile Include="Compute\v2_1\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
@@ -105,11 +106,11 @@
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
     <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
-    <Compile Include="Compute\v2_1\ServerReferenceExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReference.cs" />
     <Compile Include="Compute\v2_1\ServerStatus.cs" />
     <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
+    <Compile Include="Compute\v2_1\SnapshotRequest.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_1\VolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />

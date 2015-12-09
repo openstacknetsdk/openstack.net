@@ -39,7 +39,7 @@ namespace OpenStack.Compute.v2_1
         {
             var definition = _testData.BuildServer();
 
-            Trace.WriteLine(string.Format("Creating server named: {0}", definition.Name));
+            Trace.WriteLine($"Creating server named: {definition.Name}");
             var server = await _testData.CreateServer(definition);
             await server.WaitUntilActiveAsync();
 
@@ -109,12 +109,12 @@ namespace OpenStack.Compute.v2_1
         public async void UpdateServerTest()
         {
             var server = await _testData.CreateServer();
-            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
             await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
 
             var desiredName = server.Name + "UPDATED";
             server.Name = desiredName;
-            Trace.WriteLine(string.Format("Updating server name to: {0}...", server.Name));
+            Trace.WriteLine($"Updating server name to: {server.Name}...");
             await server.UpdateAsync();
 
             Trace.WriteLine("Verifying server instance was updated...");
@@ -130,12 +130,38 @@ namespace OpenStack.Compute.v2_1
         public async void DeleteServerTest()
         {
             var server = await _testData.CreateServer();
-            Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
 
             await server.DeleteAsync();
             await server.WaitUntilDeletedAsync();
 
             await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetServerAsync(server.Id));
+        }
+
+        [Fact]
+        public async void SnapshotServerTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            var request = new SnapshotRequest(server.Name + "-SNAPSHOT")
+            {
+                Metadata =
+                {
+                    ["category"] = "ci"
+                }
+            };
+
+            Trace.WriteLine("Taking a snapshot of the server...");
+            var image = await server.SnapshotAsync(request);
+            _testData.Register(image);
+            await image.WaitUntilActiveAsync();
+
+            Assert.NotNull(image);
+            Assert.Equal(request.Name, image.Name);
+            Assert.True(image.Metadata["category"] == "ci");
         }
     }
 }

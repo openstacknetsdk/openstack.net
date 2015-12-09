@@ -38,6 +38,12 @@ namespace OpenStack.Compute.v2_1
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
 
+            try
+            {
+                DeleteImages(_testData.OfType<Image>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
             if (errors.Any())
                 throw new AggregateException("Unable to remove all test data!", errors);
         }
@@ -81,6 +87,14 @@ namespace OpenStack.Compute.v2_1
         public void DeleteServers(IEnumerable<Server> servers)
         {
             var deletes = servers.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region
+        public void DeleteImages(IEnumerable<Image> images)
+        {
+            var deletes = images.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion

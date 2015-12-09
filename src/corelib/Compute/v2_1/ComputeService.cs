@@ -71,6 +71,18 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.DeleteServerAsync(serverId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync" />
+        public Task WaitUntilServerIsDeletedAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateSnapshotAsync{T}" />
+        public Task<Image> CreateSnapshotAsync(Identifier serverId, SnapshotRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateSnapshotAsync<Image>(serverId, request, cancellationToken);
+        } 
+
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -100,12 +112,18 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
-        #region Flavors
+        #region Images
 
         /// <inheritdoc cref="ComputeApiBuilder.GetImageAsync{T}" />
         public Task<Image> GetImageAsync(Identifier imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetImageAsync<Image>(imageId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsActiveAsync" />
+        public Task<Image> WaitUntilImageIsActiveAsync(Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListImagesAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
@@ -118,6 +136,18 @@ namespace OpenStack.Compute.v2_1
         public async Task<IPage<Image>> ListImageDetailsAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _computeApi.ListImageDetailsAsync<ImageCollection>(options, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageAsync" />
+        public Task DeleteImageAsync(Identifier imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteImageAsync(imageId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />
+        public Task WaitUntilImageIsDeletedAsync(Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.WaitUntilImageIsDeletedAsync(imageId, refreshDelay, timeout, progress, cancellationToken);
         }
         #endregion
 

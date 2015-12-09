@@ -30,5 +30,21 @@ namespace OpenStack.Compute.v2_1
             var owner = this.TryGetOwner<ComputeApiBuilder>();
             return owner.GetImageAsync<Image>(Id, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            await owner.DeleteImageAsync(Id, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            await owner.WaitUntilImageIsDeletedAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

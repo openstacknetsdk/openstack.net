@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Flurl.Http;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -69,15 +70,15 @@ namespace OpenStack.Compute.v2_1
         }
 
         //[Fact]
-        //public async void DeleteServerTest()
+        //public async void DeleteImageTest()
         //{
-        //    var server = await _testData.CreateServer();
-        //    Trace.WriteLine(string.Format("Created server named: {0}", server.Name));
+        //    Image image = await _testData.CreateImage();
+        //    Trace.WriteLine($"Created image named: {image.Name}");
 
-        //    await server.DeleteAsync();
-        //    await server.WaitUntilDeletedAsync();
+        //    await image.DeleteAsync();
+        //    await image.WaitUntilDeletedAsync();
 
-        //    await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetServerAsync(server.Id));
+        //    await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetImageAsync(image.Id));
         //}
     }
 }

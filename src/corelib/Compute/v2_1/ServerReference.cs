@@ -30,6 +30,13 @@ namespace OpenStack.Compute.v2_1
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.GetServerAsync<Server>(Id, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        public async Task<Image> SnapshotAsync(SnapshotRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.CreateSnapshotAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
         }  
         
 		/// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />

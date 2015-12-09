@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -238,6 +239,64 @@ namespace OpenStack.Compute.v2_1
                 _compute.DeleteServer(serverId);
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+            }
+        }
+
+        [Fact]
+        public void WaitForServerDeleted()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Active });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Deleted });
+
+                var result = _compute.GetServer(serverId);
+                result.Delete();
+                result.WaitUntilDeleted();
+                
+                Assert.Equal(ServerStatus.Deleted, result.Status);
+            }
+        }
+
+        [Fact]
+        public void WaitForServerDeleted_Returns404NotFound_ShouldConsiderRequestSuccessful()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId, Status = ServerStatus.Active });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWith((int)HttpStatusCode.NotFound, "Nothing here, boss");
+
+                var result = _compute.GetServer(serverId);
+                result.Delete();
+                result.WaitUntilDeleted();
+
+                Assert.Equal(ServerStatus.Deleted, result.Status);
+            }
+        }
+
+        [Fact]
+        public void SnapshotServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
+                httpTest.ResponseQueue.Last().Headers.Location = new Uri($"http://api.example.com/images/{imageId}");
+                httpTest.RespondWithJson(new Image { Id = imageId });
+
+                var server = _compute.GetServer(serverId);
+                Image result = server.Snapshot(new SnapshotRequest("{image-name"));
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.True(httpTest.CallLog.First(x => x.Url.EndsWith("/action")).RequestBody.Contains("createImage"));
+                Assert.NotNull(result);
+                Assert.Equal(imageId, result.Id);
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -207,7 +208,7 @@ namespace OpenStack.Compute.v2_1
                     catch (OperationCanceledException ex)
                     {
                         if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to become active.", ex);
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to be deleted.", ex);
 
                         throw;
                     }
@@ -323,6 +324,138 @@ namespace OpenStack.Compute.v2_1
                 .Authenticate(AuthenticationProvider)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateSnapshotAsync<T>(string serverId, object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var response = await BuildCreateSnapshotAsync(serverId, snapshot, cancellationToken).SendAsync();
+            Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
+            return await GetImageAsync<T>(imageId, cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for an image to become active.
+        /// </summary>
+        /// <param name="imageId">The image identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<Image> WaitUntilImageIsActiveAsync(string imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(imageId))
+                throw new ArgumentNullException("imageId");
+
+            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
+            timeout = timeout ?? TimeSpan.FromMinutes(5);
+
+            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
+            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
+            {
+                while (true)
+                {
+                    Image image = await GetImageAsync<Image>(imageId, cancellationToken).ConfigureAwait(false);
+                    if (image.Status == ImageStatus.Error)
+                        throw new ComputeOperationFailedException();
+
+                    bool complete = image.Status == ImageStatus.Active;
+
+                    progress?.Report(complete);
+
+                    if (complete)
+                        return image;
+
+                    try
+                    {
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        if (timeoutSource.IsCancellationRequested)
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the snapshot ({imageId}) to complete.", ex);
+
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateSnapshotAsync(string serverId, object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(snapshot, cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for the image to be deleted.
+        /// </summary>
+        /// <param name="imageId">The image identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task WaitUntilImageIsDeletedAsync(string imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(imageId))
+                throw new ArgumentNullException("imageId");
+
+            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
+            timeout = timeout ?? TimeSpan.FromMinutes(5);
+
+            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
+            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
+            {
+                while (true)
+                {
+                    bool complete;
+                    try
+                    {
+                        Image server = await GetImageAsync<Image>(imageId, cancellationToken).ConfigureAwait(false);
+                        if (server.Status == ImageStatus.Error)
+                            throw new ComputeOperationFailedException();
+
+                        complete = server.Status == ImageStatus.Deleted;
+                    }
+                    catch (FlurlHttpException httpError)
+                    {
+                        if (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
+                            complete = true;
+                        else
+                            throw;
+                    }
+
+                    progress?.Report(complete);
+
+                    if (complete)
+                        return;
+
+                    try
+                    {
+                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        if (timeoutSource.IsCancellationRequested)
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the image ({imageId}) to be deleted.", ex);
+
+                        throw;
+                    }
+                }
+            }
         }
 
         /// <summary />
@@ -506,6 +639,27 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment("images/detail")
                 .SetQueryParams(queryString?.Build());
+        }
+
+        /// <summary />
+        public virtual Task DeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteImageAsync(imageId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (imageId == null)
+                throw new ArgumentNullException("imageId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegments("images", imageId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
         }
         #endregion
 

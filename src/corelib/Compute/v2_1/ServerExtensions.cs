@@ -8,6 +8,12 @@ namespace OpenStack.Synchronous
     /// <summary />
     public static class ServerExtensions_v2_1
     {
+        /// <inheritdoc cref="ServerReference.GetServerAsync"/>
+        public static Server GetServer(this ServerReference server)
+        {
+            return server.GetServerAsync().ForceSynchronous();
+        }
+
         /// <inheritdoc cref="Server.WaitUntilActiveAsync"/>
         public static void WaitUntilActive(this Server server, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
@@ -30,6 +36,12 @@ namespace OpenStack.Synchronous
         public static void Delete(this Server server)
         {
             server.DeleteAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.SnapshotAsync"/>
+        public static Image Snapshot(this ServerReference server, SnapshotRequest request)
+        {
+            return server.SnapshotAsync(request).ForceSynchronous();
         }
     }
 }

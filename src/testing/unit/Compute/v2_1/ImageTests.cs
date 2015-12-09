@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -52,6 +53,27 @@ namespace OpenStack.Compute.v2_1
 
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
+            }
+        }
+
+        [Fact]
+        public void WaitForImageActive()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Unknown });
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Saving });
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Active });
+
+                var result = _compute.GetImage(imageId);
+                result.WaitUntilActive();
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}");
+                Assert.NotNull(result);
+                Assert.Equal(imageId, result.Id);
+                Assert.Equal(ImageStatus.Active, result.Status);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
             }
         }
 
@@ -115,6 +137,90 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");
+            }
+        }
+
+        [Fact]
+        public void DeleteImage()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+
+                _compute.DeleteImage(imageId);
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}");
+            }
+        }
+
+        [Fact]
+        public void DeleteImageExtension()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Image { Id = imageId });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Deleted });
+
+                var image = _compute.GetImage(imageId);
+
+                image.Delete();
+                Assert.Equal(image.Status, ImageStatus.Unknown);
+
+                image.WaitUntilDeleted();
+                Assert.Equal(image.Status, ImageStatus.Deleted);
+            }
+        }
+
+        [Fact]
+        public void WhenDeleteImage_Returns404NotFound_ShouldConsiderRequestSuccessful()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWith((int)HttpStatusCode.NotFound, "Not here, boss...");
+
+                _compute.DeleteImage(imageId);
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}");
+            }
+        }
+
+        [Fact]
+        public void WaitForImageDeleted()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Active });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Deleted });
+
+                var result = _compute.GetImage(imageId);
+                result.Delete();
+                result.WaitUntilDeleted();
+
+                Assert.Equal(ImageStatus.Deleted, result.Status);
+            }
+        }
+
+        [Fact]
+        public void WaitForImageDeleted_Returns404NotFound_ShouldConsiderRequestSuccessful()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Image { Id = imageId, Status = ImageStatus.Active });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+                httpTest.RespondWith((int)HttpStatusCode.NotFound, "Nothing here, boss");
+
+                var result = _compute.GetImage(imageId);
+                result.Delete();
+                result.WaitUntilDeleted();
+
+                Assert.Equal(ImageStatus.Deleted, result.Status);
             }
         }
     }

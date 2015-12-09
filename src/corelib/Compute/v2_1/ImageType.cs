@@ -14,16 +14,16 @@ namespace OpenStack.Compute.v2_1
         /// <summary>
         /// Base Image
         /// </summary>
-        public static ImageType Base = new ImageType("base");
+        public static readonly ImageType Base = new ImageType("base");
 
         /// <summary>
         /// Server Backup
         /// </summary>
-        public static ImageType Backup = new ImageType("backup");
+        public static readonly ImageType Backup = new ImageType("backup");
 
         /// <summary>
         /// Server Snapshot
         /// </summary>
-        public static ImageType Snapshot = new ImageType("snapshot");
+        public static readonly ImageType Snapshot = new ImageType("snapshot");
     }
 }
