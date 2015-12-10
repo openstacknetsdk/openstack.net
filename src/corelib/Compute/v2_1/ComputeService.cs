@@ -181,6 +181,22 @@ namespace OpenStack.Compute.v2_1
         }
         #endregion
 
+        #region IP Addresses
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetServerAddressAsync{T}" />
+        public Task<IList<ServerAddress>> GetServerAddressAsync(Identifier serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerAddressAsync<ServerAddress>(serverId, key, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerAddressesAsync{T}" />
+        public async Task<IDictionary<string, IList<ServerAddress>>> ListServerAddressesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerAddressesAsync<ServerAddressCollection>(serverId, cancellationToken);
+        }
+
+        #endregion
+
         #region Keypairs
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateKeyPairAsync{T}" />

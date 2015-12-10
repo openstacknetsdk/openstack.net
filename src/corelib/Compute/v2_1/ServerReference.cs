@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -32,6 +33,20 @@ namespace OpenStack.Compute.v2_1
             return await compute.GetServerAsync<Server>(Id, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <summary />
+        public async Task<IList<ServerAddress>> GetAddressAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.GetServerAddressAsync<ServerAddress>(Id, key, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        public async Task<IDictionary<string, IList<ServerAddress>>> ListAddressesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.ListServerAddressesAsync<ServerAddressCollection>(Id, cancellationToken).ConfigureAwait(false);
+        }
+		
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<Image> SnapshotAsync(SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))

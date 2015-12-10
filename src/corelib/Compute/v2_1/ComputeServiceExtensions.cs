@@ -162,6 +162,22 @@ namespace OpenStack.Synchronous
         }
         #endregion
 
+        #region IP Addresses
+
+        /// <inheritdoc cref="ComputeService.GetServerAddressAsync" />
+        public static IList<ServerAddress> GetServerAddress(this ComputeService service, Identifier serverId, string key)
+        {
+            return service.GetServerAddressAsync(serverId, key).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListServerAddressesAsync" />
+        public static IDictionary<string, IList<ServerAddress>> ListServerAddresses(this ComputeService service, Identifier serverId)
+        {
+            return service.ListServerAddressesAsync(serverId).ForceSynchronous();
+        }
+
+        #endregion
+
         #region KeyPairs
         /// <inheritdoc cref="ComputeService.CreateKeyPairAsync" />
         public static KeyPair CreateKeyPair(this ComputeService service, string name)

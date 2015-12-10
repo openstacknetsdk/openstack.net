@@ -787,6 +787,50 @@ namespace OpenStack.Compute.v2_1
         }
         #endregion
 
+        #region IP Addresses
+
+        /// <summary />
+        public virtual async Task<IList<T>> GetServerAddressAsync<T>(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var result = await BuildGetServerAddressAsync(serverId, key, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<IDictionary<string, IList<T>>>();
+
+            return result[key];
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetServerAddressAsync(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverid}/ips/{key}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<T> ListServerAddressesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildListServerAddressesAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListServerAddressesAsync(string serverid, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverid}/ips")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        #endregion
+
         #region Keypairs
 
         /// <summary />

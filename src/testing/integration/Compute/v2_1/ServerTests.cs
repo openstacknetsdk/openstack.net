@@ -140,6 +140,21 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public async void LookupServerAddressesTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            var results = await server.ListAddressesAsync();
+            Assert.NotEmpty(results);
+
+            var networkLabel = results.First().Key;
+            var result = (await server.GetAddressAsync(networkLabel)).First();
+            Assert.NotNull(result.IP);
+        }
+
+        [Fact]
         public async void SnapshotServerTest()
         {
             var server = await _testData.CreateServer();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenStack.Compute.v2_1;
 using OpenStack.Synchronous.Extensions;
 
@@ -12,6 +13,18 @@ namespace OpenStack.Synchronous
         public static Server GetServer(this ServerReference server)
         {
             return server.GetServerAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetServerAsync"/>
+        public static IList<ServerAddress> GetAddress(this ServerReference server, string key)
+        {
+            return server.GetAddressAsync(key).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetServerAsync"/>
+        public static IDictionary<string, IList<ServerAddress>> ListAddresses(this ServerReference server)
+        {
+            return server.ListAddressesAsync().ForceSynchronous();
         }
 
         /// <inheritdoc cref="Server.WaitUntilActiveAsync"/>
