@@ -50,9 +50,15 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async void FindSnapshotsTest()
         {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            var snapshot = await server.SnapshotAsync(new SnapshotRequest(server.Name + "SNAPSHOT"));
+            _testData.Register(snapshot);
+
             var results = await _compute.ListImageDetailsAsync(new ImageListOptions {Type = ImageType.Snapshot});
             Assert.NotNull(results);
-            Assert.All(results, image => Assert.Equal(ImageType.Snapshot, image.Type));
+            Assert.All(results, x => Assert.Equal(ImageType.Snapshot, x.Type));
+            Assert.Contains(results, image => image.Id == snapshot.Id);
         }
 
         [Fact]
@@ -67,6 +73,22 @@ namespace OpenStack.Compute.v2_1
                 results = await results.GetNextPageAsync();
             }
             Assert.NotNull(results);
+        }
+
+        [Fact]
+        public async void SetImageMetadataTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            var snapshot = await server.SnapshotAsync(new SnapshotRequest(server.Name + "SNAPSHOT")
+            {
+                Metadata = {["category"] = "ci-test"}
+            });
+            _testData.Register(snapshot);
+
+            var metadata = await _compute.GetImageMetadataAsync(snapshot.Id);
+            Assert.NotNull(metadata);
+            Assert.True(metadata.ContainsKey("category"));
         }
 
         //[Fact]

@@ -86,9 +86,11 @@
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
     <Compile Include="Compute\v2_1\ImageExtensions.cs" />
     <Compile Include="Compute\v2_1\Image.cs" />
     <Compile Include="Compute\v2_1\ImageListOptions.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadata.cs" />
     <Compile Include="Compute\v2_1\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />

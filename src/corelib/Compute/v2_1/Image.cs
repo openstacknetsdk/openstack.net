@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Extensions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +16,21 @@ namespace OpenStack.Compute.v2_1
         /// </summary>
         public Image()
         {
-            Metadata = new Dictionary<string, string>();
+            Metadata = new ImageMetadata();
+        }
+
+        /// <summary />
+        public override Identifier Id
+        {
+            get { return base.Id; }
+            set
+            {
+                base.Id = value;
+
+                // Since Metadata has nothing in it's json that indicates what image it is associated with, we need to manually remember it
+                if (Metadata != null)
+                    Metadata.ImageId = value;
+            }
         }
 
         /// <summary />
@@ -54,7 +67,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("metadata")]
-        public IDictionary<string, string> Metadata { get; set; }
+        public ImageMetadata Metadata { get; set; }
 
         /// <summary />
         [JsonIgnore]

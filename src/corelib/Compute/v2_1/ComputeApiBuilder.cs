@@ -573,6 +573,28 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetImageMetadataAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"images/{imageId}/metadata")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
         public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IServiceResource
         {
@@ -639,6 +661,32 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment("images/detail")
                 .SetQueryParams(queryString?.Build());
+        }
+
+        /// <summary /> // this keeps existing, but omitted values
+        public virtual async Task<T> UpdateImageMetadataAsync<T>(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildUpdateImageMetadataAsync(imageId, metadata, overwrite, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildUpdateImageMetadataAsync(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            PreparedRequest request = endpoint
+                .AppendPathSegments($"images/{imageId}/metadata")
+                .Authenticate(AuthenticationProvider);
+
+            if (overwrite)
+                return request.PreparePutJson(metadata, cancellationToken);
+
+            return request.PreparePostJson(metadata, cancellationToken);
         }
 
         /// <summary />

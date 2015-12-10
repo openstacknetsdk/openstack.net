@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -31,6 +32,24 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/images/{imageId}");
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetImageMetadata()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = "1";
+                httpTest.RespondWithJson(new ImageMetadata { ["stuff"] = "things" });
+
+                ImageMetadata result = _compute.GetImageMetadata(imageId);
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
+                Assert.NotNull(result);
+                Assert.Equal(1, result.Count);
+                Assert.True(result.ContainsKey("stuff"));
                 Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
             }
         }
@@ -137,6 +156,27 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");
+            }
+        }
+
+        [Theory]
+        [InlineData(false, "POST")]
+        [InlineData(true, "PUT")]
+        public void UpdateImageMetadata(bool overwrite, string expectedHttpVerb)
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = "1";
+                httpTest.RespondWithJson(new Image {Id = imageId});
+                httpTest.RespondWithJson(new ImageMetadata {["stuff"] = "things" });
+
+                var image = _compute.GetImage(imageId);
+                image.Metadata["color"] = "blue";
+                image.Metadata.Update(overwrite);
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
+                Assert.Equal(expectedHttpVerb, httpTest.CallLog.Last().Request.Method.Method);
+                Assert.True(image.Metadata.ContainsKey("stuff"));
             }
         }
 

@@ -12,7 +12,7 @@ namespace OpenStack.Compute.v2_1
     public class ImageReference : IHaveExtraData, IServiceResource
     {
         /// <summary />
-        public Identifier Id { get; set; }
+        public virtual Identifier Id { get; set; }
 
         /// <summary />
         public string Name { get; set; }
