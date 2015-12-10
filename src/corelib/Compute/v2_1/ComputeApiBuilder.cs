@@ -1,4 +1,5 @@
 using System;
+using System.Extensions;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -60,7 +61,7 @@ namespace OpenStack.Compute.v2_1
 
         private void SetOwner(IServiceResource resource)
         {
-            resource.Owner = this;
+            resource.PropogateOwner(this);
         }
 
         #region Servers

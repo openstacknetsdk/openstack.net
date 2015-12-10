@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using net.openstack.Providers.Rackspace.Objects.Response;
+using OpenStack.Serialization;
 
 namespace System.Extensions
 {
@@ -47,6 +47,39 @@ namespace System.Extensions
             {
                 var destProp = destProps.FirstOrDefault(x => x.Name == srcProp.Name && x.PropertyType == srcProp.PropertyType);
                 destProp?.SetValue(dest, srcProp.GetValue(src));
+            }
+        }
+
+        /// <summary />
+        public static void PropogateOwner(this IServiceResource resource, object owner)
+        {
+            if (resource == null)
+                return;
+
+            resource.Owner = owner;
+
+            foreach (PropertyInfo prop in resource.GetType().GetProperties())
+            {
+                object propVal;
+                try
+                {
+                    propVal = prop.GetValue(resource);
+                }
+                catch
+                {
+                    continue;
+                }
+                
+                (propVal as IServiceResource)?.PropogateOwner(owner);
+            }
+
+            var resourceCollection = resource as IEnumerable<IServiceResource>;
+            if (resourceCollection != null)
+            {
+                foreach (var childResource in resourceCollection)
+                {
+                    childResource.PropogateOwner(owner);
+                }
             }
         }
     }

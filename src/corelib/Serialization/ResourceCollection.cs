@@ -53,21 +53,8 @@ namespace OpenStack.Serialization
         {
             return GetEnumerator();
         }
-
-        private object _owner;
-
+        
         /// <summary />
-        object IServiceResource.Owner
-        {
-            get { return _owner; }
-            set
-            {
-                _owner = value;
-                foreach (var item in this)
-                {
-                    item.Owner = _owner;
-                }
-            }
-        }
+        object IServiceResource.Owner { get; set; }
     }
 }
