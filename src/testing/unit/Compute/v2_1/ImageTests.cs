@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -42,15 +41,42 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier imageId = "1";
+                httpTest.RespondWithJson(new ImageReferenceCollection { new ImageReference { Id = imageId } });
                 httpTest.RespondWithJson(new ImageMetadata { ["stuff"] = "things" });
 
-                ImageMetadata result = _compute.GetImageMetadata(imageId);
+                var imageReferences = _compute.ListImages();
+                ImageMetadata result = imageReferences.First().GetMetadata();
 
                 httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
                 Assert.NotNull(result);
                 Assert.Equal(1, result.Count);
                 Assert.True(result.ContainsKey("stuff"));
                 Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetImageMetadataItem()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = "1";
+                httpTest.RespondWithJson(new ImageReferenceCollection { new ImageReference { Id = imageId } });
+                httpTest.RespondWithJson(new
+                {
+                    meta = new
+                    {
+                        stuff = "things"
+                    }
+
+                });
+
+                var imageReferences = _compute.ListImages();
+                string result = imageReferences.First().GetMetadataItem("stuff");
+
+                httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
+                Assert.NotNull(result);
+                Assert.Equal("things", result);
             }
         }
 
@@ -93,6 +119,23 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(imageId, result.Id);
                 Assert.Equal(ImageStatus.Active, result.Status);
                 Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void CreateImageMetadata()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                const string key = "stuff";
+                Identifier imageId = "1";
+                httpTest.RespondWithJson(new Image { Id = imageId });
+
+                var image = _compute.GetImage(imageId);
+                image.Metadata.Create(key, "things");
+
+                Assert.True(image.Metadata.ContainsKey(key));
+                httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata/{key}");
             }
         }
 
@@ -261,6 +304,43 @@ namespace OpenStack.Compute.v2_1
                 result.WaitUntilDeleted();
 
                 Assert.Equal(ImageStatus.Deleted, result.Status);
+            }
+        }
+
+        [Fact]
+        public void DeleteImageMetadata()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                const string key = "stuff";
+                httpTest.RespondWithJson(new Image
+                {
+                    Id = imageId,
+                    Metadata =
+                    {
+                        [key] = "things"
+                    }
+                });
+                httpTest.RespondWith((int)HttpStatusCode.NoContent, "All gone!");
+
+                var image = _compute.GetImage(imageId);
+
+                image.Metadata.Delete(key);
+                Assert.False(image.Metadata.ContainsKey(key));
+                httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata/{key}");
+            }
+        }
+
+        [Fact]
+        public void WhenDeleteImageMetadata_Returns404NotFound_ShouldConsiderRequestSuccessful()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier imageId = Guid.NewGuid();
+                httpTest.RespondWith((int)HttpStatusCode.NotFound, "Not here, boss...");
+
+                _compute.DeleteImageMetadataAsync(imageId, "{invalid-key}");
             }
         }
     }

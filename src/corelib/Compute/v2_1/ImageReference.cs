@@ -31,6 +31,22 @@ namespace OpenStack.Compute.v2_1
             return owner.GetImageAsync<Image>(Id, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.GetImageMetadataAsync{T}" />
+        /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task<ImageMetadata> GetMetadataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            return owner.GetImageMetadataAsync<ImageMetadata>(Id, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetImageMetadataItemAsync" />
+        /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task<string> GetMetadataItemAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            return owner.GetImageMetadataItemAsync(Id, key, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))

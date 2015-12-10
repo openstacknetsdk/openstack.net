@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Extensions;
 using System.Linq;
 using System.Net;
@@ -577,10 +578,13 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
+            dynamic result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             SetOwner(result);
+
+            result.ImageId = imageId;
+
             return result;
         }
 
@@ -593,6 +597,53 @@ namespace OpenStack.Compute.v2_1
                 .AppendPathSegments($"images/{imageId}/metadata")
                 .Authenticate(AuthenticationProvider)
                 .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<string> GetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            dynamic result = await BuildGetImageMetadataItemAsync(imageId, key, cancellationToken)
+                .SendAsync()
+                .ReceiveJson();
+
+            var meta = (IDictionary<string, object>)result.meta;
+            return meta[key]?.ToString();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"images/{imageId}/metadata/{key}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task CreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildCreateImagMetadataAsync(imageId, key, value, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = new
+            {
+                meta = new Dictionary<string, string>
+                {
+                    [key] = value
+                }
+            };
+
+            return endpoint
+                .AppendPathSegment($"images/{imageId}/metadata/{key}")
+                .Authenticate(AuthenticationProvider)
+                .PreparePutJson(request, cancellationToken);
         }
 
         /// <summary />
@@ -706,6 +757,30 @@ namespace OpenStack.Compute.v2_1
 
             return (PreparedRequest)endpoint
                 .AppendPathSegments("images", imageId)
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        /// <summary />
+        public virtual Task DeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteImageMetadataAsync(imageId, key, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (imageId == null)
+                throw new ArgumentNullException("imageId");
+
+            if(key == null)
+                throw new ArgumentNullException("key");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegments("images", imageId, "metadata", key)
                 .Authenticate(AuthenticationProvider)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);

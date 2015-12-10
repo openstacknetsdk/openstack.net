@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;

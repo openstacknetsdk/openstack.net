@@ -14,6 +14,18 @@ namespace OpenStack.Synchronous
             return image.GetImageAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ImageReference.GetMetadataAsync"/>
+        public static ImageMetadata GetMetadata(this ImageReference image)
+        {
+            return image.GetMetadataAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ImageReference.GetMetadataItemAsync"/>
+        public static string GetMetadataItem(this ImageReference image, string key)
+        {
+            return image.GetMetadataItemAsync(key).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="Image.WaitUntilActiveAsync"/>
         public static void WaitUntilActive(this Image image, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {

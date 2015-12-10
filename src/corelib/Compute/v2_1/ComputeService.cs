@@ -126,10 +126,22 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetImageMetadataAsync<ImageMetadata>(imageId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.GetImageMetadataItemAsync" />
+        public Task<string> GetImageMetadataItemAsync(Identifier imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetImageMetadataItemAsync(imageId, key, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsActiveAsync" />
         public Task<Image> WaitUntilImageIsActiveAsync(Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateImagMetadataAsync" />
+        public Task CreateImagMetadataAsync(Identifier imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateImagMetadataAsync(imageId, key, value, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListImagesAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
@@ -154,6 +166,12 @@ namespace OpenStack.Compute.v2_1
         public Task DeleteImageAsync(Identifier imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.DeleteImageAsync(imageId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageMetadataAsync" />
+        public Task DeleteImageMetadataAsync(Identifier imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteImageMetadataAsync(imageId, key, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />

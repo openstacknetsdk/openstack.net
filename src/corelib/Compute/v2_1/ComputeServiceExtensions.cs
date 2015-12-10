@@ -107,10 +107,22 @@ namespace OpenStack.Synchronous
             return service.GetImageMetadataAsync(imageId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.GetImageMetadataItemAsync" />
+        public static string GetImageMetadataItem(this ComputeService service, Identifier imageId, string key)
+        {
+            return service.GetImageMetadataItemAsync(imageId, key).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.WaitUntilImageIsActiveAsync" />
         public static void WaitUntilImageIsActive(this ComputeService service, Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
             service.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateImagMetadataAsync" />
+        public static void CreateImagMetadata(this ComputeService service, Identifier imageId, string key, string value)
+        {
+            service.CreateImagMetadataAsync(imageId, key, value).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListImagesAsync" />
@@ -135,6 +147,12 @@ namespace OpenStack.Synchronous
         public static void DeleteImage(this ComputeService service, Identifier imageId)
         {
             service.DeleteImageAsync(imageId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteImageMetadataAsync" />
+        public static void DeleteImageMetadata(this ComputeService service, Identifier imageId, string key)
+        {
+            service.DeleteImageMetadataAsync(imageId, key).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.WaitUntilImageIsDeletedAsync" />

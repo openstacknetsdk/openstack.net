@@ -22,6 +22,14 @@ namespace OpenStack.Compute.v2_1
         object IServiceResource.Owner { get; set; }
 
         /// <summary />
+        public async Task CreateAsync(string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            await compute.CreateImagMetadataAsync(ImageId, key, value, cancellationToken);
+            this[key] = value;
+        }
+
+        /// <summary />
         public async Task UpdateAsync(bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.TryGetOwner<ComputeApiBuilder>();
@@ -31,6 +39,17 @@ namespace OpenStack.Compute.v2_1
             {
                 Add(result.Key, result.Value);
             }
+        }
+
+        /// <summary />
+        public async Task DeleteAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (!ContainsKey(key))
+                return;
+
+            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            await compute.DeleteImageMetadataAsync(ImageId, key, cancellationToken);
+            Remove(key);
         }
     }
 }

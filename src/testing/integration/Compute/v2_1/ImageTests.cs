@@ -42,6 +42,8 @@ namespace OpenStack.Compute.v2_1
             {
                 var result = results.First();
                 Assert.NotNull(result.Name);
+
+                Trace.WriteLine("Getting next page...");
                 results = await results.GetNextPageAsync();
             }
             Assert.NotNull(results);
@@ -50,11 +52,14 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async void FindSnapshotsTest()
         {
+            Trace.WriteLine("Creating a test server...");
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
+            Trace.WriteLine("Snapshotting server...");
             var snapshot = await server.SnapshotAsync(new SnapshotServerRequest(server.Name + "SNAPSHOT"));
             _testData.Register(snapshot);
 
+            Trace.WriteLine("Getting snapshot details...");
             var results = await _compute.ListImageDetailsAsync(new ImageListOptions {Type = ImageType.Snapshot});
             Assert.NotNull(results);
             Assert.All(results, x => Assert.Equal(ImageType.Snapshot, x.Type));
@@ -76,19 +81,48 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void SetImageMetadataTest()
+        public async void EditImageMetadataTest()
         {
+            Trace.WriteLine("Creating a test server...");
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
+            Trace.WriteLine("Snapshotting server...");
             var snapshot = await server.SnapshotAsync(new SnapshotServerRequest(server.Name + "SNAPSHOT")
             {
-                Metadata = {["category"] = "ci-test"}
+                Metadata =
+                {
+                    ["category"] = "ci_test",
+                    ["bad_key"] = "value"
+                }
             });
             _testData.Register(snapshot);
 
-            var metadata = await _compute.GetImageMetadataAsync(snapshot.Id);
-            Assert.NotNull(metadata);
+            Assert.True(snapshot.Metadata.ContainsKey("category"));
+
+            // Edit immediately
+            Trace.WriteLine("Adding a key...");
+            await snapshot.Metadata.CreateAsync("new_key", "value");
+            Assert.True(snapshot.Metadata.ContainsKey("new_key"));
+
+            Trace.WriteLine("Removing a key...");
+            await snapshot.Metadata.DeleteAsync("bad_key");
+            Assert.False(snapshot.Metadata.ContainsKey("bad_key"));
+
+            // Verify edits were persisted
+            Trace.WriteLine("Retrieving metadata...");
+            var metadata = await snapshot.GetMetadataAsync();
             Assert.True(metadata.ContainsKey("category"));
+            Assert.True(metadata.ContainsKey("new_key"));
+            Assert.False(metadata.ContainsKey("bad_key"));
+
+            // Batch edit
+            metadata.Remove("new_key");
+            metadata["category"] = "updated";
+            Trace.WriteLine("Updating edited metadata...");
+            await metadata.UpdateAsync(overwrite: true);
+
+            Assert.Equal("updated", metadata["category"]);
+            Assert.False(metadata.ContainsKey("new_key"));
         }
 
         //[Fact]
