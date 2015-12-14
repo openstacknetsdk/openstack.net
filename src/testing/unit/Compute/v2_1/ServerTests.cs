@@ -300,6 +300,23 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void StartServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
+
+                var server = _compute.GetServer(serverId);
+                server.Start();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("os-start"));
+            }
+        }
+
+        [Fact]
         public void GetVncConsole()
         {
             using (var httpTest = new HttpTest())

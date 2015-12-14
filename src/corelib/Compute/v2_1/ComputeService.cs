@@ -81,7 +81,13 @@ namespace OpenStack.Compute.v2_1
         public Task<Image> CreateSnapshotAsync(Identifier serverId, SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateSnapshotAsync<Image>(serverId, request, cancellationToken);
-        } 
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.StartServerAsync" />
+        public Task StartServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.StartServerAsync(serverId, cancellationToken);
+        }
 
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))

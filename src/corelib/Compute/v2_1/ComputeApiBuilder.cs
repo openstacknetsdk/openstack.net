@@ -328,15 +328,6 @@ namespace OpenStack.Compute.v2_1
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
 
-        /// <summary />
-        public virtual async Task<T> CreateSnapshotAsync<T>(string serverId, object snapshot, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
-        {
-            var response = await BuildCreateSnapshotAsync(serverId, snapshot, cancellationToken).SendAsync();
-            Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
-            return await GetImageAsync<T>(imageId, cancellationToken);
-        }
-
         /// <summary>
         /// Waits for an image to become active.
         /// </summary>
@@ -384,20 +375,6 @@ namespace OpenStack.Compute.v2_1
                     }
                 }
             }
-        }
-
-        /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateSnapshotAsync(string serverId, object snapshot, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (serverId == null)
-                throw new ArgumentNullException("serverId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("servers", serverId, "action")
-                .Authenticate(AuthenticationProvider)
-                .PreparePostJson(snapshot, cancellationToken);
         }
 
         /// <summary>
@@ -458,6 +435,36 @@ namespace OpenStack.Compute.v2_1
                     }
                 }
             }
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateSnapshotAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var response = await BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
+            return await GetImageAsync<T>(imageId, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task StartServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new StartServerRequest();
+            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(request, cancellationToken);
         }
 
         /// <summary />

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;

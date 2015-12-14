@@ -67,6 +67,12 @@ namespace OpenStack.Synchronous
             return service.CreateSnapshotAsync(serverId, request).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.StartServerAsync" />
+        public static void StartServer(this ComputeService service, Identifier serverId)
+        {
+            service.StartServerAsync(serverId).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {

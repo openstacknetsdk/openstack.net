@@ -46,21 +46,29 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.ListServerAddressesAsync<ServerAddressCollection>(Id, cancellationToken).ConfigureAwait(false);
         }
-		
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            await owner.DeleteServerAsync(Id, cancellationToken);
+        }
+
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<Image> SnapshotAsync(SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.CreateSnapshotAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
-        }  
-        
-		/// <inheritdoc cref="ComputeApiBuilder.DeleteServerAsync" />
+        }
+
+        /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task StartAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
-            await owner.DeleteServerAsync(Id, cancellationToken);
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            await compute.StartServerAsync(Id, cancellationToken).ConfigureAwait(false);
         }
     }
 }
