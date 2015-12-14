@@ -110,19 +110,26 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary>
-        /// Waits for the server to become active.
+        /// Waits for the server to reach the specified status.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
+        /// <param name="status">The status to wait for.</param>
         /// <param name="refreshDelay">The amount of time to wait between requests.</param>
         /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
         /// <param name="progress">The progress callback.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task<Server> WaitUntilServerIsActiveAsync(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TServer> WaitForServerStatusAsync<TServer, TStatus>(string serverId, string status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TServer : IServiceResource
+            where TStatus : StringEnumeration
         {
             if (string.IsNullOrEmpty(serverId))
                 throw new ArgumentNullException("serverId");
+
+            TStatus desiredStatus = StringEnumeration.FromDisplayName<TStatus>(status);
+            if (desiredStatus == null)
+                throw new ArgumentOutOfRangeException("status", status, "The specified status was not a recognized ServerStatus value.");
 
             refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
             timeout = timeout ?? TimeSpan.FromMinutes(5);
@@ -132,11 +139,11 @@ namespace OpenStack.Compute.v2_1
             {
                 while (true)
                 {
-                    Server server = await GetServerAsync<Server>(serverId, cancellationToken).ConfigureAwait(false);
-                    if (server.Status == ServerStatus.Error)
+                    dynamic server = await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
+                    if (server.Status.IsError)
                         throw new ComputeOperationFailedException();
 
-                    bool complete = server.Status == ServerStatus.Active;
+                    bool complete = server.Status == desiredStatus;
 
                     progress?.Report(complete);
 
@@ -160,6 +167,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary>
         /// Waits for the server to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="refreshDelay">The amount of time to wait between requests.</param>

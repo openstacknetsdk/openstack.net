@@ -47,7 +47,7 @@ namespace OpenStack.Compute.v2_1
             return owner.GetImageMetadataItemAsync(Id, key, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageAsync" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

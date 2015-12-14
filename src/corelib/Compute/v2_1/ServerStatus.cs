@@ -6,9 +6,14 @@ namespace OpenStack.Compute.v2_1
     public class ServerStatus : StringEnumeration
     {
         /// <summary />
-        protected ServerStatus(string displayName)
+        protected ServerStatus(string displayName, bool isError = false)
             : base(displayName)
-        { }
+        {
+            IsError = isError;
+        }
+
+        /// <summary />
+        public bool IsError { get; }
 
         /// <summary>
         /// The server is active.
@@ -28,7 +33,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary>
         /// The server is in Error.
         /// </summary>
-        public static readonly ServerStatus Error = new ServerStatus("ERROR");
+        public static readonly ServerStatus Error = new ServerStatus("ERROR", isError: true);
 
         /// <summary>
         /// The server is hard rebooting. This is equivalent to pulling the power plug on a physical server, plugging it back in, and rebooting it.

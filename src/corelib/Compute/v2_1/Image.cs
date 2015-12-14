@@ -92,7 +92,7 @@ namespace OpenStack.Compute.v2_1
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

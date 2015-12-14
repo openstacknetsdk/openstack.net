@@ -178,5 +178,23 @@ namespace OpenStack.Compute.v2_1
             Assert.Equal(request.Name, image.Name);
             Assert.True(image.Metadata["category"] == "ci");
         }
+
+        [Fact]
+        public async void RestartServerTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Stopping the server...");
+            await server.StopAsync();
+            await server.WaitForStatusAsync(ServerStatus.Stopped);
+            Assert.Equal(server.Status, ServerStatus.Stopped);
+
+            Trace.WriteLine("Starting the server...");
+            await server.StartAsync();
+            await server.WaitUntilActiveAsync();
+            Assert.Equal(server.Status, ServerStatus.Active);
+        }
     }
 }

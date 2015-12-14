@@ -124,13 +124,10 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
         
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsActiveAsync" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
-            var result = await owner.WaitUntilServerIsActiveAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
-            result.CopyProperties(this);
+            return WaitForStatusAsync(ServerStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync" />
@@ -140,6 +137,15 @@ namespace OpenStack.Compute.v2_1
             var owner = this.TryGetOwner<ComputeApiBuilder>();
             await owner.WaitUntilServerIsDeletedAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             Status = ServerStatus.Deleted;
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}" />
+        /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task WaitForStatusAsync(ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status.DisplayName, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            result.CopyProperties(this);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{T}" />

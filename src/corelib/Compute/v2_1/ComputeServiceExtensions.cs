@@ -25,10 +25,10 @@ namespace OpenStack.Synchronous
             return service.CreateServerAsync(server).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.WaitUntilServerIsActiveAsync" />
-        public static Server WaitUntilServerIsActive(this ComputeService service, Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        /// <inheritdoc cref="ComputeService.WaitForServerStatusAsync" />
+        public static Server WaitForServerStatus(this ComputeService service, Identifier serverId, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
-            return service.WaitUntilServerIsActiveAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
+            return service.WaitForServerStatusAsync(serverId, status, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListServersAsync" />
