@@ -44,7 +44,7 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}" />
         public Task<Server> WaitForServerStatusAsync(Identifier serverId, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.WaitForServerStatusAsync<Server, ServerStatus>(serverId, status.DisplayName, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitForServerStatusAsync<Server, ServerStatus>(serverId, status, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
@@ -71,10 +71,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.DeleteServerAsync(serverId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         public Task WaitUntilServerIsDeletedAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(serverId, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateSnapshotAsync{T}" />

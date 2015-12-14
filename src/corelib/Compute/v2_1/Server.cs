@@ -135,7 +135,7 @@ namespace OpenStack.Compute.v2_1
         public async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.TryGetOwner<ComputeApiBuilder>();
-            await owner.WaitUntilServerIsDeletedAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            await owner.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             Status = ServerStatus.Deleted;
         }
 
@@ -144,7 +144,7 @@ namespace OpenStack.Compute.v2_1
         public async Task WaitForStatusAsync(ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.TryGetOwner<ComputeApiBuilder>();
-            var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status.DisplayName, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 

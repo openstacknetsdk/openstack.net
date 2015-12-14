@@ -120,49 +120,12 @@ namespace OpenStack.Compute.v2_1
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task<TServer> WaitForServerStatusAsync<TServer, TStatus>(string serverId, string status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TServer> WaitForServerStatusAsync<TServer, TStatus>(string serverId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TServer : IServiceResource
             where TStatus : StringEnumeration
         {
-            if (string.IsNullOrEmpty(serverId))
-                throw new ArgumentNullException("serverId");
-
-            TStatus desiredStatus = StringEnumeration.FromDisplayName<TStatus>(status);
-            if (desiredStatus == null)
-                throw new ArgumentOutOfRangeException("status", status, "The specified status was not a recognized ServerStatus value.");
-
-            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
-            timeout = timeout ?? TimeSpan.FromMinutes(5);
-
-            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
-            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
-            {
-                while (true)
-                {
-                    dynamic server = await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
-                    if (server.Status?.IsError == true)
-                        throw new ComputeOperationFailedException();
-
-                    bool complete = server.Status == desiredStatus;
-
-                    progress?.Report(complete);
-
-                    if (complete)
-                        return server;
-
-                    try
-                    {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to be deleted.", ex);
-
-                        throw;
-                    }
-                }
-            }
+            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary>
@@ -176,54 +139,13 @@ namespace OpenStack.Compute.v2_1
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilServerIsDeletedAsync(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WaitUntilServerIsDeletedAsync<TServer, TStatus>(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TServer : IServiceResource
+            where TStatus : StringEnumeration
         {
-            if (string.IsNullOrEmpty(serverId))
-                throw new ArgumentNullException("serverId");
-
-            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
-            timeout = timeout ?? TimeSpan.FromMinutes(5);
-
-            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
-            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
-            {
-                while (true)
-                {
-                    bool complete;
-                    try
-                    {
-                        Server server = await GetServerAsync<Server>(serverId, cancellationToken).ConfigureAwait(false);
-                        if (server.Status == ServerStatus.Error)
-                            throw new ComputeOperationFailedException();
-
-                        complete = server.Status == ServerStatus.Deleted;
-                    }
-                    catch (FlurlHttpException httpError)
-                    {
-                        if (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
-                            complete = true;
-                        else
-                            throw;
-                    }
-                    
-                    progress?.Report(complete);
-
-                    if (complete)
-                        return;
-
-                    try
-                    {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the server ({serverId}) to be deleted.", ex);
-
-                        throw;
-                    }
-                }
-            }
+            TStatus deletedStatus = StringEnumeration.FromDisplayName<TStatus>("DELETED");
+            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            await ApiHelper.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary />
