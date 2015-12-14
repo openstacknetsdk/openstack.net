@@ -140,7 +140,7 @@ namespace OpenStack.Compute.v2_1
                 while (true)
                 {
                     dynamic server = await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
-                    if (server.Status.IsError)
+                    if (server.Status?.IsError == true)
                         throw new ComputeOperationFailedException();
 
                     bool complete = server.Status == desiredStatus;

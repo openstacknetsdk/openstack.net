@@ -88,7 +88,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary>
         /// The server is powered off and the disk image still persists.
         /// </summary>
-        public static readonly ServerStatus Stopped = new ServerStatus("STOPPED");
+        public static readonly ServerStatus Stopped = new ServerStatus("SHUTOFF");
 
         /// <summary>
         /// The server is suspended, either by request or necessity.
