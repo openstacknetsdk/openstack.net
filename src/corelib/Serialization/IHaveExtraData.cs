@@ -23,5 +23,11 @@ namespace OpenStack.Serialization
             
             return null;
         }
+
+        /// <summary />
+        public static void SetExtraData(this IHaveExtraData dataContainer, string key, object value)
+        {
+            dataContainer.Data[key] = value != null ? JToken.FromObject(value) : JValue.CreateNull();
+        }
     }
 }

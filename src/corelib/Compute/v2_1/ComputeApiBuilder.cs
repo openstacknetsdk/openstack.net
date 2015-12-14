@@ -454,6 +454,13 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual Task StopServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new StopServerRequest();
+            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)

@@ -62,5 +62,11 @@ namespace OpenStack.Synchronous
         {
             server.StartAsync().ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.StopAsync"/>
+        public static void Stop(this ServerReference server)
+        {
+            server.StopAsync().ForceSynchronous();
+        }
     }
 }
