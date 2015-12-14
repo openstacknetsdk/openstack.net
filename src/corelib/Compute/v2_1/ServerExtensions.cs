@@ -39,7 +39,7 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ServerReference.SnapshotAsync"/>
-        public static Image Snapshot(this ServerReference server, SnapshotRequest request)
+        public static Image Snapshot(this ServerReference server, SnapshotServerRequest request)
         {
             return server.SnapshotAsync(request).ForceSynchronous();
         }

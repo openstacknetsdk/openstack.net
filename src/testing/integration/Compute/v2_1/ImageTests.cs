@@ -52,7 +52,7 @@ namespace OpenStack.Compute.v2_1
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
-            var snapshot = await server.SnapshotAsync(new SnapshotRequest(server.Name + "SNAPSHOT"));
+            var snapshot = await server.SnapshotAsync(new SnapshotServerRequest(server.Name + "SNAPSHOT"));
             _testData.Register(snapshot);
 
             var results = await _compute.ListImageDetailsAsync(new ImageListOptions {Type = ImageType.Snapshot});
@@ -80,7 +80,7 @@ namespace OpenStack.Compute.v2_1
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
-            var snapshot = await server.SnapshotAsync(new SnapshotRequest(server.Name + "SNAPSHOT")
+            var snapshot = await server.SnapshotAsync(new SnapshotServerRequest(server.Name + "SNAPSHOT")
             {
                 Metadata = {["category"] = "ci-test"}
             });

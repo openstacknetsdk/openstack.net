@@ -291,7 +291,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.RespondWithJson(new Image { Id = imageId });
 
                 var server = _compute.GetServer(serverId);
-                Image result = server.Snapshot(new SnapshotRequest("{image-name"));
+                Image result = server.Snapshot(new SnapshotServerRequest("{image-name"));
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
                 Assert.True(httpTest.CallLog.First(x => x.Url.EndsWith("/action")).RequestBody.Contains("createImage"));

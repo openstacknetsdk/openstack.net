@@ -61,9 +61,8 @@ namespace OpenStack.Synchronous
             service.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-
         /// <inheritdoc cref="ComputeService.CreateSnapshotAsync" />
-        public static Image CreateSnapshot(this ComputeService service, Identifier serverId, SnapshotRequest request)
+        public static Image CreateSnapshot(this ComputeService service, Identifier serverId, SnapshotServerRequest request)
         {
             return service.CreateSnapshotAsync(serverId, request).ForceSynchronous();
         }

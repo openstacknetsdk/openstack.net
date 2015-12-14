@@ -84,6 +84,7 @@
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
+    <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Compute\v2_1\ServerReference.cs" />
     <Compile Include="Compute\v2_1\ServerStatus.cs" />
     <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
-    <Compile Include="Compute\v2_1\SnapshotRequest.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_1\VolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />

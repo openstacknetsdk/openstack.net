@@ -33,7 +33,8 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public async Task<Image> SnapshotAsync(SnapshotRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<Image> SnapshotAsync(SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.CreateSnapshotAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);

@@ -146,7 +146,7 @@ namespace OpenStack.Compute.v2_1
             await server.WaitUntilActiveAsync();
             Trace.WriteLine($"Created server named: {server.Name}");
 
-            var request = new SnapshotRequest(server.Name + "-SNAPSHOT")
+            var request = new SnapshotServerRequest(server.Name + "-SNAPSHOT")
             {
                 Metadata =
                 {

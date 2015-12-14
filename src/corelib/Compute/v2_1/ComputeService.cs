@@ -78,7 +78,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateSnapshotAsync{T}" />
-        public Task<Image> CreateSnapshotAsync(Identifier serverId, SnapshotRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Image> CreateSnapshotAsync(Identifier serverId, SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateSnapshotAsync<Image>(serverId, request, cancellationToken);
         } 
