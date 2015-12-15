@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using net.openstack.Providers.Rackspace;
+using OpenStack.BlockStorage.v2;
 
 namespace OpenStack.Compute.v2_1
 {
@@ -10,11 +12,17 @@ namespace OpenStack.Compute.v2_1
         private readonly ComputeService _compute;
         private readonly HashSet<object> _testData;
          
-        public ComputeTestDataManager(ComputeService networkingService)
+        public ComputeTestDataManager(ComputeService compute)
         {
-            _compute = networkingService;
+            _compute = compute;
             _testData = new HashSet<object>();
+
+            var identityProvider = TestIdentityProvider.GetIdentityProvider();
+            var blockStorage = new CloudBlockStorageProvider(null, "RegionOne", identityProvider, null);
+            BlockStorage = new BlockStorageTestDataManager(blockStorage);
         }
+
+        public BlockStorageTestDataManager BlockStorage { get; }        
 
         public void Register(IEnumerable<object> testItems)
         {
@@ -41,6 +49,12 @@ namespace OpenStack.Compute.v2_1
             try
             {
                 DeleteImages(_testData.OfType<Image>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
+                BlockStorage.Dispose();
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
 
@@ -91,7 +105,7 @@ namespace OpenStack.Compute.v2_1
         }
         #endregion
 
-        #region
+        #region Images
         public void DeleteImages(IEnumerable<Image> images)
         {
             var deletes = images.Select(x => x.DeleteAsync()).ToArray();

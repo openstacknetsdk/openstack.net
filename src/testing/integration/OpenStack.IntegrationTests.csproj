@@ -105,6 +105,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockStorage\v2\BlockStorageTestDataManager.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Compute\v2_1\ComputeTestDataManager.cs" />
     <Compile Include="Compute\v2_1\FlavorTests.cs" />

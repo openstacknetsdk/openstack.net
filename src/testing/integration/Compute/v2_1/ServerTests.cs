@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
+using net.openstack.Providers.Rackspace;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -234,6 +235,27 @@ namespace OpenStack.Compute.v2_1
             {
                 // Hurray! the test passed
             }
+        }
+
+        [Fact]
+        public async void AttachVolumeTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Creating a test volume...");
+            var volume = _testData.BlockStorage.CreateVolume();
+
+            Trace.WriteLine("Attaching the volume...");
+            Identifier volumeId = volume.Id;
+            await server.AttachVolumeAsync(new VolumeAttachmentDefinition(volumeId));
+            _testData.BlockStorage.WaitUntilAttached(volumeId);
+
+            Trace.WriteLine("Verifying volume was attached successfully...");
+            server = await _compute.GetServerAsync(server.Id);
+
+            Assert.Contains(server.AttachedVolumes, v => v.Id == volumeId);
         }
     }
 }

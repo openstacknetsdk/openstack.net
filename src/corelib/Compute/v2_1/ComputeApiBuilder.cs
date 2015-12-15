@@ -405,6 +405,31 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            T volumeAttachment = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(volumeAttachment);
+            return volumeAttachment;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(request, cancellationToken);
+        }
+
+        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)

@@ -107,6 +107,12 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.EvacuateServerAsync(serverId, request, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.AttachVolumeAsync{T}" />
+        public Task<VolumeAttachment> AttachVolumeAsync(Identifier serverId, VolumeAttachmentDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.AttachVolumeAsync<VolumeAttachment>(serverId, volume, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {

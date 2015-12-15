@@ -371,6 +371,25 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void AttachVolume()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier volumeId = Guid.NewGuid();
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new VolumeAttachment {Id = volumeId, DeviceName = "/dev/vdd"});
+
+                var server = _compute.GetServer(serverId);
+                var result = server.AttachVolume(new VolumeAttachmentDefinition(volumeId));
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
+                Assert.NotNull(result);
+                Assert.Equal(volumeId, result.Id);
+            }
+        }
+
+        [Fact]
         public void GetVncConsole()
         {
             using (var httpTest = new HttpTest())

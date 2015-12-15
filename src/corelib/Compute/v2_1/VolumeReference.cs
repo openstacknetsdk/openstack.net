@@ -6,10 +6,12 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class VolumeReference : IHaveExtraData
+    public class VolumeReference : IHaveExtraData, IServiceResource
     {
         /// <summary />
         public Identifier Id { get; set; }
+
+        object IServiceResource.Owner { get; set; }
 
         /// <summary />
         [JsonExtensionData]
