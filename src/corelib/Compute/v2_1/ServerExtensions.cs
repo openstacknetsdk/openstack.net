@@ -74,5 +74,11 @@ namespace OpenStack.Synchronous
         {
             server.RebootAsync(request).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.EvacuateAsync"/>
+        public static void Evacuate(this ServerReference server, EvacuateServerRequest request)
+        {
+            server.EvacuateAsync(request).ForceSynchronous();
+        }
     }
 }

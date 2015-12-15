@@ -399,6 +399,12 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual Task EvacuateServerAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)

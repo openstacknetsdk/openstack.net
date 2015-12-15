@@ -209,5 +209,31 @@ namespace OpenStack.Compute.v2_1
             await server.WaitForStatusAsync(ServerStatus.Reboot);
             await server.WaitUntilActiveAsync();
         }
+
+        [Fact]
+        public async void EvacuateServerTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Evacuating the server to a new host...");
+            var request = new EvacuateServerRequest(false)
+            {
+                AdminPassword = "top-secret-password"
+            };
+
+            // Our service isn't down, so we can't really evacuate.
+            // Just check that the request would have gone through (i.e. was valid)
+            // and only was rejected because the compute service is healthy
+            try
+            {
+                await server.EvacuateAsync(request);
+            }
+            catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("is still in use"))
+            {
+                // Hurray! the test passed
+            }
+        }
     }
 }

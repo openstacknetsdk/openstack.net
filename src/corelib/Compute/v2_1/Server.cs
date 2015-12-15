@@ -60,7 +60,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("hostId")]
-        public string HostId { get; set; }
+        public Identifier HostId { get; set; }
 
         /// <summary />
         [JsonProperty("OS-DCF:diskConfig")]
