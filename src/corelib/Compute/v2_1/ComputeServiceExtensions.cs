@@ -97,6 +97,12 @@ namespace OpenStack.Synchronous
             service.AttachVolumeAsync(serverId, volume).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.DetachVolumeAsync" />
+        public static void DetachVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
+        {
+            service.DetachVolumeAsync(serverId, volumeId).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {

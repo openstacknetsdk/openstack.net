@@ -122,6 +122,7 @@
     <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
     <Compile Include="Compute\v2_1\VolumeAttachmentDefinition.cs" />
     <Compile Include="Compute\v2_1\VolumeAttachment.cs" />
+    <Compile Include="Compute\v2_1\VolumeAttachmentExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_1\VolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
