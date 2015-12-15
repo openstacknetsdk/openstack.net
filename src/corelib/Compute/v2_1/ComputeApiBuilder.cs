@@ -391,6 +391,14 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual Task RebootServerAsync<TRequest>(string serverId, TRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TRequest : class, new()
+        {
+            request = request ?? new TRequest();
+            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)

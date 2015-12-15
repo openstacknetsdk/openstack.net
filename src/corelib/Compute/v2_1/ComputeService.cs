@@ -95,6 +95,12 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.StopServerAsync(serverId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.RebootServerAsync{TRequest}" />
+        public Task RebootServerAsync(Identifier serverId, RebootServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.RebootServerAsync(serverId, request, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {

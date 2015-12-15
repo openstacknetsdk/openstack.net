@@ -85,6 +85,8 @@
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
     <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\StartServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\StopServerRequest.cs" />

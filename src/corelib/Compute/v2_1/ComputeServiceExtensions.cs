@@ -79,6 +79,12 @@ namespace OpenStack.Synchronous
             service.StopServerAsync(serverId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.RebootServerAsync" />
+        public static void RebootServer(this ComputeService service, Identifier serverId, RebootServerRequest request = null)
+        {
+            service.RebootServerAsync(serverId, request).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {

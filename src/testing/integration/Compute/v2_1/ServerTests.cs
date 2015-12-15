@@ -196,5 +196,18 @@ namespace OpenStack.Compute.v2_1
             await server.WaitUntilActiveAsync();
             Assert.Equal(server.Status, ServerStatus.Active);
         }
+
+        [Fact]
+        public async void RebootServerTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Rebooting the server...");
+            await server.RebootAsync();
+            await server.WaitForStatusAsync(ServerStatus.Reboot);
+            await server.WaitUntilActiveAsync();
+        }
     }
 }

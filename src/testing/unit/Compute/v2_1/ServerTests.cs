@@ -334,6 +334,25 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void RebootServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
+
+                var server = _compute.GetServer(serverId);
+                server.Reboot(new RebootServerRequest {Type = RebootType.Hard});
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                string lastRequest = httpTest.CallLog.Last().RequestBody;
+                Assert.True(lastRequest.Contains("reboot"));
+                Assert.True(lastRequest.Contains("HARD"));
+            }
+        }
+
+        [Fact]
         public void GetVncConsole()
         {
             using (var httpTest = new HttpTest())
