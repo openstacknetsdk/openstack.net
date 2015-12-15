@@ -33,7 +33,7 @@ namespace net.openstack.Providers.Rackspace.Validators
             if (size < 0)
                 throw new ArgumentOutOfRangeException("size");
 
-            if (size < 100 || size > 1000)
+            if (size < 1 || size > 1000)
                 throw new InvalidVolumeSizeException(size);
         }
     }
