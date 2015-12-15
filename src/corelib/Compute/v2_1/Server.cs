@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Extensions;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -10,8 +12,16 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
-    public class Server : ServerReference, IServiceResource
+    public class Server : ServerReference
     {
+        /// <summary />
+        public Server()
+        {
+            Addresses = new Dictionary<string, IList<ServerAddress>>();
+            AttachedVolumes = new List<VolumeReference>();
+            SecurityGroups = new List<SecurityGroupReference>();
+        }
+
         private string _adminPassword;
 
         /// <summary />
@@ -121,8 +131,6 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonProperty("updated")]
         public DateTimeOffset? LastModified { get; set; }
-
-        object IServiceResource.Owner { get; set; }
         
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -158,6 +166,16 @@ namespace OpenStack.Compute.v2_1
 
             var result = await compute.UpdateServerAsync<Server>(Id, request, cancellationToken);
             result.CopyProperties(this);
+        }
+
+        /// <summary />
+        [OnDeserialized]
+        private void OnDeserializedMethod(StreamingContext context)
+        {
+            foreach (var volume in AttachedVolumes)
+            {
+                volume.Server = this;
+            }
         }
     }
 }

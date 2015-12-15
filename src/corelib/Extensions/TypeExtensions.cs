@@ -57,6 +57,7 @@ namespace System.Extensions
                 return;
 
             resource.Owner = owner;
+            (resource as IEnumerable<IServiceResource>)?.PropogateOwner(owner);
 
             foreach (PropertyInfo prop in resource.GetType().GetProperties())
             {
@@ -71,15 +72,16 @@ namespace System.Extensions
                 }
                 
                 (propVal as IServiceResource)?.PropogateOwner(owner);
+                (propVal as IEnumerable<IServiceResource>)?.PropogateOwner(owner);
             }
+        }
 
-            var resourceCollection = resource as IEnumerable<IServiceResource>;
-            if (resourceCollection != null)
+        /// <summary />
+        public static void PropogateOwner(this IEnumerable<IServiceResource> resources, object owner)
+        {
+            foreach (var resource in resources)
             {
-                foreach (var childResource in resourceCollection)
-                {
-                    childResource.PropogateOwner(owner);
-                }
+                resource.PropogateOwner(owner);
             }
         }
     }

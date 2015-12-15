@@ -581,13 +581,10 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            dynamic result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
+            var result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             SetOwner(result);
-
-            result.ImageId = imageId;
-
             return result;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Extensions;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,20 +18,6 @@ namespace OpenStack.Compute.v2_1
         public Image()
         {
             Metadata = new ImageMetadata();
-        }
-
-        /// <summary />
-        public override Identifier Id
-        {
-            get { return base.Id; }
-            set
-            {
-                base.Id = value;
-
-                // Since Metadata has nothing in it's json that indicates what image it is associated with, we need to manually remember it
-                if (Metadata != null)
-                    Metadata.ImageId = value;
-            }
         }
 
         /// <summary />
@@ -106,6 +93,12 @@ namespace OpenStack.Compute.v2_1
         {
             await base.WaitUntilDeletedAsync(refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             Status = ImageStatus.Deleted;
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            Metadata.Image = this;
         }
     }
 }
