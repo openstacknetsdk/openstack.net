@@ -6,6 +6,7 @@ using Flurl;
 using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
+using OpenStack.Extensions;
 
 namespace OpenStack.Compute.v2_6
 {
@@ -24,15 +25,6 @@ namespace OpenStack.Compute.v2_6
         { }
 
 #pragma warning disable 809
-        /// <inheritdoc />
-        /// <exception cref="NotSupportedException"></exception>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("GetVncConsole was deprecated in v2.6. Use GetConsole instead.", true)]
-        public override Task<PreparedRequest> BuildGetVncConsoleRequestAsync(string serverId, object type, CancellationToken cancellationToken = new CancellationToken())
-        {
-            throw new NotSupportedException("GetVncConsole was deprecated in v2.6. Use GetConsole instead.");
-        }
-
         /// <inheritdoc />
         /// <exception cref="NotSupportedException"></exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -59,6 +51,7 @@ namespace OpenStack.Compute.v2_6
             return endpoint
                 .AppendPathSegments("servers", serverId, "remote-consoles")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePostJson(request, cancellationToken);
         }
     }

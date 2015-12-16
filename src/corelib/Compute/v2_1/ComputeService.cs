@@ -136,6 +136,18 @@ namespace OpenStack.Compute.v2_1
         {
             return _computeApi.GetConsoleOutputAsync(serverId, length, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.RescueServerAsync" />
+        public virtual Task<string> RescueServerAsync(Identifier serverId, RescueServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.RescueServerAsync(serverId, request, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.UnrescueServerAsync" />
+        public virtual Task UnrescueServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.UnrescueServerAsync(serverId, cancellationToken);
+        }
         #endregion
 
         #region Flavors

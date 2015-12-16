@@ -68,7 +68,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary>
         /// The server is in rescue mode. A rescue image is running with the original server image attached.
         /// </summary>
-        public static readonly ServerStatus Rescued = new ServerStatus("RESCUED");
+        public static readonly ServerStatus Rescue = new ServerStatus("RESCUE");
 
         /// <summary>
         /// Server is performing the differential copy of data that changed during its initial copy. Server is down for this stage.

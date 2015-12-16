@@ -119,6 +119,18 @@ namespace OpenStack.Synchronous
         {
             return service.GetConsoleOutputAsync(serverId, length).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ComputeService.RescueServerAsync" />
+        public static string RescueServer(this ComputeService service, Identifier serverId, RescueServerRequest request = null)
+        {
+            return service.RescueServerAsync(serverId, request).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.UnrescueServerAsync" />
+        public static void UnrescueServer(this ComputeService service, Identifier serverId)
+        {
+            service.UnrescueServerAsync(serverId).ForceSynchronous();
+        }
         #endregion
 
         #region Flavors

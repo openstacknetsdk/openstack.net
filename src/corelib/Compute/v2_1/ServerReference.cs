@@ -150,5 +150,21 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.GetConsoleOutputAsync(Id, length, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<string> RescueAsync(RescueServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.RescueServerAsync(Id, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task UnrescueAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return compute.UnrescueServerAsync(Id, cancellationToken);
+        }
     }
 }

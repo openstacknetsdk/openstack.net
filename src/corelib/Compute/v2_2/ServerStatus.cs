@@ -61,7 +61,7 @@
         /// <summary>
         /// The server is in rescue mode. A rescue image is running with the original server image attached.
         /// </summary>
-        public new static readonly ServerStatus Rescued = new ServerStatus("RESCUED");
+        public new static readonly ServerStatus Rescue = new ServerStatus("RESCUED");
 
         /// <summary>
         /// Server is performing the differential copy of data that changed during its initial copy. Server is down for this stage.

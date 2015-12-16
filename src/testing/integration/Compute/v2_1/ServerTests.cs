@@ -320,5 +320,21 @@ namespace OpenStack.Compute.v2_1
 
             // Not testing GetConsoleOutput because it only returns a 404 on my OpenStack installation...
         }
+
+        [Fact]
+        public async void RescueServerTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Rescuing the server...");
+            await server.RescueAsync();
+            await server.WaitForStatusAsync(ServerStatus.Rescue);
+
+            Trace.WriteLine("Unrescuing the server...");
+            await server.UnrescueAsync();
+            await server.WaitUntilActiveAsync();
+        }
     }
 }

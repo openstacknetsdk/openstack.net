@@ -558,5 +558,39 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(output, result);
             }
         }
+
+        [Fact]
+        public void RescueServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId});
+                httpTest.RespondWithJson(new {adminPass = "top-secret"});
+
+                var server = _compute.GetServer(serverId);
+                server.Rescue();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("rescue", httpTest.CallLog.Last().RequestBody);
+            }
+        }
+
+        [Fact]
+        public void UnrescueServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new { adminPass = "top-secret" });
+
+                var server = _compute.GetServer(serverId);
+                server.UnrescueAsync();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("unrescue", httpTest.CallLog.Last().RequestBody);
+            }
+        }
     }
 }

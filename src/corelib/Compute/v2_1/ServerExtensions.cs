@@ -122,5 +122,17 @@ namespace OpenStack.Synchronous
         {
             return server.GetConsoleOutputAsync(length).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.RescueAsync"/>
+        public static string Rescue(this ServerReference server, RescueServerRequest request = null)
+        {
+            return server.RescueAsync(request).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.RescueAsync"/>
+        public static void Unrescue(this ServerReference server)
+        {
+            server.UnrescueAsync().ForceSynchronous();
+        }
     }
 }
