@@ -86,6 +86,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"servers/{serverId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -97,6 +98,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments("servers")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePostJson(server, cancellationToken);
         }
 
@@ -225,6 +227,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"servers/{serverId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePutJson(server, cancellationToken);
         }
 
@@ -254,6 +257,7 @@ namespace OpenStack.Compute.v2_1
             return (PreparedRequest)endpoint
                 .AppendPathSegments("servers", serverId)
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
@@ -415,6 +419,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments("servers", serverId, "action")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePostJson(request, cancellationToken);
         }
 
@@ -460,6 +465,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"flavors/{flavorId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -482,6 +488,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments("flavors")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -504,6 +511,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments("flavors/detail")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -529,6 +537,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"images/{imageId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -552,6 +561,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"images/{imageId}/metadata")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -574,6 +584,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegments($"images/{imageId}/metadata/{key}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -599,6 +610,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"images/{imageId}/metadata/{key}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePutJson(request, cancellationToken);
         }
 
@@ -689,7 +701,8 @@ namespace OpenStack.Compute.v2_1
 
             PreparedRequest request = endpoint
                 .AppendPathSegments($"images/{imageId}/metadata")
-                .Authenticate(AuthenticationProvider);
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this);
 
             if (overwrite)
                 return request.PreparePutJson(metadata, cancellationToken);
@@ -714,6 +727,7 @@ namespace OpenStack.Compute.v2_1
             return (PreparedRequest)endpoint
                 .AppendPathSegments("images", imageId)
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
@@ -738,6 +752,7 @@ namespace OpenStack.Compute.v2_1
             return (PreparedRequest)endpoint
                 .AppendPathSegments("images", imageId, "metadata", key)
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareDelete(cancellationToken)
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
@@ -763,6 +778,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverid}/ips/{key}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -782,6 +798,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverid}/ips")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -808,6 +825,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -830,6 +848,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
 
@@ -855,6 +874,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PreparePostJson(request, cancellationToken);
         }
 
@@ -875,6 +895,7 @@ namespace OpenStack.Compute.v2_1
             return endpoint
                 .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
                 .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
                 .PrepareDelete(cancellationToken);
         }
         #endregion
