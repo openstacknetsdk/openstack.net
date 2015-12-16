@@ -107,18 +107,6 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.EvacuateServerAsync(serverId, request, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.AttachVolumeAsync{T}" />
-        public Task<VolumeAttachment> AttachVolumeAsync(Identifier serverId, VolumeAttachmentDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.AttachVolumeAsync<VolumeAttachment>(serverId, volume, cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApiBuilder.DetachVolumeAsync" />
-        public Task DetachVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.DetachVolumeAsync(serverId, volumeId, cancellationToken);
-        }
-
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
         public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -231,6 +219,26 @@ namespace OpenStack.Compute.v2_1
             return await _computeApi.ListServerAddressesAsync<ServerAddressCollection>(serverId, cancellationToken);
         }
 
+        #endregion
+
+        #region Volumes
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerVolumesAsync{T}" />
+        public async Task<IEnumerable<VolumeAttachment>> ListServerVolumesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerVolumesAsync<VolumeAttachmentCollection>(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.AttachVolumeAsync{T}" />
+        public Task<VolumeAttachment> AttachVolumeAsync(Identifier serverId, VolumeAttachmentDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.AttachVolumeAsync<VolumeAttachment>(serverId, volume, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DetachVolumeAsync" />
+        public Task DetachVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DetachVolumeAsync(serverId, volumeId, cancellationToken);
+        }
         #endregion
 
         #region Keypairs

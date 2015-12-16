@@ -102,6 +102,7 @@
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeAttachmentCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />

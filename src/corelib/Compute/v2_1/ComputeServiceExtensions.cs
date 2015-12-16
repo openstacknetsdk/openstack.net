@@ -91,18 +91,6 @@ namespace OpenStack.Synchronous
             service.EvacuateServerAsync(serverId, request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.AttachVolumeAsync" />
-        public static void AttachVolume(this ComputeService service, Identifier serverId, VolumeAttachmentDefinition volume)
-        {
-            service.AttachVolumeAsync(serverId, volume).ForceSynchronous();
-        }
-
-        /// <inheritdoc cref="ComputeService.DetachVolumeAsync" />
-        public static void DetachVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
-        {
-            service.DetachVolumeAsync(serverId, volumeId).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
         {
@@ -212,6 +200,26 @@ namespace OpenStack.Synchronous
             return service.ListServerAddressesAsync(serverId).ForceSynchronous();
         }
 
+        #endregion
+
+        #region Volumes
+        /// <inheritdoc cref="ComputeService.ListServerVolumesAsync" />
+        public static IEnumerable<VolumeAttachment> ListServerVolumes(this ComputeService service, Identifier serverId)
+        {
+            return service.ListServerVolumesAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.AttachVolumeAsync" />
+        public static void AttachVolume(this ComputeService service, Identifier serverId, VolumeAttachmentDefinition volume)
+        {
+            service.AttachVolumeAsync(serverId, volume).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DetachVolumeAsync" />
+        public static void DetachVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
+        {
+            service.DetachVolumeAsync(serverId, volumeId).ForceSynchronous();
+        }
         #endregion
 
         #region KeyPairs

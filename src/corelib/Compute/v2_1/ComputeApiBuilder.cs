@@ -405,51 +405,6 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
-        {
-            T volumeAttachment = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-            SetOwner(volumeAttachment);
-            return volumeAttachment;
-        }
-
-        /// <summary />
-        public virtual async Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (serverId == null)
-                throw new ArgumentNullException("serverId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
-                .Authenticate(AuthenticationProvider)
-                .PreparePostJson(request, cancellationToken);
-        }
-
-        /// <summary />
-        public virtual Task DetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return BuildDetachVolumeAsync(serverId, volumeId, cancellationToken).SendAsync();
-        }
-
-        /// <summary />
-        public virtual async Task<PreparedRequest> BuildDetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (serverId == null)
-                throw new ArgumentNullException("serverId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
-                .Authenticate(AuthenticationProvider)
-                .PrepareDelete(cancellationToken);
-        }
-
-        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -829,6 +784,76 @@ namespace OpenStack.Compute.v2_1
                 .PrepareGet(cancellationToken);
         }
 
+        #endregion
+
+        #region Volumes
+
+        /// <summary />
+        public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            var result = await BuidListServerVolumesAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuidListServerVolumesAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            T volumeAttachment = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(volumeAttachment);
+            return volumeAttachment;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
+                .Authenticate(AuthenticationProvider)
+                .PreparePostJson(request, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDetachVolumeAsync(serverId, volumeId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareDelete(cancellationToken);
+        }
         #endregion
 
         #region Keypairs

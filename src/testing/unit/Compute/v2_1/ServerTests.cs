@@ -396,12 +396,11 @@ namespace OpenStack.Compute.v2_1
             {
                 Identifier volumeId = Guid.NewGuid();
                 Identifier serverId = Guid.NewGuid();
-                var mockData = new VolumeAttachment { Id = volumeId, DeviceName = "/dev/vdd" };
-                var data = new Server {
+                httpTest.RespondWithJson(new Server
+                {
                     Id = serverId,
-                    AttachedVolumes = { mockData }
-                };
-                httpTest.RespondWithJson(data);
+                    AttachedVolumes = { new VolumeAttachment { Id = volumeId, DeviceName = "/dev/vdd" } }
+                });
                 httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy");
 
                 var server = _compute.GetServer(serverId);
@@ -409,6 +408,32 @@ namespace OpenStack.Compute.v2_1
                 attachedVolume.Detach();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments/{volumeId}");
+            }
+        }
+
+        [Fact]
+        public void ListVolumes()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier volumeId = Guid.NewGuid();
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId});
+                httpTest.RespondWithJson(new VolumeAttachmentCollection
+                {
+                    new VolumeAttachment
+                    {
+                        Id = volumeId, DeviceName = "/dev/vdd"
+                    }
+                });
+
+                var server = _compute.GetServer(serverId);
+                var results = server.ListVolumes();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
+                Assert.NotNull(results);
+                Assert.Equal(1, results.Count());
+                Assert.Equal(volumeId, results.First().Id);
             }
         }
 
