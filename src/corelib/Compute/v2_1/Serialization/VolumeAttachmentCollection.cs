@@ -22,6 +22,6 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// Represents a collection of references to flavor resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class VolumeAttachmentCollection : FlavorCollection<VolumeAttachment>
+    public class VolumeAttachmentCollection : VolumeAttachmentCollection<VolumeAttachment>
     { }
 }

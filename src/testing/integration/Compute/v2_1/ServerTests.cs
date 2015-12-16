@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
-using net.openstack.Providers.Rackspace;
+using net.openstack.Core.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -238,7 +238,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void AttachVolumeTest()
+        public async void ServerVolumesTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -246,16 +246,30 @@ namespace OpenStack.Compute.v2_1
 
             Trace.WriteLine("Creating a test volume...");
             var volume = _testData.BlockStorage.CreateVolume();
+            Identifier volumeId = volume.Id;
+            _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
 
             Trace.WriteLine("Attaching the volume...");
-            Identifier volumeId = volume.Id;
             await server.AttachVolumeAsync(new VolumeAttachmentDefinition(volumeId));
-            _testData.BlockStorage.WaitUntilAttached(volumeId);
+            _testData.BlockStorage.StorageProvider.WaitForVolumeState(volumeId, VolumeState.InUse, new[] { VolumeState.Error });
+
+            var volumeRef = server.AttachedVolumes.FirstOrDefault();
+            Assert.NotNull(volumeRef);
 
             Trace.WriteLine("Verifying volume was attached successfully...");
-            server = await _compute.GetServerAsync(server.Id);
+            var attachedVolumes = await server.ListVolumesAsync();
+            var attachedVolume = attachedVolumes.FirstOrDefault(v => v.Id == volumeId);
+            Assert.NotNull(attachedVolume);
 
-            Assert.Contains(server.AttachedVolumes, v => v.Id == volumeId);
+            Trace.WriteLine("Retrieving attached volume details...");
+            attachedVolume = await volumeRef.GetServerVolumeAsync();
+            Assert.Equal(volumeId, attachedVolume.VolumeId);
+            Assert.Equal(server.Id, attachedVolume.ServerId);
+
+            Trace.WriteLine("Detaching the volume...");
+            await attachedVolume.DetachAsync();
+            Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
+            _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
         }
     }
 }

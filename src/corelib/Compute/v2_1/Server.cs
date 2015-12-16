@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Extensions;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -166,6 +165,15 @@ namespace OpenStack.Compute.v2_1
 
             var result = await compute.UpdateServerAsync<Server>(Id, request, cancellationToken);
             result.CopyProperties(this);
+        }
+
+        /// <inheritdoc />
+        public override async Task<VolumeAttachment> AttachVolumeAsync(VolumeAttachmentDefinition volume, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var result = await base.AttachVolumeAsync(volume, cancellationToken);
+            result.Server = this;
+            AttachedVolumes.Add(result);
+            return result;
         }
 
         /// <summary />

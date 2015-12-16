@@ -8,14 +8,15 @@ namespace OpenStack.BlockStorage.v2
 {
     public class BlockStorageTestDataManager : IDisposable
     {
-        private readonly IBlockStorageProvider _storage;
         private readonly HashSet<object> _testData;
          
         public BlockStorageTestDataManager(IBlockStorageProvider storage)
         {
-            _storage = storage;
+            StorageProvider = storage;
             _testData = new HashSet<object>();
         }
+
+        public IBlockStorageProvider StorageProvider { get; }
 
         public void Register(IEnumerable<object> testItems)
         {
@@ -46,21 +47,16 @@ namespace OpenStack.BlockStorage.v2
         #region Volumes
         public Volume CreateVolume()
         {
-            var volume = _storage.CreateVolume(1);
+            var volume = StorageProvider.CreateVolume(1);
             Register(volume);
             return volume;
-        }
-
-        public void WaitUntilAttached(Identifier volumeId)
-        {
-            _storage.WaitForVolumeState(volumeId, VolumeState.InUse, new[] {VolumeState.Error});
         }
 
         public void DeleteVolumes(IEnumerable<Volume> volumes)
         {
             foreach (Volume volume in volumes)
             {
-                _storage.DeleteVolume(volume.Id);
+                StorageProvider.DeleteVolume(volume.Id);
             }
         }
         #endregion

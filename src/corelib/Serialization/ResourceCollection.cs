@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OpenStack.Serialization
 {
@@ -9,7 +10,7 @@ namespace OpenStack.Serialization
     /// <typeparam name="T">The resource type.</typeparam>
     /// <exclude />
     [JsonObject(MemberSerialization.OptIn)] // Using JsonObject to force the entire object to be serialized, ignoring the IEnumerable interface
-    public class ResourceCollection<T> : IEnumerable<T>, IServiceResource
+    public class ResourceCollection<T> : IEnumerable<T>, IServiceResource, IHaveExtraData
         where T : IServiceResource
     {
         /// <summary>
@@ -56,5 +57,9 @@ namespace OpenStack.Serialization
         
         /// <summary />
         object IServiceResource.Owner { get; set; }
+
+        /// <summary />
+        [JsonExtensionData]
+        IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
     }
 }

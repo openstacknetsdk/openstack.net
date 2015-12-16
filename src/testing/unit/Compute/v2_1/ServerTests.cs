@@ -386,6 +386,9 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
+                Assert.True(server.AttachedVolumes.Any(v => v.Id == volumeId));
+                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.NotNull(result.Server);
             }
         }
 
@@ -408,6 +411,7 @@ namespace OpenStack.Compute.v2_1
                 attachedVolume.Detach();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments/{volumeId}");
+                Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
             }
         }
 

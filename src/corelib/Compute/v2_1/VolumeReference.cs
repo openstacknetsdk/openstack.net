@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace OpenStack.Compute.v2_1
     {
         /// <summary />
         [JsonIgnore]
-        protected internal ServerReference Server { get; set; }
+        protected internal Server Server { get; set; }
 
         /// <summary />
         public Identifier Id { get; set; }
@@ -36,22 +37,28 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual Task<VolumeAttachment> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VolumeAttachment> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertServerIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return compute.GetServerVolumeAsync<VolumeAttachment>(Server.Id, Id, cancellationToken);
+            var result = await compute.GetServerVolumeAsync<VolumeAttachment>(Server.Id, Id, cancellationToken);
+            result.Server = Server;
+            return result;
         }
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual Task DetachAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task DetachAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertServerIsSet(); 
 
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return compute.DetachVolumeAsync(Server.Id, Id, cancellationToken);
+            await compute.DetachVolumeAsync(Server.Id, Id, cancellationToken);
+
+            var attachedVolume = Server.AttachedVolumes.FirstOrDefault(v => v.Id == Id);
+            if(attachedVolume != null)
+                Server.AttachedVolumes.Remove(attachedVolume);
         }
     }
 }
