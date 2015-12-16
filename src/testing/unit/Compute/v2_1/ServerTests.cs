@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using Newtonsoft.Json.Linq;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
@@ -536,6 +537,25 @@ namespace OpenStack.Compute.v2_1
                 Assert.Contains("os-getRDPConsole", httpTest.CallLog.Last().RequestBody);
                 Assert.NotNull(result);
                 Assert.Equal(RemoteConsoleType.RdpHtml5, result.Type);
+            }
+        }
+
+        [Fact]
+        public void GetConsoleOutput()
+        {
+            const string output = "FAKE CONSOLE OUTPUT\nANOTHER\nLAST LINE";
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith(JObject.Parse("{'output': '" + output + "'}").ToString());
+
+                var server = _compute.GetServer(serverId);
+                var result = server.GetConsoleOutput();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("os-getConsoleOutput", httpTest.CallLog.Last().RequestBody);
+                Assert.Equal(output, result);
             }
         }
     }

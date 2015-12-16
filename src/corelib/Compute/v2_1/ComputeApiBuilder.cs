@@ -507,6 +507,29 @@ namespace OpenStack.Compute.v2_1
                 .PreparePostJson(request, cancellationToken);
         }
 
+        /// <summary />
+        public virtual async Task<string> GetConsoleOutputAsync(string serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            dynamic result = await BuildGetConsoleOutputAsync(serverId, length, cancellationToken)
+                .SendAsync()
+                .ReceiveJson();
+
+            return result.output;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetConsoleOutputAsync(string serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = JObject.Parse($"{{ 'os-getConsoleOutput': {{ 'length': '{length}' }} }}");
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(request, cancellationToken);
+        }
+
         #endregion
 
         #region Flavors

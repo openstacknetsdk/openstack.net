@@ -317,6 +317,8 @@ namespace OpenStack.Compute.v2_1
             catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("Unavailable console type rdp-html5"))
             {
             }
+
+            // Not testing GetConsoleOutput because it only returns a 404 on my OpenStack installation...
         }
     }
 }

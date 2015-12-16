@@ -113,6 +113,12 @@ namespace OpenStack.Synchronous
         {
             return service.GetRdpConsoleAsync(serverId).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ComputeService.GetConsoleOutputAsync" />
+        public static string GetConsoleOutput(this ComputeService service, Identifier serverId, int length = -1)
+        {
+            return service.GetConsoleOutputAsync(serverId, length).ForceSynchronous();
+        }
         #endregion
 
         #region Flavors

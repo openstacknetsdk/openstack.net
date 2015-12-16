@@ -130,6 +130,12 @@ namespace OpenStack.Compute.v2_1
         {
             return _computeApi.GetRdpConsoleAsync<RemoteConsole>(serverId, RemoteConsoleType.RdpHtml5, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetConsoleOutputAsync" />
+        public virtual Task<string> GetConsoleOutputAsync(Identifier serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetConsoleOutputAsync(serverId, length, cancellationToken);
+        }
         #endregion
 
         #region Flavors

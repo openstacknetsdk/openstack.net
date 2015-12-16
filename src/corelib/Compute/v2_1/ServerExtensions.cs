@@ -116,5 +116,11 @@ namespace OpenStack.Synchronous
         {
             return server.GetRdpConsoleAsync().ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.GetConsoleOutputAsync"/>
+        public static string GetConsoleOutput(this ServerReference server, int length = -1)
+        {
+            return server.GetConsoleOutputAsync(length).ForceSynchronous();
+        }
     }
 }
