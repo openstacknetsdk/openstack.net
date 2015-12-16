@@ -11,7 +11,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "metadata")]
-    public class ImageMetadata : Dictionary<string, string>, IHaveExtraData, IServiceResource
+    public class ImageMetadata : Dictionary<string, string>, IHaveExtraData, IChildResource
     {
         /// <summary />
         [JsonIgnore]
@@ -22,6 +22,11 @@ namespace OpenStack.Compute.v2_1
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
         object IServiceResource.Owner { get; set; }
+
+        void IChildResource.SetParent(string parentId)
+        {
+            Image = new Image {Id = parentId};
+        }
 
         /// <summary />
         protected void AssertImageIsSet([CallerMemberName]string callerName = "")

@@ -534,12 +534,13 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IChildResource
         {
             var result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
+            result.SetParent(imageId);
             return result;
         }
 
@@ -789,12 +790,13 @@ namespace OpenStack.Compute.v2_1
         #region Volumes
         /// <summary />
         public virtual async Task<T> GetServerVolumeAsync<T>(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IChildResource
         {
             var result = await BuildGetServerVolumeAsync(serverId, volumeId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             result.PropogateOwner(this);
+            result.SetParent(serverId);
             return result;
         }
 

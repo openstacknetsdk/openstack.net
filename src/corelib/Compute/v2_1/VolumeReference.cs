@@ -11,7 +11,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class VolumeReference : IHaveExtraData, IServiceResource
+    public class VolumeReference : IHaveExtraData, IChildResource
     {
         /// <summary />
         [JsonIgnore]
@@ -21,6 +21,11 @@ namespace OpenStack.Compute.v2_1
         public Identifier Id { get; set; }
 
         object IServiceResource.Owner { get; set; }
+
+        void IChildResource.SetParent(string parentId)
+        {
+            Server = new Server { Id = parentId };
+        }
 
         /// <summary />
         [JsonExtensionData]

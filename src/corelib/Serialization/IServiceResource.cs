@@ -15,6 +15,17 @@ namespace OpenStack.Serialization
         object Owner { get; set; }
     }
 
+    /// <summary>
+    /// Resources which are children of another resource.
+    /// </summary>
+    public interface IChildResource : IServiceResource
+    {
+        /// <summary>
+        /// Called after deserialization to bootstrap a link from the child back to the parent resource.
+        /// </summary>
+        void SetParent(string parentId);
+    }
+
     /// <summary />
     public static class ServiceResourceExtensions
     {
