@@ -172,10 +172,10 @@ namespace OpenStack.Synchronous
             return service.GetImageMetadataItemAsync(imageId, key).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.WaitUntilImageIsActiveAsync" />
-        public static void WaitUntilImageIsActive(this ComputeService service, Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        /// <inheritdoc cref="ComputeService.WaitForImageStatusAsync" />
+        public static void WaitForImageStatus(this ComputeService service, Identifier imageId, ImageStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
-            service.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress).ForceSynchronous();
+            service.WaitForImageStatusAsync(imageId, status, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.CreateImagMetadataAsync" />

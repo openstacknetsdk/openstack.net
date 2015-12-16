@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Extensions;
 using System.Linq;
 using System.Net;
@@ -125,7 +124,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
         public async Task<TServer> WaitForServerStatusAsync<TServer, TStatus>(string serverId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TServer : IServiceResource
-            where TStatus : StringEnumeration
+            where TStatus : ResourceStatus
         {
             Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
             return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
@@ -136,17 +135,18 @@ namespace OpenStack.Compute.v2_1
         /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
+        /// <param name="deletedStatus">The deleted status to wait for.</param>
         /// <param name="refreshDelay">The amount of time to wait between requests.</param>
         /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
         /// <param name="progress">The progress callback.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilServerIsDeletedAsync<TServer, TStatus>(string serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WaitUntilServerIsDeletedAsync<TServer, TStatus>(string serverId, TStatus deletedStatus = null, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TServer : IServiceResource
-            where TStatus : StringEnumeration
+            where TStatus : ResourceStatus
         {
-            TStatus deletedStatus = StringEnumeration.FromDisplayName<TStatus>("DELETED");
+            deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
             Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
             await ApiHelper.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
@@ -264,112 +264,42 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary>
-        /// Waits for an image to become active.
+        /// Waits for an image to reach the specified state.
         /// </summary>
         /// <param name="imageId">The image identifier.</param>
+        /// <param name="status">The image status.</param>
         /// <param name="refreshDelay">The amount of time to wait between requests.</param>
         /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
         /// <param name="progress">The progress callback.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task<Image> WaitUntilImageIsActiveAsync(string imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TImage> WaitForImageStatusAsync<TImage, TStatus>(string imageId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TImage : IServiceResource
+            where TStatus : ResourceStatus
         {
-            if (string.IsNullOrEmpty(imageId))
-                throw new ArgumentNullException("imageId");
-
-            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
-            timeout = timeout ?? TimeSpan.FromMinutes(5);
-
-            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
-            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
-            {
-                while (true)
-                {
-                    Image image = await GetImageAsync<Image>(imageId, cancellationToken).ConfigureAwait(false);
-                    if (image.Status == ImageStatus.Error)
-                        throw new ComputeOperationFailedException();
-
-                    bool complete = image.Status == ImageStatus.Active;
-
-                    progress?.Report(complete);
-
-                    if (complete)
-                        return image;
-
-                    try
-                    {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the snapshot ({imageId}) to complete.", ex);
-
-                        throw;
-                    }
-                }
-            }
+            Func<Task<dynamic>> getServer = async () => await GetImageAsync<TImage>(imageId, cancellationToken);
+            return await ApiHelper.WaitForStatusAsync(imageId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary>
         /// Waits for the image to be deleted.
         /// </summary>
         /// <param name="imageId">The image identifier.</param>
+        /// <param name="deletedStatus">The deleted status to wait for.</param>
         /// <param name="refreshDelay">The amount of time to wait between requests.</param>
         /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
         /// <param name="progress">The progress callback.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilImageIsDeletedAsync(string imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WaitUntilImageIsDeletedAsync<TImage, TStatus>(string imageId, TStatus deletedStatus, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TImage : IServiceResource
+            where TStatus : ResourceStatus
         {
-            if (string.IsNullOrEmpty(imageId))
-                throw new ArgumentNullException("imageId");
-
-            refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
-            timeout = timeout ?? TimeSpan.FromMinutes(5);
-
-            using (var timeoutSource = new CancellationTokenSource(timeout.Value))
-            using (var rootCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutSource.Token))
-            {
-                while (true)
-                {
-                    bool complete;
-                    try
-                    {
-                        Image server = await GetImageAsync<Image>(imageId, cancellationToken).ConfigureAwait(false);
-                        if (server.Status == ImageStatus.Error)
-                            throw new ComputeOperationFailedException();
-
-                        complete = server.Status == ImageStatus.Deleted;
-                    }
-                    catch (FlurlHttpException httpError)
-                    {
-                        if (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
-                            complete = true;
-                        else
-                            throw;
-                    }
-
-                    progress?.Report(complete);
-
-                    if (complete)
-                        return;
-
-                    try
-                    {
-                        await Task.Delay(refreshDelay.Value, rootCancellationToken.Token).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the image ({imageId}) to be deleted.", ex);
-
-                        throw;
-                    }
-                }
-            }
+            deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
+            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TImage>(imageId, cancellationToken);
+            await ApiHelper.WaitUntilDeletedAsync(imageId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary />

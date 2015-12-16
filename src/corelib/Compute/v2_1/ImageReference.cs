@@ -55,12 +55,12 @@ namespace OpenStack.Compute.v2_1
             await owner.DeleteImageAsync(Id, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.TryGetOwner<ComputeApiBuilder>();
-            await owner.WaitUntilImageIsDeletedAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            await owner.WaitUntilImageIsDeletedAsync<Image, ImageStatus>(Id, null, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         public Task WaitUntilServerIsDeletedAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(serverId, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(serverId, null, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateSnapshotAsync{T}" />
@@ -192,10 +192,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetImageMetadataItemAsync(imageId, key, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsActiveAsync" />
-        public Task<Image> WaitUntilImageIsActiveAsync(Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.WaitForImageStatusAsync{TImage,TStatus}" />
+        public Task<Image> WaitForImageStatusAsync(Identifier imageId, ImageStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.WaitUntilImageIsActiveAsync(imageId, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitForImageStatusAsync<Image, ImageStatus>(imageId, status, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateImagMetadataAsync" />
@@ -234,10 +234,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.DeleteImageMetadataAsync(imageId, key, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         public Task WaitUntilImageIsDeletedAsync(Identifier imageId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.WaitUntilImageIsDeletedAsync(imageId, refreshDelay, timeout, progress, cancellationToken);
+            return _computeApi.WaitUntilImageIsDeletedAsync<Image, ImageStatus>(imageId, null, refreshDelay, timeout, progress, cancellationToken);
         }
         #endregion
 

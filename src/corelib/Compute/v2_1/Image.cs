@@ -70,24 +70,22 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsActiveAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitForImageStatusAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WaitForStatus(ImageStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.TryGetOwner<ComputeApiBuilder>();
-            var result = await owner.WaitUntilImageIsActiveAsync(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            var result = await owner.WaitForImageStatusAsync<Image, ImageStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public override async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await base.DeleteAsync(cancellationToken).ConfigureAwait(false);
-            Status = ImageStatus.Unknown;
+            return WaitForStatus(ImageStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
-
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync" />
+        
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {

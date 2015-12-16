@@ -137,12 +137,11 @@ namespace OpenStack.Compute.v2_1
             return WaitForStatusAsync(ServerStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
-            await owner.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(Id, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
+            await base.WaitUntilDeletedAsync(refreshDelay, timeout, progress, cancellationToken);
             Status = ServerStatus.Deleted;
         }
 

@@ -103,6 +103,7 @@
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerStatus.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerVolumeCollection.cs" />
@@ -806,6 +807,7 @@
     <Compile Include="Serialization\IPageBuilder.cs" />
     <Compile Include="Serialization\IPageLink.cs" />
     <Compile Include="Serialization\IServiceResource.cs" />
+    <Compile Include="Serialization\ResourceStatus.cs" />
     <Compile Include="Serialization\StringEnumeration.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />

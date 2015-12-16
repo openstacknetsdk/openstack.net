@@ -23,7 +23,7 @@ namespace OpenStack
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
         public static async Task<TResource> WaitForStatusAsync<TResource, TStatus>(string resourceId, TStatus status, Func<Task<TResource>> getResource, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
-            where TStatus : StringEnumeration
+            where TStatus : ResourceStatus
         {
             if (string.IsNullOrEmpty(resourceId))
                 throw new ArgumentNullException("resourceId");
@@ -76,7 +76,7 @@ namespace OpenStack
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
         public static async Task WaitUntilDeletedAsync<TStatus>(string resourceId, TStatus deletedStatus, Func<Task<dynamic>> getResource, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
-            where TStatus : StringEnumeration
+            where TStatus : ResourceStatus
         {
             try
             {

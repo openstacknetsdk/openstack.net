@@ -250,8 +250,6 @@ namespace OpenStack.Compute.v2_1
                 var image = _compute.GetImage(imageId);
 
                 image.Delete();
-                Assert.Equal(image.Status, ImageStatus.Unknown);
-
                 image.WaitUntilDeleted();
                 Assert.Equal(image.Status, ImageStatus.Deleted);
             }

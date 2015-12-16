@@ -3,12 +3,9 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary />
-    public class ServerStatus<T> : StringEnumeration
+    public class ServerStatus<T> : ResourceStatus
         where T : ServerStatus<T>, new()
     {
-        /// <summary />
-        public bool IsError { get; protected set; }
-
         /// <summary>
         /// The server is active.
         /// </summary>
