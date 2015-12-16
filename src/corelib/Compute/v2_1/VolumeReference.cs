@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -25,12 +26,30 @@ namespace OpenStack.Compute.v2_1
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
         /// <summary />
+        protected void AssertServerIsSet([CallerMemberName]string callerName = "")
+        {
+            if (Server != null)
+                return;
+
+            throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeServer. Use ComputeService.{callerName} instead."));
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual Task<VolumeAttachment> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            AssertServerIsSet();
+
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return compute.GetServerVolumeAsync<VolumeAttachment>(Server.Id, Id, cancellationToken);
+        }
+
+        /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual Task DetachAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if(Server == null)
-                throw new InvalidOperationException("Detach can only be used on instances which were constructed by the ComputeService. Use ComputeService.DetachVolume instead.");
-                
+            AssertServerIsSet(); 
+
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return compute.DetachVolumeAsync(Server.Id, Id, cancellationToken);
         }

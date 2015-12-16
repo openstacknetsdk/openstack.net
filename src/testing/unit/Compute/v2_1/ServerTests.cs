@@ -412,6 +412,25 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void GetVolume()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier volumeId = Guid.NewGuid();
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId, AttachedVolumes = {new VolumeReference {Id = volumeId}}});
+                httpTest.RespondWithJson(new VolumeAttachment {Id = volumeId, DeviceName = "/dev/vdd"});
+
+                var server = _compute.GetServer(serverId);
+                var result = server.AttachedVolumes[0].GetServerVolume();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments/{volumeId}");
+                Assert.NotNull(result);
+                Assert.Equal(volumeId, result.Id);
+            }
+        }
+
+        [Fact]
         public void ListVolumes()
         {
             using (var httpTest = new HttpTest())

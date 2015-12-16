@@ -203,6 +203,12 @@ namespace OpenStack.Synchronous
         #endregion
 
         #region Volumes
+        /// <inheritdoc cref="ComputeService.GetServerVolumeAsync" />
+        public static VolumeAttachment GetServerVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
+        {
+            return service.GetServerVolumeAsync(serverId, volumeId).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.ListServerVolumesAsync" />
         public static IEnumerable<VolumeAttachment> ListServerVolumes(this ComputeService service, Identifier serverId)
         {

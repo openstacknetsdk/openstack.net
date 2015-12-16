@@ -787,6 +787,27 @@ namespace OpenStack.Compute.v2_1
         #endregion
 
         #region Volumes
+        /// <summary />
+        public virtual async Task<T> GetServerVolumeAsync<T>(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetServerVolumeAsync(serverId, volumeId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetServerVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
 
         /// <summary />
         public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
