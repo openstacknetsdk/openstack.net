@@ -25,9 +25,9 @@ namespace OpenStack.Compute.v2_2
         }
 
         /// <summary />
-        public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<RemoteConsole> GetVncConsoleAync(Identifier serverId, RemoteConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApiBuilder.GetVncConsoleAsync<Console>(serverId, type, cancellationToken);
+            return _computeApiBuilder.GetVncConsoleAsync<RemoteConsole>(serverId, type, cancellationToken);
         }
         #endregion
 

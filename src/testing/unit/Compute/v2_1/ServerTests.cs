@@ -460,19 +460,82 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
+        [Theory]
+        [InlineData("novnc")]
+        [InlineData("xvpvnc")]
+        public void GetVncConsole(string typeName)
+        {
+            var type = StringEnumeration.FromDisplayName<RemoteConsoleType>(typeName);
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server {Id = serverId});
+                httpTest.RespondWithJson(new RemoteConsole {Type = type});
+
+                var server = _compute.GetServer(serverId);
+                var result = server.GetVncConsole(RemoteConsoleType.NoVnc);
+                
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("os-getVNCConsole", httpTest.CallLog.Last().RequestBody);
+                Assert.NotNull(result);
+                Assert.Equal(type, result.Type);
+            }
+        }
+
         [Fact]
-        public void GetVncConsole()
+        public void GetSpiceConsole()
         {
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new Console {Type = ConsoleType.NoVnc});
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new RemoteConsole { Type = RemoteConsoleType.SpiceHtml5 });
 
-                Console result = _compute.GetVncConsole(serverId, ConsoleType.NoVnc);
-                
+                var server = _compute.GetServer(serverId);
+                var result = server.GetSpiceConsole();
+
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("os-getSPICEConsole", httpTest.CallLog.Last().RequestBody);
                 Assert.NotNull(result);
-                Assert.Equal(ConsoleType.NoVnc, result.Type);
+                Assert.Equal(RemoteConsoleType.SpiceHtml5, result.Type);
+            }
+        }
+
+        [Fact]
+        public void GetSerialConsole()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new RemoteConsole { Type = RemoteConsoleType.Serial });
+
+                var server = _compute.GetServer(serverId);
+                var result = server.GetSerialConsole();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("os-getSerialConsole", httpTest.CallLog.Last().RequestBody);
+                Assert.NotNull(result);
+                Assert.Equal(RemoteConsoleType.Serial, result.Type);
+            }
+        }
+
+        [Fact]
+        public void GetRdpConsole()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new RemoteConsole { Type = RemoteConsoleType.RdpHtml5 });
+
+                var server = _compute.GetServer(serverId);
+                var result = server.GetRdpConsole();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("os-getRDPConsole", httpTest.CallLog.Last().RequestBody);
+                Assert.NotNull(result);
+                Assert.Equal(RemoteConsoleType.RdpHtml5, result.Type);
             }
         }
     }

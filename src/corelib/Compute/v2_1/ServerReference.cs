@@ -110,5 +110,37 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return await compute.ListServerVolumesAsync<ServerVolumeCollection>(Id, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<RemoteConsole> GetVncConsoleAsync(RemoteConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.GetVncConsoleAsync<RemoteConsole>(Id, type, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<RemoteConsole> GetSpiceConsoleAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.GetSpiceConsoleAsync<RemoteConsole>(Id,RemoteConsoleType.SpiceHtml5, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<RemoteConsole> GetSerialConsoleAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.GetSerialConsoleAsync<RemoteConsole>(Id, RemoteConsoleType.Serial, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task<RemoteConsole> GetRdpConsoleAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return await compute.GetRdpConsoleAsync<RemoteConsole>(Id, RemoteConsoleType.RdpHtml5, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

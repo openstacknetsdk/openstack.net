@@ -10,7 +10,7 @@ namespace OpenStack.Synchronous
     public static class ComputeServiceExtensions_v2_2
     {
         /// <inheritdoc cref="OpenStack.Compute.v2_1.ComputeService.GetVncConsoleAync" />
-        public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
+        public static RemoteConsole GetVncConsole(this ComputeService service, Identifier serverId, RemoteConsoleType type)
         {
             return service.GetVncConsoleAync(serverId, type).ForceSynchronous();
         }

@@ -427,7 +427,8 @@ namespace OpenStack.Compute.v2_1
         public virtual Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildGetVncConsoleRequestAsync(serverId, type, cancellationToken)
-                .SendAsync().ReceiveJson<T>();
+                .SendAsync()
+                .ReceiveJson<T>();
         }
 
         /// <summary />
@@ -436,6 +437,69 @@ namespace OpenStack.Compute.v2_1
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             var request = JObject.Parse($"{{ 'os-getVNCConsole': {{ 'type': '{type}' }} }}");
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(request, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<T> GetSpiceConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetSpiceConsoleRequestAsync(serverId, type, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetSpiceConsoleRequestAsync(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = JObject.Parse($"{{ 'os-getSPICEConsole': {{ 'type': '{type}' }} }}");
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(request, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<T> GetSerialConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetSerialConsoleRequestAsync(serverId, type, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetSerialConsoleRequestAsync(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = JObject.Parse($"{{ 'os-getSerialConsole': {{ 'type': '{type}' }} }}");
+            return endpoint
+                .AppendPathSegments("servers", serverId, "action")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(request, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<T> GetRdpConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetRdpConsoleRequestAsync(serverId, type, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetRdpConsoleRequestAsync(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = JObject.Parse($"{{ 'os-getRDPConsole': {{ 'type': '{type}' }} }}");
             return endpoint
                 .AppendPathSegments("servers", serverId, "action")
                 .Authenticate(AuthenticationProvider)

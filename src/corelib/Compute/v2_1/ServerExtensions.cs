@@ -92,5 +92,29 @@ namespace OpenStack.Synchronous
         {
             return server.ListVolumesAsync().ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.GetVncConsoleAsync"/>
+        public static RemoteConsole GetVncConsole(this ServerReference server, RemoteConsoleType type)
+        {
+            return server.GetVncConsoleAsync(type).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetSpiceConsoleAsync"/>
+        public static RemoteConsole GetSpiceConsole(this ServerReference server)
+        {
+            return server.GetSpiceConsoleAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetSpiceConsoleAsync"/>
+        public static RemoteConsole GetSerialConsole(this ServerReference server)
+        {
+            return server.GetSerialConsoleAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetRdpConsoleAsync"/>
+        public static RemoteConsole GetRdpConsole(this ServerReference server)
+        {
+            return server.GetRdpConsoleAsync().ForceSynchronous();
+        }
     }
 }

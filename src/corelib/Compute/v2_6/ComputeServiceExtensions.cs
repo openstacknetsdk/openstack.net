@@ -10,7 +10,7 @@ namespace OpenStack.Synchronous
     public static class ComputeServiceExtensions_v2_6
     {
         /// <inheritdoc cref="ComputeService.GetConsoleAsync" />
-        public static Console GetConsole(this ComputeService service, Identifier serverId, ConsoleProtocol protocol, ConsoleType type)
+        public static Console GetConsole(this ComputeService service, Identifier serverId, ConsoleProtocol protocol, RemoteConsoleType type)
         {
             return service.GetConsoleAsync(serverId, protocol, type).ForceSynchronous();
         }

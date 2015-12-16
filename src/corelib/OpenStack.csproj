@@ -102,6 +102,7 @@
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerVolumeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
@@ -132,8 +133,8 @@
     <Compile Include="Compute\v2_2\ComputeApiBuilder.cs" />
     <Compile Include="Compute\v2_2\ComputeService.cs" />
     <Compile Include="Compute\v2_2\ComputeServiceExtensions.cs" />
-    <Compile Include="Compute\v2_2\Console.cs" />
-    <Compile Include="Compute\v2_2\ConsoleType.cs" />
+    <Compile Include="Compute\v2_2\RemoteConsole.cs" />
+    <Compile Include="Compute\v2_2\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_2\ListServersOptions.cs" />
     <Compile Include="Compute\v2_2\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_2\Server.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="Compute\v2_6\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_6\Console.cs" />
     <Compile Include="Compute\v2_6\ConsoleProtocol.cs" />
-    <Compile Include="Compute\v2_6\ConsoleType.cs" />
+    <Compile Include="Compute\v2_6\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_6\KeyPair.cs" />
     <Compile Include="Compute\v2_6\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_6\KeyPairType.cs" />
@@ -152,8 +153,8 @@
     <Compile Include="Compute\v2_6\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_6\Server.cs" />
     <Compile Include="Compute\v2_1\ComputeServiceExtensions.cs" />
-    <Compile Include="Compute\v2_1\Console.cs" />
-    <Compile Include="Compute\v2_1\ConsoleType.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsole.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_1\ComputeService.cs" />
     <Compile Include="Compute\v2_1\ComputeApiBuilder.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerCollection.cs" />

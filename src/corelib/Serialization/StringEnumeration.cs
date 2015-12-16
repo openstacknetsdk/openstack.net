@@ -24,7 +24,7 @@ namespace OpenStack.Serialization
         }
         
         /// <summary />
-        public string DisplayName { get; }
+        public string DisplayName { get; protected set; }
 
         /// <summary />
         public override string ToString()
@@ -43,7 +43,7 @@ namespace OpenStack.Serialization
         public static IEnumerable<StringEnumeration> GetAll(Type type)
         {
             IEnumerable<FieldInfo> fields = type
-                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .GetFields(BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Static)
                 .Where(field => field.FieldType == type);
 
             return fields.Select(info => info.GetValue(null)).Cast<StringEnumeration>();

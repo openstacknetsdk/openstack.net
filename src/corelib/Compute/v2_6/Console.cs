@@ -12,7 +12,7 @@ namespace OpenStack.Compute.v2_6
         /// <summary>
         /// The console type.
         /// </summary>
-        public ConsoleType Type { get; set; }
+        public RemoteConsoleType Type { get; set; }
 
         /// <summary>
         /// The console URL.

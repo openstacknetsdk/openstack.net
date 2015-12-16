@@ -108,9 +108,27 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.GetVncConsoleAsync{T}" />
-        public virtual Task<Console> GetVncConsoleAync(Identifier serverId, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<RemoteConsole> GetVncConsoleAync(Identifier serverId, RemoteConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.GetVncConsoleAsync<Console>(serverId, type, cancellationToken);
+            return _computeApi.GetVncConsoleAsync<RemoteConsole>(serverId, type, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetSpiceConsoleAsync{T}" />
+        public virtual Task<RemoteConsole> GetSpiceConsoleAync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetSpiceConsoleAsync<RemoteConsole>(serverId, RemoteConsoleType.SpiceHtml5, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetSerialConsoleAsync{T}" />
+        public virtual Task<RemoteConsole> GetSerialConsoleAync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetSerialConsoleAsync<RemoteConsole>(serverId, RemoteConsoleType.Serial, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetRdpConsoleAsync{T}" />
+        public virtual Task<RemoteConsole> GetRdpConsoleAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetRdpConsoleAsync<RemoteConsole>(serverId, RemoteConsoleType.RdpHtml5, cancellationToken);
         }
         #endregion
 

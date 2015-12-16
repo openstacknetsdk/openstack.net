@@ -271,5 +271,52 @@ namespace OpenStack.Compute.v2_1
             Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
             _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
         }
+
+        [Fact]
+        public async void GetConsoleTest()
+        {
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Getting a VNC console...");
+            // This is a silly hack to verify that our message passed validation
+            // Since we don't have VNC setup, it won't actually pass
+            try
+            {
+                await server.GetVncConsoleAsync(RemoteConsoleType.NoVnc);
+            }
+            catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("Unavailable console type novnc"))
+            {
+            }
+
+            Trace.WriteLine("Getting a SPICE console...");
+            var spiceConsole = await server.GetSpiceConsoleAsync();
+            Assert.NotNull(spiceConsole);
+            Assert.NotNull(spiceConsole.Url);
+            Assert.Equal(RemoteConsoleType.SpiceHtml5, spiceConsole.Type);
+
+            Trace.WriteLine("Getting a Serial console...");
+            // This is a silly hack to verify that our message passed validation
+            // Since we don't have serial setup, it won't actually pass
+            try
+            {
+                await server.GetSerialConsoleAsync();
+            }
+            catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("Unavailable console type serial"))
+            {
+            }
+
+            Trace.WriteLine("Getting a RDP console...");
+            // This is a silly hack to verify that our message passed validation
+            // Since we don't have windows/RDP setup, it won't actually pass
+            try
+            {
+                await server.GetRdpConsoleAsync();
+            }
+            catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("Unavailable console type rdp-html5"))
+            {
+            }
+        }
     }
 }

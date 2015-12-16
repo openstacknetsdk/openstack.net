@@ -29,7 +29,7 @@ namespace OpenStack.Compute.v2_6
         }
 
         /// <summary />
-        public virtual Task<Console> GetConsoleAsync(Identifier serverId, ConsoleProtocol protocol, ConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<Console> GetConsoleAsync(Identifier serverId, ConsoleProtocol protocol, RemoteConsoleType type, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApiBuilder.GetConsoleAsync<Console>(serverId, protocol, type, cancellationToken);
         }

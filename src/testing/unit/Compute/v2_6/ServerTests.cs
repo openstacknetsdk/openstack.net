@@ -20,13 +20,13 @@ namespace OpenStack.Compute.v2_6
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new Console {Type = ConsoleType.NoVnc});
+                httpTest.RespondWithJson(new Console {Type = RemoteConsoleType.NoVnc});
 
-                Console result = _computeService.GetConsole(serverId, ConsoleProtocol.VNC, ConsoleType.NoVnc);
+                Console result = _computeService.GetConsole(serverId, ConsoleProtocol.VNC, RemoteConsoleType.NoVnc);
                 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/remote-consoles");
                 Assert.NotNull(result);
-                Assert.Equal(ConsoleType.NoVnc, result.Type);
+                Assert.Equal(RemoteConsoleType.NoVnc, result.Type);
             }
         }
     }

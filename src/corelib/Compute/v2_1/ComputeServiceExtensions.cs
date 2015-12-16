@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using OpenStack.Compute.v2_1;
 using OpenStack.Synchronous.Extensions;
-using Console = OpenStack.Compute.v2_1.Console;
 
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
@@ -92,9 +91,27 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
-        public static Console GetVncConsole(this ComputeService service, Identifier serverId, ConsoleType type)
+        public static RemoteConsole GetVncConsole(this ComputeService service, Identifier serverId, RemoteConsoleType type)
         {
             return service.GetVncConsoleAync(serverId, type).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetSpiceConsoleAync" />
+        public static RemoteConsole GetSpiceConsole(this ComputeService service, Identifier serverId)
+        {
+            return service.GetSpiceConsoleAync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetSpiceConsoleAync" />
+        public static RemoteConsole GetSerialConsole(this ComputeService service, Identifier serverId)
+        {
+            return service.GetSerialConsoleAync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetRdpConsoleAsync" />
+        public static RemoteConsole GetRdpConsole(this ComputeService service, Identifier serverId)
+        {
+            return service.GetRdpConsoleAsync(serverId).ForceSynchronous();
         }
         #endregion
 
