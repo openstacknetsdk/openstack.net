@@ -5,10 +5,10 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "volumeAttachment")]
-    public class VolumeAttachmentDefinition
+    public class ServerVolumeDefinition
     {
     /// <summary />
-        public VolumeAttachmentDefinition(Identifier volumeId)
+        public ServerVolumeDefinition(Identifier volumeId)
         {
             VolumeId = volumeId;
         }

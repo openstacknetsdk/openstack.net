@@ -102,7 +102,7 @@
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
-    <Compile Include="Compute\v2_1\Serialization\VolumeAttachmentCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerVolumeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
@@ -121,11 +121,11 @@
     <Compile Include="Compute\v2_1\ServerReference.cs" />
     <Compile Include="Compute\v2_1\ServerStatus.cs" />
     <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
-    <Compile Include="Compute\v2_1\VolumeAttachmentDefinition.cs" />
-    <Compile Include="Compute\v2_1\VolumeAttachment.cs" />
-    <Compile Include="Compute\v2_1\VolumeAttachmentExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerVolume.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
-    <Compile Include="Compute\v2_1\VolumeReference.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />

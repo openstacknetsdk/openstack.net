@@ -11,7 +11,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class VolumeReference : IHaveExtraData, IChildResource
+    public class ServerVolumeReference : IHaveExtraData, IChildResource
     {
         /// <summary />
         [JsonIgnore]
@@ -42,12 +42,12 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task<VolumeAttachment> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ServerVolume> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertServerIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            var result = await compute.GetServerVolumeAsync<VolumeAttachment>(Server.Id, Id, cancellationToken);
+            var result = await compute.GetServerVolumeAsync<ServerVolume>(Server.Id, Id, cancellationToken);
             result.Server = Server;
             return result;
         }

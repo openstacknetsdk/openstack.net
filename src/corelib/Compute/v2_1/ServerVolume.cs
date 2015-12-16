@@ -1,14 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "volumeAttachment")]
-    public class VolumeAttachment : VolumeReference
+    public class ServerVolume : ServerVolumeReference
     {
         /// <summary />
         [JsonProperty("device")]

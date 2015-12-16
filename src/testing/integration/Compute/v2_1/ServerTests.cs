@@ -250,7 +250,7 @@ namespace OpenStack.Compute.v2_1
             _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
 
             Trace.WriteLine("Attaching the volume...");
-            await server.AttachVolumeAsync(new VolumeAttachmentDefinition(volumeId));
+            await server.AttachVolumeAsync(new ServerVolumeDefinition(volumeId));
             _testData.BlockStorage.StorageProvider.WaitForVolumeState(volumeId, VolumeState.InUse, new[] { VolumeState.Error });
 
             var volumeRef = server.AttachedVolumes.FirstOrDefault();

@@ -4,16 +4,16 @@ using OpenStack.Synchronous.Extensions;
 namespace OpenStack.Synchronous
 {
     /// <summary />
-    public static class VolumeAttachmentExtensions
+    public static class ServerVolumeExtensions
     {
         /// <summary />
-        public static VolumeAttachment GetServerVolume(this VolumeReference volume)
+        public static ServerVolume GetServerVolume(this ServerVolumeReference volume)
         {
             return volume.GetServerVolumeAsync().ForceSynchronous();
         }
 
         /// <summary />
-        public static void Detach(this VolumeReference volume)
+        public static void Detach(this ServerVolumeReference volume)
         {
             volume.DetachAsync().ForceSynchronous();
         }

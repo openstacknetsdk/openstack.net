@@ -17,7 +17,7 @@ namespace OpenStack.Compute.v2_1
         public Server()
         {
             Addresses = new Dictionary<string, IList<ServerAddress>>();
-            AttachedVolumes = new List<VolumeReference>();
+            AttachedVolumes = new List<ServerVolumeReference>();
             SecurityGroups = new List<SecurityGroupReference>();
         }
 
@@ -117,7 +117,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("os-extended-volumes:volumes_attached")]
-        public IList<VolumeReference> AttachedVolumes { get; set; }
+        public IList<ServerVolumeReference> AttachedVolumes { get; set; }
 
         /// <summary />
         [JsonProperty("security_groups")]
@@ -168,7 +168,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <inheritdoc />
-        public override async Task<VolumeAttachment> AttachVolumeAsync(VolumeAttachmentDefinition volume, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = new CancellationToken())
         {
             var result = await base.AttachVolumeAsync(volume, cancellationToken);
             result.Server = this;

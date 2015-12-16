@@ -223,21 +223,21 @@ namespace OpenStack.Compute.v2_1
 
         #region Volumes
         /// <inheritdoc cref="ComputeApiBuilder.GetServerVolumeAsync{T}" />
-        public async Task<VolumeAttachment> GetServerVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ServerVolume> GetServerVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.GetServerVolumeAsync<VolumeAttachment>(serverId, volumeId, cancellationToken);
+            return await _computeApi.GetServerVolumeAsync<ServerVolume>(serverId, volumeId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServerVolumesAsync{T}" />
-        public async Task<IEnumerable<VolumeAttachment>> ListServerVolumesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<ServerVolume>> ListServerVolumesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerVolumesAsync<VolumeAttachmentCollection>(serverId, cancellationToken);
+            return await _computeApi.ListServerVolumesAsync<ServerVolumeCollection>(serverId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.AttachVolumeAsync{T}" />
-        public Task<VolumeAttachment> AttachVolumeAsync(Identifier serverId, VolumeAttachmentDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ServerVolume> AttachVolumeAsync(Identifier serverId, ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.AttachVolumeAsync<VolumeAttachment>(serverId, volume, cancellationToken);
+            return _computeApi.AttachVolumeAsync<ServerVolume>(serverId, volume, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.DetachVolumeAsync" />

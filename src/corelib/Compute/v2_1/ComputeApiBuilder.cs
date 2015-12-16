@@ -837,11 +837,11 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            T volumeAttachment = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
+            T result = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(volumeAttachment);
-            return volumeAttachment;
+            SetOwner(result);
+            return result;
         }
 
         /// <summary />

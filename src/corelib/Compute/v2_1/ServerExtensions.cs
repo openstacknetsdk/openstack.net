@@ -82,13 +82,13 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ServerReference.AttachVolumeAsync"/>
-        public static VolumeAttachment AttachVolume(this ServerReference server, VolumeAttachmentDefinition volume)
+        public static ServerVolume AttachVolume(this ServerReference server, ServerVolumeDefinition volume)
         {
             return server.AttachVolumeAsync(volume).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ServerReference.ListVolumesAsync"/>
-        public static IEnumerable<VolumeAttachment> ListVolumes(this ServerReference server)
+        public static IEnumerable<ServerVolume> ListVolumes(this ServerReference server)
         {
             return server.ListVolumesAsync().ForceSynchronous();
         }

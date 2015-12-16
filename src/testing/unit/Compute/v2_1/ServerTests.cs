@@ -378,10 +378,10 @@ namespace OpenStack.Compute.v2_1
                 Identifier volumeId = Guid.NewGuid();
                 Identifier serverId = Guid.NewGuid();
                 httpTest.RespondWithJson(new Server { Id = serverId });
-                httpTest.RespondWithJson(new VolumeAttachment {Id = volumeId, DeviceName = "/dev/vdd"});
+                httpTest.RespondWithJson(new ServerVolume {Id = volumeId, DeviceName = "/dev/vdd"});
 
                 var server = _compute.GetServer(serverId);
-                var result = server.AttachVolume(new VolumeAttachmentDefinition(volumeId));
+                var result = server.AttachVolume(new ServerVolumeDefinition(volumeId));
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
                 Assert.NotNull(result);
@@ -402,12 +402,12 @@ namespace OpenStack.Compute.v2_1
                 httpTest.RespondWithJson(new Server
                 {
                     Id = serverId,
-                    AttachedVolumes = { new VolumeAttachment { Id = volumeId, DeviceName = "/dev/vdd" } }
+                    AttachedVolumes = { new ServerVolume { Id = volumeId, DeviceName = "/dev/vdd" } }
                 });
                 httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy");
 
                 var server = _compute.GetServer(serverId);
-                VolumeReference attachedVolume = server.AttachedVolumes[0];
+                ServerVolumeReference attachedVolume = server.AttachedVolumes[0];
                 attachedVolume.Detach();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments/{volumeId}");
@@ -422,8 +422,8 @@ namespace OpenStack.Compute.v2_1
             {
                 Identifier volumeId = Guid.NewGuid();
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new Server {Id = serverId, AttachedVolumes = {new VolumeReference {Id = volumeId}}});
-                httpTest.RespondWithJson(new VolumeAttachment {Id = volumeId, DeviceName = "/dev/vdd"});
+                httpTest.RespondWithJson(new Server {Id = serverId, AttachedVolumes = {new ServerVolumeReference {Id = volumeId}}});
+                httpTest.RespondWithJson(new ServerVolume {Id = volumeId, DeviceName = "/dev/vdd"});
 
                 var server = _compute.GetServer(serverId);
                 var result = server.AttachedVolumes[0].GetServerVolume();
@@ -442,9 +442,9 @@ namespace OpenStack.Compute.v2_1
                 Identifier volumeId = Guid.NewGuid();
                 Identifier serverId = Guid.NewGuid();
                 httpTest.RespondWithJson(new Server {Id = serverId});
-                httpTest.RespondWithJson(new VolumeAttachmentCollection
+                httpTest.RespondWithJson(new ServerVolumeCollection
                 {
-                    new VolumeAttachment
+                    new ServerVolume
                     {
                         Id = volumeId, DeviceName = "/dev/vdd"
                     }
