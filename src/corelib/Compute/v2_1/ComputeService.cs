@@ -41,10 +41,16 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.CreateServerAsync<Server>(server, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}" />
+        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
         public Task<Server> WaitForServerStatusAsync(Identifier serverId, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.WaitForServerStatusAsync<Server, ServerStatus>(serverId, status, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}(string, IEnumerable{TStatus},TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
+        public Task<Server> WaitForServerStatusAsync(Identifier serverId, IEnumerable<ServerStatus> statuses, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.WaitForServerStatusAsync<Server, ServerStatus>(serverId, statuses, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />

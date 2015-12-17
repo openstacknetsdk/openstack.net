@@ -24,10 +24,16 @@ namespace OpenStack.Synchronous
             return service.CreateServerAsync(server).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.WaitForServerStatusAsync" />
+        /// <inheritdoc cref="ComputeService.WaitForServerStatusAsync(Identifier,ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)" />
         public static Server WaitForServerStatus(this ComputeService service, Identifier serverId, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
             return service.WaitForServerStatusAsync(serverId, status, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.WaitForServerStatusAsync(Identifier,IEnumerable{ServerStatus},TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)" />
+        public static Server WaitForServerStatus(this ComputeService service, Identifier serverId, IEnumerable<ServerStatus> statuses, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            return service.WaitForServerStatusAsync(serverId, statuses, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListServersAsync" />

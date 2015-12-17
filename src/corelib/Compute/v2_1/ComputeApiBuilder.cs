@@ -130,6 +130,26 @@ namespace OpenStack.Compute.v2_1
             return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
+
+        /// <summary>
+        /// Waits for the server to reach the specified status.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TServer> WaitForServerStatusAsync<TServer, TStatus>(string serverId, IEnumerable<TStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TServer : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
+        }
+
         /// <summary>
         /// Waits for the server to be deleted.
         /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>

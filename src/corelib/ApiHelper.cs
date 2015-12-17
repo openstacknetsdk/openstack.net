@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +24,26 @@ namespace OpenStack
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public static async Task<TResource> WaitForStatusAsync<TResource, TStatus>(string resourceId, TStatus status, Func<Task<TResource>> getResource, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<TResource> WaitForStatusAsync<TResource, TStatus>(string resourceId, TStatus status, Func<Task<TResource>> getResource, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TStatus : ResourceStatus
+        {
+            return WaitForStatusAsync<TResource, TStatus>(resourceId, new[] {status}, getResource, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Waits for the server to reach the specified status.
+        /// </summary>
+        /// <param name="resourceId">The resource identifier.</param>
+        /// <param name="statuses">The status to wait for.</param>
+        /// <param name="getResource">Function which retrieves the resource.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public static async Task<TResource> WaitForStatusAsync<TResource, TStatus>(string resourceId, IEnumerable<TStatus> statuses, Func<Task<TResource>> getResource, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TStatus : ResourceStatus
         {
             if (string.IsNullOrEmpty(resourceId))
@@ -40,7 +61,7 @@ namespace OpenStack
                     if (resource.Status?.IsError == true)
                         throw new ResourceErrorException($"The resource ({resourceId}) is in an error state ({resource.Status})");
 
-                    bool complete = resource.Status == status;
+                    bool complete = statuses.Contains((TStatus)resource.Status);
 
                     progress?.Report(complete);
 
@@ -54,7 +75,7 @@ namespace OpenStack
                     catch (OperationCanceledException ex)
                     {
                         if (timeoutSource.IsCancellationRequested)
-                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the resource ({resourceId}) to reach the {status} state.", ex);
+                            throw new TimeoutException($"The requested timeout of {timeout.Value.TotalSeconds} seconds has been reached while waiting for the resource ({resourceId}) to reach the {statuses} state.", ex);
 
                         throw;
                     }
