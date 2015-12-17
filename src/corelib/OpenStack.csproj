@@ -102,6 +102,7 @@
     <Compile Include="Compute\v2_1\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServiceLimits.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
     <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
     <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />

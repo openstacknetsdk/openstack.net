@@ -306,5 +306,11 @@ namespace OpenStack.Synchronous
             return service.CreateKeyPairAsync(name).ForceSynchronous();
         }
         #endregion
+
+        /// <inheritdoc cref="ComputeService.GetLimitsAsync" />
+        public static ServiceLimits GetLimits(this ComputeService service)
+        {
+            return service.GetLimitsAsync().ForceSynchronous();
+        }
     }
 }

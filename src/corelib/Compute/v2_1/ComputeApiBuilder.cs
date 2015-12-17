@@ -1003,5 +1003,26 @@ namespace OpenStack.Compute.v2_1
         }
 
         #endregion
+
+        /// <summary />
+        public virtual Task<T> GetLimitsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetLimitsAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("limits")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
     }
 }

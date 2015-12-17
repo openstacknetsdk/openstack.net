@@ -330,5 +330,10 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        /// <inheritdoc cref="ComputeApiBuilder.GetLimitsAsync{T}" />
+        public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetLimitsAsync<ServiceLimits>(cancellationToken);
+        }
     }
 }
