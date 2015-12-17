@@ -137,6 +137,24 @@ namespace OpenStack.Synchronous
         {
             service.UnrescueServerAsync(serverId).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ComputeService.ResizeServerAsync" />
+        public static void ResizeServer(this ComputeService service, Identifier serverId, Identifier flavorId)
+        {
+            service.ResizeServerAsync(serverId, flavorId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ConfirmResizeServerAsync" />
+        public static void ConfirmResizeServer(this ComputeService service, Identifier serverId)
+        {
+            service.ConfirmResizeServerAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CancelResizeServerAsync" />
+        public static void CancelResizeServer(this ComputeService service, Identifier serverId)
+        {
+            service.CancelResizeServerAsync(serverId).ForceSynchronous();
+        }
         #endregion
 
         #region Flavors

@@ -174,5 +174,29 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return compute.UnrescueServerAsync(Id, cancellationToken);
         }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task ResizeAsync(Identifier flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return compute.ResizeServerAsync(Id, flavorId, cancellationToken);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task ConfirmResizeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return compute.ConfirmResizeServerAsync(Id, cancellationToken);
+        }
+
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task CancelResizeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            return compute.CancelResizeServerAsync(Id, cancellationToken);
+        }
     }
 }

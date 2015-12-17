@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
-using net.openstack.Core.Domain;
 using Xunit;
 using Xunit.Abstractions;
+using VolumeState = net.openstack.Core.Domain.VolumeState;
 
 namespace OpenStack.Compute.v2_1
 {
@@ -334,6 +334,35 @@ namespace OpenStack.Compute.v2_1
 
             Trace.WriteLine("Unrescuing the server...");
             await server.UnrescueAsync();
+            await server.WaitUntilActiveAsync();
+        }
+
+        [Fact]
+        public async void ResizeServerTest()
+        {
+            var flavors = await _compute.ListFlavorsAsync();
+            var small = flavors.First(f => f.Name.Contains("small")).Id;
+            var medium = flavors.First(f => f.Name.Contains("medium")).Id;
+
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+            Trace.WriteLine($"Created server named: {server.Name}");
+
+            Trace.WriteLine("Resizing the server to medium...");
+            await server.ResizeAsync(medium);
+            await server.WaitForStatusAsync(ServerStatus.VerifyResize);
+
+            Trace.WriteLine("Canceling the resize of the server...");
+            await server.CancelResizeAsync();
+            await server.WaitUntilActiveAsync();
+
+            Trace.WriteLine("Resizing the server to small...");
+            await server.ResizeAsync(small);
+            await server.WaitForStatusAsync(ServerStatus.VerifyResize);
+
+            Trace.WriteLine("Confirming the resize of the server...");
+            await server.ConfirmResizeAsync();
+            await server.WaitForStatusAsync(new [] {ServerStatus.Resizing, ServerStatus.Active}); // resizing is quick, or maybe doesn't happen at all, so wait for either
             await server.WaitUntilActiveAsync();
         }
     }

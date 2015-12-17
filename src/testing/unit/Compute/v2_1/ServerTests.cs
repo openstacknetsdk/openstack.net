@@ -592,5 +592,63 @@ namespace OpenStack.Compute.v2_1
                 Assert.Contains("unrescue", httpTest.CallLog.Last().RequestBody);
             }
         }
+
+        [Fact]
+        public void ResizeServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier flavorId = "1";
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy!");
+
+                var server = _compute.GetServer(serverId);
+                server.Resize(flavorId);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("resize", httpTest.CallLog.Last().RequestBody);
+            }
+        }
+
+        [Fact]
+        public void ConfirmResizeServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier flavorId = "1";
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy!");
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy!");
+
+                var server = _compute.GetServer(serverId);
+                server.Resize(flavorId);
+                server.ConfirmResize();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("confirmResize", httpTest.CallLog.Last().RequestBody);
+            }
+        }
+
+        [Fact]
+        public void CancelResizeServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier flavorId = "1";
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy!");
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, good buddy!");
+
+                var server = _compute.GetServer(serverId);
+                server.Resize(flavorId);
+                server.CancelResize();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.Contains("revertResize", httpTest.CallLog.Last().RequestBody);
+            }
+        }
     }
 }

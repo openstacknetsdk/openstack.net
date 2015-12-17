@@ -154,6 +154,24 @@ namespace OpenStack.Compute.v2_1
         {
             return _computeApi.UnrescueServerAsync(serverId, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ResizeServerAsync" />
+        public virtual Task ResizeServerAsync(Identifier serverId, Identifier flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.ResizeServerAsync(serverId, flavorId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ConfirmResizeServerAsync" />
+        public virtual Task ConfirmResizeServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.ConfirmResizeServerAsync(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CancelResizeServerAsync" />
+        public virtual Task CancelResizeServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CancelResizeServerAsync(serverId, cancellationToken);
+        }
         #endregion
 
         #region Flavors

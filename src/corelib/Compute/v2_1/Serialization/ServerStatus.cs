@@ -64,7 +64,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <summary>
         /// Server is performing the differential copy of data that changed during its initial copy. Server is down for this stage.
         /// </summary>
-        public static readonly T Resized = new T {DisplayName = "RESIZED"};
+        public static readonly T Resizing = new T {DisplayName = "RESIZED"};
 
         /// <summary>
         /// The resize or migration of a server failed for some reason. The destination server is being cleaned up and the original source server is restarting.

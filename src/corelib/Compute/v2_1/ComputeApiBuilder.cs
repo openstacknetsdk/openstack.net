@@ -426,15 +426,48 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual Task ResizeServerAsync(string serverId, string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            object request = new
+            {
+                resize = new
+                {
+                    flavorRef = flavorId
+                }
+            };
+            return BuildServerActionAsync(serverId, request, cancellationToken)
+                .SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task ConfirmResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            object request = new Dictionary<string, object> {["confirmResize"] = null };
+            return BuildServerActionAsync(serverId, request, cancellationToken)
+                .SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task CancelResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            object request = new Dictionary<string, object> {["revertResize"] = null };
+            return BuildServerActionAsync(serverId, request, cancellationToken)
+                .SendAsync();
+        }
+
+        /// <summary />
         public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
 
+            if (request == null)
+                throw new ArgumentNullException("request");
+
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
-                .AppendPathSegments("servers", serverId, "action")
+                .AppendPathSegments($"servers/{serverId}/action")
                 .Authenticate(AuthenticationProvider)
                 .SetMicroversion(this)
                 .PreparePostJson(request, cancellationToken);
