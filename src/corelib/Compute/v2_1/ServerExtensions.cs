@@ -152,5 +152,11 @@ namespace OpenStack.Synchronous
         {
             server.CancelResizeAsync().ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ServerReference.ListActionsAsync"/>
+        public static IEnumerable<ServerActionReference> ListActions(this ServerReference server)
+        {
+            return server.ListActionsAsync().ForceSynchronous();
+        }
     }
 }

@@ -650,5 +650,42 @@ namespace OpenStack.Compute.v2_1
                 Assert.Contains("revertResize", httpTest.CallLog.Last().RequestBody);
             }
         }
+
+        [Fact]
+        public void ListServerActions()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                Identifier actionId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new ServerActionReferenceCollection {new ServerActionReference {Id = actionId, ServerId = serverId, Name = "create"}});
+                httpTest.RespondWithJson(new ServerAction
+                {
+                    Id = actionId,
+                    Name = "create",
+                    Events = {new ServerEvent {Name = "create_instance"}}
+                });
+
+                var server = _compute.GetServer(serverId);
+                var results = server.ListActions();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-instance-actions");
+                Assert.NotNull(results);
+                Assert.Equal(1, results.Count());
+
+                var actionRef = results.First();
+                Assert.Equal(actionId, actionRef.Id);
+                Assert.NotNull(actionRef.Name);
+
+                var action = actionRef.GetAction();
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-instance-actions/{actionId}");
+                Assert.NotNull(action);
+                Assert.NotNull(action.Name);
+                Assert.NotNull(action.Events);
+                Assert.Equal(1, action.Events.Count);
+                Assert.NotNull(action.Events.First().Name);
+            }
+        }
     }
 }

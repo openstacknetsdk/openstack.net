@@ -472,6 +472,58 @@ namespace OpenStack.Compute.v2_1
                 .SetMicroversion(this)
                 .PreparePostJson(request, cancellationToken);
         }
+
+        /// <summary />
+        public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var results = await BuildListServerActionsAsync(serverId, cancellationToken).SendAsync().ReceiveJson<T>();
+            results.PropogateOwner(this);
+            return results;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListServerActionsAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"servers/{serverId}/os-instance-actions")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> GetServerActionAsync<T>(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetServerActionAsync(serverId, actionId, cancellationToken).SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetServerActionAsync(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            if (serverId == null)
+                throw new ArgumentNullException("actionId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"servers/{serverId}/os-instance-actions/{actionId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
         #endregion
 
         #region Flavors

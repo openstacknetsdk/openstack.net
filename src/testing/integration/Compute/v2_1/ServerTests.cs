@@ -63,6 +63,27 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(server.PowerState);
             Assert.NotNull(server.VMState);
             Assert.NotNull(server.SecurityGroups);
+
+            var history = await server.ListActionsAsync();
+            Assert.NotNull(history);
+            var createRef = history.FirstOrDefault(a => a.Name == "create");
+            Assert.NotNull(createRef);
+            Assert.NotNull(createRef.Id);
+            Assert.NotNull(createRef.Name);
+            Assert.NotNull(createRef.ServerId);
+            Assert.NotNull(createRef.UserId);
+
+            var createAction = await createRef.GetActionAsync();
+            Assert.NotNull(createAction);
+            Assert.NotNull(createAction.Id);
+            Assert.NotNull(createAction.Name);
+            Assert.NotNull(createAction.Events);
+
+            var createEvent = createAction.Events.FirstOrDefault();
+            Assert.NotNull(createEvent);
+            Assert.NotNull(createEvent.Name);
+            Assert.NotNull(createEvent.Finished);
+            Assert.Equal(ServerEventStatus.Success, createEvent.Result);
         }
 
         [Fact]

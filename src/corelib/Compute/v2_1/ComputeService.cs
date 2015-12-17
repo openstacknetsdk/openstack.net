@@ -172,6 +172,18 @@ namespace OpenStack.Compute.v2_1
         {
             return _computeApi.CancelResizeServerAsync(serverId, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerActionsAsync{T}" />
+        public virtual async Task<IEnumerable<ServerActionReference>> ListServerActionsAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerActionsAsync<ServerActionReferenceCollection>(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerActionsAsync{T}" />
+        public virtual Task<ServerAction> GetServerActionAsync(Identifier serverId, Identifier actionId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerActionAsync<ServerAction>(serverId, actionId, cancellationToken);
+        }
         #endregion
 
         #region Flavors
