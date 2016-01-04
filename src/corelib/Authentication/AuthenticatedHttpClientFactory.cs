@@ -16,7 +16,7 @@ namespace OpenStack.Authentication
         {
             return new HttpClient(handler)
             {
-                Timeout = FlurlHttp.Configuration.DefaultTimeout
+                Timeout = FlurlHttp.GlobalSettings.DefaultTimeout
             };
         }
 

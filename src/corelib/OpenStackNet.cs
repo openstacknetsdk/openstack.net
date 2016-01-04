@@ -35,7 +35,7 @@ namespace OpenStack
         /// <param name="configureFlurl">Addtional configuration of Flurl's global settings <seealso cref="Flurl.Http.FlurlHttp.Configure" />.</param>
         /// <param name="configureJson">Additional configuration of Json.NET's global settings <seealso cref="Newtonsoft.Json.JsonConvert.DefaultSettings" />.</param>
         /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
-        public static void Configure(Action<FlurlHttpConfigurationOptions> configureFlurl = null, Action<JsonSerializerSettings> configureJson = null, Action<OpenStackNetConfigurationOptions> configure = null)
+        public static void Configure(Action<FlurlHttpSettings> configureFlurl = null, Action<JsonSerializerSettings> configureJson = null, Action<OpenStackNetConfigurationOptions> configure = null)
         {
             lock (ConfigureLock)
             {
@@ -61,7 +61,7 @@ namespace OpenStack
             {
                 Configuration.ResetDefaults();
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings();
-                FlurlHttp.Configuration.ResetDefaults();
+                FlurlHttp.GlobalSettings.ResetDefaults();
 
                 _isConfigured = false;
             }
@@ -87,7 +87,7 @@ namespace OpenStack
             };
         }
 
-        private static void ConfigureFlurl(Action<FlurlHttpConfigurationOptions> configureFlurl = null)
+        private static void ConfigureFlurl(Action<FlurlHttpSettings> configureFlurl = null)
         {
             FlurlHttp.Configure(c =>
             {
