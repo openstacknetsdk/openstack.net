@@ -54,6 +54,12 @@ namespace OpenStack.Compute.v2_1
 
             try
             {
+                DeleteSecurityGroups(_testData.OfType<SecurityGroup>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
                 BlockStorage.Dispose();
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
@@ -109,6 +115,33 @@ namespace OpenStack.Compute.v2_1
         public void DeleteImages(IEnumerable<Image> images)
         {
             var deletes = images.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Security Groups
+        public SecurityGroupDefinition BuildSecurityGroup()
+        {
+            string name = TestData.GenerateName();
+            return new SecurityGroupDefinition(name, "ci test data");
+        }
+
+        public async Task<SecurityGroup> CreateSecurityGroup()
+        {
+            var definition = BuildSecurityGroup();
+            return await CreateSecurityGroup(definition);
+        }
+
+        public async Task<SecurityGroup> CreateSecurityGroup(SecurityGroupDefinition definition)
+        {
+            var securityGroup = await _compute.CreateSecurityGroupAsync(definition);
+            Register(securityGroup);
+            return securityGroup;
+        }
+        
+        public void DeleteSecurityGroups(IEnumerable<SecurityGroup> securityGroups)
+        {
+            var deletes = securityGroups.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion

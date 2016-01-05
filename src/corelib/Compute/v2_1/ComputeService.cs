@@ -35,7 +35,7 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetServerAsync<Server>(serverId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.CreateServerAsync{TPage}" />
+        /// <inheritdoc cref="ComputeApiBuilder.CreateServerAsync{T}" />
         public Task<Server> CreateServerAsync(ServerCreateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateServerAsync<Server>(server, cancellationToken);
@@ -65,7 +65,7 @@ namespace OpenStack.Compute.v2_1
             return await _computeApi.ListServerDetailsAsync<ServerCollection>(options, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{TPage}" />
+        /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{T}" />
         public Task<Server> UpdateServerAsync(Identifier serverid, ServerUpdateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.UpdateServerAsync<Server>(serverid, server, cancellationToken);
@@ -326,6 +326,40 @@ namespace OpenStack.Compute.v2_1
         {
             var keyPair = new KeyPairDefinition(name);
             return _computeApi.CreateKeyPairAsync<KeyPair>(keyPair, cancellationToken);
+        }
+
+        #endregion
+
+        #region Security Groups
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetSecurityGroupAsync{T}" />
+        public Task<SecurityGroup> GetSecurityGroupAsync(Identifier securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetSecurityGroupAsync<SecurityGroup>(securityGroupId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateSecurityGroupAsync{T}" />
+        public Task<SecurityGroup> CreateSecurityGroupAsync(SecurityGroupDefinition securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateSecurityGroupAsync<SecurityGroup>(securityGroup, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListSecurityGroupsAsync{T}" />
+        public async Task<IEnumerable<SecurityGroup>> ListSecurityGroupsAsync(Identifier serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListSecurityGroupsAsync<SecurityGroupCollection>(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.UpdateSecurityGroupAsync{T}" />
+        public Task<SecurityGroup> UpdateSecurityGroupAsync(Identifier securityGroupId, SecurityGroupDefinition securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.UpdateSecurityGroupAsync<SecurityGroup>(securityGroupId, securityGroup, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteSecurityGroupAsync" />
+        public Task DeleteSecurityGroupAsync(Identifier securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteSecurityGroupAsync(securityGroupId, cancellationToken);
         }
 
         #endregion

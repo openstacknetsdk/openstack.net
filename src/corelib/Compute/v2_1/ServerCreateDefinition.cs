@@ -14,6 +14,11 @@ namespace OpenStack.Compute.v2_1
             Name = name;
             ImageId = imageId;
             FlavorId = flavorId;
+            SecurityGroups = new List<SecurityGroupReference>();
+            Networks = new List<NetworkAttachDefinition>();
+            Metadata = new Dictionary<string, string>();
+            Personality = new List<Personality>();
+            BlockDeviceMapping = new List<ServerBlockDeviceMapping>();
         }
 
         /// <summary />

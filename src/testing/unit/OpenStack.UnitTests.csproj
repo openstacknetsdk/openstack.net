@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="AuthenticationTests.cs" />
     <Compile Include="Compute\v2_1\ComputeServiceTests.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupTests.cs" />
     <Compile Include="Compute\v2_1\ImageTests.cs" />
     <Compile Include="Compute\v2_1\KeyPairTests.cs" />
     <Compile Include="Compute\v2_1\FlavorTests.cs" />

@@ -307,6 +307,40 @@ namespace OpenStack.Synchronous
         }
         #endregion
 
+        #region Security Groups
+
+        /// <inheritdoc cref="ComputeService.GetSecurityGroupAsync" />
+        public static SecurityGroup GetSecurityGroup(this ComputeService service, Identifier securityGroupId)
+        {
+            return service.GetSecurityGroupAsync(securityGroupId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateSecurityGroupAsync" />
+        public static SecurityGroup CreateSecurityGroup(this ComputeService service, SecurityGroupDefinition securityGroup)
+        {
+            return service.CreateSecurityGroupAsync(securityGroup).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListSecurityGroupsAsync" />
+        public static IEnumerable<SecurityGroup> ListSecurityGroups(this ComputeService service, Identifier serverId = null)
+        {
+            return service.ListSecurityGroupsAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.UpdateSecurityGroupAsync" />
+        public static SecurityGroup UpdateSecurityGroup(this ComputeService service, Identifier securityGroupid, SecurityGroupDefinition securityGroup)
+        {
+            return service.UpdateSecurityGroupAsync(securityGroupid, securityGroup).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteSecurityGroupAsync" />
+        public static void DeleteSecurityGroup(this ComputeService service, Identifier securityGroupId)
+        {
+            service.DeleteSecurityGroupAsync(securityGroupId).ForceSynchronous();
+        }
+
+        #endregion
+
         #region Compute Service
         /// <inheritdoc cref="ComputeService.GetLimitsAsync" />
         public static ServiceLimits GetLimits(this ComputeService service)

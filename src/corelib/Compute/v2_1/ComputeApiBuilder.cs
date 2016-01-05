@@ -130,7 +130,6 @@ namespace OpenStack.Compute.v2_1
             return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
-
         /// <summary>
         /// Waits for the server to reach the specified status.
         /// </summary>
@@ -1004,6 +1003,178 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Security Groups
+
+        /// <summary />
+        public virtual async Task<T> GetSecurityGroupAsync<T>(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetSecurityGroupsAsync(securityGroupId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetSecurityGroupsAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"os-security-groups/{securityGroupId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateSecurityGroupAsync<T>(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildCreateSecurityGroupAsync(securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateSecurityGroupAsync(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if(securityGroup == null)
+                throw new ArgumentNullException("securityGroup");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-security-groups")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(securityGroup, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateSecurityGroupRuleAsync<T>(object rule, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildCreateSecurityGroupRuleAsync(rule, cancellationToken).SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateSecurityGroupRuleAsync(object rule, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (rule == null)
+                throw new ArgumentNullException("rule");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-security-group-rules")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(rule, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildListSecurityGropusAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListSecurityGropusAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            if (serverId != null)
+                endpoint = endpoint.AppendPathSegment($"servers/{serverId}");
+
+            return endpoint
+                .AppendPathSegment("os-security-groups")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> UpdateSecurityGroupAsync<T>(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildUpdateSecurityGroupAsync(securityGroupId, securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
+            SetOwner(result);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildUpdateSecurityGroupAsync(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if(securityGroupId == null)
+                throw new ArgumentNullException("securityGroupId");
+
+            if(securityGroup == null)
+                throw new ArgumentNullException("securityGroup");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments($"os-security-groups/{securityGroupId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePutJson(securityGroup, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteSecurityGroupAsync(securityGroupId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (securityGroupId == null)
+                throw new ArgumentNullException("securityGroupId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegment($"os-security-groups/{securityGroupId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        /// <summary />
+        public virtual Task DeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteSecurityGroupRuleAsync(ruleId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (ruleId == null)
+                throw new ArgumentNullException("ruleId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegment($"os-security-group-rules/{ruleId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        #endregion
+
         #region Compute Service
         /// <summary />
         public virtual Task<T> GetLimitsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
@@ -1065,6 +1236,5 @@ namespace OpenStack.Compute.v2_1
                 .PrepareGet(cancellationToken);
         }
         #endregion
-
     }
 }
