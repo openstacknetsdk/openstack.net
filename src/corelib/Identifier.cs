@@ -66,7 +66,7 @@ namespace OpenStack
         /// </returns>
         public static implicit operator string(Identifier id)
         {
-            return id == null ? string.Empty : id.ToString();
+            return id?.ToString();
         }
 
         /// <summary>
