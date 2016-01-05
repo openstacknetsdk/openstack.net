@@ -60,11 +60,6 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public string Microversion { get; }
 
-        private void SetOwner(IServiceResource resource)
-        {
-            resource.PropogateOwner(this);
-        }
-
         #region Servers
 
         /// <summary />
@@ -74,7 +69,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildGetServerAsync(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -107,7 +102,7 @@ namespace OpenStack.Compute.v2_1
             where T : IServiceResource
         {
             var result = await BuildCreateServerAsync(server, cancellationToken).SendAsync().ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -190,7 +185,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListServersAsync<TPage>);
-            SetOwner(results);
+            results.PropogateOwner(this);
 
             return results;
         }
@@ -225,7 +220,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListServerDetailsAsync<TPage>);
-            SetOwner(results);
+            results.PropogateOwner(this);
             return results;
         }
 
@@ -256,7 +251,7 @@ namespace OpenStack.Compute.v2_1
             where T : IServiceResource
         {
             var result = await BuildUpdateServerAsync(serverId, server, cancellationToken).SendAsync().ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -533,7 +528,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildGetFlavorAsync(flavorId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -556,7 +551,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildListFlavorsAsync(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -579,7 +574,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildListFlavorDetailsAsync(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -605,7 +600,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildGetImageAsync(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -714,7 +709,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListImagesAsync<TPage>);
-            SetOwner(results);
+            results.PropogateOwner(this);
 
             return results;
         }
@@ -749,7 +744,7 @@ namespace OpenStack.Compute.v2_1
                 .ReceiveJson<TPage>();
 
             results.SetNextPageHandler(ListImageDetailsAsync<TPage>);
-            SetOwner(results);
+            results.PropogateOwner(this);
             return results;
         }
 
@@ -770,7 +765,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildUpdateImageMetadataAsync(imageId, metadata, overwrite, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -939,7 +934,7 @@ namespace OpenStack.Compute.v2_1
             T result = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -1012,7 +1007,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildGetSecurityGroupsAsync(securityGroupId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -1033,7 +1028,7 @@ namespace OpenStack.Compute.v2_1
             where T : IServiceResource
         {
             var result = await BuildCreateSecurityGroupAsync(securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -1057,7 +1052,7 @@ namespace OpenStack.Compute.v2_1
             where T : IServiceResource
         {
             var result = await BuildCreateSecurityGroupRuleAsync(rule, cancellationToken).SendAsync().ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -1083,7 +1078,7 @@ namespace OpenStack.Compute.v2_1
             var result = await BuildListSecurityGropusAsync(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
@@ -1107,7 +1102,7 @@ namespace OpenStack.Compute.v2_1
             where T : IServiceResource
         {
             var result = await BuildUpdateSecurityGroupAsync(securityGroupId, securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
-            SetOwner(result);
+            result.PropogateOwner(this);
             return result;
         }
 
