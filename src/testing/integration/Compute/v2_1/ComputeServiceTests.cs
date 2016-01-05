@@ -3,6 +3,7 @@ using System.Diagnostics;
 using OpenStack.Serialization;
 using Xunit;
 using Xunit.Abstractions;
+using System.Threading.Tasks;
 
 namespace OpenStack.Compute.v2_1
 {
@@ -27,7 +28,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void GetLimitsTest()
+        public async Task GetLimitsTest()
         {
             var limits = await _compute.GetLimitsAsync();
             Assert.NotNull(limits);
@@ -39,7 +40,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void GetCurrentQuotas()
+        public async Task GetCurrentQuotas()
         {
             var quotas = await _compute.GetCurrentQuotasAsync();
             Assert.NotNull(quotas);
@@ -48,7 +49,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void GetDefaultQuotas()
+        public async Task GetDefaultQuotas()
         {
             var quotas = await _compute.GetDefaultQuotasAsync();
             Assert.NotNull(quotas);

@@ -50,7 +50,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void FindSnapshotsTest()
+        public async Task FindSnapshotsTest()
         {
             Trace.WriteLine("Creating a test server...");
             var server = await _testData.CreateServer();
@@ -81,7 +81,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void EditImageMetadataTest()
+        public async Task EditImageMetadataTest()
         {
             Trace.WriteLine("Creating a test server...");
             var server = await _testData.CreateServer();

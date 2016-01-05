@@ -36,7 +36,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void CreateServerTest()
+        public async Task CreateServerTest()
         {
             var definition = _testData.BuildServer();
 
@@ -101,7 +101,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void FindServersTest()
+        public async Task FindServersTest()
         {
             var servers = await _testData.CreateServers();
             await Task.WhenAll(servers.Select(x => x.WaitUntilActiveAsync()));
@@ -128,7 +128,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void UpdateServerTest()
+        public async Task UpdateServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -149,7 +149,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void DeleteServerTest()
+        public async Task DeleteServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -162,7 +162,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void LookupServerAddressesTest()
+        public async Task LookupServerAddressesTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -177,7 +177,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void SnapshotServerTest()
+        public async Task SnapshotServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -202,7 +202,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void RestartServerTest()
+        public async Task RestartServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -220,7 +220,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void RebootServerTest()
+        public async Task RebootServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -233,7 +233,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void EvacuateServerTest()
+        public async Task EvacuateServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -259,7 +259,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void ServerVolumesTest()
+        public async Task ServerVolumesTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -294,7 +294,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void GetConsoleTest()
+        public async Task GetConsoleTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -343,7 +343,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void RescueServerTest()
+        public async Task RescueServerTest()
         {
             var server = await _testData.CreateServer();
             await server.WaitUntilActiveAsync();
@@ -359,7 +359,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async void ResizeServerTest()
+        public async Task ResizeServerTest()
         {
             var flavors = await _compute.ListFlavorsAsync();
             var small = flavors.First(f => f.Name.Contains("small")).Id;
