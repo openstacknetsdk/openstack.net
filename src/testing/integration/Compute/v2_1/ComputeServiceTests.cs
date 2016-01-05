@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenStack.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,6 +35,25 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(limits.ResourceLimits);
             Assert.NotNull(limits.ResourceLimits.ServersMax);
             Assert.NotNull(limits.ResourceLimits.ServersUsed);
+            Assert.Empty(((IHaveExtraData)limits).Data);
+        }
+
+        [Fact]
+        public async void GetCurrentQuotas()
+        {
+            var quotas = await _compute.GetCurrentQuotasAsync();
+            Assert.NotNull(quotas);
+            Assert.Equal("details", quotas.Id);
+            Assert.Empty(((IHaveExtraData)quotas).Data);
+        }
+
+        [Fact]
+        public async void GetDefaultQuotas()
+        {
+            var quotas = await _compute.GetDefaultQuotasAsync();
+            Assert.NotNull(quotas);
+            Assert.Equal("defaults", quotas.Id);
+            Assert.Empty(((IHaveExtraData)quotas).Data);
         }
     }
 }

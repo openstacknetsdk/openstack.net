@@ -1004,6 +1004,7 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Compute Service
         /// <summary />
         public virtual Task<T> GetLimitsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -1023,6 +1024,47 @@ namespace OpenStack.Compute.v2_1
                 .SetMicroversion(this)
                 .PrepareGet(cancellationToken);
         }
+
+        /// <summary />
+        public virtual Task<T> GetCurrentQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetCurrentQuotasAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-quota-sets/details")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<T> GetDefaultQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildGetDefaultQuotasAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-quota-sets/defaults")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+        #endregion
 
     }
 }

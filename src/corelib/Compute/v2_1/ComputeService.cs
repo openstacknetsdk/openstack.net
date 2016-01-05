@@ -330,10 +330,24 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Compute Service
         /// <inheritdoc cref="ComputeApiBuilder.GetLimitsAsync{T}" />
         public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetLimitsAsync<ServiceLimits>(cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetCurrentQuotasAsync{T}" />
+        public Task<ServiceQuotas> GetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetCurrentQuotasAsync<ServiceQuotas>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetDefaultQuotasAsync{T}" />
+        public Task<ServiceQuotas> GetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetDefaultQuotasAsync<ServiceQuotas>(cancellationToken);
+        }
+        #endregion
     }
 }

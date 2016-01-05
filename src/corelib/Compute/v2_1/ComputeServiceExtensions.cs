@@ -307,10 +307,24 @@ namespace OpenStack.Synchronous
         }
         #endregion
 
+        #region Compute Service
         /// <inheritdoc cref="ComputeService.GetLimitsAsync" />
         public static ServiceLimits GetLimits(this ComputeService service)
         {
             return service.GetLimitsAsync().ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ComputeService.GetCurrentQuotasAsync" />
+        public static ServiceQuotas GetCurrentQuotas(this ComputeService service)
+        {
+            return service.GetCurrentQuotasAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetDefaultQuotasAsync" />
+        public static ServiceQuotas GetDefaultQuotas(this ComputeService service)
+        {
+            return service.GetDefaultQuotasAsync().ForceSynchronous();
+        }
+        #endregion
     }
 }
