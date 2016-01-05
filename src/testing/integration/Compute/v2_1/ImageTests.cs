@@ -125,16 +125,21 @@ namespace OpenStack.Compute.v2_1
             Assert.False(metadata.ContainsKey("new_key"));
         }
 
-        //[Fact]
-        //public async void DeleteImageTest()
-        //{
-        //    Image image = await _testData.CreateImage();
-        //    Trace.WriteLine($"Created image named: {image.Name}");
+        [Fact]
+        public async Task DeleteImageTest()
+        {
+            Trace.WriteLine("Creating a server...");
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
 
-        //    await image.DeleteAsync();
-        //    await image.WaitUntilDeletedAsync();
+            Trace.WriteLine("Snapshotting the server...");
+            var snapshot = await server.SnapshotAsync(new SnapshotServerRequest(server.Name + "SNAPSHOT"));
+            await snapshot.WaitUntilActiveAsync();
 
-        //    await Assert.ThrowsAsync<FlurlHttpException>(() => _compute.GetImageAsync(image.Id));
-        //}
+            Trace.WriteLine($"Deleting snapshot image {snapshot.Name}");
+
+            await snapshot.DeleteAsync();
+            await snapshot.WaitUntilDeletedAsync();
+        }
     }
 }
