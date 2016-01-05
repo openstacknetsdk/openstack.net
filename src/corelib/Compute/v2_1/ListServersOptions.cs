@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1
     public class ListServersOptions : PageOptions
     {
         /// <summary />
-        public DateTimeOffset? LastModified { get; set; }
+        public DateTimeOffset? UpdatedAfter { get; set; }
 
         /// <summary />
         public Identifier ImageId { get; set; }
@@ -25,7 +25,7 @@ namespace OpenStack.Compute.v2_1
         protected override IDictionary<string, object> BuildQueryString()
         {
             var queryString = base.BuildQueryString();
-            queryString["changes-since"] = LastModified?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+            queryString["changes-since"] = UpdatedAfter?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             queryString["image"] = ImageId;
             queryString["flavor"] = FlavorId;
             queryString["name"] = Name;

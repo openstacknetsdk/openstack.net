@@ -175,7 +175,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 var imageType = ImageType.Snapshot;
                 
-                _compute.ListImages(new ImageListOptions { Name = name, ServerId = serverId, LastModified = lastModified, MininumDiskSize = minDisk, MininumMemorySize = minRam, Type = imageType});
+                _compute.ListImages(new ImageListOptions { Name = name, ServerId = serverId, UpdatedAfter = lastModified, MininumDiskSize = minDisk, MininumMemorySize = minRam, Type = imageType});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*server={serverId}");

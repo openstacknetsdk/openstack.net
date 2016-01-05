@@ -129,7 +129,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 ServerStatus status = ServerStatus.Active;
 
-                _compute.ListServers(new ListServersOptions { Name = name, FlavorId = flavorId, ImageId = imageId, LastModified = lastModified, Status = status});
+                _compute.ListServers(new ListServersOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*flavor={flavorId}");

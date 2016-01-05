@@ -26,7 +26,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("updated")]
-        public DateTimeOffset LastModified { get; set; }
+        public DateTimeOffset Updated { get; set; }
 
         /// <summary />
         [JsonProperty("minDisk")]

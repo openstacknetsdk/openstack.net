@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1
     public class ImageListOptions : PageOptions
     {
         /// <summary />
-        public DateTimeOffset? LastModified { get; set; }
+        public DateTimeOffset? UpdatedAfter { get; set; }
 
         /// <summary />
         public Identifier ServerId { get; set; }
@@ -28,7 +28,7 @@ namespace OpenStack.Compute.v2_1
         protected override IDictionary<string, object> BuildQueryString()
         {
             var queryString = base.BuildQueryString();
-            queryString["changes-since"] = LastModified?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+            queryString["changes-since"] = UpdatedAfter?.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             queryString["server"] = ServerId;
             queryString["name"] = Name;
             queryString["minDisk"] = MininumDiskSize;
