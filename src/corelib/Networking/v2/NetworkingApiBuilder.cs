@@ -25,7 +25,7 @@ namespace OpenStack.Networking.v2
         protected readonly ServiceUrlBuilder UrlBuilder;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkingService"/> class.
+        /// Initializes a new instance of the <see cref="NetworkingApiBuilder"/> class.
         /// </summary>
         /// <param name="serviceType">The service type for the desired networking provider.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>

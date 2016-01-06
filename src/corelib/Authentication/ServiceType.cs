@@ -71,6 +71,11 @@ namespace OpenStack.Authentication
         #endregion
 
         /// <summary>
+        /// The Compute service
+        /// </summary>
+        public static readonly ServiceType Compute = new ServiceType("compute");
+
+        /// <summary>
         /// The Content Delivery Network (CDN) service
         /// </summary>
         public static readonly ServiceType ContentDeliveryNetwork = new ServiceType("cdn");

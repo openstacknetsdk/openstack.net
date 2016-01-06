@@ -36,7 +36,7 @@ namespace OpenStack.Networking.v2
         #region Networks
 
         [Fact]
-        public async void CreateNetworkTest()
+        public async Task CreateNetworkTest()
         {
             var definition = _testData.BuildNetwork();
 
@@ -52,7 +52,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void BulkCreateNetworksTest()
+        public async Task BulkCreateNetworksTest()
         {
             var definitions = new[] { _testData.BuildNetwork(), _testData.BuildNetwork(), _testData.BuildNetwork() };
 
@@ -68,7 +68,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void UpdateNetworkTest()
+        public async Task UpdateNetworkTest()
         {
             Network network = await _testData.CreateNetwork();
 
@@ -86,7 +86,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void ListNetworksTest()
+        public async Task ListNetworksTest()
         {
             var networks = await _testData.CreateNetworks();
 
@@ -99,7 +99,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void GetNetworkTest()
+        public async Task GetNetworkTest()
         {
             var network = await _testData.CreateNetwork();
 
@@ -114,7 +114,7 @@ namespace OpenStack.Networking.v2
 
         #region Subnets
         [Fact]
-        public async void CreateSubnetTest()
+        public async Task CreateSubnetTest()
         {
             var network = await _testData.CreateNetwork();
             var definition = new SubnetCreateDefinition(network.Id, IPVersion.IPv4, "192.168.3.0/24")
@@ -153,7 +153,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void BulkCreateSubnetsTest()
+        public async Task BulkCreateSubnetsTest()
         {
             var network = await _testData.CreateNetwork();
             var definitions = new[] {_testData.BuildSubnet(network), _testData.BuildSubnet(network), _testData.BuildSubnet(network) };
@@ -167,7 +167,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void UpdateSubnetTest()
+        public async Task UpdateSubnetTest()
         {
             Network network = await _testData.CreateNetwork();
             Subnet subnet = await _testData.CreateSubnet(network);
@@ -186,7 +186,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void ListSubnetsTest()
+        public async Task ListSubnetsTest()
         {
             var network = await _testData.CreateNetwork();
             var subnets = await _testData.CreateSubnets(network);
@@ -200,7 +200,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void GetSubnetTest()
+        public async Task GetSubnetTest()
         {
             var network = await _testData.CreateNetwork();
             var subnet = await _testData.CreateSubnet(network);
@@ -217,7 +217,7 @@ namespace OpenStack.Networking.v2
 
         #region Ports
         [Fact]
-        public async void CreatePortTest()
+        public async Task CreatePortTest()
         {
             var network = await _testData.CreateNetwork();
             var subnet = await _testData.CreateSubnet(network);
@@ -256,7 +256,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void BulkCreatePortsTest()
+        public async Task BulkCreatePortsTest()
         {
             var network = await _testData.CreateNetwork();
             var definitions = new[] { _testData.BuildPort(network), _testData.BuildPort(network), _testData.BuildPort(network) };
@@ -270,7 +270,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void UpdatePortTest()
+        public async Task UpdatePortTest()
         {
             Network network = await _testData.CreateNetwork();
             Port port = await _testData.CreatePort(network);
@@ -289,7 +289,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void ListPortsTest()
+        public async Task ListPortsTest()
         {
             var network = await _testData.CreateNetwork();
             var ports = await _testData.CreatePorts(network);
@@ -303,7 +303,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
-        public async void GetPortTest()
+        public async Task GetPortTest()
         {
             var network = await _testData.CreateNetwork();
             var port = await _testData.CreatePort(network);

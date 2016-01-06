@@ -28,9 +28,9 @@ namespace OpenStackNet.Testing.Unit.Providers.Rackspace
 
         [TestMethod]
         [TestCategory(TestCategories.Unit)]
-        public void Should_Throw_Exception_When_Size_Is_Less_Than_100()
+        public void Should_Throw_Exception_When_Size_Is_Less_Than_1()
         {
-            const int size = 50;
+            const int size = 0;
 
             try
             {

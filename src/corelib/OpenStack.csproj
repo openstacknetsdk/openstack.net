@@ -27,7 +27,7 @@
     <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>618</NoWarn>
+    <NoWarn>612,618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +60,7 @@
       <HintPath>..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -76,12 +77,115 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiHelper.cs" />
     <Compile Include="Authentication\AuthenticatedHttpClientFactory.cs" />
     <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
+    <Compile Include="Compute\ComputeOperationFailedException.cs" />
+    <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\EvacuateServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
+    <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\StartServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\StopServerRequest.cs" />
+    <Compile Include="Compute\v2_1\AddressType.cs" />
+    <Compile Include="Compute\v2_1\Flavor.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
+    <Compile Include="Compute\v2_1\ImageExtensions.cs" />
+    <Compile Include="Compute\v2_1\Image.cs" />
+    <Compile Include="Compute\v2_1\ImageListOptions.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadata.cs" />
+    <Compile Include="Compute\v2_1\ImageStatus.cs" />
+    <Compile Include="Compute\v2_1\ImageType.cs" />
+    <Compile Include="Compute\v2_1\IPProtocol.cs" />
+    <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroup.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupRuleDefinition.cs" />
+    <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServiceQuotas.cs" />
+    <Compile Include="Compute\v2_1\ServiceLimits.cs" />
+    <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerEventCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\RebootType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerEventStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerVolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\ServerAction.cs" />
+    <Compile Include="Compute\v2_1\ServerActionExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
+    <Compile Include="Compute\v2_1\ServerCreateDefinition.cs" />
+    <Compile Include="Compute\v2_1\DiskConfiguration.cs" />
+    <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\ImageReference.cs" />
+    <Compile Include="Compute\v2_1\KeyPair.cs" />
+    <Compile Include="Compute\v2_1\KeyPairDefinition.cs" />
+    <Compile Include="Compute\v2_1\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
+    <Compile Include="Compute\v2_1\ServerAddress.cs" />
+    <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerActionReference.cs" />
+    <Compile Include="Compute\v2_1\ServerEventStatus.cs" />
+    <Compile Include="Compute\v2_1\ServerExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerReference.cs" />
+    <Compile Include="Compute\v2_1\ServerStatus.cs" />
+    <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerVolume.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
+    <Compile Include="Compute\v2_1\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
+    <Compile Include="Compute\v2_2\KeyPair.cs" />
+    <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
+    <Compile Include="Compute\v2_2\KeyPairType.cs" />
+    <Compile Include="Compute\v2_2\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_2\ComputeService.cs" />
+    <Compile Include="Compute\v2_2\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_2\RemoteConsole.cs" />
+    <Compile Include="Compute\v2_2\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_2\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_2\Serialization\ServerCollection.cs" />
+    <Compile Include="Compute\v2_2\Server.cs" />
+    <Compile Include="Compute\v2_2\ServerReference.cs" />
+    <Compile Include="Compute\v2_2\ServerStatus.cs" />
+    <Compile Include="Compute\v2_6\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_6\ComputeService.cs" />
+    <Compile Include="Compute\v2_6\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_6\Console.cs" />
+    <Compile Include="Compute\v2_6\ConsoleProtocol.cs" />
+    <Compile Include="Compute\v2_6\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_6\KeyPair.cs" />
+    <Compile Include="Compute\v2_6\KeyPairDefinition.cs" />
+    <Compile Include="Compute\v2_6\KeyPairType.cs" />
+    <Compile Include="Compute\v2_6\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_6\Serialization\ServerCollection.cs" />
+    <Compile Include="Compute\v2_6\Server.cs" />
+    <Compile Include="Compute\v2_1\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsole.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_1\ComputeService.cs" />
+    <Compile Include="Compute\v2_1\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerCollection.cs" />
+    <Compile Include="Compute\v2_1\Server.cs" />
+    <Compile Include="Compute\v2_6\ServerReference.cs" />
+    <Compile Include="Compute\v2_6\ServerStatus.cs" />
+    <Compile Include="Exceptions\ResourceErrorException.cs" />
+    <Compile Include="Extensions\PreparedRequestExtentions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
@@ -252,6 +356,7 @@
     <Compile Include="Exceptions\UserAuthenticationException.cs" />
     <Compile Include="Exceptions\IdentityRequiredException.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="PageOptions.cs" />
     <Compile Include="Providers\Hp\HpIdentityProvider.cs" />
     <Compile Include="Providers\Hp\NamespaceDoc.cs" />
     <Compile Include="Providers\Hp\PredefinedHpIdentityEndpoints.cs" />
@@ -605,6 +710,7 @@
     <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
     <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\Personality.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveError.cs" />
     <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveResponse.cs" />
@@ -718,11 +824,21 @@
     <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
     <Compile Include="Exceptions\RegionRequiredException.cs" />
     <Compile Include="Serialization\DefaultJsonConverter.cs" />
+    <Compile Include="Serialization\IPageBuilder.cs" />
+    <Compile Include="Serialization\IPageLink.cs" />
+    <Compile Include="Serialization\IServiceResource.cs" />
+    <Compile Include="Serialization\ResourceStatus.cs" />
+    <Compile Include="Serialization\StringEnumeration.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
+    <Compile Include="Serialization\IHaveExtraData.cs" />
+    <Compile Include="Serialization\IQueryStringBuilder.cs" />
+    <Compile Include="Serialization\ISupportMicroversions.cs" />
     <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\Page.cs" />
     <Compile Include="Serialization\ResourceCollection.cs" />
+    <Compile Include="Serialization\PageLink.cs" />
+    <Compile Include="Serialization\StringEnumerationConverter.cs" />
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />

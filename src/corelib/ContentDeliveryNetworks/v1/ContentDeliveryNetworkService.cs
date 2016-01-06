@@ -9,6 +9,7 @@ using Flurl.Extensions;
 using Flurl.Http;
 using Marvin.JsonPatch;
 using OpenStack.Authentication;
+using OpenStack.Serialization;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -96,14 +97,15 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         // TODO: move into a class that we can use via composition so that we aren't implementing this for everything that is paged?
-        private async Task<IPage<Service>> ListServicesAsync(Url url, CancellationToken cancellationToken)
+        private async Task<ServiceCollection> ListServicesAsync(Url url, CancellationToken cancellationToken)
         {
             ServiceCollection result = await url
                 .Authenticate(_authenticationProvider)
                 .GetJsonAsync<ServiceCollection>(cancellationToken)
                 .ConfigureAwait(false);
 
-            result.NextPageHandler = ListServicesAsync;
+            ((IPageBuilder<ServiceCollection>)result).SetNextPageHandler(ListServicesAsync);
+
             return result;
         }
 

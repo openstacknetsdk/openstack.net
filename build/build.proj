@@ -7,7 +7,7 @@
     <!-- Note: We won't start using semver until v2 -->
     <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' != '' ">-beta$(bamboo_GitVersion_BuildMetadata)</PrereleaseTag>
     <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' == '' ">-SNAPSHOT</PrereleaseTag>
-    <Version>1.5.0.2</Version>
+    <Version>1.5.1$(PrereleaseTag)</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
@@ -57,13 +57,10 @@
       <MSTest Condition=" '$(VS120COMNTOOLS)' != '' ">&quot;$(VS120COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
     </PropertyGroup>
 
+    <RemoveDir Directories="..\artifacts\TestResults\" />
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" ContinueOnError="true" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -nunit ..\artifacts\TestResults\unit-tests.nunit.xml" ContinueOnError="true" />
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
-
-    <!-- Convert test results to the NUnit format for easier reporting -->
-    <XslTransformation XmlInputPaths="..\artifacts\TestResults\unit-tests.xml"  XslInputPath="$(XUnitXslt)"
-      OutputPaths="..\artifacts\TestResults\unit-tests.nunit.xml" />
   </Target>
 
   <Target Name="IntegrationTest" DependsOnTargets="Build">
