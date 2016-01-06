@@ -7,8 +7,8 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of server events of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
-    public class ServerEventCollection<T> : ResourceCollection<T>
+    /// <exclude />
+    public class ServerActionReferenceCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
         /// <summary>
@@ -21,7 +21,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of references to server event resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
-    public class ServerActionReferenceCollection : ServerEventCollection<ServerActionReference>
+    /// <exclude />
+    public class ServerActionReferenceCollection : ServerActionReferenceCollection<ServerActionReference>
     { }
 }

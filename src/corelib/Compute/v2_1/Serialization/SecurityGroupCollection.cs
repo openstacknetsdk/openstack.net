@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of security group resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class SecurityGroupCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
@@ -17,8 +17,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         [JsonProperty("security_groups")]
         protected IList<T> SecurityGroups => Items;
     }
-    
+
     /// <inheritdoc cref="FlavorCollection{T}" />
+    /// <exclude />
     public class SecurityGroupCollection : SecurityGroupCollection<SecurityGroup>
     { }
 }

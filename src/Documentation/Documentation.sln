@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.v4.0", "Documentation.v4.0.shfbproj", "{EA57BD15-3742-45B8-BDE2-263F7236BAFD}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "AdditionalReferenceDocumentation.Portable", "AdditionalReferenceDocumentation.Portable.shfbproj", "{CB031E9B-F94F-4780-A8BA-82144C316B79}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.4", "History\1.4\Documentation.1.4.shfbproj", "{376777E9-509C-4DBB-89E9-80117153AE32}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation.1.5", "History\1.5\Documentation.1.5.shfbproj", "{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{376777E9-509C-4DBB-89E9-80117153AE32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{376777E9-509C-4DBB-89E9-80117153AE32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{376777E9-509C-4DBB-89E9-80117153AE32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +52,6 @@ Global
 		{04832591-1BB8-40F3-86A8-BE39F852223A} = {4ACC6725-E54F-4245-8100-CFE8180332D5}
 		{E67FAFFF-F45A-45C1-914A-BDAD5B26C192} = {4ACC6725-E54F-4245-8100-CFE8180332D5}
 		{376777E9-509C-4DBB-89E9-80117153AE32} = {4ACC6725-E54F-4245-8100-CFE8180332D5}
+		{33170D92-DBB6-4DA5-B8BC-37CD6773C0CC} = {4ACC6725-E54F-4245-8100-CFE8180332D5}
 	EndGlobalSection
 EndGlobal

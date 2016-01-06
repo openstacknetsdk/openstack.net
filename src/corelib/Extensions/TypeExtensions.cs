@@ -10,6 +10,7 @@ namespace System.Extensions
     /// <summary>
     /// Useful System.Type extension methods for custom implementations.
     /// </summary>
+    /// <exclude />
     public static class TypeExtensions
     {
         /// <summary>

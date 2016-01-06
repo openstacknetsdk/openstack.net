@@ -10,6 +10,7 @@ using OpenStack.Serialization;
 namespace OpenStack
 {
     /// <summary />
+    /// <exclude />
     public static class ApiHelper
     {
         /// <summary>
@@ -48,7 +49,7 @@ namespace OpenStack
         {
             if (string.IsNullOrEmpty(resourceId))
                 throw new ArgumentNullException("resourceId");
-            
+
             refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
             timeout = timeout ?? TimeSpan.FromMinutes(5);
 

@@ -5,6 +5,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// The remote console type
     /// </summary>
+    /// <exclude />
     public class RemoteConsoleType<T> : StringEnumeration
         where T : RemoteConsoleType<T>, new()
     {

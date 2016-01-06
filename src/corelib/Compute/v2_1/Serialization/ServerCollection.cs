@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of server resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ServerCollection<TPage, TItem> : Page<TPage, TItem, PageLink>
         where TPage : ServerCollection<TPage, TItem>
         where TItem : IServiceResource
@@ -28,11 +28,12 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of references to server resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ServerReferenceCollection : ServerCollection<ServerReferenceCollection, ServerReference>
     { }
 
     /// <inheritdoc cref="ServerCollection{TPage, TItem}" />
+    /// <exclude />
     public class ServerCollection : ServerCollection<ServerCollection, Server>
     { }
 }

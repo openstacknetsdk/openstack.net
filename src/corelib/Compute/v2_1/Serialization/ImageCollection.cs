@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of image resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ImageCollection<TPage, TItem> : Page<TPage, TItem, PageLink>
         where TPage : ImageCollection<TPage, TItem>
         where TItem : IServiceResource
@@ -28,11 +28,12 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of references to image resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ImageReferenceCollection : ImageCollection<ImageReferenceCollection, ImageReference>
     { }
 
     /// <inheritdoc cref="FlavorCollection{T}" />
+    /// <exclude />
     public class ImageCollection : ImageCollection<ImageCollection, Image>
     { }
 }

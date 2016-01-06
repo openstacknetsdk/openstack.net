@@ -22,7 +22,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\corelib\OpenStack.csproj" subFolders="True" />
     </DocumentationSources>
-    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <BuildAssemblerVerbosity>OnlyErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
     <KeepLogFile>True</KeepLogFile>
@@ -92,7 +92,8 @@
         <configuration>
           <currentProject label=".NET Framework" version="4.5" ripOldApis="False" />
           <versions>
-            <version label="openstack.net" version="1.5" helpFileProject="History\Current\Documentation.Current.shfbproj" />
+            <version label="openstack.net" version="1.6" helpFileProject="History\Current\Documentation.Current.shfbproj" />
+            <version label="openstack.net" version="1.5" ripOldApis="True" helpFileProject="History\1.5\Documentation.1.5.shfbproj" />
             <version label="openstack.net" version="1.4" ripOldApis="True" helpFileProject="History\1.4\Documentation.1.4.shfbproj" />
             <version label="openstack.net" version="1.3.6" ripOldApis="True" helpFileProject="History\1.3.6\Documentation.1.3.6.shfbproj" />
           </versions>
@@ -108,12 +109,31 @@
     </PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="Flurl.Extensions" isExposed="False" />
-<Filter entryType="Namespace" fullName="Flurl.Http" isExposed="False" />
-<Filter entryType="Namespace" fullName="OpenStack.Networking.v2.Serialization" isExposed="False" />
-<Filter entryType="Namespace" fullName="OpenStack.Serialization" isExposed="False" />
-<Filter entryType="Namespace" fullName="OpenStack.Synchronous.Extensions" isExposed="False" /></ApiFilter>
+      <Filter entryType="Namespace" fullName="Flurl.Http" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Authentication" isExposed="True">
+        <Filter entryType="Class" fullName="OpenStack.Authentication.AuthenticatedHttpClientFactory" filterName="AuthenticatedHttpClientFactory" isExposed="False" />
+        <Filter entryType="Class" fullName="OpenStack.Authentication.ServiceType" filterName="ServiceType" isExposed="False" />
+        <Filter entryType="Class" fullName="OpenStack.Authentication.ServiceUrlBuilder" filterName="ServiceUrlBuilder" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="OpenStack.Compute.v2_1.Serialization" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Compute.v2_2.Serialization" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Compute.v2_6.Serialization" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Networking.v2.Serialization" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Serialization" isExposed="False" />
+      <Filter entryType="Namespace" fullName="OpenStack.Synchronous.Extensions" isExposed="False" />
+      <Filter entryType="Namespace" fullName="System.Extensions" isExposed="False" />
+      <Filter entryType="Namespace" fullName="Newtonsoft.Json" isExposed="True">
+        <Filter entryType="Class" fullName="Newtonsoft.Json.JsonConverter" filterName="JsonConverter" isExposed="False" />
+      </Filter>
+    </ApiFilter>
     <HelpAttributes />
-    <NamespaceSummaries />
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Flurl.Http" isDocumented="False" />
+<NamespaceSummaryItem name="OpenStack.Compute.v2_1.Serialization" isDocumented="False" />
+<NamespaceSummaryItem name="OpenStack.Compute.v2_2.Serialization" isDocumented="False" />
+<NamespaceSummaryItem name="OpenStack.Compute.v2_6.Serialization" isDocumented="False" />
+<NamespaceSummaryItem name="OpenStack.Serialization" isDocumented="False" />
+<NamespaceSummaryItem name="OpenStack.Synchronous" isDocumented="True" /></NamespaceSummaries>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
     <HtmlHelp2xCompilerPath />
@@ -121,6 +141,7 @@
     <ComponentPath />
     <MaximumGroupParts>3</MaximumGroupParts>
     <NamespaceGrouping>False</NamespaceGrouping>
+    <MissingTags>AutoDocumentCtors, AutoDocumentDispose</MissingTags>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

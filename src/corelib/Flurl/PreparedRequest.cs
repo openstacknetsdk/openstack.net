@@ -12,6 +12,7 @@ namespace Flurl.Http
     /// <summary>
     /// Represents a prepared Flurl request which can be executed at a later time.
     /// </summary>
+    /// <exclude />
     public class PreparedRequest : FlurlClient
     {
         /// <summary>

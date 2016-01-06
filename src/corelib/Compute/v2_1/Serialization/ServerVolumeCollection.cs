@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of server volume resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ServerVolumeCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
@@ -21,7 +21,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of references to flavor resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class ServerVolumeCollection : ServerVolumeCollection<ServerVolume>
     { }
 }

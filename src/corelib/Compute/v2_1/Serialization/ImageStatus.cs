@@ -3,6 +3,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary />
+    /// <exclude />
     public class ImageStatus<T> : ResourceStatus
         where T : ImageStatus<T>, new()
     {

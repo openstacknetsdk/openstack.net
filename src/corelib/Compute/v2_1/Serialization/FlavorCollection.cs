@@ -7,7 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of flavor resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class FlavorCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
@@ -21,11 +21,12 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Represents a collection of references to flavor resources of the <see cref="ComputeService"/>.
     /// </summary>
-    /// <threadsafety static="true" instance="false"/>
+    /// <exclude />
     public class FlavorReferenceCollection : FlavorCollection<FlavorReference>
     { }
 
     /// <inheritdoc cref="FlavorCollection{T}" />
+    /// <exclude />
     public class FlavorCollection : FlavorCollection<Flavor>
     { }
 }

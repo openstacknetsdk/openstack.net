@@ -5,6 +5,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// The server image type
     /// </summary>
+    /// <exclude />
     public class ImageType<T> : StringEnumeration
         where T : ImageType<T>, new()
     {

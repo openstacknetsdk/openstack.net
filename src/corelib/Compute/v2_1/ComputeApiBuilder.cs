@@ -19,6 +19,7 @@ namespace OpenStack.Compute.v2_1
     /// Builds requests to the Compute API which can be further customized and then executed.
     /// <para>Intended for custom implementations.</para>
     /// </summary>
+    /// <exclude />
     /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.1.html">OpenStack Compute API v2.1 Overview</seealso>
     public class ComputeApiBuilder : ISupportMicroversions
     {
@@ -361,7 +362,7 @@ namespace OpenStack.Compute.v2_1
                 .SendAsync()
                 .ReceiveJson<T>();
         }
-        
+
         /// <summary />
         public virtual Task<T> GetSpiceConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -370,7 +371,7 @@ namespace OpenStack.Compute.v2_1
                 .SendAsync()
                 .ReceiveJson<T>();
         }
-        
+
         /// <summary />
         public virtual Task<T> GetSerialConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -379,7 +380,7 @@ namespace OpenStack.Compute.v2_1
                 .SendAsync()
                 .ReceiveJson<T>();
         }
-        
+
         /// <summary />
         public virtual Task<T> GetRdpConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -388,7 +389,7 @@ namespace OpenStack.Compute.v2_1
                 .SendAsync()
                 .ReceiveJson<T>();
         }
-        
+
         /// <summary />
         public virtual async Task<string> GetConsoleOutputAsync(string serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -399,7 +400,7 @@ namespace OpenStack.Compute.v2_1
 
             return result.output;
         }
-        
+
         /// <summary />
         public virtual async Task<string> RescueServerAsync(string serverId, object request = null, CancellationToken cancellationToken = default(CancellationToken))
         {

@@ -85,6 +85,7 @@
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
+    <Compile Include="Compute\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\EvacuateServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
     <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
     <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />
-    <Compile Include="Compute\v2_1\Serialization\ServerEventCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerActionReferenceCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageType.cs" />
     <Compile Include="Compute\v2_1\Serialization\RebootType.cs" />
