@@ -4,10 +4,8 @@
   <PropertyGroup>
     <Configuration>Debug</Configuration>
 
-    <!-- Note: We won't start using semver until v2 -->
-    <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' != '' ">-beta$(bamboo_GitVersion_BuildMetadata)</PrereleaseTag>
-    <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' == '' ">-SNAPSHOT</PrereleaseTag>
-    <Version>1.5.1$(PrereleaseTag)</Version>
+    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' != '' ">$(bamboo_GitVersion_NuGetVersion)</Version>
+    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
