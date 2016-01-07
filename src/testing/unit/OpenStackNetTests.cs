@@ -19,6 +19,7 @@ namespace OpenStack
         public void Dispose()
         {
             OpenStackNet.ResetDefaults();
+            OpenStackNet.Configure();
         }
 
         [Fact]
