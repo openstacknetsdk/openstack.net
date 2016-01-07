@@ -23,6 +23,7 @@
     <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
     <CallTarget Targets="IntegrationTest" />
+    <CallTarget Targets="MigrationTest" />
     <CallTarget Targets="Package" />
   </Target>
 
@@ -68,6 +69,18 @@
     <!-- Convert test results to the NUnit format for easier reporting -->
     <XslTransformation XmlInputPaths="..\artifacts\TestResults\integration-tests.xml"  XslInputPath="$(XUnitXslt)"
       OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
+  </Target>
+
+  <Target Name="MigrationTest" DependsOnTargets="Build">
+    <PropertyGroup>
+      <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
+    </PropertyGroup>
+
+    <Message Text="Updating NuGet packages to the latest available releases (including prereleases available on MyGet)..." />
+    <Exec Command="$(NuGet) update -Prerelease $(MigrationSln)" />
+
+    <Message Text="Verifying that the migration solution builds..." />
+    <Exec Command="$(MSBuild) $(MigrationSln) /nologo /clp:ErrorsOnly" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">
