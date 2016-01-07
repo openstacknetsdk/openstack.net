@@ -76,6 +76,8 @@
       <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
     </PropertyGroup>
 
+    <Exec Command="$(NuGet) restore $(MigrationSln)" />
+
     <Message Text="Updating NuGet packages to the latest available releases (including prereleases available on MyGet)..." />
     <Exec Command="$(NuGet) update -Prerelease $(MigrationSln)" />
 
