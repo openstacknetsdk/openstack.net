@@ -168,7 +168,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage>  ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
             return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -176,7 +176,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServersAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -203,7 +203,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServerDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListServerDetailsUrlAsync(queryString, cancellationToken);
             return await ListServersAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -211,7 +211,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListServerDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -470,7 +470,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IEnumerable<IServiceResource>
         {
             var results = await BuildListServerActionsAsync(serverId, cancellationToken).SendAsync().ReceiveJson<T>();
             results.PropogateOwner(this);
@@ -547,7 +547,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IEnumerable<IServiceResource>
         {
             var result = await BuildListFlavorsAsync(cancellationToken)
                 .SendAsync()
@@ -570,7 +570,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> ListFlavorDetailsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IEnumerable<IServiceResource>
         {
             var result = await BuildListFlavorDetailsAsync(cancellationToken)
                 .SendAsync()
@@ -692,7 +692,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListImagesUrlAsync(queryString, cancellationToken);
             return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -700,7 +700,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListImagesAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -727,7 +727,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListImageDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListImageDetailsUrlAsync(queryString, cancellationToken);
             return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
@@ -735,7 +735,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<TPage> ListImageDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IServiceResource
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             var results = await url
                 .Authenticate(AuthenticationProvider)
@@ -1074,7 +1074,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IEnumerable<IServiceResource>
         {
             var result = await BuildListSecurityGropusAsync(serverId, cancellationToken)
                 .SendAsync()

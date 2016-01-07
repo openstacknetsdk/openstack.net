@@ -13,7 +13,6 @@ namespace OpenStack.Serialization
     [JsonObject(MemberSerialization.OptIn)]
     public class Page<TPage, TItem, TLink> : ResourceCollection<TItem>, IPage<TItem>, IPageBuilder<TPage>
         where TPage : IPage<TItem>
-        where TItem : IServiceResource
         where TLink : IPageLink
     {
         private Func<Url, CancellationToken, Task<TPage>> _nextPageHandler;
