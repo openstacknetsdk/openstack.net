@@ -30,17 +30,10 @@ namespace OpenStack.Serialization
     public static class ServiceResourceExtensions
     {
         /// <summary />
-        public static T TryGetOwner<T>(this IServiceResource resource)
-            where T : class
-        {
-            return resource.Owner as T;
-        }
-
-        /// <summary />
         public static T GetOwnerOrThrow<T>(this IServiceResource resource, [CallerMemberName]string callerName = "")
             where T : class
         {
-            var owner = resource.TryGetOwner<T>();
+            var owner = resource.Owner as T;
             if (owner != null)
                 return owner;
 

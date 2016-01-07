@@ -34,7 +34,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task UpdateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var request = new SecurityGroupDefinition(Name, Description);
 
             var result = await compute.UpdateSecurityGroupAsync<SecurityGroup>(Id, request, cancellationToken);
@@ -45,7 +45,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<SecurityGroupRule> AddRuleAsync(SecurityGroupRuleDefinition rule, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             rule.GroupId = Id;
 
             var result = await compute.CreateSecurityGroupRuleAsync<SecurityGroupRule>(rule, cancellationToken);

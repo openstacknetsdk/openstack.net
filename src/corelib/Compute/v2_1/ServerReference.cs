@@ -51,7 +51,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             await owner.DeleteServerAsync(Id, cancellationToken);
         }
 
@@ -59,7 +59,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             await owner.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(Id, null, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
         }
 

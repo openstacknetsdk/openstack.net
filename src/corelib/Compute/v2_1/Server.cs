@@ -149,7 +149,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
@@ -158,7 +158,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(IEnumerable<ServerStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
@@ -167,7 +167,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task UpdateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var request = new ServerUpdateDefinition();
             this.CopyProperties(request);
 

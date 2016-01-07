@@ -41,7 +41,7 @@ namespace OpenStack.Compute.v2_1
         public async Task CreateAsync(string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertImageIsSet();
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             await compute.CreateImagMetadataAsync(Image.Id, key, value, cancellationToken);
             this[key] = value;
         }
@@ -50,7 +50,7 @@ namespace OpenStack.Compute.v2_1
         public async Task UpdateAsync(bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertImageIsSet();
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var results = await compute.UpdateImageMetadataAsync<ImageMetadata>(Image.Id, this, overwrite, cancellationToken);
             Clear();
             foreach (var result in results)
@@ -66,7 +66,7 @@ namespace OpenStack.Compute.v2_1
                 return;
 
             AssertImageIsSet();
-            var compute = this.TryGetOwner<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             await compute.DeleteImageMetadataAsync(Image.Id, key, cancellationToken);
             Remove(key);
         }

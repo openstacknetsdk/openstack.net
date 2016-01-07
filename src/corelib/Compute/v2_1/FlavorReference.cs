@@ -29,7 +29,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="FlavorReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<Flavor> GetFlavorAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             return owner.GetFlavorAsync<Flavor>(Id, cancellationToken);
         }
     }

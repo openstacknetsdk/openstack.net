@@ -29,7 +29,7 @@ namespace OpenStack.Compute.v2_1
             if (securityGroup != null)
                 return securityGroup;
 
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
 
             // In some cases, such as when working with the groups on a server, we only have the name and not the id
             var groups = await owner.ListSecurityGroupsAsync<SecurityGroupCollection>(cancellationToken: cancellationToken);
@@ -51,7 +51,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.TryGetOwner<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
             var securityGroup = await LoadSecurityGroup(cancellationToken);
 
             await owner.DeleteSecurityGroupAsync(securityGroup.Id, cancellationToken);
