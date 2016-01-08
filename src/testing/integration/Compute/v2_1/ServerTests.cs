@@ -114,9 +114,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async Task ListServerDetailsTest()
+        public async Task ListServersTest()
         {
-            var results = await _compute.ListServerDetailsAsync(new ServerListOptions { PageSize = 1 });
+            var results = await _compute.ListServersAsync(new ServerListOptions { PageSize = 1 });
 
             while (results.Any())
             {

@@ -42,10 +42,10 @@ namespace OpenStack.Synchronous
             return service.ListServerReferencesAsync(options).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListServerDetailsAsync" />
-        public static IPage<Server> ListServerDetails(this ComputeService service, ServerListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListServersAsync" />
+        public static IPage<Server> ListServers(this ComputeService service, ServerListOptions options = null)
         {
-            return service.ListServerDetailsAsync(options).ForceSynchronous();
+            return service.ListServersAsync(options).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.UpdateServerAsync" />
