@@ -36,10 +36,10 @@ namespace OpenStack.Synchronous
             return service.WaitForServerStatusAsync(serverId, statuses, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListServersAsync" />
-        public static IPage<ServerReference> ListServers(this ComputeService service, ServerListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListServerReferencesAsync" />
+        public static IPage<ServerReference> ListServerReferences(this ComputeService service, ServerListOptions options = null)
         {
-            return service.ListServersAsync(options).ForceSynchronous();
+            return service.ListServerReferencesAsync(options).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListServerDetailsAsync" />

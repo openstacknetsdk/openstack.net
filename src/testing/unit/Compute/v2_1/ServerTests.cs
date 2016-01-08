@@ -66,7 +66,7 @@ namespace OpenStack.Compute.v2_1
                 });
                 httpTest.RespondWithJson(new Server { Id = serverId });
 
-                var serverRef = _compute.ListServers().First();
+                var serverRef = _compute.ListServerReferences().First();
                 var result = serverRef.GetServer();
                 
                 Assert.NotNull(result);
@@ -95,7 +95,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListServers()
+        public void ListServerReferences()
         {
             using (var httpTest = new HttpTest())
             {
@@ -106,7 +106,7 @@ namespace OpenStack.Compute.v2_1
                    Links = { new PageLink("next", "http://api.com/next") }
                 });
 
-                var results = _compute.ListServers();
+                var results = _compute.ListServerReferences();
 
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.Equal(1, results.Count());
@@ -117,7 +117,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListServersWithFilter()
+        public void ListServerReferencesWithFilter()
         {
             using (var httpTest = new HttpTest())
             {
@@ -129,7 +129,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 ServerStatus status = ServerStatus.Active;
 
-                _compute.ListServers(new ServerListOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
+                _compute.ListServerReferences(new ServerListOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*flavor={flavorId}");
@@ -140,7 +140,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListServersWithPaging()
+        public void ListServerReferencesWithPaging()
         {
             using (var httpTest = new HttpTest())
             {
@@ -152,7 +152,7 @@ namespace OpenStack.Compute.v2_1
 
                 Identifier startingAt = Guid.NewGuid();
                 const int pageSize = 10;
-                _compute.ListServers(new ServerListOptions { PageSize = pageSize, StartingAt = startingAt });
+                _compute.ListServerReferences(new ServerListOptions { PageSize = pageSize, StartingAt = startingAt });
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");

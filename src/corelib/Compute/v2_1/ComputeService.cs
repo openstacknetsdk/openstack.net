@@ -53,10 +53,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.WaitForServerStatusAsync<Server, ServerStatus>(serverId, statuses, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
-        public async Task<IPage<ServerReference>> ListServersAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerReferencesAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
+        public async Task<IPage<ServerReference>> ListServerReferencesAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServersAsync<ServerReferenceCollection>(options, cancellationToken);
+            return await _computeApi.ListServerReferencesAsync<ServerReferenceCollection>(options, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListServerDetailsAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
