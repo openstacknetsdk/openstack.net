@@ -75,7 +75,8 @@ docs/Api/
 docs/html/
 /src/Documentation/Help/
 
-#NuGet
+#NuGet/Paket
 *.nupkg
-/src/packages/
-src/testing/migration/packages
+packages
+paket.exe
+paket.lock
