@@ -89,7 +89,7 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async Task ListServersTest()
         {
-            var results = await _compute.ListServersAsync(new ListServersOptions {PageSize = 1});
+            var results = await _compute.ListServersAsync(new ServerListOptions {PageSize = 1});
 
             while (results.Any())
             {
@@ -107,7 +107,7 @@ namespace OpenStack.Compute.v2_1
             await Task.WhenAll(servers.Select(x => x.WaitUntilActiveAsync()));
             var serversNames = new HashSet<string>(servers.Select(s => s.Name));
 
-            var results = await _compute.ListServersAsync(new ListServersOptions {Name = "ci-*"});
+            var results = await _compute.ListServersAsync(new ServerListOptions {Name = "ci-*"});
             var resultNames = new HashSet<string>(results.Select(s => s.Name));
 
             Assert.Subset(resultNames, serversNames);
@@ -116,7 +116,7 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async Task ListServerDetailsTest()
         {
-            var results = await _compute.ListServerDetailsAsync(new ListServersOptions { PageSize = 1 });
+            var results = await _compute.ListServerDetailsAsync(new ServerListOptions { PageSize = 1 });
 
             while (results.Any())
             {

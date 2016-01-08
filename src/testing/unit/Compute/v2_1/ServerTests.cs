@@ -129,7 +129,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 ServerStatus status = ServerStatus.Active;
 
-                _compute.ListServers(new ListServersOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
+                _compute.ListServers(new ServerListOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*flavor={flavorId}");
@@ -144,11 +144,15 @@ namespace OpenStack.Compute.v2_1
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new ServerCollection());
+                httpTest.RespondWithJson(new ServerCollection
+                {
+                    Items = {new Server()},
+                    Links = {new PageLink("next", "http://example.com")}
+                });
 
                 Identifier startingAt = Guid.NewGuid();
                 const int pageSize = 10;
-                _compute.ListServers(new ListServersOptions { PageSize = pageSize, StartingAt = startingAt });
+                _compute.ListServers(new ServerListOptions { PageSize = pageSize, StartingAt = startingAt });
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");

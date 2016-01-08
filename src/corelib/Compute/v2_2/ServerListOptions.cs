@@ -1,6 +1,6 @@
 ﻿namespace OpenStack.Compute.v2_2
 {
     /// <summary />
-    public class ListServersOptions : v2_1.ListServersOptions
+    public class ServerListOptions : v2_1.ServerListOptions
     { }
 }

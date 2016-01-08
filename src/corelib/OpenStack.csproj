@@ -136,7 +136,7 @@
     <Compile Include="Compute\v2_1\ImageReference.cs" />
     <Compile Include="Compute\v2_1\KeyPair.cs" />
     <Compile Include="Compute\v2_1\KeyPairDefinition.cs" />
-    <Compile Include="Compute\v2_1\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_1\ServerListOptions.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
     <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
@@ -159,7 +159,7 @@
     <Compile Include="Compute\v2_2\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_2\RemoteConsole.cs" />
     <Compile Include="Compute\v2_2\RemoteConsoleType.cs" />
-    <Compile Include="Compute\v2_2\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_2\ServerListOptions.cs" />
     <Compile Include="Compute\v2_2\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_2\Server.cs" />
     <Compile Include="Compute\v2_2\ServerReference.cs" />
@@ -173,7 +173,7 @@
     <Compile Include="Compute\v2_6\KeyPair.cs" />
     <Compile Include="Compute\v2_6\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_6\KeyPairType.cs" />
-    <Compile Include="Compute\v2_6\ListServersOptions.cs" />
+    <Compile Include="Compute\v2_6\ServerListOptions.cs" />
     <Compile Include="Compute\v2_6\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_6\Server.cs" />
     <Compile Include="Compute\v2_1\ComputeServiceExtensions.cs" />

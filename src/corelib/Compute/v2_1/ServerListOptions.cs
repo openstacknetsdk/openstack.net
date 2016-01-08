@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class ListServersOptions : PageOptions
+    public class ServerListOptions : PageOptions
     {
         /// <summary />
         public DateTimeOffset? UpdatedAfter { get; set; }

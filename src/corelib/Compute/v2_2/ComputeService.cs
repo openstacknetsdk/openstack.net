@@ -19,7 +19,7 @@ namespace OpenStack.Compute.v2_2
 
         #region Servers
         /// <inheritdoc cref="v2_1.ComputeApiBuilder.ListServersAsync{T}(IQueryStringBuilder,CancellationToken)" />
-        public virtual async Task<IPage<ServerReference>> ListServersAsync(ListServersOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IPage<ServerReference>> ListServersAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _computeApiBuilder.ListServersAsync<ServerCollection>(options, cancellationToken);
         }
