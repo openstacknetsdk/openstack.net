@@ -21,17 +21,6 @@ namespace Flurl.Extensions
         /// <summary>
         /// Allow a specific HTTP status code.
         /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this FlurlClient client, HttpStatusCode statusCode)
-        {
-            return client.AllowHttpStatus(((int)statusCode).ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="statusCode">The allowed status code.</param>
         /// <returns></returns>
