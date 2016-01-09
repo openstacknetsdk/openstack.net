@@ -18,14 +18,11 @@ namespace OpenStack
         {
             var testOutput = new XunitTraceListener(testLog);
             Trace.Listeners.Add(testOutput);
-
-            OpenStackNet.ResetDefaults();
         }
 
         public void Dispose()
         {
             OpenStackNet.ResetDefaults();
-            OpenStackNet.Configure();
         }
 
         [Fact]

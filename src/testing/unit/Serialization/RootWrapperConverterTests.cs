@@ -19,12 +19,7 @@ namespace OpenStack.Serialization
         class ThingCollection : List<Thing>
         {
         }
-
-        public RootWrapperConverterTests()
-        {
-            OpenStackNet.Configure();            
-        }
-
+        
         [Fact]
         public void Serialize()
         {

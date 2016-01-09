@@ -1,7 +1,10 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using Flurl;
+using Flurl.Http;
 using Flurl.Http.Configuration;
+using Flurl.Http.Content;
 using OpenStack.Authentication;
 
 namespace OpenStack.Testing
@@ -31,6 +34,7 @@ namespace OpenStack.Testing
                     CallLog.Add(call);
                 };
             };
+            OpenStackNet.ResetDefaults();
             OpenStackNet.Configure(setFlurlTestMode, configure);
         }
 
@@ -39,6 +43,23 @@ namespace OpenStack.Testing
         {
             OpenStackNet.ResetDefaults();
             base.Dispose();
+        }
+
+        /// <inheritdoc />
+        public new HttpTest RespondWithJson(object data)
+        {
+            return RespondWithJson(200, data);
+        }
+
+        /// <inheritdoc />
+        public new HttpTest RespondWithJson(int status, object data)
+        {
+            ResponseQueue.Enqueue(new HttpResponseMessage
+            {
+                StatusCode = (HttpStatusCode)status,
+                Content = new CapturedJsonContent(OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(data))
+            });
+            return this;
         }
 
         class TestHttpClientFactory : IHttpClientFactory
