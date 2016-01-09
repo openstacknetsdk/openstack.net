@@ -22,10 +22,10 @@ namespace OpenStack.Serialization
         {
             OpenStackNet.Configure();
             var thing = new ExampleThing{Messages = null};
-            string json = JsonConvert.SerializeObject(thing);
+            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(thing);
             Assert.DoesNotContain("messages", json);
 
-            var result = JsonConvert.DeserializeObject<ExampleThing>(json);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ExampleThing>(json);
 
             Assert.NotNull(result.Messages);
             Assert.Empty(result.Messages);
@@ -37,7 +37,7 @@ namespace OpenStack.Serialization
             OpenStackNet.Configure();
             var thing = new ExampleThing { Messages = new List<string>() };
 
-            string json = JsonConvert.SerializeObject(thing);
+            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(thing);
 
             Assert.DoesNotContain("messages", json);
         }

@@ -18,7 +18,7 @@ namespace OpenStack.Networking.v2
                 {"b", "things"}
             };
 
-            string result = JsonConvert.SerializeObject(options, Formatting.None, new DHCPOptionsConverter());
+            string result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(options, Formatting.None, new DHCPOptionsConverter());
 
             string expectedJson = JArray.Parse("[{'opt_name':'a','opt_value':'stuff'},{'opt_name':'b','opt_value':'things'}]").ToString(Formatting.None);
             Assert.Equal(expectedJson, result);
@@ -29,7 +29,7 @@ namespace OpenStack.Networking.v2
         {
             string json = JArray.Parse("[{'opt_name':'a','opt_value':'stuff'},{'opt_name':'b','opt_value':'things'}]").ToString(Formatting.None);
 
-            var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(json, new DHCPOptionsConverter());
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<Dictionary<string, string>>(json, new DHCPOptionsConverter());
 
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
@@ -53,8 +53,8 @@ namespace OpenStack.Networking.v2
                 }
             };
 
-            var json = JsonConvert.SerializeObject(port);
-            var result = JsonConvert.DeserializeObject<Port>(json);
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(port);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<Port>(json);
 
             Assert.NotNull(result.DHCPOptions);
             Assert.Equal(1, result.DHCPOptions.Count);

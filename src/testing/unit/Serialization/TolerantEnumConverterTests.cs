@@ -25,7 +25,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenValueIsRecognized_MatchToValue()
         {
-            var result = JsonConvert.DeserializeObject<ThingStatus>("\"ACTIVE\"");
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ThingStatus>("\"ACTIVE\"");
 
             Assert.Equal(ThingStatus.Active, result);
         }
@@ -33,7 +33,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenAttributedValueIsRecognized_MatchToValue()
         {
-            var result = JsonConvert.DeserializeObject<ThingStatus>("\"REMOVE_FAILED\"");
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ThingStatus>("\"REMOVE_FAILED\"");
 
             Assert.Equal(ThingStatus.RemoveFailed, result);
         }
@@ -41,7 +41,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenValueIsUnrecognized_MatchToUnknownValue()
         {
-            var result = JsonConvert.DeserializeObject<ThingStatus>("\"bad-enum-value\"");
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ThingStatus>("\"bad-enum-value\"");
 
             Assert.Equal(ThingStatus.Unknown, result);
         }
@@ -49,7 +49,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenValueIsUnrecognized_AndUnknownIsNotPresent_MatchToFirstValue()
         {
-            var result = JsonConvert.DeserializeObject<StuffStatus>("\"bad-enum-value\"");
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<StuffStatus>("\"bad-enum-value\"");
 
             Assert.Equal(StuffStatus.Missing, result);
         }
@@ -57,7 +57,7 @@ namespace OpenStack.Serialization
         [Fact]
         public void WhenValueIsUnrecognized_AndDestinationIsNullable_UseNull()
         {
-            var result = JsonConvert.DeserializeObject<StuffStatus?>("\"bad-enum-value\"");
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<StuffStatus?>("\"bad-enum-value\"");
 
             Assert.Null(result);
         }

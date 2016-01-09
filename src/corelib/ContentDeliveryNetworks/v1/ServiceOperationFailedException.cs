@@ -27,7 +27,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param>
         private ServiceOperationFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            Errors = JsonConvert.DeserializeObject<IEnumerable<ServiceError>>(info.GetString("service_errors"));
+            Errors = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<IEnumerable<ServiceError>>(info.GetString("service_errors"));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // ReSharper disable once ExceptionNotDocumented
-            info.AddValue("service_errors", JsonConvert.SerializeObject(Errors));
+            info.AddValue("service_errors", OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(Errors));
             base.GetObjectData(info, context);
         }
     }
