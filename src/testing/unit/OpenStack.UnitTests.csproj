@@ -135,6 +135,7 @@
     <Compile Include="Stubs.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
+    <Compile Include="XunitTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\build\keys\SDKTestingKey.snk">

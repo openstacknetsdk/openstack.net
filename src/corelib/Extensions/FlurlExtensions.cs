@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl.Http;
+using OpenStack;
 using OpenStack.Authentication;
 
 // ReSharper disable once CheckNamespace
@@ -106,8 +107,28 @@ namespace Flurl.Extensions
         /// </returns>
         public static PreparedRequest Authenticate(this Url url, IAuthenticationProvider authenticationProvider)
         {
-            var client = new PreparedRequest(url, autoDispose: true);
-            return client.Authenticate(authenticationProvider);
+            return url.PrepareRequest().Authenticate(authenticationProvider);
+        }
+
+        /// <summary>
+        /// Builds a prepared Flurl request which can be executed at a later time.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        public static PreparedRequest PrepareRequest(this string url)
+        {
+            return new Url(url).PrepareRequest();
+        }
+
+        /// <summary>
+        /// Builds a prepared Flurl request which can be executed at a later time.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        public static PreparedRequest PrepareRequest(this Url url)
+        {
+            return new PreparedRequest(url, autoDispose: true)
+            {
+                Settings = OpenStackNet.Configuration.FlurlHttpSettings
+            };
         }
 
         /// <summary>

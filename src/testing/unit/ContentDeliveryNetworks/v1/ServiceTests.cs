@@ -171,7 +171,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeployed_StopsWhenUserTokenIsCancelled()
+        public async Task WaitForServiceDeployed_StopsWhenUserTokenIsCancelled()
         {
             using (var httpTest = new HttpTest())
             {
@@ -184,7 +184,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeployed_StopsWhenTimeoutIsReached()
+        public async Task WaitForServiceDeployed_StopsWhenTimeoutIsReached()
         {
             using (var httpTest = new HttpTest())
             {
@@ -207,7 +207,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
+        public async Task WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
         {
             using (var httpTest = new HttpTest())
             {
@@ -220,7 +220,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeleted_StopsWhenTimeoutIsReached()
+        public async Task WaitForServiceDeleted_StopsWhenTimeoutIsReached()
         {
             using (var httpTest = new HttpTest())
             {

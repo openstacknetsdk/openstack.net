@@ -21,7 +21,17 @@ namespace OpenStack
         /// Global configuration which affects OpenStack.NET's behavior.
         /// <para>Modify using <see cref="Configure"/>.</para>
         /// </summary>
-        public static readonly OpenStackNetConfigurationOptions Configuration = new OpenStackNetConfigurationOptions();
+        public static OpenStackNetConfigurationOptions Configuration
+        {
+            get
+            {
+                if (!_isConfigured)
+                    Configure();
+                return _config;
+            }
+        }
+
+        private static readonly OpenStackNetConfigurationOptions _config = new OpenStackNetConfigurationOptions();
         private static readonly object ConfigureLock = new object();
         private static bool _isConfigured;
 
@@ -37,12 +47,14 @@ namespace OpenStack
         {
             lock (ConfigureLock)
             {
-                if (_isConfigured)
+                // Check if a user is attempting to apply custom configuration after the default config has been applied
+                if (_isConfigured && (configureFlurl != null || configure != null))
+                {
+                    Trace.TraceError("Ignoring additional call to OpenStackNet.Configure. It can only be called once at application start-up, before instantiating any OpenStack.NET objects.");
                     return;
+                }
 
-                if(configure != null)
-                    configure(Configuration);
-
+                configure?.Invoke(_config);
                 ConfigureFlurl(configureFlurl);
 
                 _isConfigured = true;
@@ -56,20 +68,19 @@ namespace OpenStack
         {
             lock (ConfigureLock)
             {
-                Configuration.ResetDefaults();
+                _config.ResetDefaults();
                 _isConfigured = false;
             }
         }
 
         private static void ConfigureFlurl(Action<FlurlHttpSettings> configureFlurl = null)
         {
-            var c = new FlurlHttpSettings();
+            var flurlSettings = _config.FlurlHttpSettings;
 
             // Apply the application's default settings
-            if (configureFlurl != null)
-                configureFlurl(c);
+            configureFlurl?.Invoke(flurlSettings);
 
-            c.JsonSerializer = new NewtonsoftJsonSerializer(new JsonSerializerSettings
+            flurlSettings.JsonSerializer = new NewtonsoftJsonSerializer(new JsonSerializerSettings
             {
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
@@ -80,32 +91,29 @@ namespace OpenStack
             //
             // Apply our default settings
             //
-            if (c.HttpClientFactory is DefaultHttpClientFactory)
-                c.HttpClientFactory = new AuthenticatedHttpClientFactory();
+            if (flurlSettings.HttpClientFactory is DefaultHttpClientFactory)
+                flurlSettings.HttpClientFactory = new AuthenticatedHttpClientFactory();
 
             // Apply our event handling without clobbering any application level handlers
-            var applicationBeforeCall = c.BeforeCall;
-            c.BeforeCall = call =>
+            var applicationBeforeCall = flurlSettings.BeforeCall;
+            flurlSettings.BeforeCall = call =>
             {
                 SetUserAgentHeader(call);
-                if (applicationBeforeCall != null)
-                    applicationBeforeCall(call);
+                applicationBeforeCall?.Invoke(call);
             };
 
-            var applicationAfterCall = c.AfterCall;
-            c.AfterCall = call =>
+            var applicationAfterCall = flurlSettings.AfterCall;
+            flurlSettings.AfterCall = call =>
             {
                 Tracing.TraceHttpCall(call);
-                if (applicationAfterCall != null)
-                    applicationAfterCall(call);
+                applicationAfterCall?.Invoke(call);
             };
 
-            var applicationOnError = c.OnError;
-            c.OnError = call =>
+            var applicationOnError = flurlSettings.OnError;
+            flurlSettings.OnError = call =>
             {
                 Tracing.TraceFailedHttpCall(call);
-                if (applicationOnError != null)
-                    applicationOnError(call);
+                applicationOnError?.Invoke(call);
             };
         }
 
@@ -136,7 +144,7 @@ namespace OpenStack
             /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
             public static void TraceFailedHttpCall(HttpCall httpCall)
             {
-                Http.TraceData(TraceEventType.Error, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
+                Http.TraceData(TraceEventType.Error, 0, SerializeHttpCall(httpCall));
                 Http.Flush();
             }
 
@@ -146,7 +154,16 @@ namespace OpenStack
             /// <param name="httpCall">The Flurl HTTP call instance, containing information about the request and response.</param>
             public static void TraceHttpCall(HttpCall httpCall)
             {
-                Http.TraceData(TraceEventType.Information, 0, JsonConvert.SerializeObject(httpCall, Formatting.Indented));
+                Http.TraceData(TraceEventType.Information, 0, SerializeHttpCall(httpCall));
+            }
+
+            private static string SerializeHttpCall(HttpCall httpCall)
+            {
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                return JsonConvert.SerializeObject(httpCall, Formatting.Indented, settings);
             }
         }
     }
@@ -163,6 +180,11 @@ namespace OpenStack
             ResetDefaults();
         }
 
+        /// <summary>
+        /// Custom Flurl.Http configuration settings which are specific to requests made by this SDK.
+        /// </summary>
+        public FlurlHttpSettings FlurlHttpSettings { get; private set; }
+
         /// <summary> 
         /// Additional application specific user agents which should be set in the UserAgent header on all requests.
         /// </summary>
@@ -173,6 +195,7 @@ namespace OpenStack
 		/// </summary>
         public virtual void ResetDefaults()
         {
+            FlurlHttpSettings = new FlurlHttpSettings();
             UserAgents = new List<ProductInfoHeaderValue>
             {
                 new ProductInfoHeaderValue("openstack.net", GetType().GetAssemblyFileVersion())
