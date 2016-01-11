@@ -1,7 +1,10 @@
+using System;
+using System.Net;
 using System.Net.Http;
 using Flurl;
 using Flurl.Http;
 using Flurl.Http.Configuration;
+using Flurl.Http.Content;
 using OpenStack.Authentication;
 
 namespace OpenStack.Testing
@@ -13,22 +16,48 @@ namespace OpenStack.Testing
     /// If you use the default HttpTest, then any tests which rely upon authentication handling (e.g retrying a request when a token expires) will fail.
     /// </para>
     /// </summary>
-    public class HttpTest : Flurl.Http.Testing.HttpTest
+    public class HttpTest : Flurl.Http.Testing.HttpTest, IDisposable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpTest"/> class.
         /// </summary>
-        public HttpTest()
+        /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
+        public HttpTest(Action<OpenStackNetConfigurationOptions> configure = null)
         {
-            FlurlHttp.Configure(opts =>
+            Action<FlurlHttpSettings> setTestMode = settings =>
             {
-                opts.HttpClientFactory = new TestHttpClientFactory(this);
-                opts.AfterCall = call => // Restore handler which was nuked by the base HttpTest
+                settings.HttpClientFactory = new TestHttpClientFactory(this);
+                settings.AfterCall = call =>
                 {
                     CallLog.Add(call);
-                    OpenStackNet.Tracing.TraceHttpCall(call); 
                 };
+            };
+            OpenStackNet.ResetDefaults();
+            OpenStackNet.Configure(setTestMode, configure);
+        }
+
+        /// <inheritdoc />
+        public new void Dispose()
+        {
+            OpenStackNet.ResetDefaults();
+            base.Dispose();
+        }
+
+        /// <inheritdoc />
+        public new HttpTest RespondWithJson(object data)
+        {
+            return RespondWithJson(200, data);
+        }
+
+        /// <inheritdoc />
+        public new HttpTest RespondWithJson(int status, object data)
+        {
+            ResponseQueue.Enqueue(new HttpResponseMessage
+            {
+                StatusCode = (HttpStatusCode)status,
+                Content = new CapturedJsonContent(OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(data))
             });
+            return this;
         }
 
         class TestHttpClientFactory : IHttpClientFactory

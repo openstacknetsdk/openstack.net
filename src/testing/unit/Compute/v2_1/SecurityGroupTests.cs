@@ -98,7 +98,7 @@ namespace OpenStack.Compute.v2_1
     },
     'id': '55d75417-37df-48e2-96aa-20ba53a82900'
 }}";
-            var result = JsonConvert.DeserializeObject<SecurityGroupRule>(JObject.Parse(json).ToString());
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<SecurityGroupRule>(JObject.Parse(json).ToString());
             Assert.Equal("0.0.0.0 / 24", result.CIDR);
         }
 

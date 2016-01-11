@@ -21,7 +21,6 @@ namespace OpenStack
         public static Mock<IAuthenticationProvider> CreateAuthenticationProvider()
         {
             var stub = new Mock<IAuthenticationProvider>();
-            OpenStackNet.Configure();
 
             stub.Setup(provider => provider.GetToken(It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult("mock-token"));

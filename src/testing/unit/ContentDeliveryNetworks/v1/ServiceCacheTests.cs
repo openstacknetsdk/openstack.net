@@ -12,7 +12,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         {
             var cache = new ServiceCache("cache", TimeSpan.FromSeconds(60));
             
-            var json = JsonConvert.SerializeObject(cache);
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(cache);
 
             var result = JObject.Parse(json);
             Assert.Equal(60, result.Value<double>("ttl"));
@@ -22,9 +22,9 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         public void DeserializeTimeToLiveFromSeconds()
         {
             var cache = new ServiceCache("cache", TimeSpan.FromSeconds(60));
-            var json = JsonConvert.SerializeObject(cache);
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(cache);
             
-            var result = JsonConvert.DeserializeObject<ServiceCache>(json);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ServiceCache>(json);
 
             Assert.Equal(60, result.TimeToLive.TotalSeconds);
         }

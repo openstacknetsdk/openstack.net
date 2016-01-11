@@ -17,7 +17,7 @@ namespace OpenStack
             var rawId = Guid.NewGuid();
             var id = (Identifier)rawId;
 
-            var result = JsonConvert.SerializeObject(id);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(id);
 
             Assert.Equal(string.Format("\"{0}\"", rawId.ToString("D")), result);
         }
@@ -27,7 +27,7 @@ namespace OpenStack
         {
             var thing = new Thing {Id = Guid.NewGuid()};
 
-            var result = JsonConvert.SerializeObject(thing, Formatting.None);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(thing);
 
             Assert.Equal(string.Format("{{\"Id\":\"{0}\"}}", thing.Id), result);
         }
@@ -37,8 +37,8 @@ namespace OpenStack
         {
             var id = new Identifier(Guid.NewGuid());
 
-            var json = JsonConvert.SerializeObject(id);
-            var result = JsonConvert.DeserializeObject<Identifier>(json);
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(id);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<Identifier>(json);
 
             Assert.Equal(id, result);
         }
