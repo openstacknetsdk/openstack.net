@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using Flurl;
-using Flurl.Http;
 using Flurl.Http.Configuration;
 using Flurl.Http.Content;
 using OpenStack.Authentication;
@@ -21,19 +20,19 @@ namespace OpenStack.Testing
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpTest"/> class.
         /// </summary>
-        /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
-        public HttpTest(Action<OpenStackNetConfigurationOptions> configure = null)
+        public HttpTest()
         {
-            Action<FlurlHttpSettings> setTestMode = settings =>
-            {
-                settings.HttpClientFactory = new TestHttpClientFactory(this);
-                settings.AfterCall = call =>
-                {
-                    CallLog.Add(call);
-                };
-            };
             OpenStackNet.ResetDefaults();
-            OpenStackNet.Configure(setTestMode, configure);
+            OpenStackNet.Configuring += SetTestMode;
+        }
+
+        private void SetTestMode(OpenStackNetConfigurationOptions options)
+        {
+            options.FlurlHttpSettings.HttpClientFactory = new TestHttpClientFactory(this);
+            options.FlurlHttpSettings.AfterCall = call =>
+            {
+                CallLog.Add(call);
+            };
         }
 
         /// <inheritdoc />

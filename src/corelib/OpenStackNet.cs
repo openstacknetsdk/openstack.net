@@ -19,7 +19,7 @@ namespace OpenStack
     {
         /// <summary>
         /// Global configuration which affects OpenStack.NET's behavior.
-        /// <para>Modify using <see cref="Configure(Action{OpenStackNetConfigurationOptions})"/>.</para>
+        /// <para>Customize using the <see cref="Configuring"/> event.</para>
         /// </summary>
         public static OpenStackNetConfigurationOptions Configuration
         {
@@ -36,34 +36,19 @@ namespace OpenStack
         private static bool _isConfigured;
 
         /// <summary>
-        /// <para>DEPRECATED. This no longer needs to be explicityly called, unless you require customizations. In that case, use <see cref="Configure(Action{OpenStackNetConfigurationOptions})"/> .</para>
-        /// Initializes the SDK using the default configuration.
+        /// Occurs when initializing the global configuration for OpenStack.NET.
         /// </summary>
-        [Obsolete("This will be removed in v2.0. Use Configure(Action{OpenStackNetConfigurationOptions}) instead if you need to customize anything.")]
-        public static void Configure()
-        {
-            Configure(null);
-        }
+        public static event Action<OpenStackNetConfigurationOptions> Configuring;
 
         /// <summary>
-        /// <para>Provides thread-safe accesss to OpenStack.NET's global configuration options.</para>
-        /// <para>Can only be called once at application start-up, before instantiating any OpenStack.NET objects.</para>
-        /// </summary>
-        /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
-        public static void Configure(Action<OpenStackNetConfigurationOptions> configure)
-        {
-            Configure(null, configure);
-        }
-
-        /// <summary>
-        /// <para>DEPRECATED, use <see cref="Configure(Action{OpenStackNetConfigurationOptions})"/> instead.</para>
+        /// <para>DEPRECATED, use the <see cref="Configuring"/> event instead.</para>
         /// <para>Provides thread-safe accesss to OpenStack.NET's global configuration options.</para>
         /// <para>Can only be called once at application start-up, before instantiating any OpenStack.NET objects.</para>
         /// </summary>
         /// <param name="configureFlurl">Addtional configuration of the OpenStack.NET Flurl client settings <seealso cref="Flurl.Http.FlurlHttp.Configure" />.</param>
         /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
-        [Obsolete("This will be removed in v2.0. Use Configure(Action{OpenStackNetConfigurationOptions}) instead.")]
-        public static void Configure(Action<FlurlHttpSettings> configureFlurl, Action<OpenStackNetConfigurationOptions> configure)
+        [Obsolete("This will be removed in v2.0. Use the OpenStackNet.Configuring event instead.")]
+        public static void Configure(Action<FlurlHttpSettings> configureFlurl = null, Action<OpenStackNetConfigurationOptions> configure = null)
         {
             lock (ConfigureLock)
             {
@@ -76,25 +61,30 @@ namespace OpenStack
                     return;
                 }
 
-                // TODO: Use the line below once we hit 2.0 and configureFlurl is deprecated
-                // _config = new OpenStackNetConfigurationOptions(configure);
-                _config = new OpenStackNetConfigurationOptions(options =>
-                {
-                    configureFlurl?.Invoke(options.FlurlHttpSettings);
-                    configure?.Invoke(options);
-                });
+                // Give the application an opportunity to tweak the default config
+                _config = OpenStackNetConfigurationOptions.Create();
+                Configuring?.Invoke(_config);
+                
+                // Apply legacy custom configuration, removed in 2.0 as it's replaced by the Configuring event
+                configureFlurl?.Invoke(_config.FlurlHttpSettings);
+
+                // Finish configuration and lock it
+                _config.CompleteInitialization();
+
                 _isConfigured = true;
             }
         }
 
         /// <summary>
-        /// Resets all configuration (OpenStack.NET, Flurl and Json.NET) so that <see cref="Configure(Action{OpenStackNetConfigurationOptions})"/> can be called again.
+        /// <par>Resets all configuration (OpenStack.NET, Flurl and Json.NET).</par>
+        /// <para>After this is called, you must re-register any <see cref="Configuring"/> event handlers.</para>
         /// </summary>
         public static void ResetDefaults()
         {
             lock (ConfigureLock)
             {
                 _config = null;
+                Configuring = null;
                 _isConfigured = false;
             }
         }
@@ -144,29 +134,45 @@ namespace OpenStack
 
     /// <summary>
     /// A readonly set of properties that affect OpenStack.NET's behavior.
-    /// <para>To configure, pass a custom action via the static <see cref="OpenStackNet.Configure(Action{OpenStackNetConfigurationOptions})"/> method.</para>
+    /// <para>To customize, register an event handler for <see cref="OpenStackNet.Configuring"/>.</para>
     /// </summary>
     public class OpenStackNetConfigurationOptions
     {
-        private readonly bool _isInitialized;
+        private bool _isInitialized;
         private readonly FlurlHttpSettings _flurlHttpSettings;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private readonly List<ProductInfoHeaderValue> _userAgents;
 
         /// <summary/>
-        protected internal OpenStackNetConfigurationOptions(Action<OpenStackNetConfigurationOptions> configure = null)
+        protected OpenStackNetConfigurationOptions()
         {
             _flurlHttpSettings = new FlurlHttpSettings();
             _jsonSerializerSettings = new JsonSerializerSettings();
-            _userAgents = new List<ProductInfoHeaderValue>
-            {
-                new ProductInfoHeaderValue("openstack.net", GetType().GetAssemblyFileVersion())
-            };
+            _userAgents = new List<ProductInfoHeaderValue>();
+        }
 
-            configure?.Invoke(this);
+        /// <summary />
+        public static event Action<CreateEvent> Creating;
+
+        /// <summary />
+        internal static OpenStackNetConfigurationOptions Create()
+        {
+            var createEvent = new CreateEvent();
+            Creating?.Invoke(createEvent);
+            return createEvent.Result;
+        }
+
+        /// <summary />
+        public void CompleteInitialization()
+        {
+            OnCompleteInitialization();
             ApplyDefaults();
             _isInitialized = true;
         }
+
+        /// <summary />
+        protected virtual void OnCompleteInitialization()
+        {}
 
         /// <summary>
         /// Custom Flurl.Http configuration settings which are specific to requests made by this SDK.
@@ -215,6 +221,8 @@ namespace OpenStack
             //
             // Apply our default settings on top of user customizations, hopefully without clobbering anything
             //
+            UserAgents.Add(new ProductInfoHeaderValue("openstack.net", GetType().GetAssemblyFileVersion()));
+
             _jsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
             _jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
             _jsonSerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -256,6 +264,13 @@ namespace OpenStack
             {
                 call.Request.Headers.UserAgent.Add(userAgent);
             }
+        }
+
+        /// <summary />
+        public class CreateEvent
+        {
+            /// <summary />
+            public OpenStackNetConfigurationOptions Result = new OpenStackNetConfigurationOptions();
         }
     }
 }

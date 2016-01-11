@@ -30,7 +30,7 @@ namespace OpenStack
         public void WhenConfigureIsCalled_GlobalFlurlConfiguration_IsNotAltered()
         {
             // User makes their own tweaks to Flurl
-            Action<HttpCall> customErrorHandler = call => Debug.WriteLine("I saw an erro!");
+            Action<HttpCall> customErrorHandler = call => Debug.WriteLine("I saw an error!");
             FlurlHttp.GlobalSettings.OnError = customErrorHandler;
 
             // We configure openstack.net
@@ -48,7 +48,7 @@ namespace OpenStack
         public void WhenResetDefaultsIsCalled_GlobalFlurlConfiguration_IsNotAltered()
         {
             // User makes their own tweaks to Flurl
-            Action<HttpCall> customErrorHandler = call => Debug.WriteLine("I saw an erro!");
+            Action<HttpCall> customErrorHandler = call => Debug.WriteLine("I saw an error!");
             FlurlHttp.GlobalSettings.OnError = customErrorHandler;
 
             // We configure openstack.net
@@ -122,9 +122,14 @@ namespace OpenStack
         [Fact]
         public async Task UserAgentWithApplicationSuffixTest()
         {
-            using (var httpTest = new HttpTest(configure: options =>
-                    options.UserAgents.Add(new ProductInfoHeaderValue("(unittests)"))))
+            using (var httpTest = new HttpTest())
             {
+                // Apply a custom application user agent
+                OpenStackNet.Configuring += options =>
+                {
+                    options.UserAgents.Add(new ProductInfoHeaderValue("(unittests)"));
+                };
+
                 await "http://api.com".PrepareRequest().GetAsync();
 
                 var userAgent = httpTest.CallLog[0].Request.Headers.UserAgent.ToString();
