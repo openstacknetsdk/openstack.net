@@ -9,6 +9,7 @@ using OpenStack.Serialization;
 using OpenStack.Testing;
 using Xunit;
 using Xunit.Abstractions;
+#pragma warning disable 618 // We can remove this once OpenStackNet.Configure() is made internal and obsolete is removed
 
 namespace OpenStack
 {

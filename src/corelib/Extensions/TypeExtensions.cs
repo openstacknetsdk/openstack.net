@@ -32,6 +32,15 @@ namespace System.Extensions
         }
 
         /// <summary />
+        public static T Clone<T>(this T src)
+            where T : new()
+        {
+            var dest = new T();
+            src.CopyProperties(dest);
+            return dest;
+        }
+
+        /// <summary />
         public static void CopyProperties<T>(this T src, T dest)
         {
             foreach (PropertyDescriptor srcProp in TypeDescriptor.GetProperties(src))

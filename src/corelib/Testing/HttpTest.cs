@@ -21,21 +21,19 @@ namespace OpenStack.Testing
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpTest"/> class.
         /// </summary>
-        /// <param name="configureFlurl">Addtional configuration of the OpenStack.NET Flurl client settings <seealso cref="Flurl.Http.FlurlHttp.Configure" />.</param>
         /// <param name="configure">Additional configuration of OpenStack.NET's global settings.</param>
-        public HttpTest(Action<FlurlHttpSettings> configureFlurl = null, Action<OpenStackNetConfigurationOptions> configure = null)
+        public HttpTest(Action<OpenStackNetConfigurationOptions> configure = null)
         {
-            Action<FlurlHttpSettings> setFlurlTestMode = opts =>
+            Action<FlurlHttpSettings> setTestMode = settings =>
             {
-                configureFlurl?.Invoke(opts);
-                opts.HttpClientFactory = new TestHttpClientFactory(this);
-                opts.AfterCall = call =>
+                settings.HttpClientFactory = new TestHttpClientFactory(this);
+                settings.AfterCall = call =>
                 {
                     CallLog.Add(call);
                 };
             };
             OpenStackNet.ResetDefaults();
-            OpenStackNet.Configure(setFlurlTestMode, configure);
+            OpenStackNet.Configure(setTestMode, configure);
         }
 
         /// <inheritdoc />
