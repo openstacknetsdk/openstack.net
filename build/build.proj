@@ -75,6 +75,12 @@
       <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
     </PropertyGroup>
 
+    <!-- Remove cached prerelease packages so that the latest is grabed from MyGet -->
+    <ItemGroup>
+      <PrereleasePackages Include="$(LOCALAPPDATA)\NuGet\Cache\*beta*"/>
+    </ItemGroup>
+    <Delete Files="@(PrereleasePackages)" />
+
     <Exec Command="$(NuGet) restore $(MigrationSln)" />
 
     <Message Text="Updating NuGet packages to the latest available releases (including prereleases available on MyGet)..." />
