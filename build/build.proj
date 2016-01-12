@@ -23,7 +23,6 @@
     <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
     <CallTarget Targets="IntegrationTest" />
-    <CallTarget Targets="MigrationTest" />
     <CallTarget Targets="Package" />
   </Target>
 
@@ -71,7 +70,7 @@
       OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
   </Target>
 
-  <Target Name="MigrationTest" DependsOnTargets="Build">
+  <Target Name="MigrationTest" DependsOnTargets="DownloadNuGet">
     <PropertyGroup>
       <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
     </PropertyGroup>
