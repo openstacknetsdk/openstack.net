@@ -979,14 +979,46 @@ namespace OpenStack.Compute.v2_1
         #region Keypairs
 
         /// <summary />
-        public virtual async Task<T> CreateKeyPairAsync<T>(object keypair, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> GetKeyPairAsync<T>(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
         {
-            PreparedRequest request = await BuildCreateKeyPairRequestAsync(keypair, cancellationToken);
-            return await request.SendAsync().ReceiveJson<T>();
+            if (keypairName == null)
+                throw new ArgumentNullException("keypairName");
+
+            PreparedRequest request = await BuildGetKeyPairRequestAsync(keypairName, cancellationToken);
+
+            var result = await request.SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateKeyPairRequestAsync(object keypair, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildGetKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"os-keypairs/{keypairName}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateKeyPairAsync<T>(object keypair, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            if(keypair == null)
+                throw new ArgumentNullException("keypair");
+
+            PreparedRequest request = await BuildCreateKeyPairRequestAsync(keypair, cancellationToken);
+            var result = await request.SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateKeyPairRequestAsync(object keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -994,9 +1026,52 @@ namespace OpenStack.Compute.v2_1
                 .AppendPathSegment("os-keypairs")
                 .Authenticate(AuthenticationProvider)
                 .SetMicroversion(this)
-                .PreparePostJson(keypair, cancellationToken);
+                .PreparePostJson(keypairName, cancellationToken);
         }
 
+        /// <summary />
+        public virtual async Task<T> ListKeyPairsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            PreparedRequest request = await BuildListKeyPairsRequestAsync(cancellationToken);
+            var result = await request.SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListKeyPairsRequestAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("os-keypairs")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (keypairName == null)
+                throw new ArgumentNullException("keypairName");
+
+            return BuildDeleteKeyPairRequestAsync(keypairName, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegment($"os-keypairs/{keypairName}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
         #endregion
 
         #region Security Groups

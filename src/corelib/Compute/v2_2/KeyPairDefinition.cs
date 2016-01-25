@@ -7,10 +7,10 @@ namespace OpenStack.Compute.v2_2
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "keypair")]
     public class KeyPairDefinition : v2_1.KeyPairDefinition
     {
-        /// <summary />
-        public KeyPairDefinition(string name) : base(name)
+        /// <inheritdoc />
+        public KeyPairDefinition(string name, string publicKey)
+            : base(name, publicKey)
         {
-            Name = name;
         }
 
         /// <summary />
