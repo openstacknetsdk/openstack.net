@@ -321,13 +321,35 @@ namespace OpenStack.Compute.v2_1
 
         #region Keypairs
 
-        /// <inheritdoc cref="ComputeApiBuilder.CreateKeyPairAsync{T}" />
-        public virtual Task<KeyPair> CreateKeyPairAsync(string name, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.GetKeyPairAsync{T}" />
+        public virtual Task<KeyPairDetails> GetKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var keyPair = new KeyPairDefinition(name);
-            return _computeApi.CreateKeyPairAsync<KeyPair>(keyPair, cancellationToken);
+            return _computeApi.GetKeyPairAsync<KeyPairDetails>(keypairName, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.CreateKeyPairAsync{T}" />
+        public virtual Task<KeyPairResponse> CreateKeyPairAsync(KeyPairRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateKeyPairAsync<KeyPairResponse>(request, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task<KeyPair> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateKeyPairAsync<KeyPair>(keypair, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListKeyPairsAsync{T}" />
+        public virtual async Task<IEnumerable<KeyPair>> ListKeyPairsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListKeyPairsAsync<KeyPairCollection>(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteKeyPairAsync(keypairName, cancellationToken);
+        }
         #endregion
 
         #region Security Groups

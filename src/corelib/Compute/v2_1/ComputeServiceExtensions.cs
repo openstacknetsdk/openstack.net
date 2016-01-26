@@ -300,11 +300,36 @@ namespace OpenStack.Synchronous
         #endregion
 
         #region KeyPairs
-        /// <inheritdoc cref="ComputeService.CreateKeyPairAsync" />
-        public static KeyPair CreateKeyPair(this ComputeService service, string name)
+        /// <inheritdoc cref="ComputeService.GetKeyPairAsync" />
+        public static KeyPairDetails GetKeyPair(this ComputeService service, string keypairName)
         {
-            return service.CreateKeyPairAsync(name).ForceSynchronous();
+            return service.GetKeyPairAsync(keypairName).ForceSynchronous();
         }
+
+        /// <inheritdoc cref="ComputeService.CreateKeyPairAsync" />
+        public static KeyPairResponse CreateKeyPair(this ComputeService service, KeyPairRequest request)
+        {
+            return service.CreateKeyPairAsync(request).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ImportKeyPairAsync" />
+        public static KeyPair ImportKeyPair(this ComputeService service, KeyPairDefinition keyPair)
+        {
+            return service.ImportKeyPairAsync(keyPair).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListKeyPairsAsync" />
+        public static IEnumerable<KeyPair> ListKeyPairs(this ComputeService service)
+        {
+            return service.ListKeyPairsAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteKeyPairAsync" />
+        public static void DeleteKeyPair(this ComputeService service, string keypairName)
+        {
+            service.DeleteKeyPairAsync(keypairName).ForceSynchronous();
+        }
+
         #endregion
 
         #region Security Groups

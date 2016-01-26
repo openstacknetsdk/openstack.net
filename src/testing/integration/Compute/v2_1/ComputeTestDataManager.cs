@@ -60,6 +60,12 @@ namespace OpenStack.Compute.v2_1
 
             try
             {
+                DeleteKeyPairs(_testData.OfType<KeyPair>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
                 BlockStorage.Dispose();
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
@@ -142,6 +148,31 @@ namespace OpenStack.Compute.v2_1
         public void DeleteSecurityGroups(IEnumerable<SecurityGroup> securityGroups)
         {
             var deletes = securityGroups.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Key Pairs
+        public KeyPairRequest BuildKeyPairRequest()
+        {
+            return new KeyPairRequest(TestData.GenerateName());
+        }
+
+        public Task<KeyPairResponse> CreateKeyPair()
+        {
+            return CreateKeyPair(BuildKeyPairRequest());
+        }
+
+        public async Task<KeyPairResponse> CreateKeyPair(KeyPairRequest request)
+        {
+            var keypair = await _compute.CreateKeyPairAsync(request);
+            Register(keypair);
+            return keypair;
+        }
+
+        public void DeleteKeyPairs(IEnumerable<KeyPair> keypairs)
+        {
+            var deletes = keypairs.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion

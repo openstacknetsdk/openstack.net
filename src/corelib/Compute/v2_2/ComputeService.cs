@@ -34,13 +34,9 @@ namespace OpenStack.Compute.v2_2
         #region Keypairs
 
         /// <summary />
-        public virtual Task<KeyPair> CreateKeyPairAsync(string name, KeyPairType? type = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<KeyPair> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var keyPair = new KeyPairDefinition(name)
-            {
-                Type = type
-            };
-            return _computeApiBuilder.CreateKeyPairAsync<KeyPair>(keyPair, cancellationToken);
+            return _computeApiBuilder.CreateKeyPairAsync<KeyPair>(keypair, cancellationToken);
         }
 
         #endregion

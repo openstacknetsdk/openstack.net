@@ -15,10 +15,10 @@ namespace OpenStack.Synchronous
             return service.GetVncConsoleAync(serverId, type).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="OpenStack.Compute.v2_1.ComputeService.CreateKeyPairAsync" />
-        public static KeyPair CreateKeyPair(this ComputeService service, string name, KeyPairType? type = null)
+        /// <inheritdoc cref="OpenStack.Compute.v2_1.ComputeService.ImportKeyPairAsync" />
+        public static KeyPair ImportKeyPair(this ComputeService service, KeyPairDefinition keypair)
         {
-            return service.CreateKeyPairAsync(name, type).ForceSynchronous();
+            return service.ImportKeyPairAsync(keypair).ForceSynchronous();
         }
     }
 }
