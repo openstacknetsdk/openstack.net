@@ -78,9 +78,32 @@ namespace OpenStack.Compute.v2_1
         public ServerCreateDefinition BuildServer()
         {
             string name = TestData.GenerateName();
-            const string flavor = "1"; // m1.tiny
-            Identifier image = new Identifier("74382d40-c0c0-49b0-bacd-42eb3fbaf271"); // cirros
-            return new ServerCreateDefinition(name, image, flavor);
+            var flavor = GetDefaultFlavor();
+            var image = GetDefaultImage();
+            Task.WaitAll(flavor, image);
+            return new ServerCreateDefinition(name, image.Result, flavor.Result);
+        }
+
+        private Identifier _defaultFlavor;
+        private async Task<Identifier> GetDefaultFlavor()
+        {
+            if (_defaultFlavor == null)
+            {
+                var flavors = await _compute.ListFlavorsAsync();
+                _defaultFlavor = flavors.First(x => x.Name == "m1.tiny").Id;
+            }
+            return _defaultFlavor;
+        }
+
+        private Identifier _defaultImage;
+        private async Task<Identifier> GetDefaultImage()
+        {
+            if (_defaultImage == null)
+            {
+                var images = await _compute.ListImagesAsync(new ImageListOptions {Name = "cirros"});
+                _defaultImage = images.First().Id;
+            }
+            return _defaultImage;
         }
 
         public async Task<Server> CreateServer()
