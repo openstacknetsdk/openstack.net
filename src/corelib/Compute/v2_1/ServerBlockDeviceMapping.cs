@@ -11,7 +11,7 @@ namespace OpenStack.Compute.v2_1
     public class ServerBlockDeviceMapping
     {
         /// <summary />
-        [JsonProperty("boot_index")]
+        [JsonProperty("boot_index", DefaultValueHandling = DefaultValueHandling.Include)]
         public int BootIndex { get; set; }
 
         /// <summary />
@@ -20,7 +20,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("uuid")]
-        public Identifier VolumeId { get; set; }
+        public Identifier SourceId { get; set; }
 
         /// <summary />
         [JsonProperty("source_type")]
@@ -29,6 +29,10 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonProperty("destination_type")]
         public VolumeType DestinationType { get; set; }
+
+        /// <summary /> // in GB
+        [JsonProperty("volume_size")]
+        public int? DestinationVolumeSize { get; set; }
 
         /// <summary />
         [JsonProperty("delete_on_termination")]

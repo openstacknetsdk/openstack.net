@@ -83,5 +83,58 @@ namespace OpenStack.Compute.v2_1
             byte[] contents = System.IO.File.ReadAllBytes(path);
             UserData = System.Convert.ToBase64String(contents);
         }
+
+        /// <summary>
+        /// Configures the server to boot from an existing volume.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="deleteVolumeWithServer">if set to <c>true</c> [delete volume with server].</param>
+        public void ConfigureBootFromVolume(Identifier volumeId, bool deleteVolumeWithServer = false)
+        {
+            BlockDeviceMapping.Add(new ServerBlockDeviceMapping
+            {
+                SourceType = VolumeType.Volume,
+                SourceId = volumeId,
+                BootIndex = 0,
+                DeleteWithServer = deleteVolumeWithServer
+            });
+        }
+
+        /// <summary>
+        /// Configures the server to boot from a copy of an existing volume.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="volumeSize">Size of the volume.</param>
+        /// <param name="deleteVolumeWithServer">if set to <c>true</c> [delete volume with server].</param>
+        public void ConfigureBootFromNewVolume(Identifier volumeId, int volumeSize, bool deleteVolumeWithServer = false)
+        {
+            BlockDeviceMapping.Add(new ServerBlockDeviceMapping
+            {
+                SourceType = VolumeType.Volume,
+                SourceId = volumeId,
+                BootIndex = 0,
+                DestinationType = VolumeType.Volume,
+                DestinationVolumeSize = volumeSize,
+                DeleteWithServer = deleteVolumeWithServer
+            });
+        }
+
+        /// <summary>
+        /// Configures the server to boot from a new volume, copied from the base server image.
+        /// </summary>
+        /// <param name="volumeSize">Size of the volume.</param>
+        /// <param name="deleteVolumeWithServer">if set to <c>true</c> [delete volume with server].</param>
+        public void ConfigureBootFromNewVolume(int volumeSize, bool deleteVolumeWithServer = false)
+        {
+            BlockDeviceMapping.Add(new ServerBlockDeviceMapping
+            {
+                SourceType = VolumeType.Image,
+                SourceId = ImageId,
+                BootIndex = 0,
+                DestinationType = VolumeType.Volume,
+                DestinationVolumeSize = volumeSize,
+                DeleteWithServer = deleteVolumeWithServer
+            });
+        }
     }
 }

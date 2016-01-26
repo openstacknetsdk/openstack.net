@@ -87,6 +87,50 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
+        public async Task BootFromVolume()
+        {
+            var definition = _testData.BuildServer();
+            definition.ConfigureBootFromVolume("30ca5d77-c519-48ea-a56c-7c4e0ca0894d");
+
+            Trace.WriteLine("Booting new server from volume...");
+            var server = await _testData.CreateServer(definition);
+            await server.WaitUntilActiveAsync();
+
+            Assert.NotEmpty(server.AttachedVolumes);
+            Assert.Contains(server.AttachedVolumes, x => x.Id == definition.BlockDeviceMapping[0].SourceId);
+        }
+
+        [Fact]
+        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
+        public async Task BootFromVolumeCopy()
+        {
+            var definition = _testData.BuildServer();
+            definition.ConfigureBootFromNewVolume("30ca5d77-c519-48ea-a56c-7c4e0ca0894d", volumeSize: 1, deleteVolumeWithServer: true);
+
+            Trace.WriteLine("Booting new server from a new volume created from an existing volume...");
+            var server = await _testData.CreateServer(definition);
+            await server.WaitUntilActiveAsync();
+
+            Assert.NotEmpty(server.AttachedVolumes);
+            Assert.Contains(server.AttachedVolumes, x => x.Id == definition.BlockDeviceMapping[0].SourceId);
+        }
+
+        [Fact]
+        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
+        public async Task BootFromImageCopy()
+        {
+            var definition = _testData.BuildServer();
+            definition.ConfigureBootFromNewVolume(volumeSize: 1, deleteVolumeWithServer: true);
+            Trace.WriteLine("Booting new server from a new volume created from an existing image...");
+            var server = await _testData.CreateServer(definition);
+            await server.WaitUntilActiveAsync();
+
+            Assert.NotEmpty(server.AttachedVolumes);
+            Assert.Contains(server.AttachedVolumes, x => x.Id != definition.BlockDeviceMapping[0].SourceId);
+        }
+
+        [Fact]
         public async Task ListServerReferencesTest()
         {
             var results = await _compute.ListServerReferencesAsync(new ServerListOptions {PageSize = 1});
