@@ -386,6 +386,34 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Sever Groups
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetServerGroupAsync{T}" />
+        public Task<ServerGroup> GetServerGroupAsync(Identifier serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerGroupAsync<ServerGroup>(serverGroupId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateServerGroupAsync{T}" />
+        public Task<ServerGroup> CreateServerGroupAsync(ServerGroupDefinition serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateServerGroupAsync<ServerGroup>(serverGroup, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerGroupsAsync{T}" />
+        public async Task<IEnumerable<ServerGroup>> ListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerGroupsAsync<ServerGroupCollection>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteServerGroupAsync" />
+        public Task DeleteServerGroupAsync(Identifier serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteServerGroupAsync(serverGroupId, cancellationToken);
+        }
+
+        #endregion
+
         #region Compute Service
         /// <inheritdoc cref="ComputeApiBuilder.GetLimitsAsync{T}" />
         public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))

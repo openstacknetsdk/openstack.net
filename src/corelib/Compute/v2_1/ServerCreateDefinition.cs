@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using OpenStack.Serialization;
+using OpenStack.Compute.v2_1.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
+    [JsonConverter(typeof(ServerCreateDefinitionConverter))]
     public class ServerCreateDefinition
     {
         /// <summary />
-        public ServerCreateDefinition(string name, Identifier imageId, string flavorId)
+        public ServerCreateDefinition(string name, Identifier imageId, Identifier flavorId)
         {
             Name = name;
             ImageId = imageId;
@@ -31,7 +31,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("flavorRef")]
-        public string FlavorId { get; set; }
+        public Identifier FlavorId { get; set; }
 
         /// <summary />
         [JsonProperty("security_groups")]
@@ -70,7 +70,7 @@ namespace OpenStack.Compute.v2_1
         public string KeyPairName { get; set; }
 
         /// <summary />
-        [JsonProperty("os:scheduler_hints")]
+        [JsonIgnore] // Serialized at the same level as "server"
         public SchedulerHints SchedulerHints { get; set; }
 
         /// <summary />

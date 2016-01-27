@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
@@ -17,6 +18,30 @@ namespace OpenStack.Compute.v2_1
         public ServerTests()
         {
             _compute = new ComputeService(Stubs.AuthenticationProvider, "region");
+        }
+
+        [Fact]
+        public void SerializeServerWithSchedulerHints()
+        {
+            string expectedJson = JObject.Parse(@"{'server':{'name':'name','imageRef':'00000000-0000-0000-0000-000000000000','flavorRef':'00000000-0000-0000-0000-000000000000'},'os:scheduler_hints':{'group':'groupId'}}")
+                .ToString(Formatting.None);
+            var server = new ServerCreateDefinition("name", Guid.Empty, Guid.Empty);
+            server.SchedulerHints = new SchedulerHints();
+            server.SchedulerHints.Add("group", "groupId");
+
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(server);
+            Assert.Equal(expectedJson, json);
+        }
+
+        [Fact]
+        public void SerializeServerWithoutSchedulerHints()
+        {
+            string expectedJson = JObject.Parse(@"{'server':{'name':'name','imageRef':'00000000-0000-0000-0000-000000000000','flavorRef':'00000000-0000-0000-0000-000000000000'}}")
+                .ToString(Formatting.None);
+            var server = new ServerCreateDefinition("name", Guid.Empty, Guid.Empty);
+
+            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(server);
+            Assert.Equal(expectedJson, json);
         }
 
         [Fact]

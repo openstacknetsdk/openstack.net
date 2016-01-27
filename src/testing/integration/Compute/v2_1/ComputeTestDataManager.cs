@@ -60,6 +60,12 @@ namespace OpenStack.Compute.v2_1
 
             try
             {
+                DeleteServerGroups(_testData.OfType<ServerGroup>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
                 DeleteKeyPairs(_testData.OfType<KeyPair>());
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
@@ -171,6 +177,33 @@ namespace OpenStack.Compute.v2_1
         public void DeleteSecurityGroups(IEnumerable<SecurityGroup> securityGroups)
         {
             var deletes = securityGroups.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Server Groups
+        public ServerGroupDefinition BuildServerGroup()
+        {
+            string name = TestData.GenerateName();
+            return new ServerGroupDefinition(name, "affinity");
+        }
+
+        public async Task<ServerGroup> CreateServerGroup()
+        {
+            var definition = BuildServerGroup();
+            return await CreateServerGroup(definition);
+        }
+
+        public async Task<ServerGroup> CreateServerGroup(ServerGroupDefinition definition)
+        {
+            var serverGroup = await _compute.CreateServerGroupAsync(definition);
+            Register(serverGroup);
+            return serverGroup;
+        }
+
+        public void DeleteServerGroups(IEnumerable<ServerGroup> serverGroups)
+        {
+            var deletes = serverGroups.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion
