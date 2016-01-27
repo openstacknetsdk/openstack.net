@@ -386,6 +386,62 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
+        #region Sever Groups
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetServerGroupAsync{T}" />
+        public Task<ServerGroup> GetServerGroupAsync(Identifier serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerGroupAsync<ServerGroup>(serverGroupId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateServerGroupAsync{T}" />
+        public Task<ServerGroup> CreateServerGroupAsync(ServerGroupDefinition serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateServerGroupAsync<ServerGroup>(serverGroup, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListServerGroupsAsync{T}" />
+        public async Task<IEnumerable<ServerGroup>> ListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListServerGroupsAsync<ServerGroupCollection>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteServerGroupAsync" />
+        public Task DeleteServerGroupAsync(Identifier serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteServerGroupAsync(serverGroupId, cancellationToken);
+        }
+
+        #endregion
+
+        #region Volumes
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetVolumeAsync{T}" />
+        public Task<Volume> GetVolumeAsync(Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetVolumeAsync<Volume>(volumeId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.CreateVolumeAsync{T}" />
+        public Task<Volume> CreateVolumeAsync(VolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateVolumeAsync<Volume>(volume, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListVolumesAsync{T}" />
+        public async Task<IEnumerable<Volume>> ListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteVolumeAsync" />
+        public Task DeleteVolumeAsync(Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteVolumeAsync(volumeId, cancellationToken);
+        }
+
+        #endregion
+
         #region Compute Service
         /// <inheritdoc cref="ComputeApiBuilder.GetLimitsAsync{T}" />
         public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))

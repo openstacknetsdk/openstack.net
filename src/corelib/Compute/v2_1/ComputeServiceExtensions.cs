@@ -366,6 +366,62 @@ namespace OpenStack.Synchronous
 
         #endregion
 
+        #region Server Groups
+
+        /// <inheritdoc cref="ComputeService.GetServerGroupAsync" />
+        public static ServerGroup GetServerGroup(this ComputeService service, Identifier severGroupId)
+        {
+            return service.GetServerGroupAsync(severGroupId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateServerGroupAsync" />
+        public static ServerGroup CreateServerGroup(this ComputeService service, ServerGroupDefinition serverGroup)
+        {
+            return service.CreateServerGroupAsync(serverGroup).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListServerGroupsAsync" />
+        public static IEnumerable<ServerGroup> ListServerGroups(this ComputeService service)
+        {
+            return service.ListServerGroupsAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteServerGroupAsync" />
+        public static void DeleteServerGroup(this ComputeService service, Identifier serverGroupId)
+        {
+            service.DeleteServerGroupAsync(serverGroupId).ForceSynchronous();
+        }
+
+        #endregion
+
+        #region Volumes
+
+        /// <inheritdoc cref="ComputeService.GetVolumeAsync" />
+        public static Volume GetVolume(this ComputeService service, Identifier volumeId)
+        {
+            return service.GetVolumeAsync(volumeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateVolumeAsync" />
+        public static Volume CreateVolume(this ComputeService service, VolumeDefinition volume)
+        {
+            return service.CreateVolumeAsync(volume).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListVolumesAsync" />
+        public static IEnumerable<Volume> ListVolumes(this ComputeService service)
+        {
+            return service.ListVolumesAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteVolumeAsync" />
+        public static void DeleteVolume(this ComputeService service, Identifier volumeId)
+        {
+            service.DeleteVolumeAsync(volumeId).ForceSynchronous();
+        }
+
+        #endregion
+
         #region Compute Service
         /// <inheritdoc cref="ComputeService.GetLimitsAsync" />
         public static ServiceLimits GetLimits(this ComputeService service)

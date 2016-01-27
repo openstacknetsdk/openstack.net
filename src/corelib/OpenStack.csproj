@@ -111,11 +111,18 @@
     <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRuleDefinition.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerCreateDefinitionConverter.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerGroupCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\KeyPairCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\KeyPairConverter.cs" />
     <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerGroup.cs" />
+    <Compile Include="Compute\v2_1\ServerGroupDefinition.cs" />
     <Compile Include="Compute\v2_1\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServiceLimits.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
@@ -155,6 +162,8 @@
     <Compile Include="Compute\v2_1\ServerVolumeDefinition.cs" />
     <Compile Include="Compute\v2_1\ServerVolume.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
+    <Compile Include="Compute\v2_1\VolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\Volume.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />

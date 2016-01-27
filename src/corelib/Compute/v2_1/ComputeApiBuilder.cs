@@ -1151,7 +1151,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListSecurityGropusAsync(serverId, cancellationToken)
+            var result = await BuildListSecurityGroupsAsync(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             result.PropogateOwner(this);
@@ -1159,7 +1159,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListSecurityGropusAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildListSecurityGroupsAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -1238,6 +1238,204 @@ namespace OpenStack.Compute.v2_1
 
             return (PreparedRequest)endpoint
                 .AppendPathSegment($"os-security-group-rules/{ruleId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        #endregion
+
+        #region Server Groups
+
+        /// <summary />
+        public virtual async Task<T> GetServerGroupAsync<T>(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetServerGroupsAsync(serverGroupId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetServerGroupsAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverGroupId == null)
+                throw new ArgumentNullException("serverGroupId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"os-server-groups/{serverGroupId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateServerGroupAsync<T>(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildCreateServerGroupAsync(serverGroup, cancellationToken).SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateServerGroupAsync(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverGroup == null)
+                throw new ArgumentNullException("serverGroup");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-server-groups")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(serverGroup, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListServerGroupsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            var result = await BuildListServerGroupsAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("os-server-groups")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteServerGroupAsync(serverGroupId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverGroupId == null)
+                throw new ArgumentNullException("serverGroupId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegment($"os-server-groups/{serverGroupId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareDelete(cancellationToken)
+                .AllowHttpStatus(HttpStatusCode.NotFound);
+        }
+
+        #endregion
+
+        #region Volumes
+
+        /// <summary />
+        public virtual async Task<T> GetVolumeAsync<T>(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildGetVolumesAsync(volumeId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildGetVolumesAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment($"os-volumes/{volumeId}")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateVolumeAsync<T>(object volume, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            var result = await BuildCreateVolumeAsync(volume, cancellationToken).SendAsync().ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateVolumeAsync(object volume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volume == null)
+                throw new ArgumentNullException("volume");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("os-volumes")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PreparePostJson(volume, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListVolumesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            var result = await BuildListVolumesAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+            result.PropogateOwner(this);
+            return result;
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("os-volumes")
+                .Authenticate(AuthenticationProvider)
+                .SetMicroversion(this)
+                .PrepareGet(cancellationToken);
+        }
+        
+        /// <summary />
+        public virtual Task DeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteVolumeAsync(volumeId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildDeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return (PreparedRequest)endpoint
+                .AppendPathSegment($"os-volumes/{volumeId}")
                 .Authenticate(AuthenticationProvider)
                 .SetMicroversion(this)
                 .PrepareDelete(cancellationToken)

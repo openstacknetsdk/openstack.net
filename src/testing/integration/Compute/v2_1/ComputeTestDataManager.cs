@@ -60,6 +60,18 @@ namespace OpenStack.Compute.v2_1
 
             try
             {
+                DeleteServerGroups(_testData.OfType<ServerGroup>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
+                DeleteVolumes(_testData.OfType<Volume>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
                 DeleteKeyPairs(_testData.OfType<KeyPair>());
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
@@ -171,6 +183,62 @@ namespace OpenStack.Compute.v2_1
         public void DeleteSecurityGroups(IEnumerable<SecurityGroup> securityGroups)
         {
             var deletes = securityGroups.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Server Groups
+        public ServerGroupDefinition BuildServerGroup()
+        {
+            string name = TestData.GenerateName();
+            return new ServerGroupDefinition(name, "affinity");
+        }
+
+        public async Task<ServerGroup> CreateServerGroup()
+        {
+            var definition = BuildServerGroup();
+            return await CreateServerGroup(definition);
+        }
+
+        public async Task<ServerGroup> CreateServerGroup(ServerGroupDefinition definition)
+        {
+            var serverGroup = await _compute.CreateServerGroupAsync(definition);
+            Register(serverGroup);
+            return serverGroup;
+        }
+
+        public void DeleteServerGroups(IEnumerable<ServerGroup> serverGroups)
+        {
+            var deletes = serverGroups.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Volumes
+        public VolumeDefinition BuildVolume()
+        {
+            return new VolumeDefinition(1)
+            {
+                Name = TestData.GenerateName()
+            };
+        }
+
+        public async Task<Volume> CreateVolume()
+        {
+            var definition = BuildVolume();
+            return await CreateVolume(definition);
+        }
+
+        public async Task<Volume> CreateVolume(VolumeDefinition definition)
+        {
+            var volume = await _compute.CreateVolumeAsync(definition);
+            Register(volume);
+            return volume;
+        }
+
+        public void DeleteVolumes(IEnumerable<Volume> volumes)
+        {
+            var deletes = volumes.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion
