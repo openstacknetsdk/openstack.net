@@ -38,5 +38,15 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonExtensionData]
         public IDictionary<string, JToken> Data { get; set; } = new Dictionary<string, JToken>();
+
+        /// <summary>
+        /// Adds a custom scheduling hint.
+        /// </summary>
+        /// <param name="hint">The hint key.</param>
+        /// <param name="value">The hint value.</param>
+        public void Add(string hint, object value)
+        {
+            Data.Add(hint, JToken.FromObject(value));
+        }
     }
 }
