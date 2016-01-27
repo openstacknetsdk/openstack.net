@@ -1151,7 +1151,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListSecurityGropusAsync(serverId, cancellationToken)
+            var result = await BuildListSecurityGroupsAsync(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             result.PropogateOwner(this);
@@ -1159,7 +1159,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListSecurityGropusAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildListSecurityGroupsAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
