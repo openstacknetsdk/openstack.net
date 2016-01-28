@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using OpenStack;
 using OpenStack.Authentication;
 
@@ -113,7 +114,7 @@ namespace net.openstack.Core.Providers
                     if (userAccessObject == null)
                         return null;
 
-                    UserAccess access = userAccessObject.ToObject<UserAccess>();
+                    UserAccess access = userAccessObject.ToObject<UserAccess>(JsonSerializer.Create());
                     if (access == null || access.Token == null)
                         return null;
 
