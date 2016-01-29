@@ -15,16 +15,26 @@ namespace OpenStack.Compute.v2_1
     {
         /// <summary />
         [JsonIgnore]
-        protected internal Server Server { get; set; }
+        protected ServerReference ServerRef { get; set; }
 
         /// <summary />
         public Identifier Id { get; set; }
 
         object IServiceResource.Owner { get; set; }
 
+        internal void SetParent(ServerReference parent)
+        {
+            ServerRef = parent;
+        }
+
+        void IChildResource.SetParent(object parent)
+        {
+            SetParent((Server)parent);
+        }
+
         void IChildResource.SetParent(string parentId)
         {
-            Server = new Server { Id = parentId };
+            SetParent(new ServerReference {Id = parentId});
         }
 
         /// <summary />
@@ -34,7 +44,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         protected void AssertServerIsSet([CallerMemberName]string callerName = "")
         {
-            if (Server != null)
+            if (ServerRef != null)
                 return;
 
             throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeServer. Use ComputeService.{callerName} instead."));
@@ -47,8 +57,8 @@ namespace OpenStack.Compute.v2_1
             AssertServerIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            var result = await compute.GetServerVolumeAsync<ServerVolume>(Server.Id, Id, cancellationToken);
-            result.Server = Server;
+            var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken);
+            result.ServerRef = ServerRef;
             return result;
         }
 
@@ -59,11 +69,15 @@ namespace OpenStack.Compute.v2_1
             AssertServerIsSet(); 
 
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            await compute.DetachVolumeAsync(Server.Id, Id, cancellationToken);
+            await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken);
 
-            var attachedVolume = Server.AttachedVolumes.FirstOrDefault(v => v.Id == Id);
-            if(attachedVolume != null)
-                Server.AttachedVolumes.Remove(attachedVolume);
+            var server = ServerRef as Server;
+            if (server != null)
+            {
+                var attachedVolume = server.AttachedVolumes.FirstOrDefault(v => v.Id == Id);
+                if (attachedVolume != null)
+                    server.AttachedVolumes.Remove(attachedVolume);
+            }
         }
     }
 }

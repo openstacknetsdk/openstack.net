@@ -418,7 +418,6 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(volumeId, result.Id);
                 Assert.True(server.AttachedVolumes.Any(v => v.Id == volumeId));
                 Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
-                Assert.NotNull(result.Server);
             }
         }
 

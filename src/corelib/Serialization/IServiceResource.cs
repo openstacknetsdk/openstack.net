@@ -23,6 +23,11 @@ namespace OpenStack.Serialization
         /// <summary>
         /// Called after deserialization to bootstrap a link from the child back to the parent resource.
         /// </summary>
+        void SetParent(object parent);
+
+        /// <summary>
+        /// Called after deserialization to bootstrap a link from the child back to the parent resource.
+        /// </summary>
         void SetParent(string parentId);
     }
 

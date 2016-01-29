@@ -81,8 +81,8 @@ namespace OpenStack.Synchronous
             server.EvacuateAsync(request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ServerReference.AttachVolumeAsync"/>
-        public static ServerVolume AttachVolume(this ServerReference server, ServerVolumeDefinition volume)
+        /// <inheritdoc cref="Server.AttachVolumeAsync"/>
+        public static ServerVolume AttachVolume(this Server server, ServerVolumeDefinition volume)
         {
             return server.AttachVolumeAsync(volume).ForceSynchronous();
         }

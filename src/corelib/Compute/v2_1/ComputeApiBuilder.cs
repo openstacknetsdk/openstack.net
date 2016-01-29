@@ -907,13 +907,14 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IEnumerable<IServiceResource>
+            where T : IEnumerable<IServiceResource>, IEnumerable<IChildResource>
         {
-            var result = await BuidListServerVolumesAsync(serverId, cancellationToken)
+            var results = await BuidListServerVolumesAsync(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            results.PropogateOwner(this);
+            results.SetParent(serverId);
+            return results;
         }
 
         /// <summary />
@@ -930,12 +931,13 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
+            where T : IServiceResource, IChildResource
         {
             T result = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
             result.PropogateOwner(this);
+            result.SetParent(serverId);
             return result;
         }
 

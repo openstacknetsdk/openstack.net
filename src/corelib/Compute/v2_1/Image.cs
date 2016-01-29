@@ -96,7 +96,7 @@ namespace OpenStack.Compute.v2_1
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            Metadata.Image = this;
+            Metadata.SetParent(this);
         }
     }
 }

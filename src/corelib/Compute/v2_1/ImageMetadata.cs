@@ -15,7 +15,7 @@ namespace OpenStack.Compute.v2_1
     {
         /// <summary />
         [JsonIgnore]
-        internal protected Image Image { get; set; }
+        protected ImageReference Image { get; set; }
 
         /// <summary />
         [JsonExtensionData]
@@ -23,9 +23,19 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
+        internal void SetParent(ImageReference parent)
+        {
+            Image = parent;
+        }
+
         void IChildResource.SetParent(string parentId)
         {
-            Image = new Image {Id = parentId};
+            SetParent(new Image {Id = parentId});
+        }
+
+        void IChildResource.SetParent(object parent)
+        {
+            SetParent((Image)parent);
         }
 
         /// <summary />

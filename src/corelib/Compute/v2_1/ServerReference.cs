@@ -105,14 +105,6 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return await compute.AttachVolumeAsync<ServerVolume>(Id, volume, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary />
-        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<IEnumerable<ServerVolume>> ListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();

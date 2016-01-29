@@ -175,22 +175,24 @@ namespace OpenStack.Compute.v2_1
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc />
-        public override async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = new CancellationToken())
+        /// <summary />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var result = await base.AttachVolumeAsync(volume, cancellationToken);
-            result.Server = this;
+            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var result = await compute.AttachVolumeAsync<ServerVolume>(Id, volume, cancellationToken).ConfigureAwait(false);
             AttachedVolumes.Add(result);
+            ((IChildResource)result).SetParent(this);
             return result;
         }
-
+        
         /// <summary />
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
-            foreach (var volume in AttachedVolumes)
+            foreach (IChildResource volume in AttachedVolumes)
             {
-                volume.Server = this;
+                volume.SetParent(this);
             }
         }
     }

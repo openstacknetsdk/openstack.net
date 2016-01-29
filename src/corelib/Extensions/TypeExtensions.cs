@@ -94,6 +94,15 @@ namespace System.Extensions
                 resource.PropogateOwner(owner);
             }
         }
+
+        /// <summary />
+        public static void SetParent(this IEnumerable<IChildResource> resources, string parentId)
+        {
+            foreach (var resource in resources)
+            {
+                resource.SetParent(parentId);
+            }
+        }
     }
 
 }
