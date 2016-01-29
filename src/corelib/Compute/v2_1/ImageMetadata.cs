@@ -23,7 +23,8 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        internal void SetParent(ImageReference parent)
+        /// <summary />
+        protected internal void SetParent(ImageReference parent)
         {
             Image = parent;
         }

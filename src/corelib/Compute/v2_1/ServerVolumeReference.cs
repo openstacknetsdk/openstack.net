@@ -22,7 +22,8 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        internal void SetParent(ServerReference parent)
+        /// <summary />
+        protected internal void SetParent(ServerReference parent)
         {
             ServerRef = parent;
         }

@@ -190,7 +190,7 @@ namespace OpenStack.Compute.v2_1
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
-            foreach (IChildResource volume in AttachedVolumes)
+            foreach (var volume in AttachedVolumes)
             {
                 volume.SetParent(this);
             }
