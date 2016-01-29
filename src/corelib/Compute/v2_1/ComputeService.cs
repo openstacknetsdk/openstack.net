@@ -293,7 +293,7 @@ namespace OpenStack.Compute.v2_1
 
         #endregion
 
-        #region Volumes
+        #region Server Volumes
         /// <inheritdoc cref="ComputeApiBuilder.GetServerVolumeAsync{T}" />
         public async Task<ServerVolume> GetServerVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {

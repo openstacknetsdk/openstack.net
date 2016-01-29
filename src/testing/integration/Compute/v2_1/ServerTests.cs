@@ -117,7 +117,6 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
         public async Task BootFromImageCopy()
         {
             var definition = _testData.BuildServer();

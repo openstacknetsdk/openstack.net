@@ -273,7 +273,7 @@ namespace OpenStack.Synchronous
 
         #endregion
 
-        #region Volumes
+        #region Server Volumes
         /// <inheritdoc cref="ComputeService.GetServerVolumeAsync" />
         public static ServerVolume GetServerVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
         {

@@ -59,50 +59,5 @@ namespace System.Extensions
                 destProp?.SetValue(dest, srcProp.GetValue(src));
             }
         }
-
-        /// <summary />
-        public static void PropogateOwner(this IServiceResource resource, object owner)
-        {
-            if (resource == null)
-                return;
-
-            resource.Owner = owner;
-            (resource as IEnumerable<IServiceResource>)?.PropogateOwner(owner);
-
-            foreach (PropertyInfo prop in resource.GetType().GetProperties())
-            {
-                object propVal;
-                try
-                {
-                    propVal = prop.GetValue(resource);
-                }
-                catch
-                {
-                    continue;
-                }
-                
-                (propVal as IServiceResource)?.PropogateOwner(owner);
-                (propVal as IEnumerable<IServiceResource>)?.PropogateOwner(owner);
-            }
-        }
-
-        /// <summary />
-        public static void PropogateOwner(this IEnumerable<IServiceResource> resources, object owner)
-        {
-            foreach (var resource in resources)
-            {
-                resource.PropogateOwner(owner);
-            }
-        }
-
-        /// <summary />
-        public static void SetParent(this IEnumerable<IChildResource> resources, string parentId)
-        {
-            foreach (var resource in resources)
-            {
-                resource.SetParent(parentId);
-            }
-        }
     }
-
 }

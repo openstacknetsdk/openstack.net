@@ -77,7 +77,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiHelper.cs" />
     <Compile Include="Authentication\AuthenticatedHttpClientFactory.cs" />
     <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
     <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
@@ -166,6 +166,7 @@
     <Compile Include="Compute\v2_1\Volume.cs" />
     <Compile Include="Compute\v2_1\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
+    <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />
@@ -201,7 +202,6 @@
     <Compile Include="Compute\v2_6\ServerReference.cs" />
     <Compile Include="Compute\v2_6\ServerStatus.cs" />
     <Compile Include="Exceptions\ResourceErrorException.cs" />
-    <Compile Include="Extensions\PreparedRequestExtentions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
@@ -848,7 +848,6 @@
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />
     <Compile Include="Serialization\IQueryStringBuilder.cs" />
-    <Compile Include="Serialization\ISupportMicroversions.cs" />
     <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\Page.cs" />

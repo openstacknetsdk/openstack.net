@@ -6,7 +6,6 @@ using Flurl;
 using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
-using OpenStack.Extensions;
 
 namespace OpenStack.Compute.v2_6
 {
@@ -44,15 +43,10 @@ namespace OpenStack.Compute.v2_6
         /// <summary />
         public virtual async Task<PreparedRequest> BuildGetConsoleRequest(string serverId, object protocol, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            var body = new { remote_console = new { protocol, type } };
 
-            var request = new { remote_console = new { protocol, type } };
-
-            return endpoint
-                .AppendPathSegments("servers", serverId, "remote-consoles")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(request, cancellationToken);
+            PreparedRequest request = await UrlBuilder.PrepareRequest($"servers/{serverId}/remote-consoles", cancellationToken);
+            return request.PreparePostJson(body, cancellationToken);
         }
     }
 }

@@ -18,28 +18,6 @@ namespace Flurl.Extensions
     public static class FlurlExtensions
     {
         /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this Url url, HttpStatusCode statusCode)
-        {
-            return new FlurlClient(url, autoDispose: true).AllowHttpStatus(statusCode);
-        }
-
-        /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this string url, HttpStatusCode statusCode)
-        {
-            return new Url(url).AllowHttpStatus(statusCode);
-        }
-
-        /// <summary>
         /// Converts a <see cref="Url"/> to a <see cref="Uri"/>.
         /// </summary>
         /// <param name="url">The URL.</param>
