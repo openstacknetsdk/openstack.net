@@ -4,8 +4,8 @@ namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary />
     /// <exclude />
-    public class VolumeType<T> : StringEnumeration
-        where T : VolumeType<T>, new()
+    public class ServerBlockDeviceType<T> : StringEnumeration
+        where T : ServerBlockDeviceType<T>, new()
     {
         /// <summary />
         public static readonly T Blank = new T{DisplayName = "blank"};

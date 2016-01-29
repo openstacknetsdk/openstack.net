@@ -139,7 +139,7 @@
     <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
-    <Compile Include="Compute\v2_1\Serialization\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerAction.cs" />
     <Compile Include="Compute\v2_1\ServerActionExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
@@ -164,7 +164,7 @@
     <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeDefinition.cs" />
     <Compile Include="Compute\v2_1\Volume.cs" />
-    <Compile Include="Compute\v2_1\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
