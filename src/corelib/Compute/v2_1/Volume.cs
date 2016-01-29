@@ -14,7 +14,7 @@ namespace OpenStack.Compute.v2_1
         /// The volume identifier.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// 
