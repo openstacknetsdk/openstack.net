@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Extensions;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -8,15 +7,16 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Extensions;
 using Flurl.Http;
+using OpenStack.Authentication;
 using OpenStack.Serialization;
 
-namespace OpenStack.Authentication
+namespace OpenStack
 {
     /// <summary>
     /// Creates urls
     /// </summary>
     /// <exclude />
-    public class ServiceUrlBuilder
+    public class ServiceEndpoint
     {
         private readonly IServiceType _serviceType;
         private readonly IAuthenticationProvider _authenticationProvider;
@@ -26,7 +26,7 @@ namespace OpenStack.Authentication
         private readonly string _microversionHeader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceUrlBuilder"/> class.
+        /// Initializes a new instance of the <see cref="ServiceEndpoint"/> class.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>
@@ -34,7 +34,7 @@ namespace OpenStack.Authentication
         /// <param name="useInternalUrl">Specifies if internal URLs should be used.</param>
         /// <param name="microversion">Specifies the microversion to send with each request.</param>
         /// <param name="microversionHeader">Specifies the header to use when setting the microversion.</param>
-        public ServiceUrlBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false,
+        public ServiceEndpoint(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false,
             string microversion = null, string microversionHeader = null)
         {
             _serviceType = serviceType;

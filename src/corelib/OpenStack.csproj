@@ -82,7 +82,6 @@
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
-    <Compile Include="Authentication\ServiceUrlBuilder.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
@@ -857,6 +856,7 @@
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />
+    <Compile Include="ServiceEndpoint.cs" />
     <Compile Include="Testing\HttpTest.cs" />
     <Compile Include="Testing\NamespaceDoc.cs" />
   </ItemGroup>

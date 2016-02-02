@@ -45,7 +45,7 @@ namespace OpenStack.Compute.v2_6
         {
             var body = new { remote_console = new { protocol, type } };
 
-            PreparedRequest request = await UrlBuilder.PrepareRequest($"servers/{serverId}/remote-consoles", cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/remote-consoles", cancellationToken);
             return request.PreparePostJson(body, cancellationToken);
         }
     }
