@@ -30,7 +30,8 @@ namespace OpenStack.Networking.v2
         /// <param name="serviceType">The service type for the desired networking provider.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="region">The region.</param>
-        public NetworkingApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
+        /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
+        public NetworkingApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
         {
             if(serviceType == null)
                 throw new ArgumentNullException("serviceType");
@@ -40,7 +41,7 @@ namespace OpenStack.Networking.v2
                 throw new ArgumentException("region cannot be null or empty", "region");
 
             AuthenticationProvider = authenticationProvider;
-            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region);
+            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region, useInternalUrl);
         }
 
         #region Networks
