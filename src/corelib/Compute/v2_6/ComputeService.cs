@@ -10,14 +10,10 @@ namespace OpenStack.Compute.v2_6
     {
         private readonly ComputeApiBuilder _computeApiBuilder;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComputeService"/> class.
-        /// </summary>
-        /// <param name="authenticationProvider">The authentication provider.</param>
-        /// <param name="region">The region.</param>
-        public ComputeService(IAuthenticationProvider authenticationProvider, string region)
+        /// <summary />
+        public ComputeService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
-            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
+            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region, useInternalUrl);
         }
 
         #region Servers

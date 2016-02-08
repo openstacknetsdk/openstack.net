@@ -22,9 +22,10 @@ namespace OpenStack.Networking.v2
         /// </summary>
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="region">The region.</param>
-        public NetworkingService(IAuthenticationProvider authenticationProvider, string region)
+        /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
+        public NetworkingService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
-            _networkingApiBuilder = new NetworkingApiBuilder(ServiceType.Networking, authenticationProvider, region);
+            _networkingApiBuilder = new NetworkingApiBuilder(ServiceType.Networking, authenticationProvider, region, useInternalUrl);
         }
 
         #region Networks
