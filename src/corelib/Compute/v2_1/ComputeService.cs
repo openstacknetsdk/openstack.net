@@ -452,11 +452,11 @@ namespace OpenStack.Compute.v2_1
             return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListVolumeTypesAsync{T}" />
-        public async Task<IEnumerable<VolumeType>> ListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await _computeApi.ListVolumeTypesAsync<VolumeTypeCollection>(cancellationToken);
-        }
+        ///// <inheritdoc cref="ComputeApiBuilder.ListVolumeTypesAsync{T}" />
+        //public async Task<IEnumerable<VolumeType>> ListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    return await _computeApi.ListVolumeTypesAsync<VolumeTypeCollection>(cancellationToken);
+        //}
 
         /// <inheritdoc cref="ComputeApiBuilder.ListVolumeSnapshotsAsync{T}" />
         public async Task<IEnumerable<VolumeSnapshot>> ListVolumeSnapshotsAsync(CancellationToken cancellationToken = default(CancellationToken))

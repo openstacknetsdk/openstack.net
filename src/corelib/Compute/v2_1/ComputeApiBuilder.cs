@@ -1161,13 +1161,13 @@ namespace OpenStack.Compute.v2_1
             return Endpoint.PrepareGetResourceRequest("os-volumes", cancellationToken);
         }
 
-        /// <summary />
-        public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await BuildListVolumeTypesAsync(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-        }
+        ///// <summary />
+        //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    return await BuildListVolumeTypesAsync(cancellationToken)
+        //        .SendAsync()
+        //        .ReceiveJson<T>();
+        //}
 
         /// <summary />
         public virtual Task<PreparedRequest> BuildListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))

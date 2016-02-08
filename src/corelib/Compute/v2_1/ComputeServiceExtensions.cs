@@ -432,11 +432,11 @@ namespace OpenStack.Synchronous
             return service.ListVolumesAsync().ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListVolumeTypesAsync" />
-        public static IEnumerable<VolumeType> ListVolumeTypes(this ComputeService service)
-        {
-            return service.ListVolumeTypesAsync().ForceSynchronous();
-        }
+        ///// <inheritdoc cref="ComputeService.ListVolumeTypesAsync" />
+        //public static IEnumerable<VolumeType> ListVolumeTypes(this ComputeService service)
+        //{
+        //    return service.ListVolumeTypesAsync().ForceSynchronous();
+        //}
 
         /// <inheritdoc cref="ComputeService.ListVolumeSnapshotsAsync" />
         public static IEnumerable<VolumeSnapshot> ListVolumeSnapshots(this ComputeService service)

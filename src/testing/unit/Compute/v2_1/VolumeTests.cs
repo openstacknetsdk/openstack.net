@@ -154,25 +154,25 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        [Fact]
-        public void ListVolumeTypes()
-        {
-            using (var httpTest = new HttpTest())
-            {
-                Identifier volumeTypeId = Guid.NewGuid();
-                httpTest.RespondWithJson(new VolumeTypeCollection
-                {
-                    new VolumeType {Id = volumeTypeId}
-                });
+        //[Fact]
+        //public void ListVolumeTypes()
+        //{
+        //    using (var httpTest = new HttpTest())
+        //    {
+        //        Identifier volumeTypeId = Guid.NewGuid();
+        //        httpTest.RespondWithJson(new VolumeTypeCollection
+        //        {
+        //            new VolumeType {Id = volumeTypeId}
+        //        });
 
-                var results = _compute.ListVolumeTypes();
+        //        var results = _compute.ListVolumeTypes();
 
-                httpTest.ShouldHaveCalled("*/os-volume-types");
-                Assert.Equal(1, results.Count());
-                var result = results.First();
-                Assert.Equal(volumeTypeId, result.Id);
-            }
-        }
+        //        httpTest.ShouldHaveCalled("*/os-volume-types");
+        //        Assert.Equal(1, results.Count());
+        //        var result = results.First();
+        //        Assert.Equal(volumeTypeId, result.Id);
+        //    }
+        //}
 
         [Fact]
         public void ListVolumeSnapshots()
