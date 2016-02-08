@@ -7,13 +7,13 @@ namespace OpenStack.Compute.v2_2
     public class ComputeApiBuilder : v2_1.ComputeApiBuilder
     {
         /// <summary />
-        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
-            : this(serviceType, authenticationProvider, region, "2.2")
+        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
+            : this(serviceType, authenticationProvider, region, useInternalUrl, "2.2")
         { }
 
         /// <summary />
-        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, string microversion)
-            : base(serviceType, authenticationProvider, region, microversion)
+        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
+            : base(serviceType, authenticationProvider, region, useInternalUrl, microversion)
         { }
     }
 }

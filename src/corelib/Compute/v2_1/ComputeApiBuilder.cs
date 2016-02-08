@@ -32,9 +32,15 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         protected readonly ServiceEndpoint Endpoint;
 
-        /// <summary />
-        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
-            : this(serviceType, authenticationProvider, region, "2.1")
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComputeApiBuilder"/> class.
+        /// </summary>
+        /// <param name="serviceType">The service type for the desired compute provider.</param>
+        /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="region">The region.</param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
+        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
+            : this(serviceType, authenticationProvider, region, useInternalUrl, "2.1")
         { }
 
         /// <summary>
@@ -42,9 +48,10 @@ namespace OpenStack.Compute.v2_1
         /// </summary>
         /// <param name="serviceType">The service type for the desired compute provider.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>
+        /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
         /// <param name="region">The region.</param>
-        /// <param name="microversion">The requested microversion.</param>
-        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, string microversion)
+        /// <param name="microversion">The requested API microversion.</param>
+        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
         {
             if (serviceType == null)
                 throw new ArgumentNullException("serviceType");
@@ -54,7 +61,7 @@ namespace OpenStack.Compute.v2_1
                 throw new ArgumentException("region cannot be null or empty", "region");
 
             AuthenticationProvider = authenticationProvider;
-            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region, false, microversion, MicroversionHeader);
+            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region, useInternalUrl, microversion, MicroversionHeader);
         }
 
         #region Servers

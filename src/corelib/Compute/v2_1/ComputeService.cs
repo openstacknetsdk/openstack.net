@@ -22,9 +22,10 @@ namespace OpenStack.Compute.v2_1
         /// </summary>
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="region">The region.</param>
-        public ComputeService(IAuthenticationProvider authenticationProvider, string region)
+        /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
+        public ComputeService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
-            _computeApi = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
+            _computeApi = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region, useInternalUrl);
         }
 
         #region Servers

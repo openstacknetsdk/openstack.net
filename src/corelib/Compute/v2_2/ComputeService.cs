@@ -12,9 +12,9 @@ namespace OpenStack.Compute.v2_2
         private readonly ComputeApiBuilder _computeApiBuilder;
 
         /// <summary />
-        public ComputeService(IAuthenticationProvider authenticationProvider, string region)
+        public ComputeService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
         {
-            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region);
+            _computeApiBuilder = new ComputeApiBuilder(ServiceType.Compute, authenticationProvider, region, useInternalUrl);
         }
 
         #region Servers
