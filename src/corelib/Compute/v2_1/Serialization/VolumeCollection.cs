@@ -5,23 +5,23 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary>
-    /// Represents a collection of server volume resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of volume resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
-    public class ServerVolumeCollection<T> : ResourceCollection<T>
+    public class VolumeCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
         /// <summary>
         /// The requested flavors.
         /// </summary>
-        [JsonProperty("volumeAttachments")]
+        [JsonProperty("volumes")]
         protected IList<T> Volumes => Items;
     }
 
     /// <summary>
-    /// Represents a collection of references to server volume resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of references to volume resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
-    public class ServerVolumeCollection : ServerVolumeCollection<ServerVolume>
+    public class VolumeCollection : VolumeCollection<Volume>
     { }
 }

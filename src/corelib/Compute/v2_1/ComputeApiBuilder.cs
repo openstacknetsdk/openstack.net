@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Extensions;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -10,7 +9,6 @@ using Flurl.Extensions;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
 using OpenStack.Authentication;
-using OpenStack.Extensions;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -21,13 +19,18 @@ namespace OpenStack.Compute.v2_1
     /// </summary>
     /// <exclude />
     /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.1.html">OpenStack Compute API v2.1 Overview</seealso>
-    public class ComputeApiBuilder : ISupportMicroversions
+    public class ComputeApiBuilder
     {
         /// <summary />
         protected readonly IAuthenticationProvider AuthenticationProvider;
 
+        /// <summary>
+        /// The Nova microversion header key
+        /// </summary>
+        public const string MicroversionHeader = "X-OpenStack-Nova-API-Version";
+
         /// <summary />
-        protected readonly ServiceUrlBuilder UrlBuilder;
+        protected readonly ServiceEndpoint Endpoint;
 
         /// <summary />
         public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region)
@@ -51,15 +54,8 @@ namespace OpenStack.Compute.v2_1
                 throw new ArgumentException("region cannot be null or empty", "region");
 
             AuthenticationProvider = authenticationProvider;
-            UrlBuilder = new ServiceUrlBuilder(serviceType, authenticationProvider, region);
-            Microversion = microversion;
+            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region, false, microversion, MicroversionHeader);
         }
-
-        /// <summary />
-        string ISupportMicroversions.MicroversionHeader => "X-OpenStack-Nova-API-Version";
-
-        /// <summary />
-        public string Microversion { get; }
 
         #region Servers
 
@@ -67,44 +63,32 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetServerAsync(serverId, cancellationToken)
+            return await BuildGetServerAsync(serverId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"servers/{serverId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}", cancellationToken);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateServerAsync(object server, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateServerRequest(object server, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("servers")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(server, cancellationToken);
+            return Endpoint.PrepareCreateResourceRequest("servers", server, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> CreateServerAsync<T>(object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildCreateServerAsync(server, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildCreateServerRequest(server, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary>
@@ -122,8 +106,9 @@ namespace OpenStack.Compute.v2_1
             where TServer : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
-            return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
+            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
         }
 
         /// <summary>
@@ -141,8 +126,9 @@ namespace OpenStack.Compute.v2_1
             where TServer : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
-            return await ApiHelper.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
+            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
         }
 
         /// <summary>
@@ -157,44 +143,28 @@ namespace OpenStack.Compute.v2_1
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilServerIsDeletedAsync<TServer, TStatus>(string serverId, TStatus deletedStatus = null, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task WaitUntilServerIsDeletedAsync<TServer, TStatus>(string serverId, TStatus deletedStatus = null, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TServer : IServiceResource
             where TStatus : ResourceStatus
         {
             deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
             Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
-            await ApiHelper.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary />
-        public virtual async Task<TPage>  ListServerReferencesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<TPage> ListServerReferencesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListServerReferencesUrlAsync(queryString, cancellationToken);
-            return await ListServerReferencesAsync<TPage>(initialRequestUrl, cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<TPage> ListServerReferencesAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
-        {
-            var results = await url
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<TPage>();
-
-            results.SetNextPageHandler(ListServerReferencesAsync<TPage>);
-            results.PropogateOwner(this);
-
-            return results;
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
         public virtual async Task<Url> BuildListServerReferencesUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("servers")
@@ -206,29 +176,14 @@ namespace OpenStack.Compute.v2_1
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
-            return await ListServerReferencesAsync<TPage>(initialRequestUrl, cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<TPage> ListServersAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
-        {
-            var results = await url
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<TPage>();
-
-            results.SetNextPageHandler(ListServersAsync<TPage>);
-            results.PropogateOwner(this);
-            return results;
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
         public virtual async Task<Url> BuildListServersUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("servers/detail")
@@ -236,46 +191,31 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildUpdateServerAsync(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildUpdateServerAsync(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"servers/{serverId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePutJson(server, cancellationToken);
+            return Endpoint.PrepareUpdateResourceRequest($"servers/{serverId}", server, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> UpdateServerAsync<T>(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildUpdateServerAsync(serverId, server, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildUpdateServerAsync(serverId, server, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
         public virtual Task DeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteServerAsync(serverId, cancellationToken).SendAsync();
+            return BuildDeleteServerRequest(serverId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteServerRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (serverId == null)
-                throw new ArgumentNullException("serverId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegments("servers", serverId)
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}", cancellationToken);
         }
 
         /// <summary>
@@ -293,8 +233,9 @@ namespace OpenStack.Compute.v2_1
             where TImage : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<dynamic>> getServer = async () => await GetImageAsync<TImage>(imageId, cancellationToken);
-            return await ApiHelper.WaitForStatusAsync(imageId, status, getServer, refreshDelay, timeout, progress, cancellationToken);
+            Func<Task<TImage>> getImage = async () => await GetImageAsync<TImage>(imageId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(imageId, status, getImage, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
         }
 
         /// <summary>
@@ -308,22 +249,23 @@ namespace OpenStack.Compute.v2_1
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilImageIsDeletedAsync<TImage, TStatus>(string imageId, TStatus deletedStatus, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Task WaitUntilImageIsDeletedAsync<TImage, TStatus>(string imageId, TStatus deletedStatus, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
             where TImage : IServiceResource
             where TStatus : ResourceStatus
         {
             deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
-            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TImage>(imageId, cancellationToken);
-            await ApiHelper.WaitUntilDeletedAsync(imageId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
+            Func<Task<dynamic>> getImage = async () => await GetServerAsync<TImage>(imageId, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync(imageId, deletedStatus, getImage, refreshDelay, timeout, progress, cancellationToken);
         }
 
         /// <summary />
-        public virtual async Task<T> CreateSnapshotAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> SnapshotServerAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
             var response = await BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
             Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
-            return await GetImageAsync<T>(imageId, cancellationToken);
+            return await GetImageAsync<T>(imageId, cancellationToken)
+                .PropogateOwner(this);
         }
 
         /// <summary />
@@ -404,7 +346,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual async Task<string> RescueServerAsync(string serverId, object request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            request = request ?? new Dictionary<string, object> {["rescue"] = null};
+            request = request ?? new Dictionary<string, object> { ["rescue"] = null };
             dynamic result = await BuildServerActionAsync(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson();
@@ -415,7 +357,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task UnrescueServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> {["unrescue"] = null };
+            object request = new Dictionary<string, object> { ["unrescue"] = null };
             return BuildServerActionAsync(serverId, request, cancellationToken)
                 .SendAsync();
         }
@@ -437,7 +379,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task ConfirmResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> {["confirmResize"] = null };
+            object request = new Dictionary<string, object> { ["confirmResize"] = null };
             return BuildServerActionAsync(serverId, request, cancellationToken)
                 .SendAsync();
         }
@@ -445,64 +387,52 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task CancelResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> {["revertResize"] = null };
+            object request = new Dictionary<string, object> { ["revertResize"] = null };
             return BuildServerActionAsync(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object requestBody, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
 
-            if (request == null)
-                throw new ArgumentNullException("request");
+            if (requestBody == null)
+                throw new ArgumentNullException("requestBody");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"servers/{serverId}/action")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(request, cancellationToken);
+            var request = await Endpoint.PrepareRequest($"servers/{serverId}/action", cancellationToken);
+            return request.PreparePostJson(requestBody, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var results = await BuildListServerActionsAsync(serverId, cancellationToken).SendAsync().ReceiveJson<T>();
-            results.PropogateOwner(this);
-            return results;
+            return await BuildListServerActionsAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListServerActionsAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerActionsAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (serverId == null)
-                throw new ArgumentNullException("serverId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"servers/{serverId}/os-instance-actions")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-instance-actions", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> GetServerActionAsync<T>(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetServerActionAsync(serverId, actionId, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildGetServerActionAsync(serverId, actionId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetServerActionAsync(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerActionAsync(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -510,13 +440,7 @@ namespace OpenStack.Compute.v2_1
             if (serverId == null)
                 throw new ArgumentNullException("actionId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"servers/{serverId}/os-instance-actions/{actionId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-instance-actions/{actionId}", cancellationToken);
         }
 
         #endregion
@@ -526,69 +450,48 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetFlavorAsync<T>(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetFlavorAsync(flavorId, cancellationToken)
+            return await BuildGetFlavorAsync(flavorId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"flavors/{flavorId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"flavors/{flavorId}", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListFlavorsAsync(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildListFlavorsAsync(cancellationToken)
+                 .SendAsync()
+                 .ReceiveJson<T>()
+                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("flavors")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareListResourcesRequest("flavors", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListFlavorDetailsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListFlavorDetailsAsync(cancellationToken)
+            return await BuildListFlavorDetailsAsync(cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("flavors/detail")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareListResourcesRequest("flavors/detail", cancellationToken);
         }
 
         #endregion
@@ -598,47 +501,33 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetImageAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetImageAsync(imageId, cancellationToken)
+            return await BuildGetImageAsync(imageId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"images/{imageId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"images/{imageId}", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
-            var result = await BuildGetImageMetadataAsync(imageId, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            result.SetParent(imageId);
-            return result;
+            return await BuildGetImageMetadataAsync(imageId, cancellationToken)
+                 .SendAsync()
+                 .ReceiveJson<T>()
+                 .PropogateOwner(this)
+                 .SetParent(imageId);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetImageMetadataAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageMetadataAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"images/{imageId}/metadata")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata", cancellationToken);
         }
 
         /// <summary />
@@ -653,15 +542,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"images/{imageId}/metadata/{key}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata/{key}", cancellationToken);
         }
 
         /// <summary />
@@ -673,9 +556,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual async Task<PreparedRequest> BuildCreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            var request = new
+            var imageMetadata = new
             {
                 meta = new Dictionary<string, string>
                 {
@@ -683,11 +564,8 @@ namespace OpenStack.Compute.v2_1
                 }
             };
 
-            return endpoint
-                .AppendPathSegment($"images/{imageId}/metadata/{key}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePutJson(request, cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata/{key}", cancellationToken);
+            return request.PreparePutJson(imageMetadata, cancellationToken);
         }
 
         /// <summary />
@@ -695,30 +573,14 @@ namespace OpenStack.Compute.v2_1
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListImagesUrlAsync(queryString, cancellationToken);
-            return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<TPage> ListImagesAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
-        {
-            var results = await url
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<TPage>();
-
-            results.SetNextPageHandler(ListImagesAsync<TPage>);
-            results.PropogateOwner(this);
-
-            return results;
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
         public virtual async Task<Url> BuildListImagesUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("images")
@@ -730,29 +592,14 @@ namespace OpenStack.Compute.v2_1
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
             Url initialRequestUrl = await BuildListImageDetailsUrlAsync(queryString, cancellationToken);
-            return await ListImagesAsync<TPage>(initialRequestUrl, cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<TPage> ListImageDetailsAsync<TPage>(Url url, CancellationToken cancellationToken)
-            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
-        {
-            var results = await url
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<TPage>();
-
-            results.SetNextPageHandler(ListImageDetailsAsync<TPage>);
-            results.PropogateOwner(this);
-            return results;
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
         public virtual async Task<Url> BuildListImageDetailsUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("images/detail")
@@ -763,22 +610,16 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> UpdateImageMetadataAsync<T>(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildUpdateImageMetadataAsync(imageId, metadata, overwrite, cancellationToken)
+            return await BuildUpdateImageMetadataAsync(imageId, metadata, overwrite, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
         public virtual async Task<PreparedRequest> BuildUpdateImageMetadataAsync(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            PreparedRequest request = endpoint
-                .AppendPathSegments($"images/{imageId}/metadata")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this);
+            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata", cancellationToken);
 
             if (overwrite)
                 return request.PreparePutJson(metadata, cancellationToken);
@@ -793,19 +634,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (imageId == null)
-                throw new ArgumentNullException("imageId");
-
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegments("images", imageId)
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"images/{imageId}", cancellationToken);
         }
 
         /// <summary />
@@ -815,22 +646,15 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (imageId == null)
                 throw new ArgumentNullException("imageId");
 
-            if(key == null)
+            if (key == null)
                 throw new ArgumentNullException("key");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegments("images", imageId, "metadata", key)
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"images/{imageId}/metadata/{key}", cancellationToken);
         }
         #endregion
 
@@ -847,15 +671,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetServerAddressAsync(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerAddressAsync(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverid}/ips/{key}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips/{key}", cancellationToken);
         }
 
         /// <summary />
@@ -867,91 +685,75 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListServerAddressesAsync(string serverid, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerAddressesAsync(string serverid, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverid}/ips")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips", cancellationToken);
         }
 
         #endregion
 
-        #region Volumes
+        #region Server Volumes
         /// <summary />
         public virtual async Task<T> GetServerVolumeAsync<T>(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
-            var result = await BuildGetServerVolumeAsync(serverId, volumeId, cancellationToken)
+            return await BuildGetServerVolumeAsync(serverId, volumeId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            result.SetParent(serverId);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this)
+                .SetParent(serverId);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetServerVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IEnumerable<IServiceResource>
-        {
-            var result = await BuidListServerVolumesAsync(serverId, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
-        }
-
-        /// <summary />
-        public virtual async Task<PreparedRequest> BuidListServerVolumesAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
-        }
-
-        /// <summary />
-        public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
-            where T : IServiceResource
-        {
-            T result = await BuildAttachVolumeAsync(serverId, request, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
-        }
-
-        /// <summary />
-        public virtual async Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
 
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(request, cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-volume_attachments/{volumeId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IChildResource>
+        {
+            return await BuidListServerVolumesAsync(serverId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this)
+                .SetParentOnChildren(serverId);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuidListServerVolumesAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-volume_attachments", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IChildResource
+        {
+            return await BuildAttachVolumeAsync(serverId, request, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this)
+                .SetParent(serverId);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object serverVolume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            return Endpoint.PrepareCreateResourceRequest($"servers/{serverId}/os-volume_attachments", serverVolume, cancellationToken);
         }
 
         /// <summary />
@@ -961,18 +763,15 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
 
-            return endpoint
-                .AppendPathSegment($"servers/{serverId}/os-volume_attachments/{volumeId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken);
+            return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}/os-volume_attachments/{volumeId}", cancellationToken);
         }
         #endregion
 
@@ -985,70 +784,51 @@ namespace OpenStack.Compute.v2_1
             if (keypairName == null)
                 throw new ArgumentNullException("keypairName");
 
-            PreparedRequest request = await BuildGetKeyPairRequestAsync(keypairName, cancellationToken);
-
-            var result = await request.SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildGetKeyPairRequestAsync(keypairName, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"os-keypairs/{keypairName}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> CreateKeyPairAsync<T>(object keypair, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            if(keypair == null)
+            if (keypair == null)
                 throw new ArgumentNullException("keypair");
 
-            PreparedRequest request = await BuildCreateKeyPairRequestAsync(keypair, cancellationToken);
-            var result = await request.SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildCreateKeyPairRequestAsync(keypair, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateKeyPairRequestAsync(object keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateKeyPairRequestAsync(object keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment("os-keypairs")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(keypairName, cancellationToken);
+            return Endpoint.PrepareCreateResourceRequest("os-keypairs", keypair, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListKeyPairsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            PreparedRequest request = await BuildListKeyPairsRequestAsync(cancellationToken);
-            var result = await request.SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildListKeyPairsRequestAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListKeyPairsRequestAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListKeyPairsRequestAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment("os-keypairs")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest("os-keypairs", cancellationToken);
         }
 
         /// <summary />
@@ -1061,16 +841,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegment($"os-keypairs/{keypairName}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
         #endregion
 
@@ -1080,124 +853,96 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetSecurityGroupAsync<T>(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetSecurityGroupsAsync(securityGroupId, cancellationToken)
+            return await BuildGetSecurityGroupsAsync(securityGroupId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetSecurityGroupsAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetSecurityGroupsAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            if (securityGroupId == null)
+                throw new ArgumentNullException("securityGroupId");
 
-            return endpoint
-                .AppendPathSegment($"os-security-groups/{securityGroupId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"os-security-groups/{securityGroupId}", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> CreateSecurityGroupAsync<T>(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildCreateSecurityGroupAsync(securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildCreateSecurityGroupAsync(securityGroup, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateSecurityGroupAsync(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateSecurityGroupAsync(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if(securityGroup == null)
+            if (securityGroup == null)
                 throw new ArgumentNullException("securityGroup");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("os-security-groups")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(securityGroup, cancellationToken);
+            return Endpoint.PrepareCreateResourceRequest("os-security-groups", securityGroup, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> CreateSecurityGroupRuleAsync<T>(object rule, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildCreateSecurityGroupRuleAsync(rule, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildCreateSecurityGroupRuleAsync(rule, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateSecurityGroupRuleAsync(object rule, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateSecurityGroupRuleAsync(object rule, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (rule == null)
                 throw new ArgumentNullException("rule");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("os-security-group-rules")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(rule, cancellationToken);
+            return Endpoint.PrepareCreateResourceRequest("os-security-group-rules", rule, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListSecurityGroupsAsync(serverId, cancellationToken)
+            return await BuildListSecurityGroupsAsync(serverId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListSecurityGroupsAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListSecurityGroupsAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            if (serverId != null)
-                endpoint = endpoint.AppendPathSegment($"servers/{serverId}");
-
-            return endpoint
-                .AppendPathSegment("os-security-groups")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            string path = serverId == null ? "os-security-groups" : $"servers/{serverId}/os-security-groups";
+            return Endpoint.PrepareGetResourceRequest(path, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> UpdateSecurityGroupAsync<T>(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildUpdateSecurityGroupAsync(securityGroupId, securityGroup, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildUpdateSecurityGroupAsync(securityGroupId, securityGroup, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildUpdateSecurityGroupAsync(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildUpdateSecurityGroupAsync(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if(securityGroupId == null)
+            if (securityGroupId == null)
                 throw new ArgumentNullException("securityGroupId");
 
-            if(securityGroup == null)
+            if (securityGroup == null)
                 throw new ArgumentNullException("securityGroup");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments($"os-security-groups/{securityGroupId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePutJson(securityGroup, cancellationToken);
+            return Endpoint.PrepareUpdateResourceRequest($"os-security-groups/{securityGroupId}", securityGroup, cancellationToken);
         }
 
         /// <summary />
@@ -1207,19 +952,12 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
                 throw new ArgumentNullException("securityGroupId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegment($"os-security-groups/{securityGroupId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"os-security-groups/{securityGroupId}", cancellationToken);
         }
 
         /// <summary />
@@ -1229,19 +967,12 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (ruleId == null)
                 throw new ArgumentNullException("ruleId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegment($"os-security-group-rules/{ruleId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"os-security-group-rules/{ruleId}", cancellationToken);
         }
 
         #endregion
@@ -1252,73 +983,54 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerGroupAsync<T>(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildGetServerGroupsAsync(serverGroupId, cancellationToken)
+            return await BuildGetServerGroupsAsync(serverGroupId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetServerGroupsAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerGroupsAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
                 throw new ArgumentNullException("serverGroupId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment($"os-server-groups/{serverGroupId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest($"os-server-groups/{serverGroupId}", cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> CreateServerGroupAsync<T>(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var result = await BuildCreateServerGroupAsync(serverGroup, cancellationToken).SendAsync().ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+            return await BuildCreateServerGroupAsync(serverGroup, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateServerGroupAsync(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateServerGroupAsync(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroup == null)
                 throw new ArgumentNullException("serverGroup");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("os-server-groups")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PreparePostJson(serverGroup, cancellationToken);
+            return Endpoint.PrepareCreateResourceRequest("os-server-groups", serverGroup, cancellationToken);
         }
 
         /// <summary />
         public virtual async Task<T> ListServerGroupsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            var result = await BuildListServerGroupsAsync(cancellationToken)
+            return await BuildListServerGroupsAsync(cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
-            result.PropogateOwner(this);
-            return result;
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegment("os-server-groups")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest("os-server-groups", cancellationToken);
         }
 
         /// <summary />
@@ -1328,21 +1040,334 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildDeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
                 throw new ArgumentNullException("serverGroupId");
 
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return (PreparedRequest)endpoint
-                .AppendPathSegment($"os-server-groups/{serverGroupId}")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareDelete(cancellationToken)
-                .AllowHttpStatus(HttpStatusCode.NotFound);
+            return Endpoint.PrepareDeleteResourceRequest($"os-server-groups/{serverGroupId}", cancellationToken);
         }
 
+        #endregion
+
+        #region Volumes
+
+        /// <summary />
+        public virtual async Task<T> GetVolumeAsync<T>(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildGetVolumeAsync(volumeId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            return Endpoint.PrepareGetResourceRequest($"os-volumes/{volumeId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> GetVolumeTypeAsync<T>(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await BuildGetVolumeTypeAsync(volumeTypeId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetVolumeTypeAsync(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volumeTypeId == null)
+                throw new ArgumentNullException("volumeTypeId");
+
+            return Endpoint.PrepareGetResourceRequest($"os-volume-types/{volumeTypeId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> GetVolumeSnapshotAsync<T>(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildGetVolumeSnapshotRequest(snapshotId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            return Endpoint.PrepareGetResourceRequest($"os-snapshots/{snapshotId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> CreateVolumeAsync<T>(object volume, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildCreateVolumeAsync(volume, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildCreateVolumeAsync(object volume, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volume == null)
+                throw new ArgumentNullException("volume");
+
+            return Endpoint.PrepareCreateResourceRequest("os-volumes", volume, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> SnapshotVolumeAsync<T>(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildCreateVolumeSnapshotRequest(snapshot, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateVolumeSnapshotRequest(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if(snapshot == null)
+                throw new ArgumentNullException("snapshot");
+
+            return await Endpoint.PrepareCreateResourceRequest("os-snapshots", snapshot, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListVolumesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListVolumesAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest("os-volumes", cancellationToken);
+        }
+
+        ///// <summary />
+        //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    return await BuildListVolumeTypesAsync(cancellationToken)
+        //        .SendAsync()
+        //        .ReceiveJson<T>();
+        //}
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest("os-volume-types", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> ListVolumeSnapshotsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListVolumeSnapshotsRequest(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildListVolumeSnapshotsRequest(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest("os-snapshots", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteVolumeAsync(volumeId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildDeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            return Endpoint.PrepareDeleteResourceRequest($"os-volumes/{volumeId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteVolumeSnapshotAsync(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteVolumeSnapshotRequest(snapshotId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildDeleteVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            return Endpoint.PrepareDeleteResourceRequest($"os-snapshots/{snapshotId}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for the volume to reach the specified status.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TVolume> WaitForVolumeStatusAsync<TVolume, TStatus>(string volumeId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if(volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            if(status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to reach the specified status.
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TSnapshot> WaitForVolumeSnapshotStatusAsync<TSnapshot, TStatus>(string snapshotId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TSnapshot : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume to reach the specified status.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TVolume> WaitForVolumeStatusAsync<TVolume, TStatus>(string volumeId, IEnumerable<TStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to reach the specified status.
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TSnapshot> WaitForVolumeSnapshotStatusAsync<TSnapshot, TStatus>(string snapshotId, IEnumerable<TStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TSnapshot : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public Task WaitUntilVolumeIsDeletedAsync<TVolume, TStatus>(string volumeId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+            
+            Func<Task<dynamic>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync<TStatus>(volumeId, getVolume, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public Task WaitUntilVolumeSnapshotIsDeletedAsync<TVolume, TStatus>(string snapshotId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            Func<Task<dynamic>> getSnapshot = async () => await GetVolumeSnapshotAsync<TVolume>(snapshotId, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync<TStatus>(snapshotId, getSnapshot, refreshDelay, timeout, progress, cancellationToken);
+        }
         #endregion
 
         #region Compute Service
@@ -1355,15 +1380,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("limits")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest("limits", cancellationToken);
         }
 
         /// <summary />
@@ -1375,15 +1394,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("os-quota-sets/details")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest("os-quota-sets/details", cancellationToken);
         }
 
         /// <summary />
@@ -1395,15 +1408,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildGetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
-
-            return endpoint
-                .AppendPathSegments("os-quota-sets/defaults")
-                .Authenticate(AuthenticationProvider)
-                .SetMicroversion(this)
-                .PrepareGet(cancellationToken);
+            return Endpoint.PrepareGetResourceRequest("os-quota-sets/defaults", cancellationToken);
         }
         #endregion
     }

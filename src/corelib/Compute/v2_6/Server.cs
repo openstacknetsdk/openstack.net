@@ -16,7 +16,7 @@ namespace OpenStack.Compute.v2_6
         /// <value>
         /// The identifier.
         /// </value>
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// The xtended data

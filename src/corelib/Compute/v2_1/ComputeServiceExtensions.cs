@@ -66,10 +66,10 @@ namespace OpenStack.Synchronous
             service.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.CreateSnapshotAsync" />
-        public static Image CreateSnapshot(this ComputeService service, Identifier serverId, SnapshotServerRequest request)
+        /// <inheritdoc cref="ComputeService.SnapshotServerAsync" />
+        public static Image SnapshotServer(this ComputeService service, Identifier serverId, SnapshotServerRequest request)
         {
-            return service.CreateSnapshotAsync(serverId, request).ForceSynchronous();
+            return service.SnapshotServerAsync(serverId, request).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.StartServerAsync" />
@@ -273,7 +273,7 @@ namespace OpenStack.Synchronous
 
         #endregion
 
-        #region Volumes
+        #region Server Volumes
         /// <inheritdoc cref="ComputeService.GetServerVolumeAsync" />
         public static ServerVolume GetServerVolume(this ComputeService service, Identifier serverId, Identifier volumeId)
         {
@@ -375,9 +375,9 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ComputeService.CreateServerGroupAsync" />
-        public static ServerGroup CreateServerGroup(this ComputeService service, ServerGroupDefinition severGroup)
+        public static ServerGroup CreateServerGroup(this ComputeService service, ServerGroupDefinition serverGroup)
         {
-            return service.CreateServerGroupAsync(severGroup).ForceSynchronous();
+            return service.CreateServerGroupAsync(serverGroup).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListServerGroupsAsync" />
@@ -387,9 +387,73 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ComputeService.DeleteServerGroupAsync" />
-        public static void DeleteServerGroup(this ComputeService service, Identifier severGroupId)
+        public static void DeleteServerGroup(this ComputeService service, Identifier serverGroupId)
         {
-            service.DeleteServerGroupAsync(severGroupId).ForceSynchronous();
+            service.DeleteServerGroupAsync(serverGroupId).ForceSynchronous();
+        }
+
+        #endregion
+
+        #region Volumes
+
+        /// <inheritdoc cref="ComputeService.GetVolumeAsync" />
+        public static Volume GetVolume(this ComputeService service, Identifier volumeId)
+        {
+            return service.GetVolumeAsync(volumeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetVolumeTypeAsync" />
+        public static VolumeType GetVolumeType(this ComputeService service, Identifier volumeTypeId)
+        {
+            return service.GetVolumeTypeAsync(volumeTypeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetVolumeSnapshotAsync" />
+        public static VolumeSnapshot GetVolumeSnapshot(this ComputeService service, Identifier snapshotId)
+        {
+            return service.GetVolumeSnapshotAsync(snapshotId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateVolumeAsync" />
+        public static Volume CreateVolume(this ComputeService service, VolumeDefinition volume)
+        {
+            return service.CreateVolumeAsync(volume).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.SnapshotVolumeAsync" />
+        public static VolumeSnapshot SnapshotVolume(this ComputeService service, VolumeSnapshotDefinition snapshot)
+        {
+            return service.SnapshotVolumeAsync(snapshot).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListVolumesAsync" />
+        public static IEnumerable<Volume> ListVolumes(this ComputeService service)
+        {
+            return service.ListVolumesAsync().ForceSynchronous();
+        }
+
+        ///// <inheritdoc cref="ComputeService.ListVolumeTypesAsync" />
+        //public static IEnumerable<VolumeType> ListVolumeTypes(this ComputeService service)
+        //{
+        //    return service.ListVolumeTypesAsync().ForceSynchronous();
+        //}
+
+        /// <inheritdoc cref="ComputeService.ListVolumeSnapshotsAsync" />
+        public static IEnumerable<VolumeSnapshot> ListVolumeSnapshots(this ComputeService service)
+        {
+            return service.ListVolumeSnapshotsAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteVolumeAsync" />
+        public static void DeleteVolume(this ComputeService service, Identifier volumeId)
+        {
+            service.DeleteVolumeAsync(volumeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteVolumeSnapshotAsync" />
+        public static void DeleteVolumeSnapshot(this ComputeService service, Identifier snapshotId)
+        {
+            service.DeleteVolumeSnapshotAsync(snapshotId).ForceSynchronous();
         }
 
         #endregion

@@ -68,7 +68,7 @@ namespace OpenStack.Compute.v2_1
         public async Task<Image> SnapshotAsync(SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return await compute.CreateSnapshotAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
+            return await compute.SnapshotServerAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary />
@@ -101,14 +101,6 @@ namespace OpenStack.Compute.v2_1
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
             await compute.EvacuateServerAsync(Id, request, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary />
-        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return await compute.AttachVolumeAsync<ServerVolume>(Id, volume, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary />

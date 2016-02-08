@@ -77,13 +77,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiHelper.cs" />
     <Compile Include="Authentication\AuthenticatedHttpClientFactory.cs" />
     <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
-    <Compile Include="Authentication\ServiceUrlBuilder.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\VolumeStatus.cs" />
+    <Compile Include="BlockStorage\v2\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\VolumeStatus.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
@@ -118,6 +120,11 @@
     <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
+    <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroup.cs" />
     <Compile Include="Compute\v2_1\ServerGroupDefinition.cs" />
@@ -137,7 +144,7 @@
     <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
-    <Compile Include="Compute\v2_1\Serialization\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerAction.cs" />
     <Compile Include="Compute\v2_1\ServerActionExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
@@ -160,8 +167,13 @@
     <Compile Include="Compute\v2_1\ServerVolumeDefinition.cs" />
     <Compile Include="Compute\v2_1\ServerVolume.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
-    <Compile Include="Compute\v2_1\VolumeType.cs" />
+    <Compile Include="Compute\v2_1\VolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\Volume.cs" />
+    <Compile Include="Compute\v2_1\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshot.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotDefinition.cs" />
+    <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />
@@ -197,7 +209,6 @@
     <Compile Include="Compute\v2_6\ServerReference.cs" />
     <Compile Include="Compute\v2_6\ServerStatus.cs" />
     <Compile Include="Exceptions\ResourceErrorException.cs" />
-    <Compile Include="Extensions\PreparedRequestExtentions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
@@ -844,7 +855,6 @@
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />
     <Compile Include="Serialization\IQueryStringBuilder.cs" />
-    <Compile Include="Serialization\ISupportMicroversions.cs" />
     <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
     <Compile Include="Serialization\OpenStackContractResolver.cs" />
     <Compile Include="Serialization\Page.cs" />
@@ -854,6 +864,7 @@
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />
+    <Compile Include="ServiceEndpoint.cs" />
     <Compile Include="Testing\HttpTest.cs" />
     <Compile Include="Testing\NamespaceDoc.cs" />
   </ItemGroup>

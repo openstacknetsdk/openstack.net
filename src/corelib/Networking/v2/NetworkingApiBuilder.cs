@@ -22,7 +22,7 @@ namespace OpenStack.Networking.v2
         protected readonly IAuthenticationProvider AuthenticationProvider;
 
         /// <summary />
-        protected readonly ServiceUrlBuilder UrlBuilder;
+        protected readonly ServiceEndpoint Endpoint;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkingApiBuilder"/> class.
@@ -40,7 +40,7 @@ namespace OpenStack.Networking.v2
                 throw new ArgumentException("region cannot be null or empty", "region");
 
             AuthenticationProvider = authenticationProvider;
-            UrlBuilder = new ServiceUrlBuilder(serviceType, authenticationProvider, region);
+            Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region);
         }
 
         #region Networks
@@ -53,7 +53,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public async Task<PreparedRequest> ListNetworksAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
  
             return endpoint
                 .AppendPathSegments("networks")
@@ -71,7 +71,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> GetNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("networks", networkId)
@@ -89,7 +89,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreateNetworkAsync(object network, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("networks")
@@ -107,7 +107,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreateNetworksAsync(IEnumerable<object> networks, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("networks")
@@ -126,7 +126,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> UpdateNetworkAsync(string networkId, object network, CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("networks", networkId)
@@ -141,7 +141,7 @@ namespace OpenStack.Networking.v2
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<PreparedRequest> DeleteNetworkAsync(string networkId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return (PreparedRequest)endpoint
                 .AppendPathSegments("networks", networkId)
@@ -162,7 +162,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> ListSubnetsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("subnets")
@@ -180,7 +180,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreateSubnetAsync(object subnet, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("subnets")
@@ -198,7 +198,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreateSubnetsAsync(IEnumerable<object> subnets, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("subnets")
@@ -216,7 +216,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> GetSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("subnets", subnetId)
@@ -235,7 +235,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> UpdateSubnetAsync(string subnetId, object subnet, CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("subnets", subnetId)
@@ -250,7 +250,7 @@ namespace OpenStack.Networking.v2
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<PreparedRequest> DeleteSubnetAsync(string subnetId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return (PreparedRequest)endpoint
                 .AppendPathSegments("subnets", subnetId)
@@ -270,7 +270,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegment("ports")
@@ -288,7 +288,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreatePortAsync(object port, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("ports")
@@ -306,7 +306,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> CreatePortsAsync(IEnumerable<object> ports, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("ports")
@@ -324,7 +324,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> GetPortAsync(string portId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("ports", portId)
@@ -343,7 +343,7 @@ namespace OpenStack.Networking.v2
         /// </returns>
         public virtual async Task<PreparedRequest> UpdatePortAsync(string portId, object port, CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return endpoint
                 .AppendPathSegments("ports", portId)
@@ -358,7 +358,7 @@ namespace OpenStack.Networking.v2
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<PreparedRequest> DeletePortAsync(string portId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await UrlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return (PreparedRequest)endpoint
                 .AppendPathSegments("ports", portId)

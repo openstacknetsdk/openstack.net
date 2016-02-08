@@ -93,7 +93,7 @@ namespace OpenStack.Compute.v2_1
         {
             BlockDeviceMapping.Add(new ServerBlockDeviceMapping
             {
-                SourceType = VolumeType.Volume,
+                SourceType = ServerBlockDeviceType.Volume,
                 SourceId = volumeId,
                 BootIndex = 0,
                 DeleteWithServer = deleteVolumeWithServer
@@ -110,10 +110,10 @@ namespace OpenStack.Compute.v2_1
         {
             BlockDeviceMapping.Add(new ServerBlockDeviceMapping
             {
-                SourceType = VolumeType.Volume,
+                SourceType = ServerBlockDeviceType.Volume,
                 SourceId = volumeId,
                 BootIndex = 0,
-                DestinationType = VolumeType.Volume,
+                DestinationType = ServerBlockDeviceType.Volume,
                 DestinationVolumeSize = volumeSize,
                 DeleteWithServer = deleteVolumeWithServer
             });
@@ -128,10 +128,10 @@ namespace OpenStack.Compute.v2_1
         {
             BlockDeviceMapping.Add(new ServerBlockDeviceMapping
             {
-                SourceType = VolumeType.Image,
+                SourceType = ServerBlockDeviceType.Image,
                 SourceId = ImageId,
                 BootIndex = 0,
-                DestinationType = VolumeType.Volume,
+                DestinationType = ServerBlockDeviceType.Volume,
                 DestinationVolumeSize = volumeSize,
                 DeleteWithServer = deleteVolumeWithServer
             });

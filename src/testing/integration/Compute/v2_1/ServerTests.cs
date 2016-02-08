@@ -117,7 +117,6 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
         public async Task BootFromImageCopy()
         {
             var definition = _testData.BuildServer();
@@ -310,7 +309,7 @@ namespace OpenStack.Compute.v2_1
             Trace.WriteLine($"Created server named: {server.Name}");
 
             Trace.WriteLine("Creating a test volume...");
-            var volume = _testData.BlockStorage.CreateVolume();
+            var volume = await _testData.CreateVolume();
             Identifier volumeId = volume.Id;
             _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
 
@@ -327,12 +326,12 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(attachedVolume);
 
             Trace.WriteLine("Retrieving attached volume details...");
-            attachedVolume = await volumeRef.GetServerVolumeAsync();
-            Assert.Equal(volumeId, attachedVolume.VolumeId);
-            Assert.Equal(server.Id, attachedVolume.ServerId);
+            var serverVolume = await volumeRef.GetServerVolumeAsync();
+            Assert.Equal(volumeId, serverVolume.VolumeId);
+            Assert.Equal(server.Id, serverVolume.ServerId);
 
             Trace.WriteLine("Detaching the volume...");
-            await attachedVolume.DetachAsync();
+            await volumeRef.DetachAsync();
             Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
             _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
         }

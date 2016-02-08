@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -131,6 +132,21 @@ namespace Flurl.Http
                 throw new InvalidOperationException("Unable to execute request as nothing has been built yet.");
 
             return SendAsync(Verb, Content, CancellationToken);
+        }
+    }
+
+    /// <summary />
+    public static class PreparedRequestExtensions
+    {
+        /// <summary>
+        /// Allow a specific set of HTTP status codes.
+        /// </summary>
+        /// <param name="request">The prepared request.</param>
+        /// <param name="statusCodes">The allowed status codes.</param>
+        /// <returns></returns>
+        public static PreparedRequest AllowHttpStatus(this PreparedRequest request, params HttpStatusCode[] statusCodes)
+        {
+            return (PreparedRequest)((FlurlClient)request).AllowHttpStatus(statusCodes);
         }
     }
 }

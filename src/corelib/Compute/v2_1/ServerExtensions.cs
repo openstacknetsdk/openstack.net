@@ -27,6 +27,18 @@ namespace OpenStack.Synchronous
             return server.ListAddressesAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="Server.WaitForStatusAsync(ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)"/>
+        public static void WaitForStatus(this Server server, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            server.WaitForStatusAsync(status, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="Server.WaitForStatusAsync(ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)"/>
+        public static void WaitForStatus(this Server server, IEnumerable<ServerStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            server.WaitForStatusAsync(status, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="Server.WaitUntilActiveAsync"/>
         public static void WaitUntilActive(this Server server, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {
@@ -81,8 +93,8 @@ namespace OpenStack.Synchronous
             server.EvacuateAsync(request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ServerReference.AttachVolumeAsync"/>
-        public static ServerVolume AttachVolume(this ServerReference server, ServerVolumeDefinition volume)
+        /// <inheritdoc cref="Server.AttachVolumeAsync"/>
+        public static ServerVolume AttachVolume(this Server server, ServerVolumeDefinition volume)
         {
             return server.AttachVolumeAsync(volume).ForceSynchronous();
         }

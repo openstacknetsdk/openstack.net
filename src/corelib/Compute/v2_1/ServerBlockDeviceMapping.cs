@@ -24,11 +24,11 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("source_type")]
-        public VolumeType SourceType { get; set; }
+        public ServerBlockDeviceType SourceType { get; set; }
 
         /// <summary />
         [JsonProperty("destination_type")]
-        public VolumeType DestinationType { get; set; }
+        public ServerBlockDeviceType DestinationType { get; set; }
 
         /// <summary /> // in GB
         [JsonProperty("volume_size")]
