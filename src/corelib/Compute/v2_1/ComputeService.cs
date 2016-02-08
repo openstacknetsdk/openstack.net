@@ -83,10 +83,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.WaitUntilServerIsDeletedAsync<Server, ServerStatus>(serverId, null, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.CreateSnapshotAsync{T}" />
-        public Task<Image> CreateSnapshotAsync(Identifier serverId, SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.SnapshotServerAsync{T}" />
+        public Task<Image> SnapshotServerAsync(Identifier serverId, SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.CreateSnapshotAsync<Image>(serverId, request, cancellationToken);
+            return _computeApi.SnapshotServerAsync<Image>(serverId, request, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.StartServerAsync" />
@@ -422,10 +422,28 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetVolumeAsync<Volume>(volumeId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.GetVolumeTypeAsync{T}" />
+        public Task<VolumeType> GetVolumeTypeAsync(Identifier volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetVolumeTypeAsync<VolumeType>(volumeTypeId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.GetVolumeSnapshotAsync{T}" />
+        public Task<VolumeSnapshot> GetVolumeSnapshotAsync(Identifier snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetVolumeSnapshotAsync<VolumeSnapshot>(snapshotId, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.CreateVolumeAsync{T}" />
         public Task<Volume> CreateVolumeAsync(VolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateVolumeAsync<Volume>(volume, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.SnapshotVolumeAsync{T}" />
+        public Task<VolumeSnapshot> SnapshotVolumeAsync(VolumeSnapshotDefinition snapshot, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.SnapshotVolumeAsync<VolumeSnapshot>(snapshot, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListVolumesAsync{T}" />
@@ -434,10 +452,28 @@ namespace OpenStack.Compute.v2_1
             return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApiBuilder.ListVolumeTypesAsync{T}" />
+        public async Task<IEnumerable<VolumeType>> ListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListVolumeTypesAsync<VolumeTypeCollection>(cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.ListVolumeSnapshotsAsync{T}" />
+        public async Task<IEnumerable<VolumeSnapshot>> ListVolumeSnapshotsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _computeApi.ListVolumeSnapshotsAsync<VolumeSnapshotCollection>(cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApiBuilder.DeleteVolumeAsync" />
         public Task DeleteVolumeAsync(Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.DeleteVolumeAsync(volumeId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApiBuilder.DeleteVolumeSnapshotAsync" />
+        public Task DeleteVolumeSnapshotAsync(Identifier snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteVolumeSnapshotAsync(snapshotId, cancellationToken);
         }
 
         #endregion

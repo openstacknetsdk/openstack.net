@@ -267,12 +267,37 @@ namespace OpenStack
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
         /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
-        public async Task WaitUntilDeletedAsync<TStatus>(string resourceId, TStatus deletedStatus, Func<Task<dynamic>> getResource, TimeSpan? refreshDelay, TimeSpan? timeout, IProgress<bool> progress, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WaitUntilDeletedAsync<TStatus>(string resourceId, TStatus deletedStatus, Func<Task<dynamic>> getResource, TimeSpan? refreshDelay, TimeSpan? timeout, IProgress<bool> progress, CancellationToken cancellationToken)
             where TStatus : ResourceStatus
         {
             try
             {
                 await WaitForStatusAsync<object, TStatus>(resourceId, deletedStatus, getResource, refreshDelay, timeout, progress, cancellationToken);
+            }
+            catch (FlurlHttpException httpError) when (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
+            {
+                progress?.Report(true);
+            }
+        }
+
+        /// <summary>
+        /// Waits for the resource to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
+        /// </summary>
+        /// <param name="resourceId">The resource identifier.</param>
+        /// <param name="getResource">Function which retrieves the resource.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task WaitUntilDeletedAsync<TStatus>(string resourceId, Func<Task<dynamic>> getResource, TimeSpan? refreshDelay, TimeSpan? timeout, IProgress<bool> progress, CancellationToken cancellationToken)
+            where TStatus : ResourceStatus
+        {
+            try
+            {
+                await WaitForStatusAsync<object, TStatus>(resourceId, Enumerable.Empty<TStatus>(), getResource, refreshDelay, timeout, progress, cancellationToken);
             }
             catch (FlurlHttpException httpError) when (httpError.Call.HttpStatus == HttpStatusCode.NotFound)
             {

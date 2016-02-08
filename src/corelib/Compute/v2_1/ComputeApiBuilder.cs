@@ -259,7 +259,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<T> CreateSnapshotAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> SnapshotServerAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
             var response = await BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
@@ -1089,6 +1089,25 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<T> GetVolumeSnapshotAsync<T>(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildGetVolumeSnapshotRequest(snapshotId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            return Endpoint.PrepareGetResourceRequest($"os-snapshots/{snapshotId}", cancellationToken);
+        }
+
+        /// <summary />
         public virtual async Task<T> CreateVolumeAsync<T>(object volume, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1105,6 +1124,25 @@ namespace OpenStack.Compute.v2_1
                 throw new ArgumentNullException("volume");
 
             return Endpoint.PrepareCreateResourceRequest("os-volumes", volume, cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<T> SnapshotVolumeAsync<T>(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildCreateVolumeSnapshotRequest(snapshot, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateVolumeSnapshotRequest(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if(snapshot == null)
+                throw new ArgumentNullException("snapshot");
+
+            return await Endpoint.PrepareCreateResourceRequest("os-snapshots", snapshot, cancellationToken);
         }
 
         /// <summary />
@@ -1138,6 +1176,22 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
+        public virtual async Task<T> ListVolumeSnapshotsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListVolumeSnapshotsRequest(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildListVolumeSnapshotsRequest(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest("os-snapshots", cancellationToken);
+        }
+
+        /// <summary />
         public virtual Task DeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteVolumeAsync(volumeId, cancellationToken).SendAsync();
@@ -1152,6 +1206,168 @@ namespace OpenStack.Compute.v2_1
             return Endpoint.PrepareDeleteResourceRequest($"os-volumes/{volumeId}", cancellationToken);
         }
 
+        /// <summary />
+        public virtual Task DeleteVolumeSnapshotAsync(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteVolumeSnapshotRequest(snapshotId, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildDeleteVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            return Endpoint.PrepareDeleteResourceRequest($"os-snapshots/{snapshotId}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for the volume to reach the specified status.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TVolume> WaitForVolumeStatusAsync<TVolume, TStatus>(string volumeId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if(volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            if(status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to reach the specified status.
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TSnapshot> WaitForVolumeSnapshotStatusAsync<TSnapshot, TStatus>(string snapshotId, TStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TSnapshot : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume to reach the specified status.
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TVolume> WaitForVolumeStatusAsync<TVolume, TStatus>(string volumeId, IEnumerable<TStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to reach the specified status.
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="status">The status to wait for.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public async Task<TSnapshot> WaitForVolumeSnapshotStatusAsync<TSnapshot, TStatus>(string snapshotId, IEnumerable<TStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TSnapshot : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            if (status == null)
+                throw new ArgumentNullException("status");
+
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
+                .PropogateOwner(this);
+        }
+
+        /// <summary>
+        /// Waits for the volume to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
+        /// </summary>
+        /// <param name="volumeId">The volume identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public Task WaitUntilVolumeIsDeletedAsync<TVolume, TStatus>(string volumeId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (volumeId == null)
+                throw new ArgumentNullException("volumeId");
+            
+            Func<Task<dynamic>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync<TStatus>(volumeId, getVolume, refreshDelay, timeout, progress, cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits for the volume snapshot to be deleted.
+        /// <para>Treats a 404 NotFound exception as confirmation that it is deleted.</para>
+        /// </summary>
+        /// <param name="snapshotId">The snapshot identifier.</param>
+        /// <param name="refreshDelay">The amount of time to wait between requests.</param>
+        /// <param name="timeout">The amount of time to wait before throwing a <see cref="TimeoutException"/>.</param>
+        /// <param name="progress">The progress callback.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="TimeoutException">If the <paramref name="timeout"/> value is reached.</exception>
+        /// <exception cref="FlurlHttpException">If the API call returns a bad <see cref="HttpStatusCode"/>.</exception>
+        public Task WaitUntilVolumeSnapshotIsDeletedAsync<TVolume, TStatus>(string snapshotId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
+            where TVolume : IServiceResource
+            where TStatus : ResourceStatus
+        {
+            if (snapshotId == null)
+                throw new ArgumentNullException("snapshotId");
+
+            Func<Task<dynamic>> getSnapshot = async () => await GetVolumeSnapshotAsync<TVolume>(snapshotId, cancellationToken);
+            return Endpoint.WaitUntilDeletedAsync<TStatus>(snapshotId, getSnapshot, refreshDelay, timeout, progress, cancellationToken);
+        }
         #endregion
 
         #region Compute Service

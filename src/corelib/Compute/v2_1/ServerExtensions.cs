@@ -27,6 +27,18 @@ namespace OpenStack.Synchronous
             return server.ListAddressesAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="Server.WaitForStatusAsync(ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)"/>
+        public static void WaitForStatus(this Server server, ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            server.WaitForStatusAsync(status, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="Server.WaitForStatusAsync(ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)"/>
+        public static void WaitForStatus(this Server server, IEnumerable<ServerStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
+        {
+            server.WaitForStatusAsync(status, refreshDelay, timeout, progress).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="Server.WaitUntilActiveAsync"/>
         public static void WaitUntilActive(this Server server, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null)
         {

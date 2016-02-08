@@ -40,6 +40,7 @@ namespace OpenStack.Compute.v2_1
         public void Dispose()
         {
             var errors = new List<Exception>();
+
             try
             {
                 DeleteServers(_testData.OfType<Server>());
@@ -61,6 +62,12 @@ namespace OpenStack.Compute.v2_1
             try
             {
                 DeleteServerGroups(_testData.OfType<ServerGroup>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
+                DeleteVolumeSnapshots(_testData.OfType<VolumeSnapshot>());
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
 
@@ -238,8 +245,25 @@ namespace OpenStack.Compute.v2_1
 
         public void DeleteVolumes(IEnumerable<Volume> volumes)
         {
+            var gets = volumes.Select(v => _compute.GetVolumeAsync(v.Id)).ToArray();
+            Task.WaitAll(gets);
+
+            var serverDeletes = gets.SelectMany(v => v.Result.Attachments.Select(a => a.ServerId))
+                .Select(serverId => _compute.WaitUntilServerIsDeletedAsync(serverId)).ToArray();
+            Task.WaitAll(serverDeletes);
+
             var deletes = volumes.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
+        }
+
+        public void DeleteVolumeSnapshots(IEnumerable<VolumeSnapshot> snapshots)
+        {
+            var deletes = snapshots.Select(x => x.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+
+            // workaround 500 errors when deleting a volume which still has snapshots
+            var waits = snapshots.Select(x => x.WaitUntilDeletedAsync()).ToArray();
+            Task.WaitAll(waits);
         }
         #endregion
 

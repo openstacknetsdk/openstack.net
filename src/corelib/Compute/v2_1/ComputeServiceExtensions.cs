@@ -66,10 +66,10 @@ namespace OpenStack.Synchronous
             service.WaitUntilServerIsDeletedAsync(serverId, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.CreateSnapshotAsync" />
-        public static Image CreateSnapshot(this ComputeService service, Identifier serverId, SnapshotServerRequest request)
+        /// <inheritdoc cref="ComputeService.SnapshotServerAsync" />
+        public static Image SnapshotServer(this ComputeService service, Identifier serverId, SnapshotServerRequest request)
         {
-            return service.CreateSnapshotAsync(serverId, request).ForceSynchronous();
+            return service.SnapshotServerAsync(serverId, request).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.StartServerAsync" />
@@ -402,10 +402,28 @@ namespace OpenStack.Synchronous
             return service.GetVolumeAsync(volumeId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.GetVolumeTypeAsync" />
+        public static VolumeType GetVolumeType(this ComputeService service, Identifier volumeTypeId)
+        {
+            return service.GetVolumeTypeAsync(volumeTypeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetVolumeSnapshotAsync" />
+        public static VolumeSnapshot GetVolumeSnapshot(this ComputeService service, Identifier snapshotId)
+        {
+            return service.GetVolumeSnapshotAsync(snapshotId).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.CreateVolumeAsync" />
         public static Volume CreateVolume(this ComputeService service, VolumeDefinition volume)
         {
             return service.CreateVolumeAsync(volume).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.SnapshotVolumeAsync" />
+        public static VolumeSnapshot SnapshotVolume(this ComputeService service, VolumeSnapshotDefinition snapshot)
+        {
+            return service.SnapshotVolumeAsync(snapshot).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListVolumesAsync" />
@@ -414,10 +432,28 @@ namespace OpenStack.Synchronous
             return service.ListVolumesAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.ListVolumeTypesAsync" />
+        public static IEnumerable<VolumeType> ListVolumeTypes(this ComputeService service)
+        {
+            return service.ListVolumeTypesAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.ListVolumeSnapshotsAsync" />
+        public static IEnumerable<VolumeSnapshot> ListVolumeSnapshots(this ComputeService service)
+        {
+            return service.ListVolumeSnapshotsAsync().ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.DeleteVolumeAsync" />
         public static void DeleteVolume(this ComputeService service, Identifier volumeId)
         {
             service.DeleteVolumeAsync(volumeId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteVolumeSnapshotAsync" />
+        public static void DeleteVolumeSnapshot(this ComputeService service, Identifier snapshotId)
+        {
+            service.DeleteVolumeSnapshotAsync(snapshotId).ForceSynchronous();
         }
 
         #endregion

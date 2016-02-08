@@ -82,6 +82,10 @@
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\VolumeStatus.cs" />
+    <Compile Include="BlockStorage\v2\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\VolumeStatus.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
@@ -116,8 +120,10 @@
     <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroup.cs" />
@@ -165,6 +171,8 @@
     <Compile Include="Compute\v2_1\Volume.cs" />
     <Compile Include="Compute\v2_1\ServerBlockDeviceType.cs" />
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshot.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotDefinition.cs" />
     <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />

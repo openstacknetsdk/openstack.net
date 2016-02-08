@@ -68,7 +68,7 @@ namespace OpenStack.Compute.v2_1
         public async Task<Image> SnapshotAsync(SnapshotServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
-            return await compute.CreateSnapshotAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
+            return await compute.SnapshotServerAsync<Image>(Id, request, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary />
