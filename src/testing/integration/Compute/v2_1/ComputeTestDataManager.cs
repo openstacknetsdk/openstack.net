@@ -79,7 +79,7 @@ namespace OpenStack.Compute.v2_1
 
             try
             {
-                DeleteKeyPairs(_testData.OfType<KeyPair>());
+                DeleteKeyPairs(_testData.OfType<KeyPairSummary>());
             }
             catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
 
@@ -285,7 +285,7 @@ namespace OpenStack.Compute.v2_1
             return keypair;
         }
 
-        public void DeleteKeyPairs(IEnumerable<KeyPair> keypairs)
+        public void DeleteKeyPairs(IEnumerable<KeyPairSummary> keypairs)
         {
             var deletes = keypairs.Select(x => x.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);

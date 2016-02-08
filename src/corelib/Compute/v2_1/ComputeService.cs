@@ -323,9 +323,9 @@ namespace OpenStack.Compute.v2_1
         #region Keypairs
 
         /// <inheritdoc cref="ComputeApiBuilder.GetKeyPairAsync{T}" />
-        public virtual Task<KeyPairDetails> GetKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<KeyPair> GetKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.GetKeyPairAsync<KeyPairDetails>(keypairName, cancellationToken);
+            return _computeApi.GetKeyPairAsync<KeyPair>(keypairName, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.CreateKeyPairAsync{T}" />
@@ -335,15 +335,15 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<KeyPair> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<KeyPairSummary> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.CreateKeyPairAsync<KeyPair>(keypair, cancellationToken);
+            return _computeApi.CreateKeyPairAsync<KeyPairSummary>(keypair, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.ListKeyPairsAsync{T}" />
-        public virtual async Task<IEnumerable<KeyPair>> ListKeyPairsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IEnumerable<KeyPairSummary>> ListKeyPairsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListKeyPairsAsync<KeyPairCollection>(cancellationToken);
+            return await _computeApi.ListKeyPairsAsync<KeyPairSummaryCollection>(cancellationToken);
         }
 
         /// <summary />

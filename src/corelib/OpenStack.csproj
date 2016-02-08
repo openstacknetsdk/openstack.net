@@ -105,7 +105,7 @@
     <Compile Include="Compute\v2_1\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\IPProtocol.cs" />
-    <Compile Include="Compute\v2_1\KeyPairDetails.cs" />
+    <Compile Include="Compute\v2_1\KeyPair.cs" />
     <Compile Include="Compute\v2_1\KeyPairRequest.cs" />
     <Compile Include="Compute\v2_1\KeyPairResponse.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
@@ -152,7 +152,7 @@
     <Compile Include="Compute\v2_1\DiskConfiguration.cs" />
     <Compile Include="Compute\v2_1\FlavorReference.cs" />
     <Compile Include="Compute\v2_1\ImageReference.cs" />
-    <Compile Include="Compute\v2_1\KeyPair.cs" />
+    <Compile Include="Compute\v2_1\KeyPairSummary.cs" />
     <Compile Include="Compute\v2_1\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_1\ServerListOptions.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />

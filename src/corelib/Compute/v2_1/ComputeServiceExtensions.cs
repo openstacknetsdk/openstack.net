@@ -301,7 +301,7 @@ namespace OpenStack.Synchronous
 
         #region KeyPairs
         /// <inheritdoc cref="ComputeService.GetKeyPairAsync" />
-        public static KeyPairDetails GetKeyPair(this ComputeService service, string keypairName)
+        public static KeyPair GetKeyPair(this ComputeService service, string keypairName)
         {
             return service.GetKeyPairAsync(keypairName).ForceSynchronous();
         }
@@ -313,13 +313,13 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ComputeService.ImportKeyPairAsync" />
-        public static KeyPair ImportKeyPair(this ComputeService service, KeyPairDefinition keyPair)
+        public static KeyPairSummary ImportKeyPair(this ComputeService service, KeyPairDefinition keyPair)
         {
             return service.ImportKeyPairAsync(keyPair).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListKeyPairsAsync" />
-        public static IEnumerable<KeyPair> ListKeyPairs(this ComputeService service)
+        public static IEnumerable<KeyPairSummary> ListKeyPairs(this ComputeService service)
         {
             return service.ListKeyPairsAsync().ForceSynchronous();
         }

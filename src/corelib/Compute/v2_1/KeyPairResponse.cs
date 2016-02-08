@@ -3,7 +3,7 @@
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class KeyPairResponse : KeyPair
+    public class KeyPairResponse : KeyPairSummary
     {
         /// <summary />
         [JsonProperty("private_key")]
