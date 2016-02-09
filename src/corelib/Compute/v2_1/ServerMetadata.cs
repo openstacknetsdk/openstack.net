@@ -12,11 +12,11 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "metadata")]
-    public class ImageMetadata : Dictionary<string, string>, IHaveExtraData, IChildResource
+    public class ServerMetadata : Dictionary<string, string>, IHaveExtraData, IChildResource
     {
         /// <summary />
         [JsonIgnore]
-        protected ImageReference Image { get; set; }
+        protected ServerReference Server { get; set; }
 
         /// <summary />
         [JsonExtensionData]
@@ -25,25 +25,25 @@ namespace OpenStack.Compute.v2_1
         object IServiceResource.Owner { get; set; }
 
         /// <summary />
-        protected internal void SetParent(ImageReference parent)
+        protected internal void SetParent(ServerReference parent)
         {
-            Image = parent;
+            Server = parent;
         }
 
         void IChildResource.SetParent(string parentId)
         {
-            SetParent(new ImageReference { Id = parentId});
+            SetParent(new ServerReference {Id = parentId});
         }
 
         void IChildResource.SetParent(object parent)
         {
-            SetParent((ImageReference)parent);
+            SetParent((ServerReference)parent);
         }
 
         /// <summary />
         protected void AssertParentIsSet([CallerMemberName]string callerName = "")
         {
-            if (Image != null)
+            if (Server != null)
                 return;
 
             throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
@@ -54,7 +54,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.CreateImageMetadataAsync(Image.Id, key, value, cancellationToken);
+            await compute.CreateServerMetadataAsync(Server.Id, key, value, cancellationToken);
             this[key] = value;
         }
 
@@ -63,7 +63,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var results = await compute.UpdateImageMetadataAsync<ImageMetadata>(Image.Id, this, overwrite, cancellationToken);
+            var results = await compute.UpdateServerMetadataAsync<ServerMetadata>(Server.Id, this, overwrite, cancellationToken);
             Clear();
             foreach (var result in results)
             {
@@ -79,7 +79,7 @@ namespace OpenStack.Compute.v2_1
 
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DeleteImageMetadataAsync(Image.Id, key, cancellationToken);
+            await compute.DeleteServerMetadataAsync(Server.Id, key, cancellationToken);
             Remove(key);
         }
     }

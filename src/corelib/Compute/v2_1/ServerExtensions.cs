@@ -21,6 +21,18 @@ namespace OpenStack.Synchronous
             return server.GetAddressAsync(key).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ServerReference.GetMetadataAsync"/>
+        public static ServerMetadata GetMetadata(this ServerReference server)
+        {
+            return server.GetMetadataAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.GetMetadataItemAsync"/>
+        public static string GetMetadataItem(this ServerReference server, string key)
+        {
+            return server.GetMetadataItemAsync(key).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ServerReference.GetServerAsync"/>
         public static IDictionary<string, IList<ServerAddress>> ListAddresses(this ServerReference server)
         {

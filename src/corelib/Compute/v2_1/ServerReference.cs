@@ -36,6 +36,22 @@ namespace OpenStack.Compute.v2_1
             return await compute.GetServerAddressAsync<ServerAddress>(Id, key, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="ComputeApi.GetServerMetadataAsync{T}" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task<ServerMetadata> GetMetadataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
+            return owner.GetServerMetadataAsync<ServerMetadata>(Id, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.GetServerMetadataItemAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public Task<string> GetMetadataItemAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
+            return owner.GetServerMetadataItemAsync(Id, key, cancellationToken);
+        }
+
         /// <summary />
         public async Task<IDictionary<string, IList<ServerAddress>>> ListAddressesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

@@ -83,6 +83,40 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary />
+        public virtual async Task<T> GetServerMetadataAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IChildResource
+        {
+            return await BuildGetServerMetadataRequest(serverId, cancellationToken)
+                 .SendAsync()
+                 .ReceiveJson<T>()
+                 .PropogateOwner(this)
+                 .SetParent(serverId);
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetServerMetadataRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/metadata", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual async Task<string> GetServerMetadataItemAsync(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            dynamic result = await BuildGetServerMetadataItemRequest(serverId, key, cancellationToken)
+                .SendAsync()
+                .ReceiveJson();
+
+            var meta = (IDictionary<string, object>)result.meta;
+            return meta[key]?.ToString();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildGetServerMetadataItemRequest(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/metadata/{key}", cancellationToken);
+        }
+
+        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateServerRequest(object server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareCreateResourceRequest("servers", server, cancellationToken);
@@ -96,6 +130,27 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual Task CreateServerMetadataAsync(string serverId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildCreateServerMetadataRequest(serverId, key, value, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildCreateServerMetadataRequest(string serverId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var serverMetadata = new
+            {
+                meta = new Dictionary<string, string>
+                {
+                    [key] = value
+                }
+            };
+
+            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata/{key}", cancellationToken);
+            return request.PreparePutJson(serverMetadata, cancellationToken);
         }
 
         /// <summary>
@@ -213,6 +268,27 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
+        /// <summary /> // this keeps existing, but omitted values
+        public virtual async Task<T> UpdateServerMetadataAsync<T>(string serverId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildUpdateServerMetadataRequest(serverId, metadata, overwrite, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this);
+        }
+
+        /// <summary />
+        public virtual async Task<PreparedRequest> BuildUpdateServerMetadataRequest(string serverId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata", cancellationToken);
+
+            if (overwrite)
+                return request.PreparePutJson(metadata, cancellationToken);
+
+            return request.PreparePostJson(metadata, cancellationToken);
+        }
+
         /// <summary />
         public virtual Task DeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -223,6 +299,24 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual Task<PreparedRequest> BuildDeleteServerRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}", cancellationToken);
+        }
+
+        /// <summary />
+        public virtual Task DeleteServerMetadataAsync(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteServerMetadataRequest(serverId, key, cancellationToken).SendAsync();
+        }
+
+        /// <summary />
+        public virtual Task<PreparedRequest> BuildDeleteServerMetadataRequest(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (serverId == null)
+                throw new ArgumentNullException("serverId");
+
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}/metadata/{key}", cancellationToken);
         }
 
         /// <summary>
@@ -555,13 +649,13 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary />
-        public virtual Task CreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task CreateImageMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildCreateImagMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
+            return BuildCreateImageMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateImagMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildCreateImageMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             var imageMetadata = new
             {

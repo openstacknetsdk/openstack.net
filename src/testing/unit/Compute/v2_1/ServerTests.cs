@@ -45,6 +45,17 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void SerializeListServerOptionsInUrl()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new ServerSummaryCollection());
+                _compute.ListServerSummaries(new ServerListOptions());
+                httpTest.ShouldNotHaveCalled("*metadata*");
+            }   
+        }
+
+        [Fact]
         public void CreateServer()
         {
             using (var httpTest = new HttpTest())
@@ -59,6 +70,23 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId,result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void CreateServerMetadata()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                const string key = "stuff";
+                Identifier serverId = "1";
+                httpTest.RespondWithJson(new Server { Id = serverId });
+
+                var server = _compute.GetServer(serverId);
+                server.Metadata.Create(key, "things");
+
+                Assert.True(server.Metadata.ContainsKey(key));
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata/{key}");
             }
         }
 
@@ -96,6 +124,51 @@ namespace OpenStack.Compute.v2_1
                 
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
+            }
+        }
+
+        [Fact]
+        public void GetServerMetadata()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = "1";
+                httpTest.RespondWithJson(new ServerSummaryCollection { new ServerSummary { Id = serverId } });
+                httpTest.RespondWithJson(new ServerMetadata { ["stuff"] = "things" });
+
+                var servers = _compute.ListServerSummaries();
+                ServerMetadata result = servers.First().GetMetadata();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata");
+                Assert.NotNull(result);
+                Assert.Equal(1, result.Count);
+                Assert.True(result.ContainsKey("stuff"));
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetServerMetadataItem()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = "1";
+                httpTest.RespondWithJson(new ServerSummaryCollection { new ServerSummary { Id = serverId } });
+                httpTest.RespondWithJson(new
+                {
+                    meta = new
+                    {
+                        stuff = "things"
+                    }
+
+                });
+
+                var servers = _compute.ListServerSummaries();
+                string result = servers.First().GetMetadataItem("stuff");
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata");
+                Assert.NotNull(result);
+                Assert.Equal("things", result);
             }
         }
 
@@ -224,6 +297,27 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
+        [Theory]
+        [InlineData(false, "POST")]
+        [InlineData(true, "PUT")]
+        public void UpdateServerMetadata(bool overwrite, string expectedHttpVerb)
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = "1";
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWithJson(new ServerMetadata { ["stuff"] = "things" });
+
+                var server = _compute.GetServer(serverId);
+                server.Metadata["color"] = "blue";
+                server.Metadata.Update(overwrite);
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata");
+                Assert.Equal(expectedHttpVerb, httpTest.CallLog.Last().Request.Method.Method);
+                Assert.True(server.Metadata.ContainsKey("stuff"));
+            }
+        }
+
         [Fact]
         public void DeleteServer()
         {
@@ -268,6 +362,33 @@ namespace OpenStack.Compute.v2_1
                 _compute.DeleteServer(serverId);
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}");
+            }
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.Accepted)]
+        [InlineData(HttpStatusCode.NotFound)]
+        public void DeleteServerMetadata(HttpStatusCode responseCode)
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                const string key = "stuff";
+                httpTest.RespondWithJson(new Server
+                {
+                    Id = serverId,
+                    Metadata =
+                    {
+                        [key] = "things"
+                    }
+                });
+                httpTest.RespondWith((int)responseCode, "All gone!");
+
+                var server = _compute.GetServer(serverId);
+
+                server.Metadata.Delete(key);
+                Assert.False(server.Metadata.ContainsKey(key));
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata/{key}");
             }
         }
 
