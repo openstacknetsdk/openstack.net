@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,9 +8,8 @@ using Flurl;
 using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
-using OpenStack.Serialization;
 
-namespace OpenStack
+namespace OpenStack.Serialization
 {
     /// <summary>
     /// Creates urls

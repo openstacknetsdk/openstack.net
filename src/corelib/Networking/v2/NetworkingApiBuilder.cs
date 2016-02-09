@@ -8,6 +8,7 @@ using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Networking.v2.Serialization;
+using OpenStack.Serialization;
 
 namespace OpenStack.Networking.v2
 {

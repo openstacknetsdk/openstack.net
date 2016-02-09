@@ -854,6 +854,7 @@
     <Compile Include="Serialization\IPageLink.cs" />
     <Compile Include="Serialization\IServiceResource.cs" />
     <Compile Include="Serialization\ResourceStatus.cs" />
+    <Compile Include="Serialization\ServiceEndpoint.cs" />
     <Compile Include="Serialization\StringEnumeration.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />
@@ -867,7 +868,6 @@
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />
-    <Compile Include="ServiceEndpoint.cs" />
     <Compile Include="Testing\HttpTest.cs" />
     <Compile Include="Testing\NamespaceDoc.cs" />
   </ItemGroup>
