@@ -31,7 +31,7 @@ namespace OpenStack.Compute.v2_1
 
         void IChildResource.SetParent(object parent)
         {
-            SetParent((Server)parent);
+            SetParent((ServerReference)parent);
         }
 
         void IChildResource.SetParent(string parentId)
@@ -44,19 +44,19 @@ namespace OpenStack.Compute.v2_1
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
         /// <summary />
-        protected void AssertServerIsSet([CallerMemberName]string callerName = "")
+        protected void AssertParentIsSet([CallerMemberName]string callerName = "")
         {
             if (ServerRef != null)
                 return;
 
-            throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeServer. Use ComputeService.{callerName} instead."));
+            throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
         }
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<ServerVolume> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            AssertServerIsSet();
+            AssertParentIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken);
@@ -68,7 +68,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task DetachAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            AssertServerIsSet(); 
+            AssertParentIsSet(); 
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken);

@@ -32,27 +32,27 @@ namespace OpenStack.Compute.v2_1
 
         void IChildResource.SetParent(string parentId)
         {
-            SetParent(new Image {Id = parentId});
+            SetParent(new ImageReference { Id = parentId});
         }
 
         void IChildResource.SetParent(object parent)
         {
-            SetParent((Image)parent);
+            SetParent((ImageReference)parent);
         }
 
         /// <summary />
-        protected void AssertImageIsSet([CallerMemberName]string callerName = "")
+        protected void AssertParentIsSet([CallerMemberName]string callerName = "")
         {
             if (Image != null)
                 return;
 
-            throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeServer. Use ComputeService.{callerName} instead."));
+            throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
         }
 
         /// <summary />
         public async Task CreateAsync(string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            AssertImageIsSet();
+            AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             await compute.CreateImagMetadataAsync(Image.Id, key, value, cancellationToken);
             this[key] = value;
@@ -61,7 +61,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public async Task UpdateAsync(bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            AssertImageIsSet();
+            AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             var results = await compute.UpdateImageMetadataAsync<ImageMetadata>(Image.Id, this, overwrite, cancellationToken);
             Clear();
@@ -77,7 +77,7 @@ namespace OpenStack.Compute.v2_1
             if (!ContainsKey(key))
                 return;
 
-            AssertImageIsSet();
+            AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             await compute.DeleteImageMetadataAsync(Image.Id, key, cancellationToken);
             Remove(key);
