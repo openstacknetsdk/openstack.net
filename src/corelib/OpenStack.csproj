@@ -115,6 +115,7 @@
     <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRuleDefinition.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ComputeApi.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerCreateDefinitionConverter.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerGroupCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\KeyPairCollection.cs" />
@@ -180,7 +181,7 @@
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />
-    <Compile Include="Compute\v2_2\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_2\ComputeApi.cs" />
     <Compile Include="Compute\v2_2\ComputeService.cs" />
     <Compile Include="Compute\v2_2\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_2\RemoteConsole.cs" />
@@ -190,7 +191,7 @@
     <Compile Include="Compute\v2_2\Server.cs" />
     <Compile Include="Compute\v2_2\ServerReference.cs" />
     <Compile Include="Compute\v2_2\ServerStatus.cs" />
-    <Compile Include="Compute\v2_6\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_6\ComputeApi.cs" />
     <Compile Include="Compute\v2_6\ComputeService.cs" />
     <Compile Include="Compute\v2_6\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_6\Console.cs" />
@@ -206,7 +207,6 @@
     <Compile Include="Compute\v2_1\RemoteConsole.cs" />
     <Compile Include="Compute\v2_1\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_1\ComputeService.cs" />
-    <Compile Include="Compute\v2_1\ComputeApiBuilder.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_1\Server.cs" />
     <Compile Include="Compute\v2_6\ServerReference.cs" />

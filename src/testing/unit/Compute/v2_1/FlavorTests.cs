@@ -30,7 +30,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/flavors/{flavorId}");
                 Assert.NotNull(result);
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -72,7 +72,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -94,7 +94,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
     }

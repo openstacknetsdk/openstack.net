@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 using OpenStack.Authentication;
 using OpenStack.Serialization;
 
-namespace OpenStack.Compute.v2_1
+namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary>
     /// Builds requests to the Compute API which can be further customized and then executed.
@@ -19,7 +19,7 @@ namespace OpenStack.Compute.v2_1
     /// </summary>
     /// <exclude />
     /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.1.html">OpenStack Compute API v2.1 Overview</seealso>
-    public class ComputeApiBuilder
+    public class ComputeApi
     {
         /// <summary />
         protected readonly IAuthenticationProvider AuthenticationProvider;
@@ -33,25 +33,25 @@ namespace OpenStack.Compute.v2_1
         protected readonly ServiceEndpoint Endpoint;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComputeApiBuilder"/> class.
+        /// Initializes a new instance of the <see cref="ComputeApi"/> class.
         /// </summary>
         /// <param name="serviceType">The service type for the desired compute provider.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="region">The region.</param>
         /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
-        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
+        public ComputeApi(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
             : this(serviceType, authenticationProvider, region, useInternalUrl, "2.1")
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComputeApiBuilder"/> class.
+        /// Initializes a new instance of the <see cref="ComputeApi"/> class.
         /// </summary>
         /// <param name="serviceType">The service type for the desired compute provider.</param>
         /// <param name="authenticationProvider">The authentication provider.</param>
         /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
         /// <param name="region">The region.</param>
         /// <param name="microversion">The requested API microversion.</param>
-        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
+        protected ComputeApi(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
         {
             if (serviceType == null)
                 throw new ArgumentNullException("serviceType");

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -47,10 +48,10 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteServerGroupAsync" />
+        /// <inheritdoc cref="ComputeApi.DeleteServerGroupAsync" />
         public Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.DeleteServerGroupAsync(Id, cancellationToken);
         }
     }

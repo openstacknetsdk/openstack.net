@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -137,7 +138,7 @@ namespace OpenStack.Compute.v2_1
             return WaitForStatusAsync(ServerStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
+        /// <inheritdoc cref="ComputeApi.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -145,29 +146,29 @@ namespace OpenStack.Compute.v2_1
             Status = ServerStatus.Deleted;
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
+        /// <inheritdoc cref="ComputeApi.WaitForServerStatusAsync{TServer,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(ServerStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForServerStatusAsync{TServer,TStatus}(string,IEnumerable{TStatus},TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
+        /// <inheritdoc cref="ComputeApi.WaitForServerStatusAsync{TServer,TStatus}(string,IEnumerable{TStatus},TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(IEnumerable<ServerStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             var result = await owner.WaitForServerStatusAsync<Server, ServerStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.UpdateServerAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.UpdateServerAsync{T}" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task UpdateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
             var request = new ServerUpdateDefinition();
             this.CopyProperties(request);
 
@@ -179,7 +180,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
             var result = await compute.AttachVolumeAsync<ServerVolume>(Id, volume, cancellationToken).ConfigureAwait(false);
             AttachedVolumes.Add(result);
             ((IChildResource)result).SetParent(this);

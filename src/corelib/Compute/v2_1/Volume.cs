@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.BlockStorage.v2;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -103,33 +104,33 @@ namespace OpenStack.Compute.v2_1
             return WaitForStatusAsync(VolumeStatus.Available, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilVolumeIsDeletedAsync{TVolume,TStatus}" />
+        /// <inheritdoc cref="ComputeApi.WaitUntilVolumeIsDeletedAsync{TVolume,TStatus}" />
         /// <exception cref="InvalidOperationException">When the instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.WaitUntilVolumeIsDeletedAsync<Volume, VolumeStatus>(Id, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForVolumeStatusAsync{TVolume,TStatus}(string,IEnumerable{TStatus},TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
+        /// <inheritdoc cref="ComputeApi.WaitForVolumeStatusAsync{TVolume,TStatus}(string,IEnumerable{TStatus},TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
         /// <exception cref="InvalidOperationException">When the instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(IEnumerable<VolumeStatus> status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             var result = await owner.WaitForVolumeStatusAsync<Volume, VolumeStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForVolumeStatusAsync{TVolume,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
+        /// <inheritdoc cref="ComputeApi.WaitForVolumeStatusAsync{TVolume,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
         /// <exception cref="InvalidOperationException">When the instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatusAsync(VolumeStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             var result = await owner.WaitForVolumeStatusAsync<Volume, VolumeStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.SnapshotVolumeAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.SnapshotVolumeAsync{T}" />
         public Task<VolumeSnapshot> SnapshotAsync(VolumeSnapshotDefinition snapshot = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if(snapshot == null)
@@ -137,14 +138,14 @@ namespace OpenStack.Compute.v2_1
 
             snapshot.VolumeId = Id;
 
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.SnapshotVolumeAsync<VolumeSnapshot>(snapshot, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteVolumeAsync" />
+        /// <inheritdoc cref="ComputeApi.DeleteVolumeAsync" />
         public Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.DeleteVolumeAsync(Id, cancellationToken);
         }
 

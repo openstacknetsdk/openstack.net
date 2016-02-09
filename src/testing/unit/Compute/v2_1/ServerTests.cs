@@ -58,7 +58,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.NotNull(result);
                 Assert.Equal(serverId,result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -75,7 +75,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}");
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -115,7 +115,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
                 Assert.Equal(ServerStatus.Active, result.Status);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -137,7 +137,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(serverId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -199,7 +199,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
                 Assert.Equal(request.Name, result.Name);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -220,7 +220,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(serverId, server.Id);
                 Assert.Equal("{new-name}", server.Name);
                 Assert.Equal(lastModified, server.LastModified);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)server).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)server).Owner);
             }
         }
 
@@ -417,7 +417,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
                 Assert.True(server.AttachedVolumes.Any(v => v.Id == volumeId));
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 

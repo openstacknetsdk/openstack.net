@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -21,43 +22,43 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        /// <inheritdoc cref="ComputeApiBuilder.GetImageAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.GetImageAsync{T}" />
         /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<Image> GetImageAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.GetImageAsync<Image>(Id, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.GetImageMetadataAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.GetImageMetadataAsync{T}" />
         /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<ImageMetadata> GetMetadataAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.GetImageMetadataAsync<ImageMetadata>(Id, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.GetImageMetadataItemAsync" />
+        /// <inheritdoc cref="ComputeApi.GetImageMetadataItemAsync" />
         /// <exception cref="InvalidOperationException">When the <see cref="ImageReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<string> GetMetadataItemAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             return owner.GetImageMetadataItemAsync(Id, key, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteImageAsync" />
+        /// <inheritdoc cref="ComputeApi.DeleteImageAsync" />
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             await owner.DeleteImageAsync(Id, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
+        /// <inheritdoc cref="ComputeApi.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             await owner.WaitUntilImageIsDeletedAsync<Image, ImageStatus>(Id, null, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
         }
     }

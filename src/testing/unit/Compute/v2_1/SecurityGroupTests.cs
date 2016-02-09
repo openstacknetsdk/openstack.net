@@ -33,7 +33,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/os-security-groups/{securityGroupId}");
                 Assert.NotNull(result);
                 Assert.Equal(securityGroupId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -79,7 +79,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled("*/os-security-groups");
                 Assert.Equal(securityGroupId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -122,7 +122,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Contains(result, securityGroup.Rules);
                 Assert.Equal(securityGroupRuleId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -143,7 +143,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(securityGroupId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -163,7 +163,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-security-groups");
                 Assert.Equal(1, results.Count());
                 var result = results.First();
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
         

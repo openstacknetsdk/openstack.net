@@ -30,10 +30,10 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteKeyPairAsync" />
+        /// <inheritdoc cref="ComputeApi.DeleteKeyPairAsync" />
         public Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
             return compute.DeleteKeyPairAsync(Name, cancellationToken);
         }
     }

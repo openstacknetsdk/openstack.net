@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -54,11 +55,11 @@ namespace OpenStack.Compute.v2_1
 
         object IServiceResource.Owner { get; set; }
 
-        /// <inheritdoc cref="ComputeApiBuilder.DeleteSecurityGroupRuleAsync" />
+        /// <inheritdoc cref="ComputeApi.DeleteSecurityGroupRuleAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             await owner.DeleteSecurityGroupRuleAsync(Id, cancellationToken);
         }
 

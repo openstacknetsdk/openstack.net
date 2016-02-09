@@ -10,15 +10,15 @@ namespace OpenStack.Compute.v2_6
 {
     /// <inheritdoc />
     /// <seealso href="https://github.com/openstack/nova/blob/master/nova/api/openstack/rest_api_version_history.rst#26">Compute Microversion 2.6</seealso>
-    public class ComputeApiBuilder : v2_2.ComputeApiBuilder
+    public class ComputeApi : v2_2.ComputeApi
     {
         /// <inheritdoc />
-        public ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
+        public ComputeApi(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
             : this(serviceType, authenticationProvider, region, useInternalUrl, "2.6")
         { }
 
         /// <inheritdoc />
-        protected ComputeApiBuilder(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
+        protected ComputeApi(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl, string microversion)
             : base(serviceType, authenticationProvider, region, useInternalUrl, microversion)
         { }
 

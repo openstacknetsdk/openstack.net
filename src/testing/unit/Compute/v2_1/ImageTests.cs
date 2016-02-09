@@ -31,7 +31,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/images/{imageId}");
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -51,7 +51,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(1, result.Count);
                 Assert.True(result.ContainsKey("stuff"));
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -118,7 +118,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
                 Assert.Equal(ImageStatus.Active, result.Status);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -157,7 +157,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(imageId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 

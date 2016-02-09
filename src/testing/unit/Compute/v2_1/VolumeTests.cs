@@ -41,7 +41,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/os-volumes/{volumeId}");
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -90,7 +90,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled("*/os-volumes");
                 Assert.Equal(volumeId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -110,7 +110,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
                 Assert.Equal(VolumeStatus.Available, result.Status);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -129,7 +129,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled("*/os-snapshots");
                 Assert.Contains(volumeId, httpTest.CallLog.Last().RequestBody);
                 Assert.Equal(volumeId, result.VolumeId);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)volume).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)volume).Owner);
             }
         }
 
@@ -150,7 +150,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(volumeId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
