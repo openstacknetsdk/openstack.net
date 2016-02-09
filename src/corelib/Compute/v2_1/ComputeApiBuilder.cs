@@ -70,14 +70,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetServerAsync(serverId, cancellationToken)
+            return await BuildGetServerRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}", cancellationToken);
         }
@@ -198,7 +198,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildUpdateServerAsync(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildUpdateServerRequest(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareUpdateResourceRequest($"servers/{serverId}", server, cancellationToken);
         }
@@ -207,7 +207,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> UpdateServerAsync<T>(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildUpdateServerAsync(serverId, server, cancellationToken)
+            return await BuildUpdateServerRequest(serverId, server, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
@@ -269,7 +269,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> SnapshotServerAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var response = await BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            var response = await BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
             Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
             return await GetImageAsync<T>(imageId, cancellationToken)
                 .PropogateOwner(this);
@@ -279,14 +279,14 @@ namespace OpenStack.Compute.v2_1
         public virtual Task StartServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new StartServerRequest();
-            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
         /// <summary />
         public virtual Task StopServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new StopServerRequest();
-            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
         /// <summary />
@@ -294,20 +294,20 @@ namespace OpenStack.Compute.v2_1
             where TRequest : class, new()
         {
             request = request ?? new TRequest();
-            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
         /// <summary />
         public virtual Task EvacuateServerAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildServerActionAsync(serverId, request, cancellationToken).SendAsync();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
         /// <summary />
         public virtual Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getVNCConsole': {{ 'type': '{type}' }} }}");
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
@@ -316,7 +316,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task<T> GetSpiceConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getSPICEConsole': {{ 'type': '{type}' }} }}");
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
@@ -325,7 +325,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task<T> GetSerialConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getSerialConsole': {{ 'type': '{type}' }} }}");
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
@@ -334,7 +334,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task<T> GetRdpConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getRDPConsole': {{ 'type': '{type}' }} }}");
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
@@ -343,7 +343,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<string> GetConsoleOutputAsync(string serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getConsoleOutput': {{ 'length': '{length}' }} }}");
-            dynamic result = await BuildServerActionAsync(serverId, request, cancellationToken)
+            dynamic result = await BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson();
 
@@ -354,7 +354,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<string> RescueServerAsync(string serverId, object request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             request = request ?? new Dictionary<string, object> { ["rescue"] = null };
-            dynamic result = await BuildServerActionAsync(serverId, request, cancellationToken)
+            dynamic result = await BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson();
 
@@ -365,7 +365,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task UnrescueServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             object request = new Dictionary<string, object> { ["unrescue"] = null };
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
@@ -379,7 +379,7 @@ namespace OpenStack.Compute.v2_1
                     flavorRef = flavorId
                 }
             };
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
@@ -387,7 +387,7 @@ namespace OpenStack.Compute.v2_1
         public virtual Task ConfirmResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             object request = new Dictionary<string, object> { ["confirmResize"] = null };
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
@@ -395,12 +395,12 @@ namespace OpenStack.Compute.v2_1
         public virtual Task CancelResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             object request = new Dictionary<string, object> { ["revertResize"] = null };
-            return BuildServerActionAsync(serverId, request, cancellationToken)
+            return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildServerActionAsync(string serverId, object requestBody, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildServerActionRequest(string serverId, object requestBody, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -416,14 +416,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListServerActionsAsync(serverId, cancellationToken)
+            return await BuildListServerActionsRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListServerActionsAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerActionsRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-instance-actions", cancellationToken);
         }
@@ -432,14 +432,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerActionAsync<T>(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetServerActionAsync(serverId, actionId, cancellationToken)
+            return await BuildGetServerActionRequest(serverId, actionId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetServerActionAsync(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerActionRequest(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -457,14 +457,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetFlavorAsync<T>(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetFlavorAsync(flavorId, cancellationToken)
+            return await BuildGetFlavorRequest(flavorId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetFlavorAsync(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetFlavorRequest(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"flavors/{flavorId}", cancellationToken);
         }
@@ -473,14 +473,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListFlavorSummariesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorSummariesAsync(cancellationToken)
+            return await BuildListFlavorSummariesRequest(cancellationToken)
                  .SendAsync()
                  .ReceiveJson<T>()
                  .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListFlavorSummariesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorSummariesRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors", cancellationToken);
         }
@@ -489,14 +489,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorsAsync(cancellationToken)
+            return await BuildListFlavorsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors/detail", cancellationToken);
         }
@@ -508,14 +508,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetImageAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetImageAsync(imageId, cancellationToken)
+            return await BuildGetImageRequest(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}", cancellationToken);
         }
@@ -524,7 +524,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
-            return await BuildGetImageMetadataAsync(imageId, cancellationToken)
+            return await BuildGetImageMetadataRequest(imageId, cancellationToken)
                  .SendAsync()
                  .ReceiveJson<T>()
                  .PropogateOwner(this)
@@ -532,7 +532,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetImageMetadataAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageMetadataRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata", cancellationToken);
         }
@@ -540,7 +540,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual async Task<string> GetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            dynamic result = await BuildGetImageMetadataItemAsync(imageId, key, cancellationToken)
+            dynamic result = await BuildGetImageMetadataItemRequest(imageId, key, cancellationToken)
                 .SendAsync()
                 .ReceiveJson();
 
@@ -549,7 +549,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetImageMetadataItemRequest(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata/{key}", cancellationToken);
         }
@@ -557,11 +557,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task CreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildCreateImagMetadataAsync(imageId, key, value, cancellationToken).SendAsync();
+            return BuildCreateImagMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildCreateImagMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             var imageMetadata = new
             {
@@ -617,14 +617,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> UpdateImageMetadataAsync<T>(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildUpdateImageMetadataAsync(imageId, metadata, overwrite, cancellationToken)
+            return await BuildUpdateImageMetadataRequest(imageId, metadata, overwrite, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildUpdateImageMetadataAsync(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildUpdateImageMetadataRequest(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata", cancellationToken);
 
@@ -637,11 +637,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteImageAsync(imageId, cancellationToken).SendAsync();
+            return BuildDeleteImageRequest(imageId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteImageRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"images/{imageId}", cancellationToken);
         }
@@ -649,11 +649,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteImageMetadataAsync(imageId, key, cancellationToken).SendAsync();
+            return BuildDeleteImageMetadataRequest(imageId, key, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteImageMetadataRequest(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (imageId == null)
                 throw new ArgumentNullException("imageId");
@@ -670,7 +670,7 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual async Task<IList<T>> GetServerAddressAsync<T>(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var result = await BuildGetServerAddressAsync(serverId, key, cancellationToken)
+            var result = await BuildGetServerAddressRequest(serverId, key, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<IDictionary<string, IList<T>>>();
 
@@ -678,7 +678,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetServerAddressAsync(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerAddressRequest(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips/{key}", cancellationToken);
         }
@@ -686,13 +686,13 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task<T> ListServerAddressesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildListServerAddressesAsync(serverId, cancellationToken)
+            return BuildListServerAddressesRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListServerAddressesAsync(string serverid, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerAddressesRequest(string serverid, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips", cancellationToken);
         }
@@ -704,7 +704,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerVolumeAsync<T>(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
-            return await BuildGetServerVolumeAsync(serverId, volumeId, cancellationToken)
+            return await BuildGetServerVolumeRequest(serverId, volumeId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
@@ -712,7 +712,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetServerVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerVolumeRequest(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -727,7 +727,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IChildResource>
         {
-            return await BuidListServerVolumesAsync(serverId, cancellationToken)
+            return await BuidListServerVolumesRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this)
@@ -735,7 +735,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuidListServerVolumesAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuidListServerVolumesRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -747,7 +747,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
-            return await BuildAttachVolumeAsync(serverId, request, cancellationToken)
+            return await BuildAttachVolumeRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
@@ -755,7 +755,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildAttachVolumeAsync(string serverId, object serverVolume, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildAttachVolumeRequest(string serverId, object serverVolume, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -766,11 +766,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDetachVolumeAsync(serverId, volumeId, cancellationToken).SendAsync();
+            return BuildDetachVolumeRequest(serverId, volumeId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDetachVolumeRequest(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
                 throw new ArgumentNullException("serverId");
@@ -791,14 +791,14 @@ namespace OpenStack.Compute.v2_1
             if (keypairName == null)
                 throw new ArgumentNullException("keypairName");
 
-            return await BuildGetKeyPairRequestAsync(keypairName, cancellationToken)
+            return await BuildGetKeyPairRequest(keypairName, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetKeyPairRequest(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
@@ -810,14 +810,14 @@ namespace OpenStack.Compute.v2_1
             if (keypair == null)
                 throw new ArgumentNullException("keypair");
 
-            return await BuildCreateKeyPairRequestAsync(keypair, cancellationToken)
+            return await BuildCreateKeyPairRequest(keypair, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildCreateKeyPairRequestAsync(object keypair, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateKeyPairRequest(object keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareCreateResourceRequest("os-keypairs", keypair, cancellationToken);
         }
@@ -826,14 +826,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListKeyPairsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListKeyPairsRequestAsync(cancellationToken)
+            return await BuildListKeyPairsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListKeyPairsRequestAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListKeyPairsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-keypairs", cancellationToken);
         }
@@ -844,11 +844,11 @@ namespace OpenStack.Compute.v2_1
             if (keypairName == null)
                 throw new ArgumentNullException("keypairName");
 
-            return BuildDeleteKeyPairRequestAsync(keypairName, cancellationToken).SendAsync();
+            return BuildDeleteKeyPairRequest(keypairName, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteKeyPairRequestAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteKeyPairRequest(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
@@ -860,14 +860,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetSecurityGroupAsync<T>(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetSecurityGroupsAsync(securityGroupId, cancellationToken)
+            return await BuildGetSecurityGroupsRequest(securityGroupId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetSecurityGroupsAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetSecurityGroupsRequest(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
                 throw new ArgumentNullException("securityGroupId");
@@ -879,14 +879,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> CreateSecurityGroupAsync<T>(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildCreateSecurityGroupAsync(securityGroup, cancellationToken)
+            return await BuildCreateSecurityGroupRequest(securityGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildCreateSecurityGroupAsync(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateSecurityGroupRequest(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroup == null)
                 throw new ArgumentNullException("securityGroup");
@@ -898,14 +898,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> CreateSecurityGroupRuleAsync<T>(object rule, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildCreateSecurityGroupRuleAsync(rule, cancellationToken)
+            return await BuildCreateSecurityGroupRuleRequest(rule, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildCreateSecurityGroupRuleAsync(object rule, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateSecurityGroupRuleRequest(object rule, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (rule == null)
                 throw new ArgumentNullException("rule");
@@ -917,14 +917,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListSecurityGroupsAsync(serverId, cancellationToken)
+            return await BuildListSecurityGroupsRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListSecurityGroupsAsync(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListSecurityGroupsRequest(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             string path = serverId == null ? "os-security-groups" : $"servers/{serverId}/os-security-groups";
             return Endpoint.PrepareGetResourceRequest(path, cancellationToken);
@@ -934,14 +934,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> UpdateSecurityGroupAsync<T>(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildUpdateSecurityGroupAsync(securityGroupId, securityGroup, cancellationToken)
+            return await BuildUpdateSecurityGroupRequest(securityGroupId, securityGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildUpdateSecurityGroupAsync(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildUpdateSecurityGroupRequest(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
                 throw new ArgumentNullException("securityGroupId");
@@ -955,11 +955,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteSecurityGroupAsync(securityGroupId, cancellationToken).SendAsync();
+            return BuildDeleteSecurityGroupRequest(securityGroupId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRequest(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
                 throw new ArgumentNullException("securityGroupId");
@@ -970,11 +970,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteSecurityGroupRuleAsync(ruleId, cancellationToken).SendAsync();
+            return BuildDeleteSecurityGroupRuleRequest(ruleId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRuleRequest(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (ruleId == null)
                 throw new ArgumentNullException("ruleId");
@@ -990,14 +990,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetServerGroupAsync<T>(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetServerGroupsAsync(serverGroupId, cancellationToken)
+            return await BuildGetServerGroupsRequest(serverGroupId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetServerGroupsAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetServerGroupsRequest(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
                 throw new ArgumentNullException("serverGroupId");
@@ -1009,14 +1009,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> CreateServerGroupAsync<T>(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildCreateServerGroupAsync(serverGroup, cancellationToken)
+            return await BuildCreateServerGroupRequest(serverGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildCreateServerGroupAsync(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateServerGroupRequest(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroup == null)
                 throw new ArgumentNullException("serverGroup");
@@ -1028,14 +1028,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListServerGroupsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListServerGroupsAsync(cancellationToken)
+            return await BuildListServerGroupsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerGroupsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-server-groups", cancellationToken);
         }
@@ -1043,11 +1043,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteServerGroupAsync(serverGroupId, cancellationToken).SendAsync();
+            return BuildDeleteServerGroupRequest(serverGroupId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteServerGroupRequest(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
                 throw new ArgumentNullException("serverGroupId");
@@ -1063,14 +1063,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> GetVolumeAsync<T>(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildGetVolumeAsync(volumeId, cancellationToken)
+            return await BuildGetVolumeRequest(volumeId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetVolumeRequest(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeId == null)
                 throw new ArgumentNullException("volumeId");
@@ -1081,13 +1081,13 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual async Task<T> GetVolumeTypeAsync<T>(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await BuildGetVolumeTypeAsync(volumeTypeId, cancellationToken)
+            return await BuildGetVolumeTypeRequest(volumeTypeId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetVolumeTypeAsync(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetVolumeTypeRequest(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeTypeId == null)
                 throw new ArgumentNullException("volumeTypeId");
@@ -1118,14 +1118,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> CreateVolumeAsync<T>(object volume, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            return await BuildCreateVolumeAsync(volume, cancellationToken)
+            return await BuildCreateVolumeRequest(volume, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildCreateVolumeAsync(object volume, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildCreateVolumeRequest(object volume, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volume == null)
                 throw new ArgumentNullException("volume");
@@ -1156,14 +1156,14 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<T> ListVolumesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListVolumesAsync(cancellationToken)
+            return await BuildListVolumesRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListVolumesRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-volumes", cancellationToken);
         }
@@ -1171,16 +1171,16 @@ namespace OpenStack.Compute.v2_1
         ///// <summary />
         //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         //{
-        //    return await BuildListVolumeTypesAsync(cancellationToken)
+        //    return await BuildListVolumeTypesRequest(cancellationToken)
         //        .SendAsync()
         //        .ReceiveJson<T>();
         //}
 
-        /// <summary />
-        public virtual Task<PreparedRequest> BuildListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return Endpoint.PrepareGetResourceRequest("os-volume-types", cancellationToken);
-        }
+        ///// <summary />
+        //public virtual Task<PreparedRequest> BuildListVolumeTypesRequest(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    return Endpoint.PrepareGetResourceRequest("os-volume-types", cancellationToken);
+        //}
 
         /// <summary />
         public virtual async Task<T> ListVolumeSnapshotsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
@@ -1201,11 +1201,11 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task DeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildDeleteVolumeAsync(volumeId, cancellationToken).SendAsync();
+            return BuildDeleteVolumeRequest(volumeId, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildDeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildDeleteVolumeRequest(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeId == null)
                 throw new ArgumentNullException("volumeId");
@@ -1381,13 +1381,13 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task<T> GetLimitsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildGetLimitsAsync(cancellationToken)
+            return BuildGetLimitsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetLimitsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("limits", cancellationToken);
         }
@@ -1395,13 +1395,13 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task<T> GetCurrentQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildGetCurrentQuotasAsync(cancellationToken)
+            return BuildGetCurrentQuotasRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetCurrentQuotasRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-quota-sets/details", cancellationToken);
         }
@@ -1409,13 +1409,13 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         public virtual Task<T> GetDefaultQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildGetDefaultQuotasAsync(cancellationToken)
+            return BuildGetDefaultQuotasRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>();
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildGetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildGetDefaultQuotasRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-quota-sets/defaults", cancellationToken);
         }
