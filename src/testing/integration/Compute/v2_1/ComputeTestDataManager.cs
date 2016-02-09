@@ -119,7 +119,7 @@ namespace OpenStack.Compute.v2_1
         {
             if (_defaultImage == null)
             {
-                var images = await _compute.ListImagesAsync(new ImageListOptions {Name = "cirros"});
+                var images = await _compute.ListImageSummariesAsync(new ImageListOptions {Name = "cirros"});
                 _defaultImage = images.First().Id;
             }
             return _defaultImage;

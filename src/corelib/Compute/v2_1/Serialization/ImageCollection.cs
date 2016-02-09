@@ -26,10 +26,10 @@ namespace OpenStack.Compute.v2_1.Serialization
     }
 
     /// <summary>
-    /// Represents a collection of references to image resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of image summary resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
-    public class ImageReferenceCollection : ImageCollection<ImageReferenceCollection, ImageReference>
+    public class ImageSummaryCollection : ImageCollection<ImageSummaryCollection, ImageSummary>
     { }
 
     /// <inheritdoc cref="FlavorCollection{T}" />

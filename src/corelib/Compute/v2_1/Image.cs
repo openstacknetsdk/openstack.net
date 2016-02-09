@@ -10,7 +10,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "image")]
-    public class Image : ImageReference
+    public class Image : ImageSummary
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Image"/> class.

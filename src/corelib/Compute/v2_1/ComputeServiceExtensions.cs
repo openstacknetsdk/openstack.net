@@ -220,16 +220,16 @@ namespace OpenStack.Synchronous
             service.CreateImagMetadataAsync(imageId, key, value).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListImagesAsync" />
-        public static IPage<ImageReference> ListImages(this ComputeService service, ImageListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListImageSummariesAsync" />
+        public static IPage<ImageSummary> ListImageSummaries(this ComputeService service, ImageListOptions options = null)
         {
-            return service.ListImagesAsync(options).ForceSynchronous();
+            return service.ListImageSummariesAsync(options).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListImageDetailsAsync" />
-        public static IPage<Image> ListImageDetails(this ComputeService service, ImageListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListImagesAsync" />
+        public static IPage<Image> ListImages(this ComputeService service, ImageListOptions options = null)
         {
-            return service.ListImageDetailsAsync(options).ForceSynchronous();
+            return service.ListImagesAsync(options).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.UpdateImageMetadataAsync" />

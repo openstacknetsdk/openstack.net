@@ -576,16 +576,16 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<TPage> ListImageSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListImagesUrlAsync(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListImageSummariesRequest(queryString, cancellationToken);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<Url> BuildListImagesUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListImageSummariesRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -595,16 +595,16 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<TPage> ListImageDetailsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListImageDetailsUrlAsync(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListImagesRequest(queryString, cancellationToken);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<Url> BuildListImageDetailsUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListImagesRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 

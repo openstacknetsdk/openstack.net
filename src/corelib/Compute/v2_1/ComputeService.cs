@@ -241,16 +241,16 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.CreateImagMetadataAsync(imageId, key, value, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListImagesAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
-        public async Task<IPage<ImageReference>> ListImagesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListImageSummariesAsync{TPage}" />
+        public async Task<IPage<ImageSummary>> ListImageSummariesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListImagesAsync<ImageReferenceCollection>(options, cancellationToken);
+            return await _computeApi.ListImageSummariesAsync<ImageSummaryCollection>(options, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListImageDetailsAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
-        public async Task<IPage<Image>> ListImageDetailsAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListImagesAsync{TPage}" />
+        public async Task<IPage<Image>> ListImagesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListImageDetailsAsync<ImageCollection>(options, cancellationToken);
+            return await _computeApi.ListImagesAsync<ImageCollection>(options, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApiBuilder.UpdateImageMetadataAsync{T}" />

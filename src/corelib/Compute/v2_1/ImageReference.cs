@@ -12,10 +12,8 @@ namespace OpenStack.Compute.v2_1
     public class ImageReference : IHaveExtraData, IServiceResource
     {
         /// <summary />
+        [JsonProperty("id")]
         public virtual Identifier Id { get; set; }
-
-        /// <summary />
-        public string Name { get; set; }
 
         /// <summary />
         [JsonExtensionData]

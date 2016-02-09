@@ -104,6 +104,7 @@
     <Compile Include="Compute\v2_1\ImageListOptions.cs" />
     <Compile Include="Compute\v2_1\ImageMetadata.cs" />
     <Compile Include="Compute\v2_1\ImageStatus.cs" />
+    <Compile Include="Compute\v2_1\ImageSummary.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\IPProtocol.cs" />
     <Compile Include="Compute\v2_1\KeyPair.cs" />
