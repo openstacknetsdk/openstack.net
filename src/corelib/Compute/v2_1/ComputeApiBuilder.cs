@@ -470,33 +470,33 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> ListFlavorSummariesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorsAsync(cancellationToken)
+            return await BuildListFlavorSummariesAsync(cancellationToken)
                  .SendAsync()
                  .ReceiveJson<T>()
                  .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorSummariesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors", cancellationToken);
         }
 
         /// <summary />
-        public virtual async Task<T> ListFlavorDetailsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorDetailsAsync(cancellationToken)
+            return await BuildListFlavorsAsync(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual Task<PreparedRequest> BuildListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors/detail", cancellationToken);
         }

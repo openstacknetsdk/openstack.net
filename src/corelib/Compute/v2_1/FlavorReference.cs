@@ -15,10 +15,6 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
-        /// <summary /> // In some cases, only the id is populated. Use GetFlavor if Name is null.
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
         /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
@@ -26,7 +22,7 @@ namespace OpenStack.Compute.v2_1
         object IServiceResource.Owner { get; set; }
 
         /// <inheritdoc cref="ComputeApiBuilder.GetFlavorAsync{T}" />
-        /// <exception cref="InvalidOperationException">When the <see cref="FlavorReference"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        /// <exception cref="InvalidOperationException">When the <see cref="FlavorSummary"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<Flavor> GetFlavorAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();

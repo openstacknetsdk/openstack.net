@@ -5,7 +5,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "flavor")]
-    public class Flavor : FlavorReference
+    public class Flavor : FlavorSummary
     {
         /// <summary />
         [JsonProperty("disk")]

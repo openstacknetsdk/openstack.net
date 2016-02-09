@@ -33,9 +33,9 @@ namespace OpenStack.Compute.v2_1
         }
         
         [Fact]
-        public async Task ListFlavorsTest()
+        public async Task ListFlavorSummariesTest()
         {
-            var results = await _compute.ListFlavorsAsync();
+            var results = await _compute.ListFlavorSummariesAsync();
 
             Assert.NotNull(results);
             Assert.All(results, result => Assert.NotNull(result.Id));
@@ -45,7 +45,7 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async Task GetFlavorTest()
         {
-            var results = await _compute.ListFlavorsAsync();
+            var results = await _compute.ListFlavorSummariesAsync();
 
             var flavorRef = results.FirstOrDefault(x => x.Name == "m1.tiny");
             var flavor = await flavorRef.GetFlavorAsync();
@@ -60,9 +60,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async Task ListFlavorDetailsTest()
+        public async Task ListFlavorsTest()
         {
-            var results = await _compute.ListFlavorDetailsAsync();
+            var results = await _compute.ListFlavorsAsync();
 
             Assert.NotNull(results);
             Assert.True(results.Any());

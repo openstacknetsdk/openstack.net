@@ -195,16 +195,16 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetFlavorAsync<Flavor>(flavorId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorsAsync{T}" />
-        public async Task<IEnumerable<FlavorReference>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorSummariesAsync{T}" />
+        public async Task<IEnumerable<FlavorSummary>> ListFlavorSummariesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListFlavorsAsync<FlavorReferenceCollection>(cancellationToken);
+            return await _computeApi.ListFlavorSummariesAsync<FlavorSummaryCollection>(cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorDetailsAsync{T}" />
-        public async Task<IEnumerable<Flavor>> ListFlavorDetailsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApiBuilder.ListFlavorsAsync{T}" />
+        public async Task<IEnumerable<Flavor>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListFlavorDetailsAsync<FlavorCollection>(cancellationToken);
+            return await _computeApi.ListFlavorsAsync<FlavorCollection>(cancellationToken);
         }
 
         #endregion

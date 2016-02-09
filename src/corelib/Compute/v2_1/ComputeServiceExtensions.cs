@@ -176,16 +176,16 @@ namespace OpenStack.Synchronous
             return service.GetFlavorAsync(flavorId).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListFlavorsAsync" />
-        public static IEnumerable<FlavorReference> ListFlavors(this ComputeService service)
+        /// <inheritdoc cref="ComputeService.ListFlavorSummariesAsync" />
+        public static IEnumerable<FlavorSummary> ListFlavorSummaries(this ComputeService service)
         {
-            return service.ListFlavorsAsync().ForceSynchronous();
+            return service.ListFlavorSummariesAsync().ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListFlavorDetailsAsync" />
-        public static IEnumerable<Flavor> ListFlavorDetails(this ComputeService service)
+        /// <inheritdoc cref="ComputeService.ListFlavorsAsync" />
+        public static IEnumerable<Flavor> ListFlavors(this ComputeService service)
         {
-            return service.ListFlavorDetailsAsync().ForceSynchronous();
+            return service.ListFlavorsAsync().ForceSynchronous();
         }
         #endregion
 

@@ -108,7 +108,7 @@ namespace OpenStack.Compute.v2_1
         {
             if (_defaultFlavor == null)
             {
-                var flavors = await _compute.ListFlavorsAsync();
+                var flavors = await _compute.ListFlavorSummariesAsync();
                 _defaultFlavor = flavors.First(x => x.Name == "m1.tiny").Id;
             }
             return _defaultFlavor;

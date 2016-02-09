@@ -404,7 +404,7 @@ namespace OpenStack.Compute.v2_1
         [Fact]
         public async Task ResizeServerTest()
         {
-            var flavors = await _compute.ListFlavorsAsync();
+            var flavors = await _compute.ListFlavorSummariesAsync();
             var small = flavors.First(f => f.Name.Contains("small")).Id;
             var medium = flavors.First(f => f.Name.Contains("medium")).Id;
 
