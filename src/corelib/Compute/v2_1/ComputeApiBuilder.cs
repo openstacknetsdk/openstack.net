@@ -160,16 +160,16 @@ namespace OpenStack.Compute.v2_1
         }
 
         /// <summary />
-        public virtual async Task<TPage> ListServerReferencesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<TPage> ListServerSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListServerReferencesUrlAsync(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListServerSummariesUrl(queryString, cancellationToken);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<Url> BuildListServerReferencesUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListServerSummariesUrl(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -182,13 +182,13 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task<TPage> ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListServersUrlAsync(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListServersUrl(queryString, cancellationToken);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary />
-        public virtual async Task<Url> BuildListServersUrlAsync(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListServersUrl(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 

@@ -125,6 +125,7 @@
     <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\ServerSummary.cs" />
     <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />

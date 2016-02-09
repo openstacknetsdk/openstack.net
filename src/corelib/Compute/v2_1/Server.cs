@@ -11,7 +11,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
-    public class Server : ServerReference
+    public class Server : ServerSummary
     {
         /// <summary />
         public Server()

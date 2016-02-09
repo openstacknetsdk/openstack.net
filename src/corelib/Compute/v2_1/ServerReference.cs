@@ -17,10 +17,6 @@ namespace OpenStack.Compute.v2_1
         public Identifier Id { get; set; }
 
         /// <summary />
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 

@@ -26,10 +26,10 @@ namespace OpenStack.Compute.v2_1.Serialization
     }
 
     /// <summary>
-    /// Represents a collection of references to server resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of server summary resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
-    public class ServerReferenceCollection : ServerCollection<ServerReferenceCollection, ServerReference>
+    public class ServerSummaryCollection : ServerCollection<ServerSummaryCollection, ServerSummary>
     { }
 
     /// <inheritdoc cref="ServerCollection{TPage, TItem}" />

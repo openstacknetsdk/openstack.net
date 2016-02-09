@@ -21,7 +21,7 @@ namespace OpenStack.Compute.v2_6
         /// <summary />
         public virtual async Task<IPage<ServerReference>> ListServerReferencesAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApiBuilder.ListServerReferencesAsync<ServerCollection>(options, cancellationToken);
+            return await _computeApiBuilder.ListServerSummariesAsync<ServerCollection>(options, cancellationToken);
         }
 
         /// <summary />
