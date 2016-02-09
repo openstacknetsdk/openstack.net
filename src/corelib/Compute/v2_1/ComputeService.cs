@@ -235,10 +235,10 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.WaitForImageStatusAsync<Image, ImageStatus>(imageId, status, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.CreateImagMetadataAsync" />
-        public Task CreateImagMetadataAsync(Identifier imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApi.CreateImageMetadataAsync" />
+        public Task CreateImageMetadataAsync(Identifier imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _computeApi.CreateImagMetadataAsync(imageId, key, value, cancellationToken);
+            return _computeApi.CreateImageMetadataAsync(imageId, key, value, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.ListImageSummariesAsync{TPage}" />

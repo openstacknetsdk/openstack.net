@@ -54,7 +54,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.CreateImagMetadataAsync(Image.Id, key, value, cancellationToken);
+            await compute.CreateImageMetadataAsync(Image.Id, key, value, cancellationToken);
             this[key] = value;
         }
 

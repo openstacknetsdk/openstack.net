@@ -214,10 +214,10 @@ namespace OpenStack.Synchronous
             service.WaitForImageStatusAsync(imageId, status, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.CreateImagMetadataAsync" />
-        public static void CreateImagMetadata(this ComputeService service, Identifier imageId, string key, string value)
+        /// <inheritdoc cref="ComputeService.CreateImageMetadataAsync" />
+        public static void CreateImageMetadata(this ComputeService service, Identifier imageId, string key, string value)
         {
-            service.CreateImagMetadataAsync(imageId, key, value).ForceSynchronous();
+            service.CreateImageMetadataAsync(imageId, key, value).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListImageSummariesAsync" />

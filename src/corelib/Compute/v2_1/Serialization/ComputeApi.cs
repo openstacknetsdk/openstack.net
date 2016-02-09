@@ -555,13 +555,13 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary />
-        public virtual Task CreateImagMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task CreateImageMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return BuildCreateImagMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
+            return BuildCreateImageMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
         }
 
         /// <summary />
-        public virtual async Task<PreparedRequest> BuildCreateImagMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<PreparedRequest> BuildCreateImageMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             var imageMetadata = new
             {
