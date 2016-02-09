@@ -30,7 +30,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/flavors/{flavorId}");
                 Assert.NotNull(result);
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -40,13 +40,13 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier flavorId = Guid.NewGuid();
-                httpTest.RespondWithJson(new FlavorReferenceCollection
+                httpTest.RespondWithJson(new FlavorSummaryCollection
                 {
-                    new FlavorReference {Id = flavorId}
+                    new FlavorSummary {Id = flavorId}
                 });
                 httpTest.RespondWithJson(new Flavor { Id = flavorId });
 
-                var results = _compute.ListFlavors();
+                var results = _compute.ListFlavorSummaries();
                 var flavorRef = results.First();
                 var result = flavorRef.GetFlavor();
 
@@ -56,28 +56,28 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListFlavors()
+        public void ListFlavorSummaries()
         {
             using (var httpTest = new HttpTest())
             {
                 const string flavorId = "1";
-                httpTest.RespondWithJson(new FlavorReferenceCollection
+                httpTest.RespondWithJson(new FlavorSummaryCollection
                 {
-                    Items = { new FlavorReference { Id = flavorId } }
+                    Items = { new FlavorSummary { Id = flavorId } }
                 });
 
-                var results = _compute.ListFlavors();
+                var results = _compute.ListFlavorSummaries();
 
                 httpTest.ShouldHaveCalled("*/flavors");
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
         [Fact]
-        public void ListFlavorDetails()
+        public void ListFlavors()
         {
             using (var httpTest = new HttpTest())
             {
@@ -88,13 +88,13 @@ namespace OpenStack.Compute.v2_1
                 });
                 httpTest.RespondWithJson(new Flavor { Id = flavorId });
 
-                var results = _compute.ListFlavorDetails();
+                var results = _compute.ListFlavors();
 
                 httpTest.ShouldHaveCalled("*/flavors");
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
     }

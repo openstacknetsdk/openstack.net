@@ -43,7 +43,7 @@ namespace OpenStack.Compute.v2_1
   ]
 }").ToString();
 
-            var results = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<KeyPairCollection>(json);
+            var results = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<KeyPairSummaryCollection>(json);
             Assert.NotNull(results);
             Assert.Equal(2, results.Count());
             var result = results.First();
@@ -57,8 +57,8 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 const string name = "keypair-name";
-                httpTest.RespondWithJson(new KeyPairDetails { Name = name });
-                KeyPairDetails result = _computeService.GetKeyPair(name);
+                httpTest.RespondWithJson(new KeyPair { Name = name });
+                KeyPair result = _computeService.GetKeyPair(name);
 
                 httpTest.ShouldHaveCalled($"*/os-keypairs/{name}");
                 Assert.NotNull(result);
@@ -88,8 +88,8 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 const string name = "keypair-name";
-                httpTest.RespondWithJson(new KeyPair {Name = name});
-                KeyPair result = _computeService.ImportKeyPair(new KeyPairDefinition(name, Guid.NewGuid().ToString()));
+                httpTest.RespondWithJson(new KeyPairSummary {Name = name});
+                KeyPairSummary result = _computeService.ImportKeyPair(new KeyPairDefinition(name, Guid.NewGuid().ToString()));
 
                 httpTest.ShouldHaveCalled("*/os-keypairs");
                 Assert.NotNull(result);
@@ -103,11 +103,11 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 const string name = "keypair-name";
-                httpTest.RespondWithJson(new KeyPairCollection
+                httpTest.RespondWithJson(new KeyPairSummaryCollection
                 {
-                    new KeyPair { Name = name }
+                    new KeyPairSummary { Name = name }
                 });
-                IEnumerable<KeyPair> results = _computeService.ListKeyPairs();
+                IEnumerable<KeyPairSummary> results = _computeService.ListKeyPairs();
 
                 httpTest.ShouldHaveCalled("*/os-keypairs");
                 Assert.NotNull(results);
@@ -123,10 +123,10 @@ namespace OpenStack.Compute.v2_1
         {
             using (var httpTest = new HttpTest())
             {
-                httpTest.RespondWithJson(new KeyPairDetails {Name = "keypair-name"});
+                httpTest.RespondWithJson(new KeyPair {Name = "keypair-name"});
                 httpTest.RespondWith((int) responseCode, "All gone!");
 
-                KeyPair result = _computeService.GetKeyPair("keypair-name");
+                KeyPairSummary result = _computeService.GetKeyPair("keypair-name");
                 result.Delete();
 
                 httpTest.ShouldHaveCalled("*/os-keypairs");

@@ -4,13 +4,14 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "image")]
-    public class Image : ImageReference
+    public class Image : ImageSummary
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Image"/> class.
@@ -70,11 +71,11 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <inheritdoc cref="ComputeApiBuilder.WaitForImageStatusAsync{TImage,TStatus}" />
+        /// <inheritdoc cref="ComputeApi.WaitForImageStatusAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task WaitForStatus(ImageStatus status, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var owner = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var owner = this.GetOwnerOrThrow<ComputeApi>();
             var result = await owner.WaitForImageStatusAsync<Image, ImageStatus>(Id, status, refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
@@ -85,7 +86,7 @@ namespace OpenStack.Compute.v2_1
             return WaitForStatus(ImageStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
         
-        /// <inheritdoc cref="ComputeApiBuilder.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
+        /// <inheritdoc cref="ComputeApi.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {

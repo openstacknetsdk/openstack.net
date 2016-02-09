@@ -32,7 +32,7 @@ namespace OpenStack.Compute.v2_1
                     }
                 });
 
-                var serverReferences = _compute.ListServerReferences();
+                var serverReferences = _compute.ListServerSummaries();
                 var result = (serverReferences.First().GetAddress("private")).First();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/ips/private");
@@ -50,7 +50,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.RespondWithJson(new ServerCollection { new Server { Id = serverId } });
                 httpTest.RespondWithJson(new ServerAddressCollection {["ServiceNet"] = new List<ServerAddress> {new ServerAddress {IP = "192.168.1.189"}}});
 
-                var serverReferences = _compute.ListServerReferences();
+                var serverReferences = _compute.ListServerSummaries();
                 var results = serverReferences.First().ListAddresses();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/ips");

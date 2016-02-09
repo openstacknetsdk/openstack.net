@@ -19,10 +19,10 @@ namespace OpenStack.Compute.v2_1.Serialization
     }
 
     /// <summary>
-    /// Represents a collection of references to flavor resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of flavor summary resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
-    public class FlavorReferenceCollection : FlavorCollection<FlavorReference>
+    public class FlavorSummaryCollection : FlavorCollection<FlavorSummary>
     { }
 
     /// <inheritdoc cref="FlavorCollection{T}" />

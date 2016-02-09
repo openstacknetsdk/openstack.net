@@ -7,8 +7,8 @@ namespace OpenStack.Synchronous
     /// <summary />
     public static class KeypairExtensions_v2_1
     {
-        /// <inheritdoc cref="KeyPair.DeleteAsync" />
-        public static void Delete(this KeyPair keypair)
+        /// <inheritdoc cref="KeyPairSummary.DeleteAsync" />
+        public static void Delete(this KeyPairSummary keypair)
         {
             keypair.DeleteAsync().ForceSynchronous();
         }

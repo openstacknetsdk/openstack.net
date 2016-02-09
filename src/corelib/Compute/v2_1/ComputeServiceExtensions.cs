@@ -36,10 +36,10 @@ namespace OpenStack.Synchronous
             return service.WaitForServerStatusAsync(serverId, statuses, refreshDelay, timeout, progress).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListServerReferencesAsync" />
-        public static IPage<ServerReference> ListServerReferences(this ComputeService service, ServerListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListServerSummariesAsync" />
+        public static IPage<ServerSummary> ListServerSummaries(this ComputeService service, ServerListOptions options = null)
         {
-            return service.ListServerReferencesAsync(options).ForceSynchronous();
+            return service.ListServerSummariesAsync(options).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListServersAsync" />
@@ -176,16 +176,16 @@ namespace OpenStack.Synchronous
             return service.GetFlavorAsync(flavorId).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListFlavorsAsync" />
-        public static IEnumerable<FlavorReference> ListFlavors(this ComputeService service)
+        /// <inheritdoc cref="ComputeService.ListFlavorSummariesAsync" />
+        public static IEnumerable<FlavorSummary> ListFlavorSummaries(this ComputeService service)
         {
-            return service.ListFlavorsAsync().ForceSynchronous();
+            return service.ListFlavorSummariesAsync().ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListFlavorDetailsAsync" />
-        public static IEnumerable<Flavor> ListFlavorDetails(this ComputeService service)
+        /// <inheritdoc cref="ComputeService.ListFlavorsAsync" />
+        public static IEnumerable<Flavor> ListFlavors(this ComputeService service)
         {
-            return service.ListFlavorDetailsAsync().ForceSynchronous();
+            return service.ListFlavorsAsync().ForceSynchronous();
         }
         #endregion
 
@@ -220,16 +220,16 @@ namespace OpenStack.Synchronous
             service.CreateImagMetadataAsync(imageId, key, value).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListImagesAsync" />
-        public static IPage<ImageReference> ListImages(this ComputeService service, ImageListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListImageSummariesAsync" />
+        public static IPage<ImageSummary> ListImageSummaries(this ComputeService service, ImageListOptions options = null)
         {
-            return service.ListImagesAsync(options).ForceSynchronous();
+            return service.ListImageSummariesAsync(options).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListImageDetailsAsync" />
-        public static IPage<Image> ListImageDetails(this ComputeService service, ImageListOptions options = null)
+        /// <inheritdoc cref="ComputeService.ListImagesAsync" />
+        public static IPage<Image> ListImages(this ComputeService service, ImageListOptions options = null)
         {
-            return service.ListImageDetailsAsync(options).ForceSynchronous();
+            return service.ListImagesAsync(options).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.UpdateImageMetadataAsync" />
@@ -301,7 +301,7 @@ namespace OpenStack.Synchronous
 
         #region KeyPairs
         /// <inheritdoc cref="ComputeService.GetKeyPairAsync" />
-        public static KeyPairDetails GetKeyPair(this ComputeService service, string keypairName)
+        public static KeyPair GetKeyPair(this ComputeService service, string keypairName)
         {
             return service.GetKeyPairAsync(keypairName).ForceSynchronous();
         }
@@ -313,13 +313,13 @@ namespace OpenStack.Synchronous
         }
 
         /// <inheritdoc cref="ComputeService.ImportKeyPairAsync" />
-        public static KeyPair ImportKeyPair(this ComputeService service, KeyPairDefinition keyPair)
+        public static KeyPairSummary ImportKeyPair(this ComputeService service, KeyPairDefinition keyPair)
         {
             return service.ImportKeyPairAsync(keyPair).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.ListKeyPairsAsync" />
-        public static IEnumerable<KeyPair> ListKeyPairs(this ComputeService service)
+        public static IEnumerable<KeyPairSummary> ListKeyPairs(this ComputeService service)
         {
             return service.ListKeyPairsAsync().ForceSynchronous();
         }

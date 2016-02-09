@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -57,7 +58,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertServerIsSet();
 
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
             var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken);
             result.ServerRef = ServerRef;
             return result;
@@ -69,7 +70,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertServerIsSet(); 
 
-            var compute = this.GetOwnerOrThrow<ComputeApiBuilder>();
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
             await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken);
 
             var server = ServerRef as Server;

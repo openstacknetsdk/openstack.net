@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Flurl.Http;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -34,9 +33,9 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public async Task ListImagesTest()
+        public async Task ListImageSummariesTest()
         {
-            var results = await _compute.ListImagesAsync(new ImageListOptions {PageSize = 1});
+            var results = await _compute.ListImageSummariesAsync(new ImageListOptions {PageSize = 1});
 
             while (results.Any())
             {
@@ -60,16 +59,16 @@ namespace OpenStack.Compute.v2_1
             _testData.Register(snapshot);
 
             Trace.WriteLine("Getting snapshot details...");
-            var results = await _compute.ListImageDetailsAsync(new ImageListOptions {Type = ImageType.Snapshot});
+            var results = await _compute.ListImagesAsync(new ImageListOptions {Type = ImageType.Snapshot});
             Assert.NotNull(results);
             Assert.All(results, x => Assert.Equal(ImageType.Snapshot, x.Type));
             Assert.Contains(results, image => image.Id == snapshot.Id);
         }
 
         [Fact]
-        public async Task ListImageDetailsTest()
+        public async Task ListImagesTest()
         {
-            var results = await _compute.ListImageDetailsAsync(new ImageListOptions { PageSize = 1 });
+            var results = await _compute.ListImagesAsync(new ImageListOptions { PageSize = 1 });
 
             while (results.Any())
             {

@@ -97,15 +97,17 @@
     <Compile Include="Compute\v2_1\Actions\StopServerRequest.cs" />
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
+    <Compile Include="Compute\v2_1\FlavorReference.cs" />
     <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
     <Compile Include="Compute\v2_1\ImageExtensions.cs" />
     <Compile Include="Compute\v2_1\Image.cs" />
     <Compile Include="Compute\v2_1\ImageListOptions.cs" />
     <Compile Include="Compute\v2_1\ImageMetadata.cs" />
     <Compile Include="Compute\v2_1\ImageStatus.cs" />
+    <Compile Include="Compute\v2_1\ImageSummary.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\IPProtocol.cs" />
-    <Compile Include="Compute\v2_1\KeyPairDetails.cs" />
+    <Compile Include="Compute\v2_1\KeyPair.cs" />
     <Compile Include="Compute\v2_1\KeyPairRequest.cs" />
     <Compile Include="Compute\v2_1\KeyPairResponse.cs" />
     <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRuleDefinition.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ComputeApi.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerCreateDefinitionConverter.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerGroupCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\KeyPairCollection.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\ServerSummary.cs" />
     <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
     <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
@@ -150,9 +154,9 @@
     <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
     <Compile Include="Compute\v2_1\ServerCreateDefinition.cs" />
     <Compile Include="Compute\v2_1\DiskConfiguration.cs" />
-    <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\FlavorSummary.cs" />
     <Compile Include="Compute\v2_1\ImageReference.cs" />
-    <Compile Include="Compute\v2_1\KeyPair.cs" />
+    <Compile Include="Compute\v2_1\KeyPairSummary.cs" />
     <Compile Include="Compute\v2_1\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_1\ServerListOptions.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
@@ -177,7 +181,7 @@
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />
-    <Compile Include="Compute\v2_2\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_2\ComputeApi.cs" />
     <Compile Include="Compute\v2_2\ComputeService.cs" />
     <Compile Include="Compute\v2_2\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_2\RemoteConsole.cs" />
@@ -187,7 +191,7 @@
     <Compile Include="Compute\v2_2\Server.cs" />
     <Compile Include="Compute\v2_2\ServerReference.cs" />
     <Compile Include="Compute\v2_2\ServerStatus.cs" />
-    <Compile Include="Compute\v2_6\ComputeApiBuilder.cs" />
+    <Compile Include="Compute\v2_6\ComputeApi.cs" />
     <Compile Include="Compute\v2_6\ComputeService.cs" />
     <Compile Include="Compute\v2_6\ComputeServiceExtensions.cs" />
     <Compile Include="Compute\v2_6\Console.cs" />
@@ -203,7 +207,6 @@
     <Compile Include="Compute\v2_1\RemoteConsole.cs" />
     <Compile Include="Compute\v2_1\RemoteConsoleType.cs" />
     <Compile Include="Compute\v2_1\ComputeService.cs" />
-    <Compile Include="Compute\v2_1\ComputeApiBuilder.cs" />
     <Compile Include="Compute\v2_1\Serialization\ServerCollection.cs" />
     <Compile Include="Compute\v2_1\Server.cs" />
     <Compile Include="Compute\v2_6\ServerReference.cs" />
@@ -851,6 +854,7 @@
     <Compile Include="Serialization\IPageLink.cs" />
     <Compile Include="Serialization\IServiceResource.cs" />
     <Compile Include="Serialization\ResourceStatus.cs" />
+    <Compile Include="Serialization\ServiceEndpoint.cs" />
     <Compile Include="Serialization\StringEnumeration.cs" />
     <Compile Include="Serialization\IdentifierConverter.cs" />
     <Compile Include="Serialization\IHaveExtraData.cs" />
@@ -864,7 +868,6 @@
     <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
     <Compile Include="Serialization\TolerantEnumConverter.cs" />
     <Compile Include="Serialization\RootWrapperConverter.cs" />
-    <Compile Include="ServiceEndpoint.cs" />
     <Compile Include="Testing\HttpTest.cs" />
     <Compile Include="Testing\NamespaceDoc.cs" />
   </ItemGroup>

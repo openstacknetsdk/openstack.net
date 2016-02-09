@@ -58,7 +58,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.NotNull(result);
                 Assert.Equal(serverId,result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -75,7 +75,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}");
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -85,13 +85,13 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new ServerReferenceCollection
+                httpTest.RespondWithJson(new ServerSummaryCollection
                 {
-                    Items = { new ServerReference { Id = serverId } }
+                    Items = { new ServerSummary { Id = serverId } }
                 });
                 httpTest.RespondWithJson(new Server { Id = serverId });
 
-                var serverRef = _compute.ListServerReferences().First();
+                var serverRef = _compute.ListServerSummaries().First();
                 var result = serverRef.GetServer();
                 
                 Assert.NotNull(result);
@@ -115,34 +115,34 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
                 Assert.Equal(ServerStatus.Active, result.Status);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
         [Fact]
-        public void ListServerReferences()
+        public void ListerServerSummaries()
         {
             using (var httpTest = new HttpTest())
             {
                 Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new ServerReferenceCollection
+                httpTest.RespondWithJson(new ServerSummaryCollection
                 {
-                   Items = { new ServerReference {Id = serverId}},
+                   Items = { new ServerSummary { Id = serverId}},
                    Links = { new PageLink("next", "http://api.com/next") }
                 });
 
-                var results = _compute.ListServerReferences();
+                var results = _compute.ListServerSummaries();
 
                 httpTest.ShouldHaveCalled("*/servers");
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(serverId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
         [Fact]
-        public void ListServerReferencesWithFilter()
+        public void ListServerSummariesWithFilter()
         {
             using (var httpTest = new HttpTest())
             {
@@ -154,7 +154,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 ServerStatus status = ServerStatus.Active;
 
-                _compute.ListServerReferences(new ServerListOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
+                _compute.ListServerSummaries(new ServerListOptions { Name = name, FlavorId = flavorId, ImageId = imageId, UpdatedAfter = lastModified, Status = status});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*flavor={flavorId}");
@@ -165,7 +165,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListServerReferencesWithPaging()
+        public void ListServerSummariesWithPaging()
         {
             using (var httpTest = new HttpTest())
             {
@@ -177,7 +177,7 @@ namespace OpenStack.Compute.v2_1
 
                 Identifier startingAt = Guid.NewGuid();
                 const int pageSize = 10;
-                _compute.ListServerReferences(new ServerListOptions { PageSize = pageSize, StartingAt = startingAt });
+                _compute.ListServerSummaries(new ServerListOptions { PageSize = pageSize, StartingAt = startingAt });
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");
@@ -199,7 +199,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(serverId, result.Id);
                 Assert.Equal(request.Name, result.Name);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -220,7 +220,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.Equal(serverId, server.Id);
                 Assert.Equal("{new-name}", server.Name);
                 Assert.Equal(lastModified, server.LastModified);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)server).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)server).Owner);
             }
         }
 
@@ -417,7 +417,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
                 Assert.True(server.AttachedVolumes.Any(v => v.Id == volumeId));
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 

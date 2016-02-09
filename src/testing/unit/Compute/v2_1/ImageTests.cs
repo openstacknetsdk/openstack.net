@@ -31,7 +31,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/images/{imageId}");
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -41,17 +41,17 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier imageId = "1";
-                httpTest.RespondWithJson(new ImageReferenceCollection { new ImageReference { Id = imageId } });
+                httpTest.RespondWithJson(new ImageSummaryCollection { new ImageSummary { Id = imageId } });
                 httpTest.RespondWithJson(new ImageMetadata { ["stuff"] = "things" });
 
-                var imageReferences = _compute.ListImages();
+                var imageReferences = _compute.ListImageSummaries();
                 ImageMetadata result = imageReferences.First().GetMetadata();
 
                 httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
                 Assert.NotNull(result);
                 Assert.Equal(1, result.Count);
                 Assert.True(result.ContainsKey("stuff"));
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -61,7 +61,7 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier imageId = "1";
-                httpTest.RespondWithJson(new ImageReferenceCollection { new ImageReference { Id = imageId } });
+                httpTest.RespondWithJson(new ImageSummaryCollection { new ImageSummary { Id = imageId } });
                 httpTest.RespondWithJson(new
                 {
                     meta = new
@@ -71,7 +71,7 @@ namespace OpenStack.Compute.v2_1
 
                 });
 
-                var imageReferences = _compute.ListImages();
+                var imageReferences = _compute.ListImageSummaries();
                 string result = imageReferences.First().GetMetadataItem("stuff");
 
                 httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
@@ -86,13 +86,13 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier imageId = Guid.NewGuid();
-                httpTest.RespondWithJson(new ImageReferenceCollection
+                httpTest.RespondWithJson(new ImageSummaryCollection
                 {
-                    new ImageReference {Id = imageId}
+                    new ImageSummary {Id = imageId}
                 });
                 httpTest.RespondWithJson(new Image { Id = imageId });
 
-                var results = _compute.ListImages();
+                var results = _compute.ListImageSummaries();
                 var flavorRef = results.First();
                 var result = flavorRef.GetImage();
 
@@ -118,7 +118,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
                 Assert.Equal(ImageStatus.Active, result.Status);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -145,19 +145,19 @@ namespace OpenStack.Compute.v2_1
             using (var httpTest = new HttpTest())
             {
                 Identifier imageId = Guid.NewGuid();
-                httpTest.RespondWithJson(new ImageReferenceCollection
+                httpTest.RespondWithJson(new ImageSummaryCollection
                 {
-                    Items = { new ImageReference { Id = imageId } },
+                    Items = { new ImageSummary { Id = imageId } },
                     Links = { new PageLink("next", "http://api.com/next") }
                 });
 
-                var results = _compute.ListImages();
+                var results = _compute.ListImageSummaries();
 
                 httpTest.ShouldHaveCalled("*/images");
                 Assert.Equal(1, results.Count());
                 var result = results.First();
                 Assert.Equal(imageId, result.Id);
-                Assert.IsType<ComputeApiBuilder>(((IServiceResource)result).Owner);
+                Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
 
@@ -175,7 +175,7 @@ namespace OpenStack.Compute.v2_1
                 var lastModified = DateTimeOffset.Now.AddDays(-1);
                 var imageType = ImageType.Snapshot;
                 
-                _compute.ListImages(new ImageListOptions { Name = name, ServerId = serverId, UpdatedAfter = lastModified, MininumDiskSize = minDisk, MininumMemorySize = minRam, Type = imageType});
+                _compute.ListImageSummaries(new ImageListOptions { Name = name, ServerId = serverId, UpdatedAfter = lastModified, MininumDiskSize = minDisk, MininumMemorySize = minRam, Type = imageType});
 
                 httpTest.ShouldHaveCalled($"*name={name}");
                 httpTest.ShouldHaveCalled($"*server={serverId}");
@@ -195,7 +195,7 @@ namespace OpenStack.Compute.v2_1
 
                 Identifier startingAt = Guid.NewGuid();
                 const int pageSize = 10;
-                _compute.ListImages(new ImageListOptions { PageSize = pageSize, StartingAt = startingAt });
+                _compute.ListImageSummaries(new ImageListOptions { PageSize = pageSize, StartingAt = startingAt });
 
                 httpTest.ShouldHaveCalled($"*marker={startingAt}*");
                 httpTest.ShouldHaveCalled($"*limit={pageSize}*");

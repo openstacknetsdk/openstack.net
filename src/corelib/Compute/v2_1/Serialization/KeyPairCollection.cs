@@ -20,6 +20,6 @@ namespace OpenStack.Compute.v2_1.Serialization
 
     /// <inheritdoc cref="KeyPairCollection{T}" />
     /// <exclude />
-    public class KeyPairCollection : KeyPairCollection<KeyPair>
+    public class KeyPairSummaryCollection : KeyPairCollection<KeyPairSummary>
     { }
 }
