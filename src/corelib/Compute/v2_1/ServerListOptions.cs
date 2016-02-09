@@ -7,6 +7,12 @@ namespace OpenStack.Compute.v2_1
     public class ServerListOptions : PageOptions
     {
         /// <summary />
+        public ServerListOptions()
+        {
+            Metadata = new Dictionary<string, string>();
+        }
+
+        /// <summary />
         public DateTimeOffset? UpdatedAfter { get; set; }
 
         /// <summary />
@@ -22,6 +28,9 @@ namespace OpenStack.Compute.v2_1
         public ServerStatus Status { get; set; }
 
         /// <summary />
+        public IDictionary<string, string> Metadata { get; set; } 
+
+        /// <summary />
         protected override IDictionary<string, object> BuildQueryString()
         {
             var queryString = base.BuildQueryString();
@@ -30,6 +39,7 @@ namespace OpenStack.Compute.v2_1
             queryString["flavor"] = FlavorId;
             queryString["name"] = Name;
             queryString["status"] = Status;
+            queryString["metadata"] = Metadata;
 
             return queryString;
         }

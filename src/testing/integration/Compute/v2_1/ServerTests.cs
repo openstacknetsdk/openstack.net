@@ -148,12 +148,27 @@ namespace OpenStack.Compute.v2_1
         {
             var servers = await _testData.CreateServers();
             await Task.WhenAll(servers.Select(x => x.WaitUntilActiveAsync()));
+
+            var serverWithMetadata = servers.First();
+            var fooValue = Guid.NewGuid().ToString();
+            await serverWithMetadata.Metadata.CreateAsync("foo", fooValue);
+
             var serversNames = new HashSet<string>(servers.Select(s => s.Name));
 
             var results = await _compute.ListServerSummariesAsync(new ServerListOptions {Name = "ci-*"});
             var resultNames = new HashSet<string>(results.Select(s => s.Name));
 
             Assert.Subset(resultNames, serversNames);
+
+            Trace.WriteLine("Filtering servers by their metadata...");
+            results = await _compute.ListServerSummariesAsync(new ServerListOptions
+            {
+                Metadata =
+                {
+                    {"foo", fooValue}
+                }
+            });
+            Assert.Equal(1, results.Count());
         }
 
         [Fact]

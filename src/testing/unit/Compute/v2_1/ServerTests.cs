@@ -45,6 +45,17 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void SerializeListServerOptionsInUrl()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new ServerSummaryCollection());
+                _compute.ListServerSummaries(new ServerListOptions());
+                httpTest.ShouldNotHaveCalled("*metadata*");
+            }   
+        }
+
+        [Fact]
         public void CreateServer()
         {
             using (var httpTest = new HttpTest())
