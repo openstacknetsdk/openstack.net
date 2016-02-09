@@ -19,6 +19,7 @@ namespace OpenStack.Compute.v2_1
         {
             Addresses = new Dictionary<string, IList<ServerAddress>>();
             AttachedVolumes = new List<ServerVolumeReference>();
+            Metadata = new ServerMetadata();
             SecurityGroups = new List<SecurityGroupReference>();
         }
 
@@ -58,7 +59,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("metadata")]
-        public IDictionary<string, string> Metadata { get; set; }
+        public ServerMetadata Metadata { get; set; }
 
         /// <summary />
         [JsonProperty("accessIPv4")]
@@ -191,6 +192,7 @@ namespace OpenStack.Compute.v2_1
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
+            Metadata.SetParent(this);
             foreach (var volume in AttachedVolumes)
             {
                 volume.SetParent(this);

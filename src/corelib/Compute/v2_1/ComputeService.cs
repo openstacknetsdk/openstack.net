@@ -36,10 +36,28 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetServerAsync<Server>(serverId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApi.GetServerMetadataAsync{T}" />
+        public Task<ServerMetadata> GetServerMetadataAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerMetadataAsync<ServerMetadata>(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.GetServerMetadataItemAsync" />
+        public Task<string> GetServerMetadataItemAsync(Identifier serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.GetServerMetadataItemAsync(serverId, key, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApi.CreateServerAsync{T}" />
         public Task<Server> CreateServerAsync(ServerCreateDefinition server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateServerAsync<Server>(server, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.CreateServerMetadataAsync" />
+        public Task CreateServerMetadataAsync(Identifier serverId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.CreateServerMetadataAsync(serverId, key, value, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.WaitForServerStatusAsync{TServer,TStatus}(string,TStatus,TimeSpan?,TimeSpan?,IProgress{bool},CancellationToken)" />
@@ -72,11 +90,24 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.UpdateServerAsync<Server>(serverid, server, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApi.UpdateServerMetadataAsync{T}" />
+        public Task<ServerMetadata> UpdateServerMetadataAsync(Identifier serverId, ServerMetadata metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.UpdateServerMetadataAsync<ServerMetadata>(serverId, metadata, overwrite, cancellationToken);
+        }
+        
         /// <inheritdoc cref="ComputeApi.DeleteServerAsync" />
         public Task DeleteServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.DeleteServerAsync(serverId, cancellationToken);
         }
+
+        /// <inheritdoc cref="ComputeApi.DeleteServerMetadataAsync" />
+        public Task DeleteServerMetadataAsync(Identifier serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DeleteServerMetadataAsync(serverId, key, cancellationToken);
+        }
+
 
         /// <inheritdoc cref="ComputeApi.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         public Task WaitUntilServerIsDeletedAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))

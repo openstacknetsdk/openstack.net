@@ -18,10 +18,28 @@ namespace OpenStack.Synchronous
             return service.GetServerAsync(serverId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.GetServerAsync" />
+        public static ServerMetadata GetServerMetadata(this ComputeService service, Identifier serverId)
+        {
+            return service.GetServerMetadataAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.GetServerMetadataItemAsync" />
+        public static string GetServerMetadataItem(this ComputeService service, Identifier serverId, string key)
+        {
+            return service.GetServerMetadataItemAsync(serverId, key).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.CreateServerAsync" />
         public static Server CreateServer(this ComputeService service, ServerCreateDefinition server)
         {
             return service.CreateServerAsync(server).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.CreateServerMetadataAsync" />
+        public static void CreateServerMetadata(this ComputeService service, Identifier serverId, string key, string value)
+        {
+            service.CreateServerMetadataAsync(serverId, key, value).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.WaitForServerStatusAsync(Identifier,ServerStatus,TimeSpan?,TimeSpan?,IProgress{bool},System.Threading.CancellationToken)" />
@@ -54,10 +72,22 @@ namespace OpenStack.Synchronous
             return service.UpdateServerAsync(serverid, server).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.UpdateServerMetadataAsync" />
+        public static ServerMetadata UpdateServerMetadata(this ComputeService service, Identifier serverId, ServerMetadata metadata, bool overwrite = false)
+        {
+            return service.UpdateServerMetadataAsync(serverId, metadata, overwrite).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.DeleteServerAsync" />
         public static void DeleteServer(this ComputeService service, Identifier serverId)
         {
             service.DeleteServerAsync(serverId).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DeleteServerMetadataAsync" />
+        public static void DeleteServerMetadata(this ComputeService service, Identifier serverId, string key)
+        {
+            service.DeleteServerMetadataAsync(serverId, key).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.WaitUntilServerIsDeletedAsync" />

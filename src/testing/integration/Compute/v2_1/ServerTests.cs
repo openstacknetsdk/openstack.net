@@ -192,6 +192,47 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public async Task EditServerMetadataTest()
+        {
+            Trace.WriteLine("Creating a test server...");
+            var definition = _testData.BuildServer();
+            definition.Metadata = new ServerMetadata
+            {
+                ["category"] = "ci_test",
+                ["bad_key"] = "value"
+            };
+            var server = await _testData.CreateServer(definition);
+            await server.WaitUntilActiveAsync();
+
+            Assert.True(server.Metadata.ContainsKey("category"));
+
+            // Edit immediately
+            Trace.WriteLine("Adding a key...");
+            await server.Metadata.CreateAsync("new_key", "value");
+            Assert.True(server.Metadata.ContainsKey("new_key"));
+
+            Trace.WriteLine("Removing a key...");
+            await server.Metadata.DeleteAsync("bad_key");
+            Assert.False(server.Metadata.ContainsKey("bad_key"));
+
+            // Verify edits were persisted
+            Trace.WriteLine("Retrieving metadata...");
+            var metadata = await server.GetMetadataAsync();
+            Assert.True(metadata.ContainsKey("category"));
+            Assert.True(metadata.ContainsKey("new_key"));
+            Assert.False(metadata.ContainsKey("bad_key"));
+
+            // Batch edit
+            metadata.Remove("new_key");
+            metadata["category"] = "updated";
+            Trace.WriteLine("Updating edited metadata...");
+            await metadata.UpdateAsync(overwrite: true);
+
+            Assert.Equal("updated", metadata["category"]);
+            Assert.False(metadata.ContainsKey("new_key"));
+        }
+
+        [Fact]
         public async Task DeleteServerTest()
         {
             var server = await _testData.CreateServer();
