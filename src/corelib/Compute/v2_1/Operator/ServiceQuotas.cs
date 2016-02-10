@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
-namespace OpenStack.Compute.v2_1
+namespace OpenStack.Compute.v2_1.Operator
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "quota_set")]

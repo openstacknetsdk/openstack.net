@@ -110,6 +110,7 @@
     <Compile Include="Compute\v2_1\ComputeServiceTests.cs" />
     <Compile Include="Compute\v2_1\ComputeTestDataManager.cs" />
     <Compile Include="Compute\v2_1\FlavorTests.cs" />
+    <Compile Include="Compute\v2_1\Operator\ComputeServiceTests.cs" />
     <Compile Include="Compute\v2_1\VolumeTests.cs" />
     <Compile Include="Compute\v2_1\ImageTests.cs" />
     <Compile Include="Compute\v2_1\ServerGroupTests.cs" />

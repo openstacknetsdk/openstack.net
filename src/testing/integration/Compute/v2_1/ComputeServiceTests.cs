@@ -38,23 +38,5 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(limits.ResourceLimits.ServersUsed);
             Assert.Empty(((IHaveExtraData)limits).Data);
         }
-
-        [Fact]
-        public async Task GetCurrentQuotas()
-        {
-            var quotas = await _compute.GetCurrentQuotasAsync();
-            Assert.NotNull(quotas);
-            Assert.Equal("details", quotas.Id);
-            Assert.Empty(((IHaveExtraData)quotas).Data);
-        }
-
-        [Fact]
-        public async Task GetDefaultQuotas()
-        {
-            var quotas = await _compute.GetDefaultQuotasAsync();
-            Assert.NotNull(quotas);
-            Assert.Equal("defaults", quotas.Id);
-            Assert.Empty(((IHaveExtraData)quotas).Data);
-        }
     }
 }

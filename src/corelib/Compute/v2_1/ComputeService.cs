@@ -15,7 +15,7 @@ namespace OpenStack.Compute.v2_1
     public class ComputeService
     {
         /// <summary />
-        private readonly ComputeApi _computeApi;
+        internal readonly ComputeApi _computeApi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputeService"/> class.
@@ -515,18 +515,6 @@ namespace OpenStack.Compute.v2_1
         public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetLimitsAsync<ServiceLimits>(cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.GetCurrentQuotasAsync{T}" />
-        public Task<ServiceQuotas> GetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetCurrentQuotasAsync<ServiceQuotas>(cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.GetDefaultQuotasAsync{T}" />
-        public Task<ServiceQuotas> GetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetDefaultQuotasAsync<ServiceQuotas>(cancellationToken);
         }
         #endregion
     }

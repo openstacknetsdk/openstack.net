@@ -98,6 +98,8 @@
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\Operator\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServerMetadata.cs" />
     <Compile Include="Compute\v2_1\ServerMetadataExtensions.cs" />
     <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
@@ -134,7 +136,6 @@
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroup.cs" />
     <Compile Include="Compute\v2_1\ServerGroupDefinition.cs" />
-    <Compile Include="Compute\v2_1\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServiceLimits.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
     <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
