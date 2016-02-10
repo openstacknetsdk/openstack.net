@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json.Linq;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
@@ -114,7 +113,7 @@ namespace OpenStack.Compute.v2_1
 
                 var quotas = _compute.GetCurrentQuotas();
 
-                httpTest.ShouldHaveCalled("*/os-quota-sets/details");
+                httpTest.ShouldHaveCalled("*/os-quota-sets/detail");
                 Assert.NotNull(quotas);
 
                 Assert.Equal(100, quotas.KeyPairs);
