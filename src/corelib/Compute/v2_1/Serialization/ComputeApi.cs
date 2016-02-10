@@ -21,7 +21,9 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <seealso href="http://developer.openstack.org/api-ref-compute-v2.1.html">OpenStack Compute API v2.1 Overview</seealso>
     public class ComputeApi
     {
-        /// <summary />
+        /// <summary>
+        /// The authentication service.
+        /// </summary>
         protected readonly IAuthenticationProvider AuthenticationProvider;
 
         /// <summary>
@@ -29,7 +31,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// </summary>
         public const string MicroversionHeader = "X-OpenStack-Nova-API-Version";
 
-        /// <summary />
+        /// <summary>
+        /// The Compute service endpoint.
+        /// </summary>
         protected readonly ServiceEndpoint Endpoint;
 
         /// <summary>
@@ -41,7 +45,8 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <param name="useInternalUrl">if set to <c>true</c> uses the internal URLs specified in the ServiceCatalog, otherwise the public URLs are used.</param>
         public ComputeApi(IServiceType serviceType, IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl)
             : this(serviceType, authenticationProvider, region, useInternalUrl, "2.1")
-        { }
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputeApi"/> class.
@@ -66,7 +71,12 @@ namespace OpenStack.Compute.v2_1.Serialization
 
         #region Servers
 
-        /// <summary />
+        /// <summary>
+        /// Shows details for a server. 
+        /// </summary>
+        /// <typeparam name="T">The return type.</typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<T> GetServerAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -76,30 +86,52 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="GetServerAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildGetServerRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Gets all metadata for a server. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> GetServerMetadataAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
             return await BuildGetServerMetadataRequest(serverId, cancellationToken)
-                 .SendAsync()
-                 .ReceiveJson<T>()
-                 .PropogateOwner(this)
-                 .SetParent(serverId);
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this)
+                .SetParent(serverId);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="GetServerMetadataAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildGetServerMetadataRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/metadata", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Shows details for a metadata item, by key, for a server. 
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The metadata key.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<string> GetServerMetadataItemAsync(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             dynamic result = await BuildGetServerMetadataItemRequest(serverId, key, cancellationToken)
@@ -110,19 +142,36 @@ namespace OpenStack.Compute.v2_1.Serialization
             return meta[key]?.ToString();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="GetServerMetadataItemAsync"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildGetServerMetadataItemRequest(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/metadata/{key}", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="CreateServerAsync{T}"/> request.
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildCreateServerRequest(object server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareCreateResourceRequest("servers", server, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Creates a server. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="server">The server.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> CreateServerAsync<T>(object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -132,13 +181,27 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Creates or replaces a metadata item, by key, for a server. 
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The metadata key.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task CreateServerMetadataAsync(string serverId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildCreateServerMetadataRequest(serverId, key, value, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="CreateServerMetadataAsync"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<PreparedRequest> BuildCreateServerMetadataRequest(string serverId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             var serverMetadata = new
@@ -214,7 +277,13 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Lists summary information for all servers.
+        /// </summary>
+        /// <typeparam name="TPage">The return type.</typeparam>
+        /// <param name="queryString">The query string.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<TPage> ListServerSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
@@ -223,7 +292,12 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="ListServerSummariesAsync{T}"/> URL.
+        /// </summary>
+        /// <param name="queryString">Options for paging and filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<Url> BuildListServerSummariesUrl(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
@@ -233,7 +307,13 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetQueryParams(queryString?.Build());
         }
 
-        /// <summary />
+        /// <summary>
+        /// Lists all servers with details. 
+        /// </summary>
+        /// <typeparam name="TPage">The return type.</typeparam>
+        /// <param name="queryString">Options for paging and filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<TPage> ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
@@ -242,7 +322,12 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the list servers URL.
+        /// </summary>
+        /// <param name="queryString">Options for paging and filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<Url> BuildListServersUrl(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
@@ -252,13 +337,26 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetQueryParams(queryString?.Build());
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="UpdateServerAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="server">The server.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildUpdateServerRequest(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareUpdateResourceRequest($"servers/{serverId}", server, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Updates the editable attributes of a server.
+        /// </summary>
+        /// <typeparam name="T">The return type</typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="server">The server.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> UpdateServerAsync<T>(string serverId, object server, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -268,7 +366,16 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary /> // this keeps existing, but omitted values
+        /// <summary>
+        /// Creates or replaces one or more metadata items for a server.
+        /// <para>Omitted keys are not removed unless <paramref name="overwrite"/> is <c>true</c>.</para>
+        /// </summary>
+        /// <typeparam name="T">The return type</typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="overwrite">if set to <c>true</c> overwrite all existing metadata keys.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> UpdateServerMetadataAsync<T>(string serverId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -278,7 +385,14 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="UpdateServerMetadataAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="metadata">The metadata.</param>
+        /// <param name="overwrite">if set to <c>true</c> overwrite all existing metadata keys.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<PreparedRequest> BuildUpdateServerMetadataRequest(string serverId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata", cancellationToken);
@@ -289,25 +403,52 @@ namespace OpenStack.Compute.v2_1.Serialization
             return request.PreparePostJson(metadata, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Deletes a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task DeleteServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteServerRequest(serverId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="DeleteServerAsync"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildDeleteServerRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Deletes a metadata item, by key, from a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The metadata key.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task DeleteServerMetadataAsync(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteServerMetadataRequest(serverId, key, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="DeleteServerMetadataAsync"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="key">The metadata key.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// serverId
+        /// or
+        /// key
+        /// </exception>
         public virtual Task<PreparedRequest> BuildDeleteServerMetadataRequest(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -359,7 +500,14 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.WaitUntilDeletedAsync(imageId, deletedStatus, getImage, refreshDelay, timeout, progress, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Snapshots a server.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> SnapshotServerAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -369,21 +517,38 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Starts a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task StartServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new StartServerRequest();
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Stops a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task StopServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new StopServerRequest();
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Reboots a server.
+        /// </summary>
+        /// <typeparam name="TRequest">The type of the request.</typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task RebootServerAsync<TRequest>(string serverId, TRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
             where TRequest : class, new()
         {
@@ -391,13 +556,26 @@ namespace OpenStack.Compute.v2_1.Serialization
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Evacuates a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task EvacuateServerAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Gets a VNC console for a server.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="type">The remote console type.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<T> GetVncConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getVNCConsole': {{ 'type': '{type}' }} }}");
@@ -406,7 +584,14 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Gets a SPICE console for a server. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="type">The remote console type.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<T> GetSpiceConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getSPICEConsole': {{ 'type': '{type}' }} }}");
@@ -415,7 +600,14 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Gets a serial console for a server.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="type">The remote console type.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<T> GetSerialConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getSerialConsole': {{ 'type': '{type}' }} }}");
@@ -424,7 +616,14 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Gets an RDP console for a server.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="type">The remote console type.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<T> GetRdpConsoleAsync<T>(string serverId, object type, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getRDPConsole': {{ 'type': '{type}' }} }}");
@@ -433,7 +632,13 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Shows console output for a server instance.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="length">The number of lines to fetch from the end of console log. -1 indicates unlimited.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<string> GetConsoleOutputAsync(string serverId, int length = -1, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = JObject.Parse($"{{ 'os-getConsoleOutput': {{ 'length': '{length}' }} }}");
@@ -444,10 +649,16 @@ namespace OpenStack.Compute.v2_1.Serialization
             return result.output;
         }
 
-        /// <summary />
+        /// <summary>
+        /// Puts a server in rescue mode and changes its status to RESCUE. 
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<string> RescueServerAsync(string serverId, object request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            request = request ?? new Dictionary<string, object> { ["rescue"] = null };
+            request = request ?? new Dictionary<string, object> {["rescue"] = null};
             dynamic result = await BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
                 .ReceiveJson();
@@ -455,15 +666,27 @@ namespace OpenStack.Compute.v2_1.Serialization
             return result.adminPass;
         }
 
-        /// <summary />
+        /// <summary>
+        /// Unrescues a server. Changes status to ACTIVE.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task UnrescueServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> { ["unrescue"] = null };
+            object request = new Dictionary<string, object> {["unrescue"] = null};
             return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Resizes a server.
+        /// <para>Depending on the cloud configuration, <see cref="ConfirmResizeServerAsync"/> may need to be called to complete the resize operation.</para>
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="flavorId">The flavor identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task ResizeServerAsync(string serverId, string flavorId, CancellationToken cancellationToken = default(CancellationToken))
         {
             object request = new
@@ -477,23 +700,44 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Confirms a pending resize action for a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task ConfirmResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> { ["confirmResize"] = null };
+            object request = new Dictionary<string, object> {["confirmResize"] = null};
             return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Cancels and reverts a pending resize action for a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task CancelResizeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            object request = new Dictionary<string, object> { ["revertResize"] = null };
+            object request = new Dictionary<string, object> {["revertResize"] = null};
             return BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds a server action request, where the server operation is specified in the request body.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="requestBody">The request body.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// serverId
+        /// or
+        /// requestBody
+        /// </exception>
         public virtual async Task<PreparedRequest> BuildServerActionRequest(string serverId, object requestBody, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -506,7 +750,13 @@ namespace OpenStack.Compute.v2_1.Serialization
             return request.PreparePostJson(requestBody, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Lists the actions which have been applied to a sever.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -516,13 +766,25 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="ListServerActionsAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildListServerActionsRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-instance-actions", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Shows details for a server action.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="actionId">The action identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> GetServerActionAsync<T>(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -532,7 +794,18 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="GetServerActionAsync{T}"/> request.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="actionId">The action identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// serverId
+        /// or
+        /// actionId
+        /// </exception>
         public virtual Task<PreparedRequest> BuildGetServerActionRequest(string serverId, string actionId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -547,7 +820,14 @@ namespace OpenStack.Compute.v2_1.Serialization
         #endregion
 
         #region Flavors
-        /// <summary />
+
+        /// <summary>
+        /// Shows details for a flavor. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="flavorId">The flavor identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> GetFlavorAsync<T>(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -557,29 +837,48 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="GetFlavorAsync{T}"/> request.
+        /// </summary>
+        /// <param name="flavorId">The flavor identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildGetFlavorRequest(string flavorId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"flavors/{flavorId}", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Lists summary information for available flavors.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> ListFlavorSummariesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
             return await BuildListFlavorSummariesRequest(cancellationToken)
-                 .SendAsync()
-                 .ReceiveJson<T>()
-                 .PropogateOwnerToChildren(this);
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="ListFlavorSummariesAsync{T}"/> request.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildListFlavorSummariesRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors", cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Lists available flavors.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -589,7 +888,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Builds the <see cref="ListFlavorsAsync{T}"/> request.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns></returns>
         public virtual Task<PreparedRequest> BuildListFlavorsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareListResourcesRequest("flavors/detail", cancellationToken);
@@ -598,7 +901,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         #endregion
 
         #region Images
-        /// <summary />
+
         public virtual async Task<T> GetImageAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -608,30 +911,26 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetImageRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> GetImageMetadataAsync<T>(string imageId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
             return await BuildGetImageMetadataRequest(imageId, cancellationToken)
-                 .SendAsync()
-                 .ReceiveJson<T>()
-                 .PropogateOwner(this)
-                 .SetParent(imageId);
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this)
+                .SetParent(imageId);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetImageMetadataRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<string> GetImageMetadataItemAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             dynamic result = await BuildGetImageMetadataItemRequest(imageId, key, cancellationToken)
@@ -642,19 +941,16 @@ namespace OpenStack.Compute.v2_1.Serialization
             return meta[key]?.ToString();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetImageMetadataItemRequest(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"images/{imageId}/metadata/{key}", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task CreateImageMetadataAsync(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildCreateImageMetadataRequest(imageId, key, value, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual async Task<PreparedRequest> BuildCreateImageMetadataRequest(string imageId, string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             var imageMetadata = new
@@ -669,7 +965,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return request.PreparePutJson(imageMetadata, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<TPage> ListImageSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
@@ -678,7 +973,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual async Task<Url> BuildListImageSummariesRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
@@ -688,7 +982,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetQueryParams(queryString?.Build());
         }
 
-        /// <summary />
         public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
@@ -697,7 +990,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual async Task<Url> BuildListImagesRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
@@ -717,7 +1009,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual async Task<PreparedRequest> BuildUpdateImageMetadataRequest(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata", cancellationToken);
@@ -728,25 +1019,21 @@ namespace OpenStack.Compute.v2_1.Serialization
             return request.PreparePostJson(metadata, cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteImageAsync(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteImageRequest(imageId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteImageRequest(string imageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"images/{imageId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteImageMetadataAsync(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteImageMetadataRequest(imageId, key, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteImageMetadataRequest(string imageId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (imageId == null)
@@ -757,11 +1044,11 @@ namespace OpenStack.Compute.v2_1.Serialization
 
             return Endpoint.PrepareDeleteResourceRequest($"images/{imageId}/metadata/{key}", cancellationToken);
         }
+
         #endregion
 
         #region IP Addresses
 
-        /// <summary />
         public virtual async Task<IList<T>> GetServerAddressAsync<T>(string serverId, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             var result = await BuildGetServerAddressRequest(serverId, key, cancellationToken)
@@ -771,13 +1058,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             return result[key];
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetServerAddressRequest(string serverid, string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips/{key}", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task<T> ListServerAddressesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildListServerAddressesRequest(serverId, cancellationToken)
@@ -785,7 +1070,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListServerAddressesRequest(string serverid, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverid}/ips", cancellationToken);
@@ -794,7 +1078,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         #endregion
 
         #region Server Volumes
-        /// <summary />
+
         public virtual async Task<T> GetServerVolumeAsync<T>(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
@@ -805,7 +1089,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetParent(serverId);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetServerVolumeRequest(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -817,7 +1100,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-volume_attachments/{volumeId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> ListServerVolumesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IChildResource>
         {
@@ -828,7 +1110,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetParentOnChildren(serverId);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuidListServerVolumesRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -837,7 +1118,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-volume_attachments", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> AttachVolumeAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IChildResource
         {
@@ -848,7 +1128,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SetParent(serverId);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildAttachVolumeRequest(string serverId, object serverVolume, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -857,13 +1136,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareCreateResourceRequest($"servers/{serverId}/os-volume_attachments", serverVolume, cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DetachVolumeAsync(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDetachVolumeRequest(serverId, volumeId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDetachVolumeRequest(string serverId, string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverId == null)
@@ -874,11 +1151,11 @@ namespace OpenStack.Compute.v2_1.Serialization
 
             return Endpoint.PrepareDeleteResourceRequest($"servers/{serverId}/os-volume_attachments/{volumeId}", cancellationToken);
         }
+
         #endregion
 
         #region Keypairs
 
-        /// <summary />
         public virtual async Task<T> GetKeyPairAsync<T>(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -891,13 +1168,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetKeyPairRequest(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> CreateKeyPairAsync<T>(object keypair, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -910,13 +1185,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateKeyPairRequest(object keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareCreateResourceRequest("os-keypairs", keypair, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> ListKeyPairsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -926,13 +1199,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListKeyPairsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-keypairs", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (keypairName == null)
@@ -941,16 +1212,15 @@ namespace OpenStack.Compute.v2_1.Serialization
             return BuildDeleteKeyPairRequest(keypairName, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteKeyPairRequest(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareDeleteResourceRequest($"os-keypairs/{keypairName}", cancellationToken);
         }
+
         #endregion
 
         #region Security Groups
 
-        /// <summary />
         public virtual async Task<T> GetSecurityGroupAsync<T>(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -960,7 +1230,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetSecurityGroupsRequest(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
@@ -969,7 +1238,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"os-security-groups/{securityGroupId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> CreateSecurityGroupAsync<T>(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -979,7 +1247,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateSecurityGroupRequest(object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroup == null)
@@ -988,7 +1255,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareCreateResourceRequest("os-security-groups", securityGroup, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> CreateSecurityGroupRuleAsync<T>(object rule, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -998,7 +1264,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateSecurityGroupRuleRequest(object rule, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (rule == null)
@@ -1007,7 +1272,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareCreateResourceRequest("os-security-group-rules", rule, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> ListSecurityGroupsAsync<T>(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -1017,14 +1281,12 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListSecurityGroupsRequest(string serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             string path = serverId == null ? "os-security-groups" : $"servers/{serverId}/os-security-groups";
             return Endpoint.PrepareGetResourceRequest(path, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> UpdateSecurityGroupAsync<T>(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1034,7 +1296,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildUpdateSecurityGroupRequest(string securityGroupId, object securityGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
@@ -1046,13 +1307,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareUpdateResourceRequest($"os-security-groups/{securityGroupId}", securityGroup, cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteSecurityGroupAsync(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteSecurityGroupRequest(securityGroupId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRequest(string securityGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (securityGroupId == null)
@@ -1061,13 +1320,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareDeleteResourceRequest($"os-security-groups/{securityGroupId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteSecurityGroupRuleAsync(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteSecurityGroupRuleRequest(ruleId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteSecurityGroupRuleRequest(string ruleId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (ruleId == null)
@@ -1080,7 +1337,6 @@ namespace OpenStack.Compute.v2_1.Serialization
 
         #region Server Groups
 
-        /// <summary />
         public virtual async Task<T> GetServerGroupAsync<T>(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1090,7 +1346,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetServerGroupsRequest(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
@@ -1099,7 +1354,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"os-server-groups/{serverGroupId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> CreateServerGroupAsync<T>(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1109,7 +1363,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateServerGroupRequest(object serverGroup, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroup == null)
@@ -1118,7 +1371,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareCreateResourceRequest("os-server-groups", serverGroup, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> ListServerGroupsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -1128,19 +1380,16 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListServerGroupsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-server-groups", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteServerGroupAsync(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteServerGroupRequest(serverGroupId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteServerGroupRequest(string serverGroupId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serverGroupId == null)
@@ -1153,7 +1402,6 @@ namespace OpenStack.Compute.v2_1.Serialization
 
         #region Volumes
 
-        /// <summary />
         public virtual async Task<T> GetVolumeAsync<T>(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1163,7 +1411,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetVolumeRequest(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeId == null)
@@ -1172,7 +1419,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"os-volumes/{volumeId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> GetVolumeTypeAsync<T>(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await BuildGetVolumeTypeRequest(volumeTypeId, cancellationToken)
@@ -1180,7 +1426,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetVolumeTypeRequest(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeTypeId == null)
@@ -1189,7 +1434,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"os-volume-types/{volumeTypeId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> GetVolumeSnapshotAsync<T>(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1199,7 +1443,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (snapshotId == null)
@@ -1208,7 +1451,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareGetResourceRequest($"os-snapshots/{snapshotId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> CreateVolumeAsync<T>(object volume, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1218,7 +1460,6 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildCreateVolumeRequest(object volume, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volume == null)
@@ -1227,7 +1468,6 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareCreateResourceRequest("os-volumes", volume, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> SnapshotVolumeAsync<T>(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
@@ -1237,16 +1477,14 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwner(this);
         }
 
-        /// <summary />
         public virtual async Task<PreparedRequest> BuildCreateVolumeSnapshotRequest(object snapshot, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if(snapshot == null)
+            if (snapshot == null)
                 throw new ArgumentNullException("snapshot");
 
             return await Endpoint.PrepareCreateResourceRequest("os-snapshots", snapshot, cancellationToken);
         }
 
-        /// <summary />
         public virtual async Task<T> ListVolumesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -1256,27 +1494,23 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListVolumesRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-volumes", cancellationToken);
         }
 
-        ///// <summary />
-        //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
+        //        //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         //{
         //    return await BuildListVolumeTypesRequest(cancellationToken)
         //        .SendAsync()
         //        .ReceiveJson<T>();
         //}
 
-        ///// <summary />
-        //public virtual Task<PreparedRequest> BuildListVolumeTypesRequest(CancellationToken cancellationToken = default(CancellationToken))
+        //        //public virtual Task<PreparedRequest> BuildListVolumeTypesRequest(CancellationToken cancellationToken = default(CancellationToken))
         //{
         //    return Endpoint.PrepareGetResourceRequest("os-volume-types", cancellationToken);
         //}
 
-        /// <summary />
         public virtual async Task<T> ListVolumeSnapshotsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
@@ -1286,19 +1520,16 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .PropogateOwnerToChildren(this);
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildListVolumeSnapshotsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-snapshots", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteVolumeAsync(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteVolumeRequest(volumeId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteVolumeRequest(string volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (volumeId == null)
@@ -1307,13 +1538,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             return Endpoint.PrepareDeleteResourceRequest($"os-volumes/{volumeId}", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task DeleteVolumeSnapshotAsync(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildDeleteVolumeSnapshotRequest(snapshotId, cancellationToken).SendAsync();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildDeleteVolumeSnapshotRequest(string snapshotId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (snapshotId == null)
@@ -1337,10 +1566,10 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TVolume : IServiceResource
             where TStatus : ResourceStatus
         {
-            if(volumeId == null)
+            if (volumeId == null)
                 throw new ArgumentNullException("volumeId");
 
-            if(status == null)
+            if (status == null)
                 throw new ArgumentNullException("status");
 
             Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
@@ -1443,7 +1672,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             if (volumeId == null)
                 throw new ArgumentNullException("volumeId");
-            
+
             Func<Task<dynamic>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
             return Endpoint.WaitUntilDeletedAsync<TStatus>(volumeId, getVolume, refreshDelay, timeout, progress, cancellationToken);
         }
@@ -1469,10 +1698,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             Func<Task<dynamic>> getSnapshot = async () => await GetVolumeSnapshotAsync<TVolume>(snapshotId, cancellationToken);
             return Endpoint.WaitUntilDeletedAsync<TStatus>(snapshotId, getSnapshot, refreshDelay, timeout, progress, cancellationToken);
         }
+
         #endregion
 
         #region Compute Service
-        /// <summary />
+
         public virtual Task<T> GetLimitsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildGetLimitsRequest(cancellationToken)
@@ -1480,13 +1710,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetLimitsRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("limits", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task<T> GetCurrentQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildGetCurrentQuotasRequest(cancellationToken)
@@ -1494,13 +1722,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetCurrentQuotasRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-quota-sets/details", cancellationToken);
         }
 
-        /// <summary />
         public virtual Task<T> GetDefaultQuotasAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
         {
             return BuildGetDefaultQuotasRequest(cancellationToken)
@@ -1508,11 +1734,11 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .ReceiveJson<T>();
         }
 
-        /// <summary />
         public virtual Task<PreparedRequest> BuildGetDefaultQuotasRequest(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest("os-quota-sets/defaults", cancellationToken);
         }
+
         #endregion
     }
 }
