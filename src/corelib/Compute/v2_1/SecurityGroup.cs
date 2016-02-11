@@ -38,7 +38,7 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             var request = new SecurityGroupDefinition(Name, Description);
 
-            var result = await compute.UpdateSecurityGroupAsync<SecurityGroup>(Id, request, cancellationToken);
+            var result = await compute.UpdateSecurityGroupAsync<SecurityGroup>(Id, request, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
@@ -49,7 +49,7 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             rule.GroupId = Id;
 
-            var result = await compute.CreateSecurityGroupRuleAsync<SecurityGroupRule>(rule, cancellationToken);
+            var result = await compute.CreateSecurityGroupRuleAsync<SecurityGroupRule>(rule, cancellationToken).ConfigureAwait(false);
             Rules.Add(result);
             return result;
         }

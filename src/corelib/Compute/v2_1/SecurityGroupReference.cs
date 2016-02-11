@@ -32,7 +32,7 @@ namespace OpenStack.Compute.v2_1
             var owner = this.GetOwnerOrThrow<ComputeApi>();
 
             // In some cases, such as when working with the groups on a server, we only have the name and not the id
-            var groups = await owner.ListSecurityGroupsAsync<SecurityGroupCollection>(cancellationToken: cancellationToken);
+            var groups = await owner.ListSecurityGroupsAsync<SecurityGroupCollection>(cancellationToken: cancellationToken).ConfigureAwait(false);
             securityGroup = groups.FirstOrDefault(x => x.Name == Name);
             if(securityGroup == null)
                 throw new Exception($"Unable to find the security group named: {Name}.");
@@ -42,9 +42,9 @@ namespace OpenStack.Compute.v2_1
 
         /// <inheritdoc cref="ComputeApi.GetSecurityGroupAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task<SecurityGroup> GetSecurityGroupAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<SecurityGroup> GetSecurityGroupAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await LoadSecurityGroup(cancellationToken);
+            return LoadSecurityGroup(cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.DeleteSecurityGroupAsync" />
@@ -52,9 +52,9 @@ namespace OpenStack.Compute.v2_1
         public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.GetOwnerOrThrow<ComputeApi>();
-            var securityGroup = await LoadSecurityGroup(cancellationToken);
+            var securityGroup = await LoadSecurityGroup(cancellationToken).ConfigureAwait(false);
 
-            await owner.DeleteSecurityGroupAsync(securityGroup.Id, cancellationToken);
+            await owner.DeleteSecurityGroupAsync(securityGroup.Id, cancellationToken).ConfigureAwait(false);
         }
     }
 }

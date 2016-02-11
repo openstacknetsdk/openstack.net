@@ -54,7 +54,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.CreateServerMetadataAsync(Server.Id, key, value, cancellationToken);
+            await compute.CreateServerMetadataAsync(Server.Id, key, value, cancellationToken).ConfigureAwait(false);
             this[key] = value;
         }
 
@@ -63,7 +63,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var results = await compute.UpdateServerMetadataAsync<ServerMetadata>(Server.Id, this, overwrite, cancellationToken);
+            var results = await compute.UpdateServerMetadataAsync<ServerMetadata>(Server.Id, this, overwrite, cancellationToken).ConfigureAwait(false);
             Clear();
             foreach (var result in results)
             {
@@ -79,7 +79,7 @@ namespace OpenStack.Compute.v2_1
 
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DeleteServerMetadataAsync(Server.Id, key, cancellationToken);
+            await compute.DeleteServerMetadataAsync(Server.Id, key, cancellationToken).ConfigureAwait(false);
             Remove(key);
         }
     }

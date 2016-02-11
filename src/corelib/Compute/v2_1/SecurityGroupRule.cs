@@ -57,10 +57,10 @@ namespace OpenStack.Compute.v2_1
 
         /// <inheritdoc cref="ComputeApi.DeleteSecurityGroupRuleAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.GetOwnerOrThrow<ComputeApi>();
-            await owner.DeleteSecurityGroupRuleAsync(Id, cancellationToken);
+            return owner.DeleteSecurityGroupRuleAsync(Id, cancellationToken);
         }
 
         private class CIDRWrapper

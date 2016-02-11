@@ -83,7 +83,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetServerRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
-                .SetParent(serverId);
+                .SetParent(serverId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             dynamic result = await BuildGetServerMetadataItemRequest(serverId, key, cancellationToken)
                 .SendAsync()
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
 
             var meta = (IDictionary<string, object>)result.meta;
             return meta[key]?.ToString();
@@ -171,7 +171,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateServerRequest(server, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 }
             };
 
-            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata/{key}", cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata/{key}", cancellationToken).ConfigureAwait(false);
             return request.PreparePutJson(serverMetadata, cancellationToken);
         }
 
@@ -222,9 +222,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TServer : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -242,9 +242,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TServer : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            Func<Task<TServer>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(serverId, status, getServer, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TStatus : ResourceStatus
         {
             deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
-            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken);
+            Func<Task<dynamic>> getServer = async () => await GetServerAsync<TServer>(serverId, cancellationToken).ConfigureAwait(false);
             return Endpoint.WaitUntilDeletedAsync(serverId, deletedStatus, getServer, refreshDelay, timeout, progress, cancellationToken);
         }
 
@@ -277,9 +277,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual async Task<TPage> ListServerSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListServerSummariesUrl(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListServerSummariesUrl(queryString, cancellationToken).ConfigureAwait(false);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -305,9 +305,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual async Task<TPage> ListServersAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListServersUrl(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListServersUrl(queryString, cancellationToken).ConfigureAwait(false);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildUpdateServerRequest(serverId, server, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildUpdateServerMetadataRequest(serverId, metadata, overwrite, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<PreparedRequest> BuildUpdateServerMetadataRequest(string serverId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata", cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"servers/{serverId}/metadata", cancellationToken).ConfigureAwait(false);
 
             if (overwrite)
                 return request.PreparePutJson(metadata, cancellationToken);
@@ -454,9 +454,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TImage : IServiceResource
             where TStatus : ResourceStatus
         {
-            Func<Task<TImage>> getImage = async () => await GetImageAsync<TImage>(imageId, cancellationToken);
+            Func<Task<TImage>> getImage = async () => await GetImageAsync<TImage>(imageId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(imageId, status, getImage, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             where TStatus : ResourceStatus
         {
             deletedStatus = deletedStatus ?? StringEnumeration.FromDisplayName<TStatus>("DELETED");
-            Func<Task<dynamic>> getImage = async () => await GetServerAsync<TImage>(imageId, cancellationToken);
+            Func<Task<dynamic>> getImage = async () => await GetServerAsync<TImage>(imageId, cancellationToken).ConfigureAwait(false);
             return Endpoint.WaitUntilDeletedAsync(imageId, deletedStatus, getImage, refreshDelay, timeout, progress, cancellationToken);
         }
 
@@ -489,10 +489,10 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual async Task<T> SnapshotServerAsync<T>(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
             where T : IServiceResource
         {
-            var response = await BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+            var response = await BuildServerActionRequest(serverId, request, cancellationToken).SendAsync().ConfigureAwait(false);
             Identifier imageId = response.Headers.Location.Segments.Last(); // grab id off the end of the url, e.g. http://172.29.236.100:9292/images/baaab9b9-3635-429e-9969-2899a7cf2d97
             return await GetImageAsync<T>(imageId, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -613,7 +613,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             var request = JObject.Parse($"{{ 'os-getConsoleOutput': {{ 'length': '{length}' }} }}");
             dynamic result = await BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
 
             return result.output;
         }
@@ -629,7 +629,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             request = request ?? new Dictionary<string, object> {["rescue"] = null};
             dynamic result = await BuildServerActionRequest(serverId, request, cancellationToken)
                 .SendAsync()
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
 
             return result.adminPass;
         }
@@ -709,7 +709,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (requestBody == null)
                 throw new ArgumentNullException("requestBody");
 
-            var request = await Endpoint.PrepareRequest($"servers/{serverId}/action", cancellationToken);
+            var request = await Endpoint.PrepareRequest($"servers/{serverId}/action", cancellationToken).ConfigureAwait(false);
             return request.PreparePostJson(requestBody, cancellationToken);
         }
 
@@ -725,7 +725,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListServerActionSummariesRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -751,7 +751,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetServerActionRequest(serverId, actionId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -792,7 +792,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetFlavorRequest(flavorId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -816,7 +816,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListFlavorSummariesRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -839,7 +839,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListFlavorsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetImageRequest(imageId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -893,7 +893,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
-                .SetParent(imageId);
+                .SetParent(imageId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -916,7 +916,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             dynamic result = await BuildGetImageMetadataItemRequest(imageId, key, cancellationToken)
                 .SendAsync()
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
 
             var meta = (IDictionary<string, object>)result.meta;
             return meta[key]?.ToString();
@@ -962,7 +962,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 }
             };
 
-            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata/{key}", cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata/{key}", cancellationToken).ConfigureAwait(false);
             return request.PreparePutJson(imageMetadata, cancellationToken);
         }
 
@@ -975,9 +975,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual async Task<TPage> ListImageSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListImageSummariesRequest(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListImageSummariesRequest(queryString, cancellationToken).ConfigureAwait(false);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1003,9 +1003,9 @@ namespace OpenStack.Compute.v2_1.Serialization
         public virtual async Task<TPage> ListImagesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
             where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            Url initialRequestUrl = await BuildListImagesRequest(queryString, cancellationToken);
+            Url initialRequestUrl = await BuildListImagesRequest(queryString, cancellationToken).ConfigureAwait(false);
             return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1037,7 +1037,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildUpdateImageMetadataRequest(imageId, metadata, overwrite, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1049,7 +1049,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual async Task<PreparedRequest> BuildUpdateImageMetadataRequest(string imageId, object metadata, bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata", cancellationToken);
+            PreparedRequest request = await Endpoint.PrepareRequest($"images/{imageId}/metadata", cancellationToken).ConfigureAwait(false);
 
             if (overwrite)
                 return request.PreparePutJson(metadata, cancellationToken);
@@ -1125,7 +1125,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             var result = await BuildGetServerAddressRequest(serverId, key, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<IDictionary<string, IList<T>>>();
+                .ReceiveJson<IDictionary<string, IList<T>>>().ConfigureAwait(false);
 
             return result[key];
         }
@@ -1182,7 +1182,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
-                .SetParent(serverId);
+                .SetParent(serverId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1220,7 +1220,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this)
-                .SetParentOnChildren(serverId);
+                .SetParentOnChildren(serverId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1251,7 +1251,7 @@ namespace OpenStack.Compute.v2_1.Serialization
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwner(this)
-                .SetParent(serverId);
+                .SetParent(serverId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1322,7 +1322,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetKeyPairRequest(keypairName, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1351,7 +1351,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateKeyPairRequest(keypair, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1375,7 +1375,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListKeyPairsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1427,7 +1427,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetSecurityGroupRequest(securityGroupId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1456,7 +1456,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateSecurityGroupRequest(securityGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1485,7 +1485,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateSecurityGroupRuleRequest(rule, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1514,7 +1514,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListSecurityGroupsRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1541,7 +1541,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildUpdateSecurityGroupRequest(securityGroupId, securityGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1630,7 +1630,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetServerGroupRequest(serverGroupId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1659,7 +1659,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateServerGroupRequest(serverGroup, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1687,7 +1687,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListServerGroupsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1739,7 +1739,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetVolumeRequest(volumeId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1766,7 +1766,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             return await BuildGetVolumeTypeRequest(volumeTypeId, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<T>();
+                .ReceiveJson<T>().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1795,7 +1795,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildGetVolumeSnapshotRequest(snapshotId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1824,7 +1824,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildCreateVolumeRequest(volume, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1853,7 +1853,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildSnapshotVolumeRequest(snapshot, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1867,7 +1867,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (snapshot == null)
                 throw new ArgumentNullException("snapshot");
 
-            return await Endpoint.PrepareCreateResourceRequest("os-snapshots", snapshot, cancellationToken);
+            return await Endpoint.PrepareCreateResourceRequest("os-snapshots", snapshot, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1881,7 +1881,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListVolumesRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1916,7 +1916,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             return await BuildListVolumeSnapshotsRequest(cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
-                .PropogateOwnerToChildren(this);
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1997,9 +1997,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (status == null)
                 throw new ArgumentNullException("status");
 
-            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -2023,9 +2023,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (status == null)
                 throw new ArgumentNullException("status");
 
-            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -2049,9 +2049,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (status == null)
                 throw new ArgumentNullException("status");
 
-            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            Func<Task<TVolume>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(volumeId, status, getVolume, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -2075,9 +2075,9 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (status == null)
                 throw new ArgumentNullException("status");
 
-            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken);
+            Func<Task<TSnapshot>> getSnapshot = async () => await GetVolumeSnapshotAsync<TSnapshot>(snapshotId, cancellationToken).ConfigureAwait(false);
             return await Endpoint.WaitForStatusAsync(snapshotId, status, getSnapshot, refreshDelay, timeout, progress, cancellationToken)
-                .PropogateOwner(this);
+                .PropogateOwner(this).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -2098,7 +2098,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (volumeId == null)
                 throw new ArgumentNullException("volumeId");
 
-            Func<Task<dynamic>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken);
+            Func<Task<dynamic>> getVolume = async () => await GetVolumeAsync<TVolume>(volumeId, cancellationToken).ConfigureAwait(false);
             return Endpoint.WaitUntilDeletedAsync<TStatus>(volumeId, getVolume, refreshDelay, timeout, progress, cancellationToken);
         }
 
@@ -2120,7 +2120,7 @@ namespace OpenStack.Compute.v2_1.Serialization
             if (snapshotId == null)
                 throw new ArgumentNullException("snapshotId");
 
-            Func<Task<dynamic>> getSnapshot = async () => await GetVolumeSnapshotAsync<TVolume>(snapshotId, cancellationToken);
+            Func<Task<dynamic>> getSnapshot = async () => await GetVolumeSnapshotAsync<TVolume>(snapshotId, cancellationToken).ConfigureAwait(false);
             return Endpoint.WaitUntilDeletedAsync<TStatus>(snapshotId, getSnapshot, refreshDelay, timeout, progress, cancellationToken);
         }
 

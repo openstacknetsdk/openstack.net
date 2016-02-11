@@ -143,7 +143,7 @@ namespace OpenStack.Compute.v2_1
         /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await base.WaitUntilDeletedAsync(refreshDelay, timeout, progress, cancellationToken);
+            await base.WaitUntilDeletedAsync(refreshDelay, timeout, progress, cancellationToken).ConfigureAwait(false);
             Status = ServerStatus.Deleted;
         }
 
@@ -173,7 +173,7 @@ namespace OpenStack.Compute.v2_1
             var request = new ServerUpdateDefinition();
             this.CopyProperties(request);
 
-            var result = await compute.UpdateServerAsync<Server>(Id, request, cancellationToken);
+            var result = await compute.UpdateServerAsync<Server>(Id, request, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 

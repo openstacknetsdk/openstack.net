@@ -59,7 +59,7 @@ namespace OpenStack.Compute.v2_1
             AssertParentIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken);
+            var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken).ConfigureAwait(false);
             result.ServerRef = ServerRef;
             return result;
         }
@@ -71,7 +71,7 @@ namespace OpenStack.Compute.v2_1
             AssertParentIsSet(); 
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken);
+            await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken).ConfigureAwait(false);
 
             var server = ServerRef as Server;
             if (server != null)

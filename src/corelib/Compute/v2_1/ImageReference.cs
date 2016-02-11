@@ -52,7 +52,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.GetOwnerOrThrow<ComputeApi>();
-            await owner.DeleteImageAsync(Id, cancellationToken);
+            await owner.DeleteImageAsync(Id, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />

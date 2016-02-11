@@ -54,7 +54,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.CreateImageMetadataAsync(Image.Id, key, value, cancellationToken);
+            await compute.CreateImageMetadataAsync(Image.Id, key, value, cancellationToken).ConfigureAwait(false);
             this[key] = value;
         }
 
@@ -63,7 +63,7 @@ namespace OpenStack.Compute.v2_1
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var results = await compute.UpdateImageMetadataAsync<ImageMetadata>(Image.Id, this, overwrite, cancellationToken);
+            var results = await compute.UpdateImageMetadataAsync<ImageMetadata>(Image.Id, this, overwrite, cancellationToken).ConfigureAwait(false);
             Clear();
             foreach (var result in results)
             {
@@ -79,7 +79,7 @@ namespace OpenStack.Compute.v2_1
 
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DeleteImageMetadataAsync(Image.Id, key, cancellationToken);
+            await compute.DeleteImageMetadataAsync(Image.Id, key, cancellationToken).ConfigureAwait(false);
             Remove(key);
         }
     }
