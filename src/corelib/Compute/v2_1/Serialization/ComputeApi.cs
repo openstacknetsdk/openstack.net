@@ -1755,34 +1755,7 @@ namespace OpenStack.Compute.v2_1.Serialization
 
             return Endpoint.PrepareGetResourceRequest($"os-volumes/{volumeId}", cancellationToken);
         }
-
-        /// <summary>
-        /// Shows details for a volume type.
-        /// </summary>
-        /// <typeparam name="T">The return type.</typeparam>
-        /// <param name="volumeTypeId">The volume type identifier.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<T> GetVolumeTypeAsync<T>(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await BuildGetVolumeTypeRequest(volumeTypeId, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Builds the <see cref="GetVolumeTypeAsync{T}"/> request.
-        /// </summary>
-        /// <param name="volumeTypeId">The volume type identifier.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="System.ArgumentNullException">volumeTypeId</exception>
-        public virtual Task<PreparedRequest> BuildGetVolumeTypeRequest(string volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (volumeTypeId == null)
-                throw new ArgumentNullException("volumeTypeId");
-
-            return Endpoint.PrepareGetResourceRequest($"os-volume-types/{volumeTypeId}", cancellationToken);
-        }
-
+        
         /// <summary>
         /// Shows details for a volume snapshot.
         /// </summary>
@@ -1892,19 +1865,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         {
             return Endpoint.PrepareGetResourceRequest("os-volumes", cancellationToken);
         }
-
-        //public virtual async Task<T> ListVolumeTypesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    return await BuildListVolumeTypesRequest(cancellationToken)
-        //        .SendAsync()
-        //        .ReceiveJson<T>();
-        //}
-
-        //        //public virtual Task<PreparedRequest> BuildListVolumeTypesRequest(CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    return Endpoint.PrepareGetResourceRequest("os-volume-types", cancellationToken);
-        //}
-
+        
         /// <summary>
         /// Lists volume snapshots.
         /// </summary>

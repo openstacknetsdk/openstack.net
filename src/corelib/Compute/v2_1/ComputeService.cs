@@ -455,12 +455,6 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetVolumeAsync<Volume>(volumeId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.GetVolumeTypeAsync{T}" />
-        public Task<VolumeType> GetVolumeTypeAsync(Identifier volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetVolumeTypeAsync<VolumeType>(volumeTypeId, cancellationToken);
-        }
-
         /// <inheritdoc cref="ComputeApi.GetVolumeSnapshotAsync{T}" />
         public Task<VolumeSnapshot> GetVolumeSnapshotAsync(Identifier snapshotId, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -484,13 +478,7 @@ namespace OpenStack.Compute.v2_1
         {
             return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken).ConfigureAwait(false);
         }
-
-        ///// <inheritdoc cref="ComputeApiBuilder.ListVolumeTypesAsync{T}" />
-        //public async Task<IEnumerable<VolumeType>> ListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    return await _computeApi.ListVolumeTypesAsync<VolumeTypeCollection>(cancellationToken);
-        //}
-
+        
         /// <inheritdoc cref="ComputeApi.ListVolumeSnapshotsAsync{T}" />
         public async Task<IEnumerable<VolumeSnapshot>> ListVolumeSnapshotsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

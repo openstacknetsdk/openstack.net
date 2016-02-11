@@ -433,12 +433,6 @@ namespace OpenStack.Synchronous
             return service.GetVolumeAsync(volumeId).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.GetVolumeTypeAsync" />
-        public static VolumeType GetVolumeType(this ComputeService service, Identifier volumeTypeId)
-        {
-            return service.GetVolumeTypeAsync(volumeTypeId).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="ComputeService.GetVolumeSnapshotAsync" />
         public static VolumeSnapshot GetVolumeSnapshot(this ComputeService service, Identifier snapshotId)
         {
