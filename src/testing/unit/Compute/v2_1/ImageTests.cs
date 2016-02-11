@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using OpenStack.Compute.v2_1.Serialization;
+using OpenStack.Images.v2;
 using OpenStack.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;

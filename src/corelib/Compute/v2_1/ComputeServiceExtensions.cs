@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenStack.Compute.v2_1;
+using OpenStack.Images.v2;
 using OpenStack.Synchronous.Extensions;
 
 // ReSharper disable once CheckNamespace

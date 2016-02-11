@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OpenStack.Compute.v2_1.Serialization;
+using OpenStack.Images.v2;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1

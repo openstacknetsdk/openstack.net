@@ -8,6 +8,5 @@ namespace OpenStack.Compute.v2_1
         /// <summary />
         [JsonProperty("name")]
         public string Name { get; set; }
-
     }
 }

@@ -1,8 +1,10 @@
 using OpenStack.Serialization;
 
-namespace OpenStack.Compute.v2_1.Serialization
+namespace OpenStack.Images.v2.Serialization
 {
-    /// <summary />
+    /// <summary>
+    /// Server image status.
+    /// </summary>
     /// <exclude />
     public class ImageStatus<T> : ResourceStatus
         where T : ImageStatus<T>, new()
