@@ -10,10 +10,14 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Reference to an image.
+    /// </summary>
     public class ImageReference : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The image identifier.
+        /// </summary>
         [JsonProperty("id")]
         public virtual Identifier Id { get; set; }
 

@@ -36,7 +36,9 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("to_port")]
         public int ToPort { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Classless Inter-Domain Routing (CIDR). A method for allocating IP addresses and routing Internet Protocol packets.
+        /// </summary>
         [JsonProperty("cidr")]
         public string CIDR { get; set; }
 

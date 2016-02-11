@@ -2,10 +2,15 @@
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// The generated key pair.
+    /// <para>Includes the generated private key, which is sensitive data.</para>
+    /// </summary>
     public class KeyPairResponse : KeyPairSummary
     {
-        /// <summary />
+        /// <summary>
+        /// The private ssh key.
+        /// </summary>
         [JsonProperty("private_key")]
         public string PrivateKey { get; set; }
     }

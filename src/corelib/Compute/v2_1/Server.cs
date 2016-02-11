@@ -10,7 +10,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// A virtual machine (VM) instance running on a host.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
     public class Server : ServerSummary
     {
@@ -113,7 +115,9 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("OS-SRV-USG:terminated_at")]
         public DateTimeOffset? Terminated { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The build completion progress, as a percentage.
+        /// </summary>
         [JsonProperty("progress")]
         public int Progress { get; set; }
 

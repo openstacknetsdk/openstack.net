@@ -23,7 +23,9 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("build_near_host_ip")]
         public string BuildNearHostIP { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Classless Inter-Domain Routing (CIDR). A method for allocating IP addresses and routing Internet Protocol packets.
+        /// </summary>
         [JsonProperty("cidr")]
         public string CIDR { get; set; }
 

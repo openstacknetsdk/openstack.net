@@ -360,13 +360,22 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetKeyPairAsync<KeyPair>(keypairName, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.CreateKeyPairAsync{T}" />
+        /// <summary>
+        /// Creates a new key pair.
+        /// </summary>
+        /// <param name="request">The key pair request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The response includes the generated private key.</returns>
         public virtual Task<KeyPairResponse> CreateKeyPairAsync(KeyPairRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateKeyPairAsync<KeyPairResponse>(request, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Imports a key pair.
+        /// </summary>
+        /// <param name="keypair">The keypair.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual Task<KeyPairSummary> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateKeyPairAsync<KeyPairSummary>(keypair, cancellationToken);
@@ -378,7 +387,7 @@ namespace OpenStack.Compute.v2_1
             return await _computeApi.ListKeyPairsAsync<KeyPairSummaryCollection>(cancellationToken).ConfigureAwait(false);
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.DeleteKeyPairAsync"/>
         public virtual Task DeleteKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.DeleteKeyPairAsync(keypairName, cancellationToken);

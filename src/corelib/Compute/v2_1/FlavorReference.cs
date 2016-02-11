@@ -12,7 +12,9 @@ namespace OpenStack.Compute.v2_1
     /// <summary />
     public class FlavorReference : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The flavor identifier.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 

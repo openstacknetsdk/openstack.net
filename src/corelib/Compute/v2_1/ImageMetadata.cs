@@ -10,11 +10,15 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Metadata key pairs containing information about the image.
+    /// </summary>
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "metadata")]
     public class ImageMetadata : Dictionary<string, string>, IHaveExtraData, IChildResource
     {
-        /// <summary />
+        /// <summary>
+        /// The associated image.
+        /// </summary>
         [JsonIgnore]
         protected ImageReference Image { get; set; }
 
@@ -49,7 +53,7 @@ namespace OpenStack.Compute.v2_1
             throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.CreateImageMetadataAsync" />
         public async Task CreateAsync(string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet();
@@ -58,7 +62,7 @@ namespace OpenStack.Compute.v2_1
             this[key] = value;
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.UpdateImageMetadataAsync{T}" />
         public async Task UpdateAsync(bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet();
@@ -71,7 +75,7 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.DeleteImageMetadataAsync" />
         public async Task DeleteAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (!ContainsKey(key))

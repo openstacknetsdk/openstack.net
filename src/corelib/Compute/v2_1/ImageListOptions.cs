@@ -3,25 +3,39 @@ using System.Collections.Generic;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Optional filter and paging options when listing images.
+    /// </summary>
     public class ImageListOptions : PageOptions
     {
-        /// <summary />
+        /// <summary>
+        /// Filters the list of images to those that have changed since the specified date.
+        /// </summary>
         public DateTimeOffset? UpdatedAfter { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filters the list of images by server.
+        /// </summary>
         public Identifier ServerId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filters the list of images by image name.
+        /// </summary>
         public string Name { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The minimum disk size required to create a server with the image.
+        /// </summary>
         public int? MininumDiskSize { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The minimum amount of RAM required to create a server with the image.
+        /// </summary>
         public int? MininumMemorySize { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filters by base images or custom server images that you have created.
+        /// </summary>
         public ImageType Type { get; set; }
 
         /// <summary />

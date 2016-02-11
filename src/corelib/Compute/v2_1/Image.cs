@@ -10,7 +10,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// A collection of files for a specific operating system (OS) that you use to create or rebuild a server.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "image")]
     public class Image : ImageSummary
     {
@@ -22,43 +24,63 @@ namespace OpenStack.Compute.v2_1
             Metadata = new ImageMetadata();
         }
 
-        /// <summary />
+        /// <summary>
+        /// The date and time when the resource was created.
+        /// </summary>
         [JsonProperty("created")]
         public DateTimeOffset Created { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The date and time when the resource was updated.
+        /// </summary>
         [JsonProperty("updated")]
         public DateTimeOffset Updated { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The minimum disk size in GB that is required to boot the image.
+        /// </summary>
         [JsonProperty("minDisk")]
         public int MinimumDiskSize { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The minimum amount of RAM in MB that is required to boot the image.
+        /// </summary>
         [JsonProperty("minRam")]
         public int MinimumMemorySize { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The size of the image data, in bytes.
+        /// </summary>
         [JsonProperty("OS-EXT-IMG-SIZE:size")]
         public int? Size { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The build completion progress, as a percentage.
+        /// </summary>
         [JsonProperty("progress")]
         public int Progress { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The image status.
+        /// </summary>
         [JsonProperty("status")]
         public ImageStatus Status { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The associated server.
+        /// </summary>
         [JsonProperty("server")]
         public ServerReference Server { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Metadata key pairs containing information about the image.
+        /// </summary>
         [JsonProperty("metadata")]
         public ImageMetadata Metadata { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Indicates whether the image is built-in (base) or custom (snapshot).
+        /// </summary>
         [JsonIgnore]
         public ImageType Type
         {
@@ -81,6 +103,9 @@ namespace OpenStack.Compute.v2_1
             result.CopyProperties(this);
         }
 
+        /// <summary>
+        /// Wait until the image is active.
+        /// </summary>
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
