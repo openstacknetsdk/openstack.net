@@ -64,7 +64,7 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(server.VMState);
             Assert.NotNull(server.SecurityGroups);
 
-            var history = await server.ListActionsAsync();
+            var history = await server.ListActionSummariesAsync();
             Assert.NotNull(history);
             var createRef = history.FirstOrDefault(a => a.Name == "create");
             Assert.NotNull(createRef);

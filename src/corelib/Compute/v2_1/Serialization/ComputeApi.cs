@@ -719,21 +719,21 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <typeparam name="T">The return type.</typeparam>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<T> ListServerActionsAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> ListServerActionSummariesAsync<T>(string serverId, CancellationToken cancellationToken = default(CancellationToken))
             where T : IEnumerable<IServiceResource>
         {
-            return await BuildListServerActionsRequest(serverId, cancellationToken)
+            return await BuildListServerActionSummariesRequest(serverId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<T>()
                 .PropogateOwnerToChildren(this);
         }
 
         /// <summary>
-        /// Builds the <see cref="ListServerActionsAsync{T}"/> request.
+        /// Builds the <see cref="ListServerActionSummariesAsync{T}"/> request.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual Task<PreparedRequest> BuildListServerActionsRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<PreparedRequest> BuildListServerActionSummariesRequest(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Endpoint.PrepareGetResourceRequest($"servers/{serverId}/os-instance-actions", cancellationToken);
         }

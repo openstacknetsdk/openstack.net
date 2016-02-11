@@ -8,7 +8,7 @@ namespace OpenStack.Compute.v2_1
 {
     /// <summary />
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "instanceAction")]
-    public class ServerAction : ServerActionReference
+    public class ServerAction : ServerActionSummary
     {
         /// <summary />
         public ServerAction()

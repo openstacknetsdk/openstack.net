@@ -139,7 +139,7 @@
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
     <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
     <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />
-    <Compile Include="Compute\v2_1\Serialization\ServerActionReferenceCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerActionCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageType.cs" />
     <Compile Include="Compute\v2_1\Serialization\RebootType.cs" />
     <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
@@ -163,7 +163,7 @@
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
     <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
-    <Compile Include="Compute\v2_1\ServerActionReference.cs" />
+    <Compile Include="Compute\v2_1\ServerActionSummary.cs" />
     <Compile Include="Compute\v2_1\ServerEventStatus.cs" />
     <Compile Include="Compute\v2_1\ServerExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReference.cs" />

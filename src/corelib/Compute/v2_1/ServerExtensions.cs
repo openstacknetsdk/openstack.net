@@ -177,10 +177,10 @@ namespace OpenStack.Synchronous
             server.CancelResizeAsync().ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ServerReference.ListActionsAsync"/>
-        public static IEnumerable<ServerActionReference> ListActions(this ServerReference server)
+        /// <inheritdoc cref="ServerReference.ListActionSummariesAsync"/>
+        public static IEnumerable<ServerActionSummary> ListActionSummaries(this ServerReference server)
         {
-            return server.ListActionsAsync().ForceSynchronous();
+            return server.ListActionSummariesAsync().ForceSynchronous();
         }
     }
 }

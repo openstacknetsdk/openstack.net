@@ -205,10 +205,10 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task<IEnumerable<ServerActionReference>> ListActionsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<ServerActionSummary>> ListActionSummariesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            return await compute.ListServerActionsAsync<ServerActionReferenceCollection>(Id, cancellationToken);
+            return await compute.ListServerActionSummariesAsync<ServerActionSummaryCollection>(Id, cancellationToken);
         }
     }
 }

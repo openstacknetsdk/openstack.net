@@ -10,7 +10,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary />
-    public class ServerActionReference : IHaveExtraData, IServiceResource
+    public class ServerActionSummary : IHaveExtraData, IServiceResource
     {
         /// <summary />
         [JsonProperty("request_id")]

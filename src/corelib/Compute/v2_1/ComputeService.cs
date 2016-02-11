@@ -206,13 +206,13 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.CancelResizeServerAsync(serverId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.ListServerActionsAsync{T}" />
-        public virtual async Task<IEnumerable<ServerActionReference>> ListServerActionsAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
+        public virtual async Task<IEnumerable<ServerActionSummary>> ListServerActionSummariesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerActionsAsync<ServerActionReferenceCollection>(serverId, cancellationToken);
+            return await _computeApi.ListServerActionSummariesAsync<ServerActionSummaryCollection>(serverId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.ListServerActionsAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
         public virtual Task<ServerAction> GetServerActionAsync(Identifier serverId, Identifier actionId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetServerActionAsync<ServerAction>(serverId, actionId, cancellationToken);
