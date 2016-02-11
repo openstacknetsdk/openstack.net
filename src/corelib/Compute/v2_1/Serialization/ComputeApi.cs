@@ -480,7 +480,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
-        /// Snapshots a server.
+        /// Creates a snapshot image from a server.
         /// </summary>
         /// <typeparam name="T">The return type.</typeparam>
         /// <param name="serverId">The server identifier.</param>
@@ -496,7 +496,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
-        /// Starts a server.
+        /// Starts a stopped server and changes its status to ACTIVE.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -507,7 +507,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
-        /// Stops a server.
+        /// Stops a running server and changes its status to SHUTOFF.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -532,7 +532,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
-        /// Evacuates a server.
+        /// Evacuates a server from a failed host to a new one.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
         /// <param name="request">The request.</param>

@@ -93,6 +93,7 @@ namespace OpenStack.Serialization
         }
 
         /// <summary />
+        /// <exception cref="InvalidOperationException">Thrown when a resource as not constructed by the SDK.</exception>
         public static T GetOwnerOrThrow<T>(this IServiceResource resource, [CallerMemberName] string callerName = "")
             where T : class
         {
