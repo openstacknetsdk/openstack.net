@@ -10,15 +10,13 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <exclude />
     public class VolumeSnapshotCollection<T> : ResourceCollection<T>
     {
-        /// <summary>
-        /// The requested flavors.
-        /// </summary>
+        /// <summary />
         [JsonProperty("snapshots")]
         protected IList<T> VolumeSnapshots => Items;
     }
 
     /// <summary>
-    /// Represents a collection of references to volume snapshot resources of the <see cref="ComputeService"/>.
+    /// Represents a collection of volume snapshot resources of the <see cref="ComputeService"/>.
     /// </summary>
     /// <exclude />
     public class VolumeSnapshotCollection : VolumeSnapshotCollection<VolumeSnapshot>

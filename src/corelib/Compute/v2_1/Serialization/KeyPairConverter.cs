@@ -7,6 +7,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     /// <summary>
     /// Handles serialization for Compute KeyPairs, which don't follow the usual convention of not wrapping the object when contained in a list.
     /// </summary>
+    /// <exclude />
     public class KeyPairConverter : DefaultJsonConverter
     {
         private readonly string _name = "keypair";

@@ -2,7 +2,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1.Serialization
 {
-    /// <summary />
+    /// <summary>
+    /// Server event statuses.
+    /// </summary>
     /// <exclude />
     public class ServerEventStatus<T> : ResourceStatus
         where T : ServerEventStatus<T>, new()

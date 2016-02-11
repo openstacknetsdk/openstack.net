@@ -1,6 +1,6 @@
 ﻿namespace OpenStack.BlockStorage.v2
 {
-    /// <summary/>
+    /// <inheritdoc />
     public class VolumeStatus : Serialization.VolumeStatus<VolumeStatus>
     {
     }

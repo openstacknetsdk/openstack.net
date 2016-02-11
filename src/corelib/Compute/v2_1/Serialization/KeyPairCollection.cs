@@ -11,14 +11,14 @@ namespace OpenStack.Compute.v2_1.Serialization
     public class KeyPairCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
-        /// <summary>
-        /// The requested keypairs.
-        /// </summary>
+        /// <summary/>
         [JsonProperty("keypairs")]
         protected IList<T> KeyPairs => Items;
     }
 
-    /// <inheritdoc cref="KeyPairCollection{T}" />
+    /// <summary>
+    /// Represents a collection of key pair summary resources of the <see cref="ComputeService"/>.
+    /// </summary>
     /// <exclude />
     public class KeyPairSummaryCollection : KeyPairCollection<KeyPairSummary>
     { }
