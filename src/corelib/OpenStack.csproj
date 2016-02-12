@@ -98,7 +98,9 @@
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Operator\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Operator\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServerMetadata.cs" />
     <Compile Include="Compute\v2_1\ServerMetadataExtensions.cs" />

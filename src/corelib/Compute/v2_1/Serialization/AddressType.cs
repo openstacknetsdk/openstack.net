@@ -3,7 +3,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary>
-    /// Server address type.
+    /// Server address types.
     /// </summary>
     /// <exclude />
     public class AddressType<T> : StringEnumeration

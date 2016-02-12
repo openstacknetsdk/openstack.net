@@ -4,7 +4,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a new volume.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "volume")]
     public class VolumeDefinition
     {
@@ -24,45 +26,31 @@ namespace OpenStack.Compute.v2_1
             Size = size;
         }
 
-        /// <summary>
-        /// The volume name.
-        /// </summary>
+        /// <inheritdoc cref="Volume.Name"/>
         [JsonProperty("display_name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The volume description.
-        /// </summary>
+        /// <inheritdoc cref="Volume.Description"/>
         [JsonProperty("display_description")]
         public string Description { get; set; }
 
-        /// <summary>
-        /// The size of the volume, in gigabytes (GB).
-        /// </summary>
+        /// <inheritdoc cref="Volume.Size"/>
         [JsonProperty("size")]
         public int Size { get; set; }
 
-        /// <summary>
-        /// The unique identifier for a volume type.
-        /// </summary>
+        /// <inheritdoc cref="Volume.VolumeTypeId"/>
         [JsonProperty("volume_type")]
         public Identifier VolumeTypeId { get; set; }
 
-        /// <summary>
-        /// One or more metadata key and value pairs to associate with the volume.
-        /// </summary>
+        /// <inheritdoc cref="Volume.Metadata"/>
         [JsonProperty("metadata")]
         public IDictionary<string, string> Metadata { get; set; }
 
-        /// <summary>
-        /// The availability zone.
-        /// </summary>
+        /// <inheritdoc cref="Volume.AvailabilityZone"/>
         [JsonProperty("availability_zone")]
         public string AvailabilityZone { get; set; }
 
-        /// <summary>
-        /// The snapshot from which to create a volume.
-        /// </summary>
+        /// <inheritdoc cref="Volume.SourceSnapshotId"/>
         [JsonProperty("snapshot_id")]
         public Identifier SourceSnapshotId { get; set; }
     }

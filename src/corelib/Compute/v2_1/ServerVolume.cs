@@ -3,17 +3,23 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Represents a volume attached to a server.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "volumeAttachment")]
     public class ServerVolume : ServerVolumeReference
     {
         private Identifier _serverId;
 
-        /// <summary />
+        /// <summary>
+        /// A path to the device for the volume attached to the server.
+        /// </summary>
         [JsonProperty("device")]
         public string DeviceName { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server identifier.
+        /// </summary>
         [JsonProperty("serverId")]
         public Identifier ServerId
         {
@@ -25,7 +31,9 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <summary />
+        /// <summary>
+        /// The volume identifier.
+        /// </summary>
         [JsonProperty("volumeId")]
         public Identifier VolumeId { get; set; }
     }

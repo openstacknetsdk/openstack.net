@@ -8,7 +8,9 @@ using OpenStack.Synchronous.Extensions;
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
 {
-    /// <summary />
+    /// <summary>
+    /// Provides synchronous extention methods for a <see cref="Volume"/> instance.
+    /// </summary>
     public static class VolumeExtensions_v2_1
     {
         /// <inheritdoc cref="Volume.SnapshotAsync"/>

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary>
-    /// Enables you to boot a server from a volume when you specify additional parameters.
+    /// Defines how to boot a server from a volume.
     /// </summary>
     /// <remarks>
     /// If you specify the volume status, you must set it to available. In the OpenStack Block Storage database, the volume attach_status must be detached. 
@@ -17,7 +17,7 @@ namespace OpenStack.Compute.v2_1
         public int BootIndex { get; set; }
 
         /// <summary>
-        /// Defines the order in which a hypervisor tries devices when it attempts to boot the guest from storage.
+        /// A path to the device for the volume that you want to use to boot the server.
         /// </summary>
         [JsonProperty("device_name")]
         public string DeviceName { get; set; }

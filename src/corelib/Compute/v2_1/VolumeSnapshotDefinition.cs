@@ -3,7 +3,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a new volume snapshot.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "snapshot")]
     public class VolumeSnapshotDefinition
     {
@@ -12,7 +14,6 @@ namespace OpenStack.Compute.v2_1
         /// </summary>
         public VolumeSnapshotDefinition()
         {
-            
         }
 
         /// <summary>
@@ -24,15 +25,15 @@ namespace OpenStack.Compute.v2_1
             VolumeId = volumeId;
         }
 
-        /// <summary />
+        /// <inheritdoc cref="VolumeSnapshot.VolumeId" />
         [JsonProperty("volume_id")]
         public Identifier VolumeId { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="VolumeSnapshot.Name" />
         [JsonProperty("display_name")]
         public string Name { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="VolumeSnapshot.Description" />
         [JsonProperty("display_description")]
         public string Description { get; set; }
 

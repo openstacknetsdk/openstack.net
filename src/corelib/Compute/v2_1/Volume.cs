@@ -13,7 +13,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Represents a volume which can be attached to a server.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "volume")]
     public class Volume : IServiceResource, IHaveExtraData
     {
@@ -81,24 +83,30 @@ namespace OpenStack.Compute.v2_1
         public Identifier SourceSnapshotId { get; set; }
 
         /// <summary>
-        /// 
+        /// A list of servers to which this volume is attached.
         /// </summary>
         [JsonProperty("attachments")]
         public IList<ServerVolume> Attachments { get; set; }
 
         /// <summary>
-        /// 
+        /// The date and time when the resource was created.
         /// </summary>
         [JsonProperty("createdAt")]
         public DateTime Created { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
         object IServiceResource.Owner { get; set; }
 
-        /// <exception cref="InvalidOperationException">When the instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        /// <summary>
+        /// Waits the until the volume is available.
+        /// </summary>
+        /// <param name="refreshDelay">The refresh delay.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="progress">The progress.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="InvalidOperationException">When the instance was not constructed by the <see cref="ComputeService" />, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task WaitUntilAvailableAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return WaitForStatusAsync(VolumeStatus.Available, refreshDelay, timeout, progress, cancellationToken);
