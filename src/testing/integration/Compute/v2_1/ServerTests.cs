@@ -161,7 +161,7 @@ namespace OpenStack.Compute.v2_1
                     {"foo", fooValue}
                 }
             });
-            Assert.Equal(1, results.Count());
+            Assert.Contains(serverWithMetadata.Id, results.Select(x => x.Id));
         }
 
         [Fact]
