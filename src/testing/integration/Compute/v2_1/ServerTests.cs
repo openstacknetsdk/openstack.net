@@ -59,7 +59,6 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(server.Launched);
             Assert.NotNull(server.DiskConfig);
             Assert.NotNull(server.HostId);
-            Assert.NotNull(server.HostName);
             Assert.NotNull(server.PowerState);
             Assert.NotNull(server.VMState);
             Assert.NotNull(server.SecurityGroups);

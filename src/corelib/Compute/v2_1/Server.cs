@@ -110,17 +110,13 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("OS-EXT-AZ:availability_zone")]
         public string AvailabilityZone { get; set; }
 
-        /// <summary />
-        [JsonProperty("OS-EXT-SRV-ATTR:host")]
-        public string HostName { get; set; }
-
-        /// <summary />
-        [JsonProperty("OS-EXT-SRV-ATTR:hypervisor_hostname")]
-        public string HypervisorHostName { get; set; }
-
-        /// <summary />
-        [JsonProperty("OS-EXT-SRV-ATTR:instance_name")]
-        public string InstanceName { get; set; }
+        // TODO: These are operator only. If only we had extension properties... (https://github.com/dotnet/roslyn/issues/112) Need to figure out how to handle stuff like this.
+        //[JsonProperty("OS-EXT-SRV-ATTR:host")]
+        //public string HostName { get; set; }
+        //[JsonProperty("OS-EXT-SRV-ATTR:hypervisor_hostname")]
+        //public string HypervisorHostName { get; set; }
+        //[JsonProperty("OS-EXT-SRV-ATTR:instance_name")]
+        //public string InstanceName { get; set; }
 
         /// <summary>
         /// The power state of the server.
