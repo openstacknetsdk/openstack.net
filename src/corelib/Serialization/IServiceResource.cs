@@ -10,6 +10,7 @@ namespace OpenStack.Serialization
     /// Resources which want to expose service operations directly (e.g. resource.Delete())
     /// should implement this interface and the service will use it to add a reference to itself.
     /// </summary>
+    /// <exclude />
     public interface IServiceResource
     {
         /// <summary>
@@ -21,6 +22,7 @@ namespace OpenStack.Serialization
     /// <summary>
     /// Resources which are children of another resource.
     /// </summary>
+    /// <exclude />
     public interface IChildResource : IServiceResource
     {
         /// <summary>
@@ -34,14 +36,14 @@ namespace OpenStack.Serialization
         void SetParent(string parentId);
     }
 
-    /// <summary />
+    /// <exclude />
     public static class ServiceResourceExtensions
     {
         /// <summary />
         public static async Task<T> PropogateOwner<T>(this Task<T> task, object owner)
             where T : IServiceResource
         {
-            T resource = await task;
+            T resource = await task.ConfigureAwait(false);
             return PropogateOwner(resource, owner);
         }
 
@@ -77,7 +79,7 @@ namespace OpenStack.Serialization
         public static async Task<T> PropogateOwnerToChildren<T>(this Task<T> task, object owner)
             where T : IEnumerable<IServiceResource>
         {
-            T resources = await task;
+            T resources = await task.ConfigureAwait(false);
             return resources.PropogateOwnerToChildren(owner);
         }
 
@@ -109,7 +111,7 @@ namespace OpenStack.Serialization
         public static async Task<T> SetParent<T>(this Task<T> task, string parentId)
             where T : IChildResource
         {
-            var resource = await task;
+            var resource = await task.ConfigureAwait(false);
             resource.SetParent(parentId);
             return resource;
         }
@@ -118,7 +120,7 @@ namespace OpenStack.Serialization
         public static async Task<T> SetParentOnChildren<T>(this Task<T> task, string parentId)
             where T : IEnumerable<IChildResource>
         {
-            var resources = await task;
+            var resources = await task.ConfigureAwait(false);
             return SetParentOnChildren(resources, parentId);
         }
 

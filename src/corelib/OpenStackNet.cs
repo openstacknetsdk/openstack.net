@@ -266,10 +266,16 @@ namespace OpenStack
             }
         }
 
-        /// <summary />
+        /// <summary>
+        /// Raised when creating the SDK configuration options class.
+        /// <para>Intended for vendors to override.</para>
+        /// </summary>
+        /// <exclude />
         public class CreateEvent
         {
-            /// <summary />
+            /// <summary>
+            /// An instance of the configuration class to use when configuring the SDK.
+            /// </summary>
             public OpenStackNetConfigurationOptions Result = new OpenStackNetConfigurationOptions();
         }
     }

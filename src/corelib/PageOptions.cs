@@ -3,13 +3,19 @@ using OpenStack.Serialization;
 
 namespace OpenStack
 {
-    /// <summary />
+    /// <summary>
+    /// Paging options when listing a resource that supports paging.
+    /// </summary>
     public class PageOptions : IQueryStringBuilder
     {
-        /// <summary />
+        /// <summary>
+        /// The number of resources to return per page.
+        /// </summary>
         public int? PageSize { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The identifier of the first resource to return on the page.
+        /// </summary>
         public Identifier StartingAt { get; set; }
 
         /// <summary />

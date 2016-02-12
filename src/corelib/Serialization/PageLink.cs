@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace OpenStack.Serialization
 {
-    /// <summary />
+    /// <exclude />
     public class PageLink : IPageLink, IHaveExtraData
     {
         /// <summary />

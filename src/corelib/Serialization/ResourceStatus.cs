@@ -1,6 +1,6 @@
 namespace OpenStack.Serialization
 {
-    /// <summary />
+    /// <exclude />
     public class ResourceStatus : StringEnumeration
     {
         /// <summary />

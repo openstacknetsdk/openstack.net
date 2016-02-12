@@ -10,6 +10,7 @@ namespace OpenStack.Serialization
     /// Using classes for enumerations allows us to use inheritance and enable API versions or other providers to share and extend "enums"
     /// <seealso href="https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/"/>
     /// </summary>
+    /// <exclude />
     [JsonConverter(typeof(StringEnumerationConverter))]
     public abstract class StringEnumeration : IComparable
     {
