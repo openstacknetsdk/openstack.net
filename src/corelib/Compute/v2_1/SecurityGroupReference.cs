@@ -10,10 +10,14 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />   
+    /// <summary>
+    /// Reference to a security group.
+    /// </summary>
     public class SecurityGroupReference : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The security group name.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 

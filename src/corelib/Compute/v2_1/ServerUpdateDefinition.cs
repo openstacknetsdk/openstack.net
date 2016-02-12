@@ -3,18 +3,20 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a set of fields to update on a server.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
     public class ServerUpdateDefinition
     {
         private string _ipv4Address;
         private string _ipv6Address;
 
-        /// <summary />
+        /// <inheritdoc cref="ServerSummary.Name" />
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="Server.IPv4Address" />
         [JsonProperty("accessIPv4")]
         public string IPv4Address
         {
@@ -26,7 +28,7 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <summary />
+        /// <inheritdoc cref="Server.IPv6Address" />
         [JsonProperty("accessIPv6")]
         public string IPv6Address
         {

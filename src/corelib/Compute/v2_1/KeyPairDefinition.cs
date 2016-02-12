@@ -4,7 +4,7 @@ using OpenStack.Compute.v2_1.Serialization;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary>
-    /// Defines a key pair which can be imported into the compute service.
+    /// Defines an existing public key.
     /// </summary>
     [JsonConverter(typeof(KeyPairConverter))]
     public class KeyPairDefinition
@@ -20,15 +20,11 @@ namespace OpenStack.Compute.v2_1
             PublicKey = publicKey;
         }
 
-        /// <summary>
-        /// The key pair name.
-        /// </summary>
+        /// <inheritdoc cref="KeyPairSummary.Name" />
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The public ssh key to import.
-        /// </summary>
+        /// <inheritdoc cref="KeyPairSummary.PublicKey" />
         [JsonProperty("public_key")]
         public string PublicKey { get; set; }
     }

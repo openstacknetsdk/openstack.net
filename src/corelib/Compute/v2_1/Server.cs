@@ -16,7 +16,9 @@ namespace OpenStack.Compute.v2_1
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server")]
     public class Server : ServerSummary
     {
-        /// <summary />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Server"/> class.
+        /// </summary>
         public Server()
         {
             Addresses = new Dictionary<string, IList<ServerAddress>>();
@@ -27,23 +29,34 @@ namespace OpenStack.Compute.v2_1
 
         private string _adminPassword;
 
-        /// <summary />
+        /// <summary>
+        /// The IP addresses for the server.
+        /// </summary>
         [JsonProperty("addresses")]
         public IDictionary<string, IList<ServerAddress>> Addresses { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The flavor for the server instance.
+        /// </summary>
         [JsonProperty("flavor")]
         public FlavorReference Flavor { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The date and time when the resource was created.
+        /// </summary>
         [JsonProperty("created")]
         public DateTimeOffset? Created { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The image for the server instance.
+        /// </summary>
         [JsonProperty("image")]
         public ImageReference Image { get; set; }
 
-        /// <summary /> // null if this isn't a newly created server. You only get this value once
+        /// <summary>
+        /// The administrative password.
+        /// <para>The password is only available immediately after creating the server, and otherwise is empty.</para>
+        /// </summary>
         [JsonProperty("adminPass")]
         public string AdminPassword
         {
@@ -55,31 +68,45 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <summary />
+        /// <summary>
+        /// The name of associated key pair, if any. 
+        /// </summary>
         [JsonProperty("key_name")]
         public string KeyPairName { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The associated metadata key and value pairs.
+        /// </summary>
         [JsonProperty("metadata")]
         public ServerMetadata Metadata { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server v4 IP address.
+        /// </summary>
         [JsonProperty("accessIPv4")]
         public string IPv4Address { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server v6 IP address.
+        /// </summary>
         [JsonProperty("accessIPv6")]
         public string IPv6Address { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The host identifier.
+        /// </summary>
         [JsonProperty("hostId")]
         public Identifier HostId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server disk configuration.
+        /// </summary>
         [JsonProperty("OS-DCF:diskConfig")]
         public DiskConfiguration DiskConfig { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The availability zone in which the server is located.
+        /// </summary>
         [JsonProperty("OS-EXT-AZ:availability_zone")]
         public string AvailabilityZone { get; set; }
 
@@ -95,49 +122,74 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("OS-EXT-SRV-ATTR:instance_name")]
         public string InstanceName { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The power state of the server.
+        /// </summary>
         [JsonProperty("OS-EXT-STS:power_state")]
         public string PowerState { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The task state of the server.
+        /// </summary>
         [JsonProperty("OS-EXT-STS:task_state")]
         public string TaskState { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The underlying VM state.
+        /// </summary>
         [JsonProperty("OS-EXT-STS:vm_state")]
         public string VMState { get; set; }
-        
-        /// <summary />
+
+        /// <summary>
+        /// The date and time when the server was launched.
+        /// </summary>
         [JsonProperty("OS-SRV-USG:launched_at")]
         public DateTimeOffset? Launched { get; set; }
 
-        /// <summary />
+        /// <summary>
+        ///  The date and time when the server was deleted.
+        /// </summary>
         [JsonProperty("OS-SRV-USG:terminated_at")]
-        public DateTimeOffset? Terminated { get; set; }
+        public DateTimeOffset? Deleted { get; set; }
 
         /// <summary>
-        /// The build completion progress, as a percentage.
+        /// A percentage value of the build progress.
         /// </summary>
         [JsonProperty("progress")]
         public int Progress { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The attached volumes, if any.
+        /// </summary>
         [JsonProperty("os-extended-volumes:volumes_attached")]
         public IList<ServerVolumeReference> AttachedVolumes { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Associated security groups.
+        /// </summary>
         [JsonProperty("security_groups")]
         public IList<SecurityGroupReference> SecurityGroups { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server status.
+        /// </summary>
         [JsonProperty("status")]
         public ServerStatus Status { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The date and time when the resource was updated.
+        /// </summary>
         [JsonProperty("updated")]
         public DateTimeOffset? LastModified { get; set; }
-        
-        /// <exception cref="InvalidOperationException">When the <see cref="Server"/> instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+
+        /// <summary>
+        /// Waits the until the server is active.
+        /// </summary>
+        /// <param name="refreshDelay">The refresh delay.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <param name="progress">The progress.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="InvalidOperationException">When the <see cref="Server" /> instance was not constructed by the <see cref="ComputeService" />, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task WaitUntilActiveAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return WaitForStatusAsync(ServerStatus.Active, refreshDelay, timeout, progress, cancellationToken);
@@ -181,7 +233,7 @@ namespace OpenStack.Compute.v2_1
             result.CopyProperties(this);
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.AttachVolumeAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {

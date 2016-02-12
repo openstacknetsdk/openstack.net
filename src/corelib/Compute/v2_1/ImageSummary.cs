@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace OpenStack.Compute.v2_1
 {
     /// <summary>
-    /// Summary data for an image.
+    /// Summary information for an image.
     /// </summary>
     public class ImageSummary : ImageReference
     {

@@ -8,7 +8,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// A set of server instances used to apply common policies.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server_group")]
     public class ServerGroup : IHaveExtraData, IServiceResource
     {
@@ -20,7 +22,9 @@ namespace OpenStack.Compute.v2_1
             Policies = new List<string>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// The server group identitifer.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
@@ -42,7 +46,6 @@ namespace OpenStack.Compute.v2_1
         [JsonProperty("members")]
         public IList<Identifier> Members { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 

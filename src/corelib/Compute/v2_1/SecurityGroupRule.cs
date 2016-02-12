@@ -9,27 +9,39 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// A security group rule.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group_rule")]
     public class SecurityGroupRule : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The rule identifier.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The IP protocol.
+        /// </summary>
         [JsonProperty("ip_protocol")]
         public IPProtocol Protocol { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The port at start of range.
+        /// </summary>
         [JsonProperty("from_port")]
         public int FromPort { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The port at end of range.
+        /// </summary>
         [JsonProperty("to_port")]
         public int ToPort { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The CIDR for address range.
+        /// </summary>
         [JsonIgnore]
         public string CIDR
         {
@@ -37,15 +49,18 @@ namespace OpenStack.Compute.v2_1
             set { _ipRange.CIDR = value; }
         }
 
-        /// <summary />
         [JsonProperty("ip_range")]
         private CIDRWrapper _ipRange = new CIDRWrapper();
 
-        /// <summary />
+        /// <summary>
+        /// The associated security group identifier.
+        /// </summary>
         [JsonProperty("parent_group_id")]
         public Identifier GroupId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The associated source group identifier.
+        /// </summary>
         [JsonProperty("group_id")]
         public Identifier SourceGroupId { get; set; }
 

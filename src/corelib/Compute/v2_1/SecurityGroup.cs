@@ -9,25 +9,36 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Security groups are sets of IP filter rules that are applied to an instance's networking.
+    /// </summary>
+    /// <seealso href="http://docs.openstack.org/openstack-ops/content/security_groups.html"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group")]
     public class SecurityGroup : SecurityGroupReference
     {
-        /// <summary />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SecurityGroup"/> class.
+        /// </summary>
         public SecurityGroup()
         {
             Rules = new List<SecurityGroupRule>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// The security group identifier.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The security group description.
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The security group rules.
+        /// </summary>
         [JsonProperty("rules")]
         public IList<SecurityGroupRule> Rules { get; set; }
 

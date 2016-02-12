@@ -6,7 +6,9 @@ using OpenStack.Synchronous.Extensions;
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
 {
-    /// <summary />
+    /// <summary>
+    /// Provides synchronous extention methods for a <see cref="Server"/> instance.
+    /// </summary>
     public static class ServerExtensions_v2_1
     {
         /// <inheritdoc cref="ServerReference.GetServerAsync"/>

@@ -2,7 +2,9 @@ using Newtonsoft.Json;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Summary information for a flavor.
+    /// </summary>
     public class FlavorSummary : FlavorReference
     {
         /// <summary>

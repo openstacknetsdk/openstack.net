@@ -3,7 +3,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a new security group.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group")]
     public class SecurityGroupDefinition
     {
@@ -11,18 +13,18 @@ namespace OpenStack.Compute.v2_1
         /// Initializes a new instance of the <see cref="SecurityGroupDefinition"/> class.
         /// </summary>
         /// <param name="name">The security group name.</param>
-        /// <param name="description">The description.</param>
+        /// <param name="description">The security group description.</param>
         public SecurityGroupDefinition(string name, string description)
         {
             Name = name;
             Description = description;
         }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupReference.Name"/>
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroup.Description"/>
         [JsonProperty("description")]
         public string Description { get; set; }
     }
