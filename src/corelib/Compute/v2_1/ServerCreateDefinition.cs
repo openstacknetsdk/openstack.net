@@ -15,7 +15,7 @@ namespace OpenStack.Compute.v2_1
             ImageId = imageId;
             FlavorId = flavorId;
             SecurityGroups = new List<SecurityGroupReference>();
-            Networks = new List<NetworkAttachDefinition>();
+            Networks = new List<ServerNetworkDefinition>();
             Metadata = new Dictionary<string, string>();
             Personality = new List<Personality>();
             BlockDeviceMapping = new List<ServerBlockDeviceMapping>();
@@ -47,7 +47,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <summary />
         [JsonProperty("networks")]
-        public IList<NetworkAttachDefinition> Networks { get; set; }
+        public IList<ServerNetworkDefinition> Networks { get; set; }
 
         /// <summary />
         [JsonProperty("metadata")]
