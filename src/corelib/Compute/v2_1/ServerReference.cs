@@ -111,15 +111,6 @@ namespace OpenStack.Compute.v2_1
             await compute.RebootServerAsync(Id, request, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ComputeApi.EvacuateServerAsync" />
-        /// <summary />
-        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public async Task EvacuateAsync(EvacuateServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.EvacuateServerAsync(Id, request, cancellationToken).ConfigureAwait(false);
-        }
-
         /// <inheritdoc cref="ComputeApi.ListServerVolumesAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<IEnumerable<ServerVolume>> ListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))

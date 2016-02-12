@@ -121,12 +121,6 @@ namespace OpenStack.Synchronous
             service.RebootServerAsync(serverId, request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.EvacuateServerAsync" />
-        public static void EvacuateServer(this ComputeService service, Identifier serverId, EvacuateServerRequest request)
-        {
-            service.EvacuateServerAsync(serverId, request).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static RemoteConsole GetVncConsole(this ComputeService service, Identifier serverId, RemoteConsoleType type)
         {

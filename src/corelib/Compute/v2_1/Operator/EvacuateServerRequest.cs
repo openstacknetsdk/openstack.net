@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using OpenStack.Serialization;
 
-namespace OpenStack.Compute.v2_1
+namespace OpenStack.Compute.v2_1.Operator
 {
     /// <summary>
     /// Evacuates a server from a failed host to a new one.
