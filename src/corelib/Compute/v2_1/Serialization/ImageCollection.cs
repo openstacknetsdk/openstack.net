@@ -28,7 +28,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     public class ImageSummaryCollection : ImageCollection<ImageSummaryCollection, ImageSummary>
     { }
 
-    /// <inheritdoc cref="FlavorCollection{T}" />
+    /// <inheritdoc cref="ImageCollection{TPage, TItem}" />
     /// <exclude />
     public class ImageCollection : ImageCollection<ImageCollection, Image>
     { }
