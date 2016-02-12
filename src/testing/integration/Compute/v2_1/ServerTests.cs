@@ -77,12 +77,6 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(createAction.Id);
             Assert.NotNull(createAction.Name);
             Assert.NotNull(createAction.Events);
-
-            var createEvent = createAction.Events.FirstOrDefault();
-            Assert.NotNull(createEvent);
-            Assert.NotNull(createEvent.Name);
-            Assert.NotNull(createEvent.Finished);
-            Assert.Equal(ServerEventStatus.Success, createEvent.Result);
         }
 
         [Fact]
