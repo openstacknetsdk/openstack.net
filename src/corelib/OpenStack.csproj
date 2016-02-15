@@ -91,11 +91,7 @@
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
-    <Compile Include="Compute\v2_1\Actions\ResumeServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
-    <Compile Include="Compute\v2_1\Actions\StartServerRequest.cs" />
-    <Compile Include="Compute\v2_1\Actions\StopServerRequest.cs" />
-    <Compile Include="Compute\v2_1\Actions\SuspendServerRequest.cs" />
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\FlavorReference.cs" />
