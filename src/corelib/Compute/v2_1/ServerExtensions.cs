@@ -95,6 +95,18 @@ namespace OpenStack.Synchronous
             server.StopAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ServerReference.SuspendAsync"/>
+        public static void Suspend(this ServerReference server)
+        {
+            server.SuspendAsync().ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ServerReference.ResumeAsync"/>
+        public static void Resume(this ServerReference server)
+        {
+            server.ResumeAsync().ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ServerReference.RebootAsync"/>
         public static void Reboot(this ServerReference server, RebootServerRequest request = null)
         {

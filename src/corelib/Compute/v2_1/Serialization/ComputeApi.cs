@@ -555,6 +555,28 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
+        /// Suspends a server and changes its status to SUSPENDED.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual Task SuspendServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new SuspendServerRequest();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
+        /// Resumes a suspended server and changes its status to ACTIVE.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual Task ResumeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new ResumeServerRequest();
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
         /// Reboots a server.
         /// </summary>
         /// <typeparam name="TRequest">The type of the request.</typeparam>

@@ -485,6 +485,40 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        public void SuspendServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
+
+                var server = _compute.GetServer(serverId);
+                server.Suspend();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("suspend"));
+            }
+        }
+
+        [Fact]
+        public void ResumeServer()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
+
+                var server = _compute.GetServer(serverId);
+                server.Resume();
+
+                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
+                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("resume"));
+            }
+        }
+
+        [Fact]
         public void RebootServer()
         {
             using (var httpTest = new HttpTest())
