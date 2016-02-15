@@ -323,7 +323,23 @@ namespace OpenStack.Compute.v2_1
             await server.WaitForStatusAsync(ServerStatus.Reboot);
             await server.WaitUntilActiveAsync();
         }
-        
+
+        [Fact]
+        public async Task ResumeServerTest()
+        {
+            Trace.WriteLine("Creating server...");
+            var server = await _testData.CreateServer();
+            await server.WaitUntilActiveAsync();
+
+            Trace.WriteLine("Suspending the server...");
+            await server.SuspendAsync();
+            await server.WaitForStatusAsync(ServerStatus.Suspended);
+
+            Trace.WriteLine("Resuming the server...");
+            await server.ResumeAsync();
+            await server.WaitUntilActiveAsync();
+        }
+
         [Fact]
         public async Task ServerVolumesTest()
         {

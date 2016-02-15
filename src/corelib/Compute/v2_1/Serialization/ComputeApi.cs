@@ -539,7 +539,7 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual Task StartServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var request = new StartServerRequest();
+            var request = new Dictionary<string, object> {["os-start"] = "" };
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 
@@ -550,7 +550,29 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual Task StopServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var request = new StopServerRequest();
+            var request = new Dictionary<string, object> {["os-stop"] = "" };
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
+        /// Suspends a server and changes its status to SUSPENDED.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual Task SuspendServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new Dictionary<string, object> {["suspend"] = "" };
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
+        /// Resumes a suspended server and changes its status to ACTIVE.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual Task ResumeServerAsync(string serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new Dictionary<string, object> {["resume"] = "" };
             return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
         }
 

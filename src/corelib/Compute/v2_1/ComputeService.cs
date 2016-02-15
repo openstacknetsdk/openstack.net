@@ -134,6 +134,18 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.StopServerAsync(serverId, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApi.SuspendServerAsync" />
+        public Task SuspendServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.SuspendServerAsync(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.ResumeServerAsync" />
+        public Task ResumeServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.ResumeServerAsync(serverId, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApi.RebootServerAsync{TRequest}" />
         public Task RebootServerAsync(Identifier serverId, RebootServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
         {

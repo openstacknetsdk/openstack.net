@@ -103,6 +103,22 @@ namespace OpenStack.Compute.v2_1
             await compute.StopServerAsync(Id, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="ComputeApi.SuspendServerAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task SuspendAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
+            await compute.SuspendServerAsync(Id, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ComputeApi.ResumeServerAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public async Task ResumeAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
+            await compute.ResumeServerAsync(Id, cancellationToken).ConfigureAwait(false);
+        }
+
         /// <inheritdoc cref="ComputeApi.RebootServerAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task RebootAsync(RebootServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
