@@ -858,47 +858,57 @@ namespace OpenStack.Compute.v2_1.Serialization
         /// <summary>
         /// Lists summary information for available flavors.
         /// </summary>
-        /// <typeparam name="T">The return type.</typeparam>
+        /// <typeparam name="TPage">The return type.</typeparam>
+        /// <param name="queryString">Options for paging and filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<T> ListFlavorSummariesAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-            where T : IEnumerable<IServiceResource>
+        public virtual async Task<TPage> ListFlavorSummariesAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorSummariesRequest(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>()
+            Url initialRequestUrl = await BuildListFlavorSummariesURL(queryString, cancellationToken).ConfigureAwait(false);
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Builds the <see cref="ListFlavorSummariesAsync{T}"/> request.
         /// </summary>
+        /// <param name="queryString">Options for paging and filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual Task<PreparedRequest> BuildListFlavorSummariesRequest(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListFlavorSummariesURL(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return Endpoint.PrepareListResourcesRequest("flavors", cancellationToken);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("flavors")
+                .SetQueryParams(queryString?.Build());
         }
 
         /// <summary>
         /// Lists available flavors.
         /// </summary>
-        /// <typeparam name="T">The return type.</typeparam>
+        /// <typeparam name="TPage">The return type.</typeparam>
+        /// <param name="queryString">Options for paging and filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual async Task<T> ListFlavorsAsync<T>(CancellationToken cancellationToken = default(CancellationToken))
-            where T : IEnumerable<IServiceResource>
+        public virtual async Task<TPage> ListFlavorsAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
         {
-            return await BuildListFlavorsRequest(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<T>()
+            Url initialRequestUrl = await BuildListFlavorsURL(queryString, cancellationToken).ConfigureAwait(false);
+            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
                 .PropogateOwnerToChildren(this).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Builds the <see cref="ListFlavorsAsync{T}"/> request.
+        /// Builds the <see cref="ListFlavorsAsync{T}"/> URL.
         /// </summary>
+        /// <param name="queryString">Options for paging and filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public virtual Task<PreparedRequest> BuildListFlavorsRequest(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<Url> BuildListFlavorsURL(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return Endpoint.PrepareListResourcesRequest("flavors/detail", cancellationToken);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegment("flavors/detail")
+                .SetQueryParams(queryString?.Build());
         }
 
         #endregion
