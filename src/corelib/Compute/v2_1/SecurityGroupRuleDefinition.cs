@@ -5,7 +5,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a new security group rule.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group_rule")]
     public class SecurityGroupRuleDefinition : IHaveExtraData
     {
@@ -23,32 +25,31 @@ namespace OpenStack.Compute.v2_1
             ToPort = toPort;
             CIDR = cidr;
         }
-        
-        /// <summary />
+
+        /// <inheritdoc cref="SecurityGroupRule.Protocol"/>
         [JsonProperty("ip_protocol")]
         public IPProtocol Protocol { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupRule.FromPort"/>
         [JsonProperty("from_port")]
         public int FromPort { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupRule.ToPort"/>
         [JsonProperty("to_port")]
         public int ToPort { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupRule.CIDR"/>
         [JsonProperty("cidr")]
         public string CIDR { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupRule.GroupId"/>
         [JsonProperty("parent_group_id")]
         public Identifier GroupId { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="SecurityGroupRule.SourceGroupId"/>
         [JsonProperty("group_id")]
         public Identifier SourceGroupId { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
     }

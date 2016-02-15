@@ -11,9 +11,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     public class ServerGroupCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
-        /// <summary>
-        /// The requested flavors.
-        /// </summary>
+        /// <summary />
         [JsonProperty("server_groups")]
         protected IList<T> ServerGroups => Items;
     }

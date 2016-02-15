@@ -4,7 +4,10 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1.Serialization
 {
-    /// <summary />
+    /// <summary>
+    /// Serializes server create requests, which have an odd nesting structure.
+    /// </summary>
+    /// <exclude />
     public class ServerCreateDefinitionConverter : DefaultJsonConverter
     {
         /// <inheritdoc />

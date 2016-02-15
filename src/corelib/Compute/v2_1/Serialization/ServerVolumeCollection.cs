@@ -11,9 +11,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     public class ServerVolumeCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
-        /// <summary>
-        /// The requested flavors.
-        /// </summary>
+        /// <summary />
         [JsonProperty("volumeAttachments")]
         protected IList<T> Volumes => Items;
     }

@@ -2,7 +2,7 @@
 
 namespace OpenStack.Serialization
 {
-    /// <summary />
+    /// <exclude />
     public interface IQueryStringBuilder
     {
         /// <summary />

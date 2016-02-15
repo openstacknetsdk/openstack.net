@@ -43,7 +43,7 @@
     <IncludeFavorites>True</IncludeFavorites>
     <BinaryTOC>True</BinaryTOC>
     <VisibleItems>Attributes, InheritedMembers, ProtectedInternalAsProtected</VisibleItems>
-    <FeedbackEMailAddress>openstack.net%40lists.rackspace.com</FeedbackEMailAddress>
+    <FeedbackEMailAddress>sdk-support@rackspace.com</FeedbackEMailAddress>
     <CopyrightText>
     </CopyrightText>
     <CopyrightHref>

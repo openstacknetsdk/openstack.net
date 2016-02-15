@@ -6,7 +6,9 @@ using OpenStack.Synchronous.Extensions;
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
 {
-    /// <summary />
+    /// <summary>
+    /// Provides synchronous extention methods for a <see cref="Server"/> instance.
+    /// </summary>
     public static class ServerExtensions_v2_1
     {
         /// <inheritdoc cref="ServerReference.GetServerAsync"/>
@@ -99,12 +101,6 @@ namespace OpenStack.Synchronous
             server.RebootAsync(request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ServerReference.EvacuateAsync"/>
-        public static void Evacuate(this ServerReference server, EvacuateServerRequest request)
-        {
-            server.EvacuateAsync(request).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="Server.AttachVolumeAsync"/>
         public static ServerVolume AttachVolume(this Server server, ServerVolumeDefinition volume)
         {
@@ -177,10 +173,10 @@ namespace OpenStack.Synchronous
             server.CancelResizeAsync().ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ServerReference.ListActionsAsync"/>
-        public static IEnumerable<ServerActionReference> ListActions(this ServerReference server)
+        /// <inheritdoc cref="ServerReference.ListActionSummariesAsync"/>
+        public static IEnumerable<ServerActionSummary> ListActionSummaries(this ServerReference server)
         {
-            return server.ListActionsAsync().ForceSynchronous();
+            return server.ListActionSummariesAsync().ForceSynchronous();
         }
     }
 }

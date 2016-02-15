@@ -502,25 +502,7 @@ namespace OpenStack.Compute.v2_1
                 Assert.True(lastRequest.Contains("HARD"));
             }
         }
-
-        [Fact]
-        public void EvacuateServer()
-        {
-            using (var httpTest = new HttpTest())
-            {
-                Identifier serverId = Guid.NewGuid();
-                httpTest.RespondWithJson(new Server { Id = serverId });
-                httpTest.RespondWith((int)HttpStatusCode.Accepted, "Roger that, boss");
-
-                var server = _compute.GetServer(serverId);
-                server.Evacuate(new EvacuateServerRequest(false));
-
-                httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                string lastRequest = httpTest.CallLog.Last().RequestBody;
-                Assert.True(lastRequest.Contains("evacuate"));
-            }
-        }
-
+        
         [Fact]
         public void AttachVolume()
         {
@@ -808,7 +790,7 @@ namespace OpenStack.Compute.v2_1
                 Identifier serverId = Guid.NewGuid();
                 Identifier actionId = Guid.NewGuid();
                 httpTest.RespondWithJson(new Server { Id = serverId });
-                httpTest.RespondWithJson(new ServerActionReferenceCollection {new ServerActionReference {Id = actionId, ServerId = serverId, Name = "create"}});
+                httpTest.RespondWithJson(new ServerActionSummaryCollection {new ServerActionSummary {Id = actionId, ServerId = serverId, Name = "create"}});
                 httpTest.RespondWithJson(new ServerAction
                 {
                     Id = actionId,
@@ -817,7 +799,7 @@ namespace OpenStack.Compute.v2_1
                 });
 
                 var server = _compute.GetServer(serverId);
-                var results = server.ListActions();
+                var results = server.ListActionSummaries();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-instance-actions");
                 Assert.NotNull(results);

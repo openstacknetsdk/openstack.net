@@ -3,7 +3,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Compute.v2_1.Serialization
 {
     /// <summary>
-    /// The server image type
+    /// Server image types.
     /// </summary>
     /// <exclude />
     public class ImageType<T> : StringEnumeration

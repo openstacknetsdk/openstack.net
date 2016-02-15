@@ -230,6 +230,9 @@ namespace OpenStack.Serialization
             if (string.IsNullOrEmpty(resourceId))
                 throw new ArgumentNullException("resourceId");
 
+            if(statuses == null)
+                throw new ArgumentNullException("statuses");
+
             refreshDelay = refreshDelay ?? TimeSpan.FromSeconds(5);
             timeout = timeout ?? TimeSpan.FromMinutes(5);
 

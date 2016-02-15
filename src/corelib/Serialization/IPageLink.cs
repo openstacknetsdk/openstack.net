@@ -1,6 +1,6 @@
 namespace OpenStack.Serialization
 {
-    /// <summary />
+    /// <exclude />
     public interface IPageLink
     {
         /// <summary />

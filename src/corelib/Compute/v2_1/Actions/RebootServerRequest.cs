@@ -3,7 +3,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Reboots a server.
+    /// </summary>
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "reboot")]
     public class RebootServerRequest
     {

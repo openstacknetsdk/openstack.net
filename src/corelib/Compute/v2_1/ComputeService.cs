@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenStack.Authentication;
 using OpenStack.Compute.v2_1.Serialization;
+using OpenStack.Images.v2;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
@@ -15,7 +16,7 @@ namespace OpenStack.Compute.v2_1
     public class ComputeService
     {
         /// <summary />
-        private readonly ComputeApi _computeApi;
+        internal readonly ComputeApi _computeApi;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputeService"/> class.
@@ -75,13 +76,13 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListServerSummariesAsync{TPage}" />
         public async Task<IPage<ServerSummary>> ListServerSummariesAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerSummariesAsync<ServerSummaryCollection>(options, cancellationToken);
+            return await _computeApi.ListServerSummariesAsync<ServerSummaryCollection>(options, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.ListServersAsync{TPage}(IQueryStringBuilder,CancellationToken)" />
         public async Task<IPage<Server>> ListServersAsync(ServerListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServersAsync<ServerCollection>(options, cancellationToken);
+            return await _computeApi.ListServersAsync<ServerCollection>(options, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.UpdateServerAsync{T}" />
@@ -137,12 +138,6 @@ namespace OpenStack.Compute.v2_1
         public Task RebootServerAsync(Identifier serverId, RebootServerRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.RebootServerAsync(serverId, request, cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.EvacuateServerAsync" />
-        public Task EvacuateServerAsync(Identifier serverId, EvacuateServerRequest request, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.EvacuateServerAsync(serverId, request, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.GetVncConsoleAsync{T}" />
@@ -205,13 +200,13 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.CancelResizeServerAsync(serverId, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.ListServerActionsAsync{T}" />
-        public virtual async Task<IEnumerable<ServerActionReference>> ListServerActionsAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
+        public virtual async Task<IEnumerable<ServerActionSummary>> ListServerActionSummariesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerActionsAsync<ServerActionReferenceCollection>(serverId, cancellationToken);
+            return await _computeApi.ListServerActionSummariesAsync<ServerActionSummaryCollection>(serverId, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ComputeApi.ListServerActionsAsync{T}" />
+        /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
         public virtual Task<ServerAction> GetServerActionAsync(Identifier serverId, Identifier actionId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetServerActionAsync<ServerAction>(serverId, actionId, cancellationToken);
@@ -229,13 +224,13 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListFlavorSummariesAsync{T}" />
         public async Task<IEnumerable<FlavorSummary>> ListFlavorSummariesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListFlavorSummariesAsync<FlavorSummaryCollection>(cancellationToken);
+            return await _computeApi.ListFlavorSummariesAsync<FlavorSummaryCollection>(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.ListFlavorsAsync{T}" />
         public async Task<IEnumerable<Flavor>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListFlavorsAsync<FlavorCollection>(cancellationToken);
+            return await _computeApi.ListFlavorsAsync<FlavorCollection>(cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
@@ -275,13 +270,13 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListImageSummariesAsync{TPage}" />
         public async Task<IPage<ImageSummary>> ListImageSummariesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListImageSummariesAsync<ImageSummaryCollection>(options, cancellationToken);
+            return await _computeApi.ListImageSummariesAsync<ImageSummaryCollection>(options, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.ListImagesAsync{TPage}" />
         public async Task<IPage<Image>> ListImagesAsync(ImageListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListImagesAsync<ImageCollection>(options, cancellationToken);
+            return await _computeApi.ListImagesAsync<ImageCollection>(options, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.UpdateImageMetadataAsync{T}" />
@@ -320,22 +315,22 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListServerAddressesAsync{T}" />
         public async Task<IDictionary<string, IList<ServerAddress>>> ListServerAddressesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerAddressesAsync<ServerAddressCollection>(serverId, cancellationToken);
+            return await _computeApi.ListServerAddressesAsync<ServerAddressCollection>(serverId, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
 
         #region Server Volumes
         /// <inheritdoc cref="ComputeApi.GetServerVolumeAsync{T}" />
-        public async Task<ServerVolume> GetServerVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ServerVolume> GetServerVolumeAsync(Identifier serverId, Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.GetServerVolumeAsync<ServerVolume>(serverId, volumeId, cancellationToken);
+            return _computeApi.GetServerVolumeAsync<ServerVolume>(serverId, volumeId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.ListServerVolumesAsync{T}" />
         public async Task<IEnumerable<ServerVolume>> ListServerVolumesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerVolumesAsync<ServerVolumeCollection>(serverId, cancellationToken);
+            return await _computeApi.ListServerVolumesAsync<ServerVolumeCollection>(serverId, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.AttachVolumeAsync{T}" />
@@ -359,13 +354,22 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.GetKeyPairAsync<KeyPair>(keypairName, cancellationToken);
         }
 
-        /// <inheritdoc cref="ComputeApi.CreateKeyPairAsync{T}" />
+        /// <summary>
+        /// Creates a new key pair.
+        /// </summary>
+        /// <param name="request">The key pair request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The response includes the generated private key.</returns>
         public virtual Task<KeyPairResponse> CreateKeyPairAsync(KeyPairRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateKeyPairAsync<KeyPairResponse>(request, cancellationToken);
         }
 
-        /// <summary />
+        /// <summary>
+        /// Imports a key pair.
+        /// </summary>
+        /// <param name="keypair">The keypair.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         public virtual Task<KeyPairSummary> ImportKeyPairAsync(KeyPairDefinition keypair, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CreateKeyPairAsync<KeyPairSummary>(keypair, cancellationToken);
@@ -374,10 +378,10 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListKeyPairsAsync{T}" />
         public virtual async Task<IEnumerable<KeyPairSummary>> ListKeyPairsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListKeyPairsAsync<KeyPairSummaryCollection>(cancellationToken);
+            return await _computeApi.ListKeyPairsAsync<KeyPairSummaryCollection>(cancellationToken).ConfigureAwait(false);
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.DeleteKeyPairAsync"/>
         public virtual Task DeleteKeyPairAsync(string keypairName, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.DeleteKeyPairAsync(keypairName, cancellationToken);
@@ -401,7 +405,7 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListSecurityGroupsAsync{T}" />
         public async Task<IEnumerable<SecurityGroup>> ListSecurityGroupsAsync(Identifier serverId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListSecurityGroupsAsync<SecurityGroupCollection>(serverId, cancellationToken);
+            return await _computeApi.ListSecurityGroupsAsync<SecurityGroupCollection>(serverId, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.UpdateSecurityGroupAsync{T}" />
@@ -435,7 +439,7 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListServerGroupsAsync{T}" />
         public async Task<IEnumerable<ServerGroup>> ListServerGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListServerGroupsAsync<ServerGroupCollection>(cancellationToken);
+            return await _computeApi.ListServerGroupsAsync<ServerGroupCollection>(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.DeleteServerGroupAsync" />
@@ -452,12 +456,6 @@ namespace OpenStack.Compute.v2_1
         public Task<Volume> GetVolumeAsync(Identifier volumeId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetVolumeAsync<Volume>(volumeId, cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.GetVolumeTypeAsync{T}" />
-        public Task<VolumeType> GetVolumeTypeAsync(Identifier volumeTypeId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetVolumeTypeAsync<VolumeType>(volumeTypeId, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.GetVolumeSnapshotAsync{T}" />
@@ -481,19 +479,13 @@ namespace OpenStack.Compute.v2_1
         /// <inheritdoc cref="ComputeApi.ListVolumesAsync{T}" />
         public async Task<IEnumerable<Volume>> ListVolumesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken);
+            return await _computeApi.ListVolumesAsync<VolumeCollection>(cancellationToken).ConfigureAwait(false);
         }
-
-        ///// <inheritdoc cref="ComputeApiBuilder.ListVolumeTypesAsync{T}" />
-        //public async Task<IEnumerable<VolumeType>> ListVolumeTypesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    return await _computeApi.ListVolumeTypesAsync<VolumeTypeCollection>(cancellationToken);
-        //}
-
+        
         /// <inheritdoc cref="ComputeApi.ListVolumeSnapshotsAsync{T}" />
         public async Task<IEnumerable<VolumeSnapshot>> ListVolumeSnapshotsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _computeApi.ListVolumeSnapshotsAsync<VolumeSnapshotCollection>(cancellationToken);
+            return await _computeApi.ListVolumeSnapshotsAsync<VolumeSnapshotCollection>(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.DeleteVolumeAsync" />
@@ -515,18 +507,6 @@ namespace OpenStack.Compute.v2_1
         public Task<ServiceLimits> GetLimitsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.GetLimitsAsync<ServiceLimits>(cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.GetCurrentQuotasAsync{T}" />
-        public Task<ServiceQuotas> GetCurrentQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetCurrentQuotasAsync<ServiceQuotas>(cancellationToken);
-        }
-
-        /// <inheritdoc cref="ComputeApi.GetDefaultQuotasAsync{T}" />
-        public Task<ServiceQuotas> GetDefaultQuotasAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _computeApi.GetDefaultQuotasAsync<ServiceQuotas>(cancellationToken);
         }
         #endregion
     }

@@ -89,7 +89,6 @@
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\NamespaceDoc.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
-    <Compile Include="Compute\v2_1\Actions\EvacuateServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
     <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
@@ -98,6 +97,12 @@
     <Compile Include="Compute\v2_1\AddressType.cs" />
     <Compile Include="Compute\v2_1\Flavor.cs" />
     <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Operator\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\EvacuateServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Operator\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServerExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServerMetadata.cs" />
     <Compile Include="Compute\v2_1\ServerMetadataExtensions.cs" />
     <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
@@ -105,14 +110,13 @@
     <Compile Include="Compute\v2_1\Image.cs" />
     <Compile Include="Compute\v2_1\ImageListOptions.cs" />
     <Compile Include="Compute\v2_1\ImageMetadata.cs" />
-    <Compile Include="Compute\v2_1\ImageStatus.cs" />
     <Compile Include="Compute\v2_1\ImageSummary.cs" />
     <Compile Include="Compute\v2_1\ImageType.cs" />
     <Compile Include="Compute\v2_1\IPProtocol.cs" />
     <Compile Include="Compute\v2_1\KeyPair.cs" />
     <Compile Include="Compute\v2_1\KeyPairRequest.cs" />
     <Compile Include="Compute\v2_1\KeyPairResponse.cs" />
-    <Compile Include="Compute\v2_1\NetworkAttachDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerNetworkDefinition.cs" />
     <Compile Include="Compute\v2_1\SecurityGroup.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
     <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
@@ -126,7 +130,6 @@
     <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
-    <Compile Include="Compute\v2_1\Serialization\VolumeTypeCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
     <Compile Include="Compute\v2_1\ServerSummary.cs" />
     <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
@@ -134,13 +137,11 @@
     <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerGroup.cs" />
     <Compile Include="Compute\v2_1\ServerGroupDefinition.cs" />
-    <Compile Include="Compute\v2_1\ServiceQuotas.cs" />
     <Compile Include="Compute\v2_1\ServiceLimits.cs" />
     <Compile Include="Compute\v2_1\SchedulerHints.cs" />
     <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
     <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />
-    <Compile Include="Compute\v2_1\Serialization\ServerActionReferenceCollection.cs" />
-    <Compile Include="Compute\v2_1\Serialization\ImageStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerActionCollection.cs" />
     <Compile Include="Compute\v2_1\Serialization\ImageType.cs" />
     <Compile Include="Compute\v2_1\Serialization\RebootType.cs" />
     <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
@@ -164,7 +165,7 @@
     <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
     <Compile Include="Compute\v2_1\ServerAddress.cs" />
     <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
-    <Compile Include="Compute\v2_1\ServerActionReference.cs" />
+    <Compile Include="Compute\v2_1\ServerActionSummary.cs" />
     <Compile Include="Compute\v2_1\ServerEventStatus.cs" />
     <Compile Include="Compute\v2_1\ServerExtensions.cs" />
     <Compile Include="Compute\v2_1\ServerReference.cs" />
@@ -179,7 +180,6 @@
     <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
     <Compile Include="Compute\v2_1\VolumeSnapshot.cs" />
     <Compile Include="Compute\v2_1\VolumeSnapshotDefinition.cs" />
-    <Compile Include="Compute\v2_1\VolumeType.cs" />
     <Compile Include="Compute\v2_2\KeyPair.cs" />
     <Compile Include="Compute\v2_2\KeyPairDefinition.cs" />
     <Compile Include="Compute\v2_2\KeyPairType.cs" />
@@ -217,6 +217,8 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
+    <Compile Include="Images\v2\ImageStatus.cs" />
+    <Compile Include="Images\v2\Serialization\ImageStatus.cs" />
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\NamespaceDoc.cs" />
     <Compile Include="Networking\v2\AllowedAddress.cs" />

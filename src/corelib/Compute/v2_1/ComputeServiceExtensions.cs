@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenStack.Compute.v2_1;
+using OpenStack.Images.v2;
 using OpenStack.Synchronous.Extensions;
 
 // ReSharper disable once CheckNamespace
@@ -120,12 +121,6 @@ namespace OpenStack.Synchronous
             service.RebootServerAsync(serverId, request).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.EvacuateServerAsync" />
-        public static void EvacuateServer(this ComputeService service, Identifier serverId, EvacuateServerRequest request)
-        {
-            service.EvacuateServerAsync(serverId, request).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="ComputeService.GetVncConsoleAync" />
         public static RemoteConsole GetVncConsole(this ComputeService service, Identifier serverId, RemoteConsoleType type)
         {
@@ -186,10 +181,10 @@ namespace OpenStack.Synchronous
             service.CancelResizeServerAsync(serverId).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.ListServerActionsAsync" />
-        public static IEnumerable<ServerActionReference> ListServerActions(this ComputeService service, Identifier serverId)
+        /// <inheritdoc cref="ComputeService.ListServerActionSummariesAsync" />
+        public static IEnumerable<ServerActionSummary> ListServerActions(this ComputeService service, Identifier serverId)
         {
-            return service.ListServerActionsAsync(serverId).ForceSynchronous();
+            return service.ListServerActionSummariesAsync(serverId).ForceSynchronous();
         }
 
         /// <inheritdoc cref="ComputeService.GetServerActionAsync" />
@@ -432,12 +427,6 @@ namespace OpenStack.Synchronous
             return service.GetVolumeAsync(volumeId).ForceSynchronous();
         }
 
-        /// <inheritdoc cref="ComputeService.GetVolumeTypeAsync" />
-        public static VolumeType GetVolumeType(this ComputeService service, Identifier volumeTypeId)
-        {
-            return service.GetVolumeTypeAsync(volumeTypeId).ForceSynchronous();
-        }
-
         /// <inheritdoc cref="ComputeService.GetVolumeSnapshotAsync" />
         public static VolumeSnapshot GetVolumeSnapshot(this ComputeService service, Identifier snapshotId)
         {
@@ -493,18 +482,6 @@ namespace OpenStack.Synchronous
         public static ServiceLimits GetLimits(this ComputeService service)
         {
             return service.GetLimitsAsync().ForceSynchronous();
-        }
-
-        /// <inheritdoc cref="ComputeService.GetCurrentQuotasAsync" />
-        public static ServiceQuotas GetCurrentQuotas(this ComputeService service)
-        {
-            return service.GetCurrentQuotasAsync().ForceSynchronous();
-        }
-
-        /// <inheritdoc cref="ComputeService.GetDefaultQuotasAsync" />
-        public static ServiceQuotas GetDefaultQuotas(this ComputeService service)
-        {
-            return service.GetDefaultQuotasAsync().ForceSynchronous();
         }
         #endregion
     }

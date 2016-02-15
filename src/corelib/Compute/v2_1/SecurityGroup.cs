@@ -9,25 +9,36 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Security groups are sets of IP filter rules that are applied to an instance's networking.
+    /// </summary>
+    /// <seealso href="http://docs.openstack.org/openstack-ops/content/security_groups.html"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group")]
     public class SecurityGroup : SecurityGroupReference
     {
-        /// <summary />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SecurityGroup"/> class.
+        /// </summary>
         public SecurityGroup()
         {
             Rules = new List<SecurityGroupRule>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// The security group identifier.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The security group description.
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The security group rules.
+        /// </summary>
         [JsonProperty("rules")]
         public IList<SecurityGroupRule> Rules { get; set; }
 
@@ -38,7 +49,7 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             var request = new SecurityGroupDefinition(Name, Description);
 
-            var result = await compute.UpdateSecurityGroupAsync<SecurityGroup>(Id, request, cancellationToken);
+            var result = await compute.UpdateSecurityGroupAsync<SecurityGroup>(Id, request, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
 
@@ -49,7 +60,7 @@ namespace OpenStack.Compute.v2_1
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             rule.GroupId = Id;
 
-            var result = await compute.CreateSecurityGroupRuleAsync<SecurityGroupRule>(rule, cancellationToken);
+            var result = await compute.CreateSecurityGroupRuleAsync<SecurityGroupRule>(rule, cancellationToken).ConfigureAwait(false);
             Rules.Add(result);
             return result;
         }

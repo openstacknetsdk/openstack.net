@@ -1,6 +1,6 @@
 ﻿namespace OpenStack.BlockStorage.v2
 {
-    /// <summary/>
+    /// <inheritdoc />
     public class SnapshotStatus : Serialization.SnapshotStatus<SnapshotStatus>
     {
     }

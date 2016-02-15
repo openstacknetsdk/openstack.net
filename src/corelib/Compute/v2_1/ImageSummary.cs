@@ -2,12 +2,15 @@ using Newtonsoft.Json;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Summary information for an image.
+    /// </summary>
     public class ImageSummary : ImageReference
     {
-        /// <summary />
+        /// <summary>
+        /// The image name.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
-
     }
 }

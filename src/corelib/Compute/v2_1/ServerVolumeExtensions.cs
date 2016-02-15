@@ -3,16 +3,18 @@ using OpenStack.Synchronous.Extensions;
 
 namespace OpenStack.Synchronous
 {
-    /// <summary />
+    /// <summary>
+    /// Provides synchronous extention methods for a <see cref="ServerVolume"/> instance.
+    /// </summary>
     public static class ServerVolumeExtensions
     {
-        /// <summary />
+        /// <inheritdoc cref="ServerVolumeReference.GetServerVolumeAsync" />
         public static ServerVolume GetServerVolume(this ServerVolumeReference volume)
         {
             return volume.GetServerVolumeAsync().ForceSynchronous();
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ServerVolumeReference.DetachAsync" />
         public static void Detach(this ServerVolumeReference volume)
         {
             volume.DetachAsync().ForceSynchronous();

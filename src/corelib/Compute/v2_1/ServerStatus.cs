@@ -2,7 +2,7 @@
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <inheritdoc />
     public class ServerStatus : ServerStatus<ServerStatus>
     { }
 }

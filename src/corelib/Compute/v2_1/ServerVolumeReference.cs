@@ -11,14 +11,20 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Reference to a volume attachment to a server.
+    /// </summary>
     public class ServerVolumeReference : IHaveExtraData, IChildResource
     {
-        /// <summary />
+        /// <summary>
+        /// The associated server.
+        /// </summary>
         [JsonIgnore]
         protected ServerReference ServerRef { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The attachment identifier.
+        /// </summary>
         public Identifier Id { get; set; }
 
         object IServiceResource.Owner { get; set; }
@@ -39,7 +45,6 @@ namespace OpenStack.Compute.v2_1
             SetParent(new ServerReference {Id = parentId});
         }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
@@ -52,26 +57,26 @@ namespace OpenStack.Compute.v2_1
             throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.GetServerVolumeAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task<ServerVolume> GetServerVolumeAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet();
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken);
+            var result = await compute.GetServerVolumeAsync<ServerVolume>(ServerRef.Id, Id, cancellationToken).ConfigureAwait(false);
             result.ServerRef = ServerRef;
             return result;
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.DetachVolumeAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public async Task DetachAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet(); 
 
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken);
+            await compute.DetachVolumeAsync(ServerRef.Id, Id, cancellationToken).ConfigureAwait(false);
 
             var server = ServerRef as Server;
             if (server != null)

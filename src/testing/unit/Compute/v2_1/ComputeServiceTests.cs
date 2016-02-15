@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json.Linq;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
@@ -83,78 +82,6 @@ namespace OpenStack.Compute.v2_1
                 
                 Assert.NotNull(limits.ResourceLimits);
                 Assert.NotNull(limits.ResourceLimits.CoresMax);
-            }
-        }
-
-        [Fact]
-        public void GetCurrentQuotas()
-        {
-            using (var httpTest = new HttpTest())
-            {
-                httpTest.RespondWith(JObject.Parse(@"
-{
-  'quota_set': {
-    'injected_file_content_bytes': 10240,
-    'metadata_items': 128,
-    'server_group_members': 10,
-    'server_groups': 10,
-    'ram': 51200,
-    'floating_ips': 10,
-    'key_pairs': 100,
-    'id': 'details',
-    'instances': 10,
-    'security_group_rules': 20,
-    'injected_files': 5,
-    'cores': 20,
-    'fixed_ips': -1,
-    'injected_file_path_bytes': 255,
-    'security_groups': 10
-  }
-}").ToString());
-
-                var quotas = _compute.GetCurrentQuotas();
-
-                httpTest.ShouldHaveCalled("*/os-quota-sets/details");
-                Assert.NotNull(quotas);
-
-                Assert.Equal(100, quotas.KeyPairs);
-                Assert.Equal(-1, quotas.FixedIPs);
-            }
-        }
-
-        [Fact]
-        public void GetDefaultQuotas()
-        {
-            using (var httpTest = new HttpTest())
-            {
-                httpTest.RespondWith(JObject.Parse(@"
-{
-  'quota_set': {
-    'injected_file_content_bytes': 10240,
-    'metadata_items': 128,
-    'server_group_members': 10,
-    'server_groups': 10,
-    'ram': 51200,
-    'floating_ips': 10,
-    'key_pairs': 100,
-    'id': 'defaults',
-    'instances': 10,
-    'security_group_rules': 20,
-    'injected_files': 5,
-    'cores': 20,
-    'fixed_ips': -1,
-    'injected_file_path_bytes': 255,
-    'security_groups': 10
-  }
-}").ToString());
-
-                var quotas = _compute.GetDefaultQuotas();
-
-                httpTest.ShouldHaveCalled("*/os-quota-sets/defaults");
-                Assert.NotNull(quotas);
-
-                Assert.Equal(100, quotas.KeyPairs);
-                Assert.Equal(-1, quotas.FixedIPs);
             }
         }
     }

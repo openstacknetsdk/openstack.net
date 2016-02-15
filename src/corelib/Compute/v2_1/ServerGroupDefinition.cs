@@ -4,7 +4,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Defines a new server group.
+    /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "server_group")]
     public class ServerGroupDefinition
     {
@@ -17,15 +19,11 @@ namespace OpenStack.Compute.v2_1
             Policies = new List<string>(policies);
         }
 
-        /// <summary>
-        /// The server group name.
-        /// </summary>
+        /// <inheritdoc cref="ServerGroup.Name" />
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// A list of one or more policy names to associate with the server group.
-        /// </summary>
+        /// <inheritdoc cref="ServerGroup.Policies" />
         [JsonProperty("policies")]
         public IList<string> Policies { get; set; }
     }

@@ -2,10 +2,14 @@ using Newtonsoft.Json;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Summary information for a flavor.
+    /// </summary>
     public class FlavorSummary : FlavorReference
     {
-        /// <summary /> // In some cases, only the id is populated. Use GetFlavor if Name is null.
+        /// <summary>
+        /// The flavor name.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }   
     }

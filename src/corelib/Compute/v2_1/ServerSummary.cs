@@ -2,10 +2,14 @@ using Newtonsoft.Json;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Summary information for a server instance.
+    /// </summary>
     public class ServerSummary : ServerReference
     {
-        /// <summary />
+        /// <summary>
+        /// The server name.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
     }

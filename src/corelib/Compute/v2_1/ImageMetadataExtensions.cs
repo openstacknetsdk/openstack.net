@@ -4,7 +4,9 @@ using OpenStack.Synchronous.Extensions;
 // ReSharper disable once CheckNamespace
 namespace OpenStack.Synchronous
 {
-    /// <summary />
+    /// <summary>
+    /// Provides synchronous extention methods for a <see cref="ImageMetadata"/> instance.
+    /// </summary>
     public static class ImageMetadataExtensions_v2_1
     {
         /// <inheritdoc cref="ImageMetadata.CreateAsync"/>

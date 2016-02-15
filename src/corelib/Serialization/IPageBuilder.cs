@@ -5,7 +5,7 @@ using Flurl;
 
 namespace OpenStack.Serialization
 {
-    /// <summary />
+    /// <exclude />
     public interface IPageBuilder<TPage>
     {
         /// <summary>

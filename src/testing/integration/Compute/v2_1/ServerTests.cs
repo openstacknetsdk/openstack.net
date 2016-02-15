@@ -59,12 +59,11 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(server.Launched);
             Assert.NotNull(server.DiskConfig);
             Assert.NotNull(server.HostId);
-            Assert.NotNull(server.HostName);
             Assert.NotNull(server.PowerState);
             Assert.NotNull(server.VMState);
             Assert.NotNull(server.SecurityGroups);
 
-            var history = await server.ListActionsAsync();
+            var history = await server.ListActionSummariesAsync();
             Assert.NotNull(history);
             var createRef = history.FirstOrDefault(a => a.Name == "create");
             Assert.NotNull(createRef);
@@ -78,12 +77,6 @@ namespace OpenStack.Compute.v2_1
             Assert.NotNull(createAction.Id);
             Assert.NotNull(createAction.Name);
             Assert.NotNull(createAction.Events);
-
-            var createEvent = createAction.Events.FirstOrDefault();
-            Assert.NotNull(createEvent);
-            Assert.NotNull(createEvent.Name);
-            Assert.NotNull(createEvent.Finished);
-            Assert.Equal(ServerEventStatus.Success, createEvent.Result);
         }
 
         [Fact]
@@ -168,7 +161,7 @@ namespace OpenStack.Compute.v2_1
                     {"foo", fooValue}
                 }
             });
-            Assert.Equal(1, results.Count());
+            Assert.Contains(serverWithMetadata.Id, results.Select(x => x.Id));
         }
 
         [Fact]
@@ -330,33 +323,7 @@ namespace OpenStack.Compute.v2_1
             await server.WaitForStatusAsync(ServerStatus.Reboot);
             await server.WaitUntilActiveAsync();
         }
-
-        [Fact]
-        public async Task EvacuateServerTest()
-        {
-            var server = await _testData.CreateServer();
-            await server.WaitUntilActiveAsync();
-            Trace.WriteLine($"Created server named: {server.Name}");
-
-            Trace.WriteLine("Evacuating the server to a new host...");
-            var request = new EvacuateServerRequest(false)
-            {
-                AdminPassword = "top-secret-password"
-            };
-
-            // Our service isn't down, so we can't really evacuate.
-            // Just check that the request would have gone through (i.e. was valid)
-            // and only was rejected because the compute service is healthy
-            try
-            {
-                await server.EvacuateAsync(request);
-            }
-            catch (FlurlHttpException httpError) when (httpError.Call.ErrorResponseBody.Contains("is still in use"))
-            {
-                // Hurray! the test passed
-            }
-        }
-
+        
         [Fact]
         public async Task ServerVolumesTest()
         {

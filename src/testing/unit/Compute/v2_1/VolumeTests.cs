@@ -46,22 +46,6 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void GetVolumeType()
-        {
-            using (var httpTest = new HttpTest())
-            {
-                Identifier volumeTypeId = Guid.NewGuid();
-                httpTest.RespondWithJson(new VolumeType { Id = volumeTypeId });
-
-                var result = _compute.GetVolumeType(volumeTypeId);
-
-                httpTest.ShouldHaveCalled($"*/os-volume-types/{volumeTypeId}");
-                Assert.NotNull(result);
-                Assert.Equal(volumeTypeId, result.Id);
-            }
-        }
-
-        [Fact]
         public void GetVolumeSnapshot()
         {
             using (var httpTest = new HttpTest())

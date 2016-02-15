@@ -41,7 +41,7 @@ namespace OpenStack.Networking.v2
         public IPVersion IPVersion { get; set; }
 
         /// <summary>
-        /// The CIDR.
+        /// Classless Inter-Domain Routing (CIDR). A method for allocating IP addresses and routing Internet Protocol packets.
         /// </summary>
         [JsonProperty("cidr")]
         public string CIDR { get; set; }

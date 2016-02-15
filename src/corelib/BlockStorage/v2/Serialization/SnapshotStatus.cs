@@ -2,7 +2,9 @@
 
 namespace OpenStack.BlockStorage.v2.Serialization
 {
-    /// <summary />
+    /// <summary>
+    /// Volume snapshot status.
+    /// </summary>
     /// <exclude />
     public class SnapshotStatus<T> : ResourceStatus
         where T : SnapshotStatus<T>, new()

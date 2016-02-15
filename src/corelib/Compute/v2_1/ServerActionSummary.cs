@@ -9,40 +9,53 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
-    public class ServerActionReference : IHaveExtraData, IServiceResource
+    /// <summary>
+    /// Summary informationm for a server action.
+    /// </summary>
+    public class ServerActionSummary : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The action identifier.
+        /// </summary>
         [JsonProperty("request_id")]
         public Identifier Id { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The server identifier.
+        /// </summary>
         [JsonProperty("instance_uuid")]
         public Identifier ServerId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The action name.
+        /// </summary>
         [JsonProperty("action")]
         public string Name { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The action output message.
+        /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The identifier of the user who performed the action.
+        /// </summary>
         [JsonProperty("user_id")]
         public Identifier UserId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The action start time.
+        /// </summary>
         [JsonProperty("start_time")]
         public DateTimeOffset Started { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
         object IServiceResource.Owner { get; set; }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.GetServerActionAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public Task<ServerAction> GetActionAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

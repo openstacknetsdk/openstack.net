@@ -2,7 +2,9 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Internet Protocols.
+    /// </summary>
     public class IPProtocol : StringEnumeration
     {
         /// <summary />

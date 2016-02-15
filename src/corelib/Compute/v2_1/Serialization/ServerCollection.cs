@@ -12,15 +12,11 @@ namespace OpenStack.Compute.v2_1.Serialization
         where TPage : ServerCollection<TPage, TItem>
         where TItem : IServiceResource
     {
-        /// <summary>
-        /// The requested servers.
-        /// </summary>
+        /// <summary/>
         [JsonProperty("servers")]
         protected IList<TItem> Servers => Items;
 
-        /// <summary>
-        /// The paging navigation links.
-        /// </summary>
+        /// <summary/>
         [JsonProperty("servers_links")]
         protected IList<PageLink> ServerLinks => Links;
     }

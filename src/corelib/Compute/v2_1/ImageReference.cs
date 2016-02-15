@@ -5,14 +5,19 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenStack.Compute.v2_1.Serialization;
+using OpenStack.Images.v2;
 using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Reference to an image.
+    /// </summary>
     public class ImageReference : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The image identifier.
+        /// </summary>
         [JsonProperty("id")]
         public virtual Identifier Id { get; set; }
 
@@ -51,7 +56,7 @@ namespace OpenStack.Compute.v2_1
         public virtual async Task DeleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var owner = this.GetOwnerOrThrow<ComputeApi>();
-            await owner.DeleteImageAsync(Id, cancellationToken);
+            await owner.DeleteImageAsync(Id, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ComputeApi.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />

@@ -3,31 +3,48 @@ using System.Collections.Generic;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Optional filter and paging options when listing servers.
+    /// </summary>
     public class ServerListOptions : PageOptions
     {
-        /// <summary />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerListOptions"/> class.
+        /// </summary>
         public ServerListOptions()
         {
             Metadata = new Dictionary<string, string>();
         }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by a date and time stamp when the server last changed status. 
+        /// </summary>
         public DateTimeOffset? UpdatedAfter { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by an image.
+        /// </summary>
         public Identifier ImageId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by a flavor.
+        /// </summary>
         public string FlavorId { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by a server name.
+        /// <para>You can use regular expressions in the query. For example, the ?name=bob regular expression returns both bob and bobb.</para>
+        /// </summary>
         public string Name { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by a server status.
+        /// </summary>
         public ServerStatus Status { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// Filter by associated server metadata.
+        /// </summary>
         public IDictionary<string, string> Metadata { get; set; } 
 
         /// <summary />

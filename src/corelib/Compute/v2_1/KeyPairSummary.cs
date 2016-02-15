@@ -8,19 +8,27 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Key pair summary information.
+    /// </summary>
     [JsonConverter(typeof(KeyPairConverter))]
     public class KeyPairSummary : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The key pair name.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// The public ssh key.
+        /// </summary>
         [JsonProperty("public_key")]
         public string PublicKey { get; set; }
 
-        /// <summary />
+        /// <summary>
+        /// A short sequence of bytes used to authenticate, or look up, a longer public key.
+        /// </summary>
         [JsonProperty("fingerprint")]
         public string Fingerprint { get; set; }
 

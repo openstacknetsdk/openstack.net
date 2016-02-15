@@ -9,14 +9,17 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Reference to a flavor resource.
+    /// </summary>
     public class FlavorReference : IHaveExtraData, IServiceResource
     {
-        /// <summary />
+        /// <summary>
+        /// The flavor identifier.
+        /// </summary>
         [JsonProperty("id")]
         public Identifier Id { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 

@@ -10,15 +10,18 @@ using OpenStack.Serialization;
 
 namespace OpenStack.Compute.v2_1
 {
-    /// <summary />
+    /// <summary>
+    /// Key value pairs associated with a server instance.
+    /// </summary>
     [JsonConverterWithConstructor(typeof (RootWrapperConverter), "metadata")]
     public class ServerMetadata : Dictionary<string, string>, IHaveExtraData, IChildResource
     {
-        /// <summary />
+        /// <summary>
+        /// The associated server.
+        /// </summary>
         [JsonIgnore]
         protected ServerReference Server { get; set; }
 
-        /// <summary />
         [JsonExtensionData]
         IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
 
@@ -49,21 +52,21 @@ namespace OpenStack.Compute.v2_1
             throw new InvalidOperationException(string.Format($"{callerName} can only be used on instances which were constructed by the ComputeService. Use ComputeService.{callerName} instead."));
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.CreateServerMetadataAsync" />
         public async Task CreateAsync(string key, string value, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.CreateServerMetadataAsync(Server.Id, key, value, cancellationToken);
+            await compute.CreateServerMetadataAsync(Server.Id, key, value, cancellationToken).ConfigureAwait(false);
             this[key] = value;
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.UpdateServerMetadataAsync{T}" />
         public async Task UpdateAsync(bool overwrite = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            var results = await compute.UpdateServerMetadataAsync<ServerMetadata>(Server.Id, this, overwrite, cancellationToken);
+            var results = await compute.UpdateServerMetadataAsync<ServerMetadata>(Server.Id, this, overwrite, cancellationToken).ConfigureAwait(false);
             Clear();
             foreach (var result in results)
             {
@@ -71,7 +74,7 @@ namespace OpenStack.Compute.v2_1
             }
         }
 
-        /// <summary />
+        /// <inheritdoc cref="ComputeApi.DeleteServerMetadataAsync" />
         public async Task DeleteAsync(string key, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (!ContainsKey(key))
@@ -79,7 +82,7 @@ namespace OpenStack.Compute.v2_1
 
             AssertParentIsSet();
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            await compute.DeleteServerMetadataAsync(Server.Id, key, cancellationToken);
+            await compute.DeleteServerMetadataAsync(Server.Id, key, cancellationToken).ConfigureAwait(false);
             Remove(key);
         }
     }

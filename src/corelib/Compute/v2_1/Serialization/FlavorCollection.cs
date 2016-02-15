@@ -11,9 +11,7 @@ namespace OpenStack.Compute.v2_1.Serialization
     public class FlavorCollection<T> : ResourceCollection<T>
         where T : IServiceResource
     {
-        /// <summary>
-        /// The requested flavors.
-        /// </summary>
+        /// <summary />
         [JsonProperty("flavors")]
         protected IList<T> Flavors => Items;
     }
