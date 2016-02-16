@@ -33,7 +33,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void CreateAServiceOnAkamai_UsingDefaults()
+        public async Task CreateAServiceOnAkamai_UsingDefaults()
         {
             Trace.WriteLine("Looking for a CDN flavor provided by Akamai...");
             var flavors = await _cdnService.ListFlavorsAsync();
@@ -93,7 +93,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void FindServiceOnAPage()
+        public async Task FindServiceOnAPage()
         {
             var serviceIds = new List<string>();
             try

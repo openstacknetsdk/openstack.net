@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using Flurl.Http;
 using OpenStack.ContentDeliveryNetworks.v1;
 using OpenStack.Testing;
@@ -9,7 +10,7 @@ namespace OpenStack
     public class AuthenticationTests
     {
         [Fact]
-        public async void When401UnauthorizedIsReturned_RetryRequest()
+        public async Task When401UnauthorizedIsReturned_RetryRequest()
         {
             using (var httpTest = new HttpTest())
             {
@@ -23,7 +24,7 @@ namespace OpenStack
         }
 
         [Fact]
-        public async void When401AuthenticationFailsMultipleTimes_ThrowException()
+        public async Task When401AuthenticationFailsMultipleTimes_ThrowException()
         {
             using (var httpTest = new HttpTest())
             {

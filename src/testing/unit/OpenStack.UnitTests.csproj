@@ -47,18 +47,19 @@
     <AssemblyOriginatorKeyFile>..\..\..\build\keys\SDKTestingKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flurl, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Flurl.Signed.1.0.8\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    <Reference Include="Flurl, Version=1.0.10.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Flurl.Signed.1.0.10\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl.Http, Version=0.6.2.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Flurl.Http.Signed.0.6.2.2015062601\lib\net45\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http, Version=0.7.0.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Flurl.Http.Signed.0.7.0\lib\net45\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Marvin.JsonPatch, Version=0.7.0.0, Culture=neutral, PublicKeyToken=686c63b2d045ab44, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -97,12 +98,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationTests.cs" />
+    <Compile Include="Compute\v2_1\ComputeServiceTests.cs" />
+    <Compile Include="Compute\v2_1\Operator\ComputeServiceTests.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServerTests.cs" />
+    <Compile Include="Compute\v2_1\VolumeTests.cs" />
+    <Compile Include="Compute\v2_1\ServerGroupTests.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupTests.cs" />
+    <Compile Include="Compute\v2_1\ImageTests.cs" />
+    <Compile Include="Compute\v2_1\KeyPairTests.cs" />
+    <Compile Include="Compute\v2_1\FlavorTests.cs" />
+    <Compile Include="Compute\v2_1\ServerAddressTests.cs" />
+    <Compile Include="Compute\v2_1\ServerTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedExceptionTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceCacheTests.cs" />
     <Compile Include="Domain\Mapping\NetworkAddressDeserializationTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
+    <Compile Include="Extensions\TypeExtensionsTests.cs" />
     <Compile Include="IdentifierTests.cs" />
     <Compile Include="Networking\v2\DHCPOptionConverterTests.cs" />
     <Compile Include="Networking\v2\PortTests.cs" />
@@ -124,6 +137,7 @@
     <Compile Include="Stubs.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
+    <Compile Include="XunitTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\build\keys\SDKTestingKey.snk">

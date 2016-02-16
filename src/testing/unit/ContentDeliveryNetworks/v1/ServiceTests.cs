@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Extensions;
 using Marvin.JsonPatch;
-using net.openstack.Core.Domain;
 using Newtonsoft.Json;
+using OpenStack.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
@@ -29,18 +29,30 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         {
             var services = new ServiceCollection
             {
-                Services = {new Service {Id = "service-id"}},
-                ServiceLinks = {new Link("next", "http://api.com/next")}
+                Items = {new Service {Id = "service-id"}},
+                Links = {new PageLink("next", "http://api.com/next")}
             };
-            string json = JsonConvert.SerializeObject(services, Formatting.None);
+            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(services);
             Assert.Contains("\"services\"", json);
             Assert.DoesNotContain("\"service\"", json);
 
-            var result = JsonConvert.DeserializeObject<ServiceCollection>(json);
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ServiceCollection>(json);
             Assert.NotNull(result);
             Assert.Equal(1, result.Count());
-            Assert.Equal(1, result.Services.Count());
-            Assert.Equal(1, result.ServiceLinks.Count());
+            Assert.Equal(1, result.Items.Count());
+            Assert.Equal(1, result.Links.Count());
+            Assert.True(result.HasNextPage);
+        }
+
+        [Fact]
+        public void SerializePageLink()
+        {
+            var link = new PageLink("next", "http://api.com/next");
+            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(link);
+
+            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<PageLink>(json);
+            Assert.NotNull(result);
+            Assert.True(result.IsNextPage);
         }
 
         [Fact]
@@ -50,12 +62,12 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             {
                 httpTest.RespondWithJson(new ServiceCollection
                 {
-                    Services = {new Service()},
-                    ServiceLinks = {new Link("next", "http://api.com/next")}
+                    Items = {new Service()},
+                    Links = {new PageLink("next", "http://api.com/next")}
                 });
                 httpTest.RespondWithJson(new ServiceCollection
                 {
-                    Services = {new Service {Name = "MyService"}}
+                    Items = {new Service {Name = "MyService"}}
                 });
 
                 var currentPage = _cdnService.ListServices();
@@ -159,7 +171,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeployed_StopsWhenUserTokenIsCancelled()
+        public async Task WaitForServiceDeployed_StopsWhenUserTokenIsCancelled()
         {
             using (var httpTest = new HttpTest())
             {
@@ -172,7 +184,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeployed_StopsWhenTimeoutIsReached()
+        public async Task WaitForServiceDeployed_StopsWhenTimeoutIsReached()
         {
             using (var httpTest = new HttpTest())
             {
@@ -195,7 +207,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
+        public async Task WaitForServiceDeleted_StopsWhenUserTokenIsCancelled()
         {
             using (var httpTest = new HttpTest())
             {
@@ -208,7 +220,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         [Fact]
-        public async void WaitForServiceDeleted_StopsWhenTimeoutIsReached()
+        public async Task WaitForServiceDeleted_StopsWhenTimeoutIsReached()
         {
             using (var httpTest = new HttpTest())
             {

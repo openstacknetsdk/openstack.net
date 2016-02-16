@@ -1,5 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using OpenStack.Serialization;
 
 namespace System.Extensions
 {
@@ -26,6 +30,34 @@ namespace System.Extensions
                 return assembly.GetName().Version.ToString();
             }
         }
-    }
 
+        /// <summary />
+        public static T Clone<T>(this T src)
+            where T : new()
+        {
+            var dest = new T();
+            src.CopyProperties(dest);
+            return dest;
+        }
+
+        /// <summary />
+        public static void CopyProperties<T>(this T src, T dest)
+        {
+            foreach (PropertyDescriptor srcProp in TypeDescriptor.GetProperties(src))
+            {
+                srcProp.SetValue(dest, srcProp.GetValue(src));
+            }
+        }
+
+        /// <summary />
+        public static void CopyProperties(this object src, object dest)
+        {
+            var destProps = TypeDescriptor.GetProperties(dest).Cast<PropertyDescriptor>();
+            foreach (PropertyDescriptor srcProp in TypeDescriptor.GetProperties(src))
+            {
+                var destProp = destProps.FirstOrDefault(x => x.Name == srcProp.Name && x.PropertyType == srcProp.PropertyType);
+                destProp?.SetValue(dest, srcProp.GetValue(src));
+            }
+        }
+    }
 }

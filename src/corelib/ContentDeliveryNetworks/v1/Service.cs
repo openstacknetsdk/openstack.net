@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using net.openstack.Core.Domain;
 using Newtonsoft.Json;
+using OpenStack.Serialization;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -8,13 +9,13 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     /// Represents a service resource of the <see cref="IContentDeliveryNetworkService"/>
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class Service
+    public class Service : IServiceResource
     {
         /// <summary>
         /// The service identifier.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Identifier Id { get; set; }
 
         /// <summary>
         /// The service name.
@@ -69,5 +70,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// </summary>
         [JsonProperty("links")]
         public IEnumerable<Link> Links { get; set; }
+
+        object IServiceResource.Owner { get; set; }
     }
 }

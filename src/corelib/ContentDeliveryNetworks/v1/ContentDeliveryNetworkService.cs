@@ -9,6 +9,7 @@ using Flurl.Extensions;
 using Flurl.Http;
 using Marvin.JsonPatch;
 using OpenStack.Authentication;
+using OpenStack.Serialization;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
@@ -20,7 +21,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
     public class ContentDeliveryNetworkService : IContentDeliveryNetworkService
     {
         private readonly IAuthenticationProvider _authenticationProvider;
-        private readonly ServiceUrlBuilder _urlBuilder;
+        private readonly ServiceEndpoint _endpoint;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentDeliveryNetworkService"/> class.
@@ -38,7 +39,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 throw new ArgumentException("region cannot be null or empty", "region");
 
             _authenticationProvider = authenticationProvider;
-            _urlBuilder = new ServiceUrlBuilder(ServiceType.ContentDeliveryNetwork, authenticationProvider, region, useInternalUrl);
+            _endpoint = new ServiceEndpoint(ServiceType.ContentDeliveryNetwork, authenticationProvider, region, useInternalUrl);
         }
 
         /// <inheritdoc />
@@ -47,7 +48,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(flavorId))
                 throw new ArgumentNullException("flavorId");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("flavors", flavorId)
@@ -59,7 +60,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task<IEnumerable<Flavor>> ListFlavorsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("flavors")
@@ -71,7 +72,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task PingAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("ping")
@@ -83,7 +84,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         /// <inheritdoc />
         public async Task<IPage<Service>> ListServicesAsync(string startServiceId = null, int? pageSize = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
             string url = endpoint
                 .AppendPathSegments("services")
                 .SetQueryParams(new
@@ -96,14 +97,15 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         }
 
         // TODO: move into a class that we can use via composition so that we aren't implementing this for everything that is paged?
-        private async Task<IPage<Service>> ListServicesAsync(Url url, CancellationToken cancellationToken)
+        private async Task<ServiceCollection> ListServicesAsync(Url url, CancellationToken cancellationToken)
         {
             ServiceCollection result = await url
                 .Authenticate(_authenticationProvider)
                 .GetJsonAsync<ServiceCollection>(cancellationToken)
                 .ConfigureAwait(false);
 
-            result.NextPageHandler = ListServicesAsync;
+            ((IPageBuilder<ServiceCollection>)result).SetNextPageHandler(ListServicesAsync);
+
             return result;
         }
 
@@ -113,7 +115,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             return await endpoint
                 .AppendPathSegments("services", serviceId)
@@ -128,7 +130,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (service == null)
                 throw new ArgumentNullException("service");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             var response = await endpoint
                 .AppendPathSegments("services")
@@ -146,7 +148,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId)
@@ -164,7 +166,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (patch == null)
                 throw new ArgumentNullException("patch");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId)
@@ -181,7 +183,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException("url");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId, "assets")
@@ -198,7 +200,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
             if (string.IsNullOrEmpty(serviceId))
                 throw new ArgumentNullException("serviceId");
 
-            string endpoint = await _urlBuilder.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            string endpoint = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
             await endpoint
                 .AppendPathSegments("services", serviceId, "assets")

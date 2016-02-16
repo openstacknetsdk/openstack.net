@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
-using net.openstack.Core.Domain;
 using Newtonsoft.Json;
 
 namespace OpenStack.Serialization
@@ -11,50 +11,44 @@ namespace OpenStack.Serialization
     /// <inheritdoc cref="IPage{T}" />
     /// <exclude />
     [JsonObject(MemberSerialization.OptIn)]
-    public class Page<T> : ResourceCollection<T>, IPage<T>
+    public class Page<TPage, TItem, TLink> : ResourceCollection<TItem>, IPage<TItem>, IPageBuilder<TPage>
+        where TPage : IPage<TItem>
+        where TLink : IPageLink
     {
+        private Func<Url, CancellationToken, Task<TPage>> _nextPageHandler;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Page{T}"/> class.
+        /// Initializes a new instance of the <see cref="Page{TPage, TItem,TLink}"/> class.
         /// </summary>
         public Page()
         {
-            Links = new List<Link>();    
+            Links = new List<TLink>();    
         }
-
-        /// <summary>
-        /// Callback method used when retrieving the next page of items.
-        /// </summary>
-        /// <param name="url">The URL which represents a request for the next page.</param>
-        /// <param name="cancellation">The cancellation.</param>
-        /// <returns>
-        /// The next page of items.
-        /// </returns>
-        public delegate Task<IPage<T>> GetNextPageCallback(Url url, CancellationToken cancellation);
 
         /// <inheritdoc />
         [JsonIgnore]
-        public bool HasNextPage
+        public bool HasNextPage => GetNextLink() != null;
+        
+        /// <inheritdoc />
+        void IPageBuilder<TPage>.SetNextPageHandler(Func<Url, CancellationToken, Task<TPage>> value)
         {
-            get { return GetNextLink() != null; }
+            _nextPageHandler = value;
         }
 
         /// <inheritdoc />
-        public GetNextPageCallback NextPageHandler { get; set; }
-
-        /// <inheritdoc />
-        public async Task<IPage<T>> GetNextPageAsync(CancellationToken cancellationToken)
+        public async Task<IPage<TItem>> GetNextPageAsync(CancellationToken cancellationToken)
         {
             var nextPageLink = GetNextLink();
             if (nextPageLink == null)
                 return Empty();
 
-            return await NextPageHandler(new Url(nextPageLink.Href), cancellationToken);
+            return await _nextPageHandler(new Url(nextPageLink.Url), cancellationToken);
         }
 
         /// <summary>
         /// Returns an empty page
         /// </summary>
-        public static IPage<T> Empty()
+        public static IPage<TItem> Empty()
         {
             return EmptyPage.Instance;
         }
@@ -62,17 +56,17 @@ namespace OpenStack.Serialization
         /// <summary>
         /// The paging navigation links.
         /// </summary>
-        public IList<Link> Links { get; set; }
+        public IList<TLink> Links { get; set; }
 
         /// <summary>
         /// Finds the next link.
         /// </summary>
-        protected virtual Link GetNextLink()
+        protected virtual TLink GetNextLink()
         {
-            return Links.FirstOrDefault(x => x.Rel == "next");
+            return Links.FirstOrDefault(x => x.IsNextPage);
         }
 
-        private sealed class EmptyPage : Page<T>
+        private sealed class EmptyPage : Page<TPage, TItem, TLink>
         {
             public static readonly EmptyPage Instance = new EmptyPage();
 

@@ -16,6 +16,7 @@ using net.openstack.Providers.Rackspace.Objects.Response;
 namespace net.openstack.Providers.Rackspace
 {
     /// <summary>
+    /// <para>DEPRECATED. Use <see cref="OpenStack.Compute.v2_1.ComputeService"/> or Rackspace.CloudServers.v2.CloudServerService (from the Rackspace NuGet package).</para>
     /// <para>The Cloud Servers Provider enables simple access go the Rackspace next generation Cloud Servers powered by OpenStack.
     /// The next generation service is a fast, reliable, and scalable cloud compute solution without the risk of proprietary lock-in. 
     /// It provides the core features of the OpenStack Compute API v2 and also deploys certain extensions as permitted by the OpenStack Compute API contract. 
@@ -28,6 +29,7 @@ namespace net.openstack.Providers.Rackspace
     /// <see cref="IComputeProvider"/>
     /// <inheritdoc />
     /// <threadsafety static="true" instance="false"/>
+    [Obsolete("This will be removed in v2.0. Use OpenStack.Compute.v2_1.ComputeService or Rackspace.CloudServers.v2.CloudServerService (from the Rackspace NuGet package).")]
     public class CloudServersProvider : ProviderBase<IComputeProvider>, IComputeProvider
     {
         private readonly HttpStatusCode[] _validServerActionResponseCode = new[] { HttpStatusCode.OK, HttpStatusCode.Accepted, HttpStatusCode.NonAuthoritativeInformation, HttpStatusCode.NoContent };

@@ -4,10 +4,8 @@
   <PropertyGroup>
     <Configuration>Debug</Configuration>
 
-    <!-- Note: We won't start using semver until v2 -->
-    <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' != '' ">-beta$(bamboo_GitVersion_BuildMetadata)</PrereleaseTag>
-    <PrereleaseTag Condition=" '$(bamboo_GitVersion_BuildMetadata)' == '' ">-SNAPSHOT</PrereleaseTag>
-    <Version>1.5.0.2</Version>
+    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' != '' ">$(bamboo_GitVersion_NuGetVersion)</Version>
+    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
@@ -57,13 +55,10 @@
       <MSTest Condition=" '$(VS120COMNTOOLS)' != '' ">&quot;$(VS120COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
     </PropertyGroup>
 
+    <RemoveDir Directories="..\artifacts\TestResults\" />
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -xml ..\artifacts\TestResults\unit-tests.xml" ContinueOnError="true" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -nunit ..\artifacts\TestResults\unit-tests.nunit.xml" ContinueOnError="true" />
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
-
-    <!-- Convert test results to the NUnit format for easier reporting -->
-    <XslTransformation XmlInputPaths="..\artifacts\TestResults\unit-tests.xml"  XslInputPath="$(XUnitXslt)"
-      OutputPaths="..\artifacts\TestResults\unit-tests.nunit.xml" />
   </Target>
 
   <Target Name="IntegrationTest" DependsOnTargets="Build">
@@ -73,6 +68,26 @@
     <!-- Convert test results to the NUnit format for easier reporting -->
     <XslTransformation XmlInputPaths="..\artifacts\TestResults\integration-tests.xml"  XslInputPath="$(XUnitXslt)"
       OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
+  </Target>
+
+  <Target Name="MigrationTest" DependsOnTargets="DownloadNuGet">
+    <PropertyGroup>
+      <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
+    </PropertyGroup>
+
+    <!-- Remove cached prerelease packages so that the latest is grabed from MyGet -->
+    <ItemGroup>
+      <PrereleasePackages Include="$(LOCALAPPDATA)\NuGet\Cache\*beta*"/>
+    </ItemGroup>
+    <Delete Files="@(PrereleasePackages)" />
+
+    <Exec Command="$(NuGet) restore $(MigrationSln)" />
+
+    <Message Text="Updating NuGet packages to the latest available releases (including prereleases available on MyGet)..." />
+    <Exec Command="$(NuGet) update -Prerelease $(MigrationSln)" />
+
+    <Message Text="Verifying that the migration solution builds..." />
+    <Exec Command="$(MSBuild) $(MigrationSln) /nologo /clp:ErrorsOnly" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Build;Documentation">

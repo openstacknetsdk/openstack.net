@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl.Http;
+using OpenStack;
 using OpenStack.Authentication;
 
 // ReSharper disable once CheckNamespace
@@ -17,39 +17,6 @@ namespace Flurl.Extensions
     /// <exclude/>
     public static class FlurlExtensions
     {
-        /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this FlurlClient client, HttpStatusCode statusCode)
-        {
-            return client.AllowHttpStatus(((int)statusCode).ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this Url url, HttpStatusCode statusCode)
-        {
-            return new FlurlClient(url, autoDispose: true).AllowHttpStatus(statusCode);
-        }
-
-        /// <summary>
-        /// Allow a specific HTTP status code.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="statusCode">The allowed status code.</param>
-        /// <returns></returns>
-        public static FlurlClient AllowHttpStatus(this string url, HttpStatusCode statusCode)
-        {
-            return new Url(url).AllowHttpStatus(statusCode);
-        }
-
         /// <summary>
         /// Converts a <see cref="Url"/> to a <see cref="Uri"/>.
         /// </summary>
@@ -106,8 +73,28 @@ namespace Flurl.Extensions
         /// </returns>
         public static PreparedRequest Authenticate(this Url url, IAuthenticationProvider authenticationProvider)
         {
-            var client = new PreparedRequest(url, autoDispose: true);
-            return client.Authenticate(authenticationProvider);
+            return url.PrepareRequest().Authenticate(authenticationProvider);
+        }
+
+        /// <summary>
+        /// Builds a prepared Flurl request which can be executed at a later time.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        public static PreparedRequest PrepareRequest(this string url)
+        {
+            return new Url(url).PrepareRequest();
+        }
+
+        /// <summary>
+        /// Builds a prepared Flurl request which can be executed at a later time.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        public static PreparedRequest PrepareRequest(this Url url)
+        {
+            return new PreparedRequest(url, autoDispose: true)
+            {
+                Settings = OpenStackNet.Configuration.FlurlHttpSettings
+            };
         }
 
         /// <summary>
@@ -125,6 +112,13 @@ namespace Flurl.Extensions
             {
                 authenticatedMessageHandler.AuthenticationProvider = authenticationProvider;
             }
+            return request;
+        }
+
+        /// <inheritdoc cref="ClientConfigExtensions.WithHeader(FlurlClient,string,object)" />
+        public static PreparedRequest WithHeader(this PreparedRequest request, string key, object value)
+        {
+            ((FlurlClient)request).WithHeader(key, value);
             return request;
         }
 

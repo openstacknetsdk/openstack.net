@@ -160,9 +160,6 @@ namespace net.openstack.Providers.Rackspace
         {
             _userAccessCache = tokenCache ?? UserAccessCache.Instance;
             _urlBase = urlBase ?? new Uri("https://identity.api.rackspacecloud.com");
-
-            // If the consuming application doesn't configure this itself, this ensures that our dependencies are configured appropriately before calling any APIs
-            OpenStackNet.Configure();
         }
 
         /// <summary>

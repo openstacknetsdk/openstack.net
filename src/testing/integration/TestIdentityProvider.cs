@@ -10,13 +10,18 @@ namespace OpenStack
         private static readonly string EnvironmentVariablesNotFoundErrorMessage = 
             "No identity environment variables found. Make sure the following environment variables exist: " + Environment.NewLine +
                             "OPENSTACKNET_IDENTITY_URL" + Environment.NewLine +
-                            "OPENSTACKNET_USER" + Environment.NewLine +
-                            "OPENSTACKNET_PASSWORD" + Environment.NewLine +
-                            "OPENSTACKNET_PROJECT";
+                            "OPENSTACKNET_{0}USER" + Environment.NewLine +
+                            "OPENSTACKNET_{0}PASSWORD" + Environment.NewLine +
+                            "OPENSTACKNET_{0}PROJECT";
 
-        public static IIdentityProvider GetIdentityProvider()
+        public static IIdentityProvider GetOperatorIdentity()
         {
-            var identity = GetIdentityFromEnvironment();
+            return GetIdentityProvider("OPERATOR");
+        }
+
+        public static IIdentityProvider GetIdentityProvider(string role = null)
+        {
+            var identity = GetIdentityFromEnvironment(role);
             var identityEndpoint = GetIdentityEndpointFromEnvironment();
             return new OpenStackIdentityProvider(identityEndpoint, identity)
             {
@@ -37,13 +42,17 @@ namespace OpenStack
             throw new Exception(EnvironmentVariablesNotFoundErrorMessage);
         }
 
-        public static CloudIdentity GetIdentityFromEnvironment()
+        public static CloudIdentity GetIdentityFromEnvironment(string role = null)
         {
-            var user = Environment.GetEnvironmentVariable("OPENSTACKNET_USER");
+            string roleSuffix = null;
+            if (role != null)
+                roleSuffix = role + "_";
+
+            var user = Environment.GetEnvironmentVariable($"OPENSTACKNET_{roleSuffix}USER");
             if (!string.IsNullOrEmpty(user))
             {
-                var password = Environment.GetEnvironmentVariable("OPENSTACKNET_PASSWORD");
-                var projectName = Environment.GetEnvironmentVariable("OPENSTACKNET_PROJECT");
+                var password = Environment.GetEnvironmentVariable($"OPENSTACKNET_{roleSuffix}PASSWORD");
+                var projectName = Environment.GetEnvironmentVariable($"OPENSTACKNET_{roleSuffix}PROJECT");
 
                 if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(projectName))
                 {
@@ -56,11 +65,11 @@ namespace OpenStack
                 }
             }
 
-            user = Environment.GetEnvironmentVariable("BAMBOO_OPENSTACKNET_USER");
+            user = Environment.GetEnvironmentVariable($"BAMBOO_OPENSTACKNET_{roleSuffix}USER");
             if (!string.IsNullOrEmpty(user))
             {
-                var password = Environment.GetEnvironmentVariable("BAMBOO_OPENSTACKNET_PASSWORD");
-                var projectName = Environment.GetEnvironmentVariable("BAMBOO_OPENSTACKNET_PROJECT");
+                var password = Environment.GetEnvironmentVariable($"BAMBOO_OPENSTACKNET_{roleSuffix}PASSWORD");
+                var projectName = Environment.GetEnvironmentVariable($"BAMBOO_OPENSTACKNET_{roleSuffix}PROJECT");
 
                 if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(projectName))
                 {
@@ -73,7 +82,7 @@ namespace OpenStack
                 }
             }
 
-            throw new Exception(EnvironmentVariablesNotFoundErrorMessage);
+            throw new Exception(string.Format(EnvironmentVariablesNotFoundErrorMessage, roleSuffix));
         }
     }
 }

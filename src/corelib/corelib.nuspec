@@ -16,7 +16,7 @@
     <dependencies>
       <group targetFramework="4.5">
         <dependency id="Newtonsoft.Json" version="[6.0.1,7.0)" />
-        <dependency id="Flurl.Http.Signed" version="[0.6.2.2015062601, 0.7)" />
+        <dependency id="Flurl.Http.Signed" version="[0.7.0, 0.8)" />
         <dependency id="Marvin.JsonPatch.Signed" version="[0.7.0]" />
       </group>
     </dependencies>
