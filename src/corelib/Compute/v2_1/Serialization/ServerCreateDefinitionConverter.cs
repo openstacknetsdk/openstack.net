@@ -22,11 +22,11 @@ namespace OpenStack.Compute.v2_1.Serialization
             base.WriteJson(writer, value, serializer);
 
             // Serialize scheduler hints
-            var server = value as ServerCreateDefinition;
+            dynamic server = value; // Using dynamic so that other vendors can use this converter as well
             if (server?.SchedulerHints != null)
             {
                 writer.WritePropertyName("os:scheduler_hints");
-                base.WriteJson(writer, server.SchedulerHints, serializer);
+                base.WriteJson(writer, (object)server.SchedulerHints, serializer);
             }
 
             writer.WriteEndObject();
