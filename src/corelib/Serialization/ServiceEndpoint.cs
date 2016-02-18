@@ -19,10 +19,18 @@ namespace OpenStack.Serialization
     {
         private readonly IServiceType _serviceType;
         private readonly IAuthenticationProvider _authenticationProvider;
-        private readonly string _region;
-        private readonly bool _useInternalUrl;
         private readonly string _microversion;
         private readonly string _microversionHeader;
+
+        /// <summary>
+        /// The service region.
+        /// </summary>
+        public string Region { get; }
+
+        /// <summary>
+        /// Specifies if internal URLs will be used.
+        /// </summary>
+        public bool UseInternalUrl { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceEndpoint"/> class.
@@ -49,8 +57,8 @@ namespace OpenStack.Serialization
         {
             _serviceType = serviceType;
             _authenticationProvider = authenticationProvider;
-            _region = region;
-            _useInternalUrl = useInternalUrl;
+            Region = region;
+            UseInternalUrl = useInternalUrl;
             _microversion = microversion;
             _microversionHeader = microversionHeader;
         }
@@ -62,7 +70,7 @@ namespace OpenStack.Serialization
         /// <returns>A <see cref="Url"/> representing the service endpoint.</returns>
         public async Task<Url> GetEndpoint(CancellationToken cancellationToken)
         {
-            string endpoint = await _authenticationProvider.GetEndpoint(_serviceType, _region, _useInternalUrl, cancellationToken).ConfigureAwait(false);
+            string endpoint = await _authenticationProvider.GetEndpoint(_serviceType, Region, UseInternalUrl, cancellationToken).ConfigureAwait(false);
             return new Url(endpoint);
         }
 
