@@ -21,13 +21,19 @@
 
     <CallTarget Targets="Build" />
     <CallTarget Targets="UnitTest" />
-    <CallTarget Targets="IntegrationTest" />
+    <CallTarget Targets="SmokeTest" />
     <CallTarget Targets="Package" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="RestorePackages">
     <Message Text="Building version $(Version)..." />
     <Exec Command="$(MSBuild) ..\src\openstack.net.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
+
+    <MakeDir Directories="..\artifacts\tests" />
+    <ItemGroup>
+      <TestOutput Include="..\src\testing\integration\bin\$(Configuration)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(TestOutput)" DestinationFolder="..\artifacts\tests" />
   </Target>
 
   <Target Name="Documentation" DependsOnTargets="Build">
@@ -39,7 +45,7 @@
     <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
 
     <!-- Update the NuGet package with the processed inline doc -->
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File update-nuget-package.ps1 ..\artifacts\packages\openstack.net.$(Version).nupkg ..\artifacts\docs\Api\v4.0\openstacknet.xml" /> 
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File update-nuget-package.ps1 ..\artifacts\packages\openstack.net.$(Version).nupkg ..\artifacts\docs\Api\v4.0\openstacknet.xml" />
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
@@ -63,13 +69,22 @@
     <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
   </Target>
 
-  <Target Name="IntegrationTest" DependsOnTargets="Build">
+  <Target Name="SmokeTest" DependsOnTargets="Build">
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml -notrait ci=false" ContinueOnError="true" />
+    <Exec Command="$(XUnit) ..\artifacts\tests\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\smoke-tests.xml -trait smoke=true" ContinueOnError="true" />
 
     <!-- Convert test results to the NUnit format for easier reporting -->
-    <XslTransformation XmlInputPaths="..\artifacts\TestResults\integration-tests.xml"  XslInputPath="$(XUnitXslt)"
-      OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
+    <XslTransformation XmlInputPaths="..\artifacts\TestResults\smoke-tests.xml"  XslInputPath="$(XUnitXslt)"
+      OutputPaths="..\artifacts\TestResults\smoke-tests.nunit.xml" />
+  </Target>
+
+  <Target Name="RegressionTest" DependsOnTargets="Build">
+    <MakeDir Directories="..\artifacts\TestResults\" />
+    <Exec Command="$(XUnit) ..\artifacts\tests\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\regression-tests.xml -notrait manual=true" ContinueOnError="true" />
+
+    <!-- Convert test results to the NUnit format for easier reporting -->
+    <XslTransformation XmlInputPaths="..\artifacts\TestResults\regression-tests.xml"  XslInputPath="$(XUnitXslt)"
+      OutputPaths="..\artifacts\TestResults\regression-tests.nunit.xml" />
   </Target>
 
   <Target Name="MigrationTest" DependsOnTargets="DownloadNuGet">
