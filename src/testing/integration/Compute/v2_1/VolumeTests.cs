@@ -34,15 +34,6 @@ namespace OpenStack.Compute.v2_1
             _testData.Dispose();
         }
 
-        // Endpoint is documented but doesn't exist
-        //[Fact]
-        //public async Task ListVolumeTypes()
-        //{
-        //    var types = await _compute.ListVolumeTypesAsync();
-        //    Assert.NotNull(types);
-        //    Assert.Contains("lvm", types.Select(x => x.Name));
-        //}
-
         [Fact]
         public async Task VolumesTest()
         {
@@ -89,6 +80,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public async Task SnapshotsTest()
         {
             var volume = await _testData.CreateVolume();

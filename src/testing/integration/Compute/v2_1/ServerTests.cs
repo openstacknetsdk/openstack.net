@@ -269,6 +269,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public async Task SnapshotServerTest()
         {
             var server = await _testData.CreateServer();

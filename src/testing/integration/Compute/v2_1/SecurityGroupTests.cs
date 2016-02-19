@@ -47,9 +47,10 @@ namespace OpenStack.Compute.v2_1
             Assert.Equal(definition.Name, securityGroup.Name);
             Assert.Equal(definition.Description, securityGroup.Description);
 
-            Trace.WriteLine("Creatinga server associated with the security group...");
+            Trace.WriteLine("Creating a server associated with the security group...");
             var serverDefinition = _testData.BuildServer();
             serverDefinition.SecurityGroups.Add(new SecurityGroupReference());
+
             Trace.WriteLine("Updating the security group...");
             string updatedName = securityGroup.Name + "UPDATED";
             securityGroup.Name = updatedName;
@@ -78,6 +79,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public async Task SecurityGroupRuleTest()
         {
             Trace.WriteLine("Creating security group...");

@@ -114,6 +114,7 @@ namespace OpenStack.Networking.v2
 
         #region Subnets
         [Fact]
+        [Trait("smoke", "true")]
         public async Task CreateSubnetTest()
         {
             var network = await _testData.CreateNetwork();
@@ -216,7 +217,7 @@ namespace OpenStack.Networking.v2
         #endregion
 
         #region Ports
-        [Fact]
+        [Fact] // this was my first choice for a smoke test however, it is flaky because of race conditions in the API
         public async Task CreatePortTest()
         {
             var network = await _testData.CreateNetwork();
@@ -289,6 +290,7 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public async Task ListPortsTest()
         {
             var network = await _testData.CreateNetwork();

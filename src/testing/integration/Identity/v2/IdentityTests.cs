@@ -19,6 +19,7 @@ namespace OpenStack.Identity.v2
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public void AuthenticateTest()
         {
             var userAccess = _identityService.Authenticate();

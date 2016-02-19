@@ -60,6 +60,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("smoke", "true")]
         public async Task ListFlavorsTest()
         {
             var results = await _compute.ListFlavorsAsync();
