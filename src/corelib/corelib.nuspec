@@ -24,9 +24,10 @@
   <files>
 
     <!-- Runtime libraries -->
+    <!-- Note: The deploy folder contains ILMerged assemblies -->
     <file src="bin\v4.0\$Configuration$\deploy\openstacknet.dll" target="lib\net45"/>
     <file src="bin\v4.0\$Configuration$\deploy\openstacknet.pdb" target="lib\net45"/>
-    <file src="..\..\artifacts\docs\Api\v4.0\openstacknet.xml" target="lib\net45"/>
+    <file src="bin\v4.0\$Configuration$\openstacknet.xml" target="lib\net45"/>
 
   </files>
 </package>

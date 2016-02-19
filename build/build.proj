@@ -20,7 +20,6 @@
     </PropertyGroup>
 
     <CallTarget Targets="Build" />
-    <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
     <CallTarget Targets="IntegrationTest" />
     <CallTarget Targets="Package" />
@@ -38,6 +37,9 @@
 
     <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" />
     <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
+
+    <!-- Update the NuGet package with the processed inline doc -->
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File update-nuget-package.ps1 ..\artifacts\packages\openstack.net.$(Version).nupkg ..\artifacts\docs\Api\v4.0\openstacknet.xml" /> 
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
@@ -90,7 +92,7 @@
     <Exec Command="$(MSBuild) $(MigrationSln) /nologo /clp:ErrorsOnly" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Build;Documentation">
+  <Target Name="Package" DependsOnTargets="Build">
     <MakeDir Directories="..\src\corelib\bin\v4.0\$(Configuration)\deploy" />
     <Exec Command="$(ILMerge) /t:library /v4 /out:deploy/openstacknet.dll openstacknet.dll SimpleRESTServices.dll"
           WorkingDirectory="..\src\corelib\bin\v4.0\$(Configuration)" />
