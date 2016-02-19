@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
-    [Trait("ci","false")]
+    [Trait("manual","true")]
     public class ServiceTests : IDisposable
     {
         private readonly ContentDeliveryNetworkService _cdnService;

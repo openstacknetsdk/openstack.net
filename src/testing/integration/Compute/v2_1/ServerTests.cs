@@ -80,7 +80,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
+        [Trait("manual", "true")] // TODO: Run with CI tests once we've implemented cinder
         public async Task BootFromVolume()
         {
             var definition = _testData.BuildServer();
@@ -95,7 +95,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        [Trait("ci", "false")] // TODO: Run with CI tests once we've implemented cinder
+        [Trait("manual", "true")] // TODO: Run with CI tests once we've implemented cinder
         public async Task BootFromVolumeCopy()
         {
             var definition = _testData.BuildServer();

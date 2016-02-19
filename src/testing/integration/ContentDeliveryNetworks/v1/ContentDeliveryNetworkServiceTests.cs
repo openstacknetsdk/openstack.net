@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace OpenStack.ContentDeliveryNetworks.v1
 {
-    [Trait("ci","false")] // TODO: Run these with the CI tests once Poppy is installed on our environment
+    [Trait("manual","true")] // TODO: Run these with the CI tests once Poppy is installed on our environment
     public class ContentDeliveryNetworkServiceTests : IDisposable
     {
         private readonly ContentDeliveryNetworkService _cdnService;
