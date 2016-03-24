@@ -193,7 +193,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
-        public void ListerServerSummaries()
+        public void ListServerSummaries()
         {
             using (var httpTest = new HttpTest())
             {
