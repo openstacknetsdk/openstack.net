@@ -6,7 +6,7 @@ namespace OpenStack
     /// <summary>
     /// Paging options when listing a resource that supports paging.
     /// </summary>
-    public class PageOptions : IQueryStringBuilder
+    public class PageOptions : FilterOptions
     {
         /// <summary>
         /// The number of resources to return per page.
@@ -19,7 +19,7 @@ namespace OpenStack
         public Identifier StartingAt { get; set; }
 
         /// <summary />
-        protected virtual IDictionary<string, object> BuildQueryString()
+        protected override IDictionary<string, object> BuildQueryString()
         {
             return new Dictionary<string, object>
             {
@@ -27,8 +27,17 @@ namespace OpenStack
                 {"limit", PageSize}
             };
         }
+    }
 
-        IDictionary<string , object> IQueryStringBuilder.Build()
+    /// <summary>
+    /// Options when list a resource that supports filtering.
+    /// </summary>
+    public abstract class FilterOptions : IQueryStringBuilder
+    {
+        /// <summary />
+        protected abstract IDictionary<string, object> BuildQueryString();
+
+        IDictionary<string, object> IQueryStringBuilder.Build()
         {
             return BuildQueryString();
         }
