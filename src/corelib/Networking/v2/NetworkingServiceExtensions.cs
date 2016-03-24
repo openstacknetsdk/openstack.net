@@ -8,7 +8,7 @@ namespace OpenStack.Synchronous
     /// <summary>
     /// Provides synchronous extention methods for an <see cref="NetworkingService"/> instance.
     /// </summary>
-    public static class NetworkingServiceExtensions
+    public static class NetworkingServiceExtensions_v2
     {
         #region Networks
         /// <summary>

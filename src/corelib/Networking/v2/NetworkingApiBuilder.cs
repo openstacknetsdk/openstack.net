@@ -369,5 +369,153 @@ namespace OpenStack.Networking.v2
                 .AllowHttpStatus(HttpStatusCode.NotFound);
         }
         #endregion
+
+        #region Floating IPs
+
+
+        /// <summary>
+        /// Shows details for a server group.
+        /// </summary>
+        /// <typeparam name="T">The return type.</typeparam>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<T> GetFloatingIPAsync<T>(string floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildGetFloatingIPRequest(floatingIPId, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds the <see cref="GetFloatingIPAsync{T}"/> request.
+        /// </summary>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task<PreparedRequest> BuildGetFloatingIPRequest(string floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (floatingIPId == null)
+                throw new ArgumentNullException("floatingIPId");
+
+            return Endpoint.PrepareGetResourceRequest($"floatingips/{floatingIPId}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a floating IP.
+        /// </summary>
+        /// <typeparam name="T">The return type.</typeparam>
+        /// <param name="floatingIP">The floating IP.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<T> CreateFloatingIPAsync<T>(object floatingIP, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildCreateFloatingIPRequest(floatingIP, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds the <see cref="CreateFloatingIPAsync{T}"/> request.
+        /// </summary>
+        /// <param name="floatingIP">The floating IP.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task<PreparedRequest> BuildCreateFloatingIPRequest(object floatingIP, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (floatingIP == null)
+                throw new ArgumentNullException("floatingIP");
+
+            return Endpoint.PrepareCreateResourceRequest("floatingips", floatingIP, cancellationToken);
+        }
+
+        /// <summary>
+        /// Updates a floating IP.
+        /// </summary>
+        /// <typeparam name="T">The return type.</typeparam>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="floatingIP">The floating IP.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<T> UpdateFloatingIPAsync<T>(string floatingIPId, object floatingIP, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IServiceResource
+        {
+            return await BuildUpdateFloatingIPRequest(floatingIPId, floatingIP, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwner(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds the <see cref="UpdateFloatingIPAsync{T}"/> request.
+        /// </summary>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="floatingIP">The floating IP.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task<PreparedRequest> BuildUpdateFloatingIPRequest(string floatingIPId, object floatingIP, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (floatingIP == null)
+                throw new ArgumentNullException("floatingIP");
+
+            return Endpoint.PrepareUpdateResourceRequest($"floatingips/{floatingIPId}", floatingIP, cancellationToken);
+        }
+
+        /// <summary>
+        /// Lists all floating IPs for the account. 
+        /// </summary>
+        /// <typeparam name="T">The return type.</typeparam>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<T> ListFloatingIPsAsync<T>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListFloatingIPsRequest(queryString, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds the <see cref="ListFloatingIPsAsync{T}"/> request.
+        /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<PreparedRequest> BuildListFloatingIPsRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            PreparedRequest request = await Endpoint.PrepareGetResourceRequest("floatingips", cancellationToken).ConfigureAwait(false);
+
+            request.Url.SetQueryParams(queryString?.Build());
+
+            return request;
+        }
+
+        /// <summary>
+        /// Deletes a floating IP.
+        /// </summary>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual Task DeleteFloatingIPAsync(string floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildDeleteFloatingIPRequest(floatingIPId, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
+        /// Builds the <see cref="DeleteFloatingIPAsync"/> request.
+        /// </summary>
+        /// <param name="floatingIPId">The floating IP identifier.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task<PreparedRequest> BuildDeleteFloatingIPRequest(string floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (floatingIPId == null)
+                throw new ArgumentNullException("floatingIPId");
+
+            return Endpoint.PrepareDeleteResourceRequest($"floatingips/{floatingIPId}", cancellationToken);
+        }
+
+
+        #endregion
     }
 }
