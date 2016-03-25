@@ -231,7 +231,7 @@ namespace OpenStack.Compute.v2_1
 
         /// <inheritdoc cref="ComputeApi.AttachVolumeAsync{T}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ServerVolume> AttachVolumeAsync(ServerVolumeDefinition volume, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApi>();
             var result = await compute.AttachVolumeAsync<ServerVolume>(Id, volume, cancellationToken).ConfigureAwait(false);
@@ -239,7 +239,15 @@ namespace OpenStack.Compute.v2_1
             ((IChildResource)result).SetParent(this);
             return result;
         }
-        
+
+        /// <inheritdoc cref="ComputeApi.AssociateFloatingIPAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual Task AssociateFloatingIPAsync(AssociateFloatingIPRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
+            return compute.AssociateFloatingIPAsync(Id, request, cancellationToken);
+        }
+
         /// <summary />
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)

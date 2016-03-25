@@ -185,6 +185,12 @@ namespace OpenStack.Synchronous
             server.CancelResizeAsync().ForceSynchronous();
         }
 
+        /// <inheritdoc cref="Server.AssociateFloatingIPAsync"/>
+        public static void AssociateFloatingIP(this Server server, AssociateFloatingIPRequest request)
+        {
+            server.AssociateFloatingIPAsync(request).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ServerReference.ListActionSummariesAsync"/>
         public static IEnumerable<ServerActionSummary> ListActionSummaries(this ServerReference server)
         {

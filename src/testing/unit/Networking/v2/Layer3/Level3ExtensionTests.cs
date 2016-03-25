@@ -94,6 +94,32 @@ namespace OpenStack.Networking.v2.Layer3
         }
 
         [Fact]
+        public void AssociateFloatingIPToServer()
+        {
+            var compute = new ComputeService(Stubs.AuthenticationProvider, "region");
+
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                const string ip = "10.0.0.1";
+                httpTest.RespondWithJson(new Server { Id = serverId });
+                httpTest.RespondWith((int)HttpStatusCode.OK, "ip associated!");
+                httpTest.RespondWithJson(new ServerAddressCollection
+                {
+                    ["network1"] = new List<ServerAddress>
+                    {
+                        new ServerAddress {IP = ip, Type = AddressType.Floating}
+                    }
+                });
+
+                var server = compute.GetServer(serverId);
+                server.AssociateFloatingIP(new AssociateFloatingIPRequest(ip));
+
+                Assert.NotNull(server.Addresses["network1"].Single(a => a.IP == ip && a.Type == AddressType.Floating));
+            }
+        }
+
+        [Fact]
         public void DisassociateFloatingIP()
         {
             using (var httpTest = new HttpTest())
@@ -108,6 +134,35 @@ namespace OpenStack.Networking.v2.Layer3
 
                 httpTest.ShouldHaveCalled($"*/floatingips/{floatingIPId}");
                 Assert.Null(floatingIP.PortId);
+            }
+        }
+
+        [Fact]
+        public void DisassociateFloatingIPFromServer()
+        {
+            var compute = new ComputeService(Stubs.AuthenticationProvider, "region");
+
+            using (var httpTest = new HttpTest())
+            {
+                Identifier serverId = Guid.NewGuid();
+                const string ip = "10.0.0.1";
+                httpTest.RespondWithJson(new Server
+                {
+                    Id = serverId,
+                    Addresses =
+                    {
+                        ["network1"] = new List<ServerAddress>
+                        {
+                            new ServerAddress {IP = ip, Type = AddressType.Floating}
+                        }
+                    }
+                });
+                httpTest.RespondWith((int)HttpStatusCode.OK, "ip disassociated!");
+
+                var server = compute.GetServer(serverId);
+                server.DisassociateFloatingIP(ip);
+
+                Assert.Null(server.Addresses["network1"].FirstOrDefault(a => a.IP == ip && a.Type == AddressType.Floating));
             }
         }
 

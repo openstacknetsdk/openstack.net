@@ -109,7 +109,6 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.DeleteServerMetadataAsync(serverId, key, cancellationToken);
         }
 
-
         /// <inheritdoc cref="ComputeApi.WaitUntilServerIsDeletedAsync{TServer,TStatus}" />
         public Task WaitUntilServerIsDeletedAsync(Identifier serverId, TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -210,6 +209,12 @@ namespace OpenStack.Compute.v2_1
         public virtual Task CancelResizeServerAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _computeApi.CancelResizeServerAsync(serverId, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.AssociateFloatingIPAsync" />
+        public virtual Task AssociateFloatingIPAddressAsync(Identifier serverId, AssociateFloatingIPRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.AssociateFloatingIPAsync(serverId, request, cancellationToken);
         }
 
         /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
