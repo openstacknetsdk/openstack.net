@@ -121,6 +121,7 @@
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="Identity\v2\IdentityTests.cs" />
+    <Compile Include="Networking\v2\Layer3\Layer3ExtensionTests.cs" />
     <Compile Include="Networking\v2\NetworkingTestDataManager.cs" />
     <Compile Include="Networking\v2\NetworkingServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
