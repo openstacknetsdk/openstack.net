@@ -211,6 +211,8 @@
     <Compile Include="Networking\v2\NetworkingService.cs" />
     <Compile Include="Networking\v2\NetworkingServiceExtensions.cs" />
     <Compile Include="Networking\v2\Network.cs" />
+    <Compile Include="Networking\v2\Operator\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\Operator\NetworkDefinition.cs" />
     <Compile Include="Networking\v2\Serialization\FloatingIPCollection.cs" />
     <Compile Include="Networking\v2\Serialization\FloatingIPStatus.cs" />
     <Compile Include="Networking\v2\PortUpdateDefinition.cs" />
