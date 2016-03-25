@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Extensions;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -242,10 +243,33 @@ namespace OpenStack.Compute.v2_1
 
         /// <inheritdoc cref="ComputeApi.AssociateFloatingIPAsync" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
-        public virtual Task AssociateFloatingIPAsync(AssociateFloatingIPRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task AssociateFloatingIPAsync(AssociateFloatingIPRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var compute = this.GetOwnerOrThrow<ComputeApi>();
-            return compute.AssociateFloatingIPAsync(Id, request, cancellationToken);
+            await compute.AssociateFloatingIPAsync(Id, request, cancellationToken);
+
+            Addresses = await compute.ListServerAddressesAsync<ServerAddressCollection>(Id, cancellationToken);
+        }
+
+        /// <inheritdoc cref="ComputeApi.DisassociateFloatingIPAsync" />
+        /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
+        public virtual async Task DisassociateFloatingIPAsync(string floatingIPAddress, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var compute = this.GetOwnerOrThrow<ComputeApi>();
+            await compute.DisassociateFloatingIPAsync(Id, floatingIPAddress, cancellationToken);
+
+            // Remove the address from the current instance immediately
+            foreach (KeyValuePair<string, IList<ServerAddress>> group in Addresses)
+            {
+                foreach (ServerAddress address in group.Value)
+                {
+                    if (address.Type == AddressType.Floating && address.IP == floatingIPAddress)
+                    {
+                        Addresses[group.Key].Remove(address);
+                        return;
+                    }
+                }
+            }
         }
 
         /// <summary />

@@ -6,7 +6,7 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2.Serialization
 {
     /// <summary>
-    /// Represents a collection of keypair resources of the <see cref="NetworkingService"/>.
+    /// Represents a collection of floating IP resources of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <exclude />
     public class FloatingIPCollection<T> : ResourceCollection<T>
@@ -18,7 +18,7 @@ namespace OpenStack.Networking.v2.Serialization
     }
 
     /// <summary>
-    /// Represents a collection of key pair summary resources of the <see cref="NetworkingService"/>.
+    /// Represents a collection of floating IP resources of the <see cref="NetworkingService"/>.
     /// </summary>
     /// <exclude />
     public class FloatingIPCollection : FloatingIPCollection<FloatingIP>

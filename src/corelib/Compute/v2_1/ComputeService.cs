@@ -217,6 +217,12 @@ namespace OpenStack.Compute.v2_1
             return _computeApi.AssociateFloatingIPAsync(serverId, request, cancellationToken);
         }
 
+        /// <inheritdoc cref="ComputeApi.DisassociateFloatingIPAsync" />
+        public virtual Task DisassociateFloatingIPAsync(Identifier serverId, string floatingIPAddress, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _computeApi.DisassociateFloatingIPAsync(serverId, floatingIPAddress, cancellationToken);
+        }
+
         /// <inheritdoc cref="ComputeApi.ListServerActionSummariesAsync{T}" />
         public virtual async Task<IEnumerable<ServerActionSummary>> ListServerActionSummariesAsync(Identifier serverId, CancellationToken cancellationToken = default(CancellationToken))
         {

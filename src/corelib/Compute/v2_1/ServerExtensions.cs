@@ -191,6 +191,12 @@ namespace OpenStack.Synchronous
             server.AssociateFloatingIPAsync(request).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="Server.DisassociateFloatingIPAsync"/>
+        public static void DisassociateFloatingIP(this Server server, string floatingIPAddress)
+        {
+            server.DisassociateFloatingIPAsync(floatingIPAddress).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ServerReference.ListActionSummariesAsync"/>
         public static IEnumerable<ServerActionSummary> ListActionSummaries(this ServerReference server)
         {

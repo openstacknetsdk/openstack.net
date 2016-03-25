@@ -79,7 +79,7 @@ namespace OpenStack.Networking.v2.Layer3
         public async Task AssociateAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
         {
             var networking = this.GetOwnerOrThrow<NetworkingApiBuilder>();
-            var request = new FloatingIPUpdateDefinition {PortId = portId};
+            var request = new FloatingIPUpdateDefinition { PortId = portId };
             var result = await networking.UpdateFloatingIPAsync<FloatingIP>(Id, request, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }
@@ -92,7 +92,7 @@ namespace OpenStack.Networking.v2.Layer3
         public async Task DisassociateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var networking = this.GetOwnerOrThrow<NetworkingApiBuilder>();
-            var request = new FloatingIPUpdateDefinition {PortId = null};
+            var request = new FloatingIPUpdateDefinition { PortId = null };
             var result = await networking.UpdateFloatingIPAsync<FloatingIP>(Id, request, cancellationToken).ConfigureAwait(false);
             result.CopyProperties(this);
         }

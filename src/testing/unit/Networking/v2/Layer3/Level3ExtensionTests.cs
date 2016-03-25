@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using OpenStack.Serialization;
 using OpenStack.Networking.v2.Layer3.Synchronous;
 using OpenStack.Networking.v2.Serialization;
@@ -18,6 +19,125 @@ namespace OpenStack.Networking.v2.Layer3
             _networking = new NetworkingService(Stubs.AuthenticationProvider, "region");
         }
 
+        #region Routers
+        [Fact]
+        public void CreateRouter()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier networkId = Guid.NewGuid();
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Router { Id = routerId, ExternalGateway = new ExternalGateway { ExternalNetworkId = networkId } });
+
+                var definition = new RouterCreateDefinition();
+                var result = _networking.CreateRouter(definition);
+
+                httpTest.ShouldHaveCalled("*/routers");
+                Assert.NotNull(result);
+                Assert.Equal(routerId, result.Id);
+                Assert.Equal(networkId, result.ExternalGateway.ExternalNetworkId);
+                Assert.IsType<NetworkingApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void GetRouter()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Router { Id = routerId });
+
+                var result = _networking.GetRouter(routerId);
+
+                httpTest.ShouldHaveCalled($"*/routers/{routerId}");
+                Assert.NotNull(result);
+                Assert.Equal(routerId, result.Id);
+                Assert.IsType<NetworkingApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Fact]
+        public void ListRouters()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new RouterCollection
+                {
+                    new Router { Id = routerId }
+                });
+
+                var results = _networking.ListRouters(new RouterListOptions { Status = RouterStatus.Active });
+
+                httpTest.ShouldHaveCalled("*/routers?status=ACTIVE");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                Assert.Equal(routerId, result.Id);
+                Assert.IsType<NetworkingApiBuilder>(((IServiceResource)result).Owner);
+            }
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.Accepted)]
+        [InlineData(HttpStatusCode.NotFound)]
+        public void DeleteRouter(HttpStatusCode responseCode)
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Router { Id = routerId});
+                httpTest.RespondWith((int)responseCode, "All gone!");
+
+                var router = _networking.GetRouter(routerId);
+                router.Delete();
+
+                httpTest.ShouldHaveCalled($"*/routers/{routerId}");
+            }
+        }
+
+        [Fact]
+        public void AttachPort()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier portId = Guid.NewGuid();
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Router { Id = routerId});
+
+                var router = _networking.GetRouter(routerId);
+                router.AttachPort(portId);
+
+                httpTest.ShouldHaveCalled($"*/routers/{routerId}/add_router_interface");
+                var capturedRequest = httpTest.CallLog.Last();
+                Assert.Equal(HttpMethod.Put, capturedRequest.Request.Method);
+            }
+        }
+
+        [Fact]
+        public void AttachSubnet()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier portId = Guid.NewGuid();
+                Identifier subnetId = Guid.NewGuid();
+                Identifier routerId = Guid.NewGuid();
+                httpTest.RespondWithJson(new Router { Id = routerId });
+                httpTest.RespondWithJson(new {port_id = portId, subnet_id = subnetId});
+
+                var router = _networking.GetRouter(routerId);
+                var result =router.AttachSubnet(subnetId);
+
+                httpTest.ShouldHaveCalled($"*/routers/{routerId}/add_router_interface");
+                var capturedRequest = httpTest.CallLog.Last();
+                Assert.Equal(HttpMethod.Put, capturedRequest.Request.Method);
+                Assert.NotNull(result);
+                Assert.Equal(portId, result);
+            }
+        }
+        #endregion
+
+        #region Floating IPs
         [Fact]
         public void CreateFloatingIP()
         {
@@ -181,5 +301,7 @@ namespace OpenStack.Networking.v2.Layer3
                 httpTest.ShouldHaveCalled($"*/floatingips/{floatingIPId}");
             }
         }
+        #endregion
+
     }
 }
