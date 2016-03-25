@@ -1,6 +1,6 @@
 namespace OpenStack.Networking.v2.Layer3
 {
     /// <inheritdoc />
-    public class FloatingIPStatus : FloatingIPStatus<FloatingIPStatus>
+    public class FloatingIPStatus : NetworkResourceStatus<FloatingIPStatus>
     { }
 }

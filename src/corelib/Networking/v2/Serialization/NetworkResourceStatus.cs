@@ -3,24 +3,24 @@ using OpenStack.Serialization;
 namespace OpenStack.Networking.v2
 {
     /// <summary>
-    /// Server statuses.
+    /// Networking resource status. Applies to networks, routers, interfaces, floating ips etc.
     /// </summary>
     /// <exclude />
-    public class FloatingIPStatus<T> : ResourceStatus
-        where T : FloatingIPStatus<T>, new()
+    public class NetworkResourceStatus<T> : ResourceStatus
+        where T : NetworkResourceStatus<T>, new()
     {
         /// <summary>
-        /// The IP address is in an unknown state.
+        /// The resource is in an unknown state.
         /// </summary>
         public static readonly T Unknown = new T { DisplayName = "UNKNOWN" };
 
         /// <summary>
-        /// The IP address is active.
+        /// The resource is active.
         /// </summary>
         public static readonly T Active = new T { DisplayName = "ACTIVE" };
 
         /// <summary>
-        /// The IP address is unavilable.
+        /// The resource is unavilable.
         /// </summary>
         public static readonly T Down = new T { DisplayName = "DOWN" };
     }
