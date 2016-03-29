@@ -201,7 +201,7 @@ namespace OpenStack.Networking.v2
         
         public void DeleteRouters(IEnumerable<Router> routers)
         {
-            Task[] deletes = routers.Select(x => _networkingService.DeleteRouterAsync(x.Id)).ToArray();
+            Task[] deletes = routers.Select(router => router.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion
@@ -210,7 +210,7 @@ namespace OpenStack.Networking.v2
 
         public void DeleteFloatingIPs(IEnumerable<FloatingIP> floatingIPs)
         {
-            Task[] deletes = floatingIPs.Select(x => _networkingService.DeleteFloatingIPAsync(x.Id)).ToArray();
+            Task[] deletes = floatingIPs.Select(ip => ip.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion

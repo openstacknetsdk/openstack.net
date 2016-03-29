@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using OpenStack.Compute.v2_1;
+using OpenStack.Compute.v2_1.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Networking.v2.Layer3.Synchronous;
 using OpenStack.Networking.v2.Serialization;
+using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
 
@@ -85,13 +89,19 @@ namespace OpenStack.Networking.v2.Layer3
         {
             using (var httpTest = new HttpTest())
             {
+                Identifier portId = Guid.NewGuid();
                 Identifier routerId = Guid.NewGuid();
                 httpTest.RespondWithJson(new Router { Id = routerId});
+                httpTest.RespondWithJson(new PortCollection
+                {
+                    new Port {Id = portId}
+                });
                 httpTest.RespondWith((int)responseCode, "All gone!");
 
                 var router = _networking.GetRouter(routerId);
                 router.Delete();
 
+                httpTest.ShouldHaveCalled($"*/routers/{routerId}/remove_router_interface");
                 httpTest.ShouldHaveCalled($"*/routers/{routerId}");
             }
         }
