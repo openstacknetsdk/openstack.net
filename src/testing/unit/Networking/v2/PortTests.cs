@@ -35,6 +35,19 @@ namespace OpenStack.Networking.v2
         }
 
         [Fact]
+        public void FilterPorts()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWithJson(new PortCollection());
+
+                _networkingService.ListPorts(new PortListOptions {DeviceId = "123"});
+
+                httpTest.ShouldHaveCalled("*/ports?device_id=123");
+            }
+        }
+
+        [Fact]
         public void CreatePort()
         {
             using (var httpTest = new HttpTest())

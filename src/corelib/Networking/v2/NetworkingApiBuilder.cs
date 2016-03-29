@@ -266,18 +266,32 @@ namespace OpenStack.Networking.v2
         /// <summary>
         /// Lists all ports associated with the account.
         /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>
         /// A collection of port resources associated with the account.
         /// </returns>
-        public virtual async Task<PreparedRequest> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> ListPortsAsync<T>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
         {
-            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            return await BuildListPortsRequest(queryString, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
+        }
 
-            return endpoint
-                .AppendPathSegment("ports")
-                .Authenticate(AuthenticationProvider)
-                .PrepareGet(cancellationToken);
+        /// <summary>
+        /// Builds the <see cref="ListPortsAsync{T}"/> request.
+        /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public virtual async Task<PreparedRequest> BuildListPortsRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            PreparedRequest request = await Endpoint.PrepareGetResourceRequest("ports", cancellationToken).ConfigureAwait(false);
+
+            request.Url.SetQueryParams(queryString?.Build());
+
+            return request;
         }
 
         /// <summary>

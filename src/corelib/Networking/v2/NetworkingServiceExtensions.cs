@@ -169,9 +169,9 @@ namespace OpenStack.Synchronous
         /// <returns>
         /// A collection of port resources associated with the account.
         /// </returns>
-        public static IEnumerable<Port> ListPorts(this NetworkingService networkingService)
+        public static IEnumerable<Port> ListPorts(this NetworkingService networkingService, PortListOptions options = null)
         {
-            return networkingService.ListPortsAsync().ForceSynchronous();
+            return networkingService.ListPortsAsync(options).ForceSynchronous();
         }
 
         /// <summary>

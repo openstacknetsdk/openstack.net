@@ -141,13 +141,10 @@ namespace OpenStack.Networking.v2
 
         #region Ports
 
-        /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync" />
-        public async Task<IEnumerable<Port>> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync{T}" />
+        public async Task<IEnumerable<Port>> ListPortsAsync(PortListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _networkingApiBuilder
-                .ListPortsAsync(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<PortCollection>();
+            return await _networkingApiBuilder.ListPortsAsync<PortCollection>(options, cancellationToken);
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreatePortAsync" />
