@@ -36,6 +36,7 @@ namespace OpenStack.Compute.v2_1.Operator
         }
         
         [Fact]
+        [Trait("ci", "false")]
         public async Task EvacuateServerTest()
         {
             var server = await _testData.CreateServer();
