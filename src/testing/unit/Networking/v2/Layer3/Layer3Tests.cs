@@ -14,11 +14,11 @@ using Xunit;
 
 namespace OpenStack.Networking.v2.Layer3
 {
-    public class Level3ExtensionTests
+    public class Layer3Tests
     {
         private readonly NetworkingService _networking;
 
-        public Level3ExtensionTests()
+        public Layer3Tests()
         {
             _networking = new NetworkingService(Stubs.AuthenticationProvider, "region");
         }
