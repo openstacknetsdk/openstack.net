@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationTests.cs" />
+    <Compile Include="Authentication\V3\Auth\OpenstackAuthenticationProviderTests.cs" />
     <Compile Include="Compute\v2_1\ComputeServiceTests.cs" />
     <Compile Include="Compute\v2_1\Operator\ComputeServiceTests.cs" />
     <Compile Include="Compute\v2_1\Operator\ServerTests.cs" />

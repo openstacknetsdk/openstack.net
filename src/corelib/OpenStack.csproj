@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenStack</RootNamespace>
-    <AssemblyName>openstacknet</AssemblyName>
+    <AssemblyName>openstack.net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseIntermediateOutputPath>obj\v4.0\</BaseIntermediateOutputPath>
@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
+    <DocumentationFile>bin\v4.0\Debug\openstack.net.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>612,618</NoWarn>
@@ -36,7 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\v4.0\Release\openstacknet.xml</DocumentationFile>
+    <DocumentationFile>bin\v4.0\Release\openstack.net.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -81,19 +81,24 @@
     <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
     <Compile Include="Authentication\IAuthenticationProvider.cs" />
     <Compile Include="Authentication\NamespaceDoc.cs" />
+    <Compile Include="Authentication\V3\IdentityService.cs" />
+    <Compile Include="Authentication\IIAuthenticationProvider.cs" />
+    <Compile Include="Authentication\V3\Project.cs" />
     <Compile Include="Authentication\V3\Auth\AuhtScope.cs" />
     <Compile Include="Authentication\V3\Auth\AuthMethod.cs" />
     <Compile Include="Authentication\ServiceType.cs" />
     <Compile Include="Authentication\V3\Auth\Catalog.cs" />
     <Compile Include="Authentication\V3\Auth\UserCredential.cs" />
+    <Compile Include="Authentication\V3\Domain.cs" />
     <Compile Include="Authentication\V3\Endpoint.cs" />
     <Compile Include="Authentication\V3\Exceptions.cs" />
     <Compile Include="Authentication\V3\NamespaceDoc.cs" />
     <Compile Include="Authentication\V3\Auth\OpenstackAuthenticationProvider.cs" />
-    <Compile Include="Authentication\V3\Serialization\LazyHttpClient.cs" />
+    <Compile Include="Authentication\V3\Serialization\IdentityApiBuilder.cs" />
     <Compile Include="Authentication\V3\Auth\Token.cs" />
     <Compile Include="Authentication\V3\Auth\TokenCache.cs" />
     <Compile Include="Authentication\V3\Auth\AuthUser.cs" />
+    <Compile Include="Authentication\V3\Serialization\ProjectCollection.cs" />
     <Compile Include="BlockStorage\v2\Serialization\SnapshotStatus.cs" />
     <Compile Include="BlockStorage\v2\Serialization\VolumeStatus.cs" />
     <Compile Include="BlockStorage\v2\SnapshotStatus.cs" />

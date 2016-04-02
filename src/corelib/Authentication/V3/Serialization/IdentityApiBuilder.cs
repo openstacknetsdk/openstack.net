@@ -7,6 +7,7 @@ using OpenStack.Serialization;
 using System.Threading;
 using Flurl.Http;
 using Flurl;
+using OpenStack.Authentication.V3.Auth;
 using Flurl.Extensions;
 
 namespace OpenStack.Authentication.V3.Serialization
@@ -19,12 +20,12 @@ namespace OpenStack.Authentication.V3.Serialization
         /// <summary>
         /// 
         /// </summary>
-        protected readonly IAuthenticationProvider AuthProvider;
+        protected readonly IIAuthenticationProvider _authProvider;
 
         /// <summary>
         /// 
         /// </summary>
-        protected readonly ServiceEndpoint Endpoint; 
+        protected readonly ServiceEndpoint _endpoint; 
 
 
         /// <summary>
@@ -34,10 +35,10 @@ namespace OpenStack.Authentication.V3.Serialization
         /// <param name="provider"></param>
         /// <param name="region"></param>
         /// <param name="useInternal"></param>
-        public IdentityApiBuilder(IServiceType serviceType, IAuthenticationProvider provider, string region, bool useInternal)
+        public IdentityApiBuilder(IServiceType serviceType, IIAuthenticationProvider provider, string region, bool useInternal)
         {
-            AuthProvider = provider;
-            Endpoint = new ServiceEndpoint(serviceType, provider, region, useInternal);
+            _authProvider = provider;
+            _endpoint = new ServiceEndpoint(serviceType, provider, region, useInternal);
         }
 
         /// <summary>
@@ -45,12 +46,25 @@ namespace OpenStack.Authentication.V3.Serialization
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        public virtual async Task<Url> PrepareUserUrl(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url url = await _endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            var userId = await _authProvider.GetUserId(cancellationToken);
+            url.AppendPathSegment($"users/{userId}");
+            return url;
+        }
+ 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public virtual async Task<PreparedRequest> ListProjectAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            Url endpoint = await PrepareUserUrl(cancellationToken);
             return endpoint
-                .AppendPathSegment("projects")
-                .Authenticate(AuthProvider)
+                .AppendPathSegment($"projects")
+                .Authenticate(_authProvider)
                 .PrepareGet();
         }
     }

@@ -17,7 +17,7 @@ namespace OpenStack.Authentication.V3.Auth
     /// <summary>
     ///Support all identity service since v3.1
     /// </summary>
-    public class OpenstackAuthenticationProvider : IAuthenticationProvider
+    public class OpenstackIdentityProvider : IIAuthenticationProvider
     {
         private readonly UserCredential _userCredential;
         private TokenCache _tokenCache;
@@ -45,11 +45,11 @@ namespace OpenStack.Authentication.V3.Auth
         /// <param name="password"></param>
         /// <param name="scopeId"></param>
         /// <param name="scopType"></param>
-        public OpenstackAuthenticationProvider(string endpoint, string userId, string password, string scopeId = null, AuthScopeType scopType = null)
+        public OpenstackIdentityProvider(string endpoint, string userId, string password, string scopeId = null, AuthScopeType scopType = null)
         {
 
             User = new AuthUser(userId, password);
-            if(scopeId !=null & scopType !=null)
+            if (scopeId != null & scopType != null)
                 Scope = new AuthScope(scopeId, scopType);
             Endpoint = new Uri(endpoint);
             _userCredential = new UserCredential(User, Scope);
@@ -69,12 +69,13 @@ namespace OpenStack.Authentication.V3.Auth
             var tokenCache = await GetTokenCache(cancellationToken);
             foreach (var catalog in tokenCache.Catalog.Where(catalog => catalog.Type == serviceType.Type))
             {
-                return catalog.Endpoints.Where(endpoint =>
+                var endpoints = catalog.Endpoints.Where(endpoint =>
                     {
                         return string.Equals(endpoint.Region, region, StringComparison.OrdinalIgnoreCase) &&
                             (useInternalUrl ? string.Equals(endpoint.Interface, "internal", StringComparison.OrdinalIgnoreCase) :
                                 string.Equals(endpoint.Interface, "public", StringComparison.OrdinalIgnoreCase));
-                    }).First<Endpoint>().Url;
+                    });
+                return endpoints == null ? null : endpoints.First<Endpoint>().Url;
             }
             return null;
         }
@@ -87,9 +88,9 @@ namespace OpenStack.Authentication.V3.Auth
         /// <returns></returns>
         public async Task<string> GetToken(CancellationToken cancellationToken)
         {
-           var token = await GetTokenCache(cancellationToken);
+            var token = await GetTokenCache(cancellationToken);
             return token.Id;
-         }
+        }
 
         /// <summary>
         ///Get a token object from cach
@@ -104,7 +105,7 @@ namespace OpenStack.Authentication.V3.Auth
                var authRequest = new AuthRequest(_userCredential);
                return _tokenCache.Get(key, () =>
                 {
-                    var respMsg = new PreparedRequest(BuildIdentityUrl().ToString(), true)
+                    var respMsg = new PreparedRequest(BuildIdentityUrl().ToString())
                         .PreparePostJsonIgonreNull(authRequest)
                         .SendAsync()
                         .Result;
@@ -131,13 +132,13 @@ namespace OpenStack.Authentication.V3.Auth
         /// </summary>
         private string BuildCacheTokenKey()
         {
-            string user = User.Id != null ? User.Id :User.Domain + "/" + User.Name;
+            string user = User.Id != null ? User.Id : User.Domain + "/" + User.Name;
             string scope;
             if (Scope != null)
                 scope = Scope.Project != null ? Scope.Project["id"] : (Scope.Domain != null ? Scope.Domain["id"] : null);
             else
                 scope = "default_project";
-            return String.Format("{0}:{1}", user ,scope);
+            return String.Format("{0}:{1}", user, scope);
         }
 
         /// <summary>
@@ -147,9 +148,9 @@ namespace OpenStack.Authentication.V3.Auth
         /// <returns></returns>
         public async Task<AuthScope> GetScope(CancellationToken cancellationToken)
         {
-               var token = await GetTokenCache(cancellationToken);
-               var domain = token.Domain != null ? new AuthScope((string)token.Domain["id"], AuthScopeType.Domain) : null;
-               return token.Project != null ? new AuthScope((string)token.Project["id"], AuthScopeType.Project) : domain;
+            var token = await GetTokenCache(cancellationToken);
+            var domain = token.Domain != null ? new AuthScope((string)token.Domain["id"], AuthScopeType.Domain) : null;
+            return token.Project != null ? new AuthScope((string)token.Project["id"], AuthScopeType.Project) : domain;
         }
 
         /// <summary>
@@ -159,14 +160,25 @@ namespace OpenStack.Authentication.V3.Auth
         /// <returns></returns>
         public async Task<HashSet<string>> GetRegion(CancellationToken cancellationToken)
         {
-               var token =  await GetTokenCache(cancellationToken);
-               var set = new HashSet<string>();
-               foreach (var c in token.Catalog.Where<Catalog>(c => c.Type == ServiceType.Compute.Type))
-               {
-                   foreach (var endpoing in c.Endpoints)
-                       set.Add(endpoing.Region);
-               }
-               return set;
+            var token = await GetTokenCache(cancellationToken);
+            var set = new HashSet<string>();
+            foreach (var c in token.Catalog.Where<Catalog>(c => c.Type == ServiceType.Compute.Type))
+            {
+                foreach (var endpoing in c.Endpoints)
+                    set.Add(endpoing.Region);
+            }
+            return set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<string> GetUserId(CancellationToken cancellationToken)
+        {
+            var token = await GetTokenCache(cancellationToken);
+            return token.User.Id;
         }
     }
 }

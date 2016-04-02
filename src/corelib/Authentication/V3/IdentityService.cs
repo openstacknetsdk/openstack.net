@@ -8,6 +8,7 @@ using System.Threading;
 using OpenStack.Serialization;
 using Flurl.Http;
 using Flurl.Extensions;
+using OpenStack.Authentication.V3.Auth;
 
 namespace OpenStack.Authentication.V3
 {
@@ -24,14 +25,14 @@ namespace OpenStack.Authentication.V3
         /// <param name="authenticationProvider"></param>
         /// <param name="region"></param>
         /// <param name="useInternalUrl"></param>
-        public IdentityService(IAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
+        public IdentityService(IIAuthenticationProvider authenticationProvider, string region, bool useInternalUrl = false)
         {
             _identityApiBuilder = new IdentityApiBuilder(ServiceType.Identtity, authenticationProvider, region, useInternalUrl);
         }
 
         #region Project
         /// <inheritdoc cref="IdentityApiBuilder.ListProjectAsync(System.Threading.CancellationToken)"></inheritdoc>
-        public async Task<IEnumerable<Project>> ListNetworksAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IEnumerable<Project>> ListProjectAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _identityApiBuilder
                 .ListProjectAsync(cancellationToken)
