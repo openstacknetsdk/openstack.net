@@ -5,13 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenStack.Serialization;
 using System.Threading;
+using Flurl.Http;
+using Flurl;
+using Flurl.Extensions;
 
 namespace OpenStack.Authentication.V3.Serialization
 {
     /// <summary>
     /// 
     /// </summary>
-   public class IdentityApi
+   public class IdentityApiBuilder
     {
         /// <summary>
         /// 
@@ -27,28 +30,28 @@ namespace OpenStack.Authentication.V3.Serialization
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="serviceType"></param>
         /// <param name="provider"></param>
-        /// <param name="endpoint"></param>
-        public IdentityApi(IAuthenticationProvider provider, ServiceEndpoint endpoint)
+        /// <param name="region"></param>
+        /// <param name="useInternal"></param>
+        public IdentityApiBuilder(IServiceType serviceType, IAuthenticationProvider provider, string region, bool useInternal)
         {
             AuthProvider = provider;
-            Endpoint = endpoint;
+            Endpoint = new ServiceEndpoint(serviceType, provider, region, useInternal);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TPage"></typeparam>
-        /// <param name="queryString"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<TPage> ListProjectSummaryAsync<TPage>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
-            where TPage : IPageBuilder<TPage>, IEnumerable<IServiceResource>
+        public virtual async Task<PreparedRequest> ListProjectAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Url initialRequestUrl = await BuildListServersUrl(queryString, cancellationToken).ConfigureAwait(false);
-            return await Endpoint.GetResourcePageAsync<TPage>(initialRequestUrl, cancellationToken)
-                .PropogateOwnerToChildren(this).ConfigureAwait(false);
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+            return endpoint
+                .AppendPathSegment("projects")
+                .Authenticate(AuthProvider)
+                .PrepareGet();
         }
-
     }
 }

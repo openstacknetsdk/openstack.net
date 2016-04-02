@@ -18,17 +18,6 @@ namespace OpenStack.Authentication.V3.Auth
 		[JsonProperty("id")]
 		public string Id { get; set; }
 
-        /*
-        "project": {
-            "domain": {
-                "id": "default",
-                "name": "Default"
-            },
-            "id": "a6944d763bf64ee6a275f1263fae0352",
-            "name": "admin"
-        },
-        */
-
         /// <summary>
         /// 
         /// </summary>
@@ -63,8 +52,11 @@ namespace OpenStack.Authentication.V3.Auth
 		[JsonProperty("catalog")]
 		public Catalog[] Catalog { get;  set; }
 
-		//[JsonProperty("user")]
-		//public AuthUser User { get;  set; }
+        /// <summary>
+        /// 
+        /// </summary>
+		[JsonProperty("user")]
+		public AuthUser User { get;  set; }
 
 		/// <summary>
         /// 

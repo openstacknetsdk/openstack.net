@@ -10,6 +10,28 @@ namespace OpenStack.Authentication.V3.Auth
     /// <summary>
     /// 
     /// </summary>
+    public class AuthRequest
+    {
+
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <param name="_userCredential"></param>
+        public AuthRequest(UserCredential _userCredential)
+        {
+            UserCredential = _userCredential;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("auth")]
+        public UserCredential UserCredential { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class UserCredential
     {
 

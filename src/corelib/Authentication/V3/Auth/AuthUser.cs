@@ -39,6 +39,11 @@ namespace OpenStack.Authentication.V3.Auth
         /// <summary>
         /// 
         /// </summary>
+        [JsonConstructor]
+        public AuthUser() { }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="userId"></param>
         /// <param name="password"></param>
         public AuthUser(string userId, string password)
