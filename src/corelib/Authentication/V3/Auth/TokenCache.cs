@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using net.openstack.Core.Caching;
 
-namespace OpenStack.Authentication.V3
+namespace OpenStack.Authentication.V3.Auth
 {
     /// <summary>
     /// Provides a thread-safe cache of <see cref="Token"/> objects. A default shared

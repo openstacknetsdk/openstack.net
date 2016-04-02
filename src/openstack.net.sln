@@ -25,10 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.UnitTests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.IntegrationTests", "testing\integration\OpenStack.IntegrationTests.csproj", "{0C731980-8780-4F9B-9D14-DED790FD649A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStackTests1", "OpenStackTests1\OpenStackTests1.csproj", "{26C5B6E0-1E10-406D-8BC5-D181F24E9854}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpCodeSamples", "Samples\CSharpCodeSamples\CSharpCodeSamples.csproj", "{F2743826-5116-42F4-B75A-3D54B6BE3462}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.Samples", "..\samples\OpenStack.Samples.csproj", "{1E22CD29-1C76-4C5E-B6C5-45F8C12FE78A}"
 EndProject
 Global
@@ -63,22 +59,6 @@ Global
 		{0C731980-8780-4F9B-9D14-DED790FD649A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C731980-8780-4F9B-9D14-DED790FD649A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0C731980-8780-4F9B-9D14-DED790FD649A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{26C5B6E0-1E10-406D-8BC5-D181F24E9854}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F2743826-5116-42F4-B75A-3D54B6BE3462}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1E22CD29-1C76-4C5E-B6C5-45F8C12FE78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E22CD29-1C76-4C5E-B6C5-45F8C12FE78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E22CD29-1C76-4C5E-B6C5-45F8C12FE78A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

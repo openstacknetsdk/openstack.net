@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenStack.Serialization;
 
-namespace OpenStack.Authentication.v3
+namespace OpenStack.Authentication
 {
-    class Domain
+    class ProjectRefrence
     {
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace OpenStack.Authentication.V3
+namespace OpenStack.Authentication.V3.Auth
 {
     /// <summary>
     /// 
