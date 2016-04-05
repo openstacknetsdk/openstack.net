@@ -441,6 +441,7 @@ namespace OpenStack.Compute.v2_1
         }
 
         [Fact]
+        [Trait("ci", "false")]
         public async Task ResizeServerTest()
         {
             var flavors = await _compute.ListFlavorSummariesAsync();

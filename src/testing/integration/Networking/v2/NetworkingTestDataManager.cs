@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OpenStack.Networking.v2.Layer3;
 
 namespace OpenStack.Networking.v2
 {
@@ -32,6 +33,19 @@ namespace OpenStack.Networking.v2
         public void Dispose()
         {
             var errors = new List<Exception>();
+
+            try
+            {
+                DeleteFloatingIPs(_testData.OfType<FloatingIP>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
+            try
+            {
+                DeleteRouters(_testData.OfType<Router>());
+            }
+            catch (AggregateException ex) { errors.AddRange(ex.InnerExceptions); }
+
             try
             {
                 DeletePorts(_testData.OfType<Port>());
@@ -55,9 +69,9 @@ namespace OpenStack.Networking.v2
         }
 
         #region Networks
-        public NetworkDefinition BuildNetwork()
+        public Operator.NetworkDefinition BuildNetwork()
         {
-            return new NetworkDefinition
+            return new Operator.NetworkDefinition
             {
                 Name = TestData.GenerateName()
             };
@@ -101,7 +115,7 @@ namespace OpenStack.Networking.v2
 
         public SubnetCreateDefinition BuildSubnet(Network network)
         {
-            var cidr = string.Format("192.168.{0}.0/24", _subnetCounter++);
+            var cidr = $"192.168.{_subnetCounter++}.0/24";
             return new SubnetCreateDefinition(network.Id, IPVersion.IPv4, cidr)
             {
                 Name = TestData.GenerateName()
@@ -179,6 +193,24 @@ namespace OpenStack.Networking.v2
         public void DeletePorts(IEnumerable<Port> ports)
         {
             Task[] deletes = ports.Select(x => _networkingService.DeletePortAsync(x.Id)).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Routers
+        
+        public void DeleteRouters(IEnumerable<Router> routers)
+        {
+            Task[] deletes = routers.Select(router => router.DeleteAsync()).ToArray();
+            Task.WaitAll(deletes);
+        }
+        #endregion
+
+        #region Floating IPs
+
+        public void DeleteFloatingIPs(IEnumerable<FloatingIP> floatingIPs)
+        {
+            Task[] deletes = floatingIPs.Select(ip => ip.DeleteAsync()).ToArray();
             Task.WaitAll(deletes);
         }
         #endregion

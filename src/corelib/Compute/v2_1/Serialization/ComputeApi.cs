@@ -766,6 +766,37 @@ namespace OpenStack.Compute.v2_1.Serialization
         }
 
         /// <summary>
+        /// Associates a floating IP address to the server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task AssociateFloatingIPAsync(string serverId, object request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
+        /// Disassociate a floating IP address from a server.
+        /// </summary>
+        /// <param name="serverId">The server identifier.</param>
+        /// <param name="floatingIPAddress">The floating IP address to remove.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual Task DisassociateFloatingIPAsync(string serverId, string floatingIPAddress, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var request = new
+            {
+                removeFloatingIp = new
+                {
+                    address = floatingIPAddress
+                }
+            };
+            return BuildServerActionRequest(serverId, request, cancellationToken).SendAsync();
+        }
+
+        /// <summary>
         /// Builds a server action request, where the server operation is specified in the request body.
         /// </summary>
         /// <param name="serverId">The server identifier.</param>
