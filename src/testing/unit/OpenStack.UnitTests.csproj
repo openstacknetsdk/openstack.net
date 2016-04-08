@@ -117,6 +117,7 @@
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\TypeExtensionsTests.cs" />
     <Compile Include="IdentifierTests.cs" />
+    <Compile Include="Image\v2\ImageTests.cs" />
     <Compile Include="Networking\v2\DHCPOptionConverterTests.cs" />
     <Compile Include="Networking\v2\Layer3\Layer3Tests.cs" />
     <Compile Include="Networking\v2\PortTests.cs" />
