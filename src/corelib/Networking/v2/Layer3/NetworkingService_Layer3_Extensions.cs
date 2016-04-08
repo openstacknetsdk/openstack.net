@@ -6,6 +6,8 @@ using Newtonsoft.Json.Linq;
 using OpenStack.Networking.v2.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous.Extensions;
+using Flurl.Extensions;
+using Flurl.Http;
 
 namespace OpenStack.Networking.v2.Layer3
 {
@@ -100,6 +102,18 @@ namespace OpenStack.Networking.v2.Layer3
         public static Task DeleteFloatingIPAsync(this NetworkingService service, Identifier floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return service._networkingApiBuilder.DeleteFloatingIPAsync(floatingIPId, cancellationToken);
+        }
+        #endregion
+
+        #region Security Groups
+        /// <inheritdoc cref="NetworkingApiBuilder.ListSecurityGroupAsync(CancellationToken)" />
+        public static async Task<IEnumerable<SecurityGroup>> ListSecurityGroupAsync(this NetworkingService service, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await service._networkingApiBuilder
+                .ListSecurityGroupAsync(cancellationToken)
+                .SendAsync()
+                .ReceiveJson<NetSecurityGroupCollection>()
+                .ConfigureAwait(false);
         }
         #endregion
     }
@@ -200,5 +214,14 @@ namespace OpenStack.Networking.v2.Layer3.Synchronous
             service._networkingApiBuilder.DeleteFloatingIPAsync(floatingIPId).ForceSynchronous();
         }
         #endregion
+
+        #region Security Group
+        /// <inheritdoc cref="NetworkingService_Layer3_Extensions.ListSecurityGroupAsync" />
+        public static  IEnumerable<SecurityGroup> ListSecurityGroup (this NetworkingService service)
+        {
+            return service._networkingApiBuilder.ListSecurityGroupAsync().SendAsync().ReceiveJson<NetSecurityGroupCollection>().ForceSynchronous();
+        }
+        #endregion
+
     }
 }

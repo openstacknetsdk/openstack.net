@@ -313,5 +313,33 @@ namespace OpenStack.Networking.v2.Layer3
         }
         #endregion
 
+        #region  Security Groups
+        [Fact]
+        public void ListSecurityGroupAsync()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier securityGroupId = Guid.NewGuid();
+                Identifier securityGroupRuleId = Guid.NewGuid();
+                SecurityGroupRule rule = new SecurityGroupRule { Id = securityGroupRuleId };
+                List<SecurityGroupRule> rules = new List<SecurityGroupRule> { rule };
+
+                httpTest.RespondWithJson(new NetSecurityGroupCollection
+                {
+                    new SecurityGroup { Id = securityGroupId, SecurityGroupRules = rules }
+                });
+
+                var results = _networking.ListSecurityGroup();
+
+                httpTest.ShouldHaveCalled("*/security-groups");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                var resultRule = result.SecurityGroupRules.First();
+                Assert.Equal(securityGroupId, result.Id);
+                Assert.Equal(rule.Id, resultRule.Id);
+            }
+        }
+        #endregion
+
     }
 }
