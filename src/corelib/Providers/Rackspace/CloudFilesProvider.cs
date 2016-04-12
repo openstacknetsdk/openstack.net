@@ -1541,6 +1541,13 @@ namespace net.openstack.Providers.Rackspace
         /// <inheritdoc />
         public void MoveObject(string sourceContainer, string sourceObjectName, string destinationContainer, string destinationObjectName, string destinationContentType = null, Dictionary<string, string> headers = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
+            // Do nothing if the source and destination locations are the same. Prevents the object from being deleted accidentally.
+            var prefix = GetServiceEndpointCloudFiles(identity, region, useInternalUrl);
+            var src = new Uri($"{prefix}/{_encodeDecodeProvider.UrlEncode(sourceContainer)}/{_encodeDecodeProvider.UrlEncode(sourceObjectName)}");
+            var dest = new Uri($"{prefix}/{_encodeDecodeProvider.UrlEncode(destinationContainer)}/{_encodeDecodeProvider.UrlEncode(destinationObjectName)}");
+            if (src == dest)
+                return;
+
             CopyObject(sourceContainer, sourceObjectName, destinationContainer, destinationObjectName, destinationContentType, headers, region, useInternalUrl, identity);
             DeleteObject(sourceContainer, sourceObjectName, headers, true, region, useInternalUrl, identity);
         }

@@ -124,6 +124,7 @@
     <Compile Include="Networking\v2\Layer3\Layer3ExtensionTests.cs" />
     <Compile Include="Networking\v2\NetworkingTestDataManager.cs" />
     <Compile Include="Networking\v2\NetworkingServiceTests.cs" />
+    <Compile Include="ObjectStorage\CloudFilesProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
     <Compile Include="Providers\Rackspace\CloudServersTests.cs" />
