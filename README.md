@@ -1,5 +1,7 @@
 # OpenStack.NET
 
+Need Help? Email us at [sdk-support@rackspace.com](mailto:sdk-support@rackspace.com).
+
 [![Join the chat at https://gitter.im/openstacknetsdk/openstack.net](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openstacknetsdk/openstack.net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 OpenStack.NET is an OpenStack .NET SDK, written for the Microsoft .NET platform, is designed to enable developers to seamlessly work with
