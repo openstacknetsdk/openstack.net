@@ -667,6 +667,26 @@ namespace OpenStack.Networking.v2
         }
         #endregion
 
+        #region SecurityGroup
+        /// <summary>
+        /// Lists all networks security groups associated with the account.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// A collection of network resources associated with the account.
+        /// </returns>
+        public async Task<PreparedRequest> ListSecurityGroupAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            return endpoint
+                .AppendPathSegments("security-groups")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+        }
+
+        #endregion
+
         #region Floating IPs
         /// <summary>
         /// Shows details for a server group.
