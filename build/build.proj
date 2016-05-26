@@ -8,10 +8,13 @@
     <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
-    <NuGet>$(LocalAppData)\NuGet\NuGet.exe</NuGet>
+    <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
+    <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
+    <PackagesFolder>$(MSBuildThisFileDirectory.Replace('build\','packages'))</PackagesFolder>
+    <NuGet>$(PackagesFolder)\NuGet.CommandLine\tools$(LocalAppData)\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
-    <XUnit>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\xunit.runner.console.2.0.0\tools\xunit.console.exe</XUnit>
-    <XUnitXslt>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\xunit.runner.console.2.0.0\tools\NUnitXml.xslt</XUnitXslt>
+    <XUnit>$(PackagesFolder)\xunit.runner.console\tools\xunit.console.exe</XUnit>
+    <XUnitXslt>$(PackagesFolder)\xunit.runner.console\tools\NUnitXml.xslt</XUnitXslt>
   </PropertyGroup>
 
   <Target Name="CI">
@@ -33,15 +36,15 @@
 
   <Target Name="Documentation" DependsOnTargets="Build">
     <PropertyGroup>
-      <SHFBROOT>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\EWSoftware.SHFB.2014.11.22-beta\tools</SHFBROOT>
+      <SHFBROOT>$(PackagesFolder)\EWSoftware.SHFB\tools</SHFBROOT>
     </PropertyGroup>
 
-    <Exec Command="$(NuGet) restore ..\src\Documentation\Documentation.sln" />
     <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
   </Target>
 
-  <Target Name="RestorePackages" DependsOnTargets="DownloadNuGet">
-    <Exec Command="$(NuGet) restore ..\src\openstack.net.sln" />
+  <Target Name="RestorePackages">
+    <Exec Command="$(PaketBootstrapper)" />
+    <Exec Command="$(Paket) install" />
   </Target>
 
   <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
