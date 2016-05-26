@@ -1,5 +1,6 @@
 source https://www.myget.org/F/openstacknetsdk/api/v2
 source https://www.nuget.org/api/v2
+redirects: on
 
 nuget EWSoftware.SHFB = 2014.11.22
 nuget Flurl.Http.Signed
@@ -20,6 +21,7 @@ nuget xunit.runner.console
 nuget xunit.runner.visualstudio
                     
 group History-1.5
+	redirects: on
 	source https://www.nuget.org/api/v2
 	framework: net45
 	strategy: min
@@ -28,6 +30,7 @@ group History-1.5
 	nuget SimpleRESTServices
 
 group History-1.4
+	redirects: on
 	source https://www.nuget.org/api/v2
 	framework: net45
 	strategy: min
@@ -36,6 +39,7 @@ group History-1.4
 	nuget SimpleRESTServices
 
 group History-1.3.6
+	redirects: on
 	source https://www.nuget.org/api/v2
 	framework: net35
 	strategy: min

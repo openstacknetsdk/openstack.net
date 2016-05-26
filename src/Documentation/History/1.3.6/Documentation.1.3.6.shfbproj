@@ -20,8 +20,8 @@
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\packages\history-1.3\openstack.net\lib\net35\openstacknet.dll" />
-      <DocumentationSource sourceFile="..\..\..\packages\history-1.3\openstack.net\lib\net35\openstacknet.xml" />
+      <DocumentationSource sourceFile="..\..\..\packages\history-1.3.6\openstack.net\lib\net35\openstacknet.dll" />
+      <DocumentationSource sourceFile="..\..\..\packages\history-1.3.6\openstack.net\lib\net35\openstacknet.xml" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
