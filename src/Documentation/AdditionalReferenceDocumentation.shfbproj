@@ -27,10 +27,10 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.dll" />
-      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.xml" />
-      <DocumentationSource sourceFile="..\packages\SimpleRESTServices.1.3.0.1\lib\net40\SimpleRESTServices.dll" />
-      <DocumentationSource sourceFile="..\packages\SimpleRESTServices.1.3.0.1\lib\net40\SimpleRESTServices.xml" />
+      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.dll" />
+      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.xml" />
+      <DocumentationSource sourceFile="..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.dll" />
+      <DocumentationSource sourceFile="..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.xml" />
     </DocumentationSources>
     <PlugInConfigurations>
     </PlugInConfigurations>
