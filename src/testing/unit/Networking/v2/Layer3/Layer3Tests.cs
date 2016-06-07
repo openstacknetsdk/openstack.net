@@ -340,6 +340,28 @@ namespace OpenStack.Networking.v2.Layer3
                 Assert.Equal(rule.Id, resultRule.Id);
             }
         }
+
+        [Fact]
+        public void ListSecurityGroupRules()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier securityGroupId = Guid.NewGuid();
+                Identifier securityGroupRuleId = Guid.NewGuid();
+                httpTest.RespondWithJson(new SecurityGroupRuleCollection
+                {
+                    new SecurityGroupRule {Id = securityGroupRuleId, SecurityGroupId = securityGroupId}
+                });
+
+                var results = _networking.ListSecurityGroupRules();
+
+                httpTest.ShouldHaveCalled("*/security-group-rules");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                Assert.Equal(securityGroupRuleId, result.Id);
+                Assert.Equal(securityGroupId, result.SecurityGroupId);
+            }
+        }
         #endregion
 
     }

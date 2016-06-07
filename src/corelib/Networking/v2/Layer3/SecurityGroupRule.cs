@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
 namespace OpenStack.Networking.v2.Layer3
@@ -7,7 +9,7 @@ namespace OpenStack.Networking.v2.Layer3
     /// 
     /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group_rule")]
-    public class SecurityGroupRule
+    public class SecurityGroupRule : IHaveExtraData, IServiceResource
     {
         /// <summary>
         /// ingress or egress: the direction in which the security group rule is applied.
@@ -71,5 +73,10 @@ namespace OpenStack.Networking.v2.Layer3
         /// </summary>
         [JsonProperty("security_group_id")]
         public Identifier SecurityGroupId;
+
+        [JsonExtensionData]
+        IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
+
+        object IServiceResource.Owner { get; set; }
     }
 }

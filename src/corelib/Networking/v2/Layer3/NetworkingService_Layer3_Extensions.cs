@@ -111,6 +111,12 @@ namespace OpenStack.Networking.v2.Layer3
         {
             return await service._networkingApiBuilder.ListSecurityGroupsAsync<SecurityGroupCollection>(options, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <inheritdoc cref="NetworkingApiBuilder.ListSecurityGroupRulesAsync{T}" />
+        public static async Task<IEnumerable<SecurityGroupRule>> ListSecurityGroupRulesAsync(this NetworkingService service, SecurityGroupRuleListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await service._networkingApiBuilder.ListSecurityGroupRulesAsync<SecurityGroupRuleCollection>(options, cancellationToken).ConfigureAwait(false);
+        }
         #endregion
     }
 }
@@ -216,6 +222,11 @@ namespace OpenStack.Networking.v2.Layer3.Synchronous
         public static IEnumerable<SecurityGroup> ListSecurityGroups(this NetworkingService service, SecurityGroupListOptions options = null)
         {
             return service.ListSecurityGroupsAsync(options).ForceSynchronous();
+        }
+        /// <inheritdoc cref="NetworkingService_Layer3_Extensions.ListSecurityGroupRulesAsync" />
+        public static IEnumerable<SecurityGroupRule> ListSecurityGroupRules(this NetworkingService service, SecurityGroupRuleListOptions options = null)
+        {
+            return service.ListSecurityGroupRulesAsync(options).ForceSynchronous();
         }
         #endregion
 

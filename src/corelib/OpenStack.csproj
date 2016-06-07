@@ -200,6 +200,7 @@
     <Compile Include="Networking\v2\Layer3\SecurityGroupRule.cs" />
     <Compile Include="Networking\v2\AllowedAddress.cs" />
     <Compile Include="Networking\v2\AllocationPool.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupRuleListOptions.cs" />
     <Compile Include="Networking\v2\PortListOptions.cs" />
     <Compile Include="Networking\v2\HostRoute.cs" />
     <Compile Include="Networking\v2\IPAddressAssociation.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Networking\v2\Serialization\PortCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortDefinitionCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SecurityGroupCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupRuleCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetDefinitionCollection.cs" />
     <Compile Include="Networking\v2\Serialization\TrafficDirection.cs" />

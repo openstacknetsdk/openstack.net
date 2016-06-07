@@ -704,6 +704,41 @@ namespace OpenStack.Networking.v2
             return request;
         }
 
+        /// <summary>
+        /// Lists all network security group rules associated with the account.
+        /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>
+        /// A collection of network security group rule resources associated with the account.
+        /// </returns>
+        public async Task<T> ListSecurityGroupRulesAsync<T>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListSecurityGroupRulesRequest(queryString, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds a <see cref="ListSecurityGroupRulesAsync{T}"/> request.
+        /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task<PreparedRequest> BuildListSecurityGroupRulesRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+            var request = endpoint
+                .AppendPathSegments("security-group-rules")
+                .Authenticate(AuthenticationProvider)
+                .PrepareGet(cancellationToken);
+
+            request.Url.SetQueryParams(queryString?.Build());
+
+            return request;
+        }
         #endregion
 
         #region Floating IPs
