@@ -27,10 +27,10 @@ namespace OpenStack.Networking.v2
 
         public void Dispose()
         {
+            _testData.Dispose();
+
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();
-
-            _testData.Dispose();
         }
 
         #region Networks

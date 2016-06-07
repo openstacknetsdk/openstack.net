@@ -29,13 +29,14 @@ namespace OpenStack.Compute.v2_1.Operator
 
         public void Dispose()
         {
+            _testData.Dispose();
+
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();
-
-            _testData.Dispose();
         }
         
         [Fact]
+        [Trait("ci", "false")]
         public async Task EvacuateServerTest()
         {
             var server = await _testData.CreateServer();

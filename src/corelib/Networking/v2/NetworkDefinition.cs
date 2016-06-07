@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
 namespace OpenStack.Networking.v2
@@ -8,12 +10,17 @@ namespace OpenStack.Networking.v2
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "network")]
-    public class NetworkDefinition
+    public class NetworkDefinition : IHaveExtraData
     {
-        /// <summary>
-        /// The network name.
-        /// </summary>
+        /// <inheritdoc cref="Network.Name" />
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        /// <inheritdoc cref="Network.IsUp" />
+        [JsonProperty("admin_state_up")]
+        public bool? IsUp { get; set; }
+
+        [JsonExtensionData]
+        IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
     }
 }

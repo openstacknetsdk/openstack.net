@@ -67,8 +67,8 @@
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Security.Cryptography">
@@ -121,32 +121,11 @@
     <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceTests.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\ServiceTests.cs" />
     <Compile Include="Identity\v2\IdentityTests.cs" />
+    <Compile Include="Networking\v2\Layer3\Layer3ExtensionTests.cs" />
     <Compile Include="Networking\v2\NetworkingTestDataManager.cs" />
     <Compile Include="Networking\v2\NetworkingServiceTests.cs" />
     <Compile Include="ObjectStorage\CloudFilesProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\Rackspace\CloudNetworksTests.cs" />
-    <Compile Include="Providers\Rackspace\CloudServersTests.cs" />
-    <Compile Include="Providers\Rackspace\CloudBlockStorageTests.cs" />
-    <Compile Include="Providers\Rackspace\TestHelpers.cs" />
-    <Compile Include="Providers\Rackspace\UserAutoScaleTests.cs" />
-    <Compile Include="Providers\Rackspace\UserDatabaseTests.cs" />
-    <Compile Include="Providers\Rackspace\UserDatabaseUserTests.cs" />
-    <Compile Include="Providers\Rackspace\UserMonitoringTests.cs" />
-    <Compile Include="Providers\Rackspace\UserQueuesTestsSynchronous.cs" />
-    <Compile Include="Providers\Rackspace\IdentityTests.cs" />
-    <Compile Include="Providers\Rackspace\ExtendedIdentityTests.cs" />
-    <Compile Include="Providers\Rackspace\CloudFilesTests.cs" />
-    <Compile Include="Providers\Rackspace\TestCategories.cs" />
-    <Compile Include="Providers\Rackspace\UserBlockStorageTests.cs" />
-    <Compile Include="Providers\Rackspace\UserComputeTests.cs" />
-    <Compile Include="Providers\Rackspace\UserDnsTests.cs" />
-    <Compile Include="Providers\Rackspace\UserIdentityTests.cs" />
-    <Compile Include="Providers\Rackspace\UserLoadBalancerTests.cs" />
-    <Compile Include="Providers\Rackspace\UserNetworksTests.cs" />
-    <Compile Include="Providers\Rackspace\UserObjectStorageTests.cs" />
-    <Compile Include="Providers\Rackspace\UserQueuesTests.cs" />
-    <Compile Include="Providers\Rackspace\UserServerTests.cs" />
     <Compile Include="TestData.cs" />
     <Compile Include="TestIdentityProvider.cs" />
     <Compile Include="XunitTraceListener.cs" />
@@ -165,30 +144,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Providers\Rackspace\CloudFilesFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Providers\Rackspace\IdentityFull.orderedtest" />
-    <None Include="Providers\Rackspace\Full.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Providers\Rackspace\ExtendedIdentityFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Providers\Rackspace\CloudServersFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Providers\Rackspace\CloudBlockStorageFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Providers\Rackspace\CloudNetworksFull.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Providers\Rackspace\CloudFiles\DarkKnightRises.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -72,6 +72,17 @@
     <HelpAttributes />
     <NamespaceSummaries />
     <PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="false">
+          <assemblyBinding>
+            <dependentAssembly>
+              <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+              <bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" />
+            </dependentAssembly>
+          </assemblyBinding>
+          <ignoreIfUnresolved />
+        </configuration>
+      </PlugInConfig>
     </PlugInConfigurations>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />

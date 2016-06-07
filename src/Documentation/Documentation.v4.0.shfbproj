@@ -99,14 +99,8 @@
           </versions>
         </configuration>
       </PlugInConfig>
-      <PlugInConfig id="Additional Reference Links" enabled="True">
-        <configuration>
-          <targets>
-            <target htmlSdkLinkType="None" help2SdkLinkType="Index" helpViewerSdkLinkType="Id" websiteSdkLinkType="None" helpFileProject="AdditionalReferenceDocumentation.shfbproj" />
-          </targets>
-        </configuration>
-      </PlugInConfig>
-    </PlugInConfigurations>
+<PlugInConfig id="Additional Reference Links" enabled="True"><configuration><targets><target htmlSdkLinkType="None" help2SdkLinkType="Index" helpViewerSdkLinkType="Id" websiteSdkLinkType="None" helpFileProject="AdditionalReferenceDocumentation.shfbproj" /></targets></configuration></PlugInConfig>
+<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" /><bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved /></configuration></PlugInConfig></PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="Flurl.Extensions" isExposed="False" />
       <Filter entryType="Namespace" fullName="Flurl.Http" isExposed="False" />
@@ -129,11 +123,12 @@
     <HelpAttributes />
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Flurl.Http" isDocumented="False" />
-<NamespaceSummaryItem name="OpenStack.Compute.v2_1.Serialization" isDocumented="False" />
-<NamespaceSummaryItem name="OpenStack.Compute.v2_2.Serialization" isDocumented="False" />
-<NamespaceSummaryItem name="OpenStack.Compute.v2_6.Serialization" isDocumented="False" />
-<NamespaceSummaryItem name="OpenStack.Serialization" isDocumented="False" />
-<NamespaceSummaryItem name="OpenStack.Synchronous" isDocumented="True" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="OpenStack.Compute.v2_1.Serialization" isDocumented="False" />
+      <NamespaceSummaryItem name="OpenStack.Compute.v2_2.Serialization" isDocumented="False" />
+      <NamespaceSummaryItem name="OpenStack.Compute.v2_6.Serialization" isDocumented="False" />
+      <NamespaceSummaryItem name="OpenStack.Serialization" isDocumented="False" />
+      <NamespaceSummaryItem name="OpenStack.Synchronous" isDocumented="True" />
+    </NamespaceSummaries>
     <BuildLogFile />
     <HtmlHelp1xCompilerPath />
     <HtmlHelp2xCompilerPath />

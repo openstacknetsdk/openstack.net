@@ -61,8 +61,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SimpleRESTServices, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8965cea5c205d3a3, processorArchitecture=MSIL">
@@ -88,6 +88,7 @@
     <Compile Include="BlockStorage\v2\VolumeStatus.cs" />
     <Compile Include="Compute\ComputeOperationFailedException.cs" />
     <Compile Include="Compute\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Actions\AssociateFloatingIPRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
     <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
@@ -193,16 +194,43 @@
     <Compile Include="Images\v2\Serialization\ImageStatus.cs" />
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\IPProtocol.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroup.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupRule.cs" />
     <Compile Include="Networking\v2\AllowedAddress.cs" />
     <Compile Include="Networking\v2\AllocationPool.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupRuleListOptions.cs" />
+    <Compile Include="Networking\v2\PortListOptions.cs" />
     <Compile Include="Networking\v2\HostRoute.cs" />
     <Compile Include="Networking\v2\IPAddressAssociation.cs" />
+    <Compile Include="Networking\v2\Layer3\ExternalGateway.cs" />
+    <Compile Include="Networking\v2\Layer3\ExternalGatewayDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIP.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterExtensions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPExtensions.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPCreateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPStatus.cs" />
+    <Compile Include="Networking\v2\Layer3\NetworkingService_Layer3_Extensions.cs" />
+    <Compile Include="Networking\v2\Layer3\Router.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterCreateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterStatus.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterUpdateDefinition.cs" />
     <Compile Include="Networking\v2\NamespaceDoc.cs" />
     <Compile Include="Networking\v2\NetworkDefinition.cs" />
     <Compile Include="Networking\v2\NetworkingApiBuilder.cs" />
     <Compile Include="Networking\v2\NetworkingService.cs" />
     <Compile Include="Networking\v2\NetworkingServiceExtensions.cs" />
     <Compile Include="Networking\v2\Network.cs" />
+    <Compile Include="Networking\v2\Operator\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\Operator\NetworkDefinition.cs" />
+    <Compile Include="Networking\v2\Serialization\IPProtocol.cs" />
+    <Compile Include="Networking\v2\Serialization\RouterCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\FloatingIPCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\NetworkResourceStatus.cs" />
     <Compile Include="Networking\v2\PortUpdateDefinition.cs" />
     <Compile Include="Networking\v2\PortCreateDefinition.cs" />
     <Compile Include="Networking\v2\Port.cs" />
@@ -212,11 +240,15 @@
     <Compile Include="Networking\v2\Serialization\NetworkDefinitionCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupRuleCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\TrafficDirection.cs" />
     <Compile Include="Networking\v2\Subnet.cs" />
     <Compile Include="Networking\v2\SubnetCreateDefinition.cs" />
     <Compile Include="Networking\v2\SubnetUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\TrafficDirection.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />

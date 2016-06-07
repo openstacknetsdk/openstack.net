@@ -15,7 +15,7 @@ namespace OpenStack.Networking.v2
     /// <seealso href="http://developer.openstack.org/api-ref-networking-v2.html">OpenStack Networking API v2 Reference</seealso>
     public class NetworkingService
     {
-        private readonly NetworkingApiBuilder _networkingApiBuilder;
+        internal readonly NetworkingApiBuilder _networkingApiBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkingService"/> class.
@@ -141,13 +141,10 @@ namespace OpenStack.Networking.v2
 
         #region Ports
 
-        /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync" />
-        public async Task<IEnumerable<Port>> ListPortsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync{T}" />
+        public async Task<IEnumerable<Port>> ListPortsAsync(PortListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _networkingApiBuilder
-                .ListPortsAsync(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<PortCollection>();
+            return await _networkingApiBuilder.ListPortsAsync<PortCollection>(options, cancellationToken);
         }
 
         /// <inheritdoc cref="NetworkingApiBuilder.CreatePortAsync" />

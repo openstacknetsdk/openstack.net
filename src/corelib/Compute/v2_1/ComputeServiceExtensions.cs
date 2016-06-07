@@ -181,6 +181,18 @@ namespace OpenStack.Synchronous
             service.CancelResizeServerAsync(serverId).ForceSynchronous();
         }
 
+        /// <inheritdoc cref="ComputeService.AssociateFloatingIPAddressAsync" />
+        public static void AssociateFloatingIPAddressAsync(this ComputeService service, Identifier serverId, AssociateFloatingIPRequest request)
+        {
+            service.AssociateFloatingIPAddressAsync(serverId, request).ForceSynchronous();
+        }
+
+        /// <inheritdoc cref="ComputeService.DisassociateFloatingIPAsync" />
+        public static void DisassociateFloatingIPAsync(this ComputeService service, Identifier serverId, string floatingIPAddress)
+        {
+            service.DisassociateFloatingIPAsync(serverId, floatingIPAddress).ForceSynchronous();
+        }
+
         /// <inheritdoc cref="ComputeService.ListServerActionSummariesAsync" />
         public static IEnumerable<ServerActionSummary> ListServerActions(this ComputeService service, Identifier serverId)
         {

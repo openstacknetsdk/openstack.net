@@ -27,10 +27,10 @@ namespace OpenStack.Compute.v2_1
 
         public void Dispose()
         {
+            _testData.Dispose();
+
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();
-
-            _testData.Dispose();
         }
 
         [Fact]
