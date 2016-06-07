@@ -195,6 +195,7 @@
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\NamespaceDoc.cs" />
     <Compile Include="Networking\v2\IPProtocol.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupListOptions.cs" />
     <Compile Include="Networking\v2\Layer3\SecurityGroup.cs" />
     <Compile Include="Networking\v2\Layer3\SecurityGroupRule.cs" />
     <Compile Include="Networking\v2\AllowedAddress.cs" />
@@ -238,12 +239,14 @@
     <Compile Include="Networking\v2\Serialization\NetworkDefinitionCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortCollection.cs" />
     <Compile Include="Networking\v2\Serialization\PortDefinitionCollection.cs" />
-    <Compile Include="Networking\v2\Serialization\NetSecurityGroupCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetCollection.cs" />
     <Compile Include="Networking\v2\Serialization\SubnetDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\TrafficDirection.cs" />
     <Compile Include="Networking\v2\Subnet.cs" />
     <Compile Include="Networking\v2\SubnetCreateDefinition.cs" />
     <Compile Include="Networking\v2\SubnetUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\TrafficDirection.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />

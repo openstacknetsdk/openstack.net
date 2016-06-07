@@ -1,48 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using OpenStack.Networking.v2;
+using Newtonsoft.Json.Linq;
 using OpenStack.Serialization;
 
 namespace OpenStack.Networking.v2.Layer3
 {
     /// <summary>
-    ///Regpresents the security group of the <see cref="NetworkingService"/> 
+    /// Represents the security group of the <see cref="NetworkingService"/> 
     /// </summary>
-    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "securitygroup")]
-    public class SecurityGroup
+    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_group")]
+    public class SecurityGroup : IHaveExtraData, IServiceResource
     {
         /// <summary>
-        ///the security group description
+        /// The security group description
         /// </summary>
         [JsonProperty("description")]
         public string Description;
 
         /// <summary>
-        ///the UUID of security group
+        /// The UUID of security group
         /// </summary>
         [JsonProperty("id")]
         public Identifier Id;
 
         /// <summary>
-        /// the security group name
+        /// The security group name
         /// </summary>
         [JsonProperty("name")]
         public string Name;
 
         /// <summary>
-        ///A list of <see cref="SecurityGroup"/> objects.
+        /// A list of <see cref="SecurityGroup"/> objects.
         /// </summary>
         [JsonProperty("security_group_rules")]
         public IList<SecurityGroupRule> SecurityGroupRules;
 
-        /// <summary>
-        ///The UUId of tenant who owns the scurity group
-        /// </summary>
-        [JsonProperty("tenant_id")]
-        public string TenantId;
+        [JsonExtensionData]
+        IDictionary<string, JToken> IHaveExtraData.Data { get; set; } = new Dictionary<string, JToken>();
+
+        object IServiceResource.Owner { get; set; }
     }
 }

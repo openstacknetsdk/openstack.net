@@ -11,6 +11,7 @@ using OpenStack.Networking.v2.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
+using SecurityGroupCollection = OpenStack.Networking.v2.Serialization.SecurityGroupCollection;
 
 namespace OpenStack.Networking.v2.Layer3
 {
@@ -315,7 +316,7 @@ namespace OpenStack.Networking.v2.Layer3
 
         #region  Security Groups
         [Fact]
-        public void ListSecurityGroupAsync()
+        public void ListSecurityGroups()
         {
             using (var httpTest = new HttpTest())
             {
@@ -324,12 +325,12 @@ namespace OpenStack.Networking.v2.Layer3
                 SecurityGroupRule rule = new SecurityGroupRule { Id = securityGroupRuleId };
                 List<SecurityGroupRule> rules = new List<SecurityGroupRule> { rule };
 
-                httpTest.RespondWithJson(new NetSecurityGroupCollection
+                httpTest.RespondWithJson(new SecurityGroupCollection
                 {
                     new SecurityGroup { Id = securityGroupId, SecurityGroupRules = rules }
                 });
 
-                var results = _networking.ListSecurityGroup();
+                var results = _networking.ListSecurityGroups();
 
                 httpTest.ShouldHaveCalled("*/security-groups");
                 Assert.Equal(1, results.Count());

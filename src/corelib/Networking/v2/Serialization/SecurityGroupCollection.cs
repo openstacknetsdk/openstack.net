@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using OpenStack.Serialization;
 using OpenStack.Networking.v2.Layer3;
 
@@ -13,25 +9,24 @@ namespace OpenStack.Networking.v2.Serialization
     /// <para>Intended for custom implementations and stubbing responses in unit tests.</para>
     /// </summary>
     [JsonConverterWithConstructor(typeof(RootWrapperConverter), "security_groups")]
-     public class NetSecurityGroupCollection : List<SecurityGroup>
+    public class SecurityGroupCollection : List<SecurityGroup>
     {
-
         /// <summary>
-        ///Initializes a new instance of the<see cref="SecurityGroup"/> class.
+        /// Initializes a new instance of the <see cref="SecurityGroupCollection"/> class.
         /// </summary>
-        public NetSecurityGroupCollection()
+        public SecurityGroupCollection()
         {
 
         }
 
         /// <summary>
-        ///Initializes a new instance of the<see cref="SecurityGroup"/> class.
+        /// Initializes a new instance of the<see cref="SecurityGroupCollection"/> class.
         /// </summary>
-        /// <param name="securityGroups"></param>
-        public NetSecurityGroupCollection(IEnumerable<SecurityGroup> securityGroups) : base(securityGroups)
+        /// <param name="items">items</param>
+        public SecurityGroupCollection(IEnumerable<SecurityGroup> items)
+            : base(items)
         {
 
         }
-        
     }
 }

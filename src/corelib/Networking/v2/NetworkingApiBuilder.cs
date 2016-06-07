@@ -384,7 +384,7 @@ namespace OpenStack.Networking.v2
         }
         #endregion
 
-        #region Level 3 Extension
+        #region Layer 3 Extension
 
         #region Routers
         /// <summary>
@@ -669,20 +669,39 @@ namespace OpenStack.Networking.v2
 
         #region SecurityGroup
         /// <summary>
-        /// Lists all networks security groups associated with the account.
+        /// Lists all network security groups associated with the account.
         /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>
-        /// A collection of network resources associated with the account.
+        /// A collection of network security group resources associated with the account.
         /// </returns>
-        public async Task<PreparedRequest> ListSecurityGroupAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<T> ListSecurityGroupsAsync<T>(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
+            where T : IEnumerable<IServiceResource>
+        {
+            return await BuildListSecurityGroupsRequest(queryString, cancellationToken)
+                .SendAsync()
+                .ReceiveJson<T>()
+                .PropogateOwnerToChildren(this).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Builds a <see cref="ListSecurityGroupsAsync{T}"/> request.
+        /// </summary>
+        /// <param name="queryString">Options for filtering.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task<PreparedRequest> BuildListSecurityGroupsRequest(IQueryStringBuilder queryString, CancellationToken cancellationToken = default(CancellationToken))
         {
             Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
-            return endpoint
+            var request = endpoint
                 .AppendPathSegments("security-groups")
                 .Authenticate(AuthenticationProvider)
                 .PrepareGet(cancellationToken);
+
+            request.Url.SetQueryParams(queryString?.Build());
+
+            return request;
         }
 
         #endregion
