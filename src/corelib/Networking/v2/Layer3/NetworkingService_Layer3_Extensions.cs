@@ -6,6 +6,8 @@ using Newtonsoft.Json.Linq;
 using OpenStack.Networking.v2.Serialization;
 using OpenStack.Serialization;
 using OpenStack.Synchronous.Extensions;
+using Flurl.Extensions;
+using Flurl.Http;
 
 namespace OpenStack.Networking.v2.Layer3
 {
@@ -100,6 +102,20 @@ namespace OpenStack.Networking.v2.Layer3
         public static Task DeleteFloatingIPAsync(this NetworkingService service, Identifier floatingIPId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return service._networkingApiBuilder.DeleteFloatingIPAsync(floatingIPId, cancellationToken);
+        }
+        #endregion
+
+        #region Security Groups
+        /// <inheritdoc cref="NetworkingApiBuilder.ListSecurityGroupsAsync{T}" />
+        public static async Task<IEnumerable<SecurityGroup>> ListSecurityGroupsAsync(this NetworkingService service, SecurityGroupListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await service._networkingApiBuilder.ListSecurityGroupsAsync<SecurityGroupCollection>(options, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="NetworkingApiBuilder.ListSecurityGroupRulesAsync{T}" />
+        public static async Task<IEnumerable<SecurityGroupRule>> ListSecurityGroupRulesAsync(this NetworkingService service, SecurityGroupRuleListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await service._networkingApiBuilder.ListSecurityGroupRulesAsync<SecurityGroupRuleCollection>(options, cancellationToken).ConfigureAwait(false);
         }
         #endregion
     }
@@ -200,5 +216,19 @@ namespace OpenStack.Networking.v2.Layer3.Synchronous
             service._networkingApiBuilder.DeleteFloatingIPAsync(floatingIPId).ForceSynchronous();
         }
         #endregion
+
+        #region Security Groups
+        /// <inheritdoc cref="NetworkingService_Layer3_Extensions.ListSecurityGroupsAsync" />
+        public static IEnumerable<SecurityGroup> ListSecurityGroups(this NetworkingService service, SecurityGroupListOptions options = null)
+        {
+            return service.ListSecurityGroupsAsync(options).ForceSynchronous();
+        }
+        /// <inheritdoc cref="NetworkingService_Layer3_Extensions.ListSecurityGroupRulesAsync" />
+        public static IEnumerable<SecurityGroupRule> ListSecurityGroupRules(this NetworkingService service, SecurityGroupRuleListOptions options = null)
+        {
+            return service.ListSecurityGroupRulesAsync(options).ForceSynchronous();
+        }
+        #endregion
+
     }
 }

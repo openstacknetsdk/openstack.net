@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using OpenStack.Compute.v2_1;
 using Xunit;
@@ -79,6 +80,27 @@ namespace OpenStack.Networking.v2.Layer3
 
             // 8. Disassociate the floating ip from the server
             await server.DisassociateFloatingIPAsync(floatingIP.FloatingIPAddress);
+        }
+
+        [Fact]
+        public async Task ListSecurityGroups()
+        {
+            var groups = await _networkingService.ListSecurityGroupsAsync(new SecurityGroupListOptions {Name = "default"});
+
+            Assert.NotEmpty(groups);
+
+            var defaultGroup = groups.First();
+            Assert.NotNull(defaultGroup);
+            Assert.NotNull(defaultGroup.Name);
+            Assert.NotNull(defaultGroup.Description);
+            Assert.NotNull(defaultGroup.Id);
+            Assert.NotEmpty(defaultGroup.SecurityGroupRules);
+
+            var defaultRule = defaultGroup.SecurityGroupRules.First();
+            Assert.NotNull(defaultRule.Id);
+            Assert.NotNull(defaultRule.Direction);
+            Assert.NotNull(defaultRule.Ethertype);
+            Assert.NotNull(defaultRule.SecurityGroupId);
         }
     }
 }

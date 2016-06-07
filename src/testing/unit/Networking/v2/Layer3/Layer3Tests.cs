@@ -11,6 +11,7 @@ using OpenStack.Networking.v2.Serialization;
 using OpenStack.Synchronous;
 using OpenStack.Testing;
 using Xunit;
+using SecurityGroupCollection = OpenStack.Networking.v2.Serialization.SecurityGroupCollection;
 
 namespace OpenStack.Networking.v2.Layer3
 {
@@ -309,6 +310,56 @@ namespace OpenStack.Networking.v2.Layer3
                 _networking.DeleteFloatingIP(floatingIPId);
 
                 httpTest.ShouldHaveCalled($"*/floatingips/{floatingIPId}");
+            }
+        }
+        #endregion
+
+        #region  Security Groups
+        [Fact]
+        public void ListSecurityGroups()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier securityGroupId = Guid.NewGuid();
+                Identifier securityGroupRuleId = Guid.NewGuid();
+                SecurityGroupRule rule = new SecurityGroupRule { Id = securityGroupRuleId };
+                List<SecurityGroupRule> rules = new List<SecurityGroupRule> { rule };
+
+                httpTest.RespondWithJson(new SecurityGroupCollection
+                {
+                    new SecurityGroup { Id = securityGroupId, SecurityGroupRules = rules }
+                });
+
+                var results = _networking.ListSecurityGroups();
+
+                httpTest.ShouldHaveCalled("*/security-groups");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                var resultRule = result.SecurityGroupRules.First();
+                Assert.Equal(securityGroupId, result.Id);
+                Assert.Equal(rule.Id, resultRule.Id);
+            }
+        }
+
+        [Fact]
+        public void ListSecurityGroupRules()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                Identifier securityGroupId = Guid.NewGuid();
+                Identifier securityGroupRuleId = Guid.NewGuid();
+                httpTest.RespondWithJson(new SecurityGroupRuleCollection
+                {
+                    new SecurityGroupRule {Id = securityGroupRuleId, SecurityGroupId = securityGroupId}
+                });
+
+                var results = _networking.ListSecurityGroupRules();
+
+                httpTest.ShouldHaveCalled("*/security-group-rules");
+                Assert.Equal(1, results.Count());
+                var result = results.First();
+                Assert.Equal(securityGroupRuleId, result.Id);
+                Assert.Equal(securityGroupId, result.SecurityGroupId);
             }
         }
         #endregion
