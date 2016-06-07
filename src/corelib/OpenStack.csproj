@@ -194,6 +194,7 @@
     <Compile Include="Images\v2\Serialization\ImageStatus.cs" />
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\IPProtocol.cs" />
     <Compile Include="Networking\v2\Layer3\SecurityGroup.cs" />
     <Compile Include="Networking\v2\Layer3\SecurityGroupRule.cs" />
     <Compile Include="Networking\v2\AllowedAddress.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Networking\v2\Network.cs" />
     <Compile Include="Networking\v2\Operator\NamespaceDoc.cs" />
     <Compile Include="Networking\v2\Operator\NetworkDefinition.cs" />
+    <Compile Include="Networking\v2\Serialization\IPProtocol.cs" />
     <Compile Include="Networking\v2\Serialization\RouterCollection.cs" />
     <Compile Include="Networking\v2\Serialization\FloatingIPCollection.cs" />
     <Compile Include="Networking\v2\Serialization\NetworkResourceStatus.cs" />
