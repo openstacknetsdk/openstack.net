@@ -8,6 +8,7 @@
     <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
 
     <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
+    <PaketVersion>2.66.9</PaketVersion>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
     <PackagesFolder>$(MSBuildThisFileDirectory.Replace('build\','packages'))</PackagesFolder>
@@ -42,7 +43,7 @@
     <Exec Command="(set SHFBROOT=$(SHFBROOT)) &amp; $(MSBuild) ..\src\Documentation\Documentation.sln /p:Configuration=$(Configuration) /nologo /v:minimal" />
   </Target>
 
-  <Target Name="RestorePackages">
+  <Target Name="RestorePackages" DependsOnTargets="DownloadPaket">
     <Exec Command="$(PaketBootstrapper)" />
     <Exec Command="$(Paket) install" />
   </Target>
@@ -52,6 +53,11 @@
     <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '$(NuGet)'&quot;" />
   </Target>
 
+  <Target Name="DownloadPaket" Condition="!Exists('$(PaketBootstrapper)')">
+    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://github.com/fsprojects/Paket/releases/download/$(PaketVersion)/paket.bootstrapper.exe' -OutFile '$(PaketBootstrapper)'&quot;" />
+    <Exec Command="..\.paket\paket.bootstrapper.exe $(PaketVersion)" />
+  </Target>
+  
   <Target Name="UnitTest" DependsOnTargets="Build">
     <PropertyGroup>
       <MSTest Condition=" '$(VS140COMNTOOLS)' != '' ">&quot;$(VS140COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
