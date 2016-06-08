@@ -11,7 +11,7 @@
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
     <PackagesFolder>$(MSBuildThisFileDirectory.Replace('build\','packages'))</PackagesFolder>
-    <NuGet>$(PackagesFolder)\NuGet.CommandLine\tools$(LocalAppData)\NuGet.exe</NuGet>
+    <NuGet>$(PackagesFolder)\NuGet.CommandLine\tools\NuGet.exe</NuGet>
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
     <XUnit>$(PackagesFolder)\xunit.runner.console\tools\xunit.console.exe</XUnit>
     <XUnitXslt>$(PackagesFolder)\xunit.runner.console\tools\NUnitXml.xslt</XUnitXslt>
@@ -48,11 +48,6 @@
     <Exec Command="$(Paket) install" />
   </Target>
 
-  <Target Name="DownloadNuGet" Condition="!Exists('$(NuGet)')">
-    <MakeDir Directories="$(LocalAppData)\NuGet" />
-    <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile '$(NuGet)'&quot;" />
-  </Target>
-
   <Target Name="DownloadPaket" Condition="!Exists('$(PaketBootstrapper)')">
     <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://github.com/fsprojects/Paket/releases/download/$(PaketVersion)/paket.bootstrapper.exe' -OutFile '$(PaketBootstrapper)'&quot;" />
     <Exec Command="..\.paket\paket.bootstrapper.exe $(PaketVersion)" />
@@ -79,7 +74,7 @@
       OutputPaths="..\artifacts\TestResults\integration-tests.nunit.xml" />
   </Target>
 
-  <Target Name="MigrationTest" DependsOnTargets="DownloadNuGet">
+  <Target Name="MigrationTest" DependsOnTargets="RestorePackages">
     <PropertyGroup>
       <MigrationSln>..\src\testing\migration\migration.sln</MigrationSln>
     </PropertyGroup>
@@ -110,7 +105,7 @@
 
   <!-- The publish targets don't depend upon Package because of how they are used on the CI server. At this point the code has been packaged and all that needs
        to happen is to publish the artifact. -->
-  <Target Name="PublishNuGet" DependsOnTargets="DownloadNuGet">
+  <Target Name="PublishNuGet" DependsOnTargets="RestorePackages">
     <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 $(Version)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishToNuGet" />
     </Exec>
@@ -122,7 +117,7 @@
           Condition=" '$(ShouldPublishToNuGet)' == 'True' " />
   </Target>
 
-  <Target Name="PublishMyGet" DependsOnTargets="DownloadNuGet">
+  <Target Name="PublishMyGet" DependsOnTargets="RestorePackages">
     <!-- We don't need to check for existing versions because MyGet lets you overwrite -->
     <!-- The environment variable BAMBOO_MYGET_PASSWORD comes from the nuget.password variable defined on the openstack.net plan in Bamboo -->
     <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_MYGET_PASSWORD%25 -Source https://www.myget.org/F/openstacknetsdk/api/v2"/>
