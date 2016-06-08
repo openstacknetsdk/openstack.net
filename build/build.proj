@@ -7,7 +7,6 @@
     <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' != '' ">$(bamboo_GitVersion_NuGetVersion)</Version>
     <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
 
-    <ILMerge>$(MSBuildThisFileDirectory.Replace('build\','src'))\packages\ILMerge.2.14.1208\tools\ILMerge.exe</ILMerge>
     <PaketVersion>2.66.9</PaketVersion>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
@@ -16,6 +15,7 @@
     <MSBuild>&quot;$(MSBuildToolsPath)\MSBuild.exe&quot;</MSBuild>
     <XUnit>$(PackagesFolder)\xunit.runner.console\tools\xunit.console.exe</XUnit>
     <XUnitXslt>$(PackagesFolder)\xunit.runner.console\tools\NUnitXml.xslt</XUnitXslt>
+    <ILMerge>$(PackagesFolder)\ILMerge\tools\ILMerge.exe</ILMerge>
   </PropertyGroup>
 
   <Target Name="CI">
@@ -57,7 +57,7 @@
     <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -Command &quot;$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest 'https://github.com/fsprojects/Paket/releases/download/$(PaketVersion)/paket.bootstrapper.exe' -OutFile '$(PaketBootstrapper)'&quot;" />
     <Exec Command="..\.paket\paket.bootstrapper.exe $(PaketVersion)" />
   </Target>
-  
+
   <Target Name="UnitTest" DependsOnTargets="Build">
     <PropertyGroup>
       <MSTest Condition=" '$(VS140COMNTOOLS)' != '' ">&quot;$(VS140COMNTOOLS)..\IDE\MSTest.exe&quot;</MSTest>
