@@ -1,8 +1,10 @@
 REDIRECTS: ON
 NUGET
+  remote: https://www.myget.org/F/openstacknetsdk/api/v2
+  specs:
+    EWSoftware.SHFB (2014.11.22-beta)
   remote: https://www.nuget.org/api/v2
   specs:
-    EWSoftware.SHFB (2014.11.22)
     Flurl.Http.Signed (0.7)
       Flurl.Signed (>= 1.0.10) - framework: >= net45, portable-net45+sl50+win+wpa81+wp80
       Microsoft.Bcl.Async (>= 1.0.168) - framework: portable-net45+sl50+win+wpa81+wp80

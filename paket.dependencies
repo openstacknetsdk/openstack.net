@@ -2,7 +2,7 @@ source https://www.myget.org/F/openstacknetsdk/api/v2
 source https://www.nuget.org/api/v2
 redirects: on
 
-nuget EWSoftware.SHFB = 2014.11.22
+nuget EWSoftware.SHFB = 2014.11.22-beta
 nuget Flurl.Http.Signed
 nuget Flurl.Signed
 nuget ILMerge
