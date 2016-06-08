@@ -27,10 +27,10 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.dll" />
-      <DocumentationSource sourceFile="..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.xml" />
-      <DocumentationSource sourceFile="..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.dll" />
-      <DocumentationSource sourceFile="..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.xml" />
+      <DocumentationSource sourceFile="..\..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.dll" />
+      <DocumentationSource sourceFile="..\..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.xml" />
+      <DocumentationSource sourceFile="..\..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.dll" />
+      <DocumentationSource sourceFile="..\..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.xml" />
     </DocumentationSources>
     <PlugInConfigurations>
     </PlugInConfigurations>
@@ -53,9 +53,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>
