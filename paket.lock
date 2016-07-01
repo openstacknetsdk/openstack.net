@@ -13,7 +13,7 @@ NUGET
       PCLStorage (>= 0.9.6) - framework: portable-net45+sl50+win+wpa81+wp80
     Flurl.Signed (1.0.10)
     ilmerge (2.14.1208)
-    Marvin.JsonPatch.Signed (0.9)
+    Marvin.JsonPatch.Signed (0.7)
       Newtonsoft.Json (>= 6.0.4)
     Microsoft.Bcl (1.1.10) - framework: portable-net45+sl50+win+wpa81+wp80
       Microsoft.Bcl.Build (>= 1.0.14)
@@ -24,7 +24,7 @@ NUGET
       Microsoft.Bcl (>= 1.1.10)
       Microsoft.Bcl.Build (>= 1.0.14)
     Moq (4.2.1510.2205)
-    Newtonsoft.Json (8.0.3)
+    Newtonsoft.Json (6.0.8)
     NuGet.CommandLine (3.4.3)
     PCLStorage (1.0.2) - framework: portable-net45+sl50+win+wpa81+wp80
       Microsoft.Bcl (>= 1.1.6) - framework: net10, net11, net20, net30, net35, net40, net40-full
