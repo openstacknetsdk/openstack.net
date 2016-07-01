@@ -105,7 +105,7 @@
 
   <!-- The publish targets don't depend upon Package because of how they are used on the CI server. At this point the code has been packaged and all that needs
        to happen is to publish the artifact. -->
-  <Target Name="PublishNuGet" DependsOnTargets="RestorePackages">
+  <Target Name="PublishNuGet">
     <Exec Command="@powershell -NoProfile -ExecutionPolicy unrestricted -File check-nuget-version-exists.ps1 $(Version)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ShouldPublishToNuGet" />
     </Exec>
@@ -117,7 +117,7 @@
           Condition=" '$(ShouldPublishToNuGet)' == 'True' " />
   </Target>
 
-  <Target Name="PublishMyGet" DependsOnTargets="RestorePackages">
+  <Target Name="PublishMyGet">
     <!-- We don't need to check for existing versions because MyGet lets you overwrite -->
     <!-- The environment variable BAMBOO_MYGET_PASSWORD comes from the nuget.password variable defined on the openstack.net plan in Bamboo -->
     <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_MYGET_PASSWORD%25 -Source https://www.myget.org/F/openstacknetsdk/api/v2"/>
