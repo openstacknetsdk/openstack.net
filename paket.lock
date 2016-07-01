@@ -254,5 +254,5 @@ NUGET
       Flurl.Http.Signed (>= 0.6.2.2015062601 < 0.7)
       Marvin.JsonPatch.Signed (0.7)
       Newtonsoft.Json (>= 6.0.1 < 7.0)
-    SimpleRESTServices (1.3.0.2)
+    SimpleRESTServices (1.3.0.1)
       Newtonsoft.Json (>= 5.0.6)
