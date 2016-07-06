@@ -20,8 +20,8 @@
     <HtmlHelpName>API Reference Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\packages\openstack.net.1.4.0.2\lib\net45\openstacknet.dll" />
-      <DocumentationSource sourceFile="..\..\..\packages\openstack.net.1.4.0.2\lib\net45\openstacknet.xml" />
+      <DocumentationSource sourceFile="..\..\..\..\packages\history-1.4\openstack.net\lib\net45\openstacknet.dll" />
+      <DocumentationSource sourceFile="..\..\..\..\packages\history-1.4\openstack.net\lib\net45\openstacknet.xml" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -85,31 +85,28 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Flurl, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1308302a96879dfb">
-      <HintPath>..\..\..\packages\Flurl.Signed.1.0.8\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    <Reference Include="Flurl">
+      <HintPath>..\..\..\..\packages\history-1.4\Flurl.Signed\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl.Http, Version=0.6.2.0, Culture=neutral, PublicKeyToken=1308302a96879dfb">
-      <HintPath>..\..\..\packages\Flurl.Http.Signed.0.6.2.2015062601\lib\net45\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http">
+      <HintPath>..\..\..\..\packages\history-1.4\Flurl.Http.Signed\lib\net45\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Marvin.JsonPatch, Version=0.7.0.0, Culture=neutral, PublicKeyToken=686c63b2d045ab44">
-      <HintPath>..\..\..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
+    <Reference Include="Marvin.JsonPatch">
+      <HintPath>..\..\..\..\packages\history-1.4\Marvin.JsonPatch.Signed\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\packages\history-1.4\Newtonsoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SimpleRESTServices, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8965cea5c205d3a3">
-      <HintPath>..\..\..\packages\SimpleRESTServices.1.3.0.1\lib\net35\SimpleRESTServices.dll</HintPath>
+    <Reference Include="SimpleRESTServices">
+      <HintPath>..\..\..\..\packages\history-1.4\SimpleRESTServices\lib\net35\SimpleRESTServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Threading, Version=1.0.2856.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
+    <Reference Include="System.Threading">
+      <HintPath>..\..\..\..\packages\history-1.4\TaskParallelLibrary\lib\Net35\System.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
