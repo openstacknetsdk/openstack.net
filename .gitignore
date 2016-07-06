@@ -80,3 +80,4 @@ docs/html/
 packages
 paket.exe
 paket.lock
+paket.bootstrapper.exe
