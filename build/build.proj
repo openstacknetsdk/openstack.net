@@ -113,7 +113,7 @@
     <!-- The environment variable BAMBOO_NUGET_PASSWORD comes from the nuget.password variable defined on the openstack.net plan in Bamboo -->
     <Message Text="Skipping publish to NuGet because version $(Version) has already been published."
           Condition=" '$(ShouldPublishToNuGet)' == 'False' " />
-    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_NUGET_PASSWORD%25"
+    <Exec Command="$(NuGet) push ..\artifacts\packages\openstack.net.$(Version).nupkg %25BAMBOO_NUGET_PASSWORD%25 -Source https://api.nuget.org/v3/index.json"
           Condition=" '$(ShouldPublishToNuGet)' == 'True' " />
   </Target>
 

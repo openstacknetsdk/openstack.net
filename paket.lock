@@ -25,7 +25,7 @@ NUGET
       Microsoft.Bcl.Build (>= 1.0.14)
     Moq (4.2.1510.2205)
     Newtonsoft.Json (6.0.8)
-    NuGet.CommandLine (3.4.3)
+    NuGet.CommandLine (3.4.4-rtm-final)
     PCLStorage (1.0.2) - framework: portable-net45+sl50+win+wpa81+wp80
       Microsoft.Bcl (>= 1.1.6) - framework: net10, net11, net20, net30, net35, net40, net40-full
       Microsoft.Bcl.Async (>= 1.0.165) - framework: net10, net11, net20, net30, net35, net40, net40-full
