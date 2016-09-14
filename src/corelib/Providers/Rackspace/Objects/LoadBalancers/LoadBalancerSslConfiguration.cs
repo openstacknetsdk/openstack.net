@@ -48,7 +48,7 @@
         /// <summary>
         /// This is the backing field for the <see cref="IntermediateCertificate"/> property.
         /// </summary>
-        [JsonProperty("intermediatecertificate", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty("intermediateCertificate", DefaultValueHandling = DefaultValueHandling.Ignore)]
         private string _intermediateCertificate;
 
         /// <summary>
