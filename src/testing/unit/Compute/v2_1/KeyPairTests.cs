@@ -43,7 +43,7 @@ namespace OpenStack.Compute.v2_1
   ]
 }").ToString();
 
-            var results = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<KeyPairSummaryCollection>(json);
+            var results = OpenStackNet.Deserialize<KeyPairSummaryCollection>(json);
             Assert.NotNull(results);
             Assert.Equal(2, results.Count());
             var result = results.First();

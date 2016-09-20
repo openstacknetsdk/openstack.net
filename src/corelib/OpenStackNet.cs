@@ -90,6 +90,26 @@ namespace OpenStack
         }
 
         /// <summary>
+        /// Deserializes an object from a json string representation.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="json">The json string.</param>
+        public static T Deserialize<T>(string json)
+        {
+            return Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<T>(json);
+        }
+
+        /// <summary>
+        /// Serializes an object to a json string representation
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>The json string representation of the object.</returns>
+        public static string Serialize(object obj)
+        {
+            return Configuration.FlurlHttpSettings.JsonSerializer.Serialize(obj);
+        }
+
+        /// <summary>
         /// Provides global point for programmatically configuraing tracing
         /// </summary>
         public static class Tracing

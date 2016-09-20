@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using OpenStack;
 using OpenStack.Authentication;
 
@@ -109,11 +110,12 @@ namespace net.openstack.Core.Providers
                     if (response == null || response.Data == null)
                         return null;
 
-                    JToken userAccessObject = response.Data["access"];
-                    if (userAccessObject == null)
+                    // The defalut json serialization is helpfully formatting the expires date string. Use our custom serializer for this part to prevent chaos of timezone proportions.
+                    var rawJson = response.Data["access"]?.ToString(Formatting.None);
+                    if (rawJson == null)
                         return null;
 
-                    UserAccess access = userAccessObject.ToObject<UserAccess>();
+                    UserAccess access = OpenStackNet.Deserialize<UserAccess>(rawJson);
                     if (access == null || access.Token == null)
                         return null;
 
