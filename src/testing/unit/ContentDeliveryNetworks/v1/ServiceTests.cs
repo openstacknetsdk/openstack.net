@@ -32,11 +32,11 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 Items = {new Service {Id = "service-id"}},
                 Links = {new PageLink("next", "http://api.com/next")}
             };
-            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(services);
+            string json = OpenStackNet.Serialize(services);
             Assert.Contains("\"services\"", json);
             Assert.DoesNotContain("\"service\"", json);
 
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ServiceCollection>(json);
+            var result = OpenStackNet.Deserialize<ServiceCollection>(json);
             Assert.NotNull(result);
             Assert.Equal(1, result.Count());
             Assert.Equal(1, result.Items.Count());
@@ -48,9 +48,9 @@ namespace OpenStack.ContentDeliveryNetworks.v1
         public void SerializePageLink()
         {
             var link = new PageLink("next", "http://api.com/next");
-            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(link);
+            string json = OpenStackNet.Serialize(link);
 
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<PageLink>(json);
+            var result = OpenStackNet.Deserialize<PageLink>(json);
             Assert.NotNull(result);
             Assert.True(result.IsNextPage);
         }

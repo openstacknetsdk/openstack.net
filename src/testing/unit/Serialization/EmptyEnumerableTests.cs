@@ -21,10 +21,10 @@ namespace OpenStack.Serialization
         public void WhenDeserializingNullCollection_ItShouldUseAnEmptyCollection()
         {
             var thing = new ExampleThing{Messages = null};
-            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(thing);
+            string json = OpenStackNet.Serialize(thing);
             Assert.DoesNotContain("messages", json);
 
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<ExampleThing>(json);
+            var result = OpenStackNet.Deserialize<ExampleThing>(json);
 
             Assert.NotNull(result.Messages);
             Assert.Empty(result.Messages);
@@ -35,7 +35,7 @@ namespace OpenStack.Serialization
         {
             var thing = new ExampleThing { Messages = new List<string>() };
 
-            string json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(thing);
+            string json = OpenStackNet.Serialize(thing);
 
             Assert.DoesNotContain("messages", json);
         }

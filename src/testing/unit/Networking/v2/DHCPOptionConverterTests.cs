@@ -19,7 +19,7 @@ namespace OpenStack.Networking.v2
                 }
             };
 
-            string result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(input);
+            string result = OpenStackNet.Serialize(input);
 
             string expectedJson = JObject.Parse("{'port':{'extra_dhcp_opts':[{'opt_name':'a','opt_value':'stuff'},{'opt_name':'b','opt_value':'things'}]}}").ToString(Formatting.None);
             Assert.Equal(expectedJson, result);
@@ -30,7 +30,7 @@ namespace OpenStack.Networking.v2
         {
             string json = JObject.Parse("{'port':{'extra_dhcp_opts':[{'opt_name':'a','opt_value':'stuff'},{'opt_name':'b','opt_value':'things'}]}}").ToString(Formatting.None);
 
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<PortCreateDefinition>(json).DHCPOptions;
+            var result = OpenStackNet.Deserialize<PortCreateDefinition>(json).DHCPOptions;
 
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
@@ -52,8 +52,8 @@ namespace OpenStack.Networking.v2
                 }
             };
 
-            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(port);
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<Port>(json);
+            var json = OpenStackNet.Serialize(port);
+            var result = OpenStackNet.Deserialize<Port>(json);
 
             Assert.NotNull(result.DHCPOptions);
             Assert.Equal(1, result.DHCPOptions.Count);

@@ -29,7 +29,7 @@ namespace OpenStack.Compute.v2_1
             server.SchedulerHints = new SchedulerHints();
             server.SchedulerHints.Add("group", "groupId");
 
-            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(server);
+            var json = OpenStackNet.Serialize(server);
             Assert.Equal(expectedJson, json);
         }
 
@@ -40,7 +40,7 @@ namespace OpenStack.Compute.v2_1
                 .ToString(Formatting.None);
             var server = new ServerCreateDefinition("name", Guid.Empty, Guid.Empty);
 
-            var json = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(server);
+            var json = OpenStackNet.Serialize(server);
             Assert.Equal(expectedJson, json);
         }
 

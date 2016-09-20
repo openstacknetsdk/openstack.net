@@ -24,7 +24,7 @@ namespace OpenStack.Compute.v2_1
         public void DeserializeVolumeWithEmptyAttachment()
         {
             var json = JObject.Parse(@"{'volume': {'attachments': [{}]}}").ToString();
-            var result = OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Deserialize<Volume>(json);
+            var result = OpenStackNet.Deserialize<Volume>(json);
             Assert.Empty(result.Attachments);
         }
 
