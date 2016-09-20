@@ -54,7 +54,7 @@ namespace OpenStack.Testing
             ResponseQueue.Enqueue(new HttpResponseMessage
             {
                 StatusCode = (HttpStatusCode)status,
-                Content = new CapturedJsonContent(OpenStackNet.Configuration.FlurlHttpSettings.JsonSerializer.Serialize(data))
+                Content = new CapturedJsonContent(OpenStackNet.Serialize(data))
             });
             return this;
         }
