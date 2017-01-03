@@ -40,19 +40,19 @@ namespace OpenStack.Compute.v2_1
         /// The minimum disk size in GB that is required to boot the image.
         /// </summary>
         [JsonProperty("minDisk")]
-        public int MinimumDiskSize { get; set; }
+        public Int64 MinimumDiskSize { get; set; }
 
         /// <summary>
         /// The minimum amount of RAM in MB that is required to boot the image.
         /// </summary>
         [JsonProperty("minRam")]
-        public int MinimumMemorySize { get; set; }
+        public Int64 MinimumMemorySize { get; set; }
 
         /// <summary>
         /// The size of the image data, in bytes.
         /// </summary>
         [JsonProperty("OS-EXT-IMG-SIZE:size")]
-        public int? Size { get; set; }
+        public Int64? Size { get; set; }
 
         /// <summary>
         /// The build completion progress, as a percentage.
@@ -111,7 +111,7 @@ namespace OpenStack.Compute.v2_1
         {
             return WaitForStatus(ImageStatus.Active, refreshDelay, timeout, progress, cancellationToken);
         }
-        
+
         /// <inheritdoc cref="ComputeApi.WaitUntilImageIsDeletedAsync{TImage,TStatus}" />
         /// <exception cref="InvalidOperationException">When this instance was not constructed by the <see cref="ComputeService"/>, as it is missing the appropriate internal state to execute service calls.</exception>
         public override async Task WaitUntilDeletedAsync(TimeSpan? refreshDelay = null, TimeSpan? timeout = null, IProgress<bool> progress = null, CancellationToken cancellationToken = default(CancellationToken))
