@@ -18,9 +18,9 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		string MetadataKey { get; }
 
 		/// <summary>
-		/// Value of Metatag
+		/// Value of Metadata
 		/// </summary>
-		new string Value { get; set; }
+		string MetadataValue { get; set; }
 
 	}
 }

@@ -240,7 +240,7 @@ namespace OpenStack.ObjectStorage.v1
 	    /// <param name="objectPath">The path of object.</param>
 	    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
 	    /// <returns>
-	    /// Metadata of container object
+	    /// Metadata of object
 	    /// </returns>
 	    public virtual async Task<PreparedRequest> ReadContainerObjectMetadataAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -260,7 +260,7 @@ namespace OpenStack.ObjectStorage.v1
 	    /// <param name="metadataCollection">The metadata to save in object.</param>
 	    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
 	    /// <returns>
-	    /// Nothing
+	    /// Metadata of object
 	    /// </returns>
 	    public virtual async Task<PreparedRequest> SaveContainerObjectMetadataAsync(string containerId, string objectPath, ContainerObjectMetadataCollection metadataCollection, CancellationToken cancellationToken = default(CancellationToken))
         {

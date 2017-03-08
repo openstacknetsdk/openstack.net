@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Networking.v2.Serialization;
+using OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata;
+using OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata;
 using OpenStack.ObjectStorage.v1.Serialization;
 
 namespace OpenStack.ObjectStorage.v1
@@ -29,7 +33,10 @@ namespace OpenStack.ObjectStorage.v1
             _objectStorageApiBuilder = new ObjectStorageApiBuilder(ServiceType.ObjectStorage, authenticationProvider, region, useInternalUrl);
         }
 
+
+
         #region Containers
+
         /// <inheritdoc cref="ObjectStorageApiBuilder.ListContainersAsync(CancellationToken)" />
         public async Task<IEnumerable<Container>> ListContainersAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -40,18 +47,18 @@ namespace OpenStack.ObjectStorage.v1
         }
 
         /// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerContentAsync(string, CancellationToken)" />
-        public Task<ContainerObjectCollection> GetContainerContentAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ContainerObjectCollection> GetContainerContentAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _objectStorageApiBuilder
+            return await _objectStorageApiBuilder
                 .GetContainerContentAsync(containerId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<ContainerObjectCollection>();
         }
 
         /// <inheritdoc cref="ObjectStorageApiBuilder.CreateContainerAsync(string, CancellationToken)" />
-        public Task<Container> CreateContainerAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Container> CreateContainerAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _objectStorageApiBuilder
+            return await _objectStorageApiBuilder
                 .CreateContainerAsync(containerId, cancellationToken)
                 .SendAsync()
                 .ReceiveJson<Container>();
@@ -60,137 +67,118 @@ namespace OpenStack.ObjectStorage.v1
         /// <inheritdoc cref="ObjectStorageApiBuilder.SaveContainerMetadataAsync(string, ContainerMetadataCollection, CancellationToken)" />
         public async Task<ContainerMetadataCollection> SaveContainerMetadataAsync(string containerId, ContainerMetadataCollection metadataCollection, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _objectStorageApiBuilder
+			var headerString = await _objectStorageApiBuilder
                 .SaveContainerMetadataAsync(containerId, metadataCollection, cancellationToken)
                 .SendAsync()
                 .ReceiveString();
+
+			var metadataSerializer = new MetadataSerializer<IContainerMetadata>();
+
+	        return new ContainerMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
         }
 
         /// <inheritdoc cref="ObjectStorageApiBuilder.ReadContainerMetadataAsync(string, CancellationToken)" />
-        public Task<ContainerMetadataCollection> ReadContainerMetadataAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ContainerMetadataCollection> ReadContainerMetadataAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _objectStorageApiBuilder
+            var headerString = await _objectStorageApiBuilder
                 .ReadContainerMetadataAsync(containerId, cancellationToken)
                 .SendAsync()
                 .ReceiveString();
+
+			var metadataSerializer = new MetadataSerializer<IContainerMetadata>();
+
+	        return new ContainerMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
         }
 
         /// <inheritdoc cref="ObjectStorageApiBuilder.DeleteContainerAsync(string, CancellationToken)" />
-        public Task DeleteContainerAsync(Identifier networkId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .DeleteContainerAsync(networkId, cancellationToken)
-                .SendAsync();
-        }
-        #endregion
-
-        #region Subnets
-
-        /// <inheritdoc cref="NetworkingApiBuilder.ListSubnetsAsync" />
-        public async Task<IEnumerable<Subnet>> ListSubnetsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpResponseMessage> DeleteContainerAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _objectStorageApiBuilder
-                .ListSubnetsAsync(cancellationToken)
-                .SendAsync()
-                .ReceiveJson<SubnetCollection>();
-        }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.CreateSubnetAsync" />
-        public Task<Subnet> CreateSubnetAsync(SubnetCreateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .CreateSubnetAsync(subnet, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<Subnet>();
-        }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.CreateSubnetsAsync" />
-        public async Task<IEnumerable<Subnet>> CreateSubnetsAsync(IEnumerable<SubnetCreateDefinition> subnets, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await _objectStorageApiBuilder
-                .CreateSubnetsAsync(subnets, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<SubnetCollection>();
-        }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.GetSubnetAsync" />
-        public Task<Subnet> GetSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .GetSubnetAsync(subnetId, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<Subnet>();
-        }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.UpdateSubnetAsync" />
-        public Task<Subnet> UpdateSubnetAsync(Identifier subnetId, SubnetUpdateDefinition subnet, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .UpdateSubnetAsync(subnetId, subnet, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<Subnet>();
-        }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.DeleteSubnetAsync" />
-        public Task DeleteSubnetAsync(Identifier subnetId, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .DeleteSubnetAsync(subnetId, cancellationToken)
+                .DeleteContainerAsync(containerId, cancellationToken)
                 .SendAsync();
         }
-        #endregion
+		
+		#endregion
 
-        #region Ports
 
-        /// <inheritdoc cref="NetworkingApiBuilder.ListPortsAsync{T}" />
-        public async Task<IEnumerable<Port>> ListPortsAsync(PortListOptions options = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return await _objectStorageApiBuilder.ListPortsAsync<PortCollection>(options, cancellationToken);
-        }
 
-        /// <inheritdoc cref="NetworkingApiBuilder.CreatePortAsync" />
-        public Task<Port> CreatePortAsync(PortCreateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .CreatePortAsync(port, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<Port>();
-        }
 
-        /// <inheritdoc cref="NetworkingApiBuilder.CreatePortsAsync" />
-        public async Task<IEnumerable<Port>> CreatePortsAsync(IEnumerable<PortCreateDefinition> ports, CancellationToken cancellationToken = default(CancellationToken))
+		#region Container Objects
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerObjectAsync(string, string, CancellationToken)" />
+        public async Task<IEnumerable<ContainerObject>> GetContainerObjectAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _objectStorageApiBuilder
-                .CreatePortsAsync(ports, cancellationToken)
+                .GetContainerObjectAsync(containerId, objectPath, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<PortCollection>();
+                .ReceiveJson<ContainerObjectCollection>();
         }
-
-        /// <inheritdoc cref="NetworkingApiBuilder.GetPortAsync" />
-        public Task<Port> GetPortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.UpdateContainerObjectAsync(string, string, System.IO.Stream, CancellationToken)" />
+        public async Task<ContainerObjectMetadataCollection> UpdateContainerObjectAsync(string containerId, string objectPath, System.IO.Stream dataStream, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _objectStorageApiBuilder
-                .GetPortAsync(portId, cancellationToken)
+			var headerString = await _objectStorageApiBuilder
+                .UpdateContainerObjectAsync(containerId, objectPath, dataStream, cancellationToken)
                 .SendAsync()
-                .ReceiveJson<Port>();
-        }
+                .ReceiveString();
 
-        /// <inheritdoc cref="NetworkingApiBuilder.UpdatePortAsync" />
-        public Task<Port> UpdatePortAsync(Identifier portId, PortUpdateDefinition port, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return _objectStorageApiBuilder
-                .UpdatePortAsync(portId, port, cancellationToken)
-                .SendAsync()
-                .ReceiveJson<Port>();
-        }
+			var metadataSerializer = new MetadataSerializer<IContainerObjectMetadata>();
 
-        /// <inheritdoc cref="NetworkingApiBuilder.DeletePortAsync" />
-        public Task DeletePortAsync(Identifier portId, CancellationToken cancellationToken = default(CancellationToken))
+	        return new ContainerObjectMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
+        }
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.UpdateContainerObjectAsync" />
+        public async Task<ContainerObjectMetadataCollection> UpdateContainerObjectAsync(string containerId, string objectPath, string filePath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return _objectStorageApiBuilder
-                .DeletePortAsync(portId, cancellationToken)
+	        string headerString;
+
+			using (var dataStream = new System.IO.FileStream(filePath, FileMode.Open, FileAccess.Read))
+	        {
+				headerString = await _objectStorageApiBuilder
+					.UpdateContainerObjectAsync(containerId,objectPath,dataStream,cancellationToken)
+					.SendAsync()
+					.ReceiveString();
+	        }
+
+			var metadataSerializer = new MetadataSerializer<IContainerObjectMetadata>();
+
+	        return new ContainerObjectMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
+        }
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.DeleteContainerObjectAsync(string, string, CancellationToken)" />
+        public async Task<HttpResponseMessage> DeleteContainerObjectAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _objectStorageApiBuilder
+                .DeleteContainerObjectAsync(containerId, objectPath, cancellationToken)
                 .SendAsync();
         }
-        #endregion
-    }
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.ReadContainerObjectMetadataAsync(string, string, CancellationToken)" />
+        public async Task<ContainerObjectMetadataCollection> ReadContainerObjectMetadataAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			var headerString = await _objectStorageApiBuilder
+                .ReadContainerObjectMetadataAsync(containerId, objectPath, cancellationToken)
+                .SendAsync()
+                .ReceiveString();
+
+			var metadataSerializer = new MetadataSerializer<IContainerObjectMetadata>();
+
+	        return new ContainerObjectMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
+        }
+		
+        /// <inheritdoc cref="ObjectStorageApiBuilder.SaveContainerObjectMetadataAsync(string, string, ContainerObjectMetadataCollection, CancellationToken)" />
+        public async Task<ContainerObjectMetadataCollection> SaveContainerObjectMetadataAsync(string containerId, string objectPath, ContainerObjectMetadataCollection metadataCollection, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			var headerString = await _objectStorageApiBuilder
+                .SaveContainerObjectMetadataAsync(containerId, objectPath, metadataCollection, cancellationToken)
+                .SendAsync()
+                .ReceiveString();
+
+			var metadataSerializer = new MetadataSerializer<IContainerObjectMetadata>();
+
+	        return new ContainerObjectMetadataCollection(metadataSerializer.ParseMetadataHeaderStyle(headerString));
+        }
+
+		#endregion
+	}
 }

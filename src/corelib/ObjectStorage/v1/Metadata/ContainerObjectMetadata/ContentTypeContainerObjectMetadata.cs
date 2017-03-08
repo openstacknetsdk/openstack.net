@@ -26,8 +26,8 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 		/// </summary>
 		public string ContentType
 		{
-			get { return parseValue(this.Value); }
-			set { this.Value = serializeValue(value); }
+			get { return parseValue(this.MetadataValue); }
+			set { this.MetadataValue = serializeValue(value); }
 		}
 
 		/// <summary>

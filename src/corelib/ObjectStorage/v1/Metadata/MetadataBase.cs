@@ -33,12 +33,18 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		/// Get or set value
 		/// </summary>
 		[JsonProperty]
-		public string Value { get; set; }
+		public string MetadataValue { get; set; }
 
 		string ISerializedKeyValuePair.Key
 		{
 			get { return this.MetadataKey; }
 			set { throw new InvalidOperationException(); }
+		}
+
+		string ISerializedKeyValuePair.Value
+		{
+			get { return this.MetadataValue; }
+			set { this.MetadataValue = value; }
 		}
 	}
 }

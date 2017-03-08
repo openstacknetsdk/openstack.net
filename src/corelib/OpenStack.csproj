@@ -248,6 +248,7 @@
     <Compile Include="ObjectStorage\v1\Serialization\ContainerCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ISerializedKeyValuePair.cs" />
+    <Compile Include="ObjectStorage\v1\Serialization\MetadataSerializer.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
