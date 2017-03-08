@@ -1,9 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http.Content;
+using OpenStack.ObjectStorage.v1.Serialization;
+using OpenStack.Serialization;
 
 // ReSharper disable once CheckNamespace
 namespace Flurl.Http
@@ -79,6 +83,15 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
+        /// <summary>
+        /// Prepares the client to send a DELETE request
+        /// </summary>
+        public PreparedRequest PrepareHead(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Head;
+            CancellationToken = cancellationToken;
+            return this;
+        }
 
         /// <summary>
         /// Prepares the client to send a GET request
@@ -100,7 +113,7 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
-
+		
         /// <summary>
         /// Prepares the client to send a POST request containing json
         /// </summary>
@@ -113,12 +126,39 @@ namespace Flurl.Http
         }
 
         /// <summary>
+        /// Prepares the client to send a POST request containing data in header
+        /// </summary>
+        public PreparedRequest PreparePostHeader(IEnumerable<ISerializedKeyValuePair> data, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Post;
+	        foreach (var keyValuePair in data)
+	        {
+		        this.WithHeader(keyValuePair.Key, keyValuePair.Value);
+	        }
+            CancellationToken = cancellationToken;
+            return this;
+        }
+
+
+
+        /// <summary>
         /// Prepares the client to send a PUT request containing json
         /// </summary>
         public PreparedRequest PreparePutJson(object data, CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = HttpMethod.Put;
             Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
+            CancellationToken = cancellationToken;
+            return this;
+        }
+
+        /// <summary>
+        /// Prepares the client to send a PUT request containing data in stream
+        /// </summary>
+        public PreparedRequest PreparePutStream(System.IO.Stream dataStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Put;
+            Content = new CapturedStreamContent(dataStream);
             CancellationToken = cancellationToken;
             return this;
         }
