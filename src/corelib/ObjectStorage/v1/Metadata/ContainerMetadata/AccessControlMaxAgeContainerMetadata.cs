@@ -14,7 +14,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata {
 		/// <summary>
 		/// Create new instance
 		/// </summary>
-		public AccessControlMaxAgeContainerMetadata() : base("Access-Control-Max-Age")
+		public AccessControlMaxAgeContainerMetadata() : base("X-Container-Meta-Access-Control-Max-Age", false)
 		{
 			
 		}
@@ -24,26 +24,9 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata {
 		/// </summary>
 		public long MaxAgeSeconds
 		{
-			get { return parseValue(this.MetadataValue); }
-			set { this.MetadataValue = serializeValue(value); }
+			get { return MetadataConverter.ParseLongSingleValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeLongValue(value); }
 		}
-
-		/// <summary>
-		/// Serialize value to Metadata
-		/// </summary>
-		/// <returns></returns>
-		private static string serializeValue(long value)
-		{
-			return value.ToString("0");
-		}
-
-		/// <summary>
-		/// Parse value from Metadata
-		/// </summary>
-		/// <param name="value"></param>
-		private static long parseValue(string value)
-		{
-			return System.Convert.ToInt64(value);
-		}
+		
 	}
 }

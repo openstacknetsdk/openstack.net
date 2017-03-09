@@ -16,7 +16,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata {
 		/// <summary>
 		/// Create new instance
 		/// </summary>
-		public AccessControlAllowOriginContainerMetadata() : base("Access-Control-Allow-Origin")
+		public AccessControlAllowOriginContainerMetadata() : base("X-Container-Meta-Access-Control-Allow-Origin", true)
 		{
 			
 		}
@@ -26,33 +26,9 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata {
 		/// </summary>
 		public string[] Origins
 		{
-			get { return parseValue(this.MetadataValue); }
-			set { this.MetadataValue = serializeValue(value); }
+			get { return MetadataConverter.ParseStringMultiValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeStringValue(value); }
 		}
-
-		/// <summary>
-		/// Serialize value to Metadata
-		/// </summary>
-		/// <returns></returns>
-		private static string serializeValue(string[] value)
-		{
-			if (value == null) return "";
-
-			return string.Join(" ", value);
-		}
-
-		/// <summary>
-		/// Parse value from Metadata
-		/// </summary>
-		/// <param name="value"></param>
-		private static string[] parseValue(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				return null;
-			}
-
-			return value.Split(new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
-		}
+		
 	}
 }

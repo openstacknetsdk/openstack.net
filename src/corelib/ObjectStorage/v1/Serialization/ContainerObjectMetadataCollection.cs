@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using OpenStack.ObjectStorage.v1.Metadata;
 using OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata;
 using OpenStack.Serialization;
@@ -10,7 +11,6 @@ namespace OpenStack.ObjectStorage.v1.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <exclude />
-    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "metadataList")]
     public class ContainerObjectMetadataCollection : List<IContainerObjectMetadata>
     {
         /// <summary>
@@ -27,5 +27,14 @@ namespace OpenStack.ObjectStorage.v1.Serialization
         public ContainerObjectMetadataCollection(IEnumerable<IContainerObjectMetadata> metadataList) : base(metadataList)
         {
         }
+
+		/// <summary>
+		/// Convert list to standard KeyValuePair enumerator
+		/// </summary>
+		/// <returns></returns>
+	    public IEnumerable<KeyValuePair<string, IEnumerable<string>>> ToKeyValuePairs()
+	    {
+		    return this.Select(item => item.ToKeyValuePair());
+	    }
     }
 }

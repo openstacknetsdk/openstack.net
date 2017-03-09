@@ -13,48 +13,34 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 	public class TimestampContainerObjectMetadata : MetadataBase, IContainerObjectMetadata
 	{
 
-		private static readonly DateTime zeroDayUnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+		private static readonly DateTime zeroDayUnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 		/// <summary>
 		/// Create new instance
 		/// </summary>
-		public TimestampContainerObjectMetadata() : base("X-Timestamp")
+		public TimestampContainerObjectMetadata() : base("X-Timestamp", false)
 		{
 			
 		}
+
+		/// <summary>
+		/// Get or set Timestamp of Object
+		/// </summary>
+		public double Timestamp
+		{
+			get { return MetadataConverter.ParseDoubleSingleValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeDoubleValue(value); }
+		}
+
+		/// <summary>
+		/// Get or set Timestamp of Object in DateTime format
+		/// </summary>
+		public DateTime TimestampDate
+		{
+			get { return MetadataConverter.ParseTimestampSingleValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeTimestampValue(value); }
+		}
 		
-		/// <summary>
-		/// Get or set LastUpdate of Object
-		/// </summary>
-		public DateTime LastUpdate
-		{
-			get { return parseValue(this.MetadataValue); }
-			set { this.MetadataValue = serializeValue(value); }
-		}
-
-		/// <summary>
-		/// Serialize value to Metadata
-		/// </summary>
-		/// <returns></returns>
-		private static string serializeValue(DateTime value)
-		{
-			return value.Subtract(zeroDayUnixTime).TotalDays.ToString("R", System.Globalization.CultureInfo.InvariantCulture);
-		}
-
-		/// <summary>
-		/// Parse value from Metadata
-		/// </summary>
-		/// <param name="value"></param>
-		private static DateTime parseValue(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				return zeroDayUnixTime;
-			}
-
-			var valueDays = System.Convert.ToDouble(value, System.Globalization.CultureInfo.InvariantCulture);
-
-			return zeroDayUnixTime.AddDays(valueDays);
-		}
+		
 	}
 }

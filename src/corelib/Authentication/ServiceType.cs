@@ -88,7 +88,7 @@ namespace OpenStack.Authentication
         /// <summary>
         /// The ObjectStorage service
         /// </summary>
-        public static readonly ServiceType ObjectStorage = new ServiceType("object-storage");
+        public static readonly ServiceType ObjectStorage = new ServiceType("object-store");
     }
 
     /// <summary>

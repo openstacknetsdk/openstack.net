@@ -16,7 +16,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 		/// <summary>
 		/// Create new instance
 		/// </summary>
-		public ContentLengthContainerObjectMetadata() : base("Content-Length")
+		public ContentLengthContainerObjectMetadata() : base("Content-Length", false)
 		{
 			
 		}
@@ -26,26 +26,9 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 		/// </summary>
 		public long ContentLength
 		{
-			get { return parseValue(this.MetadataValue); }
-			set { this.MetadataValue = serializeValue(value); }
+			get { return MetadataConverter.ParseLongSingleValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeLongValue(value); }
 		}
-
-		/// <summary>
-		/// Serialize value to Metadata
-		/// </summary>
-		/// <returns></returns>
-		private static string serializeValue(long value)
-		{
-			return value.ToString("0");
-		}
-
-		/// <summary>
-		/// Parse value from Metadata
-		/// </summary>
-		/// <param name="value"></param>
-		private static long parseValue(string value)
-		{
-			return System.Convert.ToInt64(value);
-		}
+		
 	}
 }

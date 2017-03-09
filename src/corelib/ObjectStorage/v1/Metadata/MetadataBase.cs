@@ -11,16 +11,17 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 	/// <summary>
 	/// Base implementation of generic Metadata
 	/// </summary>
-	public abstract class MetadataBase : IMetadata, ISerializedKeyValuePair {
+	public abstract class MetadataBase : IMetadata {
 
 		/// <summary>
 		/// Create new <see cref="MetadataBase"/>.
 		/// </summary>
 		/// <param name="metadataKey"></param>
-		public MetadataBase(string metadataKey)
+		/// <param name="allowMultiValue"></param>
+		public MetadataBase(string metadataKey, bool allowMultiValue)
 		{
 			this.MetadataKey = metadataKey;
-			
+			this.AllowMultiValue = allowMultiValue;
 		}
 
 		/// <summary>
@@ -30,21 +31,24 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		public string MetadataKey { get; }
 
 		/// <summary>
+		/// If True <see cref="MetadataValue"/> can contains multi value, otherwise one only.
+		/// </summary>
+		public bool AllowMultiValue { get; }
+
+		/// <summary>
 		/// Get or set value
 		/// </summary>
 		[JsonProperty]
-		public string MetadataValue { get; set; }
+		public string[] MetadataValue { get; set; }
 
-		string ISerializedKeyValuePair.Key
+		/// <summary>
+		/// Convert Metadata to standard KeyValuePair structure
+		/// </summary>
+		/// <returns></returns>
+		public KeyValuePair<string, IEnumerable<string>> ToKeyValuePair()
 		{
-			get { return this.MetadataKey; }
-			set { throw new InvalidOperationException(); }
+			return new KeyValuePair<string, IEnumerable<string>>(this.MetadataKey, this.MetadataValue);
 		}
-
-		string ISerializedKeyValuePair.Value
-		{
-			get { return this.MetadataValue; }
-			set { this.MetadataValue = value; }
-		}
+		
 	}
 }

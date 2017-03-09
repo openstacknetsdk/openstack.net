@@ -1,0 +1,17 @@
+﻿# Guida
+https://developer.openstack.org/api-ref/object-storage/?expanded=show-object-metadata-detail
+
+# Chiamata:
+curl -i https://storage.sbg1.cloud.ovh.net/v1/AUTH_9aa1ef7de0284ddd9d9cf0f620a99b9d/fs-test/test/metadata/my-file.txt --head -H "Content-Type: application/json" -H "X-Auth-Token: e47518f2bc504d9e805c7f52734776d2"
+
+# Output:
+HTTP/1.1 200 OK
+Content-Length: 10
+Accept-Ranges: bytes
+Last-Modified: Thu, 09 Mar 2017 01:29:33 GMT
+Etag: 781e5e245d69b566979b86e28d23f2c7
+X-Timestamp: 1489022972.40503
+Content-Type: application/json; charset=utf-8
+X-Trans-Id: txbd9ea0c589394d2e9cef0-0058c0b0d0
+X-Openstack-Request-Id: txbd9ea0c589394d2e9cef0-0058c0b0d0
+Date: Thu, 09 Mar 2017 01:33:04 GMT

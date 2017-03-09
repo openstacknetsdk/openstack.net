@@ -9,7 +9,6 @@ namespace OpenStack.ObjectStorage.v1.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <exclude />
-    [JsonConverterWithConstructor(typeof(RootWrapperConverter), "containers")]
     public class ContainerCollection : List<Container>
     {
         /// <summary>

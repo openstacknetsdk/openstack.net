@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace OpenStack.ObjectStorage.v1.Serialization {
 			return fReturn.ToString();
 		}
 
+
 		/// <summary>
 		/// Parse value to Metadata collection
 		/// </summary>
@@ -39,33 +41,93 @@ namespace OpenStack.ObjectStorage.v1.Serialization {
 		/// <returns></returns>
 		public IEnumerable<T> ParseMetadataHeaderStyle(string serializedValue)
 		{
-			if (string.IsNullOrEmpty(serializedValue)) yield break;
-
-			var metadataTypeInterface = typeof(T);
-			var metadataTypes = System.Reflection.Assembly.GetExecutingAssembly()
-				.GetTypes()
-				.Where(classType => classType.IsClass && !classType.IsAbstract && metadataTypeInterface.IsAssignableFrom(classType))
-				.Select(classType => new { type = classType, metadataKey = ((T)System.Activator.CreateInstance(classType)).MetadataKey })
-				.ToArray();
-
-			var re = new Regex(@"\s*(?<key>[a-zA-Z\-\_]+)\s*:\s*(?<value>[^\n\r]*)");
+			if (string.IsNullOrEmpty(serializedValue)) return Enumerable.Empty<T>();
+			
+			var re = new Regex(@"\s*(?<key>[a-zA-Z\-_]+)\s*:\s*(?<value>[^\n\r]*)");
 			var matches = re.Matches(serializedValue);
 
-			foreach (Match match in matches)
-			{
-				var key = match.Groups["key"].Value;
-				var value = match.Groups["value"].Value.Trim();
+			return this.ParseMetadataHeaders(
+				matches
+					.Cast<System.Text.RegularExpressions.Match>()
+					.Select(match => new KeyValuePair<string, IEnumerable<string>>(
+						match.Groups["key"].Value,
+						match.Groups["value"].Value
+							.Trim()
+							.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+							.Select(item => item.Trim())
+							.Where(item => string.IsNullOrEmpty(item) == false)
+					))
+			);
+		}
 
+		/// <summary>
+		/// Parse HttpResponseHeaders to Metadata collection
+		/// </summary>
+		/// <param name="headers"></param>
+		/// <returns></returns>
+		public IEnumerable<T> ParseMetadataHeaders(HttpResponseHeaders headers)
+		{
+			return this.ParseMetadataHeaders(headers.Select(item => item));
+		}
+
+		/// <summary>
+		/// Parse value to Metadata collection
+		/// </summary>
+		/// <param name="headers"></param>
+		/// <returns></returns>
+		public IEnumerable<T> ParseMetadataHeaders(IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers)
+		{
+			var metadataTypes = this.getCompatibleMetadataTypeList().ToArray();
+
+			foreach (var header in headers)
+			{
 				var metadataInfo = metadataTypes
-					.FirstOrDefault(item => item.metadataKey.Equals(key, StringComparison.InvariantCultureIgnoreCase));
+					.FirstOrDefault(item => item.MetadataKey.Equals(header.Key, StringComparison.InvariantCultureIgnoreCase));
 				if (metadataInfo == null) continue;
 
-				var metadata = (T)System.Activator.CreateInstance(metadataInfo.type);
-				metadata.MetadataValue = value;
+				var metadata = (T)System.Activator.CreateInstance(metadataInfo.MetadataType);
+				
+				if (metadata.AllowMultiValue == false)
+				{
+					metadata.MetadataValue = header.Value
+						.Select(item => item.Trim())
+						.Where(item => string.IsNullOrEmpty(item) == false)
+						.ToArray();
+				}
+				else
+				{
+					metadata.MetadataValue = header.Value
+						.SelectMany(item => item.Split(new []{','}, StringSplitOptions.RemoveEmptyEntries))
+						.Select(item => item.Trim())
+						.Where(item => string.IsNullOrEmpty(item) == false)
+						.ToArray();
+				}
 
 				yield return metadata;
 			}
 		}
 
+
+		private IEnumerable<MetadataInfo> getCompatibleMetadataTypeList()
+		{
+			var metadataTypeInterface = typeof(T);
+			var metadataTypes = System.Reflection.Assembly.GetCallingAssembly()
+				.GetTypes()
+				.Where(classType => classType.IsClass && !classType.IsAbstract && metadataTypeInterface.IsAssignableFrom(classType))
+				.Select(classType => new MetadataInfo()
+				{
+					MetadataType = classType,
+					MetadataKey = ((T) System.Activator.CreateInstance(classType)).MetadataKey
+				});
+			return metadataTypes;
+		}
+
+		private class MetadataInfo
+		{
+			
+			public Type MetadataType { get; set; }
+
+			public string MetadataKey { get; set; }
+		}
 	}
 }

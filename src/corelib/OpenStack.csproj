@@ -235,19 +235,21 @@
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlMaxAgeContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlAllowOriginContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentLengthContainerObjectMetadata.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ETagContainerObjectMetadata.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\LastModifiedContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\TimestampContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentTypeContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\IContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\IContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\IMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\MetadataBase.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\MetadataConverter.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageApiBuilder.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageService.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectCollection.cs" />
-    <Compile Include="ObjectStorage\v1\Serialization\ISerializedKeyValuePair.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\MetadataSerializer.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
@@ -889,6 +891,7 @@
     </None>
     <None Include="app.config" />
     <None Include="corelib.nuspec" />
+    <Content Include="ObjectStorage\v1\curl-tests\containerObject-head.txt" />
     <Content Include="ObjectStorage\v1\curl-tests\containers-get.txt" />
     <Content Include="ObjectStorage\v1\curl-tests\accounts-get.txt" />
     <None Include="ObjectStorage\v1\curl-tests\tokens-withTenantId.json" />

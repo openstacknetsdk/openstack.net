@@ -10,21 +10,21 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 	/// <summary>
 	/// The `Content-Type` header metadata.
 	/// </summary>
-	public class ContentTypeContainerObjectMetadata : MetadataBase, IContainerObjectMetadata
+	public class ETagContainerObjectMetadata : MetadataBase, IContainerObjectMetadata
 	{
 
 		/// <summary>
 		/// Create new instance
 		/// </summary>
-		public ContentTypeContainerObjectMetadata() : base("Content-Type", false)
+		public ETagContainerObjectMetadata() : base("ETag", false)
 		{
 			
 		}
 		
 		/// <summary>
-		/// Get or set content-type of Object
+		/// Get or set ETag of Object
 		/// </summary>
-		public string ContentType
+		public string ETag
 		{
 			get { return MetadataConverter.ParseStringSingleValue(this.MetadataValue); }
 			set { this.MetadataValue = MetadataConverter.SerializeStringValue(value); }
