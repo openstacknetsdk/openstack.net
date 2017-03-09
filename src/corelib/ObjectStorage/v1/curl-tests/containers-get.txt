@@ -1,0 +1,133 @@
+﻿# Guida
+https://developer.openstack.org/api-ref/object-storage/?expanded=show-container-details-and-list-objects-detail
+
+# Chiamata:
+curl -i https://storage.sbg1.cloud.ovh.net/v1/AUTH_9aa1ef7de0284ddd9d9cf0f620a99b9d/fs-test?format=json -X GET -H "X-Auth-Token: f163a4eb716d45178e6f72a8103cb711"
+
+# Output:
+HTTP/1.1 200 OK
+X-Container-Meta-Web-Listings: true
+Content-Length: 2490
+X-Container-Object-Count: 15
+X-Timestamp: 1488310678.00786
+X-Container-Meta-Web-Error: error.html
+X-Container-Meta-Web-Listings-Css: listing.css
+X-Storage-Policy: PCS
+Last-Modified: Tue, 07 Mar 2017 13:56:22 GMT
+X-Container-Meta-Web-Index: index.html
+X-Container-Meta-Access-Control-Allow-Origin: https://www.ovh.com
+X-Container-Read: .r:*,.rlistings
+X-Container-Bytes-Used: 5170405
+Content-Type: application/json; charset=utf-8
+Accept-Ranges: bytes
+X-Trans-Id: tx6ce0070ba54f4cd9b399d-0058bf0500
+X-Openstack-Request-Id: tx6ce0070ba54f4cd9b399d-0058bf0500
+Date: Tue, 07 Mar 2017 19:07:44 GMT
+
+[
+	{
+		"hash":"84bb0c02a4a70cc3963cb17ae40ed47d",
+		"last_modified":"2017-02-28T19:37:58.628560",
+		"bytes":447,
+		"name":"401error.html",
+		"content_type":"text/html"
+	},
+	{
+		"hash":"144f46132883febbd8525714c44fa1ce",
+		"last_modified":"2017-02-28T19:37:58.573220",
+		"bytes":438,
+		"name":"404error.html",
+		"content_type":"text/html"
+	},
+	{
+		"hash":"1ad5d67e460e381aa5c87e5875302493",
+		"last_modified":"2017-02-28T19:38:00.384590",
+		"bytes":468,
+		"name":"503error.html",
+		"content_type":"text/html"
+	},
+	{
+		"hash":"e30ce861ccc126a42a644808aba0bb43",
+		"last_modified":"2017-03-07T08:20:53.227720",
+		"bytes":2830555,
+		"name":"W3SVC4-2017-02.zip",
+		"content_type":"application/zip"
+	},
+	{
+		"hash":"e52aa38131bb45c1e539b793f44acf72",
+		"last_modified":"2017-02-28T19:37:58.641620",
+		"bytes":87308,
+		"name":"images/401.png",
+		"content_type":"image/png"
+	},
+	{
+		"hash":"f2fdf1aa043b12ee4b1d30d54a502619",
+		"last_modified":"2017-02-28T19:37:58.625040",
+		"bytes":43747,
+		"name":"images/404.png",
+		"content_type":"image/png"
+	},
+	{
+		"hash":"bbb1d6da3f2137d19b879d9e26be95ef",
+		"last_modified":"2017-02-28T19:37:58.639810",
+		"bytes":90846,
+		"name":"images/503.png",
+		"content_type":"image/png"
+	},
+	{
+		"hash":"0bbe5b868c589446365c190435918830",
+		"last_modified":"2017-02-28T19:37:58.635780",
+		"bytes":7695,
+		"name":"images/index.png",
+		"content_type":"image/png"
+	},
+	{
+		"hash":"8c730d91d7a74c5aba0cd1093c63e04b",
+		"last_modified":"2017-02-28T19:37:58.638280",
+		"bytes":313,
+		"name":"index.html",
+		"content_type":"text/html"
+	},
+	{
+		"hash":"e7cc89e8daeb2be27d008b1ec5ef9480",
+		"last_modified":"2017-02-28T19:37:58.633380",
+		"bytes":1876,
+		"name":"listing.css",
+		"content_type":"text/css"
+	},
+	{
+		"hash":"d960cecd63061c475603c586a722aa1e",
+		"last_modified":"2017-02-28T19:40:15.638860",
+		"bytes":832995,
+		"name":"path1/Negozio 1.jpg",
+		"content_type":"image/jpeg"
+	},
+	{
+		"hash":"caa10a4f0423ed70fd7ea49af2750af1",
+		"last_modified":"2017-02-28T19:40:12.019660",
+		"bytes":745340,
+		"name":"path1/musica-dettaglio.jpg",
+		"content_type":"image/jpeg"
+	},
+	{
+		"hash":"3bc9754b380c0ba4c260f27d9165cbaf",
+		"last_modified":"2017-02-28T19:40:11.977410",
+		"bytes":114224,
+		"name":"path1/natura-tramonto.jpg",
+		"content_type":"image/jpeg"
+	},
+	{
+		"hash":"8c1c0175fe4349810ad19c49f65eb7bc",
+		"last_modified":"2017-02-28T19:40:11.975840",
+		"bytes":414035,
+		"name":"path1/natura.jpg",
+		"content_type":"image/jpeg"
+	},
+	{
+		"hash":"9467c8b0c0103dc18b9ba274c9c87abf",
+		"last_modified":"2017-02-28T19:37:58.629130",
+		"bytes":118,
+		"name":"styles/index.css",
+		"content_type":"text/css"
+	}
+]
