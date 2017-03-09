@@ -891,11 +891,6 @@
     </None>
     <None Include="app.config" />
     <None Include="corelib.nuspec" />
-    <Content Include="ObjectStorage\v1\curl-tests\containerObject-head.txt" />
-    <Content Include="ObjectStorage\v1\curl-tests\containers-get.txt" />
-    <Content Include="ObjectStorage\v1\curl-tests\accounts-get.txt" />
-    <None Include="ObjectStorage\v1\curl-tests\tokens-withTenantId.json" />
-    <None Include="ObjectStorage\v1\curl-tests\tokens-noTenantId.json" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>

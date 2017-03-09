@@ -142,37 +142,6 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
-		
-        /// <summary>
-        /// Prepares the client to send a POST request containing form
-        /// </summary>
-        public PreparedRequest PreparePostForm(IEnumerable<KeyValuePair<string, IEnumerable<string>>> formData, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Verb = HttpMethod.Post;
-
-			// var multipartFormDataContent = new MultipartFormDataContent();
-			//multipartFormDataContent.Add(new StringContent(pairValue), pair.Key.ToLowerInvariant().Replace('-', '_'));
-	        /*foreach (var pair in formData)
-	        {
-		        foreach (var pairValue in pair.Value)
-		        {
-			        multipartFormDataContent.Add(new StringContent(pairValue), pair.Key.ToLowerInvariant().Replace('-', '_'));
-		        }
-	        }
-			Content = multipartFormDataContent;*/
-			// this.PostUrlEncodedAsync(formData, cancellationToken);
-			Content = new CapturedUrlEncodedContent(
-				Settings.UrlEncodedSerializer.Serialize(
-					formData.SelectMany(
-						pair => pair.Value,
-						(pair, pairVal) => new KeyValuePair<string, string>(pair.Key, pairVal)
-					)
-				)
-			);
-
-            CancellationToken = cancellationToken;
-            return this;
-        }
 
 		/// <summary>
 		/// Prepares the client to send a POST request containing data in content Header
@@ -197,21 +166,6 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
-
-        /// <summary>
-        /// Prepares the client to send a POST request containing data in header
-        /// </summary>
-        public PreparedRequest PreparePostHeader(IEnumerable<IMetadata> data, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Verb = HttpMethod.Post;
-	        foreach (var keyValuePair in data)
-	        {
-		        this.HttpClient.DefaultRequestHeaders.Add(keyValuePair.MetadataKey, keyValuePair.MetadataValue);
-	        }
-            CancellationToken = cancellationToken;
-            return this;
-        }
-
 
 
         /// <summary>
