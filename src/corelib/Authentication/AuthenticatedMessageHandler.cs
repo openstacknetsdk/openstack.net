@@ -30,7 +30,7 @@ namespace OpenStack.Authentication
             try
             {
                 var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-	            var contentStr = await response.Content.ReadAsStringAsync();
+	            // var contentStr = await response.Content.ReadAsStringAsync();
 	            return response;
             }
             catch (FlurlHttpException ex)
