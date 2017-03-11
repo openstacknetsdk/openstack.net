@@ -9,20 +9,20 @@ namespace OpenStack.ObjectStorage.v1.Serialization
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
     /// <exclude />
-    public class ContainerObjectCollection : List<ContainerObject>
+    public class ContainerItemCollection : List<IContainerItem>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainerObjectCollection"/> class.
+        /// Initializes a new instance of the <see cref="ContainerItemCollection"/> class.
         /// </summary>
-        public ContainerObjectCollection()
+        public ContainerItemCollection()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContainerObjectCollection"/> class.
+        /// Initializes a new instance of the <see cref="ContainerItemCollection"/> class.
         /// </summary>
         /// <param name="containerObjects">The container objects.</param>
-        public ContainerObjectCollection(IEnumerable<ContainerObject> containerObjects) : base(containerObjects)
+        public ContainerItemCollection(IEnumerable<ContainerObject> containerObjects) : base(containerObjects)
         {
         }
     }

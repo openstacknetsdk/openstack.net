@@ -51,21 +51,21 @@ namespace OpenStack.ObjectStorage.v1
 		}
 
 		/// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerContentAsync(string, CancellationToken)" />
-		public async Task<ContainerObjectCollection> GetContainerContentAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<ContainerItemCollection> GetContainerContentAsync(string containerId, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _objectStorageApiBuilder
 				.GetContainerContentAsync(containerId, cancellationToken)
 				.SendAsync()
-				.ReceiveJson<ContainerObjectCollection>();
+				.ReceiveJson<ContainerItemCollection>();
 		}
 
 		/// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerContentAsync(string, ContentObjectFilterCollection, CancellationToken)" />
-		public async Task<ContainerObjectCollection> GetContainerContentAsync(string containerId, ContentObjectFilterCollection filterCollection, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<ContainerItemCollection> GetContainerContentAsync(string containerId, ContentObjectFilterCollection filterCollection, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _objectStorageApiBuilder
 				.GetContainerContentAsync(containerId, filterCollection, cancellationToken)
 				.SendAsync()
-				.ReceiveJson<ContainerObjectCollection>();
+				.ReceiveJson<ContainerItemCollection>();
 		}
 
 		/// <inheritdoc cref="ObjectStorageApiBuilder.CreateContainerAsync(string, CancellationToken)" />
@@ -114,12 +114,12 @@ namespace OpenStack.ObjectStorage.v1
 		#region Container Objects
 		
 		/// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerObjectAsync(string, string, CancellationToken)" />
-		public async Task<IEnumerable<ContainerObject>> GetContainerObjectAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<IEnumerable<IContainerItem>> GetContainerObjectAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _objectStorageApiBuilder
 				.GetContainerObjectAsync(containerId, objectPath, cancellationToken)
 				.SendAsync()
-				.ReceiveJson<ContainerObjectCollection>();
+				.ReceiveJson<ContainerItemCollection>();
 		}
 		
 		/// <inheritdoc cref="ObjectStorageApiBuilder.UpdateContainerObjectAsync(string, string, System.IO.Stream, CancellationToken)" />

@@ -10,7 +10,7 @@ namespace OpenStack.ObjectStorage.v1 {
 	/// <summary>
 	/// Represent an Object of container
 	/// </summary>
-	public class ContainerObject {
+	public class ContainerObject : IContainerItem {
 
 		/// <summary>
 		/// Hash of Object
@@ -41,6 +41,9 @@ namespace OpenStack.ObjectStorage.v1 {
 		/// </summary>
 		[JsonProperty("content_type")]
 		public string ContentType { get; set; }
+		
+		/// <inheritdoc cref="IContainerItem.ItemType"/>
+		public ContainerItemType ItemType { get { return ContainerItemType.Object; } }
 
 	}
 }

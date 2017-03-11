@@ -231,6 +231,8 @@
     <Compile Include="Networking\v2\TrafficDirection.cs" />
     <Compile Include="ObjectStorage\NamespaceDoc.cs" />
     <Compile Include="ObjectStorage\v1\Container.cs" />
+    <Compile Include="ObjectStorage\v1\ContainerDirectory.cs" />
+    <Compile Include="ObjectStorage\v1\ContainerItemType.cs" />
     <Compile Include="ObjectStorage\v1\ContainerObject.cs" />
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\ContentObjectFilterBase.cs" />
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\ContentObjectFilterCollection.cs" />
@@ -238,7 +240,9 @@
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\PathContentObjectFilter.cs" />
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\SearchRangeContentObjectFilter.cs" />
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\SearchPrefixContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\DelimiterContentObjectFilter.cs" />
     <Compile Include="ObjectStorage\v1\ContentObjectFilters\TakeContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\IContainerItem.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlMaxAgeContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlAllowOriginContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentLengthContainerObjectMetadata.cs" />
@@ -257,7 +261,8 @@
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerCollection.cs" />
-    <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectCollection.cs" />
+    <Compile Include="ObjectStorage\v1\Serialization\ContainerItemCollection.cs" />
+    <Compile Include="ObjectStorage\v1\Serialization\ContainerItemConverter.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\HttpStatusCodeConverter.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\MetadataSerializer.cs" />
     <Compile Include="OpenStackNet.cs" />
