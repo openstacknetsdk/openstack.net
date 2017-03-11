@@ -10,6 +10,7 @@ using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Networking.v2.Serialization;
+using OpenStack.ObjectStorage.v1.ContentObjectFilters;
 using OpenStack.ObjectStorage.v1.Metadata.ContainerMetadata;
 using OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata;
 using OpenStack.ObjectStorage.v1.Serialization;
@@ -54,6 +55,15 @@ namespace OpenStack.ObjectStorage.v1
 		{
 			return await _objectStorageApiBuilder
 				.GetContainerContentAsync(containerId, cancellationToken)
+				.SendAsync()
+				.ReceiveJson<ContainerObjectCollection>();
+		}
+
+		/// <inheritdoc cref="ObjectStorageApiBuilder.GetContainerContentAsync(string, ContentObjectFilterCollection, CancellationToken)" />
+		public async Task<ContainerObjectCollection> GetContainerContentAsync(string containerId, ContentObjectFilterCollection filterCollection, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return await _objectStorageApiBuilder
+				.GetContainerContentAsync(containerId, filterCollection, cancellationToken)
 				.SendAsync()
 				.ReceiveJson<ContainerObjectCollection>();
 		}
@@ -137,6 +147,15 @@ namespace OpenStack.ObjectStorage.v1
 				.SendAsync();
 		}
 		
+		/// <inheritdoc cref="ObjectStorageApiBuilder.DeleteContainerObjectListAsync(string, IEnumerable{string}, CancellationToken)" />
+		public async Task<BulkDeleteResult> DeleteContainerObjectListAsync(string containerId, IEnumerable<string> objectPathList, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return await _objectStorageApiBuilder
+				.DeleteContainerObjectListAsync(containerId, objectPathList, cancellationToken)
+				.SendAsync()
+				.ReceiveJson<BulkDeleteResult>();
+		}
+		
 		/// <inheritdoc cref="ObjectStorageApiBuilder.ReadContainerObjectMetadataAsync(string, string, CancellationToken)" />
 		public async Task<ContainerObjectMetadataCollection> ReadContainerObjectMetadataAsync(string containerId, string objectPath, CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -165,7 +184,7 @@ namespace OpenStack.ObjectStorage.v1
 
 			var statusCode = request.StatusCode;
 
-			return statusCode == HttpStatusCode.OK;
+			return (int)statusCode < 300;
 		}
 		
 		/// <inheritdoc cref="ObjectStorageApiBuilder.SaveContainerObjectMetadataAsync(string, string, ContainerObjectMetadataCollection, CancellationToken)" />

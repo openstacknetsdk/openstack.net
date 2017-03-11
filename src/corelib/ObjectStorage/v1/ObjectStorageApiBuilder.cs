@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
@@ -8,6 +10,7 @@ using Flurl.Extensions;
 using Flurl.Http;
 using OpenStack.Authentication;
 using OpenStack.Networking.v2.Serialization;
+using OpenStack.ObjectStorage.v1.ContentObjectFilters;
 using OpenStack.ObjectStorage.v1.Serialization;
 using OpenStack.Serialization;
 
@@ -46,6 +49,7 @@ namespace OpenStack.ObjectStorage.v1
 			Endpoint = new ServiceEndpoint(serviceType, authenticationProvider, region, useInternalUrl);
 		}
 
+
 		#region Tenants
 		/*
 		/// <summary>
@@ -65,8 +69,10 @@ namespace OpenStack.ObjectStorage.v1
 		}
 		*/
 		#endregion
-
+		
+		
 		#region Containers
+
 		/// <summary>
 		/// Lists all containers associated with the current tenant.
 		/// </summary>
@@ -77,7 +83,7 @@ namespace OpenStack.ObjectStorage.v1
 		public async Task<PreparedRequest> ListContainersAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
- 
+
 			return endpoint
 				.SetQueryParam("format", "json")
 				.Authenticate(AuthenticationProvider)
@@ -95,6 +101,31 @@ namespace OpenStack.ObjectStorage.v1
 		public virtual async Task<PreparedRequest> GetContainerContentAsync(string containerName, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+			
+			return endpoint
+				.SetQueryParam("format", "json")
+				.AppendPathSegments(containerName)
+				.Authenticate(AuthenticationProvider)
+				.PrepareGet(cancellationToken);
+		}
+
+		/// <summary>
+		/// Gets the container content of specified container.
+		/// </summary>
+		/// <param name="containerName">The container identifier.</param>
+		/// <param name="filterCollection">Filters to select a range of objects.</param>
+		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+		/// <returns>
+		/// The content of container.
+		/// </returns>
+		public virtual async Task<PreparedRequest> GetContainerContentAsync(string containerName, ContentObjectFilterCollection filterCollection, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+			
+			if (filterCollection != null)
+			{
+				endpoint = endpoint.SetQueryParams(filterCollection.CompileQueryParams());
+			}
 			
 			return endpoint
 				.SetQueryParam("format", "json")
@@ -222,7 +253,7 @@ namespace OpenStack.ObjectStorage.v1
 		/// Delete the object in specified container.
 		/// </summary>
 		/// <param name="containerName">The container identifier.</param>
-		/// <param name="objectPath">The path of object.</param>
+		/// <param name="objectPath">The path object.</param>
 		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
 		/// <returns>
 		/// Nothing
@@ -235,6 +266,30 @@ namespace OpenStack.ObjectStorage.v1
 				.AppendPathSegments(containerName, objectPath)
 				.Authenticate(AuthenticationProvider)
 				.PrepareDelete(cancellationToken);
+		}
+		
+		/// <summary>
+		/// Delete the object in specified container.
+		/// </summary>
+		/// <param name="containerName">The container identifier.</param>
+		/// <param name="objectPathList">The list path object.</param>
+		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+		/// <returns>
+		/// Nothing
+		/// </returns>
+		public virtual async Task<PreparedRequest> DeleteContainerObjectListAsync(string containerName, IEnumerable<string> objectPathList, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+			var request = endpoint
+				.AppendPathSegments(containerName)
+				.SetQueryParam("bulk-delete", "true")
+				.Authenticate(AuthenticationProvider)
+				.PreparePostContentTestPlain(string.Join("\n", objectPathList.Select(item => containerName + "/" + item)), cancellationToken);
+
+			request.HttpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+			return request;
 		}
 		
 		/// <summary>

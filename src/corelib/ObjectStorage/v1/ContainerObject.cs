@@ -31,10 +31,10 @@ namespace OpenStack.ObjectStorage.v1 {
 		public long Bytes { get; set; }
 
 		/// <summary>
-		/// Object name
+		/// Object fullname
 		/// </summary>
 		[JsonProperty("name")]
-		public string Name { get; set; }
+		public string FullName { get; set; }
 
 		/// <summary>
 		/// Object content type

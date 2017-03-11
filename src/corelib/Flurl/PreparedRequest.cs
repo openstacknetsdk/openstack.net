@@ -166,7 +166,20 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
-
+		
+		/// <summary>
+		/// Prepares the client to send a POST request containing data in content Header
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public PreparedRequest PreparePostContentTestPlain(string data, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Post;
+			Content = new System.Net.Http.StringContent(data);
+            CancellationToken = cancellationToken;
+            return this;
+        }
 
         /// <summary>
         /// Prepares the client to send a PUT request containing json

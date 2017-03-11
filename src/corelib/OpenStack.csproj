@@ -232,6 +232,13 @@
     <Compile Include="ObjectStorage\NamespaceDoc.cs" />
     <Compile Include="ObjectStorage\v1\Container.cs" />
     <Compile Include="ObjectStorage\v1\ContainerObject.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\ContentObjectFilterBase.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\ContentObjectFilterCollection.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\IContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\PathContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\SearchRangeContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\SearchPrefixContentObjectFilter.cs" />
+    <Compile Include="ObjectStorage\v1\ContentObjectFilters\TakeContentObjectFilter.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlMaxAgeContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlAllowOriginContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentLengthContainerObjectMetadata.cs" />
@@ -246,10 +253,12 @@
     <Compile Include="ObjectStorage\v1\Metadata\MetadataConverter.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageApiBuilder.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageService.cs" />
+    <Compile Include="ObjectStorage\v1\BulkDeleteResult.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerMetadataCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerCollection.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\ContainerObjectCollection.cs" />
+    <Compile Include="ObjectStorage\v1\Serialization\HttpStatusCodeConverter.cs" />
     <Compile Include="ObjectStorage\v1\Serialization\MetadataSerializer.cs" />
     <Compile Include="OpenStackNet.cs" />
     <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
