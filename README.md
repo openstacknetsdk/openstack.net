@@ -1,6 +1,6 @@
-# OpenStack.NET
+# OpenStack.NET - Unsupported
 
-Need Help? Email us at [sdk-support@rackspace.com](mailto:sdk-support@rackspace.com).
+**This project is in-between maintainers.** Interested? Contact sdk-support@rackspace.com.
 
 [![Join the chat at https://gitter.im/openstacknetsdk/openstack.net](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openstacknetsdk/openstack.net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
