@@ -1,9 +1,19 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Http.Configuration;
 using Flurl.Http.Content;
+using net.openstack.Core;
+using OpenStack.ObjectStorage.v1.Metadata;
+using OpenStack.ObjectStorage.v1.Serialization;
+using OpenStack.Serialization;
 
 // ReSharper disable once CheckNamespace
 namespace Flurl.Http
@@ -69,6 +79,18 @@ namespace Flurl.Http
         /// The optional canellation token which will be used in the request, defaults to None.
         /// </summary>
         public CancellationToken CancellationToken { get; protected set; }
+		
+		/// <summary>
+		/// Apply default timeout to current Request
+		/// </summary>
+		/// <param name="defaultTimeout">The timeout to apply.</param>
+		/// <returns></returns>
+	    public PreparedRequest SettingTimeout(TimeSpan defaultTimeout)
+		{
+			Settings.DefaultTimeout = defaultTimeout;
+		    return this;
+	    }
+
 
         /// <summary>
         /// Prepares the client to send a DELETE request
@@ -76,6 +98,15 @@ namespace Flurl.Http
         public PreparedRequest PrepareDelete(CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = HttpMethod.Delete;
+            CancellationToken = cancellationToken;
+            return this;
+        }
+        /// <summary>
+        /// Prepares the client to send a DELETE request
+        /// </summary>
+        public PreparedRequest PrepareHead(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Head;
             CancellationToken = cancellationToken;
             return this;
         }
@@ -100,7 +131,7 @@ namespace Flurl.Http
             CancellationToken = cancellationToken;
             return this;
         }
-
+		
         /// <summary>
         /// Prepares the client to send a POST request containing json
         /// </summary>
@@ -112,6 +143,31 @@ namespace Flurl.Http
             return this;
         }
 
+		/// <summary>
+		/// Prepares the client to send a POST request containing data in content Header
+		/// </summary>
+		/// <param name="formData"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public PreparedRequest PreparePostContentHeader(IEnumerable<KeyValuePair<string, IEnumerable<string>>> formData, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Post;
+
+			Content = new System.Net.Http.StringContent("");
+	        Content.Headers.Remove("Content-Type");
+			foreach (var pair in formData)
+	        {
+		        foreach (var pairValue in pair.Value)
+		        {
+			        Content.Headers.Add(pair.Key, pairValue);
+		        }
+	        }
+
+            CancellationToken = cancellationToken;
+            return this;
+        }
+
+
         /// <summary>
         /// Prepares the client to send a PUT request containing json
         /// </summary>
@@ -119,6 +175,17 @@ namespace Flurl.Http
         {
             Verb = HttpMethod.Put;
             Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
+            CancellationToken = cancellationToken;
+            return this;
+        }
+
+        /// <summary>
+        /// Prepares the client to send a PUT request containing data in stream
+        /// </summary>
+        public PreparedRequest PreparePutStream(System.IO.Stream dataStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Put;
+            Content = new CapturedStreamContent(dataStream);
             CancellationToken = cancellationToken;
             return this;
         }

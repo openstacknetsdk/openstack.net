@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Flurl.Http;
 using OpenStack;
@@ -132,5 +133,15 @@ namespace Flurl.Extensions
             PreparedRequest request = await requestTask.ConfigureAwait(false);
             return await request.SendAsync().ConfigureAwait(false);
         }
+
+		/// <summary>
+		/// Sends the <see cref="HttpResponseHeaders"/>.
+		/// </summary>
+		/// <param name="responseTask">A task with returns the response</param>
+		/// <returns></returns>
+	    public static async Task<HttpResponseHeaders> ReceiveHeaders(this Task<HttpResponseMessage> responseTask)
+	    {
+		    return await Task.FromResult(responseTask.Result.Headers);
+	    }
     }
 }
