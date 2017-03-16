@@ -1,1 +1,1 @@
-.\build.cmd Build
+.\build.cmd Build /Version ${env:GitVersion.NuGetVersion}

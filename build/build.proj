@@ -3,10 +3,7 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-
-    <Version Condition=" '$(GitVersion.NuGetVersion)' != '' ">$(GitVersion.NuGetVersion)</Version>
-    <Version Condition=" '$(GitVersion.NuGetVersion)' == '' ">0.0.0-dev</Version>
-
+    <Version>0.0.0-dev</Version>
     <PaketVersion>2.66.9</PaketVersion>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
