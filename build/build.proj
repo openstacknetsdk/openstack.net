@@ -23,7 +23,8 @@
     <CallTarget Targets="Build" />
     <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
-    <CallTarget Targets="IntegrationTest" />
+    <!-- Disabled until new env is setup -->
+    <!--<CallTarget Targets="IntegrationTest" />-->
     <CallTarget Targets="Package" />
   </Target>
 
