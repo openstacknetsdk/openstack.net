@@ -4,8 +4,8 @@
   <PropertyGroup>
     <Configuration>Debug</Configuration>
 
-    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' != '' ">$(bamboo_GitVersion_NuGetVersion)</Version>
-    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
+    <Version Condition=" '$(GitVersion.NuGetVersion)' != '' ">$(GitVersion.NuGetVersion)</Version>
+    <Version Condition=" '$(GitVersion.NuGetVersion)' == '' ">0.0.0-dev</Version>
 
     <PaketVersion>2.66.9</PaketVersion>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
