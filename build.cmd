@@ -7,7 +7,9 @@ IF "%1"=="help" ( GOTO :help )
 
 :parse
 IF NOT "%1"=="" (
-  IF /I "%1"=="/Configuration" (
+  IF /I "%1"=="/Version" (
+    SET VersionArg=/p:Version=%2
+  ) ELSE IF /I "%1"=="/Configuration" (
     SET ConfigArg=/p:Configuration=%2
   ) ELSE (
     SET TargetArg=/t:%1
@@ -33,7 +35,7 @@ if not defined VisualStudioVersion (
 )
 
 :build
-msbuild build\build.proj %TargetArg% %ConfigArg% /nologo
+msbuild build\build.proj %TargetArg% %ConfigArg% %VersionArg% /nologo
 exit /b %ERRORLEVEL%
 
 :help

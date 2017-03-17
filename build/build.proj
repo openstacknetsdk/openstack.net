@@ -3,10 +3,7 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-
-    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' != '' ">$(bamboo_GitVersion_NuGetVersion)</Version>
-    <Version Condition=" '$(bamboo_GitVersion_NuGetVersion)' == '' ">0.0.0-dev</Version>
-
+    <Version>0.0.0-dev</Version>
     <PaketVersion>2.66.9</PaketVersion>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
@@ -24,9 +21,10 @@
     </PropertyGroup>
 
     <CallTarget Targets="Build" />
-    <CallTarget Targets="Documentation" />
     <CallTarget Targets="UnitTest" />
-    <CallTarget Targets="IntegrationTest" />
+    <!-- Disabled until new env is setup -->
+    <!--<CallTarget Targets="IntegrationTest" />-->
+    <CallTarget Targets="Documentation" />
     <CallTarget Targets="Package" />
   </Target>
 
@@ -61,13 +59,13 @@
 
     <RemoveDir Directories="..\artifacts\TestResults\" />
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -nunit ..\artifacts\TestResults\unit-tests.nunit.xml" ContinueOnError="true" />
-    <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" ContinueOnError="true" />
+    <Exec Command="$(XUnit) ..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll -nunit ..\artifacts\TestResults\unit-tests.nunit.xml" />
+    <Exec Command="$(MSTest) /testcontainer:..\src\testing\unit\bin\$(Configuration)\OpenStackNet.Testing.Unit.dll /category:Unit /resultsfile:..\artifacts\TestResults\unit.trx" />
   </Target>
 
   <Target Name="IntegrationTest" DependsOnTargets="Build">
     <MakeDir Directories="..\artifacts\TestResults\" />
-    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml -notrait ci=false" ContinueOnError="true" />
+    <Exec Command="$(XUnit) ..\src\testing\integration\bin\$(Configuration)\OpenStackNet.Testing.Integration.dll -xml ..\artifacts\TestResults\integration-tests.xml -notrait ci=false" />
 
     <!-- Convert test results to the NUnit format for easier reporting -->
     <XslTransformation XmlInputPaths="..\artifacts\TestResults\integration-tests.xml"  XslInputPath="$(XUnitXslt)"
@@ -100,7 +98,7 @@
           WorkingDirectory="..\src\corelib\bin\v4.0\$(Configuration)" />
 
     <MakeDir Directories="..\artifacts\packages\" />
-    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\packages -Prop Configuration=$(Configuration) -Version $(Version)" />
+    <Exec Command="$(NuGet) pack ..\src\corelib\corelib.nuspec -OutputDirectory ..\artifacts\ -Prop Configuration=$(Configuration) -Version $(Version)" />
   </Target>
 
   <!-- The publish targets don't depend upon Package because of how they are used on the CI server. At this point the code has been packaged and all that needs
