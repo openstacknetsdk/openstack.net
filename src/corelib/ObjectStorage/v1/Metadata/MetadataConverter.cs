@@ -219,15 +219,72 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 
 		#endregion
 		
+		#region DateTimeOffset converter
+		
+		/// <summary>
+		/// Serialize value to Metadata
+		/// </summary>
+		/// <returns></returns>
+		public static string[] SerializeDateTimeOffsetValue(DateTimeOffset value)
+		{
+			return new [] { value.ToString(CultureInfo.InvariantCulture.DateTimeFormat) };
+		}
+		
+		/// <summary>
+		/// Serialize value to Metadata
+		/// </summary>
+		/// <returns></returns>
+		public static string[] SerializeDateTimeOffsetValue(IEnumerable<DateTimeOffset> value)
+		{
+			if (value == null) return null;
+
+			return value.Select(item => item.ToString(CultureInfo.InvariantCulture.DateTimeFormat)).ToArray();
+		}
+
+		/// <summary>
+		/// Parse value from Metadata
+		/// </summary>
+		/// <param name="serializedValue"></param>
+		public static DateTimeOffset ParseDateTimeOffsetSingleValue(IEnumerable<string> serializedValue)
+		{
+			if (serializedValue == null) return DateTimeOffset.MinValue;
+
+			var firstValue = serializedValue.FirstOrDefault();
+			if (firstValue == null) return DateTimeOffset.MinValue;
+
+			return DateTimeOffset.Parse(firstValue,
+				System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat,
+				DateTimeStyles.AssumeUniversal
+			);
+		}
+
+		/// <summary>
+		/// Parse value from Metadata
+		/// </summary>
+		/// <param name="serializedValue"></param>
+		public static DateTimeOffset[] ParseDateTimeOffsetMultiValue(IEnumerable<string> serializedValue)
+		{
+			if (serializedValue == null) return null;
+
+			return serializedValue
+				.Select(item => DateTimeOffset.Parse(item,
+					System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat,
+					DateTimeStyles.AssumeUniversal
+				))
+				.ToArray();
+		}
+
+		#endregion
+		
 		#region Timestamp converter
 		
-		private static readonly DateTime zeroDayUnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+		private static readonly DateTimeOffset zeroDayUnixTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, new TimeSpan(0));
 
 		/// <summary>
 		/// Serialize value to Metadata
 		/// </summary>
 		/// <returns></returns>
-		public static string[] SerializeTimestampValue(DateTime value)
+		public static string[] SerializeTimestampValue(DateTimeOffset value)
 		{
 			return new [] { value.Subtract(zeroDayUnixTime).TotalSeconds.ToString("R", CultureInfo.InvariantCulture.DateTimeFormat) };
 		}
@@ -236,7 +293,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		/// Serialize value to Metadata
 		/// </summary>
 		/// <returns></returns>
-		public static string[] SerializeTimestampValue(IEnumerable<DateTime> value)
+		public static string[] SerializeTimestampValue(IEnumerable<DateTimeOffset> value)
 		{
 			if (value == null) return null;
 
@@ -247,7 +304,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		/// Parse value from Metadata
 		/// </summary>
 		/// <param name="serializedValue"></param>
-		public static DateTime ParseTimestampSingleValue(IEnumerable<string> serializedValue)
+		public static DateTimeOffset ParseTimestampSingleValue(IEnumerable<string> serializedValue)
 		{
 			var doubleValue = ParseDoubleSingleValue(serializedValue);
 
@@ -258,7 +315,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		/// Parse value from Metadata
 		/// </summary>
 		/// <param name="serializedValue"></param>
-		public static DateTime[] ParseTimestampMultiValue(IEnumerable<string> serializedValue)
+		public static DateTimeOffset[] ParseTimestampMultiValue(IEnumerable<string> serializedValue)
 		{
 			if (serializedValue == null) return null;
 

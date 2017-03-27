@@ -25,10 +25,10 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 		/// <summary>
 		/// Get or set LastModified of Object
 		/// </summary>
-		public DateTime LastModified
+		public DateTimeOffset LastModified
 		{
-			get { return MetadataConverter.ParseDateTimeSingleValue(this.MetadataValue); }
-			set { this.MetadataValue = MetadataConverter.SerializeDateTimeValue(value); }
+			get { return MetadataConverter.ParseDateTimeOffsetSingleValue(this.MetadataValue); }
+			set { this.MetadataValue = MetadataConverter.SerializeDateTimeOffsetValue(value); }
 		}
 		
 	}

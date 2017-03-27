@@ -80,7 +80,7 @@ namespace OpenStack.ObjectStorage.v1
 		/// <returns>
 		/// A collection of containers associated with current tenant.
 		/// </returns>
-		public async Task<PreparedRequest> ListContainersAsync(CancellationToken cancellationToken = default(CancellationToken))
+		public virtual async Task<PreparedRequest> ListContainersAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
 
@@ -88,6 +88,22 @@ namespace OpenStack.ObjectStorage.v1
 				.SetQueryParam("format", "json")
 				.Authenticate(AuthenticationProvider)
 				.PrepareGet(cancellationToken);
+		}
+		
+		/// <summary>
+		/// Returns container Url
+		/// </summary>
+		/// <param name="containerName">The container identifier.</param>
+		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+		/// <returns>
+		/// The URL of container A collection of containers associated with current tenant.
+		/// </returns>
+		public virtual async Task<Url> GetContainerUrlAsync(string containerName, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			Url endpoint = await Endpoint.GetEndpoint(cancellationToken).ConfigureAwait(false);
+
+			return endpoint
+				.AppendPathSegments(containerName);
 		}
 		
 		/// <summary>
@@ -265,7 +281,8 @@ namespace OpenStack.ObjectStorage.v1
 			return endpoint
 				.AppendPathSegments(containerName, objectPath)
 				.Authenticate(AuthenticationProvider)
-				.PrepareDelete(cancellationToken);
+				.PrepareDelete(cancellationToken)
+				.AllowHttpStatus(HttpStatusCode.NotFound);
 		}
 		
 		/// <summary>

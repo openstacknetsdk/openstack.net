@@ -44,8 +44,8 @@
   </Target>
 
   <Target Name="RestorePackages" DependsOnTargets="DownloadPaket">
-    <Exec Command="$(PaketBootstrapper)" />
-    <Exec Command="$(Paket) install" />
+    <Exec Command="%22$(PaketBootstrapper)%22" />
+    <Exec Command="%22$(Paket)%22 install" />
   </Target>
 
   <Target Name="DownloadPaket" Condition="!Exists('$(PaketBootstrapper)')">

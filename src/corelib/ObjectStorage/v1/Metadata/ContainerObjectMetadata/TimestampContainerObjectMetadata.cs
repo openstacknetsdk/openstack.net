@@ -12,9 +12,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 	/// </summary>
 	public class TimestampContainerObjectMetadata : MetadataBase, IContainerObjectMetadata
 	{
-
-		private static readonly DateTime zeroDayUnixTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+		
 		/// <summary>
 		/// Create new instance
 		/// </summary>
@@ -35,7 +33,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata.ContainerObjectMetadata {
 		/// <summary>
 		/// Get or set Timestamp of Object in DateTime format
 		/// </summary>
-		public DateTime TimestampDate
+		public DateTimeOffset TimestampDate
 		{
 			get { return MetadataConverter.ParseTimestampSingleValue(this.MetadataValue); }
 			set { this.MetadataValue = MetadataConverter.SerializeTimestampValue(value); }
