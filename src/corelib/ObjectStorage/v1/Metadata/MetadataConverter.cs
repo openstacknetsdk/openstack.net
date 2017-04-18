@@ -227,7 +227,7 @@ namespace OpenStack.ObjectStorage.v1.Metadata {
 		/// <returns></returns>
 		public static string[] SerializeDateTimeOffsetValue(DateTimeOffset value)
 		{
-			return new [] { value.ToString(CultureInfo.InvariantCulture.DateTimeFormat) };
+			return new [] { value.ToString("r", CultureInfo.InvariantCulture.DateTimeFormat) };
 		}
 		
 		/// <summary>

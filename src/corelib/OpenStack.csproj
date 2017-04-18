@@ -247,7 +247,9 @@
     <Compile Include="ObjectStorage\v1\Metadata\ContainerMetadata\AccessControlAllowOriginContainerMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentLengthContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ETagContainerObjectMetadata.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ExpiresContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\LastModifiedContainerObjectMetadata.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\CacheControlContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\TimestampContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\ContentTypeContainerObjectMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\ContainerObjectMetadata\IContainerObjectMetadata.cs" />
@@ -255,6 +257,7 @@
     <Compile Include="ObjectStorage\v1\Metadata\IMetadata.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\MetadataBase.cs" />
     <Compile Include="ObjectStorage\v1\Metadata\MetadataConverter.cs" />
+    <Compile Include="ObjectStorage\v1\Metadata\MetadataEnumValueAttribute.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageApiBuilder.cs" />
     <Compile Include="ObjectStorage\v1\ObjectStorageService.cs" />
     <Compile Include="ObjectStorage\v1\BulkDeleteResult.cs" />

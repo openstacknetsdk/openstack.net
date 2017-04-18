@@ -155,14 +155,24 @@ namespace Flurl.Http
 
 			Content = new System.Net.Http.StringContent("");
 	        Content.Headers.Remove("Content-Type");
-			foreach (var pair in formData)
-	        {
-		        foreach (var pairValue in pair.Value)
-		        {
-			        Content.Headers.Add(pair.Key, pairValue);
-		        }
-	        }
 
+			foreach (var pair in formData)
+			{
+				System.Net.Http.Headers.HttpHeaders headerColl;
+
+				switch (pair.Key.ToLowerInvariant())
+		        {
+					case "cache-control":
+						headerColl = this.HttpClient.DefaultRequestHeaders;
+				        break;
+					default:
+						headerColl = this.Content.Headers;
+						break;
+				}
+
+				headerColl.Add(pair.Key, pair.Value);
+	        }
+			
             CancellationToken = cancellationToken;
             return this;
         }
@@ -173,7 +183,7 @@ namespace Flurl.Http
 		/// <param name="data"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public PreparedRequest PreparePostContentTestPlain(string data, CancellationToken cancellationToken = default(CancellationToken))
+		public PreparedRequest PreparePostContentTextPlain(string data, CancellationToken cancellationToken = default(CancellationToken))
         {
             Verb = HttpMethod.Post;
 			Content = new System.Net.Http.StringContent(data);

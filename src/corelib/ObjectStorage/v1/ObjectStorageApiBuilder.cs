@@ -302,7 +302,7 @@ namespace OpenStack.ObjectStorage.v1
 				.AppendPathSegments(containerName)
 				.SetQueryParam("bulk-delete", "true")
 				.Authenticate(AuthenticationProvider)
-				.PreparePostContentTestPlain(string.Join("\n", objectPathList.Select(item => containerName + "/" + item)), cancellationToken);
+				.PreparePostContentTextPlain(string.Join("\n", objectPathList.Select(item => containerName + "/" + item)), cancellationToken);
 
 			request.HttpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
