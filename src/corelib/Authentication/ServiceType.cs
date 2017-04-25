@@ -76,6 +76,11 @@ namespace OpenStack.Authentication
         public static readonly ServiceType Compute = new ServiceType("compute");
 
         /// <summary>
+        ///the identity service 
+        /// </summary>
+        public static readonly ServiceType Identtity = new ServiceType("identity_v3");
+
+        /// <summary>
         /// The Content Delivery Network (CDN) service
         /// </summary>
         public static readonly ServiceType ContentDeliveryNetwork = new ServiceType("cdn");

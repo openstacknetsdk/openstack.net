@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http.Content;
+using Newtonsoft.Json;
 
 // ReSharper disable once CheckNamespace
 namespace Flurl.Http
@@ -108,6 +109,20 @@ namespace Flurl.Http
         {
             Verb = HttpMethod.Post;
             Content = new CapturedJsonContent(Settings.JsonSerializer.Serialize(data));
+            CancellationToken = cancellationToken;
+            return this;
+        }
+        /// <summary>
+        /// Prepares the client to send a POST request containing json
+        /// </summary>
+        public PreparedRequest PreparePostJsonIgonreNull(object data, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Verb = HttpMethod.Post;
+
+            var content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            Content = new CapturedJsonContent(content);
             CancellationToken = cancellationToken;
             return this;
         }
