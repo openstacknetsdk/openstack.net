@@ -74,7 +74,8 @@ namespace net.openstack.Providers.Rackspace
         /// implementation.
         /// </summary>
         public CloudFilesProvider()
-            : this(null, null, null, null) { }
+            : this(null, null, null, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -83,7 +84,8 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity)
-            : this(defaultIdentity, null, null, null) { }
+            : this(defaultIdentity, null, null, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -92,7 +94,8 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(IRestService restService)
-            : this(null, null, null, restService) { }
+            : this(null, null, null, restService)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -101,7 +104,8 @@ namespace net.openstack.Providers.Rackspace
         /// </summary>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created with no default identity.</param>
         public CloudFilesProvider(IIdentityProvider identityProvider)
-            : this(null, null, identityProvider, null) { }
+            : this(null, null, identityProvider, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -111,7 +115,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider)
-            : this(defaultIdentity, null, identityProvider, null) { }
+            : this(defaultIdentity, null, identityProvider, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -121,7 +126,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="defaultIdentity">The default identity to use for calls that do not explicitly specify an identity. If this value is <see langword="null"/>, no default identity is available so all calls must specify an explicit identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IRestService restService)
-            : this(defaultIdentity, null, null, restService) { }
+            : this(defaultIdentity, null, null, restService)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -134,7 +140,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, IIdentityProvider identityProvider, IRestService restService)
-            : this(defaultIdentity, null, identityProvider, restService) { }
+            : this(defaultIdentity, null, identityProvider, restService)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -148,7 +155,8 @@ namespace net.openstack.Providers.Rackspace
         /// <param name="identityProvider">The identity provider to use for authenticating requests to this provider. If this value is <see langword="null"/>, a new instance of <see cref="CloudIdentityProvider"/> is created using <paramref name="defaultIdentity"/> as the default identity.</param>
         /// <param name="restService">The implementation of <see cref="IRestService"/> to use for executing REST requests. If this value is <see langword="null"/>, the provider will use a new instance of <see cref="JsonRestServices"/>.</param>
         public CloudFilesProvider(CloudIdentity defaultIdentity, string defaultRegion, IIdentityProvider identityProvider, IRestService restService)
-            : this(defaultIdentity, defaultRegion, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default)) { }
+            : this(defaultIdentity, defaultRegion, identityProvider, restService, CloudFilesValidator.Default, CloudFilesMetadataProcessor.Default, EncodeDecodeProvider.Default, HttpStatusCodeParser.Default, new BulkDeletionResultMapper(HttpStatusCodeParser.Default))
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -176,7 +184,8 @@ namespace net.openstack.Providers.Rackspace
         /// <para>If <paramref name="mapper"/> is <see langword="null"/>.</para>
         /// </exception>
         internal CloudFilesProvider(string defaultRegion, IIdentityProvider identityProvider, IRestService restService, IObjectStorageValidator cloudFilesValidator, IObjectStorageMetadataProcessor cloudFilesMetadataProcessor, IEncodeDecodeProvider encodeDecodeProvider, IStatusParser statusParser, IObjectMapper<BulkDeleteResponse, BulkDeletionResults> mapper)
-            : this(null, defaultRegion, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper) { }
+            : this(null, defaultRegion, identityProvider, restService, cloudFilesValidator, cloudFilesMetadataProcessor, encodeDecodeProvider, statusParser, mapper)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFilesProvider"/> class with
@@ -274,14 +283,14 @@ namespace net.openstack.Providers.Rackspace
 
             switch (response.StatusCode)
             {
-            case HttpStatusCode.Created:
-                return ObjectStore.ContainerCreated;
+                case HttpStatusCode.Created:
+                    return ObjectStore.ContainerCreated;
 
-            case HttpStatusCode.Accepted:
-                return ObjectStore.ContainerExists;
+                case HttpStatusCode.Accepted:
+                    return ObjectStore.ContainerExists;
 
-            default:
-                throw new ResponseException(string.Format("Unexpected status {0} returned by Create Container.", response.StatusCode), response);
+                default:
+                    throw new ResponseException(string.Format("Unexpected status {0} returned by Create Container.", response.StatusCode), response);
             }
         }
 
@@ -310,12 +319,12 @@ namespace net.openstack.Providers.Rackspace
                     {
                         var objects = ListObjects(container, count, region: region, useInternalUrl: useInternalUrl, identity: identity);
 
-                        if(objects.Any())
+                        if (objects.Any())
                             DeleteObjects(container, objects.Select(o => o.Name), region: region, useInternalUrl: useInternalUrl, identity: identity);
                     }
                 }
             }
-            
+
             var urlPath = new Uri(string.Format("{0}/{1}", GetServiceEndpointCloudFiles(identity, region, useInternalUrl), _encodeDecodeProvider.UrlEncode(container)));
 
             try
@@ -801,7 +810,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public void UpdateObjectHeaders(string container, string objectName, Dictionary<string,string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public void UpdateObjectHeaders(string container, string objectName, Dictionary<string, string> headers, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
@@ -834,7 +843,7 @@ namespace net.openstack.Providers.Rackspace
             settings.ContentType = null;
 
             ExecuteRESTRequest(identity, urlPath, HttpMethod.POST, headers: hdrs, settings: settings);
-           
+
         }
 
         /// <inheritdoc />
@@ -942,7 +951,7 @@ namespace net.openstack.Providers.Rackspace
         }
 
         /// <inheritdoc />
-        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null,  string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
+        public IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, char delimiter = '\0', string region = null, bool useInternalUrl = false, CloudIdentity identity = null)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
@@ -959,6 +968,9 @@ namespace net.openstack.Providers.Rackspace
 
             if (limit != null)
                 queryStringParameter.Add("limit", limit.ToString());
+
+            if (delimiter != '\0')
+                queryStringParameter.Add("delimiter", delimiter.ToString());
 
             if (!string.IsNullOrEmpty(marker))
                 queryStringParameter.Add("marker", marker);
@@ -1258,7 +1270,7 @@ namespace net.openstack.Providers.Rackspace
             _cloudFilesValidator.ValidateObjectName(objectName);
 
             Dictionary<string, string> objectHeader = null;
-            if(deleteSegments)
+            if (deleteSegments)
                 objectHeader = GetObjectHeaders(container, objectName, region, useInternalUrl, identity);
 
             if (deleteSegments && objectHeader != null && objectHeader.Any(h => h.Key.Equals(ObjectManifest, StringComparison.OrdinalIgnoreCase)))
@@ -2592,6 +2604,6 @@ namespace net.openstack.Providers.Rackspace
         public const string ProcessedHeadersHeaderKey = "headers";
 
         #endregion
- 
+
     }
 }

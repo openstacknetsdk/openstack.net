@@ -1031,6 +1031,7 @@ namespace net.openstack.Core.Providers
         /// <param name="marker">When specified, only objects with names greater than <paramref name="marker"/> are returned. If the value is <see langword="null"/>, the list starts at the beginning.</param>
         /// <param name="markerEnd">When specified, only objects with names less than <paramref name="markerEnd"/> are returned. If the value is <see langword="null"/>, the list proceeds to the end, or until the <paramref name="limit"/> is reached.</param>
         /// <param name="prefix">Prefix of object names to include</param>
+        /// <param name="delimiter">A character that define the end of a file name. If the value is '\0', no delimiter are specified.</param>
         /// <param name="region">The region in which to execute this action. If not specified, the user's default region will be used.</param>
         /// <param name="useInternalUrl"><see langword="true"/> to use the endpoint's <see cref="Endpoint.InternalURL"/>; otherwise <see langword="false"/> to use the endpoint's <see cref="Endpoint.PublicURL"/>.</param>
         /// <param name="identity">The cloud identity to use for this request. If not specified, the default identity for the current provider instance will be used.</param>
@@ -1062,7 +1063,7 @@ namespace net.openstack.Core.Providers
         /// <code source="..\Samples\FSharpCodeSamples\ObjectStorageProviderExamples.fs" region="ListObjectsInContainer" language="fs"/>
         /// </example>
         /// <seealso href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/GET_showContainerDetails_v1__account___container__storage_container_services.html">Show container details and list objects (OpenStack Object Storage API v1 Reference)</seealso>
-        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
+        IEnumerable<ContainerObject> ListObjects(string container, int? limit = null, string marker = null, string markerEnd = null, string prefix = null, char delimiter = '\0', string region = null, bool useInternalUrl = false, CloudIdentity identity = null);
 
         /// <summary>
         /// Creates an object using data from a file. If the destination file already exists, the contents are overwritten.
