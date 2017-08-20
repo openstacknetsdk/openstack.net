@@ -170,7 +170,12 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Flurl\PreparedRequest.cs" />
     <Compile Include="Identifier.cs" />
-    <Compile Include="Images\v2\ImageStatus.cs" />
+    <Compile Include="Images\v2\ImageApiBuilder.cs" />
+    <Compile Include="Images\v2\ImageOptions.cs" />
+    <Compile Include="Images\v2\ImageService.cs" />
+    <Compile Include="Images\ImageStatus.cs" />
+    <Compile Include="Images\v2\ImageServiceExtension.cs" />
+    <Compile Include="Images\v2\Serialization\ImageOptionsCollection.cs" />
     <Compile Include="Images\v2\Serialization\ImageStatus.cs" />
     <Compile Include="Networking\IPVersion.cs" />
     <Compile Include="Networking\NamespaceDoc.cs" />
