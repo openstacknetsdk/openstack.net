@@ -20,6 +20,11 @@ IF NOT "%1"=="" (
 
 :: Load the environment of the most recent version of Visual Studio installed
 if not defined VisualStudioVersion (
+    if defined VS150COMNTOOLS (
+        call "%VS150COMNTOOLS%\VsDevCmd.bat"
+        goto :build
+    )
+
     if defined VS140COMNTOOLS (
         call "%VS140COMNTOOLS%\VsDevCmd.bat"
         goto :build
