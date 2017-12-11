@@ -1,6 +1,4 @@
-# OpenStack.NET - Unsupported
-
-**This project is in-between maintainers.** Interested? Contact sdk-support@rackspace.com.
+# OpenStack.NET
 
 [![MyGet Build Status](https://www.myget.org/BuildSource/Badge/openstacknetsdk?identifier=32094041-4be1-4ba5-9691-beb27c4b8f02)](https://www.myget.org/)
 [![Join the chat at https://gitter.im/openstacknetsdk/openstack.net](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openstacknetsdk/openstack.net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
