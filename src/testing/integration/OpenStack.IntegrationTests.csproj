@@ -91,9 +91,9 @@
     <Compile Include="XunitTraceListener.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\corelib\OpenStack.csproj">
-      <Project>{7DBA11EB-DBA7-4D3A-8D42-B5312E74B9C0}</Project>
-      <Name>OpenStack</Name>
+    <ProjectReference Include="..\..\corelib\OpenStack.old.csproj">
+      <Project>{1A4FB67F-8642-4402-B931-118955AE7538}</Project>
+      <Name>OpenStack.old</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

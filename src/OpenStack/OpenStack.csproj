@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flurl.Http.Signed" Version="1.1.2" />
+    <PackageReference Include="Flurl.Signed" Version="2.3.0" />
+    <PackageReference Include="ILMerge" Version="2.14.1208" />
+    <PackageReference Include="Marvin.JsonPatch" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="SimpleRESTServices" Version="20.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+
+</Project>
