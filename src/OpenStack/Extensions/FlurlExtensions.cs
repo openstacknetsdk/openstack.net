@@ -41,7 +41,7 @@ namespace Flurl.Extensions
         /// <param name="url">The URL.</param>
         public static Url RemoveNullOrEmptyQueryParams(this Url url)
         {
-            foreach (QueryParameter queryParam in url.QueryParams.ToList())
+            foreach (KeyValuePair<string, object> queryParam in url.QueryParams.ToList())
             {
                 if (queryParam.Value == null || queryParam.Value.ToString() == string.Empty)
                     url.QueryParams.Remove(queryParam);

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http.Signed" Version="1.1.2" />
-    <PackageReference Include="Flurl.Signed" Version="2.3.0" />
+    <PackageReference Include="Flurl.Http.Signed" Version="0.7.0" />
+    <PackageReference Include="Flurl.Signed" Version="1.0.10" />
     <PackageReference Include="ILMerge" Version="2.14.1208" />
     <PackageReference Include="Marvin.JsonPatch" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
 
