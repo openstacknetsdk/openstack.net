@@ -2,7 +2,7 @@
 
 namespace System.Collections.Generic
 {
-    internal static class EnumerableExtensions
+    public static class EnumerableExtensions
     {
         /// <summary>
         /// Creates a new list wrapping the specified items.

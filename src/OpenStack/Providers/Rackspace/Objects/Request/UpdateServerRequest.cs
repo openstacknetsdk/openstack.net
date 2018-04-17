@@ -12,7 +12,7 @@
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/ServerUpdate.html">Update Server (OpenStack Compute API v2 and Extensions Reference)</seealso>
     /// <threadsafety static="true" instance="false"/>
     [JsonObject(MemberSerialization.OptIn)]
-    internal class UpdateServerRequest
+    public class UpdateServerRequest
     {
         /// <summary>
         /// Gets additional details about the updated server.

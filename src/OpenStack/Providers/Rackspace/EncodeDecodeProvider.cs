@@ -9,7 +9,7 @@
     /// and decodes text with <see cref="UriUtility.UriDecode(string)"/>.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    internal class EncodeDecodeProvider : IEncodeDecodeProvider
+    public class EncodeDecodeProvider : IEncodeDecodeProvider
     {
         /// <summary>
         /// A default instance of <see cref="EncodeDecodeProvider"/>.
