@@ -1,0 +1,1265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A4FB67F-8642-4402-B931-118955AE7538}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenStack</RootNamespace>
+    <AssemblyName>openstacknet</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseIntermediateOutputPath>obj\v4.0\</BaseIntermediateOutputPath>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\v4.0\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\v4.0\Debug\openstacknet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>612,618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\v4.0\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\v4.0\Release\openstacknet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfiguration)' == 'Final'">..\..\build\keys\OpenStackNetV1.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(KeyConfiguration)' != 'Final'">..\..\build\keys\OpenStackNetV1.dev.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authentication\AuthenticatedHttpClientFactory.cs" />
+    <Compile Include="Authentication\AuthenticatedMessageHandler.cs" />
+    <Compile Include="Authentication\IAuthenticationProvider.cs" />
+    <Compile Include="Authentication\NamespaceDoc.cs" />
+    <Compile Include="Authentication\ServiceType.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\Serialization\VolumeStatus.cs" />
+    <Compile Include="BlockStorage\v2\SnapshotStatus.cs" />
+    <Compile Include="BlockStorage\v2\VolumeStatus.cs" />
+    <Compile Include="Compute\ComputeOperationFailedException.cs" />
+    <Compile Include="Compute\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Actions\AssociateFloatingIPRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RescueServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Actions\RebootType.cs" />
+    <Compile Include="Compute\v2_1\Actions\SnapshotServerRequest.cs" />
+    <Compile Include="Compute\v2_1\AddressType.cs" />
+    <Compile Include="Compute\v2_1\Flavor.cs" />
+    <Compile Include="Compute\v2_1\FlavorReference.cs" />
+    <Compile Include="Compute\v2_1\FlavorListOptions.cs" />
+    <Compile Include="Compute\v2_1\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Operator\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\EvacuateServerRequest.cs" />
+    <Compile Include="Compute\v2_1\Operator\NamespaceDoc.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServerExtensions.cs" />
+    <Compile Include="Compute\v2_1\Operator\ServiceQuotas.cs" />
+    <Compile Include="Compute\v2_1\ServerMetadata.cs" />
+    <Compile Include="Compute\v2_1\ServerMetadataExtensions.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadataExtensions.cs" />
+    <Compile Include="Compute\v2_1\ImageExtensions.cs" />
+    <Compile Include="Compute\v2_1\Image.cs" />
+    <Compile Include="Compute\v2_1\ImageListOptions.cs" />
+    <Compile Include="Compute\v2_1\ImageMetadata.cs" />
+    <Compile Include="Compute\v2_1\ImageSummary.cs" />
+    <Compile Include="Compute\v2_1\ImageType.cs" />
+    <Compile Include="Compute\v2_1\IPProtocol.cs" />
+    <Compile Include="Compute\v2_1\KeyPair.cs" />
+    <Compile Include="Compute\v2_1\KeyPairRequest.cs" />
+    <Compile Include="Compute\v2_1\KeyPairResponse.cs" />
+    <Compile Include="Compute\v2_1\ServerNetworkDefinition.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroup.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupDefinition.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupRule.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupRuleDefinition.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ComputeApi.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerCreateDefinitionConverter.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerGroupCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\KeyPairCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\KeyPairConverter.cs" />
+    <Compile Include="Compute\v2_1\Serialization\SecurityGroupCollection.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupExtensions.cs" />
+    <Compile Include="Compute\v2_1\KeyPairExtensions.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeSnapshotCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\VolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\ServerSummary.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotExtensions.cs" />
+    <Compile Include="Compute\v2_1\VolumeExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerGroupExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerGroup.cs" />
+    <Compile Include="Compute\v2_1\ServerGroupDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServiceLimits.cs" />
+    <Compile Include="Compute\v2_1\SchedulerHints.cs" />
+    <Compile Include="Compute\v2_1\Serialization\AddressType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\DiskConfiguration.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerActionCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\RebootType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerEventStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerStatus.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerVolumeCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerAddressCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ImageCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\FlavorCollection.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerBlockDeviceType.cs" />
+    <Compile Include="Compute\v2_1\ServerAction.cs" />
+    <Compile Include="Compute\v2_1\ServerActionExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerBlockDeviceMapping.cs" />
+    <Compile Include="Compute\v2_1\ServerCreateDefinition.cs" />
+    <Compile Include="Compute\v2_1\DiskConfiguration.cs" />
+    <Compile Include="Compute\v2_1\FlavorSummary.cs" />
+    <Compile Include="Compute\v2_1\ImageReference.cs" />
+    <Compile Include="Compute\v2_1\KeyPairSummary.cs" />
+    <Compile Include="Compute\v2_1\KeyPairDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerListOptions.cs" />
+    <Compile Include="Compute\v2_1\SecurityGroupReference.cs" />
+    <Compile Include="Compute\v2_1\ServerAddress.cs" />
+    <Compile Include="Compute\v2_1\FlavorExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerActionSummary.cs" />
+    <Compile Include="Compute\v2_1\ServerEventStatus.cs" />
+    <Compile Include="Compute\v2_1\ServerExtensions.cs" />
+    <Compile Include="Compute\v2_1\ServerReference.cs" />
+    <Compile Include="Compute\v2_1\ServerStatus.cs" />
+    <Compile Include="Compute\v2_1\ServerUpdateDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\ServerVolume.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeExtensions.cs" />
+    <Compile Include="Compute\v2_1\VolumeDefinition.cs" />
+    <Compile Include="Compute\v2_1\Volume.cs" />
+    <Compile Include="Compute\v2_1\ServerBlockDeviceType.cs" />
+    <Compile Include="Compute\v2_1\ServerVolumeReference.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshot.cs" />
+    <Compile Include="Compute\v2_1\VolumeSnapshotDefinition.cs" />
+    <Compile Include="Compute\v2_1\ComputeServiceExtensions.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsole.cs" />
+    <Compile Include="Compute\v2_1\RemoteConsoleType.cs" />
+    <Compile Include="Compute\v2_1\ComputeService.cs" />
+    <Compile Include="Compute\v2_1\Serialization\ServerCollection.cs" />
+    <Compile Include="Compute\v2_1\Server.cs" />
+    <Compile Include="Exceptions\ResourceErrorException.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Flurl\PreparedRequest.cs" />
+    <Compile Include="Identifier.cs" />
+    <Compile Include="Images\v2\ImageStatus.cs" />
+    <Compile Include="Images\v2\Serialization\ImageStatus.cs" />
+    <Compile Include="Networking\IPVersion.cs" />
+    <Compile Include="Networking\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\IPProtocol.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroup.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupRule.cs" />
+    <Compile Include="Networking\v2\AllowedAddress.cs" />
+    <Compile Include="Networking\v2\AllocationPool.cs" />
+    <Compile Include="Networking\v2\Layer3\SecurityGroupRuleListOptions.cs" />
+    <Compile Include="Networking\v2\PortListOptions.cs" />
+    <Compile Include="Networking\v2\HostRoute.cs" />
+    <Compile Include="Networking\v2\IPAddressAssociation.cs" />
+    <Compile Include="Networking\v2\Layer3\ExternalGateway.cs" />
+    <Compile Include="Networking\v2\Layer3\ExternalGatewayDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIP.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterExtensions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPExtensions.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPCreateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPListOptions.cs" />
+    <Compile Include="Networking\v2\Layer3\FloatingIPStatus.cs" />
+    <Compile Include="Networking\v2\Layer3\NetworkingService_Layer3_Extensions.cs" />
+    <Compile Include="Networking\v2\Layer3\Router.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterCreateDefinition.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterStatus.cs" />
+    <Compile Include="Networking\v2\Layer3\RouterUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\NetworkDefinition.cs" />
+    <Compile Include="Networking\v2\NetworkingApiBuilder.cs" />
+    <Compile Include="Networking\v2\NetworkingService.cs" />
+    <Compile Include="Networking\v2\NetworkingServiceExtensions.cs" />
+    <Compile Include="Networking\v2\Network.cs" />
+    <Compile Include="Networking\v2\Operator\NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\Operator\NetworkDefinition.cs" />
+    <Compile Include="Networking\v2\Serialization\IPProtocol.cs" />
+    <Compile Include="Networking\v2\Serialization\RouterCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\FloatingIPCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\NetworkResourceStatus.cs" />
+    <Compile Include="Networking\v2\PortUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\PortCreateDefinition.cs" />
+    <Compile Include="Networking\v2\Port.cs" />
+    <Compile Include="Networking\v2\PortStatus.cs" />
+    <Compile Include="Networking\v2\Serialization\DHCPOptionsConverter.cs" />
+    <Compile Include="Networking\v2\Serialization\NetworkCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\NetworkDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\PortCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\PortDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SecurityGroupRuleCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SubnetCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\SubnetDefinitionCollection.cs" />
+    <Compile Include="Networking\v2\Serialization\TrafficDirection.cs" />
+    <Compile Include="Networking\v2\Subnet.cs" />
+    <Compile Include="Networking\v2\SubnetCreateDefinition.cs" />
+    <Compile Include="Networking\v2\SubnetUpdateDefinition.cs" />
+    <Compile Include="Networking\v2\TrafficDirection.cs" />
+    <Compile Include="OpenStackNet.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\Flavor.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\FlavorCollection.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\NamespaceDoc.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\Provider.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\Service.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceCache.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceCacheRule.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceCollection.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkService.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\IContentDeliveryNetworkService.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceDefinition.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceDomain.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceError.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceOperationFailedException.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceOrigin.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceOriginRule.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceProtocol.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceRestriction.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceRestrictionRule.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ServiceStatus.cs" />
+    <Compile Include="ContentDeliveryNetworks\v1\ContentDeliveryNetworkServiceExtensions.cs" />
+    <Compile Include="Core\LegacyAuthenticationProviderHelper.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\HttpHeadersExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="Networking\v2\NetworkStatus.cs" />
+    <Compile Include="PageExtensions.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="Core\AsyncCompletionOption.cs" />
+    <Compile Include="Core\Caching\ICache`1.cs" />
+    <Compile Include="Core\Caching\NamespaceDoc.cs" />
+    <Compile Include="Core\Collections\BasicReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Core\Collections\NamespaceDoc.cs" />
+    <Compile Include="Core\Collections\ReadOnlyCollectionPage`1.cs" />
+    <Compile Include="Core\BackoffPolicy.cs" />
+    <Compile Include="Core\CoreTaskExtensions.cs" />
+    <Compile Include="Core\Domain\AuthenticationRequirement.cs" />
+    <Compile Include="Core\Domain\AuthenticationType.cs" />
+    <Compile Include="Core\Domain\CloudIdentityWithProject.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressNoneIsNullSimpleConverter.cs" />
+    <Compile Include="Core\Domain\Converters\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\Converters\PhysicalAddressSimpleConverter.cs" />
+    <Compile Include="Core\Domain\Converters\SimpleStringJsonConverter`1.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressSimpleConverter.cs" />
+    <Compile Include="Core\Domain\DiskConfiguration.cs" />
+    <Compile Include="Core\Domain\EndpointTemplate.cs" />
+    <Compile Include="Core\Domain\EndpointTemplateId.cs" />
+    <Compile Include="Core\Domain\ExtendedEndpoint.cs" />
+    <Compile Include="Core\Domain\ExtensibleJsonObject.cs" />
+    <Compile Include="Core\Domain\FlavorId.cs" />
+    <Compile Include="Core\Domain\ImageId.cs" />
+    <Compile Include="Core\Domain\ImageState.cs" />
+    <Compile Include="Core\Domain\IPAddressList.cs" />
+    <Compile Include="Core\Domain\NetworkId.cs" />
+    <Compile Include="Core\Domain\PowerState.cs" />
+    <Compile Include="Core\Domain\ProjectId.cs" />
+    <Compile Include="Core\Domain\Queues\Claim.cs" />
+    <Compile Include="Core\Domain\Queues\ClaimId.cs" />
+    <Compile Include="Core\Domain\Queues\CloudQueue.cs" />
+    <Compile Include="Core\Domain\Queues\Message.cs" />
+    <Compile Include="Core\Domain\Queues\MessageId.cs" />
+    <Compile Include="Core\Domain\Queues\MessagesEnqueued.cs" />
+    <Compile Include="Core\Domain\Queues\MessageStatistics.cs" />
+    <Compile Include="Core\Domain\Queues\Message`1.cs" />
+    <Compile Include="Core\Domain\Queues\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\Queues\QueuedMessage.cs" />
+    <Compile Include="Core\Domain\Queues\QueuedMessageList.cs" />
+    <Compile Include="Core\Domain\Queues\QueuedMessageListId.cs" />
+    <Compile Include="Core\Domain\Queues\QueueMessagesStatistics.cs" />
+    <Compile Include="Core\Domain\Queues\QueueName.cs" />
+    <Compile Include="Core\Domain\Queues\QueueStatistics.cs" />
+    <Compile Include="Core\Domain\ResourceHints.cs" />
+    <Compile Include="Core\Domain\ResourceObject.cs" />
+    <Compile Include="Core\Domain\ServerId.cs" />
+    <Compile Include="Core\Domain\SnapshotState.cs" />
+    <Compile Include="Core\Domain\Converters\IPAddressDetailsConverter.cs" />
+    <Compile Include="Core\Domain\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\ProviderStateBase`1.cs" />
+    <Compile Include="Core\Domain\ServerBase.cs" />
+    <Compile Include="Core\Domain\ServerImage.cs" />
+    <Compile Include="Core\Domain\SimpleServer.cs" />
+    <Compile Include="Core\Domain\SimpleServerImage.cs" />
+    <Compile Include="Core\Domain\Snapshot.cs" />
+    <Compile Include="Core\Domain\TaskState.cs" />
+    <Compile Include="Core\Domain\VirtualInterface.cs" />
+    <Compile Include="Core\Domain\VirtualInterfaceAddress.cs" />
+    <Compile Include="Core\Domain\VirtualMachineState.cs" />
+    <Compile Include="Core\Domain\Volume.cs" />
+    <Compile Include="Core\Domain\VolumeState.cs" />
+    <Compile Include="Core\Domain\VolumeType.cs" />
+    <Compile Include="Core\Domain\CloudIdentity.cs" />
+    <Compile Include="Core\Domain\CloudNetwork.cs" />
+    <Compile Include="Core\Domain\Container.cs" />
+    <Compile Include="Core\Domain\ContainerCDN.cs" />
+    <Compile Include="Core\Domain\ContainerObject.cs" />
+    <Compile Include="Core\Domain\Flavor.cs" />
+    <Compile Include="Core\Domain\FlavorDetails.cs" />
+    <Compile Include="Core\Exceptions\ContainerNotEmptyException.cs" />
+    <Compile Include="Core\Exceptions\ImageEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\Response\NamespaceDoc.cs" />
+    <Compile Include="Core\Exceptions\SnapshotEnteredErrorStateException.cs" />
+    <Compile Include="Core\Exceptions\VolumeEnteredErrorStateException.cs" />
+    <Compile Include="Core\ExtensibleEnum`1.cs" />
+    <Compile Include="Core\IBackoffPolicy.cs" />
+    <Compile Include="Core\InternalTaskExtensions.cs" />
+    <Compile Include="Core\NamespaceDoc.cs" />
+    <Compile Include="Core\Domain\HomeDocument.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskCompletionSourceExtensions.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskExtrasExtensions.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_Common.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_ContinueWhenAllAny.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_Delayed.cs" />
+    <Compile Include="Core\ParallelExtensionsExtras\TaskFactoryExtensions_From.cs" />
+    <Compile Include="Core\Providers\IIdentityService.cs" />
+    <Compile Include="Core\Providers\IQueueingService.cs" />
+    <Compile Include="Core\Providers\NamespaceDoc.cs" />
+    <Compile Include="Core\Providers\OpenStackIdentityProvider.cs" />
+    <Compile Include="Core\ReadOnlyCollectionPageExtensions.cs" />
+    <Compile Include="Core\ResourceIdentifier`1.cs" />
+    <Compile Include="Core\ResponseExtensions.cs" />
+    <Compile Include="Core\RestWebHeaderCollection.cs" />
+    <Compile Include="Core\Synchronous\AutoScaleServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\DatabaseServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\DnsServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\ClaimExtensions.cs" />
+    <Compile Include="Core\Synchronous\LoadBalancerServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\MonitoringServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\NamespaceDoc.cs" />
+    <Compile Include="Core\Synchronous\QueueingServiceExtensions.cs" />
+    <Compile Include="Core\Synchronous\ReadOnlyCollectionPageSynchronousExtensions.cs" />
+    <Compile Include="Core\UriPart.cs" />
+    <Compile Include="Core\UriUtility.cs" />
+    <Compile Include="Core\Validators\NamespaceDoc.cs" />
+    <Compile Include="Extensions\FlurlExtensions.cs" />
+    <Compile Include="Exceptions\UserAuthenticationException.cs" />
+    <Compile Include="Exceptions\IdentityRequiredException.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="PageOptions.cs" />
+    <Compile Include="Providers\Hp\HpIdentityProvider.cs" />
+    <Compile Include="Providers\Hp\NamespaceDoc.cs" />
+    <Compile Include="Providers\Hp\PredefinedHpIdentityEndpoints.cs" />
+    <Compile Include="Providers\Rackspace\CloudAutoScaleProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudDatabasesProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudDnsProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudLoadBalancerProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudMonitoringProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudQueuesProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\BulkDeletionException.cs" />
+    <Compile Include="Core\HttpStatusCodeParser.cs" />
+    <Compile Include="Core\IStatusParser.cs" />
+    <Compile Include="Core\Providers\IBlockStorageProvider.cs" />
+    <Compile Include="Core\Domain\Status.cs" />
+    <Compile Include="Core\Validators\IBlockStorageValidator.cs" />
+    <Compile Include="Core\Domain\ImageType.cs" />
+    <Compile Include="Core\Domain\Link.cs" />
+    <Compile Include="Core\Domain\Mapping\IJsonObjectMapper`1.cs" />
+    <Compile Include="Core\Domain\Mapping\IObjectMapper`2.cs" />
+    <Compile Include="Core\Domain\NewUser.cs" />
+    <Compile Include="Core\Domain\ObjectStore.cs" />
+    <Compile Include="Core\Domain\Personality.cs" />
+    <Compile Include="Core\Domain\RebootType.cs" />
+    <Compile Include="Core\Domain\ServerAddresses.cs" />
+    <Compile Include="Core\Domain\ServerState.cs" />
+    <Compile Include="Core\Domain\ServerVolume.cs" />
+    <Compile Include="Core\Domain\Tenant.cs" />
+    <Compile Include="Core\Domain\UserCredential.cs" />
+    <Compile Include="Core\Exceptions\CidrFormatException.cs" />
+    <Compile Include="Core\Exceptions\CDNNotEnabledException.cs" />
+    <Compile Include="Core\Exceptions\ContainerNameException.cs" />
+    <Compile Include="Core\Exceptions\ObjectNameException.cs" />
+    <Compile Include="Core\Exceptions\Response\BadServiceRequestException.cs" />
+    <Compile Include="Core\Exceptions\Response\ItemNotFoundException.cs" />
+    <Compile Include="Core\Exceptions\Response\MethodNotImplementedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceConflictException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceFaultException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceLimitReachedException.cs" />
+    <Compile Include="Core\Exceptions\Response\ServiceUnavailableException.cs" />
+    <Compile Include="Core\Exceptions\Response\UserNotAuthorizedException.cs" />
+    <Compile Include="Core\Providers\INetworksProvider.cs" />
+    <Compile Include="Core\Validators\INetworksValidator.cs" />
+    <Compile Include="Core\Validators\IHttpResponseCodeValidator.cs" />
+    <Compile Include="Core\WebRequestExtensions.cs" />
+    <Compile Include="Providers\Rackspace\CloudBlockStorageProvider.cs" />
+    <Compile Include="Core\Exceptions\TTLLengthException.cs" />
+    <Compile Include="Core\Providers\IObjectStorageProvider.cs" />
+    <Compile Include="Core\IObjectStorageMetadataProcessor.cs" />
+    <Compile Include="Core\IEncodeDecodeProvider.cs" />
+    <Compile Include="Core\Exceptions\NoDefaultRegionSetException.cs" />
+    <Compile Include="Core\Exceptions\ServerEnteredErrorStateException.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\ExtendedJsonRestServices.cs" />
+    <Compile Include="Providers\Rackspace\IAutoScaleService.cs" />
+    <Compile Include="Providers\Rackspace\IDatabaseService.cs" />
+    <Compile Include="Providers\Rackspace\IDnsService.cs" />
+    <Compile Include="Providers\Rackspace\ILoadBalancerService.cs" />
+    <Compile Include="Providers\Rackspace\IMonitoringService.cs" />
+    <Compile Include="Providers\Rackspace\IRackspaceProvider.cs" />
+    <Compile Include="Providers\Rackspace\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\ArchiveFormat.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ActiveServer.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\GenericLaunchConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\GroupConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\GroupState.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchConfiguration`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\LaunchType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\LoadBalancerArgument.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\NewWebhookConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\Policy.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\PolicyConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\PolicyId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\PolicyType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ScalingGroup.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ScalingGroupConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ScalingGroupConfiguration`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ScalingGroupId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ServerArgument.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ServerLaunchArguments.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ServerLaunchConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\ServerNetworkArgument.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\UpdateWebhookConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\Webhook.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\WebhookConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AutoScale\WebhookId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\BulkDeletionFailedObject.cs" />
+    <Compile Include="Providers\Rackspace\Objects\BulkDeletionResults.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\Backup.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\BackupConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\BackupId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\BackupStatus.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\Database.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseFlavor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseInstance.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseInstanceConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseInstanceId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseInstanceStatus.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseName.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseUser.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\DatabaseVolumeConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\FlavorId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\FlavorRef.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\RestorePoint.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\RootUser.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\UpdateUserConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\UserConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Databases\UserName.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Domain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsChange.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainChange.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainChanges.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainRecordConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainRecordUpdateConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomains.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsDomainUpdateConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsJob.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsJobStatus.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsJob`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsNameserver.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRateLimit.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRateLimitPattern.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRateLimits.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRateLimitUnit.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRecord.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRecordsList.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsRecordType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsServiceLimits.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsSubdomain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsSubdomainConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsSubdomainsList.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DnsUpdateConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\DomainId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\ExportedDomain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\JobId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\LimitType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\RecordId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\SerializedDomain.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Dns\SerializedDomainFormat.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\AccessType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\ConnectionHealthMonitor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\ConnectionThrottles.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\CustomHealthMonitor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\HealthMonitor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\HealthMonitorType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancer.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerCluster.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerConfiguration`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerEnabledFlag.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerMetadataItem.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerSslConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerStatistics.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerStatus.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerTimestamp.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerUpdate.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerUsage.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerUsageId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerVirtualAddress.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancerVirtualAddressType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancingAlgorithm.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\LoadBalancingProtocol.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\MetadataId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NetworkItem.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NetworkItemId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Node.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeCondition.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeServiceEvent.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeServiceEventCategory.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeServiceEventId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeServiceEventSeverity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeServiceEventType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeStatus.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\NodeUpdate.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\AddLoadBalancerMetadataRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\AddNodesRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\CreateAccessListRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\CreateLoadBalancerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\SetLoadBalancerConnectionLoggingRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\SetLoadBalancerContentCachingRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\SetLoadBalancerErrorPageRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\UpdateLoadBalancerMetadataItemRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\UpdateLoadBalancerNodeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Request\UpdateLoadBalancerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetAccessListResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerConnectionLoggingResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerContentCachingResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerErrorPageResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerMetadataItemResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerNodeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\GetLoadBalancerSslConfigurationResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListAllowedDomainsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancerMetadataResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancerNodesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancersResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancerThrottlesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancerUsageResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancingAlgorithmsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListLoadBalancingProtocolsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListNodeServiceEventsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\ListVirtualAddressesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\Response\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\SessionPersistence.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\SessionPersistenceType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\VirtualAddressId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\LoadBalancers\WebServerHealthMonitor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\BulkDeletionResultMapper.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Mapping\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AccountConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Agent.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentConnection.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentConnectionId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentToken.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentTokenConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AgentTokenId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Alarm.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmChangelog.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmChangelogId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmData.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmExample.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmExampleField.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmExampleId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmNotificationHistoryItem.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmNotificationHistoryItemId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmState.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AlarmStateHistory.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Audit.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\AuditId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\BoundAlarmExample.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Check.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckData.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckMetricType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTarget.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTargetId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTypeId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CheckTypeType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ConnectionCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CpuCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\CpuInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPoint.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPointGranularity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DataPointStatistic.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DateTimeOffsetExtensions.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DiskCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DiskInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\DnsCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\EmailNotificationDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Entity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\EntityOverview.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\FilesystemCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\FilesystemInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\FtpBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\GenericCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\GenericNotificationDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\HostInformationType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\HostInformation`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\HttpCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ImapBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\LoadAverageCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\LoginInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MemoryCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MemoryInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Metric.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MetricName.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MonitoringAccount.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MonitoringAccountId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MonitoringLimits.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MonitoringZone.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MonitoringZoneId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MssqlBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\MysqlBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NetworkCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NetworkInterfaceInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NewAlarmConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NewCheckConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NewEntityConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NewNotificationConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NewNotificationPlanConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Notification.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationAttempt.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationData.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationPlan.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationPlanConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationPlanId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationResult.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationTypeField.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\NotificationTypeId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\PagerDutyNotificationDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\PingCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\PluginCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\Pop3CheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\PostgresqlBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ProcessInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\ReadOnlyCollectionPage`2.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\SecureConnectionCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\SmtpCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\SshCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\SystemInformation.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TargetResolverType.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TcpCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TelnetBannerCheckDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TestAlarmConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TraceRoute.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TraceRouteConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TraceRouteHop.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\TransactionId.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\UpdateAlarmConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\UpdateCheckConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\UpdateEntityConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\UpdateNotificationConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\UpdateNotificationPlanConfiguration.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\WebhookNotificationDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Monitoring\WebhookToken.cs" />
+    <Compile Include="Providers\Rackspace\Objects\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\Request\ClaimMessagesRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\Request\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\Response\ListCloudQueueMessagesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\Response\ListCloudQueuesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Queues\Response\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddServiceCatalogEndpointRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateVirtualInterfaceRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\PasswordCredential.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\Personality.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\BulkDeleteResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveError.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ExtractArchiveResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetEndpointResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListEndpointsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\MetadataItemResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVirtualInterfacesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RoleResponse.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudFilesValidator.cs" />
+    <Compile Include="Core\Validators\IObjectStorageValidator.cs" />
+    <Compile Include="Providers\Rackspace\EncodeDecodeProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidVolumeSizeException.cs" />
+    <Compile Include="Providers\Rackspace\CloudNetworksProvider.cs" />
+    <Compile Include="Providers\Rackspace\IExtendedCloudIdentityProvider.cs" />
+    <Compile Include="Providers\Rackspace\Exceptions\InvalidETagException.cs" />
+    <Compile Include="Providers\Rackspace\CloudFilesProvider.cs" />
+    <Compile Include="Providers\Rackspace\CloudServersProvider.cs" />
+    <Compile Include="Core\Exceptions\InvalidCloudIdentityException.cs" />
+    <Compile Include="Providers\Rackspace\CloudFilesMetadataProcessor.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AttachServerVolumeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworkRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudNetworksDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\CloudNetworkResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListCloudNetworksResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeListResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddRoleRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AddUserRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ConfirmServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageSnapshotRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateCloudBlockStorageVolumeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerImageRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ChangeServerAdminPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\SetPasswordRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataItemRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateMetadataRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserCredentialRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateUserRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\FlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetCloudBlockStorageVolumeTypeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\GetImageDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\IProviderFactory`2.cs" />
+    <Compile Include="Core\Domain\NewServer.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListAddressesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListFlavorsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListImagesDetailsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListImagesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListServersResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\AuthDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\CreateServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\CreateServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListSnapshotResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ListVolumeTypeResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\NewUserResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\PasswordCredentialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\TenantsResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserCredentialResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UsersResponse.cs" />
+    <Compile Include="Providers\Rackspace\RackspaceImpersonationIdentity.cs" />
+    <Compile Include="Core\Domain\Metadata.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Credentials.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\MetaDataResponse.cs" />
+    <Compile Include="Core\Domain\Server.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\ServerDetailsResponse.cs" />
+    <Compile Include="Core\Domain\User.cs" />
+    <Compile Include="Core\Providers\IComputeProvider.cs" />
+    <Compile Include="Core\Domain\IdentityToken.cs" />
+    <Compile Include="Providers\Rackspace\Objects\RackspaceCloudIdentity.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\RescueServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RescueServerResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\RevertServerResizeRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UnrescueServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebootDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebootRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebuildDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerRebuildRequest.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\ServerResizeRequest.cs" />
+    <Compile Include="Core\Exceptions\Response\ResponseException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthenticationException.cs" />
+    <Compile Include="Core\Exceptions\UserAuthorizationException.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudBlockStorageValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\CloudNetworksValidator.cs" />
+    <Compile Include="Core\Caching\UserAccessCache.cs" />
+    <Compile Include="Core\Providers\IIdentityProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Domain\UserAccess.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\AuthRequest.cs" />
+    <Compile Include="Core\Domain\Role.cs" />
+    <Compile Include="Core\Domain\Endpoint.cs" />
+    <Compile Include="Core\Domain\ServiceCatalog.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\AuthenticationResponse.cs" />
+    <Compile Include="Providers\Rackspace\CloudIdentityProvider.cs" />
+    <Compile Include="Core\Domain\UserDetails.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\RolesResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Request\UpdateServerRequest.cs" />
+    <Compile Include="Providers\Rackspace\ProviderBase`1.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserResponse.cs" />
+    <Compile Include="Providers\Rackspace\Objects\Response\UserImpersonationResponse.cs" />
+    <Compile Include="Providers\Rackspace\Validators\HttpResponseCodeValidator.cs" />
+    <Compile Include="Providers\Rackspace\Validators\NamespaceDoc.cs" />
+    <Compile Include="Providers\Rackspace\WebRequestEventArgs.cs" />
+    <Compile Include="Providers\Rackspace\WebResponseEventArgs.cs" />
+    <Compile Include="Exceptions\RegionRequiredException.cs" />
+    <Compile Include="Serialization\DefaultJsonConverter.cs" />
+    <Compile Include="Serialization\IPageBuilder.cs" />
+    <Compile Include="Serialization\IPageLink.cs" />
+    <Compile Include="Serialization\IServiceResource.cs" />
+    <Compile Include="Serialization\ResourceStatus.cs" />
+    <Compile Include="Serialization\ServiceEndpoint.cs" />
+    <Compile Include="Serialization\StringEnumeration.cs" />
+    <Compile Include="Serialization\IdentifierConverter.cs" />
+    <Compile Include="Serialization\IHaveExtraData.cs" />
+    <Compile Include="Serialization\IQueryStringBuilder.cs" />
+    <Compile Include="Serialization\JsonConverterWithConstructorAttribute.cs" />
+    <Compile Include="Serialization\OpenStackContractResolver.cs" />
+    <Compile Include="Serialization\Page.cs" />
+    <Compile Include="Serialization\ResourceCollection.cs" />
+    <Compile Include="Serialization\PageLink.cs" />
+    <Compile Include="Serialization\StringEnumerationConverter.cs" />
+    <Compile Include="Serialization\TimeSpanInSecondsConverter.cs" />
+    <Compile Include="Serialization\TolerantEnumConverter.cs" />
+    <Compile Include="Serialization\RootWrapperConverter.cs" />
+    <Compile Include="Testing\HttpTest.cs" />
+    <Compile Include="Testing\NamespaceDoc.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\build\keys\OpenStackNetV1.dev.snk">
+      <Link>OpenStackNetV1.dev.snk</Link>
+    </None>
+    <None Include="..\..\build\keys\OpenStackNetV1.snk">
+      <Link>OpenStackNetV1.snk</Link>
+    </None>
+    <None Include="app.config" />
+    <None Include="corelib.nuspec" />
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\openstack_net_logo.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="..\..\.paket\paket.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="Flurl.Http">
+          <HintPath>..\..\packages\Flurl.Http.Signed\lib\net45\Flurl.Http.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == '.NETCore') Or ($(TargetFrameworkIdentifier) == 'Silverlight' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'WindowsPhone' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile259') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="Flurl.Http">
+          <HintPath>..\..\packages\Flurl.Http.Signed\lib\portable-net45+sl50+win+wpa81+wp80\Flurl.Http.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == '.NETCore') Or ($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')) Or ($(TargetFrameworkIdentifier) == 'Silverlight' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'WindowsPhone' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch') Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile259') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="Flurl">
+          <HintPath>..\..\packages\Flurl.Signed\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="System.Xml">
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == '.NETCore') Or ($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')) Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151')">
+      <ItemGroup>
+        <Reference Include="Marvin.JsonPatch">
+          <HintPath>..\..\packages\Marvin.JsonPatch.Signed\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile3') Or ($(TargetFrameworkProfile) == 'Profile18') Or ($(TargetFrameworkProfile) == 'Profile23') Or ($(TargetFrameworkProfile) == 'Profile41') Or ($(TargetFrameworkProfile) == 'Profile46')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile88') Or ($(TargetFrameworkProfile) == 'Profile96') Or ($(TargetFrameworkProfile) == 'Profile104')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp71+wpa81\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp71+wpa81\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp71+wpa81\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile36') Or ($(TargetFrameworkProfile) == 'Profile143') Or ($(TargetFrameworkProfile) == 'Profile154')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp8+wpa81\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp8+wpa81\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl4+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl5+win8+wp8+wpa81\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl5+win8+wp8+wpa81\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile102')">
+      <ItemGroup>
+        <Reference Include="System.IO">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8+wp8+wpa81\System.IO.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8+wp8+wpa81\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl\lib\portable-net40+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile3') Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile18') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile23') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile36') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile41') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile46') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile88') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile96') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile104') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile143') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile154') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net40+sl4+win8+wp71+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Microsoft.Threading.Tasks.Extensions">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net40+sl4+win8+wp71+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile259')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net45+win8+wp8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Microsoft.Threading.Tasks.Extensions">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net45+win8+wp8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Threading.Tasks">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Microsoft.Threading.Tasks.Extensions">
+          <HintPath>..\..\packages\Microsoft.Bcl.Async\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile3') Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile18') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile23') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile36') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile41') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile46') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile88') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile96') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile104') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile143') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile154') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile259') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="System.Net.Http.Extensions">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Net.Http.Primitives">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile44')">
+      <ItemGroup>
+        <Reference Include="System.Net.Http.Extensions">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net45+win8\System.Net.Http.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Net.Http.Primitives">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net45+win8\System.Net.Http.Primitives.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151')">
+      <ItemGroup>
+        <Reference Include="System.Net.Http.Extensions">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Net.Http.Primitives">
+          <HintPath>..\..\packages\Microsoft.Net.Http\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v3.0')">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\net20\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\net35\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\net40\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCore'">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == 'Silverlight' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'WindowsPhone' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1')) Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v1.0') Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile259')">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\Newtonsoft.Json\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="PCLStorage">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="PCLStorage.Abstractions">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile259')">
+      <ItemGroup>
+        <Reference Include="PCLStorage">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="PCLStorage.Abstractions">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkProfile) == 'Profile32'">
+      <ItemGroup>
+        <Reference Include="PCLStorage">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="PCLStorage.Abstractions">
+          <HintPath>..\..\packages\PCLStorage\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="SimpleRESTServices">
+          <HintPath>..\..\packages\SimpleRESTServices\lib\net35\SimpleRESTServices.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="SimpleRESTServices">
+          <HintPath>..\..\packages\SimpleRESTServices\lib\net40\SimpleRESTServices.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+</Project>

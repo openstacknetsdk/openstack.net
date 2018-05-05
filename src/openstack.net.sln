@@ -27,11 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.old", "corelib\Op
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.UnitTests.old", "testing\unit\OpenStack.UnitTests.old.csproj", "{AC3D4496-F18B-4907-9FEB-E87F9C6CB7E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.IntegrationTests", "testing\integration\OpenStack.IntegrationTests.csproj", "{0C731980-8780-4F9B-9D14-DED790FD649A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.IntegrationTests.old", "testing\integration\OpenStack.IntegrationTests.old.csproj", "{0C731980-8780-4F9B-9D14-DED790FD649A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenStack", "OpenStack\OpenStack.csproj", "{DD4A67AA-32F0-4FB4-A230-C37ED8CF57B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.UnitTests", "OpenStack.UnitTests\OpenStack.UnitTests.csproj", "{010E0D43-1B48-447E-8DBD-FDC1F1197AE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenStack.UnitTests", "OpenStack.UnitTests\OpenStack.UnitTests.csproj", "{010E0D43-1B48-447E-8DBD-FDC1F1197AE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenStack.IntegrationsTests", "OpenStack.IntegrationsTests\OpenStack.IntegrationsTests.csproj", "{8C7859AA-FBDA-443F-9501-08B476CBB320}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,14 @@ Global
 		{010E0D43-1B48-447E-8DBD-FDC1F1197AE3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{010E0D43-1B48-447E-8DBD-FDC1F1197AE3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{010E0D43-1B48-447E-8DBD-FDC1F1197AE3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8C7859AA-FBDA-443F-9501-08B476CBB320}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
