@@ -3,8 +3,9 @@
 
   <PropertyGroup>
     <Configuration>Debug</Configuration>
-    <Version>0.0.0-dev</Version>
+    <Version>1.7.8</Version>
     <PaketVersion>2.66.9</PaketVersion>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
     <PaketBootstrapper>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.bootstrapper.exe</PaketBootstrapper>
     <Paket>$(MSBuildThisFileDirectory.Replace('build\','.paket'))\paket.exe</Paket>
     <PackagesFolder>$(MSBuildThisFileDirectory.Replace('build\','packages'))</PackagesFolder>
@@ -92,7 +93,7 @@
     <Exec Command="$(MSBuild) $(MigrationSln) /nologo /clp:ErrorsOnly" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Build;Documentation">
+  <Target Name="Package" DependsOnTargets="Build">
     <MakeDir Directories="..\src\corelib\bin\v4.0\$(Configuration)\deploy" />
     <Exec Command="$(ILMerge) /t:library /v4 /out:deploy/openstacknet.dll openstacknet.dll SimpleRESTServices.dll"
           WorkingDirectory="..\src\corelib\bin\v4.0\$(Configuration)" />

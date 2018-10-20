@@ -69,7 +69,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListFlavorSummaries();
 
                 httpTest.ShouldHaveCalled("*/flavors");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
@@ -91,7 +91,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListFlavors();
 
                 httpTest.ShouldHaveCalled("*/flavors");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(flavorId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);

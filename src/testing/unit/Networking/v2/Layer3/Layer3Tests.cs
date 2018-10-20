@@ -76,7 +76,7 @@ namespace OpenStack.Networking.v2.Layer3
                 var results = _networking.ListRouters(new RouterListOptions { Status = RouterStatus.Active });
 
                 httpTest.ShouldHaveCalled("*/routers?status=ACTIVE");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(routerId, result.Id);
                 Assert.IsType<NetworkingApiBuilder>(((IServiceResource)result).Owner);
@@ -199,7 +199,7 @@ namespace OpenStack.Networking.v2.Layer3
                 var results = _networking.ListFloatingIPs(new FloatingIPListOptions {Status = FloatingIPStatus.Active});
 
                 httpTest.ShouldHaveCalled("*/floatingips?status=ACTIVE");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(floatingIPId, result.Id);
                 Assert.IsType<NetworkingApiBuilder>(((IServiceResource)result).Owner);
@@ -333,7 +333,7 @@ namespace OpenStack.Networking.v2.Layer3
                 var results = _networking.ListSecurityGroups();
 
                 httpTest.ShouldHaveCalled("*/security-groups");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 var resultRule = result.SecurityGroupRules.First();
                 Assert.Equal(securityGroupId, result.Id);
@@ -356,7 +356,7 @@ namespace OpenStack.Networking.v2.Layer3
                 var results = _networking.ListSecurityGroupRules();
 
                 httpTest.ShouldHaveCalled("*/security-group-rules");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(securityGroupRuleId, result.Id);
                 Assert.Equal(securityGroupId, result.SecurityGroupId);

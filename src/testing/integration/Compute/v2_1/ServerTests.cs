@@ -371,7 +371,7 @@ namespace OpenStack.Compute.v2_1
 
             Trace.WriteLine("Detaching the volume...");
             await volumeRef.DetachAsync();
-            Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
+            Assert.DoesNotContain(server.AttachedVolumes, v => v.Id == volumeId);
             _testData.BlockStorage.StorageProvider.WaitForVolumeAvailable(volumeId);
         }
 

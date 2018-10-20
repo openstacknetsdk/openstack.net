@@ -29,7 +29,7 @@ namespace OpenStack.Networking.v2
 
                 httpTest.ShouldHaveCalled("*/networks");
                 Assert.NotNull(networks);
-                Assert.Equal(1, networks.Count());
+                Assert.Single(networks);
                 Assert.Equal(networkId, networks.First().Id);
             }
         }

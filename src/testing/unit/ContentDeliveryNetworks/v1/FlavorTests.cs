@@ -21,7 +21,7 @@ namespace OpenStack.ContentDeliveryNetworks.v1
                 var flavors = cdnService.ListFlavors();
 
                 Assert.NotNull(flavors);
-                Assert.Equal(1, flavors.Count());
+                Assert.Single(flavors);
             }
         }
 

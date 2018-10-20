@@ -38,9 +38,9 @@ namespace OpenStack.ContentDeliveryNetworks.v1
 
             var result = OpenStackNet.Deserialize<ServiceCollection>(json);
             Assert.NotNull(result);
-            Assert.Equal(1, result.Count());
-            Assert.Equal(1, result.Items.Count());
-            Assert.Equal(1, result.Links.Count());
+            Assert.Single(result);
+            Assert.Single(result.Items);
+            Assert.Single(result.Links);
             Assert.True(result.HasNextPage);
         }
 

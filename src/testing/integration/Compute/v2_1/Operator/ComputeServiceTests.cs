@@ -20,7 +20,9 @@ namespace OpenStack.Compute.v2_1.Operator
             _compute = new ComputeService(authenticationProvider, "RegionOne");
         }
 
+#pragma warning disable xUnit1013 // Public method should be marked as test
         public void Dispose()
+#pragma warning restore xUnit1013 // Public method should be marked as test
         {
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();

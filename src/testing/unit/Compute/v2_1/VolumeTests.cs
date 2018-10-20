@@ -131,7 +131,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListVolumes();
 
                 httpTest.ShouldHaveCalled("*/os-volumes");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(volumeId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
@@ -172,7 +172,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListVolumeSnapshots();
 
                 httpTest.ShouldHaveCalled("*/os-snapshots");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(snapshotId, result.Id);
             }

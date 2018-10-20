@@ -60,7 +60,7 @@ namespace OpenStack.Serialization
         {
             var json = JArray.Parse("[{'id':'thing-id'}]").ToString();
             var things = OpenStackNet.Deserialize<List<Thing>>(json);
-            Assert.Equal(1, things.Count);
+            Assert.Single(things);
             Assert.Equal("thing-id", things[0].Id);
         }
 
@@ -70,7 +70,7 @@ namespace OpenStack.Serialization
             var json = JObject.Parse("{'things':[{'id':'thing-id'}]}").ToString();
             var things = OpenStackNet.Deserialize<ThingCollection>(json);
             Assert.NotNull(things);
-            Assert.Equal(1, things.Count);
+            Assert.Single(things);
             Assert.Equal("thing-id", things[0].Id);
         }
 

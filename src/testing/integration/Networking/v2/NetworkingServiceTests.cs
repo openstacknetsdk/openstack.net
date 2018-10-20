@@ -95,7 +95,7 @@ namespace OpenStack.Networking.v2
 
             Trace.WriteLine("Verifying list of networks...");
             Assert.NotNull(results);
-            Assert.All(networks, network => Assert.True(results.Any(x => x.Id == network.Id)));
+            Assert.All(networks, network => Assert.Contains(results, x => x.Id == network.Id));
         }
 
         [Fact]
@@ -196,7 +196,7 @@ namespace OpenStack.Networking.v2
 
             Trace.WriteLine("Verifying list of subnets...");
             Assert.NotNull(results);
-            Assert.All(subnets, subnet => Assert.True(results.Any(x => x.Id == subnet.Id)));
+            Assert.All(subnets, subnet => Assert.Contains(results, x => x.Id == subnet.Id));
         }
 
         [Fact]
@@ -299,7 +299,7 @@ namespace OpenStack.Networking.v2
 
             Trace.WriteLine("Verifying list of ports...");
             Assert.NotNull(results);
-            Assert.All(ports, port => Assert.True(results.Any(x => x.Id == port.Id)));
+            Assert.All(ports, port => Assert.Contains(results, x => x.Id == port.Id));
         }
 
         [Fact]

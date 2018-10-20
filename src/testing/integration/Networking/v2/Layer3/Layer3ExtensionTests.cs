@@ -99,7 +99,9 @@ namespace OpenStack.Networking.v2.Layer3
             var defaultRule = defaultGroup.SecurityGroupRules.First();
             Assert.NotNull(defaultRule.Id);
             Assert.NotNull(defaultRule.Direction);
+#pragma warning disable xUnit2002 // Do not use null check on value type
             Assert.NotNull(defaultRule.Ethertype);
+#pragma warning restore xUnit2002 // Do not use null check on value type
             Assert.NotNull(defaultRule.SecurityGroupId);
         }
     }
