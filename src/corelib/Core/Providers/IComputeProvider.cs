@@ -13,7 +13,7 @@ namespace net.openstack.Core.Providers
     /// <para>Represents a provider for the OpenStack Compute service.</para>
     /// </summary>
     /// <seealso href="http://docs.openstack.org/api/openstack-compute/2/content/">OpenStack Compute API v2 and Extensions Reference</seealso>
-    [Obsolete("This will be removed in v2.0. Use OpenStack.Compute.v2_1.ComputeService or Rackspace.CloudServers.v2.CloudServerService (from the Rackspace NuGet package).")]
+    //[Obsolete("This will be removed in v2.0. Use OpenStack.Compute.v2_1.ComputeService or Rackspace.CloudServers.v2.CloudServerService (from the Rackspace NuGet package).")]
     public interface IComputeProvider
     {
         /// <summary>

@@ -50,7 +50,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*/images/{imageId}/metadata");
                 Assert.NotNull(result);
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.True(result.ContainsKey("stuff"));
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
@@ -155,7 +155,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListImageSummaries();
 
                 httpTest.ShouldHaveCalled("*/images");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(imageId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);

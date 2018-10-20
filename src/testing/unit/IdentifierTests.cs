@@ -54,7 +54,7 @@ namespace OpenStack
             Assert.True(id == rawId);
             Assert.True(rawId == id);
             Assert.True(id.Equals(rawId));
-            Assert.True(rawId.Equals(id));
+            Assert.Equal(rawId, id);
         }
 
         [Fact]

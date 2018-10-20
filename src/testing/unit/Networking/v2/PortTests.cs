@@ -29,7 +29,7 @@ namespace OpenStack.Networking.v2
 
                 httpTest.ShouldHaveCalled("*/ports");
                 Assert.NotNull(ports);
-                Assert.Equal(1, ports.Count());
+                Assert.Single(ports);
                 Assert.Equal(portId, ports.First().Id);
             }
         }

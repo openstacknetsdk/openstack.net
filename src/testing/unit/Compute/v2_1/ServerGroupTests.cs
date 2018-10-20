@@ -66,7 +66,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListServerGroups();
 
                 httpTest.ShouldHaveCalled("*/os-server-groups");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(serverGroupId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);

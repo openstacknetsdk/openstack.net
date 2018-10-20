@@ -111,7 +111,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled("*/os-keypairs");
                 Assert.NotNull(results);
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 Assert.Equal(name, results.First().Name);
             }
         }

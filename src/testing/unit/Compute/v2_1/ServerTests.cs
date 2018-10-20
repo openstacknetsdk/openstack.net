@@ -141,7 +141,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/metadata");
                 Assert.NotNull(result);
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.True(result.ContainsKey("stuff"));
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
@@ -207,7 +207,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListServerSummaries();
 
                 httpTest.ShouldHaveCalled("*/servers");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(serverId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
@@ -444,7 +444,7 @@ namespace OpenStack.Compute.v2_1
                 Image result = server.Snapshot(new SnapshotServerRequest("{image-name"));
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                Assert.True(httpTest.CallLog.First(x => x.Url.EndsWith("/action")).RequestBody.Contains("createImage"));
+                Assert.Contains("createImage", httpTest.CallLog.First(x => x.Url.EndsWith("/action")).RequestBody);
                 Assert.NotNull(result);
                 Assert.Equal(imageId, result.Id);
             }
@@ -463,7 +463,7 @@ namespace OpenStack.Compute.v2_1
                 server.Start();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("os-start"));
+                Assert.Contains("os-start", httpTest.CallLog.Last().RequestBody);
             }
         }
 
@@ -480,7 +480,7 @@ namespace OpenStack.Compute.v2_1
                 server.Stop();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("os-stop"));
+                Assert.Contains("os-stop", httpTest.CallLog.Last().RequestBody);
             }
         }
 
@@ -497,7 +497,7 @@ namespace OpenStack.Compute.v2_1
                 server.Suspend();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("suspend"));
+                Assert.Contains("suspend", httpTest.CallLog.Last().RequestBody);
             }
         }
 
@@ -514,7 +514,7 @@ namespace OpenStack.Compute.v2_1
                 server.Resume();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
-                Assert.True(httpTest.CallLog.Last().RequestBody.Contains("resume"));
+                Assert.Contains("resume", httpTest.CallLog.Last().RequestBody);
             }
         }
 
@@ -532,8 +532,8 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
                 string lastRequest = httpTest.CallLog.Last().RequestBody;
-                Assert.True(lastRequest.Contains("reboot"));
-                Assert.True(lastRequest.Contains("HARD"));
+                Assert.Contains("reboot", lastRequest);
+                Assert.Contains("HARD", lastRequest);
             }
         }
         
@@ -553,7 +553,7 @@ namespace OpenStack.Compute.v2_1
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
                 Assert.NotNull(result);
                 Assert.Equal(volumeId, result.Id);
-                Assert.True(server.AttachedVolumes.Any(v => v.Id == volumeId));
+                Assert.Contains(server.AttachedVolumes, v => v.Id == volumeId);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }
         }
@@ -577,7 +577,7 @@ namespace OpenStack.Compute.v2_1
                 attachedVolume.Detach();
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments/{volumeId}");
-                Assert.False(server.AttachedVolumes.Any(v => v.Id == volumeId));
+                Assert.DoesNotContain(server.AttachedVolumes, v => v.Id == volumeId);
             }
         }
 
@@ -621,7 +621,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-volume_attachments");
                 Assert.NotNull(results);
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 Assert.Equal(volumeId, results.First().Id);
             }
         }
@@ -837,7 +837,7 @@ namespace OpenStack.Compute.v2_1
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-instance-actions");
                 Assert.NotNull(results);
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
 
                 var actionRef = results.First();
                 Assert.Equal(actionId, actionRef.Id);

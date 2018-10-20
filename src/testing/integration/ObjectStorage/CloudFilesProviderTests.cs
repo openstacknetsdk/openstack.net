@@ -28,7 +28,9 @@ namespace net.openstack.Providers.Rackspace
             _cloudFiles = new CloudFilesProvider(null, authenticationProvider);
         }
 
+#pragma warning disable xUnit1013 // Public method should be marked as test
         public void Dispose()
+#pragma warning restore xUnit1013 // Public method should be marked as test
         {
             Trace.Listeners.Clear();
             OpenStackNet.Tracing.Http.Listeners.Clear();
@@ -60,8 +62,8 @@ namespace net.openstack.Providers.Rackspace
 
             // Verify the file moved
             var files = _cloudFiles.ListObjects(container, region: region);
-            Assert.False(files.Any(f => f.Name == fileName));
-            Assert.True(files.Any(f => f.Name == backupName));
+            Assert.DoesNotContain(files, f => f.Name == fileName);
+            Assert.Contains(files, f => f.Name == backupName);
         }
 
         [Fact]
@@ -80,7 +82,7 @@ namespace net.openstack.Providers.Rackspace
 
             // Verify the file wasn't removed
             var files = _cloudFiles.ListObjects(container, region: region);
-            Assert.True(files.Any(f => f.Name == filename));
+            Assert.Contains(files, f => f.Name == filename);
         }
     }
 }

@@ -140,7 +140,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListSecurityGroups();
 
                 httpTest.ShouldHaveCalled("*/os-security-groups");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.Equal(securityGroupId, result.Id);
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
@@ -161,7 +161,7 @@ namespace OpenStack.Compute.v2_1
                 var results = _compute.ListSecurityGroups(serverId);
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/os-security-groups");
-                Assert.Equal(1, results.Count());
+                Assert.Single(results);
                 var result = results.First();
                 Assert.IsType<ComputeApi>(((IServiceResource)result).Owner);
             }

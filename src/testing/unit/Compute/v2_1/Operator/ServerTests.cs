@@ -35,7 +35,7 @@ namespace OpenStack.Compute.v2_1.Operator
 
                 httpTest.ShouldHaveCalled($"*/servers/{serverId}/action");
                 string lastRequest = httpTest.CallLog.Last().RequestBody;
-                Assert.True(lastRequest.Contains("evacuate"));
+                Assert.Contains("evacuate", lastRequest);
             }
         }
     }
